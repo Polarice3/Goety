@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=false": { "model": "goety:block/undead_totem" },
+    "powered=true": {"model": "goety:block/undead_totem_activated"}
+  }
+}

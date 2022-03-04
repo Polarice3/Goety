@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "srs",
+    "rer",
+    "srs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:bitingfocus"
+    },
+    "r":
+    {
+      "item": "minecraft:ender_pearl"
+    },
+    "s":
+    {
+      "item": "goety:savagetooth"
+    }
+  },
+  "result":
+  {
+    "item": "goety:feastfocus",
+    "count": 1
+  }
+}

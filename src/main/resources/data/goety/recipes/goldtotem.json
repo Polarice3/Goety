@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ege",
+    "gsg",
+    "lgl"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "minecraft:emerald"
+    },
+    "l":
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "g":
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    "s":
+    {
+      "item": "minecraft:soul_lantern"
+    }
+  },
+  "result":
+  {
+    "item": "goety:goldtotem",
+    "count": 1
+  }
+}

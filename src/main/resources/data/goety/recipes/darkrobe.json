@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "f f",
+    "yly",
+    "fff"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:darkfabric"
+    },
+    "y":
+    {
+      "item": "goety:magicfabric"
+    },
+    "l":
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  },
+  "result":
+  {
+    "item": "goety:darkrobe",
+    "count": 1
+  }
+}

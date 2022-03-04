@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:string"
+    },
+    "s":
+    {
+      "item": "minecraft:spider_eye"
+    }
+  },
+  "result":
+  {
+    "item": "goety:spiderlingfocus",
+    "count": 1
+  }
+}

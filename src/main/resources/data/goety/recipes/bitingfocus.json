@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "tag": "minecraft:wool"
+    },
+    "s":
+    {
+      "item": "goety:savagetooth"
+    }
+  },
+  "result":
+  {
+    "item": "goety:bitingfocus",
+    "count": 1
+  }
+}

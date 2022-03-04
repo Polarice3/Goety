@@ -1,0 +1,35 @@
+modLoader="javafml" #mandatory
+loaderVersion="[36,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+license="All rights reserved"
+[[mods]] #mandatory
+modId="goety" #mandatory
+version="${file.jarVersion}" #mandatory
+displayName="Goety" #mandatory
+logoFile="examplemod.png" #optional
+credits="Special thanks to Technovision, Cy4's Modding and TelepathicGrunt for their tutorials and diesieben07 for helping me with a problem!
+
+        Credit to Alex666 for event, spawner, gale animation and config codes, hollingsworth for Vex codes,
+        baileyholl for HUD codes, Lothrazar for Teleporting codes,
+        DenisMasterHerobrine and Ellpeck for Curios codes,
+        owmii for Cobweb movement codes, elucent for Mixin codes,
+        vemerion and MrCrayfish for wand and staff inventory codes and Ipsis for certain codes!"
+authors="anogon/Polarice3" #optional
+description='''
+Goety adds a bunch of new Mobs that can help or hinder players and a magic system that can provides a player a different way of combat!
+'''
+[[dependencies.goety]] #optional
+    modId="forge" #mandatory
+
+    mandatory=true #mandatory
+
+    versionRange="[35,)" #mandatory
+
+    ordering="NONE"
+
+    side="BOTH"
+[[dependencies.goety]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"

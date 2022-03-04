@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "bb ",
+    "btb",
+    " b "
+  ],
+  "key":
+  {
+    "b":
+    {
+      "item": "minecraft:bone_block"
+    },
+    "t":
+    {
+      "item": "goety:goldtotem"
+    }
+  },
+  "result":
+  {
+    "item": "goety:savagetooth",
+    "count": 1
+  }
+}

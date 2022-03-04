@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " b ",
+    "brb",
+    " b "
+  ],
+  "key":
+  {
+    "b":
+    {
+      "item": "minecraft:crying_obsidian"
+    },
+    "r":
+    {
+      "item": "goety:riftshard"
+    }
+  },
+  "result":
+  {
+    "item": "goety:philosophersstone",
+    "count": 1
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "fgf",
+    "flf"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:darkfabric"
+    },
+    "g":
+    {
+      "item": "goety:magicfabric"
+    },
+    "l":
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  },
+  "result":
+  {
+    "item": "goety:darkhelm",
+    "count": 1
+  }
+}

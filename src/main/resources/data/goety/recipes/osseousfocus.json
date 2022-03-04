@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "aea",
+    "sas"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:bow"
+    },
+    "a":
+    {
+      "item": "minecraft:arrow"
+    },
+    "s":
+    {
+      "item": "minecraft:bone"
+    }
+  },
+  "result":
+  {
+    "item": "goety:osseousfocus",
+    "count": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "goety:cursed_stone_chiseled"
+    },
+    {
+      "item": "goety:goldtotem"
+    }
+  ],
+  "result": {
+    "item": "goety:cursed_totem",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "fsf",
+    "sts",
+    "fsf"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "minecraft:black_dye"
+    },
+    "s":
+    {
+      "item": "minecraft:string"
+    },
+    "t":
+    {
+      "item": "goety:goldtotem"
+    }
+  },
+  "result":
+  {
+    "item": "goety:darkfabric",
+    "count": 1
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "cfw",
+    "fef",
+    "sfp"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:note_block"
+    },
+    "s":
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    "c":
+    {
+      "item": "minecraft:carrot"
+    },
+    "w":
+    {
+      "item": "minecraft:wheat"
+    },
+    "p":
+    {
+      "item": "minecraft:potato"
+    }
+  },
+  "result":
+  {
+    "item": "goety:temptingfocus",
+    "count": 1
+  }
+}

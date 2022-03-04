@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=false": { "model": "goety:block/wind_totem" },
+    "powered=true": {"model": "goety:block/wind_totem_activated"}
+  }
+}

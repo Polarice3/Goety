@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xbx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:firework_rocket"
+    },
+    "b":
+    {
+      "item": "goety:blazecore"
+    }
+  },
+  "result":
+  {
+    "item": "goety:rocketbooster",
+    "count": 1
+  }
+}

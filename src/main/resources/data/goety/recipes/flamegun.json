@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "  x",
+    "xbx",
+    " x "
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "b":
+    {
+      "item": "goety:blazecore"
+    }
+  },
+  "result":
+  {
+    "item": "goety:flamegun",
+    "count": 1
+  }
+}

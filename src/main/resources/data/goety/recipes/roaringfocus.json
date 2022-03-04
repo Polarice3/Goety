@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:note_block"
+    },
+    "s":
+    {
+      "item": "goety:savagetooth"
+    }
+  },
+  "result":
+  {
+    "item": "goety:roaringfocus",
+    "count": 1
+  }
+}

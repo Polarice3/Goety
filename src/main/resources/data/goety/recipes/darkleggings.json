@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "lal",
+    "f f",
+    "y y"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:darkfabric"
+    },
+    "y":
+    {
+      "item": "goety:magicfabric"
+    },
+    "l":
+    {
+      "item": "minecraft:leather"
+    },
+    "a":
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  },
+  "result":
+  {
+    "item": "goety:darkleggings",
+    "count": 1
+  }
+}

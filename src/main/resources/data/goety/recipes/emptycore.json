@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " b ",
+    "bgb",
+    " b "
+  ],
+  "key":
+  {
+    "b":
+    {
+      "item": "goety:cursed_ingot"
+    },
+    "g":
+    {
+      "item": "minecraft:glass"
+    }
+  },
+  "result":
+  {
+    "item": "goety:emptycore",
+    "count": 1
+  }
+}

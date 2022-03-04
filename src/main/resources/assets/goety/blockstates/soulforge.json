@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "lit=false": { "model": "goety:block/soulforge" },
+    "lit=true": {"model": "goety:block/soulforge_working"}
+  }
+}

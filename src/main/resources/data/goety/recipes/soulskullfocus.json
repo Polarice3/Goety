@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ksk",
+    "ses",
+    "ksk"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "k":
+    {
+      "item": "minecraft:skeleton_skull"
+    },
+    "s":
+    {
+      "item": "minecraft:soul_sand"
+    }
+  },
+  "result":
+  {
+    "item": "goety:soulskullfocus",
+    "count": 1
+  }
+}

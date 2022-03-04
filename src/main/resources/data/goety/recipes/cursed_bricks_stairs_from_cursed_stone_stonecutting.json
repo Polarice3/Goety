@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "goety:cursed_stone"
+  },
+  "result": "goety:cursed_bricks_stairs",
+  "count": 1
+}

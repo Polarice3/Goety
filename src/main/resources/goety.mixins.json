@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.Polarice3.Goety.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "goety.refmap.json",
+  "mixins": [
+    "CobwebImmunityMixin",
+    "ClimbingMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

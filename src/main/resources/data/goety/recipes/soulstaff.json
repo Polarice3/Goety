@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ete",
+    " c ",
+    "ele"
+  ],
+  "key":
+  {
+    "t":
+    {
+      "item": "goety:soulruby"
+    },
+    "e":
+    {
+      "item": "goety:cursed_ingot"
+    },
+    "c":
+    {
+      "item": "goety:soulwand"
+    },
+    "l":
+    {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result":
+  {
+    "item": "goety:soulstaff",
+    "count": 1
+  }
+}

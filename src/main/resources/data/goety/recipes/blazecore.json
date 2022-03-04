@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "xxx",
+    "xbx",
+    "xxx"
+  ],
+  "key":
+  {
+    "x":
+    {
+      "item": "minecraft:blaze_rod"
+    },
+    "b":
+    {
+      "item": "goety:brokenblazecore"
+    }
+  },
+  "result":
+  {
+    "item": "goety:blazecore",
+    "count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "goety:blocks/cursed_tiles",
+    "top": "goety:blocks/cursed_tiles",
+    "side": "goety:blocks/cursed_tiles"
+  }
+}

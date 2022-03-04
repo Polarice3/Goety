@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "goety:mutatedchicken_uncooked"
+  },
+  "result": "goety:mutatedchicken",
+  "experience": 0.35,
+  "cookingtime": 200
+}

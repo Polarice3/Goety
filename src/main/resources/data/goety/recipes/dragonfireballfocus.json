@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:dragon_breath"
+    },
+    "s":
+    {
+      "item": "minecraft:fire_charge"
+    }
+  },
+  "result":
+  {
+    "item": "goety:dragonfireballfocus",
+    "count": 1
+  }
+}

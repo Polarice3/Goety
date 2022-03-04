@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:spiderlingfocus"
+    },
+    "f":
+    {
+      "item": "minecraft:tnt"
+    },
+    "s":
+    {
+      "tag": "minecraft:leaves"
+    }
+  },
+  "result":
+  {
+    "item": "goety:creeperlingfocus",
+    "count": 1
+  }
+}

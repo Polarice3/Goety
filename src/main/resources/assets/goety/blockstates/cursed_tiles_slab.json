@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "goety:block/cursed_tiles_slab"
+    },
+    "type=double": {
+      "model": "goety:block/cursed_tiles"
+    },
+    "type=top": {
+      "model": "goety:block/cursed_tiles_slab_top"
+    }
+  }
+}

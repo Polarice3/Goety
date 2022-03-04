@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "s":
+    {
+      "item": "minecraft:experience_bottle"
+    }
+  },
+  "result":
+  {
+    "item": "goety:braineaterfocus",
+    "count": 1
+  }
+}

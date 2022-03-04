@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ete",
+    " c ",
+    "scs"
+  ],
+  "key":
+  {
+    "t":
+    {
+      "item": "goety:emptycore"
+    },
+    "e":
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "c":
+    {
+      "item": "goety:cursed_ingot"
+    },
+    "s":
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    }
+  },
+  "result":
+  {
+    "item": "goety:soulwand",
+    "count": 1
+  }
+}

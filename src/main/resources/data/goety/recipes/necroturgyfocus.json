@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "gea",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "g":
+    {
+      "item": "minecraft:carrot"
+    },
+    "a":
+    {
+      "item": "minecraft:potato"
+    },
+    "s":
+    {
+      "item": "minecraft:rotten_flesh"
+    }
+  },
+  "result":
+  {
+    "item": "goety:necroturgyfocus",
+    "count": 1
+  }
+}
