@@ -317,7 +317,7 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
 
         @Override
         public boolean canUse() {
-            return !EnviokerEntity.this.isMagic();
+            return !EnviokerEntity.this.isMagic() && EnviokerEntity.this.getTarget() != null;
         }
     }
 

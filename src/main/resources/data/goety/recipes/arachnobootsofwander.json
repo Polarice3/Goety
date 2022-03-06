@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ede",
+    "s s"
+  ],
+  "key":
+  {
+    "d":
+    {
+      "item": "goety:darkbootsofwander"
+    },
+    "e":
+    {
+      "item": "minecraft:spider_eye"
+    },
+    "s":
+    {
+      "item": "minecraft:string"
+    }
+  },
+  "result":
+  {
+    "item": "goety:arachnobootsofwander",
+    "count": 1
+  }
+}

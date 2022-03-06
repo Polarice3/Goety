@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "fff",
+    "flf"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:cursed_ingot"
+    },
+    "l":
+    {
+      "item": "goety:arachnohelm"
+    }
+  },
+  "result":
+  {
+    "item": "goety:arachnoarmoredhelm",
+    "count": 1
+  }
+}

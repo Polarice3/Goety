@@ -40,6 +40,7 @@ public class ZombieMinionEntity extends SummonedEntity {
 
     public ZombieMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
+        this.setCanPickUpLoot(this.isUpgraded());
     }
 
     public void tick() {
@@ -47,9 +48,11 @@ public class ZombieMinionEntity extends SummonedEntity {
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 2.0F);
         }
-        if (MainConfig.ZombieLimit.get() > ZombieLimit(this.getTrueOwner())) {
-            if (this.tickCount % 20 == 0) {
-                this.hurt(DamageSource.STARVE, 5.0F);
+        if (this.getTrueOwner() != null) {
+            if (MainConfig.ZombieLimit.get() < ZombieLimit(this.getTrueOwner())) {
+                if (this.tickCount % 20 == 0) {
+                    this.hurt(DamageSource.STARVE, 5.0F);
+                }
             }
         }
         if (MainConfig.UndeadMinionHeal.get() && this.getHealth() < this.getMaxHealth()){
@@ -144,7 +147,6 @@ public class ZombieMinionEntity extends SummonedEntity {
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         float f = difficultyIn.getSpecialMultiplier();
-        this.setCanPickUpLoot(this.random.nextFloat() < 0.55F && this.isUpgraded());
         if (this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
             int i = localdate.get(ChronoField.DAY_OF_MONTH);

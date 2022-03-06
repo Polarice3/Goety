@@ -207,7 +207,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         if (this.getOwnerId() != null) {
             compound.putUUID("Owner", this.getOwnerId());
         }
-        compound.putBoolean("Sitting", this.sitting);
+        compound.putBoolean("Sitting", this.isSitting());
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -548,6 +548,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
                 if (!pPlayer.abilities.instabuild) {
                     itemstack.shrink(1);
                 }
+                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) - 4.0D);
                 return ActionResultType.SUCCESS;
             } else {
                 return ActionResultType.PASS;

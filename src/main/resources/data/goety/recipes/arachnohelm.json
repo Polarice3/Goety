@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "srs",
+    "sds"
+  ],
+  "key":
+  {
+    "d":
+    {
+      "item": "goety:darkhelm"
+    },
+    "r":
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    "s":
+    {
+      "item": "minecraft:spider_eye"
+    }
+  },
+  "result":
+  {
+    "item": "goety:arachnohelm",
+    "count": 1
+  }
+}

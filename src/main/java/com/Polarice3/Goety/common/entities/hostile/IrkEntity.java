@@ -1,5 +1,11 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
+import com.Polarice3.Goety.common.entities.neutral.MutatedRabbitEntity;
+import com.Polarice3.Goety.init.ModEntityType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -20,6 +26,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.*;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -28,6 +35,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -72,6 +80,7 @@ public class IrkEntity extends MonsterEntity implements ICrossbowUser {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new AttackMoveGoal());
+        this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 0.5D, 6.0f, 3.0f, true));
         this.goalSelector.addGoal(4, new RangedCrossbowAttackGoal<>(this, 1.0F, 8.0F));
         this.goalSelector.addGoal(8, new MoveRandomGoal());
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
@@ -83,8 +92,15 @@ public class IrkEntity extends MonsterEntity implements ICrossbowUser {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 14.0D)
+                .add(Attributes.MAX_HEALTH, 6.0D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
+    }
+
+    public void die(DamageSource cause) {
+        if (cause.getEntity() instanceof LivingEntity) {
+            ((LivingEntity) cause.getEntity()).heal(2.0F);
+        }
+        super.die(cause);
     }
 
     protected void defineSynchedData() {
@@ -380,6 +396,146 @@ public class IrkEntity extends MonsterEntity implements ICrossbowUser {
                 }
             }
 
+        }
+    }
+
+    static class FollowOwnerGoal extends Goal {
+        private final IrkEntity summonedEntity;
+        private LivingEntity owner;
+        private final IWorldReader level;
+        private final double followSpeed;
+        private final PathNavigator navigation;
+        private int timeToRecalcPath;
+        private final float maxDist;
+        private final float minDist;
+        private float oldWaterCost;
+        private final boolean teleportToLeaves;
+
+        public FollowOwnerGoal(IrkEntity summonedEntity, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
+            this.summonedEntity = summonedEntity;
+            this.level = summonedEntity.level;
+            this.followSpeed = speed;
+            this.navigation = summonedEntity.getNavigation();
+            this.minDist = minDist;
+            this.maxDist = maxDist;
+            this.teleportToLeaves = teleportToLeaves;
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            if (!(summonedEntity.getNavigation() instanceof GroundPathNavigator) && !(summonedEntity.getNavigation() instanceof FlyingPathNavigator)) {
+                throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
+            }
+        }
+
+        public boolean canUse() {
+            LivingEntity livingentity = this.summonedEntity.getOwner();
+            if (livingentity == null) {
+                return false;
+            } else if (livingentity.isSpectator()) {
+                return false;
+            } else if (this.summonedEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
+                return false;
+            } else if (this.summonedEntity.getTarget() != null) {
+                return false;
+            } else {
+                this.owner = livingentity;
+                return true;
+            }
+        }
+
+        public boolean canContinueToUse() {
+            if (this.summonedEntity.getTarget() != null) {
+                return false;
+            } else if (this.navigation.isDone()){
+                return false;
+            } else {
+                return !(this.summonedEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));
+            }
+        }
+
+        public void start() {
+            this.timeToRecalcPath = 0;
+            this.oldWaterCost = this.summonedEntity.getPathfindingMalus(PathNodeType.WATER);
+            this.summonedEntity.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        }
+
+        public void stop() {
+            this.navigation.stop();
+            this.summonedEntity.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
+        }
+
+        public void tick() {
+            this.summonedEntity.getLookControl().setLookAt(this.owner, 10.0F, (float)this.summonedEntity.getMaxHeadXRot());
+            if (--this.timeToRecalcPath <= 0) {
+                this.timeToRecalcPath = 10;
+                if (this.summonedEntity.distanceTo(this.owner) > 8.0D) {
+                    double x = MathHelper.floor(this.owner.getX()) - 2;
+                    double y = MathHelper.floor(this.owner.getBoundingBox().minY);
+                    double z = MathHelper.floor(this.owner.getZ()) - 2;
+                    for(int l = 0; l <= 4; ++l) {
+                        for(int i1 = 0; i1 <= 4; ++i1) {
+                            if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.ValidPosition(new BlockPos(x + l, y + 2, z + i1))){
+                                float a = (float) ((x + l) + 0.5F);
+                                float b = (float) ((z + i1) + 0.5F);
+                                this.summonedEntity.getMoveControl().setWantedPosition(a, y, b, this.followSpeed);
+                                this.navigation.stop();
+                            }
+                        }
+                    }
+                }
+                if (this.summonedEntity.distanceToSqr(this.owner) > 144.0 && MainConfig.VexTeleport.get()){
+                    this.tryToTeleportNearEntity();
+                }
+            }
+        }
+
+        private void tryToTeleportNearEntity() {
+            BlockPos blockpos = this.owner.blockPosition();
+
+            for(int i = 0; i < 10; ++i) {
+                int j = this.getRandomNumber(-3, 3);
+                int k = this.getRandomNumber(-1, 1);
+                int l = this.getRandomNumber(-3, 3);
+                boolean flag = this.tryToTeleportToLocation(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
+                if (flag) {
+                    return;
+                }
+            }
+
+        }
+
+        private boolean tryToTeleportToLocation(int x, int y, int z) {
+            if (Math.abs((double)x - this.owner.getX()) < 2.0D && Math.abs((double)z - this.owner.getZ()) < 2.0D) {
+                return false;
+            } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
+                return false;
+            } else {
+                this.summonedEntity.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.summonedEntity.yRot, this.summonedEntity.xRot);
+                this.navigation.stop();
+                return true;
+            }
+        }
+
+        private boolean isTeleportFriendlyBlock(BlockPos pos) {
+            PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(this.level, pos.mutable());
+            if (pathnodetype != PathNodeType.WALKABLE) {
+                return false;
+            } else {
+                BlockState blockstate = this.level.getBlockState(pos.below());
+                if (!this.teleportToLeaves && blockstate.getBlock() instanceof LeavesBlock) {
+                    return false;
+                } else {
+                    BlockPos blockpos = pos.subtract(this.summonedEntity.blockPosition());
+                    return this.level.noCollision(this.summonedEntity, this.summonedEntity.getBoundingBox().move(blockpos));
+                }
+            }
+        }
+
+        protected boolean ValidPosition(BlockPos pos) {
+            BlockState blockstate = this.level.getBlockState(pos);
+            return (blockstate.canSurvive(this.level, pos) && this.level.isEmptyBlock(pos.above()) && this.level.isEmptyBlock(pos.above(2)));
+        }
+
+        private int getRandomNumber(int min, int max) {
+            return this.summonedEntity.getRandom().nextInt(max - min + 1) + min;
         }
     }
 

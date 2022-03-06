@@ -78,12 +78,6 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchgale").toString()));
 
-    public static final RegistryObject<EntityType<ChaosGaleEntity>> CHAOSGALE = ENTITY_TYPES.register("chaosgale",
-            () -> EntityType.Builder.<ChaosGaleEntity>of(ChaosGaleEntity::new, EntityClassification.MISC)
-                    .sized(1.0f,1.0f)
-                    .clientTrackingRange(4)
-                    .build(new ResourceLocation(Goety.MOD_ID, "chaosgale").toString()));
-
     public static final RegistryObject<EntityType<ChannellerEntity>> CHANNELLER = ENTITY_TYPES.register("channeller",
             () -> EntityType.Builder.of(ChannellerEntity::new, EntityClassification.MONSTER)
                     .canSpawnFarFromPlayer()

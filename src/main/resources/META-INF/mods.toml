@@ -1,10 +1,11 @@
 modLoader="javafml" #mandatory
-loaderVersion="[36,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[36,)" #mandatory
 license="All rights reserved"
 [[mods]] #mandatory
 modId="goety" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Goety" #mandatory
+displayURL="https://github.com/Polarice3/Goety" #optional
 logoFile="examplemod.png" #optional
 credits="Special thanks to Technovision, Cy4's Modding and TelepathicGrunt for their tutorials and diesieben07 for helping me with a problem!
 

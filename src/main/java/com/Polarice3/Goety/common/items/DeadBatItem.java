@@ -63,10 +63,11 @@ public class DeadBatItem extends Item {
                         tamedSpider.setPersistenceRequired();
                         world.addFreshEntity(tamedSpider);
                         world.playSound(player, tamedSpider.blockPosition(), SoundEvents.GENERIC_EAT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                        tamedSpider.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
                         world.broadcastEntityEvent(tamedSpider, (byte) 7);
                         stack.shrink(1);
                     } else {
-                        world.playSound(player, target.blockPosition(), SoundEvents.GENERIC_EAT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                        target.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
                         world.broadcastEntityEvent(target, (byte)6);
                     }
                     return ActionResultType.SUCCESS;

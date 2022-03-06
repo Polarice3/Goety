@@ -57,6 +57,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
     public SkeletonMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
         this.reassessWeaponGoal();
+        this.setCanPickUpLoot(this.isUpgraded());
     }
 
     public void tick() {
@@ -64,9 +65,11 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 2.0F);
         }
-        if (MainConfig.SkeletonLimit.get() > SkeletonLimit(this.getTrueOwner())) {
-            if (this.tickCount % 20 == 0) {
-                this.hurt(DamageSource.STARVE, 5.0F);
+        if (this.getTrueOwner() != null) {
+            if (MainConfig.SkeletonLimit.get() < SkeletonLimit(this.getTrueOwner())) {
+                if (this.tickCount % 20 == 0) {
+                    this.hurt(DamageSource.STARVE, 5.0F);
+                }
             }
         }
         if (MainConfig.UndeadMinionHeal.get() && this.getHealth() < this.getMaxHealth()){
@@ -192,7 +195,6 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         float f = difficultyIn.getSpecialMultiplier();
         this.reassessWeaponGoal();
-        this.setCanPickUpLoot(this.random.nextFloat() < 0.55F && this.isUpgraded());
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
         if (this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {

@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "cdc",
+    "sfs",
+    "s s"
+  ],
+  "key":
+  {
+    "d":
+    {
+      "item": "goety:darkarmoredrobe"
+    },
+    "f":
+    {
+      "item": "goety:spiderlingfocus"
+    },
+    "c":
+    {
+      "item": "minecraft:cobweb"
+    },
+    "s":
+    {
+      "item": "minecraft:string"
+    }
+  },
+  "result":
+  {
+    "item": "goety:arachnoarmoredrobe",
+    "count": 1
+  }
+}

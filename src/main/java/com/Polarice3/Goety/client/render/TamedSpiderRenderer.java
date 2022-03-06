@@ -2,11 +2,11 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.render.layers.TamedSpiderCollarLayer;
+import com.Polarice3.Goety.client.render.layers.TamedSpiderEyesLayer;
 import com.Polarice3.Goety.common.entities.ally.TamedSpiderEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.layers.SpiderEyesLayer;
 import net.minecraft.client.renderer.entity.model.SpiderModel;
 import net.minecraft.util.ResourceLocation;
 
@@ -16,7 +16,7 @@ public class TamedSpiderRenderer <T extends TamedSpiderEntity> extends MobRender
 
     public TamedSpiderRenderer(EntityRendererManager p_i46139_1_) {
         super(p_i46139_1_, new SpiderModel<>(), 0.8F);
-        this.addLayer(new SpiderEyesLayer<>(this));
+        this.addLayer(new TamedSpiderEyesLayer<>(this));
         this.addLayer(new TamedSpiderCollarLayer<>(this));
     }
 
