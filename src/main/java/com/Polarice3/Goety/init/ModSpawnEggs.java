@@ -58,6 +58,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> CREEPERLING_MINION_SPAWN_EGG = ITEMS.register("creeperling_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.CREEPERLING_MINION, 0x1c4c15, 0x000000, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> HUSKARL_SPAWN_EGG = ITEMS.register("huskarl_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.HUSKARL, 0x61a8ad, 0x446466, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> PENANCE_SPAWN_EGG = ITEMS.register("penance_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.PENANCE, 0x2c2c2c, 8032420, new Item.Properties().tab(Goety.TAB)));
 

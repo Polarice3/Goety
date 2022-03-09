@@ -24,6 +24,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -135,6 +136,11 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void LivingEffects(LivingEvent.LivingUpdateEvent event){
+
+    }
+
+    @SubscribeEvent
     public static void onPlayerEquipment(TickEvent.PlayerTickEvent event){
         PlayerEntity player = event.player;
         if (KeyPressed.openWandandBag() && player.getMainHandItem().getItem() instanceof SoulWand){
@@ -145,7 +151,7 @@ public class ModEvents {
         }
         if (RobeArmorFinder.FindBootsofWander(player)){
             FluidState fluidstate = player.level.getFluidState(player.blockPosition());
-            if (player.isInWater() && player.isAffectedByFluids() && !player.canStandOnFluid(fluidstate.getType())){
+            if (player.isInWater() && player.isAffectedByFluids() && !player.canStandOnFluid(fluidstate.getType()) && !player.hasEffect(Effects.DOLPHINS_GRACE)){
                 player.setDeltaMovement(player.getDeltaMovement().x * 1.0175, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.0175);
             }
         }
@@ -167,7 +173,12 @@ public class ModEvents {
         if (event.getEntity() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntity();
             if (RobeArmorFinder.FindBootsofWander(player)){
-               player.setDeltaMovement(player.getDeltaMovement().x, 0.625, player.getDeltaMovement().z);
+                float f = 0.625F;
+                if (player.hasEffect(Effects.JUMP)){
+                    f += 0.1F * (float)(player.getEffect(Effects.JUMP).getAmplifier() + 1);
+                }
+                Vector3d vector3d = player.getDeltaMovement();
+                player.setDeltaMovement(vector3d.x, f, vector3d.z);
             }
         }
 
@@ -225,13 +236,16 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void CosmicExpDrop(LivingExperienceDropEvent event){
+    public static void ExtraExpDrop(LivingExperienceDropEvent event){
         if (event.getAttackingPlayer() != null) {
             if (event.getAttackingPlayer().hasEffect(ModRegistryHandler.COSMIC.get())) {
                 int a = Objects.requireNonNull(event.getAttackingPlayer().getEffect(ModRegistryHandler.COSMIC.get())).getAmplifier() + 2;
                 int a1 = MathHelper.clamp(a, 2, 8);
                 event.setDroppedExperience(event.getDroppedExperience() * a1);
             }
+        }
+        if (event.getEntityLiving().hasEffect(ModRegistryHandler.NECROPOWER.get())){
+            event.setDroppedExperience(event.getDroppedExperience() * 2);
         }
     }
 

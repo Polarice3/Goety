@@ -167,6 +167,7 @@ public class ModRegistryHandler {
     public static final RegistryObject<Block> MUTATE_TOTEM = BLOCKS.register("mutation_totem", MutateTotemBlock::new);
     public static final RegistryObject<Block> UNDEAD_TOTEM = BLOCKS.register("undead_totem", UndeadTotemBlock::new);
     public static final RegistryObject<Block> WIND_TOTEM = BLOCKS.register("wind_totem", WindTotemBlock::new);
+    public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
 //    public static final RegistryObject<Block> SOULFORGE = BLOCKS.register("soulforge", SoulForgeBlock::new);
 
     //Slabs
@@ -244,6 +245,8 @@ public class ModRegistryHandler {
             () -> new BlockItemBase(UNDEAD_TOTEM.get()));
     public static final RegistryObject<Item> WIND_TOTEM_ITEM = ITEMS.register("wind_totem",
             () -> new BlockItemBase(WIND_TOTEM.get()));
+    public static final RegistryObject<Item> OBELISK_ITEM = ITEMS.register("obelisk",
+            () -> new BlockItemBase(OBELISK.get()));
     //Effects
     public static final RegistryObject<Effect> MINOR_HARM = EFFECTS.register("minorharm",
             MinorHarmEffect::new);
@@ -261,4 +264,6 @@ public class ModRegistryHandler {
             CursedEffect::new);
     public static final RegistryObject<Effect> ILLAGUE = EFFECTS.register("illague",
             IllagueEffect::new);
+    public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
+            NecroPowerEffect::new);
 }

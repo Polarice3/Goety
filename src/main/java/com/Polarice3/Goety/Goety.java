@@ -150,6 +150,10 @@ public class Goety {
         });
 
         DeferredWorkQueue.runLater(() -> {
+            GlobalEntityTypeAttributes.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
+        });
+
+        DeferredWorkQueue.runLater(() -> {
             GlobalEntityTypeAttributes.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
         });
 

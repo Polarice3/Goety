@@ -132,6 +132,13 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "envioker").toString()));
 
+    public static final RegistryObject<EntityType<HuskarlEntity>> HUSKARL = ENTITY_TYPES.register("huskarl",
+            () -> EntityType.Builder.of(HuskarlEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "huskarl").toString()));
+
     public static final RegistryObject<EntityType<MutatedCowEntity>> MUTATED_COW = ENTITY_TYPES.register("mutatedcow",
             () -> EntityType.Builder.of(MutatedCowEntity::new, EntityClassification.MONSTER)
                     .sized(0.9F, 1.95F)
