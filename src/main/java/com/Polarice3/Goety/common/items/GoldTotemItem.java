@@ -2,12 +2,16 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.blocks.CursedCageBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.init.ModRegistryHandler;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.JukeboxBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
@@ -19,15 +23,15 @@ import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -188,6 +192,24 @@ public class GoldTotemItem extends Item {
             return 1.0D - (Soulcount / (double) MAXSOULS);
         } else {
             return 1.0D;
+        }
+    }
+
+    public ActionResultType useOn(ItemUseContext pContext) {
+        World world = pContext.getLevel();
+        BlockPos blockpos = pContext.getClickedPos();
+        BlockState blockstate = world.getBlockState(blockpos);
+        if (blockstate.is(ModRegistryHandler.CURSED_CAGE_BLOCK.get()) && !blockstate.getValue(CursedCageBlock.POWERED)) {
+            ItemStack itemstack = pContext.getItemInHand();
+            if (!world.isClientSide) {
+                ((CursedCageBlock)ModRegistryHandler.CURSED_CAGE_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
+                world.levelEvent(null, 1010, blockpos, Item.getId(this));
+                itemstack.shrink(1);
+            }
+
+            return ActionResultType.sidedSuccess(world.isClientSide);
+        } else {
+            return ActionResultType.PASS;
         }
     }
 

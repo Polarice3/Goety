@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "lit=true": { "model": "goety:block/cursed_burner" },
+    "lit=false": { "model": "goety:block/cursed_burner_litdown" }
+  }
+}

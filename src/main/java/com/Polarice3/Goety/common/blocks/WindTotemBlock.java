@@ -14,36 +14,12 @@ import net.minecraftforge.common.extensions.IForgeBlock;
 
 import javax.annotation.Nullable;
 
-public class WindTotemBlock extends ContainerBlock implements IForgeBlock {
-    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-
-    public WindTotemBlock() {
-        super(Properties.of(Material.STONE)
-                .strength(3.0F, 9.0F)
-                .sound(SoundType.STONE)
-                .harvestLevel(0)
-                .harvestTool(ToolType.PICKAXE)
-        );
-        this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, Boolean.FALSE));
-    }
-
-    @Override
-    public int getExpDrop(BlockState state, net.minecraft.world.IWorldReader level, BlockPos pos, int fortune, int silktouch) {
-        return 15 + RANDOM.nextInt(15) + RANDOM.nextInt(15);
-    }
-
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(POWERED);
-    }
+public class WindTotemBlock extends TotemHeadBlock {
 
     @Nullable
     @Override
     public TileEntity newBlockEntity(IBlockReader worldIn) {
         return new WindTotemTileEntity();
-    }
-
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.MODEL;
     }
 
 }

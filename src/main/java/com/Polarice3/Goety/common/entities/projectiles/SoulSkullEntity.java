@@ -50,10 +50,6 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
         return false;
     }
 
-    public float getBlockExplosionResistance(Explosion pExplosion, IBlockReader pLevel, BlockPos pPos, BlockState pBlockState, FluidState pFluidState, float pExplosionPower) {
-        return this.isDangerous() && pBlockState.canEntityDestroy(pLevel, pPos, this) ? Math.min(0.8F, pExplosionPower) : pExplosionPower;
-    }
-
     public void tick() {
         super.tick();
         if (this.isUpgraded()){

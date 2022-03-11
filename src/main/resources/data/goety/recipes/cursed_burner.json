@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "lcl",
+    "bsb"
+  ],
+  "key":
+  {
+    "l":
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "s":
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    "b":
+    {
+      "tag": "minecraft:stone_bricks"
+    },
+    "c":
+    {
+      "item": "minecraft:coal_block"
+    }
+  },
+  "result":
+  {
+    "item": "goety:cursed_burner",
+    "count": 1
+  }
+}

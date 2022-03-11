@@ -1,0 +1,20 @@
+{
+  "pools": [
+    {
+      "name": "nethernal",
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        }
+      ],
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "goety:brokenblazecore",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

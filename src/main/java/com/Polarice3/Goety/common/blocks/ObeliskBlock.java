@@ -3,6 +3,9 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.common.tileentities.ObeliskTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -22,6 +25,7 @@ public class ObeliskBlock extends ContainerBlock implements IForgeBlock {
     public static final VoxelShape SHAPE_COMMON = VoxelShapes.or(SHAPE_BASE, SHAPE_BASE2, SHAPE_BASE3);
     public static final VoxelShape SHAPE_COLLISION = VoxelShapes.or(SHAPE_COMMON, SHAPE_PILLAR);
     public static final VoxelShape SHAPE_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 24.0D, 16.0D);
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public ObeliskBlock() {
         super(AbstractBlock.Properties.of(Material.STONE)
@@ -30,6 +34,7 @@ public class ObeliskBlock extends ContainerBlock implements IForgeBlock {
                 .harvestLevel(0)
                 .harvestTool(ToolType.PICKAXE)
         );
+        this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, Boolean.FALSE));
     }
 
     @Override
@@ -51,6 +56,10 @@ public class ObeliskBlock extends ContainerBlock implements IForgeBlock {
 
     public VoxelShape getShape(BlockState pState, IBlockReader pLevel, BlockPos pPos, ISelectionContext pContext) {
         return SHAPE_SHAPE;
+    }
+
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(POWERED);
     }
 
     @Nullable

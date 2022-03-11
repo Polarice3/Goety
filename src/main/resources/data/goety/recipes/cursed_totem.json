@@ -1,15 +1,9 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "goety:cursed_stone_chiseled"
-    },
-    {
-      "item": "goety:goldtotem"
-    }
-  ],
-  "result": {
-    "item": "goety:cursed_totem",
-    "count": 1
-  }
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "item": "goety:cursed_stone_chiseled"
+  },
+  "result": "goety:cursed_totem",
+  "experience": 0.0,
+  "cookingtime": 400
 }

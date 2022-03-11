@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "goety:soulwand"
+    },
+    "title": {
+      "translate": "advancements.goety.root.title"
+    },
+    "description": {
+      "translate": "advancements.goety.root.description"
+    },
+    "background": "goety:textures/blocks/cursed_bricks.png",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden" : false
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "goety:goldtotem"
+    },
+    "title": {
+      "translate": "advancements.goety.crafttotem.title"
+    },
+    "description": {
+      "translate": "advancements.goety.crafttotem.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "goety:goety/root",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:goldtotem"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 25
+  }
+}

@@ -76,11 +76,8 @@ public class WindTotemTileEntity extends TotemTileEntity {
         }
     }
 
-    private void launch(LivingEntity p_213688_1_) {
-        double d0 = p_213688_1_.getX() - this.getBlockPos().getX();
-        double d1 = p_213688_1_.getZ() - this.getBlockPos().getZ();
-        double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        p_213688_1_.push(0.0D, 2.0D, 0.0D);
+    private void launch(LivingEntity livingEntity) {
+        livingEntity.push(0.0D, 2.0D, 0.0D);
     }
 
 

@@ -1,25 +1,9 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "sss",
-    "sts",
-    "sss"
-  ],
-  "key":
-  {
-    "s":
-    {
-      "item": "minecraft:stone"
-    },
-    "t":
-    {
-      "item": "goety:goldtotem"
-    }
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "tag": "forge:stone"
   },
-  "result":
-  {
-    "item": "goety:cursed_stone",
-    "count": 8
-  }
+  "result": "goety:cursed_stone",
+  "experience": 0.0,
+  "cookingtime": 200
 }

@@ -25,6 +25,12 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<ObeliskTileEntity>> OBELISK = TILEENTITY_TYPES.register("obelisk",
             () -> TileEntityType.Builder.of(ObeliskTileEntity::new, ModRegistryHandler.OBELISK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<CursedBurnerTileEntity>> CURSEDBURNER = TILEENTITY_TYPES.register("cursed_burner",
+            () -> TileEntityType.Builder.of(CursedBurnerTileEntity::new, ModRegistryHandler.CURSED_BURNER.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<CursedCageTileEntity>> CURSED_CAGE = TILEENTITY_TYPES.register("cursed_cage",
+            () -> TileEntityType.Builder.of(CursedCageTileEntity::new, ModRegistryHandler.CURSED_CAGE_BLOCK.get()).build(null));
+
 /*    public static final RegistryObject<TileEntityType<SoulForgeTileEntity>> SOULFORGE = TILEENTITY_TYPES.register("soulforge",
             () -> TileEntityType.Builder.create(SoulForgeTileEntity::new, RegistryHandler.SOULFORGE.get()).build(null));*/
 }

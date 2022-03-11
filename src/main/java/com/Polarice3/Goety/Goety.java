@@ -1,6 +1,7 @@
 package com.Polarice3.Goety;
 
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
+import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
 import com.Polarice3.Goety.common.entities.ally.*;
@@ -91,6 +92,8 @@ public class Goety {
         ModEnchantmentsType.ENCHANTMENT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         ModParticleTypes.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        ModRecipeSerializer.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         MinecraftForge.EVENT_BUS.register(this);
 

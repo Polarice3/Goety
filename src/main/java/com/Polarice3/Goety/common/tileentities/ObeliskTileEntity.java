@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.blocks.FangTotemBlock;
+import com.Polarice3.Goety.common.blocks.ObeliskBlock;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.client.Minecraft;
@@ -53,12 +55,12 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
                     --this.spawnDelay;
                 } else {
                     this.spawnDelay = this.level.random.nextInt(400) + 200;
-                    this.activated = 10;
+                    this.activated = 20;
                     int spawnRange = 4;
-                    double d0 = (double)this.getBlockPos().getX() + (this.level.random.nextDouble() - this.level.random.nextDouble()) * (double) spawnRange + 0.5D;
-                    double d1 = (double)(this.getBlockPos().getY() + this.level.random.nextInt(3));
-                    double d2 = (double)this.getBlockPos().getZ() + (this.level.random.nextDouble() - this.level.random.nextDouble()) * (double) spawnRange + 0.5D;
                     for (int p = 0; p < 1 + this.level.random.nextInt(2); ++p) {
+                        double d0 = (double)this.getBlockPos().getX() + (this.level.random.nextDouble() - this.level.random.nextDouble()) * (double) spawnRange + 0.5D;
+                        double d1 = (double)(this.getBlockPos().getY() + this.level.random.nextInt(3));
+                        double d2 = (double)this.getBlockPos().getZ() + (this.level.random.nextDouble() - this.level.random.nextDouble()) * (double) spawnRange + 0.5D;
                         HuskarlEntity zombieEntity = ModEntityType.HUSKARL.get().create(this.level);
                         assert zombieEntity != null;
                         zombieEntity.moveTo(d0, d1, d2);
@@ -67,6 +69,12 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
                         ((IServerWorld) this.level).addFreshEntityWithPassengers(zombieEntity);
                     }
                 }
+            }
+            if (this.activated != 0){
+                --this.activated;
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ObeliskBlock.POWERED, true), 3);
+            } else {
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ObeliskBlock.POWERED, false), 3);
             }
         }
     }
@@ -81,7 +89,6 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
             double d1 = (double)blockpos.getY() + 1.0D + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
             if (this.activated != 0) {
-                --this.activated;
                 for (int p = 0; p < 4; ++p) {
                     MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.7, 0.7, 0.7);
                     MINECRAFT.level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);

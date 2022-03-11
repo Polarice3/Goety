@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.FangTotemBlock;
+import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
 import com.Polarice3.Goety.init.ModRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -86,12 +87,12 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
                 }
                 if (this.activated != 0){
                     --this.activated;
-                    this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(FangTotemBlock.POWERED, true), 3);
+                    this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, true), 3);
                 } else {
-                    this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(FangTotemBlock.POWERED, false), 3);
+                    this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
                 }
             } else {
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(FangTotemBlock.POWERED, false), 3);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
             }
         }
     }

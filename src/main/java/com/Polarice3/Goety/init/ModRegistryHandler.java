@@ -168,6 +168,7 @@ public class ModRegistryHandler {
     public static final RegistryObject<Block> UNDEAD_TOTEM = BLOCKS.register("undead_totem", UndeadTotemBlock::new);
     public static final RegistryObject<Block> WIND_TOTEM = BLOCKS.register("wind_totem", WindTotemBlock::new);
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
+    public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
 //    public static final RegistryObject<Block> SOULFORGE = BLOCKS.register("soulforge", SoulForgeBlock::new);
 
     //Slabs
@@ -247,6 +248,8 @@ public class ModRegistryHandler {
             () -> new BlockItemBase(WIND_TOTEM.get()));
     public static final RegistryObject<Item> OBELISK_ITEM = ITEMS.register("obelisk",
             () -> new BlockItemBase(OBELISK.get()));
+    public static final RegistryObject<Item> CURSED_BURNER_ITEM = ITEMS.register("cursed_burner",
+            () -> new BlockItemBase(CURSED_BURNER.get()));
     //Effects
     public static final RegistryObject<Effect> MINOR_HARM = EFFECTS.register("minorharm",
             MinorHarmEffect::new);

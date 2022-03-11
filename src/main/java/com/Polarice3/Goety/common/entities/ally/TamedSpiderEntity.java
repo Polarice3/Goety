@@ -869,7 +869,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
                 if (!this.tamedSpiderEntity.isLeashed() && !this.tamedSpiderEntity.isPassenger()) {
-                    if (this.tamedSpiderEntity.distanceToSqr(this.owner) >= 144.0D && MainConfig.UndeadTeleport.get()) {
+                    if (this.tamedSpiderEntity.distanceToSqr(this.owner) >= 144.0D) {
                         this.tryToTeleportNearEntity();
                     } else {
                         this.navigation.moveTo(this.owner, this.followSpeed);

@@ -1,0 +1,9 @@
+{
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "tag": "forge:glass/colorless"
+  },
+  "result": "goety:emptycore",
+  "experience": 0.0,
+  "cookingtime": 400
+}

@@ -1,0 +1,9 @@
+{
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "tag": "forge:ingots/iron"
+  },
+  "result": "goety:cursed_ingot",
+  "experience": 0.0,
+  "cookingtime": 400
+}
