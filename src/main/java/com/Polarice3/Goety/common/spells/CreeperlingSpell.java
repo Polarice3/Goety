@@ -39,6 +39,7 @@ public class CreeperlingSpell extends ChargingSpells{
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
@@ -53,6 +54,7 @@ public class CreeperlingSpell extends ChargingSpells{
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 

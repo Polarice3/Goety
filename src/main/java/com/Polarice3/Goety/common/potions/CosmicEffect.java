@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.potions;
 
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -57,10 +57,10 @@ public class CosmicEffect extends ModEffects{
                     pLivingEntity.addEffect(new EffectInstance(Effects.WITHER, 400, a));
                     break;
                 case 13:
-                    pLivingEntity.addEffect(new EffectInstance(ModRegistryHandler.HOSTED.get(), 400, a));
+                    pLivingEntity.addEffect(new EffectInstance(ModRegistry.HOSTED.get(), 400, a));
                     break;
                 case 14:
-                    pLivingEntity.addEffect(new EffectInstance(ModRegistryHandler.CURSED.get(), 400, a));
+                    pLivingEntity.addEffect(new EffectInstance(ModRegistry.CURSED.get(), 400, a));
                     break;
             }
         }

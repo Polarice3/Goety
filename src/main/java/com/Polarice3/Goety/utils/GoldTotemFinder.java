@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.compat.CuriosLoaded;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -9,7 +9,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 public class GoldTotemFinder {
     private static boolean isMatchingItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModRegistryHandler.GOLDTOTEM.get();
+        return itemStack.getItem() == ModRegistry.GOLDTOTEM.get();
     }
 
     public static ItemStack FindTotem(PlayerEntity playerEntity){

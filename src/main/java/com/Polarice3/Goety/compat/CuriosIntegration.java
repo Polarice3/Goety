@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.compat;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -29,8 +29,8 @@ import java.util.Map;
 public class CuriosIntegration implements ICompatable {
 
     private static final Map<Item, String> TYPES = ImmutableMap.<Item, String>builder()
-            .put(ModRegistryHandler.GOLDTOTEM.get(), "charm")
-            .put(ModRegistryHandler.FOCUSBAG.get(), "belt")
+            .put(ModRegistry.GOLDTOTEM.get(), "charm")
+            .put(ModRegistry.FOCUSBAG.get(), "belt")
             .build();
 
     public void setup(FMLCommonSetupEvent event) {

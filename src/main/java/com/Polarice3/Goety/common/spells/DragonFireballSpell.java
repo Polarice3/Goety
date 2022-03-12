@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DragonFireballEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -36,6 +37,7 @@ public class DragonFireballSpell extends Spells{
         dragonFireball.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D), entityLiving.getZ() + vector3d.z * 2.0D);
         worldIn.addFreshEntity(dragonFireball);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ENDER_DRAGON_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        this.IncreaseInfamy(MainConfig.DragonFireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
@@ -49,5 +51,6 @@ public class DragonFireballSpell extends Spells{
         dragonFireball.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D), entityLiving.getZ() + vector3d.z * 2.0D);
         worldIn.addFreshEntity(dragonFireball);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ENDER_DRAGON_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        this.IncreaseInfamy(MainConfig.DragonFireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

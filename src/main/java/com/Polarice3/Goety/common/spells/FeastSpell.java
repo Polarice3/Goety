@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
@@ -42,6 +43,7 @@ public class FeastSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving){
@@ -57,6 +59,7 @@ public class FeastSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     private void spawnFangs(LivingEntity livingEntity, double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, float p_190876_9_, int p_190876_10_) {

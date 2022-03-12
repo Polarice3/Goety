@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.armors;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Items;
@@ -16,19 +16,19 @@ import java.util.function.Supplier;
 public enum ModArmorMaterial implements IArmorMaterial {
 
     DARKMAGE(Goety.MOD_ID + ":darkmage", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModRegistryHandler.DARKFABRIC.get());}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModRegistry.DARKFABRIC.get());}),
     NECROTURGE(Goety.MOD_ID + ":necroturge", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModRegistryHandler.DARKFABRIC.get());}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModRegistry.DARKFABRIC.get());}),
     ARACHNOTURGE(Goety.MOD_ID + ":arachnoturge", 5, new int[] {1, 2, 2, 1}, 25,
             SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(Items.STRING);}),
     DARKARMOREDMAGE(Goety.MOD_ID + ":darkarmoredmage", 15, new int[]{2, 5, 6, 2}, 25,
-            SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModRegistryHandler.CURSED_INGOT.get());
+            SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModRegistry.CURSED_INGOT.get());
     }),
     ARMOREDNECROTURGE(Goety.MOD_ID + ":armorednecroturge", 15, new int[]{2, 5, 6, 2}, 25,
-            SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModRegistryHandler.CURSED_INGOT.get());
+            SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModRegistry.CURSED_INGOT.get());
     }),
     ARMOREDARACHNOTURGE(Goety.MOD_ID + ":armoredarachnoturge", 15, new int[]{2, 5, 6, 2}, 25,
-            SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModRegistryHandler.CURSED_INGOT.get());
+            SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModRegistry.CURSED_INGOT.get());
     });
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[] {13, 15, 16, 11};

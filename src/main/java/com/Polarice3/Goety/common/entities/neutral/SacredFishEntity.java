@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -20,7 +20,7 @@ public class SacredFishEntity extends AbstractFishEntity {
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-        this.spawnAtLocation(ModRegistryHandler.SACRED_FISH.get());
+        this.spawnAtLocation(ModRegistry.SACRED_FISH.get());
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){

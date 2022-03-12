@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -17,6 +18,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -31,8 +33,9 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public class InquillagerEntity extends SpellcastingIllagerEntity {
-    protected InquillagerEntity(EntityType<? extends SpellcastingIllagerEntity> p_i48556_1_, World p_i48556_2_) {
+    public InquillagerEntity(EntityType<? extends SpellcastingIllagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
+        this.xpReward = 10;
     }
 
     protected void registerGoals() {
@@ -187,6 +190,10 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
 
         protected void performSpellCasting() {
             InquillagerEntity.this.heal(InquillagerEntity.this.getMaxHealth());
+            for(int i = 0; i < InquillagerEntity.this.random.nextInt(35) + 10; ++i) {
+                new ParticleUtil(ParticleTypes.WITCH, InquillagerEntity.this.getX() + InquillagerEntity.this.random.nextGaussian() * (double)0.13F, InquillagerEntity.this.getY() + InquillagerEntity.this.random.nextGaussian() * (double)0.13F, InquillagerEntity.this.getZ() + InquillagerEntity.this.random.nextGaussian() * (double)0.13F, 0, 0, 0);
+            }
+            InquillagerEntity.this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 2.0F);
         }
 
         protected SoundEvent getSpellPrepareSound() {

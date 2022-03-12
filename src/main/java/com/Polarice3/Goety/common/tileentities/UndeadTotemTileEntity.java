@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
@@ -57,7 +57,7 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
                 entity.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 900, 1));
                 entity.addEffect(new EffectInstance(Effects.ABSORPTION, 900, 1));
                 entity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 900, 1));
-                entity.addEffect(new EffectInstance(ModRegistryHandler.NECROPOWER.get(), 900, 0, false, false));
+                entity.addEffect(new EffectInstance(ModRegistry.NECROPOWER.get(), 900, 0, false, false));
             }
         }
     }

@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -38,6 +39,7 @@ public class SoulSkullSpell extends InstantCastSpells {
         soulSkullEntity.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D) + 0.5D, entityLiving.getZ() + vector3d.z * 2.0D);
         worldIn.addFreshEntity(soulSkullEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        this.IncreaseInfamy(MainConfig.SoulSkullInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -56,5 +58,6 @@ public class SoulSkullSpell extends InstantCastSpells {
         soulSkullEntity.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D) + 0.5D, entityLiving.getZ() + vector3d.z * 2.0D);
         worldIn.addFreshEntity(soulSkullEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        this.IncreaseInfamy(MainConfig.SoulSkullInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

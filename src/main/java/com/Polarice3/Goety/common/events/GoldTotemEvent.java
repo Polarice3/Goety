@@ -5,7 +5,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -67,7 +67,7 @@ public class GoldTotemEvent {
         }
 
         if (event.getEntityLiving() instanceof PlayerEntity && MainConfig.TotemUndying.get()){
-            if (event.getEntityLiving().hasEffect(ModRegistryHandler.DEATHPROTECT.get())){
+            if (event.getEntityLiving().hasEffect(ModRegistry.DEATHPROTECT.get())){
                 event.getEntityLiving().setHealth(1.0F);
                 event.getEntityLiving().removeAllEffects();
                 event.getEntityLiving().addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
@@ -84,12 +84,12 @@ public class GoldTotemEvent {
     private static ItemStack getTotemItem(PlayerEntity player) {
         for(Hand hand : Hand.values()) {
             ItemStack itemstack = player.getItemInHand(hand);
-            if (itemstack.getItem() == ModRegistryHandler.GOLDTOTEM.get()) {
+            if (itemstack.getItem() == ModRegistry.GOLDTOTEM.get()) {
                 return itemstack;
             }
         }
 
-        return new ItemStack(ModRegistryHandler.GOLDTOTEM.get());
+        return new ItemStack(ModRegistry.GOLDTOTEM.get());
     }
 
 }

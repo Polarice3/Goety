@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
@@ -31,7 +31,7 @@ public class WitchBombEntity extends ProjectileItemEntity {
     }
 
     protected Item getDefaultItem() {
-        return ModRegistryHandler.WITCHBOMB.get();
+        return ModRegistry.WITCHBOMB.get();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -58,7 +58,7 @@ public class WitchBombEntity extends ProjectileItemEntity {
     protected void onHit(RayTraceResult result) {
         super.onHit(result);
         if (!this.level.isClientSide) {
-            this.level.explode(null, this.getX(), this.getY(), this.getZ(), 2.0F, Explosion.Mode.NONE);
+            this.level.explode(null, this.getX(), this.getY(), this.getZ(), 1.0F, Explosion.Mode.NONE);
             this.remove();
         }
 

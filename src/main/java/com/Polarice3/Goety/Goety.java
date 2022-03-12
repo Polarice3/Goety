@@ -9,18 +9,20 @@ import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.*;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
+import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
+import com.Polarice3.Goety.common.infamy.IInfamy;
+import com.Polarice3.Goety.common.infamy.InfamyImp;
+import com.Polarice3.Goety.common.infamy.InfamyStore;
+import com.Polarice3.Goety.common.infamy.ModNetwork;
 import com.Polarice3.Goety.common.potions.ModPotions;
 import com.Polarice3.Goety.common.tileentities.ModTileEntityType;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
-import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModSpawnEggs;
-import com.Polarice3.Goety.init.ModFeatures;
-import com.Polarice3.Goety.init.ModRegistryHandler;
-import com.Polarice3.Goety.init.ModStructures;
+import com.Polarice3.Goety.init.*;
 import com.mojang.serialization.Codec;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
@@ -37,6 +39,7 @@ import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -106,12 +109,16 @@ public class Goety {
 
         forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
 
-        ModRegistryHandler.init();
+        ModRegistry.init();
         ModStructures.init();
         ModFeatures.init();
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        CapabilityManager.INSTANCE.register(IInfamy.class, new InfamyStore(), InfamyImp::new);
+        MinecraftForge.EVENT_BUS.register(RegisterCommands.class);
+        ModNetwork.init();
+
         DeferredWorkQueue.runLater(() -> {
             GlobalEntityTypeAttributes.put(ModEntityType.TANK.get(), AbstractTankEntity.setCustomAttributes().build());
         });
@@ -150,6 +157,14 @@ public class Goety {
 
         DeferredWorkQueue.runLater(() -> {
             GlobalEntityTypeAttributes.put(ModEntityType.ENVIOKER.get(), EnviokerEntity.setCustomAttributes().build());
+        });
+
+        DeferredWorkQueue.runLater(() -> {
+            GlobalEntityTypeAttributes.put(ModEntityType.INQUILLAGER.get(), InquillagerEntity.setCustomAttributes().build());
+        });
+
+        DeferredWorkQueue.runLater(() -> {
+            GlobalEntityTypeAttributes.put(ModEntityType.CONQUILLAGER.get(), ConquillagerEntity.setCustomAttributes().build());
         });
 
         DeferredWorkQueue.runLater(() -> {
@@ -305,7 +320,7 @@ public class Goety {
     public static final ItemGroup TAB = new ItemGroup("goetyTab") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(ModRegistryHandler.GOLDTOTEM.get());
+            return new ItemStack(ModRegistry.GOLDTOTEM.get());
         }
     };
 }

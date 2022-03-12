@@ -88,15 +88,6 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
                 return livingentity.isAlliedTo(entityIn);
             }
         }
-        if (entityIn instanceof FriendlyVexEntity && ((FriendlyVexEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof SummonedEntity && ((SummonedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof FriendlyTankEntity && ((FriendlyTankEntity) entityIn).getOwner() == this.getTrueOwner()){
-            return true;
-        }
         return super.isAlliedTo(entityIn);
     }
 

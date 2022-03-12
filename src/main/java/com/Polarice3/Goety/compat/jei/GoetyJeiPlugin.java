@@ -1,15 +1,13 @@
 package com.Polarice3.Goety.compat.jei;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
@@ -28,7 +26,7 @@ public class GoetyJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModRegistryHandler.CURSED_BURNER.get()), CursedBurnerCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModRegistry.CURSED_BURNER.get()), CursedBurnerCategory.UID);
     }
 
     public void registerRecipes(IRecipeRegistration registration) {

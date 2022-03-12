@@ -40,6 +40,21 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingDuration;
 
+    public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RoarInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ZombieInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TeleportInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulSkullInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FeastInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TemptingInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingInfamyChance;
+
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterXPCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexCooldown;
@@ -57,11 +72,8 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxEnchant;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> HiredTimer;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DyingTimer;
-
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
-    public static final ForgeConfigSpec.ConfigValue<Integer> CultistSpawnFreq;
+    public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnFreq;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> NecroArmoredRobeRepairAmount;
@@ -72,11 +84,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadMinionHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
 
-    public static final ForgeConfigSpec.ConfigValue<Float> HealAmount;
-
-    public static final ForgeConfigSpec.ConfigValue<Boolean> HexerSpawn;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> CultistsSpawn;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
@@ -88,8 +98,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsAttackCreepers;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> TavernGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemGen;
@@ -102,151 +113,175 @@ public class MainConfig {
         MaxSouls = BUILDER.comment("Totem Maximum Soul Count, Default: 10000")
                 .defineInRange("maxSouls", 10000, 100, Integer.MAX_VALUE);
         SoulRepair = BUILDER.comment("Dark and Necro Robes repair themselves using Soul Energy, Default: true")
-                .define("soulrepair", true);
+                .define("soulRepair", true);
         TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy, Default: true")
-                .define("totemundying", true);
+                .define("totemUndying", true);
         MaxEnchant = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 3")
                 .defineInRange("maxEnchant", 3, 1, 10);
         StarterTotem = BUILDER.comment("Gives Players a Totem of Souls when first entering World, Default: false")
-                .define("startertotem", false);
+                .define("starterTotem", false);
         CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 20")
-                .defineInRange("craftsouls", 20, 0, Integer.MAX_VALUE);
+                .defineInRange("craftSouls", 20, 0, Integer.MAX_VALUE);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
-                .define("shownum", false);
-        BUILDER.pop();
-        BUILDER.push("Protectors");
-        HiredTimer = BUILDER.comment("Hired Timer, Default: 24000")
-                .defineInRange("hiredtimer", 24000, 0, 72000);
-        DyingTimer = BUILDER.comment("Dying Timer, Default: 12000")
-                .defineInRange("dyingtimer", 12000, 0, 72000);
-        HealAmount = BUILDER.comment("Heal Amount after being fed (Always put an F at the end of the value!), Default: 10.0F")
-                .define("healamount", 10.0F);
+                .define("showNumber", false);
         BUILDER.pop();
         BUILDER.push("Soul Taken");
         UndeadSouls = BUILDER.comment("Undead Killed, Default: 5")
-                .defineInRange("undeadsouls", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("undeadSouls", 5, 0, Integer.MAX_VALUE);
         AnthropodSouls = BUILDER.comment("Anthropods Killed, Default: 5")
-                .defineInRange("anthropodsouls", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("anthropodSouls", 5, 0, Integer.MAX_VALUE);
         IllagerSouls = BUILDER.comment("Illagers, Witches, Cultists, Protectors Killed, Default: 25")
-                .defineInRange("illagersouls", 25, 0, Integer.MAX_VALUE);
+                .defineInRange("illagerSouls", 25, 0, Integer.MAX_VALUE);
         VillagerSouls = BUILDER.comment("Villagers Killed, Default: 50")
-                .defineInRange("villagersouls", 50, 0, Integer.MAX_VALUE);
+                .defineInRange("villagerSouls", 50, 0, Integer.MAX_VALUE);
         PiglinSouls = BUILDER.comment("Non-Undead Piglin Killed, Default: 10")
-                .defineInRange("piglinsouls", 10, 0, Integer.MAX_VALUE);
+                .defineInRange("piglinSouls", 10, 0, Integer.MAX_VALUE);
         EnderDragonSouls = BUILDER.comment("Ender Dragon Killed, Default: 1000")
-                .defineInRange("enderdragonsouls", 1000, 0, Integer.MAX_VALUE);
+                .defineInRange("enderDragonSouls", 1000, 0, Integer.MAX_VALUE);
         PlayerSouls = BUILDER.comment("Players Killed, Default: 100")
-                .defineInRange("playersouls", 100, 0, Integer.MAX_VALUE);
+                .defineInRange("playerSouls", 100, 0, Integer.MAX_VALUE);
         DefaultSouls = BUILDER.comment("Others Killed, Default: 5")
-                .defineInRange("othersouls", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("otherSouls", 5, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Spell Costs");
         VexCost = BUILDER.comment("Vex Spell Cost, Default: 18")
-                .defineInRange("vexcost", 18, 0, Integer.MAX_VALUE);
+                .defineInRange("vexCost", 18, 0, Integer.MAX_VALUE);
         FangCost = BUILDER.comment("Fang Spell Cost, Default: 8")
-                .defineInRange("fangcost", 8, 0, Integer.MAX_VALUE);
+                .defineInRange("fangCost", 8, 0, Integer.MAX_VALUE);
         RoarCost = BUILDER.comment("Roaring Spell Cost, Default: 10")
-                .defineInRange("bitecost", 10, 0, Integer.MAX_VALUE);
+                .defineInRange("biteCost", 10, 0, Integer.MAX_VALUE);
         ZombieCost = BUILDER.comment("Necroturgy Spell Cost, Default: 5")
-                .defineInRange("zombiecost", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("zombieCost", 5, 0, Integer.MAX_VALUE);
         SkeletonCost = BUILDER.comment("Osseous Spell Cost, Default: 8")
-                .defineInRange("skeletoncost", 8, 0, Integer.MAX_VALUE);
+                .defineInRange("skeletonCost", 8, 0, Integer.MAX_VALUE);
         WitchGaleCost = BUILDER.comment("Witch's Gale Spell Cost, Default: 15")
-                .defineInRange("cripplecost", 15, 0, Integer.MAX_VALUE);
+                .defineInRange("crippleCost", 15, 0, Integer.MAX_VALUE);
         SpiderlingCost = BUILDER.comment("Spiderling Spell Cost per second, Default: 2")
-                .defineInRange("spiderlingcost", 2, 0, Integer.MAX_VALUE);
+                .defineInRange("spiderlingCost", 2, 0, Integer.MAX_VALUE);
         BrainEaterCost = BUILDER.comment("Brain Eater Spell Cost per second, Default: 5")
-                .defineInRange("braincost", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("brainCost", 5, 0, Integer.MAX_VALUE);
         BrainEaterXPCost = BUILDER.comment("How much Experience the above spell Cost per heal, Default: 40")
-                .defineInRange("brainxpcost", 40, 0, 1000);
+                .defineInRange("brainXpCost", 40, 0, 1000);
         TeleportCost = BUILDER.comment("Teleport Spell Cost, Default: 5")
-                .defineInRange("teleportcost", 5, 0, Integer.MAX_VALUE);
+                .defineInRange("teleportCost", 5, 0, Integer.MAX_VALUE);
         SoulSkullCost = BUILDER.comment("Soul Skull Spell Cost, Default: 16")
-                .defineInRange("soulskullcost", 16, 0, Integer.MAX_VALUE);
+                .defineInRange("soulSkullCost", 16, 0, Integer.MAX_VALUE);
         FeastCost = BUILDER.comment("Feasting Spell Cost, Default: 8")
-                .defineInRange("feastcost", 8, 0, Integer.MAX_VALUE);
+                .defineInRange("feastCost", 8, 0, Integer.MAX_VALUE);
         TemptingCost = BUILDER.comment("Tempting Spell Cost, Default: 2")
-                .defineInRange("temptingcost", 2, 0, Integer.MAX_VALUE);
+                .defineInRange("temptingCost", 2, 0, Integer.MAX_VALUE);
         DragonFireballCost = BUILDER.comment("Dragon Fireball Spell Cost, Default: 64")
-                .defineInRange("dragonfireballcost", 64, 0, Integer.MAX_VALUE);
+                .defineInRange("dragonFireballCost", 64, 0, Integer.MAX_VALUE);
         CreeperlingCost = BUILDER.comment("Creeperling Spell Cost per second, Default: 8")
-                .defineInRange("creeperlingcost", 8, 0, Integer.MAX_VALUE);
+                .defineInRange("creeperlingCost", 8, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
-                .defineInRange("vextime", 100, 0, 72000);
+                .defineInRange("vexTime", 100, 0, 72000);
         FangDuration = BUILDER.comment("Time to cast Fang Spell, Default: 80")
-                .defineInRange("fangtime", 80, 0, 72000);
+                .defineInRange("fangTime", 80, 0, 72000);
         RoarDuration = BUILDER.comment("Time to cast Roaring Spell, Default: 40")
-                .defineInRange("roartime", 40, 0, 72000);
+                .defineInRange("roarTime", 40, 0, 72000);
         ZombieDuration = BUILDER.comment("Time to cast Necroturgy Spell, Default: 60")
-                .defineInRange("zombietime", 60, 0, 72000);
+                .defineInRange("zombieTime", 60, 0, 72000);
         SkeletonDuration = BUILDER.comment("Time to cast Osseous Spell, Default: 60")
-                .defineInRange("skeletontime", 60, 0, 72000);
+                .defineInRange("skeletonTime", 60, 0, 72000);
         WitchGaleDuration = BUILDER.comment("Time to cast Witch's Gale Spell, Default: 20")
-                .defineInRange("crippletime", 20, 0, 72000);
+                .defineInRange("crippleTime", 20, 0, 72000);
         SpiderlingDuration = BUILDER.comment("Time to cast Spiderling Spell per second, Default: 10")
-                .defineInRange("spiderlingtime", 10, 0, 72000);
+                .defineInRange("spiderlingTime", 10, 0, 72000);
         BrainEaterDuration = BUILDER.comment("Time to cast Brain Eater Spell per second, Default: 5")
-                .defineInRange("braineatertime", 5, 0, 72000);
+                .defineInRange("brainEaterTime", 5, 0, 72000);
         FeastDuration = BUILDER.comment("Time to cast Feasting Spell per second, Default: 20")
-                .defineInRange("feasttime", 20, 0, 72000);
+                .defineInRange("feastTime", 20, 0, 72000);
         TemptingDuration = BUILDER.comment("Time to cast Tempting Spell per second, Default: 20")
-                .defineInRange("temptingtime", 20, 0, 72000);
+                .defineInRange("temptingTime", 20, 0, 72000);
         DragonFireballDuration = BUILDER.comment("Time to cast Dragon Fireball Spell, Default: 30")
-                .defineInRange("dragonfireballtime", 30, 0, 72000);
+                .defineInRange("dragonFireballTime", 30, 0, 72000);
         CreeperlingDuration = BUILDER.comment("Time to cast Creeperling Spell per second, Default: 10")
-                .defineInRange("creeperlingtime", 10, 0, 72000);
+                .defineInRange("creeperlingTime", 10, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
-                .defineInRange("vexcooldown", 340, 0, 72000);
+                .defineInRange("vexCooldown", 340, 0, 72000);
         ZombieCooldown = BUILDER.comment("Necroturgy Spell Cooldown, Default: 250")
-                .defineInRange("zombiecooldown", 250, 0, 72000);
+                .defineInRange("zombieCooldown", 250, 0, 72000);
         SkeletonCooldown = BUILDER.comment("Osseous Spell Cooldown, Default: 280")
-                .defineInRange("skeletoncooldown", 280, 0, 72000);
+                .defineInRange("skeletonCooldown", 280, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Mob Spawning");
-        HexerSpawn = BUILDER.comment("Hexer Spawning, Default: true")
-                .define("hexerspawn", true);
-        CultistsSpawn = BUILDER.comment("Cultists Spawning, Default: true")
-                .define("cultistsspawn", true);
-        CultistSpawnFreq = BUILDER.comment("Spawn Frequency for Cultists, Default: 12000")
-                .defineInRange("cultistsspawnfreq", 12000, 0, 72000);
         MRabbitMax = BUILDER.comment("Maximum amount of Mutant Rabbits can spawn, Default: 16")
-                .defineInRange("mrabbitmax", 16, 0, 100);
+                .defineInRange("mutatedRabbitMax", 16, 0, 100);
+        BUILDER.pop();
+        BUILDER.push("Infamy");
+        InfamySpawn = BUILDER.comment("Illager Spawning due to Infamy, Default: true")
+                .define("infamySpawn", true);
+        InfamySpawnFreq = BUILDER.comment("Spawn Frequency for Illagers Hunting the Player, Default: 12000")
+                .defineInRange("infamySpawnFreq", 12000, 0, 72000);
+        InfamySpell = BUILDER.comment("Casting Spells have a chance of giving Player Infamy, Default: true")
+                .define("infamySpell", true);
+        InfamySpellGive = BUILDER.comment("How much Infamy is given when casting Spells, Default: 1")
+                .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Infamy Chance");
+        VexInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Vex Spell, Default: 1")
+                .defineInRange("vexInfamyChance", 1, 0, Integer.MAX_VALUE);
+        FangInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fang Spell, Default: 4")
+                .defineInRange("fangInfamyChance", 4, 0, Integer.MAX_VALUE);
+        RoarInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Roaring Spell, Default: 4")
+                .defineInRange("roarInfamyChance", 4, 0, Integer.MAX_VALUE);
+        ZombieInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Necroturgy Spell, Default: 16")
+                .defineInRange("zombieInfamyChance", 16, 0, Integer.MAX_VALUE);
+        SkeletonInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Osseous Spell, Default: 16")
+                .defineInRange("skeletonInfamyChance", 16, 0, Integer.MAX_VALUE);
+        WitchGaleInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Witch's Gale Spell, Default: 16")
+                .defineInRange("crippleInfamyChance", 16, 0, Integer.MAX_VALUE);
+        SpiderlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spiderling Spell per second, Default: 128")
+                .defineInRange("spiderlingInfamyChance", 128, 0, Integer.MAX_VALUE);
+        BrainEaterInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Brain Eater Spell per second, Default: 0")
+                .defineInRange("brainEaterInfamyChance", 0, 0, Integer.MAX_VALUE);
+        SoulSkullInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Skull Spell per second, Default: 0")
+                .defineInRange("soulSkullInfamyChance", 0, 0, Integer.MAX_VALUE);
+        TeleportInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Teleport Spell per second, Default: 0")
+                .defineInRange("teleportInfamyChance", 0, 0, Integer.MAX_VALUE);
+        FeastInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Feasting Spell per second, Default: 8")
+                .defineInRange("feastInfamyChance", 8, 0, Integer.MAX_VALUE);
+        TemptingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Tempting Spell per second, Default: 0")
+                .defineInRange("temptingInfamyChance", 0, 0, Integer.MAX_VALUE);
+        DragonFireballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Dragon Fireball Spell, Default: 0")
+                .defineInRange("dragonFireballInfamyChance", 0, 0, Integer.MAX_VALUE);
+        CreeperlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Creeperling Spell per second, Default: 128")
+                .defineInRange("creeperlingInfamyChance", 128, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
-        TavernGen = BUILDER.comment("Tavern Generates in the World, Default: true")
-                .define("taverngen", true);
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")
-                .define("darkmanorgen", true);
+                .define("darkManorGen", true);
         PortalOutpostGen = BUILDER.comment("Portal Outpost Generates in the World, Default: true")
-                .define("portaloutpostgen", true);
+                .define("portalOutpostGen", true);
         CursedGraveyardGen = BUILDER.comment("Cursed Graveyard Generates in the World, Default: true")
-                .define("cursedgraveyardgen", true);
+                .define("cursedGraveyardGen", true);
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
-                .define("totemgen", true);
+                .define("totemGen", true);
         BUILDER.pop();
         BUILDER.push("Spells");
         UndeadTeleport = BUILDER.comment("Whether Undead Minions can teleport to Players, Default: false")
-                .define("undeadteleport", false);
+                .define("undeadTeleport", false);
         VexTeleport = BUILDER.comment("Whether Vex Minions can teleport to Players, Default: true")
-                .define("vexteleport", true);
+                .define("vexTeleport", true);
         MinionsAttackCreepers = BUILDER.comment("Whether Minions can attack Creepers if Mob Griefing Rule is False, Default: true")
-                .define("minionattackcreepers", true);
+                .define("minionAttackCreepers", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
-                .define("undeadminionheal", true);
+                .define("undeadMinionHeal", true);
         TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Arachnid Robes, Default: true")
-                .define("loyalspiderheal", true);
+                .define("loyalSpiderHeal", true);
         UndeadMinionHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Undead Minion to heal, Default: 1")
-                .defineInRange("undeadminionhealcost", 1, 1, Integer.MAX_VALUE);
+                .defineInRange("undeadMinionHealCost", 1, 1, Integer.MAX_VALUE);
         TamedSpiderHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Loyal Spider to heal, Default: 1")
-                .defineInRange("loyalspiderhealcost", 1, 1, Integer.MAX_VALUE);
+                .defineInRange("loyalSpiderHealCost", 1, 1, Integer.MAX_VALUE);
         WandVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a wand, without instantly dying, around the player, Default: 8")
-                .defineInRange("wandvexlimit", 8, 1, Integer.MAX_VALUE);
+                .defineInRange("wandVexLimit", 8, 1, Integer.MAX_VALUE);
         StaffVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a staff, without instantly dying, around the player, Default: 16")
-                .defineInRange("staffvexlimit", 16, 1, Integer.MAX_VALUE);
+                .defineInRange("staffVexLimit", 16, 1, Integer.MAX_VALUE);
         ZombieLimit = BUILDER.comment("Number of Zombie Servants that can exist around the player without instantly dying, Default: 32")
                 .defineInRange("zombieLimit", 32, 1, Integer.MAX_VALUE);
         SkeletonLimit = BUILDER.comment("Number of Skeleton Servants that can exist around the player without instantly dying, Default: 32")
@@ -254,7 +289,7 @@ public class MainConfig {
         BUILDER.pop();
         BUILDER.push("Misc");
         VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")
-                .define("vizierminion", false);
+                .define("vizierMinion", false);
         DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 20")
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
         NecroArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Necro Armored Robes per second, Default: 20")
@@ -262,7 +297,9 @@ public class MainConfig {
         WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 20")
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
         SoulSkullFire = BUILDER.comment("Soul Skulls when shot from Staffs sets ground aflame, Default: false")
-                .define("soulskullfire", false);
+                .define("soulSkullFire", false);
+        IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")
+                .define("illagueSpread", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

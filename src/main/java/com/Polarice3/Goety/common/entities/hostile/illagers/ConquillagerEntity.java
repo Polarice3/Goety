@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
@@ -29,6 +31,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -50,7 +53,7 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
     private final Inventory inventory = new Inventory(5);
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
 
-    protected ConquillagerEntity(EntityType<? extends AbstractIllagerEntity> p_i48556_1_, World p_i48556_2_) {
+    public ConquillagerEntity(EntityType<? extends AbstractIllagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
     }
 
@@ -80,7 +83,21 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         super.tick();
         for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D), field_213690_b)) {
             if (!(entity instanceof PatrollerEntity)) {
-                entity.addEffect(new EffectInstance(ModRegistryHandler.ILLAGUE.get(), 12000));
+                if (entity instanceof PlayerEntity){
+                    if (!((PlayerEntity) entity).isCreative()){
+                        entity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), 12000, 0, false, false));
+
+                    }
+                } else if (entity instanceof AbstractVillagerEntity) {
+                    entity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), 12000, 0, false, false));
+                } else {
+                    entity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), 2000, 0, false, false));
+                }
+            }
+        }
+        if (this.level.isClientSide) {
+            for(int i = 0; i < 2; ++i) {
+                new ParticleUtil(ModParticleTypes.PLAGUE_EFFECT.get(), this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.5D, 0.0D);
             }
         }
     }

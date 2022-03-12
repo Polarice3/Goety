@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -70,19 +70,19 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
         int i1;
         int i2 = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MOB_LOOTING, stack);
         i1 = MathHelper.clamp(i2, 1, 3);
-        if (target.hasEffect(ModRegistryHandler.GOLDTOUCHED.get())){
-            EffectInstance effectInstance = target.getEffect(ModRegistryHandler.GOLDTOUCHED.get());
+        if (target.hasEffect(ModRegistry.GOLDTOUCHED.get())){
+            EffectInstance effectInstance = target.getEffect(ModRegistry.GOLDTOUCHED.get());
             int random = attacker.level.random.nextInt(6 / i1);
             if (random == 0){
                 assert effectInstance != null;
                 int amp = effectInstance.getAmplifier();
                 int i = amp + 1;
                 i = MathHelper.clamp(i, 0, 5);
-                target.removeEffect(ModRegistryHandler.GOLDTOUCHED.get());
-                target.addEffect(new EffectInstance(ModRegistryHandler.GOLDTOUCHED.get(), 300, i));
+                target.removeEffect(ModRegistry.GOLDTOUCHED.get());
+                target.addEffect(new EffectInstance(ModRegistry.GOLDTOUCHED.get(), 300, i));
             }
         } else {
-            target.addEffect(new EffectInstance(ModRegistryHandler.GOLDTOUCHED.get(), 300));
+            target.addEffect(new EffectInstance(ModRegistry.GOLDTOUCHED.get(), 300));
         }
         return true;
     }

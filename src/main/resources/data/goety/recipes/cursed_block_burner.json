@@ -1,0 +1,9 @@
+{
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "tag": "forge:storage_blocks/iron"
+  },
+  "result": "goety:cursed_block",
+  "experience": 0.0,
+  "cookingtime": 1600
+}

@@ -24,14 +24,14 @@ public class CultistsSpawner {
 
     public int tick(ServerWorld world) {
         Random random = world.random;
-        if (!MainConfig.CultistsSpawn.get()) {
+        if (!MainConfig.InfamySpawn.get()) {
             return 0;
         } else {
             --this.ticksUntilSpawn;
             if (this.ticksUntilSpawn > 0) {
                 return 0;
             } else {
-                this.ticksUntilSpawn += MainConfig.CultistSpawnFreq.get();
+                this.ticksUntilSpawn += MainConfig.InfamySpawnFreq.get();
                 if (!world.isDay()) {
                     int j = world.players().size();
                     if (j < 1) {

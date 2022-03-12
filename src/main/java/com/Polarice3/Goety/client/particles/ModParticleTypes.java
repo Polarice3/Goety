@@ -21,10 +21,14 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> TOTEM_EFFECT = PARTICLE_TYPES.register("totem_effect",
             () -> new BasicParticleType(false));
 
+    public static final RegistryObject<BasicParticleType> PLAGUE_EFFECT = PARTICLE_TYPES.register("plague_effect",
+            () -> new BasicParticleType(false));
+
     @SubscribeEvent
     public static void registerFactories(ParticleFactoryRegisterEvent event) {
         ParticleManager particles = Minecraft.getInstance().particleEngine;
 
         particles.register(ModParticleTypes.TOTEM_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
     }
 }

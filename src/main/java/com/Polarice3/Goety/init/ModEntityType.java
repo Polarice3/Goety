@@ -6,7 +6,9 @@ import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.*;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
+import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.LightningTrapEntity;
@@ -131,6 +133,20 @@ public class ModEntityType {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "envioker").toString()));
+
+    public static final RegistryObject<EntityType<InquillagerEntity>> INQUILLAGER = ENTITY_TYPES.register("inquillager",
+            () -> EntityType.Builder.of(InquillagerEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "inquillager").toString()));
+
+    public static final RegistryObject<EntityType<ConquillagerEntity>> CONQUILLAGER = ENTITY_TYPES.register("conquillager",
+            () -> EntityType.Builder.of(ConquillagerEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "conquillager").toString()));
 
     public static final RegistryObject<EntityType<HuskarlEntity>> HUSKARL = ENTITY_TYPES.register("huskarl",
             () -> EntityType.Builder.of(HuskarlEntity::new, EntityClassification.MONSTER)

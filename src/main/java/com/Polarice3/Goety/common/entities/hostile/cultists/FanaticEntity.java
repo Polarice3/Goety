@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -76,7 +76,7 @@ public class FanaticEntity extends AbstractCultistEntity {
     }
 
     public boolean hasBomb(){
-        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModRegistryHandler.WITCHBOMB.get();
+        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModRegistry.WITCHBOMB.get();
     }
 
     static class ThrowBombsGoal extends Goal{
@@ -91,7 +91,7 @@ public class FanaticEntity extends AbstractCultistEntity {
         public boolean canUse() {
             if (this.fanatic.getTarget() != null && this.fanatic.hasBomb()){
                 LivingEntity entity = this.fanatic.getTarget();
-                return this.fanatic.distanceTo(entity) >= 8.0;
+                return this.fanatic.distanceTo(entity) > 2.0;
             } else {
                 return false;
             }
@@ -111,7 +111,7 @@ public class FanaticEntity extends AbstractCultistEntity {
         public void tick() {
             super.tick();
             ++this.bombTimer;
-            if (this.bombTimer >= 200) {
+            if (this.bombTimer >= 60) {
                 LivingEntity livingEntity = this.fanatic.getTarget();
                 WitchBombEntity snowballentity = new WitchBombEntity(this.fanatic.level, this.fanatic);
                 Vector3d vector3d = livingEntity.getDeltaMovement();
@@ -191,7 +191,7 @@ public class FanaticEntity extends AbstractCultistEntity {
                 this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
         }
         if (random3 == 0) {
-            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModRegistryHandler.WITCHBOMB.get()));
+            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModRegistry.WITCHBOMB.get()));
         }
     }
 

@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.bosses;
 
 import com.Polarice3.Goety.common.entities.projectiles.WarpedSpearEntity;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -91,7 +91,7 @@ public class PenanceEntity extends CreatureEntity implements IRangedAttackMob {
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistryHandler.WARPED_SPEAR.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.WARPED_SPEAR.get()));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PenanceEntity extends CreatureEntity implements IRangedAttackMob {
     }
 
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
-        WarpedSpearEntity spearEntity = new WarpedSpearEntity(this.level, this, new ItemStack(ModRegistryHandler.WARPED_SPEAR.get()));
+        WarpedSpearEntity spearEntity = new WarpedSpearEntity(this.level, this, new ItemStack(ModRegistry.WARPED_SPEAR.get()));
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - spearEntity.getY();
         double d2 = target.getZ() - this.getZ();
@@ -257,7 +257,7 @@ public class PenanceEntity extends CreatureEntity implements IRangedAttackMob {
         }
 
         public boolean canUse() {
-            return super.canUse() && this.field_204728_a.stunTick <= 0 && this.field_204728_a.roarTick <= 0 && this.field_204728_a.getMainHandItem().getItem() == ModRegistryHandler.WARPED_SPEAR.get();
+            return super.canUse() && this.field_204728_a.stunTick <= 0 && this.field_204728_a.roarTick <= 0 && this.field_204728_a.getMainHandItem().getItem() == ModRegistry.WARPED_SPEAR.get();
         }
 
         public void start() {

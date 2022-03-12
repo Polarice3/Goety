@@ -14,6 +14,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectType;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -21,7 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class ModRegistryHandler {
+public class ModRegistry {
     public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Goety.MOD_ID);
     public static DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Goety.MOD_ID);
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Goety.MOD_ID);
@@ -157,6 +158,7 @@ public class ModRegistryHandler {
             new ApostleArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
     //Blocks
     public static final RegistryObject<Block> BLAZE_CORE_BLOCK = BLOCKS.register("blazecoreblock", TankCoreBlock::new);
+    public static final RegistryObject<Block> CURSED_METAL_BLOCK = BLOCKS.register("cursed_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_BLOCK = BLOCKS.register("cursed_stone", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_BRICK_BLOCK = BLOCKS.register("cursed_bricks", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_CHISELED_BLOCK = BLOCKS.register("cursed_stone_chiseled", CursedStoneBlock::new);
@@ -210,6 +212,8 @@ public class ModRegistryHandler {
     //Block Items
     public static final RegistryObject<Item> BLAZE_CORE_ITEM = ITEMS.register("blazecoreblock",
             () -> new BlockItemBase(BLAZE_CORE_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_METAL_BLOCK_ITEM = ITEMS.register("cursed_block",
+            () -> new BlockItemBase(CURSED_METAL_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_STONE_ITEM = ITEMS.register("cursed_stone",
             () -> new BlockItemBase(CURSED_STONE_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_STONE_SLAB_ITEM = ITEMS.register("cursed_stone_slab",
@@ -253,20 +257,31 @@ public class ModRegistryHandler {
     //Effects
     public static final RegistryObject<Effect> MINOR_HARM = EFFECTS.register("minorharm",
             MinorHarmEffect::new);
+
     public static final RegistryObject<Effect> DEATHPROTECT = EFFECTS.register("deathprotect",
-            DeathProtectEffect::new);
+            () -> new ModEffects(EffectType.BENEFICIAL, 0));
+
     public static final RegistryObject<Effect> GOLDTOUCHED = EFFECTS.register("goldtouched",
-            GoldTouchEffect::new);
+            () -> new ModEffects(EffectType.HARMFUL, 4866583));
+
     public static final RegistryObject<Effect> HOSTED = EFFECTS.register("hosted",
-            HostedEffect::new);
+            () -> new ModEffects(EffectType.HARMFUL, 10044730));
+
     public static final RegistryObject<Effect> SUMMONDOWN = EFFECTS.register("summondown",
-            SummonDownEffect::new);
+            () -> new ModEffects(EffectType.HARMFUL, 0));
+
     public static final RegistryObject<Effect> COSMIC = EFFECTS.register("cosmic",
             CosmicEffect::new);
+
     public static final RegistryObject<Effect> CURSED = EFFECTS.register("cursed",
-            CursedEffect::new);
+            () -> new ModEffects(EffectType.HARMFUL, 10044730));
+
     public static final RegistryObject<Effect> ILLAGUE = EFFECTS.register("illague",
             IllagueEffect::new);
+
     public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
-            NecroPowerEffect::new);
+            () -> new ModEffects(EffectType.NEUTRAL, 4393481));
+
+    public static final RegistryObject<Effect> LAUNCH = EFFECTS.register("launch",
+            () -> new ModEffects(EffectType.NEUTRAL, 0));
 }

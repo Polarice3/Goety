@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -37,7 +37,7 @@ public class ParasiteEntity extends MonsterEntity {
             && !(enemy instanceof SilverfishEntity) && !(enemy instanceof EndermiteEntity)
             && !(enemy instanceof WitherEntity) && !(enemy instanceof EnderDragonEntity);
     private static final Predicate<LivingEntity> HOSTED = (p_213797_0_) ->
-            p_213797_0_.hasEffect(ModRegistryHandler.HOSTED.get()) && !(p_213797_0_ instanceof ParasiteEntity) && p_213797_0_.attackable();
+            p_213797_0_.hasEffect(ModRegistry.HOSTED.get()) && !(p_213797_0_ instanceof ParasiteEntity) && p_213797_0_.attackable();
 
     public ParasiteEntity(EntityType<? extends ParasiteEntity> type, World worldIn) {
         super(type, worldIn);
@@ -112,7 +112,7 @@ public class ParasiteEntity extends MonsterEntity {
             int random = this.level.random.nextInt(16);
             if (random == 0) {
                 float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-                ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistryHandler.HOSTED.get(), 140 * (int) f));
+                ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistry.HOSTED.get(), 140 * (int) f));
                 this.lifetime = 0;
             }
         }

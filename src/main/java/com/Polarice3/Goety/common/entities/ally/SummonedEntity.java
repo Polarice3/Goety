@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -87,7 +87,7 @@ public class SummonedEntity extends CreatureEntity {
             } else if (this.limitedLifeTicks > 0){
                 this.limitedLifespan = true;
             }
-            if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModRegistryHandler.NECROBOOTSOFWANDER.get()){
+            if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModRegistry.NECROBOOTSOFWANDER.get()){
                 if (this.getMobType() == CreatureAttribute.UNDEAD){
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 1, false, false, false));
                 }
@@ -213,7 +213,7 @@ public class SummonedEntity extends CreatureEntity {
     }
 
     public boolean canBeAffected(EffectInstance pPotioneffect) {
-        return pPotioneffect.getEffect() != ModRegistryHandler.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
+        return pPotioneffect.getEffect() != ModRegistry.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
     }
 
     static class ZombieAttackGoal extends MeleeAttackGoal {

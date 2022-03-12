@@ -15,10 +15,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class NetherBallEntity extends DamagingProjectileEntity {
@@ -55,7 +52,8 @@ public class NetherBallEntity extends DamagingProjectileEntity {
                 nethernalEntity.moveTo(blockPos, 0.0F, 0.0F);
                 nethernalEntity.setLimitedLife(3600);
                 this.level.addFreshEntity(nethernalEntity);
-                this.level.explode(this, this.getX(), this.getY(), this.getZ(), 5.0F, Explosion.Mode.NONE);
+                boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+                this.level.explode(this, this.getX(), this.getY(), this.getZ(), 8.0F, flag, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
                 this.remove();
             }
 

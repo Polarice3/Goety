@@ -43,6 +43,7 @@ public class WitchGaleSpell extends Spells{
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.WITCH, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
@@ -61,6 +62,7 @@ public class WitchGaleSpell extends Spells{
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.WITCH, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 }

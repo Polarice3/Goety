@@ -39,6 +39,7 @@ public class TeleportSpell extends InstantCastSpells{
         enderTeleportEvent(entityLiving, worldIn, newPos);
         new ParticleUtil(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian());
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        this.IncreaseInfamy(MainConfig.TeleportInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class TeleportSpell extends InstantCastSpells{
         enderTeleportEvent(entityLiving, worldIn, newPos);
         new ParticleUtil(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian());
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        this.IncreaseInfamy(MainConfig.TeleportInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public static void enderTeleportEvent(LivingEntity player, World world, BlockPos target) {

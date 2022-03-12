@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -87,22 +87,15 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
-/*        if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
-            BlackBullEntity blackBullEntity = new BlackBullEntity(ModEntityType.BLACK_BULL.get(), level);
-            blackBullEntity.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
-            blackBullEntity.finalizeSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, (ILivingEntityData)null, (CompoundNBT)null);
-            this.startRiding(blackBullEntity);
-            worldIn.addFreshEntity(blackBullEntity);
-        }*/
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.level.random.nextInt(2);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistryHandler.SOULSTAFF.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.SOULSTAFF.get()));
         this.setDropChance(EquipmentSlotType.MAINHAND, 0.0F);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistryHandler.APOSTLEARMOREDHELM.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistryHandler.APOSTLEARMOREDROBE.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.APOSTLEARMOREDHELM.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.APOSTLEARMOREDROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
         this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
         switch (random){

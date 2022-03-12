@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.IClearable;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
     }
 
     public void decreaseSouls(int souls) {
-        if (this.item.getItem() != ModRegistryHandler.GOLDTOTEM.get()) {
+        if (this.item.getItem() != ModRegistry.GOLDTOTEM.get()) {
             return;
         }
         assert this.item.getTag() != null;

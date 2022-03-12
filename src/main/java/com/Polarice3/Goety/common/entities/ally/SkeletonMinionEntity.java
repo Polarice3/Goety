@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -188,7 +188,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
     }
 
     public boolean canBeAffected(EffectInstance potioneffectIn) {
-        return potioneffectIn.getEffect() != ModRegistryHandler.HOSTED.get();
+        return potioneffectIn.getEffect() != ModRegistry.HOSTED.get();
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {

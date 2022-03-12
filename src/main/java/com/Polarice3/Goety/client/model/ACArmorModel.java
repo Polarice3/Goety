@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.client.model;
 
-import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.LivingEntity;
 
-public class ACArmorModel<T extends AbstractCultistEntity> extends BipedModel<T> {
+public class ACArmorModel<T extends LivingEntity> extends BipedModel<T> {
     public final ModelRenderer all;
 
     public ACArmorModel(float modelSizeIn) {

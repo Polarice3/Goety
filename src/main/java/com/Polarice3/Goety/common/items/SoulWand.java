@@ -7,7 +7,7 @@ import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import com.Polarice3.Goety.common.spells.*;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -77,7 +77,7 @@ public class SoulWand extends Item{
     }
 
     private static boolean isMatchingItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModRegistryHandler.FOCUSBAG.get();
+        return itemStack.getItem() == ModRegistry.FOCUSBAG.get();
     }
 
     public boolean SoulDiscount(LivingEntity entityLiving){
@@ -85,7 +85,7 @@ public class SoulWand extends Item{
     }
 
     public boolean SoulCostUp(LivingEntity entityLiving){
-        return entityLiving.hasEffect(ModRegistryHandler.SUMMONDOWN.get());
+        return entityLiving.hasEffect(ModRegistry.SUMMONDOWN.get());
     }
 
     public boolean ReduceCastTime(LivingEntity entityLiving){
@@ -94,7 +94,7 @@ public class SoulWand extends Item{
 
     public int SoulUse(LivingEntity entityLiving, ItemStack stack){
         if (SoulCostUp(entityLiving)){
-            int amp = Objects.requireNonNull(entityLiving.getEffect(ModRegistryHandler.SUMMONDOWN.get())).getAmplifier() + 2;
+            int amp = Objects.requireNonNull(entityLiving.getEffect(ModRegistry.SUMMONDOWN.get())).getAmplifier() + 2;
             return SoulCost(stack) * amp;
         } else if (SoulDiscount(entityLiving)){
             return SoulCost(stack)/2;

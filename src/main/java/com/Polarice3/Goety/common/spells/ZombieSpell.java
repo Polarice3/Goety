@@ -67,6 +67,7 @@ public class ZombieSpell extends SummonSpells{
                 new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
             }
             this.SummonDown(entityLiving);
+            this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
         }
     }
 
@@ -102,6 +103,7 @@ public class ZombieSpell extends SummonSpells{
             for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                 new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
             }
+            this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
         }
     }
 }

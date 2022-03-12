@@ -1,9 +1,8 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.blocks.FangTotemBlock;
 import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -107,7 +106,7 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
             }
 
             assert this.level != null;
-            boolean flag = this.level.getBlockState(new BlockPos(beaconXIn, j, beaconZIn)).is(ModRegistryHandler.CURSED_TOTEM_BLOCK.get());
+            boolean flag = this.level.getBlockState(new BlockPos(beaconXIn, j, beaconZIn)).is(ModRegistry.CURSED_TOTEM_BLOCK.get());
 
             if (!flag) {
                 break;

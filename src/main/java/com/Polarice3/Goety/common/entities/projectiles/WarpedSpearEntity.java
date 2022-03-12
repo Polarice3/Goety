@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -37,7 +37,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof WarpedSpearEntity);
     };
     private static final DataParameter<Boolean> field_226571_aq_ = EntityDataManager.defineId(WarpedSpearEntity.class, DataSerializers.BOOLEAN);
-    private ItemStack thrownStack = new ItemStack(ModRegistryHandler.WARPED_SPEAR.get());
+    private ItemStack thrownStack = new ItemStack(ModRegistry.WARPED_SPEAR.get());
     private boolean dealtDamage;
     public int returningTicks;
 

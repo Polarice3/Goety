@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.world.features;
 
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -16,11 +16,11 @@ import java.util.Random;
 
 public class CursedTotemFeature extends Feature<NoFeatureConfig> {
     private static final BlockStateMatcher IS_GRASS = BlockStateMatcher.forBlock(Blocks.GRASS_BLOCK);
-    private final BlockState cursedtiles = ModRegistryHandler.CURSED_TILES_BLOCK.get().defaultBlockState();
-    private final BlockState cursedtotem = ModRegistryHandler.CURSED_TOTEM_BLOCK.get().defaultBlockState();
-    private final BlockState fanghead = ModRegistryHandler.FANG_TOTEM.get().defaultBlockState();
-    private final BlockState mutatehead = ModRegistryHandler.MUTATE_TOTEM.get().defaultBlockState();
-    private final BlockState windhead = ModRegistryHandler.WIND_TOTEM.get().defaultBlockState();
+    private final BlockState cursedtiles = ModRegistry.CURSED_TILES_BLOCK.get().defaultBlockState();
+    private final BlockState cursedtotem = ModRegistry.CURSED_TOTEM_BLOCK.get().defaultBlockState();
+    private final BlockState fanghead = ModRegistry.FANG_TOTEM.get().defaultBlockState();
+    private final BlockState mutatehead = ModRegistry.MUTATE_TOTEM.get().defaultBlockState();
+    private final BlockState windhead = ModRegistry.WIND_TOTEM.get().defaultBlockState();
 
     public CursedTotemFeature(Codec<NoFeatureConfig> codec) {
         super(codec);

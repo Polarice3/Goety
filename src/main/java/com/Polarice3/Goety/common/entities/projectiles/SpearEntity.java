@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 public class SpearEntity extends AbstractArrowEntity {
     private static final DataParameter<Byte> ID_LOYALTY = EntityDataManager.defineId(SpearEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Boolean> ID_FOIL = EntityDataManager.defineId(SpearEntity.class, DataSerializers.BOOLEAN);
-    private ItemStack tridentItem = new ItemStack(ModRegistryHandler.IRON_SPEAR.get());
+    private ItemStack tridentItem = new ItemStack(ModRegistry.IRON_SPEAR.get());
     private boolean dealtDamage;
     public IItemTier itemTier = ItemTier.IRON;
     public int clientSideReturnTridentTickCount;
@@ -56,17 +56,17 @@ public class SpearEntity extends AbstractArrowEntity {
 
     public void setTridentItem(IItemTier tier){
         if (tier == ItemTier.WOOD){
-            this.tridentItem = new ItemStack(ModRegistryHandler.WOODEN_SPEAR.get());
+            this.tridentItem = new ItemStack(ModRegistry.WOODEN_SPEAR.get());
         } else if (tier == ItemTier.STONE){
-            this.tridentItem = new ItemStack(ModRegistryHandler.STONE_SPEAR.get());
+            this.tridentItem = new ItemStack(ModRegistry.STONE_SPEAR.get());
         } else if (tier == ItemTier.IRON){
-            this.tridentItem = new ItemStack(ModRegistryHandler.IRON_SPEAR.get());
+            this.tridentItem = new ItemStack(ModRegistry.IRON_SPEAR.get());
         } else if (tier == ItemTier.DIAMOND){
-            this.tridentItem = new ItemStack(ModRegistryHandler.DIAMOND_SPEAR.get());
+            this.tridentItem = new ItemStack(ModRegistry.DIAMOND_SPEAR.get());
         } else if (tier == ItemTier.NETHERITE){
-            this.tridentItem = new ItemStack(ModRegistryHandler.NETHERITE_SPEAR.get());
+            this.tridentItem = new ItemStack(ModRegistry.NETHERITE_SPEAR.get());
         } else {
-            this.tridentItem = new ItemStack(ModRegistryHandler.IRON_SPEAR.get());
+            this.tridentItem = new ItemStack(ModRegistry.IRON_SPEAR.get());
         }
     }
 

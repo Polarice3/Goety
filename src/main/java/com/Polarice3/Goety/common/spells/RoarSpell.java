@@ -51,6 +51,7 @@ public class RoarSpell extends Spells {
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
+        this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
@@ -75,6 +76,7 @@ public class RoarSpell extends Spells {
             double d = worldIn.random.nextGaussian() * 0.2D;
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), d, d, d);
         }
+        this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     private void superlaunch(Entity p_213688_1_, LivingEntity livingEntity) {

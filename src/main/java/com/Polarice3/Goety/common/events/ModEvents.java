@@ -5,9 +5,11 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
+import com.Polarice3.Goety.common.infamy.IInfamy;
+import com.Polarice3.Goety.common.infamy.InfamyProvider;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.common.items.SoulWand;
-import com.Polarice3.Goety.init.ModRegistryHandler;
+import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
@@ -22,6 +24,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -32,6 +35,7 @@ import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -50,9 +54,16 @@ import java.util.Objects;
 public class ModEvents {
 
     @SubscribeEvent
+    public static void onPlayerCapabilityAttachEvent(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof PlayerEntity) {
+            event.addCapability(new ResourceLocation(Goety.MOD_ID, "infamy"), new InfamyProvider());
+        }
+    }
+
+    @SubscribeEvent
     public static void openBagandWand(InputEvent.KeyInputEvent event){
-        KeyPressed.setWand(ModRegistryHandler.keyBindings[0].isDown());
-        KeyPressed.setWandandbag(ModRegistryHandler.keyBindings[1].isDown());
+        KeyPressed.setWand(ModRegistry.keyBindings[0].isDown());
+        KeyPressed.setWandandbag(ModRegistry.keyBindings[1].isDown());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -86,19 +97,19 @@ public class ModEvents {
         }
     }
 
-    private static final Map<ServerWorld, CultistsSpawner> CULTISTS_SPAWNER_MAP = new HashMap<>();
+    private static final Map<ServerWorld, IllagerSpawner> ILLAGER_SPAWNER_MAP = new HashMap<>();
 
     @SubscribeEvent
     public static void worldLoad(WorldEvent.Load evt) {
         if (!evt.getWorld().isClientSide() && evt.getWorld() instanceof ServerWorld) {
-            CULTISTS_SPAWNER_MAP.put((ServerWorld) evt.getWorld(), new CultistsSpawner());
+            ILLAGER_SPAWNER_MAP.put((ServerWorld) evt.getWorld(), new IllagerSpawner());
         }
     }
 
     @SubscribeEvent
     public static void worldUnload(WorldEvent.Unload evt) {
         if (!evt.getWorld().isClientSide() && evt.getWorld() instanceof ServerWorld) {
-            CULTISTS_SPAWNER_MAP.remove(evt.getWorld());
+            ILLAGER_SPAWNER_MAP.remove(evt.getWorld());
         }
     }
 
@@ -106,7 +117,7 @@ public class ModEvents {
     public static void onServerTick(TickEvent.WorldTickEvent tick){
         if(!tick.world.isClientSide && tick.world instanceof ServerWorld){
             ServerWorld serverWorld = (ServerWorld)tick.world;
-            CultistsSpawner spawner2 = CULTISTS_SPAWNER_MAP.get(serverWorld);
+            IllagerSpawner spawner2 = ILLAGER_SPAWNER_MAP.get(serverWorld);
             if (spawner2 != null){
                 spawner2.tick(serverWorld);
             }
@@ -128,7 +139,7 @@ public class ModEvents {
             }
 
             if (!data.getBoolean("goety:gotTotem")) {
-                event.getPlayer().addItem(new ItemStack(ModRegistryHandler.GOLDTOTEM.get()));
+                event.getPlayer().addItem(new ItemStack(ModRegistry.GOLDTOTEM.get()));
                 data.putBoolean("goety:gotTotem", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
             }
@@ -154,6 +165,9 @@ public class ModEvents {
             if (player.isInWater() && player.isAffectedByFluids() && !player.canStandOnFluid(fluidstate.getType()) && !player.hasEffect(Effects.DOLPHINS_GRACE)){
                 player.setDeltaMovement(player.getDeltaMovement().x * 1.0175, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.0175);
             }
+        }
+        if (player.hasEffect(ModRegistry.LAUNCH.get())){
+            player.setDeltaMovement(player.getDeltaMovement().add(0, 1, 0));
         }
     }
 
@@ -198,8 +212,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void HurtEvent(LivingHurtEvent event){
         LivingEntity entity = event.getEntityLiving();
-        if (entity.hasEffect(ModRegistryHandler.CURSED.get())){
-            EffectInstance effectInstance = entity.getEffect(ModRegistryHandler.CURSED.get());
+        if (entity.hasEffect(ModRegistry.CURSED.get())){
+            EffectInstance effectInstance = entity.getEffect(ModRegistry.CURSED.get());
             assert effectInstance != null;
             int i = effectInstance.getAmplifier() + 1;
             event.setAmount(event.getAmount() * 0.5F + i);
@@ -219,8 +233,8 @@ public class ModEvents {
         Entity killed = event.getEntity();
         Entity killer = event.getSource().getEntity();
         if (killed instanceof CreatureEntity){
-            if (((CreatureEntity) killed).hasEffect(ModRegistryHandler.GOLDTOUCHED.get())){
-                int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModRegistryHandler.GOLDTOUCHED.get())).getAmplifier() + 1;
+            if (((CreatureEntity) killed).hasEffect(ModRegistry.GOLDTOUCHED.get())){
+                int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModRegistry.GOLDTOUCHED.get())).getAmplifier() + 1;
                 for(int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
                     killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
                 }
@@ -229,7 +243,15 @@ public class ModEvents {
         if (killed instanceof BatEntity){
             if (killer instanceof LivingEntity) {
                 if (RobeArmorFinder.FindArachnoHelm((LivingEntity) killer) && RobeArmorFinder.FindArachnoArmor((LivingEntity) killer)) {
-                    killed.spawnAtLocation(new ItemStack(ModRegistryHandler.DEADBAT.get()));
+                    killed.spawnAtLocation(new ItemStack(ModRegistry.DEADBAT.get()));
+                }
+            }
+        }
+        if (killed instanceof AbstractIllagerEntity){
+            if (killer instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) killer;
+                if (!GoldTotemFinder.FindTotem(player).isEmpty() || RobeArmorFinder.FindArmor(player)){
+                    InfamyHelper.increaseInfamy((PlayerEntity) killer, 5);
                 }
             }
         }
@@ -238,34 +260,42 @@ public class ModEvents {
     @SubscribeEvent
     public static void ExtraExpDrop(LivingExperienceDropEvent event){
         if (event.getAttackingPlayer() != null) {
-            if (event.getAttackingPlayer().hasEffect(ModRegistryHandler.COSMIC.get())) {
-                int a = Objects.requireNonNull(event.getAttackingPlayer().getEffect(ModRegistryHandler.COSMIC.get())).getAmplifier() + 2;
+            if (event.getAttackingPlayer().hasEffect(ModRegistry.COSMIC.get())) {
+                int a = Objects.requireNonNull(event.getAttackingPlayer().getEffect(ModRegistry.COSMIC.get())).getAmplifier() + 2;
                 int a1 = MathHelper.clamp(a, 2, 8);
                 event.setDroppedExperience(event.getDroppedExperience() * a1);
             }
         }
-        if (event.getEntityLiving().hasEffect(ModRegistryHandler.NECROPOWER.get())){
+        if (event.getEntityLiving().hasEffect(ModRegistry.NECROPOWER.get())){
             event.setDroppedExperience(event.getDroppedExperience() * 2);
         }
     }
 
     @SubscribeEvent
-    public static void AiryFocus(PotionEvent.PotionAddedEvent event){
+    public static void PotionAddedEvents(PotionEvent.PotionAddedEvent event){
         if (event.getPotionEffect().getEffect() == Effects.LEVITATION){
-            if (event.getEntityLiving().getMainHandItem().getItem() == ModRegistryHandler.EMPTYCORE.get()){
+            if (event.getEntityLiving().getMainHandItem().getItem() == ModRegistry.EMPTYCORE.get()){
                 event.getEntityLiving().getMainHandItem().setCount(0);
-                event.getEntityLiving().setItemInHand(Hand.MAIN_HAND, new ItemStack(ModRegistryHandler.AIRYCORE.get()));
+                event.getEntityLiving().setItemInHand(Hand.MAIN_HAND, new ItemStack(ModRegistry.AIRYCORE.get()));
             }
-            if (event.getEntityLiving().getOffhandItem().getItem() == ModRegistryHandler.EMPTYCORE.get()){
+            if (event.getEntityLiving().getOffhandItem().getItem() == ModRegistry.EMPTYCORE.get()){
                 event.getEntityLiving().getOffhandItem().setCount(0);
-                event.getEntityLiving().setItemInHand(Hand.OFF_HAND, new ItemStack(ModRegistryHandler.AIRYCORE.get()));
+                event.getEntityLiving().setItemInHand(Hand.OFF_HAND, new ItemStack(ModRegistry.AIRYCORE.get()));
+            }
+        }
+        if (event.getPotionEffect().getEffect() == Effects.HERO_OF_THE_VILLAGE){
+            if (event.getEntityLiving() instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+                if (!GoldTotemFinder.FindTotem(player).isEmpty()){
+                    InfamyHelper.increaseInfamy(player, 100);
+                }
             }
         }
     }
 
     @SubscribeEvent
     public static void Mutation(PotionEvent.PotionAddedEvent event){
-        if (event.getPotionEffect().getEffect() == ModRegistryHandler.COSMIC.get()){
+        if (event.getPotionEffect().getEffect() == ModRegistry.COSMIC.get()){
             World world = event.getEntityLiving().level;
             LivingEntity entity = event.getEntityLiving();
             for(int i = 0; i < world.random.nextInt(35) + 10; ++i) {
