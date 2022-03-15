@@ -55,6 +55,17 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingInfamyChance;
 
+    public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> EvokerInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllusionerInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> EnviokerInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> InquillagerInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ConquillagerInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> VizierInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> OtherInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DeathLoseInfamy;
+
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterXPCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexCooldown;
@@ -74,6 +85,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnFreq;
+    public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> NecroArmoredRobeRepairAmount;
@@ -105,6 +117,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CursedGraveyardGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SalvagedFortGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
 
@@ -218,10 +231,34 @@ public class MainConfig {
                 .define("infamySpawn", true);
         InfamySpawnFreq = BUILDER.comment("Spawn Frequency for Illagers Hunting the Player, Default: 12000")
                 .defineInRange("infamySpawnFreq", 12000, 0, 72000);
+        InfamySpawnChance = BUILDER.comment("Spawn Chance for Illagers Hunting the Player every Infamy Spawn Frequency, Default: 5")
+                .defineInRange("infamySpawnChance", 5, 0, Integer.MAX_VALUE);
         InfamySpell = BUILDER.comment("Casting Spells have a chance of giving Player Infamy, Default: true")
                 .define("infamySpell", true);
         InfamySpellGive = BUILDER.comment("How much Infamy is given when casting Spells, Default: 1")
                 .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
+        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 1")
+                .defineInRange("infamyDeathLoss", 1, 0, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Infamy Illager");
+        PillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Pillagers, Default: 1")
+                .defineInRange("pillagerInfamyGain", 1, 0, Integer.MAX_VALUE);
+        VindicatorInfamy = BUILDER.comment("How much Infamy the Player gains killing Vindicators, Default: 2")
+                .defineInRange("vindicatorInfamyGain", 2, 0, Integer.MAX_VALUE);
+        EvokerInfamy = BUILDER.comment("How much Infamy the Player gains killing Evokers, Default: 5")
+                .defineInRange("evokerInfamyGain", 5, 0, Integer.MAX_VALUE);
+        IllusionerInfamy = BUILDER.comment("How much Infamy the Player gains killing Illusioners, Default: 5")
+                .defineInRange("illusionerInfamyGain", 5, 0, Integer.MAX_VALUE);
+        EnviokerInfamy = BUILDER.comment("How much Infamy the Player gains killing Enviokers, Default: 5")
+                .defineInRange("enviokerInfamyGain", 5, 0, Integer.MAX_VALUE);
+        InquillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Inquillagers, Default: 5")
+                .defineInRange("inquillagerInfamyGain", 5, 0, Integer.MAX_VALUE);
+        ConquillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Conquillagers, Default: 5")
+                .defineInRange("conquillagerInfamyGain", 5, 0, Integer.MAX_VALUE);
+        VizierInfamy = BUILDER.comment("How much Infamy the Player gains killing Viziers, Default: 25")
+                .defineInRange("vizierInfamyGain", 25, 0, Integer.MAX_VALUE);
+        OtherInfamy = BUILDER.comment("How much Infamy the Player gains killing other types of Illagers, Default: 1")
+                .defineInRange("otherInfamyGain", 1, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Infamy Chance");
         VexInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Vex Spell, Default: 1")
@@ -260,6 +297,8 @@ public class MainConfig {
                 .define("portalOutpostGen", true);
         CursedGraveyardGen = BUILDER.comment("Cursed Graveyard Generates in the World, Default: true")
                 .define("cursedGraveyardGen", true);
+        SalvagedFortGen = BUILDER.comment("Taken Redoubt Generates in the World, Default: true")
+                .define("takenRedoubtGen", true);
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
                 .define("totemGen", true);
         BUILDER.pop();

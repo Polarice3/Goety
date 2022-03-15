@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "goety:fanatic",
+    "goety:zealot",
+    "goety:disciple",
+    "goety:channeller",
+    "goety:apostle"
+  ]
+}

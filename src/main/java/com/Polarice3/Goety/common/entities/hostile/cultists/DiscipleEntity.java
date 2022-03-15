@@ -8,7 +8,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
@@ -32,21 +31,21 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class DiscipleEntity extends SpellcastingCultistEntity {
-    private int spellInt;
     private int f;
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
     private boolean roarparticles;
+    private int cooldown;
+    private int spellcycle;
 
     public DiscipleEntity(EntityType<? extends SpellcastingCultistEntity> type, World worldIn) {
         super(type, worldIn);
-        int random = this.random.nextInt(4);
-        this.setSpellInt(random);
         this.f = 0;
+        this.cooldown = 200;
+        this.spellcycle = 0;
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 0.6D, 1.0D));
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, IronGolemEntity.class, 8.0F, 0.6D, 1.0D));
         this.goalSelector.addGoal(3, new CastingSpellGoal());
@@ -54,13 +53,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         this.goalSelector.addGoal(3, new ZombieSpellGoal());
         this.goalSelector.addGoal(3, new SkeletonSpellGoal());
         this.goalSelector.addGoal(3, new RoarSpellGoal());
-        this.goalSelector.addGoal(3, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -91,10 +83,10 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.level.random.nextInt(3);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.SOULWAND.get()));
-        this.setDropChance(EquipmentSlotType.MAINHAND, 0.0F);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.APOSTLEHELM.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.APOSTLEROBE.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.DARKBOOK.get()));
+        this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTHELM.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.CULTISTROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
         this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
         switch (random){
@@ -109,14 +101,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
                 break;
         }
-    }
-
-    public void setSpellInt(int spellInt){
-        this.spellInt = spellInt;
-    }
-
-    public int getSpellInt(){
-        return this.spellInt;
     }
 
     public boolean isFiring(){
@@ -134,6 +118,11 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     public void aiStep() {
         super.aiStep();
+        if (this.cooldown < 200){
+            ++this.cooldown;
+        } else {
+            this.spellcycle = 0;
+        }
         if (this.isFiring()) {
             ++this.f;
             if (this.f % 2 == 0 && this.f < 10) {
@@ -179,7 +168,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
     }
 
     class FireballSpellGoal extends SpellcastingCultistEntity.UseSpellGoal {
-        private int lastTargetId;
         private FireballSpellGoal() {
         }
 
@@ -187,14 +175,9 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
-            } else if (DiscipleEntity.this.getTarget() == null) {
-                return false;
-            } else return DiscipleEntity.this.getTarget().getId() != this.lastTargetId;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = DiscipleEntity.this.getTarget().getId();
+            } else {
+                return DiscipleEntity.this.spellcycle == 0;
+            }
         }
 
         protected int getCastingTime() {
@@ -221,6 +204,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 if (!DiscipleEntity.this.isSilent()) {
                     DiscipleEntity.this.level.levelEvent(null, 1016, DiscipleEntity.this.blockPosition(), 0);
                 }
+                DiscipleEntity.this.cooldown = 0;
+                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -235,7 +220,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
     }
 
     class ZombieSpellGoal extends SpellcastingCultistEntity.UseSpellGoal {
-        private int lastTargetId;
         private ZombieSpellGoal() {
         }
 
@@ -243,14 +227,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
-            } else if (DiscipleEntity.this.getTarget() == null) {
-                return false;
-            } else return DiscipleEntity.this.getTarget().getId() != this.lastTargetId;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = DiscipleEntity.this.getTarget().getId();
+            }  else return DiscipleEntity.this.cooldown >= 180 && DiscipleEntity.this.spellcycle == 1;
         }
 
         protected int getCastingTime() {
@@ -272,6 +249,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setTarget(livingentity);
                 DiscipleEntity.this.level.addFreshEntity(summonedentity);
+                DiscipleEntity.this.cooldown = 0;
+                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -286,7 +265,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
     }
 
     class SkeletonSpellGoal extends SpellcastingCultistEntity.UseSpellGoal {
-        private int lastTargetId;
         private SkeletonSpellGoal() {
         }
 
@@ -294,14 +272,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
-            } else if (DiscipleEntity.this.getTarget() == null) {
-                return false;
-            } else return DiscipleEntity.this.getTarget().getId() != this.lastTargetId;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = DiscipleEntity.this.getTarget().getId();
+            }  else return DiscipleEntity.this.cooldown >= 180 && DiscipleEntity.this.spellcycle == 1;
         }
 
         protected int getCastingTime() {
@@ -323,6 +294,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setTarget(livingentity);
                 DiscipleEntity.this.level.addFreshEntity(summonedentity);
+                DiscipleEntity.this.cooldown = 0;
+                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -367,7 +340,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         public void castSpell() {
             DiscipleEntity.this.setFiring(true);
-            DiscipleEntity.this.playSound(SoundEvents.GENERIC_EXPLODE, 1.0F, 1.0F);
+            DiscipleEntity.this.playSound(SoundEvents.RAVAGER_ROAR, 1.0F, 1.0F);
+            DiscipleEntity.this.cooldown = 0;
         }
 
         protected SoundEvent getSpellPrepareSound() {

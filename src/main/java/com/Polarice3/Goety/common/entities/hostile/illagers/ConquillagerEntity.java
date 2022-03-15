@@ -55,6 +55,7 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
 
     public ConquillagerEntity(EntityType<? extends AbstractIllagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
+        this.xpReward = 20;
     }
 
     protected void registerGoals() {

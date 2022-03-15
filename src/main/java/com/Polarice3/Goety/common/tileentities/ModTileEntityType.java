@@ -25,6 +25,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<ObeliskTileEntity>> OBELISK = TILEENTITY_TYPES.register("obelisk",
             () -> TileEntityType.Builder.of(ObeliskTileEntity::new, ModRegistry.OBELISK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<GuardianObeliskTileEntity>> GUARDIAN_OBELISK = TILEENTITY_TYPES.register("guardian_obelisk",
+            () -> TileEntityType.Builder.of(GuardianObeliskTileEntity::new, ModRegistry.GUARDIAN_OBELISK.get()).build(null));
+
     public static final RegistryObject<TileEntityType<CursedBurnerTileEntity>> CURSEDBURNER = TILEENTITY_TYPES.register("cursed_burner",
             () -> TileEntityType.Builder.of(CursedBurnerTileEntity::new, ModRegistry.CURSED_BURNER.get()).build(null));
 

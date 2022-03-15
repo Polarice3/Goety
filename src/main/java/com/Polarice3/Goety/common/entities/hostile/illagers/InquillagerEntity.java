@@ -35,7 +35,7 @@ import java.util.Map;
 public class InquillagerEntity extends SpellcastingIllagerEntity {
     public InquillagerEntity(EntityType<? extends SpellcastingIllagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
-        this.xpReward = 10;
+        this.xpReward = 20;
     }
 
     protected void registerGoals() {

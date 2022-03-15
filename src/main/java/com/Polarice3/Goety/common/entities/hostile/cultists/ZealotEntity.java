@@ -4,9 +4,8 @@ import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.WitchEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
+import net.minecraft.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -18,8 +17,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -38,30 +35,19 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
 
     public ZealotEntity(EntityType<? extends ZealotEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 16.0F);
-        this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, -1.0F);
-        ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(true);
-        this.getNavigation().setCanFloat(true);
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
-        this.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(this, 1.0D, 8.0F));
-        this.goalSelector.addGoal(3, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 30.0F));
+        this.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(this, 1.0D, 24.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -102,7 +88,7 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
             case 3:
                 this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
         }
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.APOSTLEHELM.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTHELM.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
     }
 

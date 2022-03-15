@@ -11,10 +11,4 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModPotions {
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, Goety.MOD_ID);
-
-    public static final RegistryObject<Potion> MINING_FATIGUE = POTIONS.register("mining_fatigue",
-            () -> new Potion("mining_fatigue", new EffectInstance(Effects.DIG_SLOWDOWN, 1800, 1)));
-
-    public static final RegistryObject<Potion> MINOR_HARM = POTIONS.register("minorharm",
-            () -> new Potion("minorharm", new EffectInstance(ModRegistry.MINOR_HARM.get(), 1)));
 }

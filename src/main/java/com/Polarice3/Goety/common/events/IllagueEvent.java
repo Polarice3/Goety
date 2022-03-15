@@ -7,6 +7,7 @@ import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -30,8 +31,7 @@ public class IllagueEvent {
                 int d = Objects.requireNonNull(infected.getEffect(ModRegistry.ILLAGUE.get())).getDuration() + 1;
                 if (MainConfig.IllagueSpread.get()) {
                     for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, infected.getBoundingBox().inflate(8.0D))) {
-                        if (livingEntity.getMobType() != CreatureAttribute.UNDEAD || livingEntity.getMobType() != CreatureAttribute.ILLAGER
-                                || !livingEntity.hasEffect(ModRegistry.ILLAGUE.get())) {
+                        if (!(livingEntity instanceof PatrollerEntity) && !livingEntity.hasEffect(ModRegistry.ILLAGUE.get())) {
                             if (livingEntity instanceof PlayerEntity) {
                                 if (!((PlayerEntity) livingEntity).isCreative()) {
                                     livingEntity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), d / 2, 0, false, false));

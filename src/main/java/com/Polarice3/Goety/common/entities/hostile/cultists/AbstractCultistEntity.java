@@ -6,6 +6,7 @@ import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -16,12 +17,14 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
 
     protected AbstractCultistEntity(EntityType<? extends AbstractRaiderEntity> type, World worldIn) {
         super(type, worldIn);
+        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 16.0F);
+        this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, -1.0F);
+        this.getNavigation().setCanFloat(true);
     }
 
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(3, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));

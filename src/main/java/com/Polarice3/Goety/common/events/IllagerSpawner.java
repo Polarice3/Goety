@@ -48,8 +48,9 @@ public class IllagerSpawner {
                     } else if (world.isCloseToVillage(playerentity.blockPosition(), 2)) {
                         return 0;
                     } else {
-                        long i = world.getDayTime() / 24000L;
-                        if (i >= HuntTime(playerentity)) {
+                        if (random.nextInt(MainConfig.InfamySpawnChance.get()) != 0) {
+                            return 0;
+                        } else {
                             IInfamy infamy = InfamyHelper.getCapability(playerentity);
                             int j1 = infamy.getInfamy();
                             if (j1 > 25) {
@@ -65,7 +66,7 @@ public class IllagerSpawner {
                                         return 0;
                                     } else {
                                         int i1 = 0;
-                                        int e1 = MathHelper.clamp(j1/25, 0, 3);
+                                        int e1 = MathHelper.clamp(j1 / 25, 0, 3);
                                         for (int k1 = 0; k1 < e1; ++k1) {
                                             ++i1;
                                             blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
@@ -81,7 +82,7 @@ public class IllagerSpawner {
                                             blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
                                         }
                                         if (j1 >= 75) {
-                                            int e2 = MathHelper.clamp(j1/25, 0, 5) - 2;
+                                            int e2 = MathHelper.clamp(j1 / 25, 0, 5) - 2;
                                             for (int k1 = 0; k1 < e2; ++k1) {
                                                 ++i1;
                                                 blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
@@ -99,7 +100,7 @@ public class IllagerSpawner {
                                             }
                                         }
                                         if (j1 >= 300) {
-                                            if (!playerentity.hasEffect(Effects.BAD_OMEN)){
+                                            if (!playerentity.hasEffect(Effects.BAD_OMEN)) {
                                                 playerentity.addEffect(new EffectInstance(Effects.BAD_OMEN, 120000, 0, false, false));
                                             }
                                         }
@@ -109,8 +110,6 @@ public class IllagerSpawner {
                             } else {
                                 return 0;
                             }
-                        } else {
-                            return 0;
                         }
                     }
                 }
@@ -118,11 +117,6 @@ public class IllagerSpawner {
         }
     }
 
-    private long HuntTime(PlayerEntity playerentity){
-        IInfamy infamy = InfamyHelper.getCapability(playerentity);
-        int j1 = infamy.getInfamy();
-        return 5L - j1/200;
-    }
 
     private boolean spawnEnvioker(ServerWorld worldIn, BlockPos p_222695_2_, Random random) {
         BlockState blockstate = worldIn.getBlockState(p_222695_2_);

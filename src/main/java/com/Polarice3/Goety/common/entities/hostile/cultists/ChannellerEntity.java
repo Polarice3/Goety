@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -13,10 +12,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -46,10 +43,6 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public ChannellerEntity(EntityType<? extends ChannellerEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 16.0F);
-        this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, -1.0F);
-        ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(true);
-        this.getNavigation().setCanFloat(true);
         this.prayingCooldown = 0;
     }
 
@@ -111,8 +104,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
     public MonsterEntity getAllyTarget() {
         Entity entity = this.level.getEntity(this.entityData.get(TARGET_ALLY));
         if (entity instanceof MonsterEntity
-                && !(entity instanceof CreeperEntity)
-                && !(entity instanceof SummonedEntity)) {
+                && !(entity instanceof CreeperEntity)) {
             return (MonsterEntity) entity;
         } else {
             return null;
@@ -148,7 +140,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
         return false;
     }
 
-    private final EntityPredicate ally = (new EntityPredicate().range(32.0D).selector(field_213690_b));
+    private final EntityPredicate ally = (new EntityPredicate().range(32.0D).allowSameTeam().selector(field_213690_b));
 
     public void setIsPraying(boolean praying) {
         this.entityData.set(IS_PRAYING, praying);
@@ -182,6 +174,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
                             this.getAllyTarget().setTarget(this.getTarget());
                             this.getAllyTarget().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
                             this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
+                            this.getAllyTarget().addEffect(new EffectInstance(Effects.REGENERATION, 60, 1));
                             this.getAllyTarget().setPersistenceRequired();
                             if (this.getHealth() < this.getMaxHealth()) {
                                 ++this.healTick;

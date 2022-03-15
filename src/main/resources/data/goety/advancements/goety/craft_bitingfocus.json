@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "goety:bitingfocus"
+    },
+    "title": {
+      "translate": "advancements.goety.craftbitingfocus.title"
+    },
+    "description": {
+      "translate": "advancements.goety.craftbitingfocus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "goety:goety/craft_soulwand",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:bitingfocus"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 1
+  }
+}

@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class ApostleRobeArmor extends ArmorItem {
+public class CultistRobeArmor extends ArmorItem {
 
-    public ApostleRobeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
+    public CultistRobeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
         super(materialIn, slot, builderIn);
     }
 
@@ -38,6 +38,6 @@ public class ApostleRobeArmor extends ArmorItem {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return "goety:textures/models/armor/apostlerobearmor.png";
+        return "goety:textures/models/armor/cultistrobearmor.png";
     }
 }

@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "goety:vexingfocus"
+    },
+    "title": {
+      "translate": "advancements.goety.craftvexingfocus.title"
+    },
+    "description": {
+      "translate": "advancements.goety.craftvexingfocus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "parent": "goety:goety/craft_soulwand",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:vexingfocus"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 1
+  }
+}

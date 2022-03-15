@@ -4,6 +4,11 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
+import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
@@ -11,6 +16,8 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.common.items.SoulWand;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.*;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.*;
@@ -25,6 +32,8 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -37,9 +46,11 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,6 +72,32 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof LivingEntity && !event.getWorld().isClientSide()) {
+            if (entity instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) entity;
+
+                InfamyHelper.sendInfamyUpdatePacket(player);
+            }
+
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (event.isWasDeath()) {
+            PlayerEntity player = event.getPlayer();
+
+            IInfamy capability = event.getOriginal().getCapability(InfamyProvider.CAPABILITY).resolve().get();
+
+            player.getCapability(InfamyProvider.CAPABILITY).ifPresent(infamy -> {
+                infamy.setInfamy(capability.getInfamy() - MainConfig.DeathLoseInfamy.get());
+            });
+        }
+    }
+
+    @SubscribeEvent
     public static void openBagandWand(InputEvent.KeyInputEvent event){
         KeyPressed.setWand(ModRegistry.keyBindings[0].isDown());
         KeyPressed.setWandandbag(ModRegistry.keyBindings[1].isDown());
@@ -71,14 +108,8 @@ public class ModEvents {
         if (event.getName() != null) {
             Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
             if (biome != null) {
-                if (biome.getBiomeCategory() == Biome.Category.NETHER) {
-
-                } else if (biome.getBiomeCategory() == Biome.Category.THEEND) {
-
-                } else {
-                    if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
-                        event.getSpawns().getSpawner(EntityClassification.MISC).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
-                    }
+                if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
+                    event.getSpawns().getSpawner(EntityClassification.MISC).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
                 }
             }
         }
@@ -149,6 +180,21 @@ public class ModEvents {
     @SubscribeEvent
     public static void LivingEffects(LivingEvent.LivingUpdateEvent event){
 
+    }
+
+    @SubscribeEvent
+    public static void onBreakingBlock(BlockEvent.BreakEvent event){
+        PlayerEntity player = event.getPlayer();
+        if (player.hasEffect(ModRegistry.NOMINE.get())){
+            if (event.getState().getMaterial() == Material.STONE && !(event.getState().getBlock() == ModRegistry.GUARDIAN_OBELISK.get())){
+                player.level.playSound(player, event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlacingBlock(BlockEvent.EntityPlaceEvent event){
     }
 
     @SubscribeEvent
@@ -251,7 +297,32 @@ public class ModEvents {
             if (killer instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) killer;
                 if (!GoldTotemFinder.FindTotem(player).isEmpty() || RobeArmorFinder.FindArmor(player)){
-                    InfamyHelper.increaseInfamy((PlayerEntity) killer, 5);
+                    if (killed instanceof PillagerEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.PillagerInfamy.get());
+                    } else
+                    if (killed instanceof VindicatorEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.VindicatorInfamy.get());
+                    } else
+                    if (killed instanceof EvokerEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.EvokerInfamy.get());
+                    } else
+                    if (killed instanceof IllusionerEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.IllusionerInfamy.get());
+                    } else
+                    if (killed instanceof EnviokerEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.EnviokerInfamy.get());
+                    } else
+                    if (killed instanceof InquillagerEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.InquillagerInfamy.get());
+                    } else
+                    if (killed instanceof ConquillagerEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.ConquillagerInfamy.get());
+                    } else
+                    if (killed instanceof VizierEntity){
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.VizierInfamy.get());
+                    } else {
+                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.OtherInfamy.get());
+                    }
                 }
             }
         }

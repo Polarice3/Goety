@@ -32,24 +32,12 @@ public class FanaticEntity extends AbstractCultistEntity {
 
     public FanaticEntity(EntityType<? extends FanaticEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 16.0F);
-        this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, -1.0F);
-        ((GroundPathNavigator)this.getNavigation()).setCanOpenDoors(true);
-        this.getNavigation().setCanFloat(true);
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
         this.goalSelector.addGoal(2, new ThrowBombsGoal(this));
-        this.goalSelector.addGoal(3, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){

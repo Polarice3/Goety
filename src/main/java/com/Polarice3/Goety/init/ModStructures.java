@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.world.structures.CursedGraveyardStructure;
 import com.Polarice3.Goety.common.world.structures.DarkManorStructure;
 import com.Polarice3.Goety.common.world.structures.PortalOutpostStructure;
+import com.Polarice3.Goety.common.world.structures.SalvagedFortStructure;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.registry.WorldGenRegistries;
@@ -24,6 +25,7 @@ public class ModStructures {
     public static final RegistryObject<Structure<NoFeatureConfig>> DARKMANOR = STRUCTURES.register("darkmanor", () -> (new DarkManorStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> PORTAL_OUTPOST = STRUCTURES.register("portal_outpost", () -> (new PortalOutpostStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> CURSED_GRAVEYARD = STRUCTURES.register("cursed_graveyard", () -> (new CursedGraveyardStructure(NoFeatureConfig.CODEC)));
+    public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", () -> (new SalvagedFortStructure(NoFeatureConfig.CODEC)));
 
     public static void init(){
         STRUCTURES.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -47,6 +49,12 @@ public class ModStructures {
                 new StructureSeparationSettings(32,
                         5,
                         1765434567),
+                true);
+        setupMapSpacingAndLand(
+                SALVAGED_FORT.get(),
+                new StructureSeparationSettings(32,
+                        5,
+                        1876545678),
                 true);
 
     }

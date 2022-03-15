@@ -73,6 +73,7 @@ public class ModRegistry {
     public static final RegistryObject<MutatedRabbitItem> MUTATED_RABBIT = ITEMS.register("mutatedrabbit", MutatedRabbitItem::new);
     public static final RegistryObject<Item> DARKFABRIC = ITEMS.register("darkfabric", ItemBase::new);
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
+    public static final RegistryObject<Item> DARKBOOK = ITEMS.register("darkbook", ItemBase::new);
     public static final RegistryObject<Item> DEADBAT = ITEMS.register("deadbat", DeadBatItem::new);
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
@@ -147,15 +148,15 @@ public class ModRegistry {
     public static final RegistryObject<Item> NECROARMOREDROBE = ITEMS.register("necroarmoredrobe", () ->
             new NecroArmoredRobeArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> APOSTLEHELM = ITEMS.register("apostlehelm", () ->
-            new ApostleRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.HEAD, new Item.Properties()));
-    public static final RegistryObject<Item> APOSTLEROBE = ITEMS.register("apostlerobe", () ->
-            new ApostleRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
+    public static final RegistryObject<Item> CULTISTHELM = ITEMS.register("cultisthelm", () ->
+            new CultistRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.HEAD, new Item.Properties()));
+    public static final RegistryObject<Item> CULTISTROBE = ITEMS.register("cultistrobe", () ->
+            new CultistRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
 
-    public static final RegistryObject<Item> APOSTLEARMOREDHELM = ITEMS.register("apostlearmoredhelm", () ->
-            new ApostleArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.HEAD, new Item.Properties()));
-    public static final RegistryObject<Item> APOSTLEARMOREDROBE = ITEMS.register("apostlearmoredrobe", () ->
-            new ApostleArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
+    public static final RegistryObject<Item> CULTISTARMOREDHELM = ITEMS.register("cultistarmoredhelm", () ->
+            new CultistArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.HEAD, new Item.Properties()));
+    public static final RegistryObject<Item> CULTISTARMOREDROBE = ITEMS.register("cultistarmoredrobe", () ->
+            new CultistArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
     //Blocks
     public static final RegistryObject<Block> BLAZE_CORE_BLOCK = BLOCKS.register("blazecoreblock", TankCoreBlock::new);
     public static final RegistryObject<Block> CURSED_METAL_BLOCK = BLOCKS.register("cursed_block", CursedMetalBlock::new);
@@ -170,6 +171,7 @@ public class ModRegistry {
     public static final RegistryObject<Block> UNDEAD_TOTEM = BLOCKS.register("undead_totem", UndeadTotemBlock::new);
     public static final RegistryObject<Block> WIND_TOTEM = BLOCKS.register("wind_totem", WindTotemBlock::new);
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
+    public static final RegistryObject<Block> GUARDIAN_OBELISK = BLOCKS.register("guardian_obelisk", GuardianObeliskBlock::new);
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
 //    public static final RegistryObject<Block> SOULFORGE = BLOCKS.register("soulforge", SoulForgeBlock::new);
 
@@ -252,12 +254,11 @@ public class ModRegistry {
             () -> new BlockItemBase(WIND_TOTEM.get()));
     public static final RegistryObject<Item> OBELISK_ITEM = ITEMS.register("obelisk",
             () -> new BlockItemBase(OBELISK.get()));
+    public static final RegistryObject<Item> GUARDIAN_OBELISK_ITEM = ITEMS.register("guardian_obelisk",
+            () -> new BlockItemBase(GUARDIAN_OBELISK.get()));
     public static final RegistryObject<Item> CURSED_BURNER_ITEM = ITEMS.register("cursed_burner",
             () -> new BlockItemBase(CURSED_BURNER.get()));
     //Effects
-    public static final RegistryObject<Effect> MINOR_HARM = EFFECTS.register("minorharm",
-            MinorHarmEffect::new);
-
     public static final RegistryObject<Effect> DEATHPROTECT = EFFECTS.register("deathprotect",
             () -> new ModEffects(EffectType.BENEFICIAL, 0));
 
@@ -284,4 +285,7 @@ public class ModRegistry {
 
     public static final RegistryObject<Effect> LAUNCH = EFFECTS.register("launch",
             () -> new ModEffects(EffectType.NEUTRAL, 0));
+
+    public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
+            () -> new ModEffects(EffectType.HARMFUL, 10044730));
 }

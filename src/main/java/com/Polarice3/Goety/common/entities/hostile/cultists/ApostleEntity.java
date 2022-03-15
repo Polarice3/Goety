@@ -9,8 +9,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.WitchEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
@@ -29,7 +27,6 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ApostleEntity extends SpellcastingCultistEntity {
@@ -42,26 +39,18 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     public ApostleEntity(EntityType<? extends SpellcastingCultistEntity> type, World worldIn) {
         super(type, worldIn);
         this.f = 0;
-        this.cooldown = 200;
+        this.cooldown = 100;
         this.spellcycle = 0;
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
         this.goalSelector.addGoal(3, new CastingSpellGoal());
         this.goalSelector.addGoal(3, new FireballSpellGoal());
         this.goalSelector.addGoal(3, new ZombieSpellGoal());
         this.goalSelector.addGoal(3, new SkeletonSpellGoal());
         this.goalSelector.addGoal(3, new RoarSpellGoal());
-        this.goalSelector.addGoal(3, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -92,10 +81,10 @@ public class ApostleEntity extends SpellcastingCultistEntity {
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.level.random.nextInt(2);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.SOULSTAFF.get()));
-        this.setDropChance(EquipmentSlotType.MAINHAND, 0.0F);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.APOSTLEARMOREDHELM.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.APOSTLEARMOREDROBE.get()));
+        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModRegistry.DARKBOOK.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTARMOREDHELM.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.CULTISTARMOREDROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
         this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
         switch (random){
@@ -125,7 +114,7 @@ public class ApostleEntity extends SpellcastingCultistEntity {
 
     public void aiStep() {
         super.aiStep();
-        if (this.cooldown < 200){
+        if (this.cooldown < 100){
             ++this.cooldown;
         } else {
             this.spellcycle = 0;
@@ -175,7 +164,6 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     }
 
     class FireballSpellGoal extends UseSpellGoal {
-        private int lastTargetId;
         private FireballSpellGoal() {
         }
 
@@ -183,15 +171,9 @@ public class ApostleEntity extends SpellcastingCultistEntity {
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
-            } else if (ApostleEntity.this.getTarget() == null) {
-                return false;
-            } else return ApostleEntity.this.getTarget().getId() != this.lastTargetId
-                    && ApostleEntity.this.spellcycle == 0;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = ApostleEntity.this.getTarget().getId();
+            } else {
+                return ApostleEntity.this.spellcycle == 0;
+            }
         }
 
         protected int getCastingTime() {
@@ -234,7 +216,6 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     }
 
     class ZombieSpellGoal extends UseSpellGoal {
-        private int lastTargetId;
         private ZombieSpellGoal() {
         }
 
@@ -242,15 +223,7 @@ public class ApostleEntity extends SpellcastingCultistEntity {
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
-            } else if (ApostleEntity.this.getTarget() == null) {
-                return false;
-            } else return ApostleEntity.this.getTarget().getId() != this.lastTargetId &&
-                    ApostleEntity.this.cooldown >= 180 && ApostleEntity.this.spellcycle == 1;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = ApostleEntity.this.getTarget().getId();
+            }  else return ApostleEntity.this.cooldown >= 90 && ApostleEntity.this.spellcycle == 1;
         }
 
         protected int getCastingTime() {
@@ -293,7 +266,6 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     }
 
     class SkeletonSpellGoal extends UseSpellGoal {
-        private int lastTargetId;
         private SkeletonSpellGoal() {
         }
 
@@ -301,15 +273,7 @@ public class ApostleEntity extends SpellcastingCultistEntity {
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
-            } else if (ApostleEntity.this.getTarget() == null) {
-                return false;
-            } else return ApostleEntity.this.getTarget().getId() != this.lastTargetId &&
-                    ApostleEntity.this.cooldown >= 180 && ApostleEntity.this.spellcycle == 1;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = ApostleEntity.this.getTarget().getId();
+            } else return ApostleEntity.this.cooldown >= 90 && ApostleEntity.this.spellcycle == 1;
         }
 
         protected int getCastingTime() {
@@ -355,7 +319,6 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     }
 
     class RoarSpellGoal extends UseSpellGoal {
-        private int lastTargetId;
         private RoarSpellGoal() {
         }
 
@@ -365,14 +328,7 @@ public class ApostleEntity extends SpellcastingCultistEntity {
                 return false;
             } else if (ApostleEntity.this.getTarget() == null) {
                 return false;
-            } else if (ApostleEntity.this.getTarget().getId() == this.lastTargetId) {
-                return false;
-            } else return ApostleEntity.this.distanceTo(ApostleEntity.this.getTarget()) < 4.0F;
-        }
-
-        public void start() {
-            super.start();
-            this.lastTargetId = Objects.requireNonNull(ApostleEntity.this.getTarget()).getId();
+            }  else return ApostleEntity.this.distanceTo(ApostleEntity.this.getTarget()) < 4.0F;
         }
 
         protected int getCastingTime() {

@@ -1,29 +1,9 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "fsf",
-    "sts",
-    "fsf"
-  ],
-  "key":
-  {
-    "f":
-    {
-      "item": "minecraft:yellow_dye"
-    },
-    "s":
-    {
-      "item": "minecraft:string"
-    },
-    "t":
-    {
-      "item": "goety:goldtotem"
-    }
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "tag": "minecraft:yellow_wool"
   },
-  "result":
-  {
-    "item": "goety:magicfabric",
-    "count": 1
-  }
+  "result": "goety:magicfabric",
+  "experience": 0.0,
+  "cookingtime": 400
 }

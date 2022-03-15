@@ -37,7 +37,7 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
 
     public EnviokerEntity(EntityType<? extends EnviokerEntity> p_i50207_1_, World p_i50207_2_) {
         super(p_i50207_1_, p_i50207_2_);
-        this.xpReward = 10;
+        this.xpReward = 20;
     }
 
     protected void registerGoals() {
@@ -191,14 +191,13 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
                     this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(f2) * 3.5D, EnviokerEntity.this.getZ() + (double)MathHelper.sin(f2) * 3.5D, d0, d1, f2, 6);
                 }
             } else {
-                for(int l = 0; l < 16; ++l) {
+                for(int l = 0; l < 32; ++l) {
                     double d2 = 1.25D * (double)(l + 1);
                     float fleft = f + 0.4F;
                     float fright = f - 0.4F;
-                    int j = 1 * l;
-                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(f) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(f) * d2, d0, d1, f, j);
-                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fleft) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fleft) * d2, d0, d1, f, j);
-                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fright) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fright) * d2, d0, d1, f, j);
+                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(f) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(f) * d2, d0, d1, f, l);
+                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fleft) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fleft) * d2, d0, d1, f, l);
+                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fright) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fright) * d2, d0, d1, f, l);
                 }
             }
 
@@ -247,9 +246,6 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
         private CastingSpellGoal() {
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             if (EnviokerEntity.this.getTarget() != null) {
                 EnviokerEntity.this.getLookControl().setLookAt(EnviokerEntity.this.getTarget(), (float)EnviokerEntity.this.getMaxHeadYRot(), (float)EnviokerEntity.this.getMaxHeadXRot());
@@ -264,10 +260,6 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
         private SummonSpellGoal() {
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
             if (!super.canUse()) {
                 return false;
