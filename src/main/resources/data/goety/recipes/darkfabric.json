@@ -1,7 +1,7 @@
 {
   "type": "goety:cursed_burner_recipes",
   "ingredient": {
-    "tag": "minecraft:black_wool"
+    "item": "minecraft:black_wool"
   },
   "result": "goety:darkfabric",
   "experience": 0.0,

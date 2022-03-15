@@ -1,7 +1,7 @@
 {
   "type": "goety:cursed_burner_recipes",
   "ingredient": {
-    "tag": "minecraft:yellow_wool"
+    "item": "minecraft:yellow_wool"
   },
   "result": "goety:magicfabric",
   "experience": 0.0,
