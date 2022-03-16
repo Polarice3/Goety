@@ -58,7 +58,7 @@ public class WitchBombEntity extends ProjectileItemEntity {
     protected void onHit(RayTraceResult result) {
         super.onHit(result);
         if (!this.level.isClientSide) {
-            this.level.explode(null, this.getX(), this.getY(), this.getZ(), 1.0F, Explosion.Mode.NONE);
+            this.level.explode(null, this.getX(), this.getY(), this.getZ(), 1.5F, Explosion.Mode.NONE);
             this.remove();
         }
 

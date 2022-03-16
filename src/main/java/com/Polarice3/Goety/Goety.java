@@ -275,6 +275,22 @@ public class Goety {
                 event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_CURSED_GRAVEYARD);
             }
         }
+        if (MainConfig.SalvagedFortGen.get()) {
+            if (event.getCategory() == Biome.Category.FOREST
+                    || event.getCategory() == Biome.Category.ICY
+                    || event.getCategory() == Biome.Category.TAIGA
+                    || event.getCategory() == Biome.Category.PLAINS) {
+                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_SALVAGED_FORT);
+            }
+        }
+        if (MainConfig.DecrepitFortGen.get()) {
+            if (event.getCategory() == Biome.Category.FOREST
+                    || event.getCategory() == Biome.Category.ICY
+                    || event.getCategory() == Biome.Category.TAIGA
+                    || event.getCategory() == Biome.Category.PLAINS) {
+                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DECREPIT_FORT);
+            }
+        }
         if (MainConfig.TotemGen.get()) {
             if (event.getCategory() != Biome.Category.THEEND
                     && event.getCategory() != Biome.Category.MUSHROOM
@@ -282,16 +298,6 @@ public class Goety {
                     && event.getCategory() != Biome.Category.OCEAN
                     && event.getCategory() != Biome.Category.RIVER) {
                 event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.CONFIGURED_CURSEDTOTEM);
-            }
-        }
-        if (MainConfig.SalvagedFortGen.get()) {
-            if (event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.ICY
-                    || event.getCategory() == Biome.Category.TAIGA
-                    || event.getCategory() == Biome.Category.PLAINS
-                    || event.getCategory() == Biome.Category.EXTREME_HILLS
-                    || event.getCategory() == Biome.Category.SWAMP) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_SALVAGED_FORT);
             }
         }
         event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_PORTAL_OUTPOST);
@@ -323,6 +329,7 @@ public class Goety {
             tempMap.putIfAbsent(ModStructures.PORTAL_OUTPOST.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.PORTAL_OUTPOST.get()));
             tempMap.putIfAbsent(ModStructures.CURSED_GRAVEYARD.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.CURSED_GRAVEYARD.get()));
             tempMap.putIfAbsent(ModStructures.SALVAGED_FORT.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.SALVAGED_FORT.get()));
+            tempMap.putIfAbsent(ModStructures.DECREPIT_FORT.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.DECREPIT_FORT.get()));
 
             serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
         }

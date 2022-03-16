@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.world.structures;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.world.structures.pieces.DecrepitFortPiece;
 import com.Polarice3.Goety.common.world.structures.pieces.SalvagedFortPiece;
 import com.Polarice3.Goety.init.ModStructures;
 import net.minecraft.block.BlockState;
@@ -27,14 +28,14 @@ import net.minecraft.world.gen.settings.StructureSeparationSettings;
 
 import java.util.Random;
 
-public class SalvagedFortStructure extends ModStructureTemplate {
+public class DecrepitFortStructure extends ModStructureTemplate {
 
     protected boolean linearSeparation() {
         return false;
     }
 
     @Override
-    public Structure.IStartFactory<NoFeatureConfig> getStartFactory() {
+    public IStartFactory<NoFeatureConfig> getStartFactory() {
         return Start::new;
     }
 
@@ -49,23 +50,7 @@ public class SalvagedFortStructure extends ModStructureTemplate {
                 return false;
             }
         }
-        return MainConfig.SalvagedFortGen.get() && topBlock.getFluidState().isEmpty() && !isNearVillage(chunkGenerator, seed, chunkrandom, chunkX, chunkZ) && !isNearFort(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
-    }
-
-    private boolean isNearVillage(ChunkGenerator chunkGenerator, long l, SharedSeedRandom sharedSeedRandom, int i1, int i2) {
-        StructureSeparationSettings structureseparationsettings = chunkGenerator.getSettings().getConfig(Structure.VILLAGE);
-        if (structureseparationsettings != null) {
-            for (int i = i1 - 10; i <= i1 + 10; ++i) {
-                for (int j = i2 - 10; j <= i2 + 10; ++j) {
-                    ChunkPos chunkpos = Structure.VILLAGE.getPotentialFeatureChunk(structureseparationsettings, l, sharedSeedRandom, i, j);
-                    if (i == chunkpos.x && j == chunkpos.z) {
-                        return true;
-                    }
-                }
-            }
-
-        }
-        return false;
+        return MainConfig.DecrepitFortGen.get() && topBlock.getFluidState().isEmpty() && !isNearFort(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
     }
 
     private boolean isNearFort(ChunkGenerator chunkGenerator, long l, SharedSeedRandom sharedSeedRandom, int i1, int i2) {
@@ -73,7 +58,7 @@ public class SalvagedFortStructure extends ModStructureTemplate {
         if (structureseparationsettings != null) {
             for (int i = i1 - 10; i <= i1 + 10; ++i) {
                 for (int j = i2 - 10; j <= i2 + 10; ++j) {
-                    ChunkPos chunkpos = ModStructures.DECREPIT_FORT.get().getPotentialFeatureChunk(structureseparationsettings, l, sharedSeedRandom, i, j);
+                    ChunkPos chunkpos = ModStructures.SALVAGED_FORT.get().getPotentialFeatureChunk(structureseparationsettings, l, sharedSeedRandom, i, j);
                     if (i == chunkpos.x && j == chunkpos.z) {
                         return true;
                     }
@@ -115,7 +100,7 @@ public class SalvagedFortStructure extends ModStructureTemplate {
             int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
             if (i2 >= 60) {
                 BlockPos blockpos = new BlockPos(chunkX * 16 + 8, i2 + 1, chunkZ * 16 + 8);
-                SalvagedFortPiece structure = new SalvagedFortPiece(templateManagerIn, blockpos, rotation);
+                DecrepitFortPiece structure = new DecrepitFortPiece(templateManagerIn, blockpos, rotation);
                 this.pieces.add(structure);
                 this.calculateBoundingBox();
             }

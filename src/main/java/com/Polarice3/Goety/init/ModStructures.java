@@ -1,10 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.world.structures.CursedGraveyardStructure;
-import com.Polarice3.Goety.common.world.structures.DarkManorStructure;
-import com.Polarice3.Goety.common.world.structures.PortalOutpostStructure;
-import com.Polarice3.Goety.common.world.structures.SalvagedFortStructure;
+import com.Polarice3.Goety.common.world.structures.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.registry.WorldGenRegistries;
@@ -25,7 +22,8 @@ public class ModStructures {
     public static final RegistryObject<Structure<NoFeatureConfig>> DARKMANOR = STRUCTURES.register("darkmanor", () -> (new DarkManorStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> PORTAL_OUTPOST = STRUCTURES.register("portal_outpost", () -> (new PortalOutpostStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> CURSED_GRAVEYARD = STRUCTURES.register("cursed_graveyard", () -> (new CursedGraveyardStructure(NoFeatureConfig.CODEC)));
-    public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", () -> (new SalvagedFortStructure(NoFeatureConfig.CODEC)));
+    public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", SalvagedFortStructure::new);
+    public static final RegistryObject<Structure<NoFeatureConfig>> DECREPIT_FORT = STRUCTURES.register("decrepit_fort", DecrepitFortStructure::new);
 
     public static void init(){
         STRUCTURES.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -53,8 +51,14 @@ public class ModStructures {
         setupMapSpacingAndLand(
                 SALVAGED_FORT.get(),
                 new StructureSeparationSettings(32,
-                        5,
+                        8,
                         1876545678),
+                true);
+        setupMapSpacingAndLand(
+                DECREPIT_FORT.get(),
+                new StructureSeparationSettings(32,
+                        8,
+                        1987656789),
                 true);
 
     }

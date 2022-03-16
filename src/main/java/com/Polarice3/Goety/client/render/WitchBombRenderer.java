@@ -34,7 +34,7 @@ public class WitchBombRenderer extends EntityRenderer<WitchBombEntity> {
     public void render(WitchBombEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         if (entityIn.tickCount >= 2 || !(this.entityRenderDispatcher.camera.getEntity().distanceToSqr(entityIn) < 12.25D)) {
             matrixStackIn.pushPose();
-            matrixStackIn.scale(0.5F, 0.5F, 0.5F);
+            matrixStackIn.scale(0.75F, 0.75F, 0.75F);
             matrixStackIn.mulPose(this.entityRenderDispatcher.cameraOrientation());
             matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
             MatrixStack.Entry matrixstack$entry = matrixStackIn.last();

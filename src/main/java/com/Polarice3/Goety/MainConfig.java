@@ -118,6 +118,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CursedGraveyardGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SalvagedFortGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DecrepitFortGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
 
@@ -297,8 +298,10 @@ public class MainConfig {
                 .define("portalOutpostGen", true);
         CursedGraveyardGen = BUILDER.comment("Cursed Graveyard Generates in the World, Default: true")
                 .define("cursedGraveyardGen", true);
-        SalvagedFortGen = BUILDER.comment("Taken Redoubt Generates in the World, Default: true")
-                .define("takenRedoubtGen", true);
+        SalvagedFortGen = BUILDER.comment("Salvaged Fort Generates in the World, Default: true")
+                .define("salvagedFortGen", true);
+        DecrepitFortGen = BUILDER.comment("Decrepit Fort Generates in the World, Default: true")
+                .define("decrepitFortGen", true);
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
                 .define("totemGen", true);
         BUILDER.pop();
