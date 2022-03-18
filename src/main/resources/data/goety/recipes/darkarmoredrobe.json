@@ -3,7 +3,7 @@
   "pattern":
   [
     "flf",
-    "fff",
+    "fcf",
     "fff"
   ],
   "key":
@@ -15,6 +15,10 @@
     "l":
     {
       "item": "goety:darkrobe"
+    },
+    "c":
+    {
+      "item": "goety:soul_emerald"
     }
   },
   "result":

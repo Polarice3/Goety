@@ -15,19 +15,19 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 2.0,
-                "max": 8.0,
+                "max": 4.0,
                 "type": "minecraft:uniform"
               }
             },
             {
               "function": "minecraft:looting_enchant",
               "count": {
-                "min": 2.0,
-                "max": 4.0
+                "min": 0.0,
+                "max": 2.0
               }
             }
           ],
-          "name": "minecraft:redstone"
+          "name": "minecraft:blaze_powder"
         },
         {
           "type": "minecraft:item",
@@ -49,6 +49,27 @@
             }
           ],
           "name": "minecraft:paper"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 1.0,
+                "max": 4.0,
+                "type": "minecraft:uniform"
+              }
+            },
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "min": 1.0,
+                "max": 2.0
+              }
+            }
+          ],
+          "name": "minecraft:book"
         }
       ]
     }

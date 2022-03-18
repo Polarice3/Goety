@@ -14,11 +14,11 @@
     },
     "f":
     {
-      "item": "minecraft:diamond"
+      "item": "goety:soul_emerald"
     },
     "s":
     {
-      "item": "minecraft:iron_sword"
+      "tag": "forge:storage_blocks/iron"
     }
   },
   "result":

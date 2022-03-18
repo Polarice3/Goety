@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "iii",
+    " i ",
+    " l "
+  ],
+  "key":
+  {
+    "i":
+    {
+      "tag": "forge:ingots/iron"
+    },
+    "l":
+    {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result":
+  {
+    "item": "goety:pitchfork",
+    "count": 1
+  }
+}

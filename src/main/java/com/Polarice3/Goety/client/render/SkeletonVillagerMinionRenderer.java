@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class SkeletonVillagerMinionRenderer extends AbstractCultistRenderer<SkeletonVillagerMinionEntity> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/skeletonvillagerminion.png");
+    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/skeletonvillagerminion.png");
 
     public SkeletonVillagerMinionRenderer(EntityRendererManager entityRendererManager) {
         super(entityRendererManager, new SkeletonVillagerModel<>(0.0F, 0.5F),0.5F);

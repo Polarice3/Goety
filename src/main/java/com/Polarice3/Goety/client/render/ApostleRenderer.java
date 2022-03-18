@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class ApostleRenderer extends AbstractCultistRenderer<ApostleEntity>{
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/apostle.png");
+    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/apostle.png");
 
     public ApostleRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new AbstractCultistModel<>(0.0F, 0.0F), 0.5F);

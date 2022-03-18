@@ -9,9 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -29,49 +27,26 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class SpearEntity extends AbstractArrowEntity {
-    private static final DataParameter<Byte> ID_LOYALTY = EntityDataManager.defineId(SpearEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Boolean> ID_FOIL = EntityDataManager.defineId(SpearEntity.class, DataSerializers.BOOLEAN);
-    private ItemStack tridentItem = new ItemStack(ModRegistry.IRON_SPEAR.get());
+public class PitchforkEntity extends AbstractArrowEntity {
+    private static final DataParameter<Byte> ID_LOYALTY = EntityDataManager.defineId(PitchforkEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Boolean> ID_FOIL = EntityDataManager.defineId(PitchforkEntity.class, DataSerializers.BOOLEAN);
+    private ItemStack tridentItem = new ItemStack(ModRegistry.PITCHFORK.get());
     private boolean dealtDamage;
-    public IItemTier itemTier = ItemTier.IRON;
     public int clientSideReturnTridentTickCount;
 
-    public SpearEntity(EntityType<? extends SpearEntity> p_i50148_1_, World p_i50148_2_) {
+    public PitchforkEntity(EntityType<? extends PitchforkEntity> p_i50148_1_, World p_i50148_2_) {
         super(p_i50148_1_, p_i50148_2_);
     }
 
-    public SpearEntity(World p_i48790_1_, LivingEntity p_i48790_2_, ItemStack p_i48790_3_, IItemTier pTier) {
-        super(ModEntityType.SPEAR.get(), p_i48790_2_, p_i48790_1_);
+    public PitchforkEntity(World p_i48790_1_, LivingEntity p_i48790_2_, ItemStack p_i48790_3_) {
+        super(ModEntityType.PITCHFORK.get(), p_i48790_2_, p_i48790_1_);
         this.tridentItem = p_i48790_3_.copy();
         this.entityData.set(ID_LOYALTY, (byte) EnchantmentHelper.getLoyalty(p_i48790_3_));
         this.entityData.set(ID_FOIL, p_i48790_3_.hasFoil());
-        this.itemTier = pTier;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public SpearEntity(World p_i48791_1_, double p_i48791_2_, double p_i48791_4_, double p_i48791_6_) {
-        super(ModEntityType.SPEAR.get(), p_i48791_2_, p_i48791_4_, p_i48791_6_, p_i48791_1_);
-    }
-
-    public void setTridentItem(IItemTier tier){
-        if (tier == ItemTier.WOOD){
-            this.tridentItem = new ItemStack(ModRegistry.WOODEN_SPEAR.get());
-        } else if (tier == ItemTier.STONE){
-            this.tridentItem = new ItemStack(ModRegistry.STONE_SPEAR.get());
-        } else if (tier == ItemTier.IRON){
-            this.tridentItem = new ItemStack(ModRegistry.IRON_SPEAR.get());
-        } else if (tier == ItemTier.DIAMOND){
-            this.tridentItem = new ItemStack(ModRegistry.DIAMOND_SPEAR.get());
-        } else if (tier == ItemTier.NETHERITE){
-            this.tridentItem = new ItemStack(ModRegistry.NETHERITE_SPEAR.get());
-        } else {
-            this.tridentItem = new ItemStack(ModRegistry.IRON_SPEAR.get());
-        }
-    }
-
-    public IItemTier getTier(){
-        return itemTier;
+    public PitchforkEntity(World p_i48791_1_, double p_i48791_2_, double p_i48791_4_, double p_i48791_6_) {
+        super(ModEntityType.PITCHFORK.get(), p_i48791_2_, p_i48791_4_, p_i48791_6_, p_i48791_1_);
     }
 
     protected void defineSynchedData() {
@@ -80,9 +55,6 @@ public class SpearEntity extends AbstractArrowEntity {
         this.entityData.define(ID_FOIL, false);
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void tick() {
         if (this.inGroundTime > 4) {
             this.dealtDamage = true;
@@ -181,16 +153,10 @@ public class SpearEntity extends AbstractArrowEntity {
         this.playSound(soundevent, f1, 1.0F);
     }
 
-    /**
-     * The sound made when an entity is hit by this projectile
-     */
     protected SoundEvent getDefaultHitGroundSoundEvent() {
         return SoundEvents.TRIDENT_HIT_GROUND;
     }
 
-    /**
-     * Called by a player entity when they collide with an entity
-     */
     public void playerTouch(PlayerEntity pEntity) {
         Entity entity = this.getOwner();
         if (entity == null || entity.getUUID() == pEntity.getUUID()) {
@@ -198,13 +164,10 @@ public class SpearEntity extends AbstractArrowEntity {
         }
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
     public void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
-        if (pCompound.contains("Spear", 10)) {
-            this.tridentItem = ItemStack.of(pCompound.getCompound("Spear"));
+        if (pCompound.contains("Pitchfork", 10)) {
+            this.tridentItem = ItemStack.of(pCompound.getCompound("Pitchfork"));
         }
 
         this.dealtDamage = pCompound.getBoolean("DealtDamage");
@@ -213,7 +176,7 @@ public class SpearEntity extends AbstractArrowEntity {
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.put("Spear", this.tridentItem.save(new CompoundNBT()));
+        pCompound.put("Pitchfork", this.tridentItem.save(new CompoundNBT()));
         pCompound.putBoolean("DealtDamage", this.dealtDamage);
     }
 

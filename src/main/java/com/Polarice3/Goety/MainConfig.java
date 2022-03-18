@@ -108,6 +108,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> VexTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsAttackCreepers;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsMasterImmune;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
@@ -312,6 +313,8 @@ public class MainConfig {
                 .define("vexTeleport", true);
         MinionsAttackCreepers = BUILDER.comment("Whether Minions can attack Creepers if Mob Griefing Rule is False, Default: true")
                 .define("minionAttackCreepers", true);
+        MinionsMasterImmune = BUILDER.comment("Whether Minions are immune to attacks made by other minions that are summoned by the same caster, Default: true")
+                .define("minionMasterImmune", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
                 .define("undeadMinionHeal", true);
         TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Arachnid Robes, Default: true")

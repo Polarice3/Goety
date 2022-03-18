@@ -140,6 +140,10 @@ public class Goety {
         });
 
         DeferredWorkQueue.runLater(() -> {
+            GlobalEntityTypeAttributes.put(ModEntityType.THUG.get(), ThugEntity.setCustomAttributes().build());
+        });
+
+        DeferredWorkQueue.runLater(() -> {
             GlobalEntityTypeAttributes.put(ModEntityType.DISCIPLE.get(), DiscipleEntity.setCustomAttributes().build());
         });
 

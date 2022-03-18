@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class ZombieVillagerMinionRenderer extends BipedRenderer<ZombieVillagerMinionEntity, AbstractCultistModel<ZombieVillagerMinionEntity>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/zombievillagerminion.png");
+    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/zombievillagerminion.png");
 
     public ZombieVillagerMinionRenderer(EntityRendererManager entityRendererManager) {
         super(entityRendererManager, new AbstractCultistModel<>(0.0F, 0.5F),0.5F);

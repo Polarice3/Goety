@@ -62,6 +62,9 @@ public class SalvagedFortPiece extends ModStructurePiece {
                 case "zealot":
                     cultist = ModEntityType.ZEALOT.get().create(pLevel.getLevel());
                     break;
+                case "jugger":
+                    cultist = ModEntityType.THUG.get().create(pLevel.getLevel());
+                    break;
                 case "disciple":
                     cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
                     break;

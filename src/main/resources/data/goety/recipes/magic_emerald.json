@@ -1,0 +1,9 @@
+{
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "tag": "forge:gems/emerald"
+  },
+  "result": "goety:magic_emerald",
+  "experience": 0.0,
+  "cookingtime": 400
+}

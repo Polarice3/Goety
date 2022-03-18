@@ -14,7 +14,7 @@
     "announce_to_chat": false,
     "hidden": false
   },
-  "parent": "goety:goety/craft_totem",
+  "parent": "goety:goety/root",
   "criteria": {
     "requirement": {
       "trigger": "minecraft:inventory_changed",
@@ -28,6 +28,6 @@
     }
   },
   "rewards": {
-    "experience": 10
+    "experience": 1
   }
 }

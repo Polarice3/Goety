@@ -15,7 +15,21 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 0.0,
-                "max": 4.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "minecraft:book"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
                 "type": "minecraft:uniform"
               }
             },
@@ -23,11 +37,11 @@
               "function": "minecraft:looting_enchant",
               "count": {
                 "min": 0.0,
-                "max": 2.0
+                "max": 1.0
               }
             }
           ],
-          "name": "minecraft:redstone"
+          "name": "minecraft:gold_nugget"
         }
       ]
     }

@@ -25,11 +25,13 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -133,6 +135,23 @@ public class SummonedEntity extends CreatureEntity {
             return true;
         }
         return super.isAlliedTo(entityIn);
+    }
+
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
+        if (MainConfig.MinionsMasterImmune.get()) {
+            if (source.getEntity() instanceof SummonedEntity) {
+                SummonedEntity summoned = (SummonedEntity) source.getEntity();
+                if (summoned.getTrueOwner() == this.getTrueOwner()) {
+                    return false;
+                } else {
+                    return super.hurt(source, amount);
+                }
+            } else {
+                return super.hurt(source, amount);
+            }
+        } else {
+            return super.hurt(source, amount);
+        }
     }
 
     protected void defineSynchedData() {

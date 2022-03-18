@@ -12,7 +12,11 @@ import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class FanaticRenderer extends AbstractCultistRenderer<FanaticEntity>{
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/fanatic.png");
+    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/fanatic.png");
+    protected static final ResourceLocation FANATIC_0 = Goety.location("textures/entity/cultist/fanatic/fanatic_0.png");
+    protected static final ResourceLocation FANATIC_1 = Goety.location("textures/entity/cultist/fanatic/fanatic_1.png");
+    protected static final ResourceLocation FANATIC_2 = Goety.location("textures/entity/cultist/fanatic/fanatic_2.png");
+    protected static final ResourceLocation FANATIC_3 = Goety.location("textures/entity/cultist/fanatic/fanatic_3.png");
 
     public FanaticRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new AbstractCultistModel<>(0.0F, 0.5F), 0.5F);
@@ -29,6 +33,6 @@ public class FanaticRenderer extends AbstractCultistRenderer<FanaticEntity>{
 
     @Override
     public ResourceLocation getTextureLocation(FanaticEntity entity) {
-        return TEXTURE;
+        return entity.getResourceLocation();
     }
 }

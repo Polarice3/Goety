@@ -13,6 +13,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.SimpleFoiledItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.common.ToolType;
@@ -75,6 +76,9 @@ public class ModRegistry {
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
     public static final RegistryObject<Item> DARKBOOK = ITEMS.register("darkbook", ItemBase::new);
     public static final RegistryObject<Item> DEADBAT = ITEMS.register("deadbat", DeadBatItem::new);
+    public static final RegistryObject<Item> MAGIC_EMERALD = ITEMS.register("magic_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> SOUL_EMERALD = ITEMS.register("soul_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
+
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));
@@ -94,16 +98,7 @@ public class ModRegistry {
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);
-    public static final RegistryObject<Item> WOODEN_SPEAR = ITEMS.register("wooden_spear", () ->
-            new SpearItem(ItemTier.WOOD, 2, -2.9F));
-    public static final RegistryObject<Item> STONE_SPEAR = ITEMS.register("stone_spear", () ->
-            new SpearItem(ItemTier.STONE, 2, -2.9F));
-    public static final RegistryObject<Item> IRON_SPEAR = ITEMS.register("iron_spear", () ->
-            new SpearItem(ItemTier.IRON, 2, -2.9F));
-    public static final RegistryObject<Item> DIAMOND_SPEAR = ITEMS.register("diamond_spear", () ->
-            new SpearItem(ItemTier.DIAMOND, 2, -2.9F));
-    public static final RegistryObject<Item> NETHERITE_SPEAR = ITEMS.register("netherite_spear", () ->
-            new SpearItem(ItemTier.NETHERITE, 2, -2.9F));
+    public static final RegistryObject<Item> PITCHFORK = ITEMS.register("pitchfork", PitchforkItem::new);
     public static final RegistryObject<Item> PHILOSOPHERS_MACE = ITEMS.register("philosophers_mace", PhilosophersMaceItem::new);
     public static final RegistryObject<Item> SOULWAND = ITEMS.register("soulwand", SoulWand::new);
     public static final RegistryObject<Item> SOULSTAFF = ITEMS.register("soulstaff", SoulStaff::new);
@@ -173,7 +168,6 @@ public class ModRegistry {
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
     public static final RegistryObject<Block> GUARDIAN_OBELISK = BLOCKS.register("guardian_obelisk", GuardianObeliskBlock::new);
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
-//    public static final RegistryObject<Block> SOULFORGE = BLOCKS.register("soulforge", SoulForgeBlock::new);
 
     //Slabs
     public static final RegistryObject<Block> CURSED_STONE_SLAB_BLOCK = BLOCKS.register("cursed_stone_slab",

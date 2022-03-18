@@ -69,7 +69,7 @@ public class SalvagedFortStructure extends ModStructureTemplate {
     }
 
     private boolean isNearFort(ChunkGenerator chunkGenerator, long l, SharedSeedRandom sharedSeedRandom, int i1, int i2) {
-        StructureSeparationSettings structureseparationsettings = chunkGenerator.getSettings().getConfig(ModStructures.SALVAGED_FORT.get());
+        StructureSeparationSettings structureseparationsettings = chunkGenerator.getSettings().getConfig(ModStructures.DECREPIT_FORT.get());
         if (structureseparationsettings != null) {
             for (int i = i1 - 10; i <= i1 + 10; ++i) {
                 for (int j = i2 - 10; j <= i2 + 10; ++j) {

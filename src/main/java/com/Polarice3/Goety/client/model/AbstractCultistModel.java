@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.model;
 
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
-import com.Polarice3.Goety.common.items.SpearItem;
+import com.Polarice3.Goety.common.items.PitchforkItem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -234,7 +234,7 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                 this.leftArmPose = ArmPose.BOW_AND_ARROW;
             }
         }
-        if (itemstack.getItem() instanceof SpearItem && entityIn.isAggressive()) {
+        if (itemstack.getItem() instanceof PitchforkItem && entityIn.isAggressive()) {
             if (entityIn.getMainArm() == HandSide.RIGHT) {
                 this.rightArmPose = ArmPose.THROW_SPEAR;
             } else {

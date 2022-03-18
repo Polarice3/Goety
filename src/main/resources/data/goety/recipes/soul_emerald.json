@@ -2,28 +2,24 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "sfs",
-    "fef",
-    "sfs"
+    "eee",
+    "eie",
+    "eee"
   ],
   "key":
   {
     "e":
     {
-      "item": "goety:emptycore"
-    },
-    "f":
-    {
       "item": "goety:magic_emerald"
     },
-    "s":
+    "i":
     {
-      "item": "goety:savagetooth"
+      "item": "goety:emptycore"
     }
   },
   "result":
   {
-    "item": "goety:bitingfocus",
+    "item": "goety:soul_emerald",
     "count": 1
   }
 }

@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ChannellerRenderer extends MobRenderer<ChannellerEntity, ChannellerModel> {
     public static final ResourceLocation BEAM_TEXTURES = new ResourceLocation("textures/entity/end_crystal/end_crystal_beam.png");
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/channeller.png");
+    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/channeller.png");
     private static final RenderType BEAM_RENDER_TYPE = RenderType.entitySmoothCutout(BEAM_TEXTURES);
 
     public ChannellerRenderer(EntityRendererManager renderManagerIn) {

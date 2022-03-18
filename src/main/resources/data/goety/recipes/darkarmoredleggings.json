@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "ccc",
+    "cec",
     "cdc",
     "c c"
   ],
@@ -15,6 +15,10 @@
     "d":
     {
       "item": "goety:darkleggings"
+    },
+    "e":
+    {
+      "item": "goety:soul_emerald"
     }
   },
   "result":

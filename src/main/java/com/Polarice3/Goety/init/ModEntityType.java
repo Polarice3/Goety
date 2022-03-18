@@ -54,12 +54,12 @@ public class ModEntityType {
                     .updateInterval(20)
                     .build(new ResourceLocation(Goety.MOD_ID, "warped_spear").toString()));
 
-    public static final RegistryObject<EntityType<SpearEntity>> SPEAR = ENTITY_TYPES.register("spear",
-            () -> EntityType.Builder.<SpearEntity>of(SpearEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<PitchforkEntity>> PITCHFORK = ENTITY_TYPES.register("pitchfork",
+            () -> EntityType.Builder.<PitchforkEntity>of(PitchforkEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(4)
                     .updateInterval(20)
-                    .build(new ResourceLocation(Goety.MOD_ID, "spear").toString()));
+                    .build(new ResourceLocation(Goety.MOD_ID, "pitchfork").toString()));
 
     public static final RegistryObject<EntityType<NetherBallEntity>> NETHERBALL = ENTITY_TYPES.register("scorchball",
             () -> EntityType.Builder.<NetherBallEntity>of(NetherBallEntity::new, EntityClassification.MISC)
@@ -100,6 +100,13 @@ public class ModEntityType {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "zealot").toString()));
+
+    public static final RegistryObject<EntityType<ThugEntity>> THUG = ENTITY_TYPES.register("thug",
+            () -> EntityType.Builder.of(ThugEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(1.4F, 2.7F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "thug").toString()));
 
     public static final RegistryObject<EntityType<DiscipleEntity>> DISCIPLE = ENTITY_TYPES.register("disciple",
             () -> EntityType.Builder.of(DiscipleEntity::new, EntityClassification.MONSTER)

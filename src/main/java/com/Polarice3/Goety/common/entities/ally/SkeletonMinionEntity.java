@@ -2,7 +2,9 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
+import com.Polarice3.Goety.common.entities.hostile.ScorchEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.init.ModRegistry;
@@ -35,6 +37,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
@@ -120,7 +123,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
             ItemStack itemstack = this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem));
             if (itemstack.getItem() == Items.BOW) {
                 int i = 20;
-                if (this.level.getDifficulty() != Difficulty.HARD) {
+                if (!this.isUpgraded()) {
                     i = 40;
                 }
 
