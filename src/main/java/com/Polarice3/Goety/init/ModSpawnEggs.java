@@ -25,6 +25,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> THUG_SPAWN_EGG = ITEMS.register("thug_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.THUG, 0x5a0b0b, 0x241c1c, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> CRIMSON_SPIDER_SPAWN_EGG = ITEMS.register("crimson_spider_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.CRIMSON_SPIDER, 0x9a0000, 0xe6c550, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> DISCIPLE_SPAWN_EGG = ITEMS.register("disciple_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DISCIPLE, 0x5a0b0b, 0x917186, new Item.Properties().tab(Goety.TAB)));
 

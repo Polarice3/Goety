@@ -37,6 +37,8 @@ public class CastSpells {
                 return new DragonFireballSpell();
             case 13:
                 return new CreeperlingSpell();
+            case 14:
+                return new BreathSpell();
             default:
                 return null;
         }

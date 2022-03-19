@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:airycore"
+    },
+    "f":
+    {
+      "item": "minecraft:scute"
+    },
+    "s":
+    {
+      "item": "minecraft:pufferfish"
+    }
+  },
+  "result":
+  {
+    "item": "goety:breathfocus",
+    "count": 1
+  }
+}

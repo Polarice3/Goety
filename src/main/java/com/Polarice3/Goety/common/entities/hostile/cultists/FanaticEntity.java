@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
+import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.*;
@@ -194,6 +195,13 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
+        if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
+            CrimsonSpiderEntity spider = new CrimsonSpiderEntity(ModEntityType.CRIMSON_SPIDER.get(), level);
+            spider.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
+            spider.finalizeSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, (ILivingEntityData)null, (CompoundNBT)null);
+            this.startRiding(spider);
+            worldIn.addFreshEntity(spider);
+        }
         this.setOutfitType(this.random.nextInt(this.OutfitTypeNumber()));
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
@@ -254,7 +262,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
         super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
         if (this.getMainHandItem().getItem() == ModRegistry.PITCHFORK.get()) {
-            for (int i = 0; i < 3 + this.random.nextInt(pLooting); ++i){
+            for (int i = 0; i < this.random.nextInt(3) + (pLooting > 0 ? this.random.nextInt(pLooting) : 0); ++i){
                 this.spawnAtLocation(Items.WHEAT);
             }
         }

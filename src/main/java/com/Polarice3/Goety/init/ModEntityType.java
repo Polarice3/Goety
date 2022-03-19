@@ -108,6 +108,12 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "thug").toString()));
 
+    public static final RegistryObject<EntityType<CrimsonSpiderEntity>> CRIMSON_SPIDER = ENTITY_TYPES.register("crimson_spider",
+            () -> EntityType.Builder.of(CrimsonSpiderEntity::new, EntityClassification.MONSTER)
+                    .sized(1.4F, 0.9F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "crimson_spider").toString()));
+
     public static final RegistryObject<EntityType<DiscipleEntity>> DISCIPLE = ENTITY_TYPES.register("disciple",
             () -> EntityType.Builder.of(DiscipleEntity::new, EntityClassification.MONSTER)
                     .canSpawnFarFromPlayer()

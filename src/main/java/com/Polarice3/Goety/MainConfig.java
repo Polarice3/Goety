@@ -26,6 +26,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> TemptingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> BreathingCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -39,6 +40,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> TemptingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
@@ -54,6 +56,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> TemptingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -189,6 +192,8 @@ public class MainConfig {
                 .defineInRange("dragonFireballCost", 64, 0, Integer.MAX_VALUE);
         CreeperlingCost = BUILDER.comment("Creeperling Spell Cost per second, Default: 8")
                 .defineInRange("creeperlingCost", 8, 0, Integer.MAX_VALUE);
+        BreathingCost = BUILDER.comment("Breathing Spell Cost per second, Default: 2")
+                .defineInRange("breathingCost", 2, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -215,6 +220,8 @@ public class MainConfig {
                 .defineInRange("dragonFireballTime", 30, 0, 72000);
         CreeperlingDuration = BUILDER.comment("Time to cast Creeperling Spell per second, Default: 10")
                 .defineInRange("creeperlingTime", 10, 0, 72000);
+        BreathingDuration = BUILDER.comment("Time to cast Breathing Spell per second, Default: 10")
+                .defineInRange("breathingTime", 10, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
@@ -291,6 +298,8 @@ public class MainConfig {
                 .defineInRange("dragonFireballInfamyChance", 0, 0, Integer.MAX_VALUE);
         CreeperlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Creeperling Spell per second, Default: 128")
                 .defineInRange("creeperlingInfamyChance", 128, 0, Integer.MAX_VALUE);
+        BreathingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Breathing Spell per second, Default: 0")
+                .defineInRange("breathingInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")

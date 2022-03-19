@@ -78,6 +78,13 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
+        if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
+            CrimsonSpiderEntity spider = new CrimsonSpiderEntity(ModEntityType.CRIMSON_SPIDER.get(), level);
+            spider.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
+            spider.finalizeSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, (ILivingEntityData)null, (CompoundNBT)null);
+            this.startRiding(spider);
+            worldIn.addFreshEntity(spider);
+        }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
 
