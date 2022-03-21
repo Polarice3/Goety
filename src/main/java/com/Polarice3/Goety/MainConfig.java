@@ -66,6 +66,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> InquillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> ConquillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VizierInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ScryingInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> OtherInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> DeathLoseInfamy;
 
@@ -100,6 +101,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadMinionHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
+
+    public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
 
@@ -266,6 +269,8 @@ public class MainConfig {
                 .defineInRange("conquillagerInfamyGain", 5, 0, Integer.MAX_VALUE);
         VizierInfamy = BUILDER.comment("How much Infamy the Player gains killing Viziers, Default: 25")
                 .defineInRange("vizierInfamyGain", 25, 0, Integer.MAX_VALUE);
+        ScryingInfamy = BUILDER.comment("How much Infamy the Player gains scrying on a Cat in a Village, Default: 10")
+                .defineInRange("scryingInfamyGain", 10, 0, Integer.MAX_VALUE);
         OtherInfamy = BUILDER.comment("How much Infamy the Player gains killing other types of Illagers, Default: 1")
                 .defineInRange("otherInfamyGain", 1, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -340,6 +345,8 @@ public class MainConfig {
                 .defineInRange("zombieLimit", 32, 1, Integer.MAX_VALUE);
         SkeletonLimit = BUILDER.comment("Number of Skeleton Servants that can exist around the player without instantly dying, Default: 32")
                 .defineInRange("skeletonLimit", 32, 1, Integer.MAX_VALUE);
+        CreeperlingExplosionRadius = BUILDER.comment("The radius of a Creeperling's Explosion when not powered, Default: 1.25")
+                .defineInRange("creeperlingExplosionRadius", 1.25, 1.0, Double.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Misc");
         VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")

@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.tileentities;
 import com.Polarice3.Goety.client.inventory.crafting.CursedBurnerRecipes;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeType;
 import com.Polarice3.Goety.common.blocks.CursedBurnerBlock;
+import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;

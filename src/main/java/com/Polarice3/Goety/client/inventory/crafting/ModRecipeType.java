@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface ModRecipeType<T extends IRecipe<?>> {
     IRecipeType<CursedBurnerRecipes> CURSED_BURNER_RECIPES = register("cursed_burner_recipes");
+    IRecipeType<DarkAltarRecipes> DARK_ALTAR_RECIPES = register("dark_altar_recipes");
 
     static <T extends IRecipe<?>> IRecipeType<T> register(final String pIdentifier) {
         return Registry.register(Registry.RECIPE_TYPE, new ResourceLocation(Goety.MOD_ID, pIdentifier), new IRecipeType<T>() {

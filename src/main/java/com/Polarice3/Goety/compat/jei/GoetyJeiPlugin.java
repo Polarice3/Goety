@@ -22,16 +22,19 @@ public class GoetyJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         jeiHelper = registration.getJeiHelpers();
         registration.addRecipeCategories(new CursedBurnerCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new DarkAltarCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ModRegistry.CURSED_BURNER.get()), CursedBurnerCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModRegistry.DARK_ALTAR.get()), DarkAltarCategory.UID);
     }
 
     public void registerRecipes(IRecipeRegistration registration) {
         ClientWorld world = Objects.requireNonNull(Minecraft.getInstance().level);
         registration.addRecipes(JeiRecipes.getCursedBurnerRecipes(world), CursedBurnerCategory.UID);
+        registration.addRecipes(JeiRecipes.getDarkAltarRecipes(world), DarkAltarCategory.UID);
     }
 
     @Override

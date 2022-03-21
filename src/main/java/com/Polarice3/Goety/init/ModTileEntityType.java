@@ -1,6 +1,7 @@
-package com.Polarice3.Goety.common.tileentities;
+package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.tileentities.*;
 import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
@@ -34,6 +35,10 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<CursedCageTileEntity>> CURSED_CAGE = TILEENTITY_TYPES.register("cursed_cage",
             () -> TileEntityType.Builder.of(CursedCageTileEntity::new, ModRegistry.CURSED_CAGE_BLOCK.get()).build(null));
 
-/*    public static final RegistryObject<TileEntityType<SoulForgeTileEntity>> SOULFORGE = TILEENTITY_TYPES.register("soulforge",
-            () -> TileEntityType.Builder.create(SoulForgeTileEntity::new, RegistryHandler.SOULFORGE.get()).build(null));*/
+    public static final RegistryObject<TileEntityType<DarkAltarTileEntity>> DARK_ALTAR = TILEENTITY_TYPES.register("dark_altar",
+            () -> TileEntityType.Builder.of(DarkAltarTileEntity::new, ModRegistry.DARK_ALTAR.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<PedestalTileEntity>> PEDESTAL = TILEENTITY_TYPES.register("pedestal",
+            () -> TileEntityType.Builder.of(PedestalTileEntity::new, ModRegistry.PEDESTAL.get()).build(null));
+
 }

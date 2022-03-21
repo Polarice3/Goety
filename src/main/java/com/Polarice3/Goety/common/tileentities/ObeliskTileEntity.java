@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.blocks.FangTotemBlock;
 import com.Polarice3.Goety.common.blocks.ObeliskBlock;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;

@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "goety:darkbook"
+      "item": "minecraft:red_banner",
+      "nbt": "{BlockEntityTag:{Patterns:[{Pattern:cr,Color:4},{Pattern:bt,Color:14},{Pattern:tt,Color:14},{Pattern:ms,Color:4},{Pattern:cs,Color:14},{Pattern:cs,Color:4},{Pattern:sc,Color:14},{Pattern:bo,Color:14},{Pattern:mr,Color:14},{Pattern:mc,Color:4}]},HideFlags:32,display:{Name:\u0027{\"color\":\"gold\",\"translate\":\"block.goety.cultist_banner\"}\u0027}}"
     },
     "title": {
       "translate": "advancements.goety.kill_a_cultist.title"

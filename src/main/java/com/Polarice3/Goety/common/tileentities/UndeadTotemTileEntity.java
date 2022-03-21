@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;

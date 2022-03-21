@@ -70,6 +70,9 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
         this.populateDefaultEquipmentEnchantments(difficultyIn);
         if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
             CrimsonSpiderEntity spider = new CrimsonSpiderEntity(ModEntityType.CRIMSON_SPIDER.get(), level);
+            if (this.isPersistenceRequired()){
+                spider.setPersistenceRequired();
+            }
             spider.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
             spider.finalizeSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, (ILivingEntityData)null, (CompoundNBT)null);
             this.startRiding(spider);

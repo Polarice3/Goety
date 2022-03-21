@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "tet",
+    "scs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:magic_emerald"
+    },
+    "t":
+    {
+      "item": "goety:cursed_totem"
+    },
+    "s":
+    {
+      "item": "goety:cursed_stone"
+    },
+    "c":
+    {
+      "item": "goety:cursed_stone_chiseled"
+    }
+  },
+  "result":
+  {
+    "item": "goety:dark_altar",
+    "count": 1
+  }
+}

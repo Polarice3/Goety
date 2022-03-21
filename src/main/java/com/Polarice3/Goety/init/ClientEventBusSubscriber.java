@@ -8,7 +8,6 @@ import com.Polarice3.Goety.client.inventory.container.ModContainerType;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
-import com.Polarice3.Goety.common.tileentities.ModTileEntityType;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -73,6 +72,8 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.WIND_TOTEM.get(), WindTotemTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.DARK_ALTAR.get(), DarkAltarTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.PEDESTAL.get(), PedestalTileEntityRenderer::new);
         RenderTypeLookup.setRenderLayer(ModRegistry.CURSED_CAGE_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModRegistry.CURSED_BARS_BLOCK.get(), RenderType.translucent());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);

@@ -64,7 +64,7 @@ public class CrimsonSpiderEntity extends AbstractCultistEntity {
 
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) {
+        if (!this.level.isClientSide && this.isAggressive()) {
             this.setClimbing(this.horizontalCollision);
         }
 

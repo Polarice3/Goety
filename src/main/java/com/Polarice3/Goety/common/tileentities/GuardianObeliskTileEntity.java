@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.TNTEntity;

@@ -12,5 +12,8 @@ public class ModRecipeSerializer{
     public static final RegistryObject<IRecipeSerializer<CursedBurnerRecipes>> CURSED_BURNER_RECIPES = RECIPE_SERIALIZERS.register("cursed_burner_recipes",
             () -> new CursedBurnerRecipeSerializer<>(CursedBurnerRecipes::new, 200));
 
+    public static final RegistryObject<IRecipeSerializer<DarkAltarRecipes>> DARK_ALTAR_RECIPES = RECIPE_SERIALIZERS.register("dark_altar_recipes",
+            () -> new DarkAltarRecipeSerializer<>(DarkAltarRecipes::new, 200));
+
 
 }

@@ -62,6 +62,7 @@ public class ModRegistry {
     public static final RegistryObject<Item> SAVAGETOOTH = ITEMS.register("savagetooth", ItemBase::new);
     public static final RegistryObject<Item> EMPTYCORE = ITEMS.register("emptycore", ItemBase::new);
     public static final RegistryObject<Item> AIRYCORE = ITEMS.register("airycore", ItemBase::new);
+    public static final RegistryObject<Item> ANIMALISCORE = ITEMS.register("animaliscore", ItemBase::new);
     public static final RegistryObject<UncookedMutatedItem> MUTATED_STEAK_UNCOOKED = ITEMS.register("mutatedsteak_uncooked", UncookedMutatedItem::new);
     public static final RegistryObject<MutatedSteakItem> MUTATED_STEAK = ITEMS.register("mutatedsteak", MutatedSteakItem::new);
     public static final RegistryObject<UncookedMutatedItem> MUTATED_CHICKEN_UNCOOKED = ITEMS.register("mutatedchicken_uncooked", UncookedMutatedItem::new);
@@ -78,6 +79,8 @@ public class ModRegistry {
     public static final RegistryObject<Item> DEADBAT = ITEMS.register("deadbat", DeadBatItem::new);
     public static final RegistryObject<Item> MAGIC_EMERALD = ITEMS.register("magic_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> SOUL_EMERALD = ITEMS.register("soul_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> SCRYING_MIRROR = ITEMS.register("scrying_mirror", ScryingMirrorItem::new);
+    public static final RegistryObject<Item> TREASURE_POUCH = ITEMS.register("treasure_pouch", TreasurePouchItem::new);
 
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
@@ -169,6 +172,8 @@ public class ModRegistry {
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
     public static final RegistryObject<Block> GUARDIAN_OBELISK = BLOCKS.register("guardian_obelisk", GuardianObeliskBlock::new);
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
+    public static final RegistryObject<Block> DARK_ALTAR = BLOCKS.register("dark_altar", DarkAltarBlock::new);
+    public static final RegistryObject<Block> PEDESTAL = BLOCKS.register("pedestal", PedestalBlock::new);
 
     //Slabs
     public static final RegistryObject<Block> CURSED_STONE_SLAB_BLOCK = BLOCKS.register("cursed_stone_slab",
@@ -253,6 +258,10 @@ public class ModRegistry {
             () -> new BlockItemBase(GUARDIAN_OBELISK.get()));
     public static final RegistryObject<Item> CURSED_BURNER_ITEM = ITEMS.register("cursed_burner",
             () -> new BlockItemBase(CURSED_BURNER.get()));
+    public static final RegistryObject<Item> DARK_ALTAR_ITEM = ITEMS.register("dark_altar",
+            () -> new BlockItemBase(DARK_ALTAR.get()));
+    public static final RegistryObject<Item> PEDESTAL_ITEM = ITEMS.register("pedestal",
+            () -> new BlockItemBase(PEDESTAL.get()));
     //Effects
     public static final RegistryObject<Effect> DEATHPROTECT = EFFECTS.register("deathprotect",
             () -> new ModEffects(EffectType.BENEFICIAL, 0));

@@ -6,17 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:book",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly",
-              "enchantments": [
-                "minecraft:fortune",
-                "minecraft:silk_touch",
-                "minecraft:looting"
-              ]
-            }
-          ]
+          "name": "goety:treasure_pouch"
         }
       ]
     },

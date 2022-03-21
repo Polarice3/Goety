@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
+import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

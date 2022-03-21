@@ -55,8 +55,10 @@ public class ApostleEntity extends SpellcastingCultistEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 32.0D)
+                .add(Attributes.MAX_HEALTH, 72.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                .add(Attributes.ARMOR, 16.0D)
+                .add(Attributes.ARMOR_TOUGHNESS, 12.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
@@ -80,23 +82,8 @@ public class ApostleEntity extends SpellcastingCultistEntity {
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        int random = this.level.random.nextInt(2);
         this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModRegistry.DARKBOOK.get()));
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTARMOREDHELM.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.CULTISTARMOREDROBE.get()));
-        this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
-        this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
-        switch (random){
-            case 0:
-                this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                break;
-            case 1:
-                this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-                break;
-        }
     }
 
     public boolean isFiring(){

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "lgl",
+    "mem",
+    " s "
+  ],
+  "key":
+  {
+    "g":
+    {
+      "item": "minecraft:glass_pane"
+    },
+    "l":
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "m":
+    {
+      "item": "goety:magic_emerald"
+    },
+    "s":
+    {
+      "item": "minecraft:stick"
+    },
+    "e":
+    {
+      "item": "minecraft:ender_eye"
+    }
+  },
+  "result":
+  {
+    "item": "goety:scrying_mirror",
+    "count": 1
+  }
+}

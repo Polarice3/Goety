@@ -18,7 +18,7 @@ import com.Polarice3.Goety.common.infamy.InfamyImp;
 import com.Polarice3.Goety.common.infamy.InfamyStore;
 import com.Polarice3.Goety.common.infamy.ModNetwork;
 import com.Polarice3.Goety.common.potions.ModPotions;
-import com.Polarice3.Goety.common.tileentities.ModTileEntityType;
+import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.world.structures.pieces;
 
+import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.ModLootTables;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -9,6 +10,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -54,7 +57,7 @@ public class SalvagedFortPiece extends ModStructurePiece {
 
             this.createChest(pLevel, pSbb, pRandom, pPos, ModLootTables.SALVAGED_FORT_TREASURE, blockstate);
         } else {
-            AbstractCultistEntity cultist;
+            AbstractCultistEntity cultist = null;
             switch (function) {
                 case "fanatic":
                     cultist = ModEntityType.FANATIC.get().create(pLevel.getLevel());
@@ -69,7 +72,18 @@ public class SalvagedFortPiece extends ModStructurePiece {
                     cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
                     break;
                 case "apostle":
-                    cultist = ModEntityType.APOSTLE.get().create(pLevel.getLevel());
+                    int random = pRandom.nextInt(3);
+                    switch (random){
+                        case 0:
+                            cultist = ModEntityType.FANATIC.get().create(pLevel.getLevel());
+                            break;
+                        case 1:
+                            cultist = ModEntityType.ZEALOT.get().create(pLevel.getLevel());
+                            break;
+                        case 2:
+                            cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
+                            break;
+                    }
                     break;
                 case "chan":
                     cultist = ModEntityType.CHANNELLER.get().create(pLevel.getLevel());
