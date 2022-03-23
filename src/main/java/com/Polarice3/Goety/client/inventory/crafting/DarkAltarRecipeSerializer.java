@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.client.inventory.crafting;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
@@ -9,7 +8,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 
@@ -26,34 +24,22 @@ public class DarkAltarRecipeSerializer<T extends ModSoulCraftRecipe> extends net
         String s = JSONUtils.getAsString(pJson, "group", "");
         String c = JSONUtils.getAsString(pJson, "craftType", "");
         JsonElement jsonelement = JSONUtils.isArrayNode(pJson, "main") ? JSONUtils.getAsJsonArray(pJson, "main") : JSONUtils.getAsJsonObject(pJson, "main");
-        Ingredient ingredient = Ingredient.fromJson(jsonelement);
-//        NonNullList<Ingredient> nonnulllist = itemsFromJson(JSONUtils.getAsJsonArray(pJson, "ingredients"));
-        if (!pJson.has("result")) throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
+        Ingredient main = Ingredient.fromJson(jsonelement);
+        if (!pJson.has("result")){
+            throw new com.google.gson.JsonSyntaxException("Missing result, expected to find a string or object");
+        }
         ItemStack itemstack;
-        if (pJson.get("result").isJsonObject()) itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(pJson, "result"));
-        else {
+        if (pJson.get("result").isJsonObject()){
+            itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(pJson, "result"));
+        } else {
             String s1 = JSONUtils.getAsString(pJson, "result");
             ResourceLocation resourcelocation = new ResourceLocation(s1);
-            itemstack = new ItemStack(Registry.ITEM.getOptional(resourcelocation).orElseThrow(() -> {
-                return new IllegalStateException("Item: " + s1 + " does not exist");
-            }));
+            itemstack = new ItemStack(Registry.ITEM.getOptional(resourcelocation)
+                    .orElseThrow(() -> new IllegalStateException("Item: " + s1 + " does not exist")));
         }
         int f = JSONUtils.getAsInt(pJson, "soulCost", 0);
         int i = JSONUtils.getAsInt(pJson, "cookingtime", this.defaultCookingTime);
-        return this.factory.create(pRecipeId, s, c, ingredient, itemstack, f, i);
-    }
-
-    private static NonNullList<Ingredient> itemsFromJson(JsonArray pIngredientArray) {
-        NonNullList<Ingredient> nonnulllist = NonNullList.create();
-
-        for(int i = 0; i < pIngredientArray.size(); ++i) {
-            Ingredient ingredient = Ingredient.fromJson(pIngredientArray.get(i));
-            if (!ingredient.isEmpty()) {
-                nonnulllist.add(ingredient);
-            }
-        }
-
-        return nonnulllist;
+        return this.factory.create(pRecipeId, s, c, main, itemstack, f, i);
     }
 
     public T fromNetwork(ResourceLocation pRecipeId, PacketBuffer pBuffer) {

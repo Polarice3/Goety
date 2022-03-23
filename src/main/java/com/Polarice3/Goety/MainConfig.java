@@ -102,6 +102,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
 
+    public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
+
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
@@ -234,9 +237,15 @@ public class MainConfig {
         SkeletonCooldown = BUILDER.comment("Osseous Spell Cooldown, Default: 280")
                 .defineInRange("skeletonCooldown", 280, 0, 72000);
         BUILDER.pop();
-        BUILDER.push("Mob Spawning");
+        BUILDER.push("Mobs");
         MRabbitMax = BUILDER.comment("Maximum amount of Mutant Rabbits can spawn, Default: 16")
                 .defineInRange("mutatedRabbitMax", 16, 0, 100);
+        VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")
+                .define("vizierMinion", false);
+        FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 4")
+                .defineInRange("fanaticPitchforkChance", 4, 0, Integer.MAX_VALUE);
+        FanaticWitchBombChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Witch's Bomb, Default: 4")
+                .defineInRange("fanaticWitchBombChance", 4, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Infamy");
         InfamySpawn = BUILDER.comment("Illager Spawning due to Infamy, Default: true")
@@ -346,19 +355,19 @@ public class MainConfig {
         SkeletonLimit = BUILDER.comment("Number of Skeleton Servants that can exist around the player without instantly dying, Default: 32")
                 .defineInRange("skeletonLimit", 32, 1, Integer.MAX_VALUE);
         CreeperlingExplosionRadius = BUILDER.comment("The radius of a Creeperling's Explosion when not powered, Default: 1.25")
-                .defineInRange("creeperlingExplosionRadius", 1.25, 1.0, Double.MAX_VALUE);
+                .defineInRange("creeperlingExplosionRadius", 1.25, 0.0, Double.MAX_VALUE);
+        SoulSkullFire = BUILDER.comment("Soul Skulls when shot from Staffs sets ground aflame, Default: false")
+                .define("soulSkullFire", false);
         BUILDER.pop();
-        BUILDER.push("Misc");
-        VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")
-                .define("vizierMinion", false);
+        BUILDER.push("Robe Repairs");
         DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 20")
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
         NecroArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Necro Armored Robes per second, Default: 20")
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
         WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 20")
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
-        SoulSkullFire = BUILDER.comment("Soul Skulls when shot from Staffs sets ground aflame, Default: false")
-                .define("soulSkullFire", false);
+        BUILDER.pop();
+        BUILDER.push("Misc");
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")
                 .define("illagueSpread", true);
         BUILDER.pop();

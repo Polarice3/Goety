@@ -1,9 +1,10 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistry;
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
@@ -14,8 +15,7 @@ public class ModTileEntity extends TileEntity {
     public final List<BlockPos> ladders = Lists.newArrayList();
     public final List<BlockPos> rails = Lists.newArrayList();
     public final List<BlockPos> pumpkin = Lists.newArrayList();
-    public final List<BlockPos> pedestals = Lists.newArrayList();
-    public final List<TileEntity> pedestalitem = Lists.newArrayList();
+    public final List<TileEntity> additions = Lists.newArrayList();
 
     public ModTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
@@ -43,7 +43,7 @@ public class ModTileEntity extends TileEntity {
         }
     }
 
-    public void findPedestals() {
+    public void setAdditions(Item item) {
         for(int j1 = -4; j1 <= 4; ++j1) {
             for(int k1 = -4; k1 <= 4; ++k1) {
                 for(int l1 = -4; l1 <= 4; ++l1) {
@@ -51,15 +51,34 @@ public class ModTileEntity extends TileEntity {
                     assert this.level != null;
                     BlockState blockstate = this.level.getBlockState(blockpos1);
 
-                    if (blockstate.getBlock() == ModRegistry.PEDESTAL.get()) {
-                        if (blockstate.hasTileEntity()){
-                            TileEntity tileEntity = this.level.getBlockEntity(blockpos1);
-                            if (tileEntity instanceof PedestalTileEntity){
-                                PedestalTileEntity pedestalTileEntity = (PedestalTileEntity) tileEntity;
-                                if (!pedestalTileEntity.getItem().isEmpty()){
-                                    this.pedestalitem.add(pedestalTileEntity);
-                                    this.pedestals.add(blockpos1);
-                                }
+                    if (blockstate.hasTileEntity()) {
+                        TileEntity tileEntity = this.level.getBlockEntity(blockpos1);
+                        if (tileEntity instanceof PedestalTileEntity){
+                            PedestalTileEntity pedestalTileEntity = (PedestalTileEntity) tileEntity;
+                            if (((PedestalTileEntity) tileEntity).getItem().getItem() == item){
+                                this.additions.add(pedestalTileEntity);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void removePedestalItems() {
+        for(int j1 = -4; j1 <= 4; ++j1) {
+            for(int k1 = -4; k1 <= 4; ++k1) {
+                for(int l1 = -4; l1 <= 4; ++l1) {
+                    BlockPos blockpos1 = this.worldPosition.offset(j1, k1, l1);
+                    assert this.level != null;
+                    BlockState blockstate = this.level.getBlockState(blockpos1);
+
+                    if (blockstate.hasTileEntity()) {
+                        TileEntity tileEntity = this.level.getBlockEntity(blockpos1);
+                        if (tileEntity instanceof PedestalTileEntity){
+                            PedestalTileEntity pedestalTileEntity = (PedestalTileEntity) tileEntity;
+                            if (((PedestalTileEntity) tileEntity).getItem() != ItemStack.EMPTY){
+                                pedestalTileEntity.clearContent();
                             }
                         }
                     }
@@ -73,7 +92,7 @@ public class ModTileEntity extends TileEntity {
     }
 
     public boolean checkPedestals(){
-        return !this.pedestals.isEmpty();
+        return this.additions.size() > 0;
     }
 
 }

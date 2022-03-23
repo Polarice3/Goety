@@ -14,7 +14,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -107,49 +106,9 @@ public class DarkAltarTileEntity extends ModTileEntity implements IClearable, IT
                             this.cookingProgress[i] = 0;
                         }
                     }
- /*                   if (craftType.toString().contains("necroturgy")){
-                        this.findPedestals();
-                        if (this.checkPedestals()) {
-                            if (pedestalitem.size() >= 8) {
-                                for (TileEntity tileEntity : this.pedestalitem) {
-                                    PedestalTileEntity pedestalTileEntity = (PedestalTileEntity) tileEntity;
-                                    if (pedestalTileEntity.getItem().getItem() == Items.ROTTEN_FLESH) {
-                                        if (itemstack != itemstack1 && souls > 0) {
-                                            this.cookingProgress[i]++;
-                                            if (t % 20L == 0L) {
-                                                this.cursedCageTile.decreaseSouls(soulCost.orElse(1));
-                                            }
-                                            this.makeWorkParticles();
-                                            this.clearData();
-                                        }
-                                        if (this.cookingProgress[i] == 5) {
-                                            this.level.playSound(null, this.getBlockPos(), SoundEvents.BEACON_ACTIVATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                                        }
-                                        if (this.cookingProgress[i] >= this.cookingTime[i]) {
-                                            this.items.set(i, itemstack1);
-                                            this.level.playSound(null, this.getBlockPos(), SoundEvents.BEACON_POWER_SELECT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                                            ((PedestalTileEntity) tileEntity).clearContent();
-                                            this.clearData();
-                                            this.cookingProgress[i] = 0;
-                                        }
-                                    } else {
-                                        this.clearData();
-                                        this.cookingProgress[i] = 0;
-                                    }
-                                }
-                            } else {
-                                this.clearData();
-                                this.cookingProgress[i] = 0;
-                            }
-                        } else {
-                            this.clearData();
-                            this.cookingProgress[i] = 0;
-                        }
-                    }*/
                 }
             }
         }
-
     }
 
     private void clearData(){
@@ -157,7 +116,7 @@ public class DarkAltarTileEntity extends ModTileEntity implements IClearable, IT
         this.pumpkin.clear();
         this.ladders.clear();
         this.rails.clear();
-        this.pedestals.clear();
+        this.additions.clear();
     }
 
     public boolean placeItem(ItemStack pStack, int pCookTime) {

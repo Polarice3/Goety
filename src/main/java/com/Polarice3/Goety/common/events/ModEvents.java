@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
+import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
@@ -91,9 +92,8 @@ public class ModEvents {
 
             IInfamy capability = event.getOriginal().getCapability(InfamyProvider.CAPABILITY).resolve().get();
 
-            player.getCapability(InfamyProvider.CAPABILITY).ifPresent(infamy -> {
-                infamy.setInfamy(capability.getInfamy() - MainConfig.DeathLoseInfamy.get());
-            });
+            player.getCapability(InfamyProvider.CAPABILITY)
+                    .ifPresent(infamy -> infamy.setInfamy(capability.getInfamy() - MainConfig.DeathLoseInfamy.get()));
         }
     }
 
@@ -322,6 +322,33 @@ public class ModEvents {
                         InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.VizierInfamy.get());
                     } else {
                         InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.OtherInfamy.get());
+                    }
+                }
+            }
+            if (killer instanceof SummonedEntity) {
+                SummonedEntity summonedEntity = (SummonedEntity) killer;
+                if (summonedEntity.getTrueOwner() != null) {
+                    if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
+                        PlayerEntity player = (PlayerEntity) summonedEntity.getTrueOwner();
+                        if (killed instanceof PillagerEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.PillagerInfamy.get());
+                        } else if (killed instanceof VindicatorEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.VindicatorInfamy.get());
+                        } else if (killed instanceof EvokerEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.EvokerInfamy.get());
+                        } else if (killed instanceof IllusionerEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.IllusionerInfamy.get());
+                        } else if (killed instanceof EnviokerEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.EnviokerInfamy.get());
+                        } else if (killed instanceof InquillagerEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.InquillagerInfamy.get());
+                        } else if (killed instanceof ConquillagerEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.ConquillagerInfamy.get());
+                        } else if (killed instanceof VizierEntity) {
+                            InfamyHelper.increaseInfamy(player, MainConfig.VizierInfamy.get());
+                        } else {
+                            InfamyHelper.increaseInfamy(player, MainConfig.OtherInfamy.get());
+                        }
                     }
                 }
             }

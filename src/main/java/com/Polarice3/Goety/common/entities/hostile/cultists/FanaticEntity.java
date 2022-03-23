@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -210,11 +211,21 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        int random = this.random.nextInt(9);
+        int random = this.random.nextInt(12);
         int random2 = this.random.nextInt(5);
-        int random3 = this.random.nextInt(4);
-        int random4 = this.random.nextInt(4);
-        if (random4 != 0){
+        int witchbomb;
+        if (MainConfig.FanaticWitchBombChance.get() != 0){
+            witchbomb = this.random.nextInt(MainConfig.FanaticWitchBombChance.get());
+        } else {
+            witchbomb = 1;
+        }
+        int pitchfork;
+        if (MainConfig.FanaticPitchforkChance.get() != 0){
+            pitchfork = this.random.nextInt(MainConfig.FanaticPitchforkChance.get());
+        } else {
+            pitchfork = 1;
+        }
+        if (pitchfork != 0){
             switch (random){
                 case 0:
                     this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_SWORD));
@@ -226,22 +237,31 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
                     this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_PICKAXE));
                     break;
                 case 3:
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.STONE_SHOVEL));
                     break;
                 case 4:
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
                     break;
                 case 5:
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
                     break;
                 case 6:
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
                     break;
                 case 7:
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
                     break;
                 case 8:
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+                    break;
+                case 9:
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_AXE));
+                    break;
+                case 10:
                     this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_PICKAXE));
+                    break;
+                case 11:
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_SHOVEL));
             }
         } else {
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.PITCHFORK.get()));
@@ -250,6 +270,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
             case 0:
             case 1:
             case 2:
+                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
                 break;
             case 3:
                 this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
@@ -257,7 +278,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
             case 4:
                 this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
         }
-        if (random3 == 0) {
+        if (witchbomb == 0) {
             this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModRegistry.WITCHBOMB.get()));
         }
     }

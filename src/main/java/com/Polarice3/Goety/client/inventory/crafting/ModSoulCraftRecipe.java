@@ -14,7 +14,6 @@ public abstract class ModSoulCraftRecipe implements IRecipe<IInventory> {
     protected final String group;
     protected final String craftType;
     protected final Ingredient main;
-//    private final NonNullList<Ingredient> ingredients;
     protected final int soulCost;
     protected final ItemStack result;
     protected final int cookingTime;
@@ -41,10 +40,6 @@ public abstract class ModSoulCraftRecipe implements IRecipe<IInventory> {
     public boolean canCraftInDimensions(int pWidth, int pHeight) {
         return true;
     }
-
-/*    public NonNullList<Ingredient> getIngredients() {
-        return this.ingredients;
-    }*/
 
     public Ingredient getMain() {
         return this.main;

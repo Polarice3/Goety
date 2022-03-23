@@ -1,6 +1,9 @@
 package com.Polarice3.Goety.common.tileentities;
 
+import com.Polarice3.Goety.common.network.ModNetwork;
+import com.Polarice3.Goety.common.network.TileEntityUpdatePacket;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IClearable;
@@ -8,9 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class PedestalTileEntity extends TileEntity implements IClearable {
     private ItemStack item = ItemStack.EMPTY;
@@ -67,6 +72,15 @@ public class PedestalTileEntity extends TileEntity implements IClearable {
         return ActionResultType.PASS;
     }
 
+    public void synchronize() {
+        this.setChanged();
+        assert level != null;
+        if (level.isClientSide)
+            ModNetwork.INSTANCE.sendToServer(new TileEntityUpdatePacket(worldPosition, save(new CompoundNBT())));
+        else
+            ModNetwork.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(worldPosition)), new TileEntityUpdatePacket(worldPosition, save(new CompoundNBT())));
+    }
+
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
         CompoundNBT tag = pkt.getTag();
@@ -74,6 +88,12 @@ public class PedestalTileEntity extends TileEntity implements IClearable {
     }
 
     public void clearContent() {
-        this.setItem(ItemStack.EMPTY);
+        this.item = ItemStack.EMPTY;
+        new ParticleUtil(ParticleTypes.SMOKE, this.getBlockPos().getX(), this.getBlockPos().getY() + 0.5, this.getBlockPos().getZ(), 0.0F, 5.0E-4D, 0.0F);
+        this.synchronize();
+    }
+
+    public void setRemoved() {
+        super.setRemoved();
     }
 }

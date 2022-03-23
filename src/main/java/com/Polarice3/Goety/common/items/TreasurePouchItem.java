@@ -8,13 +8,14 @@ import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class TreasurePouchItem extends ItemBase {
 
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
-        int random = worldIn.random.nextInt(3);
+        int random = worldIn.random.nextInt(4);
         Enchantment enchantment = null;
         switch (random){
             case 0:
@@ -26,10 +27,14 @@ public class TreasurePouchItem extends ItemBase {
             case 2:
                 enchantment = Enchantments.SILK_TOUCH;
                 break;
+            case 3:
+                enchantment = Enchantments.MENDING;
+                break;
         }
         int i = enchantment.getMaxLevel();
         ItemStack itemstack2 = EnchantedBookItem.createForEnchantment(new EnchantmentData(enchantment, i));
         playerIn.addItem(itemstack2);
+        playerIn.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
         itemstack.shrink(1);
         return ActionResult.pass(playerIn.getItemInHand(handIn));
     }
