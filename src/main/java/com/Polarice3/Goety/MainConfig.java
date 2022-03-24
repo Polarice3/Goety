@@ -101,6 +101,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadMinionHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
+    public static final ForgeConfigSpec.ConfigValue<Integer> InfamyThreshold;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
@@ -248,11 +249,11 @@ public class MainConfig {
                 .defineInRange("fanaticWitchBombChance", 4, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Infamy");
-        InfamySpawn = BUILDER.comment("Illager Spawning due to Infamy, Default: true")
+        InfamySpawn = BUILDER.comment("Special Illagers Spawning due to Infamy, Default: true")
                 .define("infamySpawn", true);
         InfamySpawnFreq = BUILDER.comment("Spawn Frequency for Illagers Hunting the Player, Default: 12000")
                 .defineInRange("infamySpawnFreq", 12000, 0, 72000);
-        InfamySpawnChance = BUILDER.comment("Spawn Chance for Illagers Hunting the Player every Infamy Spawn Frequency, Default: 5")
+        InfamySpawnChance = BUILDER.comment("Spawn Chance for Illagers Hunting the Player every Infamy Spawn Frequency, the lower the more likelier, Default: 5")
                 .defineInRange("infamySpawnChance", 5, 0, Integer.MAX_VALUE);
         InfamySpell = BUILDER.comment("Casting Spells have a chance of giving Player Infamy, Default: true")
                 .define("infamySpell", true);
@@ -260,6 +261,8 @@ public class MainConfig {
                 .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
         DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 1")
                 .defineInRange("infamyDeathLoss", 1, 0, Integer.MAX_VALUE);
+        InfamyThreshold = BUILDER.comment("How much Infamy is required for Special Illagers to spawn, Default: 25")
+                .defineInRange("infamyThreshold", 25, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Infamy Illager");
         PillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Pillagers, Default: 1")
@@ -278,7 +281,7 @@ public class MainConfig {
                 .defineInRange("conquillagerInfamyGain", 5, 0, Integer.MAX_VALUE);
         VizierInfamy = BUILDER.comment("How much Infamy the Player gains killing Viziers, Default: 25")
                 .defineInRange("vizierInfamyGain", 25, 0, Integer.MAX_VALUE);
-        ScryingInfamy = BUILDER.comment("How much Infamy the Player gains scrying on a Cat in a Village, Default: 10")
+        ScryingInfamy = BUILDER.comment("How much Infamy the Player gains scrying on a Cat with an Empty Map offhand in a Village, Default: 10")
                 .defineInRange("scryingInfamyGain", 10, 0, Integer.MAX_VALUE);
         OtherInfamy = BUILDER.comment("How much Infamy the Player gains killing other types of Illagers, Default: 1")
                 .defineInRange("otherInfamyGain", 1, 0, Integer.MAX_VALUE);

@@ -360,7 +360,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         protected SpellcastingCultistEntity.SpellType getSpellType() {
-            return SpellType.CRIPPLE;
+            return SpellType.ROAR;
         }
     }
 }

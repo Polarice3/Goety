@@ -53,7 +53,7 @@ public class IllagerSpawner {
                         } else {
                             IInfamy infamy = InfamyHelper.getCapability(playerentity);
                             int j1 = infamy.getInfamy();
-                            if (j1 > 25) {
+                            if (j1 > MainConfig.InfamyThreshold.get()) {
                                 int k = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 int l = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 BlockPos.Mutable blockpos$mutable = playerentity.blockPosition().mutable().move(k, 0, l);
@@ -66,7 +66,7 @@ public class IllagerSpawner {
                                         return 0;
                                     } else {
                                         int i1 = 0;
-                                        int e1 = MathHelper.clamp(j1 / 25, 0, 3);
+                                        int e1 = MathHelper.clamp(j1 / MainConfig.InfamyThreshold.get(), 0, 3);
                                         for (int k1 = 0; k1 < e1; ++k1) {
                                             ++i1;
                                             blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
@@ -81,8 +81,8 @@ public class IllagerSpawner {
                                             blockpos$mutable.setX(blockpos$mutable.getX() + random.nextInt(5) - random.nextInt(5));
                                             blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
                                         }
-                                        if (j1 >= 75) {
-                                            int e2 = MathHelper.clamp(j1 / 25, 0, 5) - 2;
+                                        if (j1 >= MainConfig.InfamyThreshold.get() * 3) {
+                                            int e2 = MathHelper.clamp(j1 / MainConfig.InfamyThreshold.get(), 0, 5) - 2;
                                             for (int k1 = 0; k1 < e2; ++k1) {
                                                 ++i1;
                                                 blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
@@ -99,7 +99,7 @@ public class IllagerSpawner {
                                                 blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
                                             }
                                         }
-                                        if (j1 >= 300) {
+                                        if (j1 >= MainConfig.InfamyThreshold.get() * 12) {
                                             if (!playerentity.hasEffect(Effects.BAD_OMEN)) {
                                                 playerentity.addEffect(new EffectInstance(Effects.BAD_OMEN, 120000, 0, false, false));
                                             }

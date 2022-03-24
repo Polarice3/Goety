@@ -23,6 +23,7 @@ import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
@@ -33,11 +34,11 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.Util;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.*;
 import net.minecraft.world.raid.Raid;
 import net.minecraftforge.api.distmarker.Dist;
@@ -62,7 +63,7 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new FindTargetGoal(this, 10.0F));
-        this.goalSelector.addGoal(3, new RangedCrossbowAttackGoal<>(this, 1.0D, 8.0F));
+        this.goalSelector.addGoal(3, new RangedCrossbowAttackGoal<>(this, 1.0D, 16.0F));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 15.0F));
@@ -217,8 +218,27 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         this.performCrossbowAttack(this, 1.6F);
     }
 
-    public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
-        this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
+    public void shootCrossbowProjectile(LivingEntity shooter, ItemStack itemStack, ProjectileEntity projectileEntity, float p_230284_4_) {
+        this.shootCrossbowProjectile(this, shooter, projectileEntity, p_230284_4_, 1.6F);
+    }
+
+    public void performCrossbowAttack(LivingEntity shooter, float velocity) {
+        Hand hand = ProjectileHelper.getWeaponHoldingHand(shooter, item -> item instanceof CrossbowItem);
+        ItemStack itemstack = shooter.getItemInHand(hand);
+        if (shooter.isHolding(item -> item instanceof CrossbowItem)) {
+            CrossbowItem.performShooting(shooter.level, shooter, hand, itemstack, velocity, (float)(14 - shooter.level.getDifficulty().getId() * 4));
+        }
+
+        this.onCrossbowAttackPerformed();
+    }
+
+    public void shootCrossbowProjectile(LivingEntity shooter, LivingEntity target, ProjectileEntity projectileEntity, float p_234279_4_, float velocity) {
+        double d0 = target.getX() - shooter.getX();
+        double d1 = target.getY(0.5F) - shooter.getY(0.5F);
+        double d2 = target.getZ() - shooter.getZ();
+        Vector3f vector3f = this.getProjectileShotVector(shooter, new Vector3d(d0, d1, d2), p_234279_4_);
+        projectileEntity.shoot(vector3f.x(), vector3f.y(), vector3f.z(), velocity, (float)(14 - shooter.level.getDifficulty().getId() * 4));
+        shooter.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (shooter.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
     private ItemStack getFirework(DyeColor pColor, int pFlightTime) {

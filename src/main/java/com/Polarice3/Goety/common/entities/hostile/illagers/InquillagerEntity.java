@@ -181,11 +181,11 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
         }
 
         protected int getCastingTime() {
-            return 20;
+            return 5;
         }
 
         protected int getCastingInterval() {
-            return 40;
+            return 20;
         }
 
         protected void performSpellCasting() {

@@ -9,6 +9,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
@@ -179,11 +180,9 @@ public class ApostleEntity extends SpellcastingCultistEntity {
                 double d1 = livingentity.getX() - ApostleEntity.this.getX();
                 double d2 = livingentity.getY(0.5D) - ApostleEntity.this.getY(0.5D);
                 double d3 = livingentity.getZ() - ApostleEntity.this.getZ();
-                for(int i = 0; i < 6; ++i) {
-                    SmallFireballEntity smallfireballentity = new SmallFireballEntity(ApostleEntity.this.level, ApostleEntity.this, d1 + ApostleEntity.this.getRandom().nextGaussian() * (double)f, d2, d3 + ApostleEntity.this.getRandom().nextGaussian() * (double)f);
-                    smallfireballentity.setPos(smallfireballentity.getX(), ApostleEntity.this.getY(0.5), smallfireballentity.getZ());
-                    ApostleEntity.this.level.addFreshEntity(smallfireballentity);
-                }
+                FireballEntity fireballEntity = new FireballEntity(ApostleEntity.this.level, ApostleEntity.this, d1, d2, d3);
+                fireballEntity.setPos(fireballEntity.getX(), ApostleEntity.this.getY(0.5), fireballEntity.getZ());
+                ApostleEntity.this.level.addFreshEntity(fireballEntity);
                 if (!ApostleEntity.this.isSilent()) {
                     ApostleEntity.this.level.levelEvent(null, 1016, ApostleEntity.this.blockPosition(), 0);
                 }
@@ -338,7 +337,7 @@ public class ApostleEntity extends SpellcastingCultistEntity {
 
         @Override
         protected SpellType getSpellType() {
-            return SpellType.CRIPPLE;
+            return SpellType.ROAR;
         }
     }
 }

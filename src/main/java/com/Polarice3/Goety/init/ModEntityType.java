@@ -9,6 +9,7 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.*;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.LightningTrapEntity;
@@ -160,6 +161,13 @@ public class ModEntityType {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "conquillager").toString()));
+
+    public static final RegistryObject<EntityType<TormentorEntity>> TORMENTOR = ENTITY_TYPES.register("tormentor",
+            () -> EntityType.Builder.of(TormentorEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "tormentor").toString()));
 
     public static final RegistryObject<EntityType<HuskarlEntity>> HUSKARL = ENTITY_TYPES.register("huskarl",
             () -> EntityType.Builder.of(HuskarlEntity::new, EntityClassification.MONSTER)

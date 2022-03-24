@@ -93,7 +93,8 @@ public class ModEvents {
             IInfamy capability = event.getOriginal().getCapability(InfamyProvider.CAPABILITY).resolve().get();
 
             player.getCapability(InfamyProvider.CAPABILITY)
-                    .ifPresent(infamy -> infamy.setInfamy(capability.getInfamy() - MainConfig.DeathLoseInfamy.get()));
+                    .ifPresent(infamy ->
+                            infamy.setInfamy(capability.getInfamy() > 0 ? capability.getInfamy() - MainConfig.DeathLoseInfamy.get() : 0));
         }
     }
 

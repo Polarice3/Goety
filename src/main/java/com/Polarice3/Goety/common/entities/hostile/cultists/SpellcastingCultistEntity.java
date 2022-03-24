@@ -144,8 +144,8 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
     public enum SpellType {
         NONE(0, 0.0D, 0.0D, 0.0D),
         FIRE(1, 0.1D, 0.1D, 0.2D),
-        ZOMBIE(3, 0.7D, 0.5D, 0.2D),
-        CRIPPLE(4, 0.7D, 0.5D, 0.2D);
+        ZOMBIE(3, 0.7D, 0.7D, 0.8D),
+        ROAR(4, 0.3D, 0.3D, 0.8D);
 
         private final int id;
         private final double[] particleSpeed;

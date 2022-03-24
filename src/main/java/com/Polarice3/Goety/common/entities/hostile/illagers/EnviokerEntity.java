@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
+import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -47,6 +49,7 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
         this.goalSelector.addGoal(2, new AttackGoal(this));
         this.goalSelector.addGoal(4, new SummonSpellGoal());
         this.goalSelector.addGoal(5, new AttackSpellGoal());
+        this.goalSelector.addGoal(6, new SoulSkullSpellGoal());
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -254,6 +257,51 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
         }
     }
 
+    class SoulSkullSpellGoal extends UseSpellGoal {
+        private SoulSkullSpellGoal() {
+        }
+
+        public boolean canUse() {
+            if (!super.canUse()) {
+                return false;
+            } else {
+                return EnviokerEntity.this.isMagic();
+            }
+        }
+
+        protected int getCastingTime() {
+            return 5;
+        }
+
+        protected int getCastingInterval() {
+            return 5;
+        }
+
+        protected void performSpellCasting() {
+            LivingEntity livingentity = EnviokerEntity.this.getTarget();
+            if (livingentity != null) {
+                double d1 = livingentity.getX() - EnviokerEntity.this.getX();
+                double d2 = livingentity.getY(0.5D) - EnviokerEntity.this.getY(0.5D);
+                double d3 = livingentity.getZ() - EnviokerEntity.this.getZ();
+                SoulSkullEntity soulSkullEntity = new SoulSkullEntity(EnviokerEntity.this.level, EnviokerEntity.this, d1, d2, d3);
+                soulSkullEntity.setPos(soulSkullEntity.getX(), EnviokerEntity.this.getY(0.5), soulSkullEntity.getZ());
+                EnviokerEntity.this.level.addFreshEntity(soulSkullEntity);
+                if (!EnviokerEntity.this.isSilent()) {
+                    EnviokerEntity.this.level.levelEvent(null, 1024, EnviokerEntity.this.blockPosition(), 0);
+                }
+            }
+
+        }
+
+        protected SoundEvent getSpellPrepareSound() {
+            return null;
+        }
+
+        protected SpellType getSpell() {
+            return SpellType.WOLOLO;
+        }
+    }
+
     class SummonSpellGoal extends UseSpellGoal {
         private final EntityPredicate vexCountTargeting = (new EntityPredicate()).range(16.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
 
@@ -264,8 +312,8 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
             if (!super.canUse()) {
                 return false;
             } else {
-                int i = EnviokerEntity.this.level.getNearbyEntities(VexEntity.class, this.vexCountTargeting, EnviokerEntity.this, EnviokerEntity.this.getBoundingBox().inflate(16.0D)).size();
-                return EnviokerEntity.this.random.nextInt(16) + 1 > i && EnviokerEntity.this.isMagic();
+                int i = EnviokerEntity.this.level.getNearbyEntities(TormentorEntity.class, this.vexCountTargeting, EnviokerEntity.this, EnviokerEntity.this.getBoundingBox().inflate(16.0D)).size();
+                return EnviokerEntity.this.random.nextInt(8) + 1 > i && EnviokerEntity.this.isMagic();
             }
         }
 
@@ -280,16 +328,15 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
         protected void performSpellCasting() {
             ServerWorld serverworld = (ServerWorld)EnviokerEntity.this.level;
 
-            for(int i = 0; i < 3 + serverworld.random.nextInt(3); ++i) {
-                BlockPos blockpos = EnviokerEntity.this.blockPosition().offset(-2 + EnviokerEntity.this.random.nextInt(5), 1, -2 + EnviokerEntity.this.random.nextInt(5));
-                VexEntity vexentity = EntityType.VEX.create(EnviokerEntity.this.level);
-                vexentity.moveTo(blockpos, 0.0F, 0.0F);
-                vexentity.finalizeSpawn(serverworld, EnviokerEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
-                vexentity.setOwner(EnviokerEntity.this);
-                vexentity.setBoundOrigin(blockpos);
-                vexentity.setLimitedLife(20 * (30 + EnviokerEntity.this.random.nextInt(90)));
-                serverworld.addFreshEntityWithPassengers(vexentity);
-            }
+            BlockPos blockpos = EnviokerEntity.this.blockPosition().offset(-2 + EnviokerEntity.this.random.nextInt(5), 1, -2 + EnviokerEntity.this.random.nextInt(5));
+            TormentorEntity tormentorEntity = ModEntityType.TORMENTOR.get().create(EnviokerEntity.this.level);
+            assert tormentorEntity != null;
+            tormentorEntity.moveTo(blockpos, 0.0F, 0.0F);
+            tormentorEntity.finalizeSpawn(serverworld, EnviokerEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData)null, (CompoundNBT)null);
+            tormentorEntity.setOwner(EnviokerEntity.this);
+            tormentorEntity.setBoundOrigin(blockpos);
+            tormentorEntity.setLimitedLife(20 * (30 + EnviokerEntity.this.random.nextInt(90)));
+            serverworld.addFreshEntityWithPassengers(tormentorEntity);
 
         }
 
