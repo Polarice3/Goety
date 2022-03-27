@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "goety:block/dead_sand"
+      },
+      {
+        "model": "goety:block/dead_sand",
+        "y": 90
+      },
+      {
+        "model": "goety:block/dead_sand",
+        "y": 180
+      },
+      {
+        "model": "goety:block/dead_sand",
+        "y": 270
+      }
+    ]
+  }
+}

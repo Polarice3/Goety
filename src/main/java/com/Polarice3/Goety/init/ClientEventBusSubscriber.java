@@ -77,6 +77,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.PEDESTAL.get(), PedestalTileEntityRenderer::new);
         RenderTypeLookup.setRenderLayer(ModRegistry.CURSED_CAGE_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModRegistry.CURSED_BARS_BLOCK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModRegistry.HAUNTED_CACTUS.get(), RenderType.cutout());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
         ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);

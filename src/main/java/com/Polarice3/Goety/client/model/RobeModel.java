@@ -69,7 +69,7 @@ public class RobeModel<T extends LivingEntity> extends BipedModel<T> {
         RightArm.texOffs(40, 48).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, 1.0F, false);
 
         Pauldron = new ModelRenderer(this);
-        Pauldron.setPos(-2.0F, -5.0F, 0.0F);
+        Pauldron.setPos(-0.5F, -5.0F, 0.0F);
         RightArm.addChild(Pauldron);
         Pauldron.texOffs(44, 64).addBox(-2.0F, -2.0F, -3.0F, 4.0F, 4.0F, 6.0F, 1.0F, false);
 
@@ -79,7 +79,7 @@ public class RobeModel<T extends LivingEntity> extends BipedModel<T> {
         LeftArm.texOffs(40, 48).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, 1.0F, true);
 
         Pauldron2 = new ModelRenderer(this);
-        Pauldron2.setPos(2.0F, -5.0F, 0.0F);
+        Pauldron2.setPos(0.5F, -5.0F, 0.0F);
         LeftArm.addChild(Pauldron2);
         Pauldron2.texOffs(36, 35).addBox(-2.0F, -2.0F, -3.0F, 4.0F, 4.0F, 6.0F, 1.0F, false);
 

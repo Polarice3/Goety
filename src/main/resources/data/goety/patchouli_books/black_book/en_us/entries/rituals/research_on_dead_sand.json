@@ -1,0 +1,21 @@
+{
+  "name": "Dead Sand Research",
+  "icon": "goety:dead_sandstone",
+  "category": "goety:rituals",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You've come across a text detailing an apocalypse that almost occur several centuries ago. The text talks about a type of sand that would spread across the world by converting certain objects around it. The Dead Sand you now have seems to fit the description of this sand and it seems to have the same properties as the legends told. Be careful when using placing this down, lest everything will be turn into a Desert."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:dead_sandstone",
+      "text": "However, not every Block is converted to Dead Sand. It seems that in the text, the people constructed a Wall using only Cobblestone and Wooden Planks to halt the spread of the Sands. It also mentions how the Sand doesn't convert non-full blocks."
+    },
+    {
+      "type": "patchouli:text",
+      "text": " Perhaps this Dead Sand can be used to build a new base of operation for yourself, or it can be used for destructive purposes. As for the original Sands, it seems the people of old managed to destroy them all. How, it doesn't specify... for some reason."
+    }
+  ]
+}

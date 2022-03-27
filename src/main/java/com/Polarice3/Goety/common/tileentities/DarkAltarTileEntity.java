@@ -1,235 +1,376 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.client.inventory.crafting.DarkAltarRecipes;
-import com.Polarice3.Goety.client.inventory.crafting.ModRecipeType;
-import com.Polarice3.Goety.client.inventory.crafting.ModSoulCraftRecipe;
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
+import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.DarkAltarBlock;
+import com.Polarice3.Goety.common.ritual.Ritual;
+import com.Polarice3.Goety.common.ritual.RitualStructures;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.IClearable;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import java.util.*;
 
-public class DarkAltarTileEntity extends ModTileEntity implements IClearable, ITickableTileEntity {
-    private final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
-    private final int[] cookingProgress = new int[1];
-    private final int[] cookingTime = new int[1];
+public class DarkAltarTileEntity extends PedestalTileEntity implements ITickableTileEntity {
     private CursedCageTileEntity cursedCageTile;
+    public RitualRecipe currentRitualRecipe;
+    public ResourceLocation currentRitualRecipeId;
+    public UUID castingPlayerId;
+    public PlayerEntity castingPlayer;
+    public List<Ingredient> remainingAdditionalIngredients = new ArrayList<>();
+    public List<ItemStack> consumedIngredients = new ArrayList<>();
+    public boolean sacrificeProvided;
+    public boolean itemUseProvided;
+    public int currentTime;
+    public int structureTime;
 
     public DarkAltarTileEntity() {
         super(ModTileEntityType.DARK_ALTAR.get());
     }
 
-    @Override
-    public void tick() {
-        boolean flag = checkCage();
-        assert this.level != null;
-        boolean flag1 = this.level.isClientSide;
-        if (flag1) {
-            if (flag) {
-                this.makeParticles();
-            }
-        } else {
-            if (flag) {
-                this.work();
-            } else {
-                for(int i = 0; i < this.items.size(); ++i) {
-                    if (this.cookingProgress[i] > 0) {
-                        this.cookingProgress[i] = MathHelper.clamp(this.cookingProgress[i] - 2, 0, this.cookingTime[i]);
-                    }
-                }
+    public RitualRecipe getCurrentRitualRecipe(){
+        if(this.currentRitualRecipeId != null){
+            if(this.level != null) {
+                Optional<? extends IRecipe<?>> recipe = this.level.getRecipeManager().byKey(this.currentRitualRecipeId);
+                recipe.map(r -> (RitualRecipe) r).ifPresent(r -> this.currentRitualRecipe = r);
+                this.currentRitualRecipeId = null;
             }
         }
-        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(DarkAltarBlock.LIT, this.checkCage()), 3);
+        return this.currentRitualRecipe;
     }
 
-    private void work() {
-        Minecraft MINECRAFT = Minecraft.getInstance();
-        assert MINECRAFT.level != null;
-        long t = MINECRAFT.level.getGameTime();
-        for(int i = 0; i < this.items.size(); ++i) {
-            ItemStack itemstack = this.items.get(i);
-            if (!itemstack.isEmpty()) {
-                if (this.cursedCageTile != null){
-                    IInventory iinventory = new Inventory(itemstack);
-                    assert this.level != null;
-                    ItemStack itemstack1 = this.level.getRecipeManager()
-                            .getRecipeFor(ModRecipeType.DARK_ALTAR_RECIPES, iinventory, this.level)
-                            .map((recipes) -> recipes.assemble(iinventory)).orElse(itemstack);
-                    Optional<Object> craftType = this.level.getRecipeManager()
-                            .getRecipeFor(ModRecipeType.DARK_ALTAR_RECIPES, iinventory, this.level)
-                            .map(ModSoulCraftRecipe::getCraftType);
-                    Optional<Integer> soulCost = this.level.getRecipeManager()
-                            .getRecipeFor(ModRecipeType.DARK_ALTAR_RECIPES, iinventory, this.level)
-                            .map(ModSoulCraftRecipe::getSoulCost);
-                    int souls = this.cursedCageTile.getSouls();
-                    if (craftType.toString().contains("animalis")){
-                        this.findAnimaStructure();
-                        if (this.checkAnimaRequirements()){
-                            if (itemstack != itemstack1 && souls > 0){
-                                this.cookingProgress[i]++;
-                                if (t % 20L == 0L) {
-                                    this.cursedCageTile.decreaseSouls(soulCost.orElse(1));
-                                }
-                                this.makeWorkParticles();
-                                this.clearData();
-                            }
-                            if (this.cookingProgress[i] == 5){
-                                this.level.playSound(null, this.getBlockPos(), SoundEvents.BEACON_ACTIVATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                            }
-                            if (this.cookingProgress[i] >= this.cookingTime[i]) {
-                                this.items.set(i, itemstack1);
-                                this.level.playSound(null, this.getBlockPos(), SoundEvents.BEACON_POWER_SELECT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                                this.clearData();
-                                this.cookingProgress[i] = 0;
+    @Override
+    public void load(BlockState state, CompoundNBT compound) {
+        super.load(state, compound);
+
+        this.consumedIngredients.clear();
+        if (this.currentRitualRecipeId != null || this.getCurrentRitualRecipe() != null) {
+            if (compound.contains("consumedIngredients")) {
+                ListNBT list = compound.getList("consumedIngredients", Constants.NBT.TAG_COMPOUND);
+                for (int i = 0; i < list.size(); i++) {
+                    ItemStack stack = ItemStack.of(list.getCompound(i));
+                    this.consumedIngredients.add(stack);
+                }
+            }
+            this.restoreRemainingAdditionalIngredients();
+        }
+        if (compound.contains("sacrificeProvided")) {
+            this.sacrificeProvided = compound.getBoolean("sacrificeProvided");
+        }
+        if (compound.contains("requiredItemUsed")) {
+            this.itemUseProvided = compound.getBoolean("requiredItemUsed");
+        }
+    }
+
+    @Override
+    public CompoundNBT save(CompoundNBT compound) {
+        if (this.getCurrentRitualRecipe() != null) {
+            if (this.consumedIngredients.size() > 0) {
+                ListNBT list = new ListNBT();
+                for (ItemStack stack : this.consumedIngredients) {
+                    list.add(stack.serializeNBT());
+                }
+                compound.put("consumedIngredients", list);
+            }
+            compound.putBoolean("sacrificeProvided", this.sacrificeProvided);
+            compound.putBoolean("requiredItemUsed", this.itemUseProvided);
+        }
+        return super.save(compound);
+    }
+
+    @Override
+    public void readNetwork(CompoundNBT compound) {
+        super.readNetwork(compound);
+        if (compound.contains("currentRitual")) {
+            this.currentRitualRecipeId = new ResourceLocation(compound.getString("currentRitual"));
+        }
+
+        if (compound.contains("castingPlayerId")) {
+            this.castingPlayerId = compound.getUUID("castingPlayerId");
+        }
+
+        this.currentTime = compound.getInt("currentTime");
+        this.structureTime = compound.getInt("structureTime");
+    }
+
+    @Override
+    public CompoundNBT writeNetwork(CompoundNBT compound) {
+        RitualRecipe recipe = this.getCurrentRitualRecipe();
+        if (recipe != null) {
+            compound.putString("currentRitual", recipe.getId().toString());
+        }
+        if (this.castingPlayerId != null) {
+            compound.putUUID("castingPlayerId", this.castingPlayerId);
+        }
+        compound.putInt("currentTime", this.currentTime);
+        compound.putInt("structureTime", this.structureTime);
+        return super.writeNetwork(compound);
+    }
+
+    @Override
+    public void tick() {
+        boolean flag = this.checkCage();
+        if (flag) {
+            if (this.cursedCageTile.getSouls() > 0){
+                RitualRecipe recipe = this.getCurrentRitualRecipe();
+                assert this.level != null;
+                if (!this.level.isClientSide && recipe != null) {
+                    this.restoreCastingPlayer();
+
+                    if (this.remainingAdditionalIngredients == null) {
+                        this.restoreRemainingAdditionalIngredients();
+                        if (this.remainingAdditionalIngredients == null) {
+                            Goety.LOGGER
+                                    .warn("Could not restore remainingAdditionalIngredients during tick - world seems to be null. Will attempt again next tick.");
+                            return;
+                        }
+                    }
+
+                    IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
+                    if (!recipe.getRitual().isValid(this.level, this.worldPosition, this, this.castingPlayer,
+                            handler.getStackInSlot(0), this.remainingAdditionalIngredients)) {
+                        this.stopRitual(false);
+                        return;
+                    }
+
+                    if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
+                        if (this.level.random.nextInt(16) == 0) {
+                            new ParticleUtil(ParticleTypes.SMOKE, this.worldPosition.getX() + this.level.random.nextGaussian(),
+                                    this.worldPosition.getY() + 0.5,
+                                    this.worldPosition.getZ() + this.level.random.nextGaussian(), 0.0F, 0.0F, 0.0F);
+                            new ParticleUtil(ParticleTypes.SMOKE, this.worldPosition.getX() + this.level.random.nextGaussian(),
+                                    this.worldPosition.getY() + 0.5,
+                                    this.worldPosition.getZ() + this.level.random.nextGaussian(), 0.0F, 0.0F, 0.0F);
+                        }
+                        return;
+                    }
+
+                    double d0 = (double)this.worldPosition.getX() + this.level.random.nextDouble();
+                    double d1 = (double)this.worldPosition.getY() + this.level.random.nextDouble();
+                    double d2 = (double)this.worldPosition.getZ() + this.level.random.nextDouble();
+                    for (int p = 0; p < 4; ++p) {
+                        new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                    }
+
+                    if (this.level.getGameTime() % 20 == 0){
+                        this.cursedCageTile.decreaseSouls(recipe.getSoulCost());
+                        this.currentTime++;
+                    }
+                    this.cursedCageTile.makeWorkParticles();
+
+                    recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
+                            this.currentTime);
+
+                    if (!recipe.getRitual()
+                            .consumeAdditionalIngredients(this.level, this.worldPosition, this.remainingAdditionalIngredients,
+                                    this.currentTime, this.consumedIngredients)) {
+                        this.stopRitual(false);
+                        return;
+                    }
+
+                    if (recipe.getDuration() >= 0 && this.currentTime >= recipe.getDuration()) {
+                        this.stopRitual(true);
+                    }
+
+                    if (recipe.getCraftType().contains("animalis")){
+                        RitualStructures.findAnimaStructure(this, this.worldPosition, this.level);
+                        if (!RitualStructures.checkAnimaRequirements(this)) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
                             }
                         } else {
-                            this.clearData();
-                            this.cookingProgress[i] = 0;
+                            this.structureTime = 0;
+                        }
+                    }
+
+                    if (recipe.getCraftType().contains("necroturgy")){
+                        RitualStructures.findNecroStructure(this, this.worldPosition, this.level);
+                        if (!RitualStructures.checkNecroRequirements(this)) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
+                    if (recipe.getCraftType().contains("minor_nether")){
+                        RitualStructures.findMinorNetherStructure(this, this.worldPosition, this.level);
+                        if (!RitualStructures.checkMinorNetherRequirements(this)) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
+                } else {
+                    if (this.level.getGameTime() % 20 == 0) {
+                        double d0 = (double) this.worldPosition.getX() + this.level.random.nextDouble();
+                        double d1 = (double) this.worldPosition.getY() + this.level.random.nextDouble();
+                        double d2 = (double) this.worldPosition.getZ() + this.level.random.nextDouble();
+                        for (int p = 0; p < 4; ++p) {
+                            new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
                         }
                     }
                 }
+            } else {
+                this.stopRitual(false);
             }
+        } else {
+            this.stopRitual(false);
         }
+        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(DarkAltarBlock.LIT, flag), 3);
     }
 
-    private void clearData(){
-        this.markUpdated();
-        this.pumpkin.clear();
-        this.ladders.clear();
-        this.rails.clear();
-        this.additions.clear();
-    }
-
-    public boolean placeItem(ItemStack pStack, int pCookTime) {
-        for(int i = 0; i < this.items.size(); ++i) {
-            ItemStack itemstack = this.items.get(i);
-            if (itemstack.isEmpty()) {
-                this.cookingTime[i] = pCookTime;
-                this.cookingProgress[i] = 0;
-                this.items.set(i, pStack.split(1));
-                this.markUpdated();
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isEmpty() {
-        for(ItemStack itemstack : this.items) {
-            if (!itemstack.isEmpty()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public void load(BlockState blockState, CompoundNBT compoundNBT) {
-        super.load(blockState, compoundNBT);
-        this.items.clear();
-        ItemStackHelper.loadAllItems(compoundNBT, this.items);
-        if (compoundNBT.contains("CookingTimes", 11)) {
-            int[] aint = compoundNBT.getIntArray("CookingTimes");
-            System.arraycopy(aint, 0, this.cookingProgress, 0, Math.min(this.cookingTime.length, aint.length));
-        }
-
-        if (compoundNBT.contains("CookingTotalTimes", 11)) {
-            int[] aint1 = compoundNBT.getIntArray("CookingTotalTimes");
-            System.arraycopy(aint1, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, aint1.length));
-        }
-
-    }
-
-    public CompoundNBT save(CompoundNBT pCompound) {
-        this.saveMetadataAndItems(pCompound);
-        pCompound.putIntArray("CookingTimes", this.cookingProgress);
-        pCompound.putIntArray("CookingTotalTimes", this.cookingTime);
-        return pCompound;
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
-        CompoundNBT tag = pkt.getTag();
-        load(this.getBlockState(), tag);
-    }
-
-    private CompoundNBT saveMetadataAndItems(CompoundNBT pCompound) {
-        super.save(pCompound);
-        ItemStackHelper.saveAllItems(pCompound, this.items, true);
-        return pCompound;
-    }
-
-    @Nullable
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 13, this.getUpdateTag());
-    }
-
-    public CompoundNBT getUpdateTag() {
-        return this.saveMetadataAndItems(new CompoundNBT());
-    }
-
-    private void markUpdated() {
-        this.setChanged();
-        this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
-    }
-
-    public Optional<DarkAltarRecipes> getRecipes(ItemStack pStack) {
-        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.level.getRecipeManager().getRecipeFor(ModRecipeType.DARK_ALTAR_RECIPES, new Inventory(pStack), this.level);
-    }
-
-    private void makeParticles() {
-        BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
-
-        if (MINECRAFT.level != null) {
-            long t = MINECRAFT.level.getGameTime();
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (t % 20L == 0L) {
-                for (int p = 0; p < 4; ++p) {
-                    MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+    public void restoreCastingPlayer() {
+        if (this.castingPlayer == null && this.castingPlayerId != null) {
+            if (this.level != null) {
+                if (this.level.getGameTime() % (20 * 30) == 0) {
+                    this.castingPlayer = EntityFinder.getPlayerByUuiDGlobal(this.castingPlayerId).orElse(null);
+                    this.setChanged();
+                    this.markNetworkDirty();
                 }
             }
         }
     }
 
-    private void makeWorkParticles() {
-        BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
+    public boolean activate(World world, BlockPos pos, PlayerEntity player, Hand hand, Direction face) {
+        if (!world.isClientSide) {
+            if (this.checkCage()){
+                ItemStack activationItem = player.getItemInHand(hand);
+                if (activationItem == ItemStack.EMPTY){
+                    return false;
+                }
 
-        if (MINECRAFT.level != null) {
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            for (int p = 0; p < 4; ++p) {
-                MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                if (this.getCurrentRitualRecipe() == null) {
+
+                    RitualRecipe ritualRecipe = this.level.getRecipeManager().getAllRecipesFor(ModRecipeSerializer.RITUAL_TYPE.get()).stream().filter(
+                            r -> r.matches(world, pos, activationItem)
+                    ).findFirst().orElse(null);
+
+                    if (ritualRecipe != null) {
+                        if (ritualRecipe.getRitual().isValid(world, pos, this, player, activationItem,
+                                ritualRecipe.getIngredients())) {
+                            this.startRitual(player, activationItem, ritualRecipe);
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    this.stopRitual(false);
+                }
+            } else {
+                return false;
             }
+        }
+        return true;
+    }
+
+    public void startRitual(PlayerEntity player, ItemStack activationItem, RitualRecipe ritualRecipe) {
+        if (!this.level.isClientSide) {
+            this.currentRitualRecipe = ritualRecipe;
+            this.castingPlayerId = player.getUUID();
+            this.castingPlayer = player;
+            this.currentTime = 0;
+            this.sacrificeProvided = false;
+            this.itemUseProvided = false;
+            this.consumedIngredients.clear();
+            this.remainingAdditionalIngredients = new ArrayList<>(this.currentRitualRecipe.getIngredients());
+            IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
+            handler.insertItem(0, activationItem.split(1), false);
+            this.currentRitualRecipe.getRitual().start(this.level, this.worldPosition, this, player, handler.getStackInSlot(0));
+            this.structureTime = 40;
+            this.setChanged();
+            this.markNetworkDirty();
         }
     }
 
-    public NonNullList<ItemStack> getItems() {
-        return this.items;
+    public void stopRitual(boolean finished) {
+        if (!this.level.isClientSide) {
+            RitualRecipe recipe = this.getCurrentRitualRecipe();
+            if (recipe != null && this.castingPlayer != null) {
+                IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
+                if (finished) {
+                    ItemStack activationItem = handler.getStackInSlot(0);
+                    recipe.getRitual().finish(this.level, this.worldPosition, this, this.castingPlayer, activationItem);
+                } else {
+                    recipe.getRitual().interrupt(this.level, this.worldPosition, this, this.castingPlayer,
+                            handler.getStackInSlot(0));
+                    InventoryHelper.dropItemStack(this.level, this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(),
+                            handler.extractItem(0, 1, false));
+                }
+            }
+            this.currentRitualRecipe = null;
+            this.castingPlayerId = null;
+            this.castingPlayer = null;
+            this.currentTime = 0;
+            this.sacrificeProvided = false;
+            this.itemUseProvided = false;
+            if (this.remainingAdditionalIngredients != null)
+                this.remainingAdditionalIngredients.clear();
+            this.consumedIngredients.clear();
+            this.structureTime = 0;
+            this.setChanged();
+            this.markNetworkDirty();
+        }
+    }
+
+    public boolean sacrificeFulfilled() {
+        return !this.getCurrentRitualRecipe().requiresSacrifice() || this.sacrificeProvided;
+    }
+
+    public boolean itemUseFulfilled() {
+        return !this.getCurrentRitualRecipe().requiresItemUse() || this.itemUseProvided;
+    }
+
+    public void notifySacrifice(LivingEntity entityLivingBase) {
+        this.sacrificeProvided = true;
+    }
+
+    public void notifyItemUse(PlayerInteractEvent.RightClickItem event) {
+        this.itemUseProvided = true;
+    }
+
+    protected void restoreRemainingAdditionalIngredients() {
+        if (this.level == null) {
+            this.remainingAdditionalIngredients = null;
+        } else {
+            if (this.consumedIngredients.size() > 0) {
+                this.remainingAdditionalIngredients = Ritual.getRemainingAdditionalIngredients(
+                        this.getCurrentRitualRecipe().getIngredients(), this.consumedIngredients);
+            } else {
+                this.remainingAdditionalIngredients = new ArrayList<>(this.getCurrentRitualRecipe().getIngredients());
+            }
+        }
+
     }
 
     private boolean checkCage() {
@@ -249,8 +390,26 @@ public class DarkAltarTileEntity extends ModTileEntity implements IClearable, IT
         }
     }
 
-    @Override
-    public void clearContent() {
-        this.items.clear();
-    }
 }
+
+/*
+ * MIT License
+ *
+ * Copyright 2020 klikli-dev
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */

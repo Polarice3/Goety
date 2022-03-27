@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class ModStructures {
     public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, Goety.MOD_ID);
-    public static final RegistryObject<Structure<NoFeatureConfig>> DARKMANOR = STRUCTURES.register("darkmanor", () -> (new DarkManorStructure(NoFeatureConfig.CODEC)));
+    public static final RegistryObject<Structure<NoFeatureConfig>> DARK_MANOR = STRUCTURES.register("dark_manor", () -> (new DarkManorStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> PORTAL_OUTPOST = STRUCTURES.register("portal_outpost", () -> (new PortalOutpostStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> CURSED_GRAVEYARD = STRUCTURES.register("cursed_graveyard", () -> (new CursedGraveyardStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", SalvagedFortStructure::new);
@@ -31,7 +31,7 @@ public class ModStructures {
 
     public static void setupStructures() {
         setupMapSpacingAndLand(
-                DARKMANOR.get(),
+                DARK_MANOR.get(),
                 new StructureSeparationSettings(60,
                         20,
                         1543212345),

@@ -207,7 +207,7 @@ public class SoulWand extends Item{
         } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("roaring")) {
             this.setSpellConditions(new RoarSpell(), itemStack);
             this.setSpell(2, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("necroturgy")) {
+        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("rotting")) {
             this.setSpellConditions(new ZombieSpell(), itemStack);
             this.setSpell(3, itemStack);
         } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("osseous")) {

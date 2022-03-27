@@ -2,7 +2,6 @@ package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.tileentities.*;
-import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

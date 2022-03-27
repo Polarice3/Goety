@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class MutatedRabbitEntity extends MutatedEntity {
-    private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(RabbitEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(MutatedRabbitEntity.class, DataSerializers.INT);
     private int jumpTicks;
     private int jumpDuration;
     private boolean wasOnGround;

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "goety:blocks/haunted_planks",
+    "top": "goety:blocks/haunted_planks",
+    "side": "goety:blocks/haunted_planks"
+  }
+}

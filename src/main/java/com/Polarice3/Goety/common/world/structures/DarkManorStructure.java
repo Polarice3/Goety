@@ -81,7 +81,7 @@ public class DarkManorStructure extends Structure<NoFeatureConfig> {
             JigsawManager.addPieces(
                     dynamicRegistryManager,
                     new VillageConfig(() -> dynamicRegistryManager.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
-                            .get(new ResourceLocation(Goety.MOD_ID, "darkmanor/start_pool")),
+                            .get(new ResourceLocation(Goety.MOD_ID, "dark_manor/start_pool")),
 
                             10),
                     AbstractVillagePiece::new,

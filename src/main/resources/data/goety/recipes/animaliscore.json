@@ -1,10 +1,27 @@
 {
-  "type": "goety:dark_altar_recipes",
-  "craftType": "animalis",
-  "main": {
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
     "item": "goety:emptycore"
   },
-  "result": "goety:animaliscore",
+  "craftType": "animalis",
   "soulCost": 1,
-  "cookingtime": 200
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:minecart"
+    },
+    {
+      "tag": "minecraft:boats"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:feather"
+    }
+  ],
+  "result": {
+    "item": "goety:animaliscore"
+  }
 }

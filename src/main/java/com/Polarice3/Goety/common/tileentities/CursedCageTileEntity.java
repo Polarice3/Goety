@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IClearable;
@@ -71,13 +72,12 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
         if (!this.item.isEmpty()) {
             if (Soulcount > 0){
                 Soulcount -= souls;
-                this.makeWorkParticles();
                 this.item.getTag().putInt(SOULSAMOUNT, Soulcount);
             }
         }
     }
 
-    private void makeWorkParticles() {
+    public void makeWorkParticles() {
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();
 
@@ -85,8 +85,8 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            MINECRAFT.level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-            MINECRAFT.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);
+            new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }
     }
 

@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    "goety:cursed_block",
+    "goety:cursed_stone",
+    "goety:cursed_stone_slab",
+    "goety:cursed_stone_stairs",
+    "goety:cursed_bricks",
+    "goety:cursed_bricks_slab",
+    "goety:cursed_bricks_stairs",
+    "goety:cursed_bricks_wall",
+    "goety:cursed_stone_chiseled",
+    "goety:cursed_tiles",
+    "goety:cursed_tiles_slab",
+    "goety:cursed_tiles_stairs",
+    "goety:cursed_bars",
+    "goety:cursed_cage",
+    "goety:cursed_totem",
+    "goety:fang_totem",
+    "goety:mutation_totem",
+    "goety:undead_totem",
+    "goety:wind_totem",
+    "goety:obelisk",
+    "goety:guardian_obelisk",
+    "goety:cursed_burner",
+    "goety:dark_altar",
+    "goety:pedestal"
+  ]
+}

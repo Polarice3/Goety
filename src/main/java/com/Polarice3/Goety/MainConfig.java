@@ -110,6 +110,8 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandSpread;
+
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
@@ -149,6 +151,10 @@ public class MainConfig {
                 .defineInRange("craftSouls", 20, 0, Integer.MAX_VALUE);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
                 .define("showNumber", false);
+        BUILDER.pop();
+        BUILDER.push("Blocks");
+        DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
+                .define("deadSandSpread", true);
         BUILDER.pop();
         BUILDER.push("Soul Taken");
         UndeadSouls = BUILDER.comment("Undead Killed, Default: 5")

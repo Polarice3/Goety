@@ -25,7 +25,6 @@ import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
 import com.Polarice3.Goety.init.*;
 import com.mojang.serialization.Codec;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,11 +40,11 @@ import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -82,6 +81,8 @@ public class Goety {
 
     public Goety() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupEntityAttributeCreation);
 
         ModEntityType.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
@@ -120,146 +121,6 @@ public class Goety {
         MinecraftForge.EVENT_BUS.register(RegisterCommands.class);
         ModNetwork.init();
 
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.TANK.get(), AbstractTankEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.FRIENDTANK.get(), AbstractTankEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.CHANNELLER.get(), ChannellerEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.FANATIC.get(), FanaticEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.ZEALOT.get(), ZealotEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.THUG.get(), ThugEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.CRIMSON_SPIDER.get(), CrimsonSpiderEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.DISCIPLE.get(), DiscipleEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.APOSTLE.get(), ApostleEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ZombieVillagerMinionEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.ENVIOKER.get(), EnviokerEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.INQUILLAGER.get(), InquillagerEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.CONQUILLAGER.get(), ConquillagerEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.TORMENTOR.get(), TormentorEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.MUTATED_PIG.get(), MutatedPigEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.MUTATED_RABBIT.get(), MutatedRabbitEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.SACRED_FISH.get(), SacredFishEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.PARASITE.get(), ParasiteEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.FRIENDLY_VEX.get(), FriendlyVexEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.TAMED_SPIDER.get(), TamedSpiderEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.VIZIER.get(), VizierEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.IRK.get(), IrkEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.NETHERNAL.get(), NethernalEntity.setCustomAttributes().build());
-        });
-
-        DeferredWorkQueue.runLater(() -> {
-            GlobalEntityTypeAttributes.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
-        });
-
         CuriosCompat.setup(event);
 
         event.enqueueWork(() -> {
@@ -269,13 +130,51 @@ public class Goety {
 
     }
 
+    private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
+        event.put(ModEntityType.TANK.get(), AbstractTankEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FRIENDTANK.get(), AbstractTankEntity.setCustomAttributes().build());
+        event.put(ModEntityType.CHANNELLER.get(), ChannellerEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FANATIC.get(), FanaticEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZEALOT.get(), ZealotEntity.setCustomAttributes().build());
+        event.put(ModEntityType.THUG.get(), ThugEntity.setCustomAttributes().build());
+        event.put(ModEntityType.CRIMSON_SPIDER.get(), CrimsonSpiderEntity.setCustomAttributes().build());
+        event.put(ModEntityType.DISCIPLE.get(), DiscipleEntity.setCustomAttributes().build());
+        event.put(ModEntityType.APOSTLE.get(), ApostleEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ZombieVillagerMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ENVIOKER.get(), EnviokerEntity.setCustomAttributes().build());
+        event.put(ModEntityType.INQUILLAGER.get(), InquillagerEntity.setCustomAttributes().build());
+        event.put(ModEntityType.CONQUILLAGER.get(), ConquillagerEntity.setCustomAttributes().build());
+        event.put(ModEntityType.TORMENTOR.get(), TormentorEntity.setCustomAttributes().build());
+        event.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MUTATED_PIG.get(), MutatedPigEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MUTATED_RABBIT.get(), MutatedRabbitEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SACRED_FISH.get(), SacredFishEntity.setCustomAttributes().build());
+        event.put(ModEntityType.PARASITE.get(), ParasiteEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FRIENDLY_VEX.get(), FriendlyVexEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.TAMED_SPIDER.get(), TamedSpiderEntity.setCustomAttributes().build());
+        event.put(ModEntityType.VIZIER.get(), VizierEntity.setCustomAttributes().build());
+        event.put(ModEntityType.IRK.get(), IrkEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());
+        event.put(ModEntityType.NETHERNAL.get(), NethernalEntity.setCustomAttributes().build());
+        event.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
+    }
+
     public void biomeModification(final BiomeLoadingEvent event) {
 
         if (MainConfig.DarkManorGen.get()) {
             if (event.getCategory() == Biome.Category.FOREST
                     || event.getCategory() == Biome.Category.ICY
                     || event.getCategory() == Biome.Category.TAIGA) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DARKMANOR);
+                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DARK_MANOR);
             }
         }
         if (MainConfig.CursedGraveyardGen.get()) {
@@ -304,6 +203,13 @@ public class Goety {
                 event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DECREPIT_FORT);
             }
         }
+        if (MainConfig.PortalOutpostGen.get()) {
+            if (event.getCategory() != Biome.Category.NETHER
+                    && event.getCategory() != Biome.Category.OCEAN
+                    && event.getCategory() != Biome.Category.RIVER) {
+                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_PORTAL_OUTPOST);
+            }
+        }
         if (MainConfig.TotemGen.get()) {
             if (event.getCategory() != Biome.Category.THEEND
                     && event.getCategory() != Biome.Category.MUSHROOM
@@ -313,8 +219,6 @@ public class Goety {
                 event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.CONFIGURED_CURSEDTOTEM);
             }
         }
-        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_PORTAL_OUTPOST);
-
     }
 
     private static Method GETCODEC_METHOD;
@@ -338,7 +242,7 @@ public class Goety {
             }
 
             Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
-            tempMap.putIfAbsent(ModStructures.DARKMANOR.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.DARKMANOR.get()));
+            tempMap.putIfAbsent(ModStructures.DARK_MANOR.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.DARK_MANOR.get()));
             tempMap.putIfAbsent(ModStructures.PORTAL_OUTPOST.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.PORTAL_OUTPOST.get()));
             tempMap.putIfAbsent(ModStructures.CURSED_GRAVEYARD.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.CURSED_GRAVEYARD.get()));
             tempMap.putIfAbsent(ModStructures.SALVAGED_FORT.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.SALVAGED_FORT.get()));

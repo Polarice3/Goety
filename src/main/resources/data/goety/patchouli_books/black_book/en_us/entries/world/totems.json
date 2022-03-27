@@ -1,0 +1,21 @@
+{
+  "name": "Dark Totems",
+  "icon": "goety:fang_totem",
+  "category": "goety:world",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Throughout your journey across the world, you've encountered some strange Totems that seems to perform some oddities when a creature is near them. From what you've gathered, only one of them seems overtly dangerous, the other types are either helpful or too strange to decipher."
+    },
+    {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/eldritch_totem.png"],
+      "border": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Whatever the case, these things seemed to only work if there's three blocks of Cursed Totem Poles directly beneath the head. The heads of these Totems drop Experience when broken, perhaps Silk Touch will allow you to collect them and perhaps find a use for them."
+    }
+  ]
+}

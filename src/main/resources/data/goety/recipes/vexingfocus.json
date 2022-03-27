@@ -1,29 +1,39 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "sfs",
-    "fef",
-    "sfs"
-  ],
-  "key":
-  {
-    "e":
-    {
-      "item": "goety:animaliscore"
-    },
-    "f":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:animaliscore"
+  },
+  "craftType": "animalis",
+  "soulCost": 5,
+  "duration": 30,
+  "ingredients": [
     {
       "item": "goety:magic_emerald"
     },
-    "s":
     {
-      "tag": "forge:storage_blocks/iron"
+      "item": "minecraft:ender_pearl"
+    },
+    {
+      "item": "minecraft:anvil"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "minecraft:experience_bottle"
+    },
+    {
+      "item": "goety:magic_emerald"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:ghast_tear"
     }
-  },
-  "result":
-  {
-    "item": "goety:vexingfocus",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:vexingfocus"
   }
 }

@@ -50,7 +50,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossbowUser {
-    private static final DataParameter<Boolean> IS_CHARGING_CROSSBOW = EntityDataManager.defineId(PillagerEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CHARGING_CROSSBOW = EntityDataManager.defineId(ConquillagerEntity.class, DataSerializers.BOOLEAN);
     private final Inventory inventory = new Inventory(5);
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
 

@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class TormentorEntity extends AbstractIllagerEntity {
-    protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(VexEntity.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(TormentorEntity.class, DataSerializers.BYTE);
     private MobEntity owner;
     @Nullable
     private BlockPos boundOrigin;

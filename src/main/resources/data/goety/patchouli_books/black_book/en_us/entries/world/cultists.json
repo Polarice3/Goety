@@ -1,0 +1,17 @@
+{
+  "name": "The Cultists",
+  "icon": "goety:darkbook",
+  "category": "goety:world",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Along your travels, you've encountered a group of Villager-like beings that seemed hostile towards you and your kind. It seems these 'Cultists' worship the Nether, and seemed to believe that killing you will bless them with favor. They don't seemed like Illagers as they do not attack any Villagers. In fact, they seemed to have more in common with Witches than anything."
+    },
+    {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/cultists.png"],
+      "border": true
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top",
+  "textures": {
+    "top": "goety:blocks/haunted_door_top",
+    "bottom": "goety:blocks/haunted_door_bottom"
+  }
+}

@@ -1,37 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "flf",
-    "y y",
-    "r p"
-  ],
-  "key":
-  {
-    "f":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "minecraft:leather_boots"
+  },
+  "craftType": "animalis",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
     {
       "item": "goety:darkfabric"
     },
-    "y":
     {
       "item": "goety:magicfabric"
     },
-    "l":
     {
-      "item": "minecraft:leather_boots"
+      "item": "minecraft:leather"
     },
-    "r":
+    {
+      "item": "minecraft:iron_ingot"
+    },
     {
       "item": "minecraft:rabbit_foot"
     },
-    "p":
     {
       "item": "minecraft:pufferfish"
     }
-  },
-  "result":
-  {
-    "item": "goety:darkbootsofwander",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:darkbootsofwander"
   }
 }

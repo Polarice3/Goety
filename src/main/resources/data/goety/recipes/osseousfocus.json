@@ -1,33 +1,36 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "sfs",
-    "aea",
-    "sas"
-  ],
-  "key":
-  {
-    "e":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:animaliscore"
+  },
+  "craftType": "necroturgy",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
     {
-      "item": "goety:animaliscore"
+      "item": "minecraft:fletching_table"
     },
-    "f":
-    {
-      "item": "minecraft:bow"
-    },
-    "a":
     {
       "item": "minecraft:arrow"
     },
-    "s":
+    {
+      "item": "minecraft:arrow"
+    },
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "minecraft:bone"
+    },
     {
       "item": "minecraft:bone"
     }
-  },
-  "result":
-  {
-    "item": "goety:osseousfocus",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:osseousfocus"
   }
 }

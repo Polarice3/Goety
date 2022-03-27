@@ -11,9 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemTier;
-import net.minecraft.item.SimpleFoiledItem;
+import net.minecraft.item.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.common.ToolType;
@@ -81,13 +79,14 @@ public class ModRegistry {
     public static final RegistryObject<Item> SOUL_EMERALD = ITEMS.register("soul_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> SCRYING_MIRROR = ITEMS.register("scrying_mirror", ScryingMirrorItem::new);
     public static final RegistryObject<Item> TREASURE_POUCH = ITEMS.register("treasure_pouch", TreasurePouchItem::new);
+    public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
 
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));
     public static final RegistryObject<Item> BITINGFOCUS = ITEMS.register("bitingfocus", () -> new MagicFocusItem(MainConfig.FangCost.get()));
     public static final RegistryObject<Item> ROARINGFOCUS = ITEMS.register("roaringfocus", () -> new MagicFocusItem(MainConfig.RoarCost.get()));
-    public static final RegistryObject<Item> NECROTURGYFOCUS = ITEMS.register("necroturgyfocus", () -> new MagicFocusItem(MainConfig.ZombieCost.get()));
+    public static final RegistryObject<Item> ROTTINGFOCUS = ITEMS.register("rottingfocus", () -> new MagicFocusItem(MainConfig.ZombieCost.get()));
     public static final RegistryObject<Item> OSSEOUSFOCUS = ITEMS.register("osseousfocus", () -> new MagicFocusItem(MainConfig.SkeletonCost.get()));
     public static final RegistryObject<Item> WITCHGALEFOCUS = ITEMS.register("witchgalefocus", () -> new MagicFocusItem(MainConfig.WitchGaleCost.get()));
     public static final RegistryObject<Item> SPIDERLINGFOCUS = ITEMS.register("spiderlingfocus", () -> new MagicFocusItem(MainConfig.SpiderlingCost.get()));
@@ -174,7 +173,36 @@ public class ModRegistry {
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
     public static final RegistryObject<Block> DARK_ALTAR = BLOCKS.register("dark_altar", DarkAltarBlock::new);
     public static final RegistryObject<Block> PEDESTAL = BLOCKS.register("pedestal", PedestalBlock::new);
+    public static final RegistryObject<Block> DEAD_SAND = BLOCKS.register("dead_sand", DeadSandBlock::new);
+    public static final RegistryObject<Block> DEAD_SANDSTONE = BLOCKS.register("dead_sandstone", DeadSandStoneBlock::new);
 
+    //Plants
+    public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
+
+    //Tree
+    public static final RegistryObject<Block> HAUNTED_PLANKS = BLOCKS.register("haunted_planks",
+            () -> new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_LOG = BLOCKS.register("haunted_log", HauntedLogBlock::new);
+    public static final RegistryObject<Block> STRIPPED_HAUNTED_LOG = BLOCKS.register("stripped_haunted_log", HauntedLogBlock::new);
+    public static final RegistryObject<Block> HAUNTED_WOOD = BLOCKS.register("haunted_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> STRIPPED_HAUNTED_WOOD = BLOCKS.register("stripped_haunted_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_PRESSURE_PLATE = BLOCKS.register("haunted_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(0.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_TRAPDOOR = BLOCKS.register("haunted_trapdoor",
+            () -> new TrapDoorBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> HAUNTED_BUTTON = BLOCKS.register("haunted_button",
+            () -> new WoodButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_STAIRS = BLOCKS.register("haunted_stairs",
+            () -> new StairsBlock(HAUNTED_PLANKS.get().defaultBlockState(), AbstractBlock.Properties.copy(HAUNTED_PLANKS.get())));
+    public static final RegistryObject<Block> HAUNTED_SLAB = BLOCKS.register("haunted_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_FENCE_GATE = BLOCKS.register("haunted_fence_gate",
+            () -> new FenceGateBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_FENCE = BLOCKS.register("haunted_fence",
+            () -> new FenceBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> HAUNTED_DOOR = BLOCKS.register("haunted_door",
+            () -> new DoorBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
     //Slabs
     public static final RegistryObject<Block> CURSED_STONE_SLAB_BLOCK = BLOCKS.register("cursed_stone_slab",
         () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE)
@@ -262,6 +290,46 @@ public class ModRegistry {
             () -> new BlockItemBase(DARK_ALTAR.get()));
     public static final RegistryObject<Item> PEDESTAL_ITEM = ITEMS.register("pedestal",
             () -> new BlockItemBase(PEDESTAL.get()));
+    public static final RegistryObject<Item> DEAD_SAND_ITEM = ITEMS.register("dead_sand",
+            () -> new BlockItemBase(DEAD_SAND.get()));
+    public static final RegistryObject<Item> DEAD_SANDSTONE_ITEM = ITEMS.register("dead_sandstone",
+            () -> new BlockItemBase(DEAD_SANDSTONE.get()));
+    public static final RegistryObject<Item> HAUNTED_CACTUS_ITEM = ITEMS.register("haunted_cactus",
+            () -> new BlockItemBase(HAUNTED_CACTUS.get()));
+    //TreeItems
+    public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = ITEMS.register("haunted_planks",
+            () -> new BlockItemBase(HAUNTED_PLANKS.get()));
+    public static final RegistryObject<Item> HAUNTED_LOG_ITEM = ITEMS.register("haunted_log",
+            () -> new BlockItemBase(HAUNTED_LOG.get()));
+    public static final RegistryObject<Item> STRIPPED_HAUNTED_LOG_ITEM = ITEMS.register("stripped_haunted_log",
+            () -> new BlockItemBase(STRIPPED_HAUNTED_LOG.get()));
+    public static final RegistryObject<Item> HAUNTED_WOOD_ITEM = ITEMS.register("haunted_wood",
+            () -> new BlockItemBase(HAUNTED_WOOD.get()));
+    public static final RegistryObject<Item> STRIPPED_HAUNTED_WOOD_ITEM = ITEMS.register("stripped_haunted_wood",
+            () -> new BlockItemBase(STRIPPED_HAUNTED_WOOD.get()));
+    public static final RegistryObject<Item> HAUNTED_PRESSURE_PLATE_ITEM = ITEMS.register("haunted_pressure_plate",
+            () -> new BlockItemBase(HAUNTED_PRESSURE_PLATE.get()));
+    public static final RegistryObject<Item> HAUNTED_BUTTON_ITEM = ITEMS.register("haunted_button",
+            () -> new BlockItemBase(HAUNTED_BUTTON.get()));
+    public static final RegistryObject<Item> HAUNTED_DOOR_ITEM = ITEMS.register("haunted_door",
+            () -> new TallBlockItem(HAUNTED_DOOR.get(), (new Item.Properties()).tab(Goety.TAB)));
+    public static final RegistryObject<Item> HAUNTED_TRAPDOOR_ITEM = ITEMS.register("haunted_trapdoor",
+            () -> new BlockItemBase(HAUNTED_TRAPDOOR.get()));
+    public static final RegistryObject<Item> HAUNTED_FENCE_ITEM = ITEMS.register("haunted_fence",
+            () -> new BlockItemBase(HAUNTED_FENCE.get()));
+    public static final RegistryObject<Item> HAUNTED_FENCE_GATE_ITEM = ITEMS.register("haunted_fence_gate",
+            () -> new BlockItemBase(HAUNTED_FENCE_GATE.get()));
+    public static final RegistryObject<Item> HAUNTED_SLAB_ITEM = ITEMS.register("haunted_slab",
+            () -> new BlockItemBase(HAUNTED_SLAB.get()));
+    public static final RegistryObject<Item> HAUNTED_STAIRS_ITEM = ITEMS.register("haunted_stairs",
+            () -> new BlockItemBase(HAUNTED_STAIRS.get()));
+    //JEI
+    public static final RegistryObject<DummyItem> JEI_DUMMY_NONE = ITEMS.register(
+            "jei_dummy/none", () -> new DummyItem(new Item.Properties()));
+    public static final RegistryObject<DummyItem> JEI_DUMMY_REQUIRE_SACRIFICE = ITEMS.register(
+            "jei_dummy/sacrifice", () -> new DummyItem(new Item.Properties()));
+    public static final RegistryObject<DummyItem> JEI_DUMMY_REQUIRE_ITEM_USE = ITEMS.register(
+            "jei_dummy/item", () -> new DummyItem(new Item.Properties()));
     //Effects
     public static final RegistryObject<Effect> DEATHPROTECT = EFFECTS.register("deathprotect",
             () -> new ModEffects(EffectType.BENEFICIAL, 0));
@@ -292,4 +360,8 @@ public class ModRegistry {
 
     public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
             () -> new ModEffects(EffectType.HARMFUL, 10044730));
+
+    public static Item.Properties defaultProperties() {
+        return new Item.Properties().tab(Goety.TAB);
+    }
 }

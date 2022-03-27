@@ -1,99 +1,94 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.network.TileEntityUpdatePacket;
 import com.Polarice3.Goety.init.ModTileEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IClearable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class PedestalTileEntity extends TileEntity implements IClearable {
-    private ItemStack item = ItemStack.EMPTY;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public class PedestalTileEntity extends ModTileEntity {
+    public long lastChangeTime;
+    public LazyOptional<ItemStackHandler> itemStackHandler = LazyOptional.of(
+            () -> new ItemStackHandler(1) {
+                @Override
+                public int getSlotLimit(int slot) {
+                    return 1;
+                }
+
+                @Override
+                protected void onContentsChanged(
+                        int slot) {
+                    assert PedestalTileEntity.this.level != null;
+                    if (!PedestalTileEntity.this.level.isClientSide) {
+                        PedestalTileEntity.this.lastChangeTime = PedestalTileEntity.this.level
+                                .getGameTime();
+                        PedestalTileEntity.this.markNetworkDirty();
+                    }
+                }
+            });
+    protected boolean initialized = false;
 
     public PedestalTileEntity() {
         super(ModTileEntityType.PEDESTAL.get());
     }
 
+    public PedestalTileEntity(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
+    }
+
+    @Nonnull
     @Override
-    public void load(BlockState state, CompoundNBT tag) {
-        super.load(state, tag);
-        item = ItemStack.of(tag.getCompound("item"));
-    }
-
-    @Override
-    public CompoundNBT save(CompoundNBT tag) {
-        tag = super.save(tag);
-        tag.put("item", item.save(new CompoundNBT()));
-        return tag;
-    }
-
-    public CompoundNBT getUpdateTag() {
-        return this.save(new CompoundNBT());
-    }
-
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.getBlockPos(), 3, this.getUpdateTag());
-    }
-
-    public ItemStack getItem() {
-        return this.item;
-    }
-
-    public void setItem(ItemStack stack) {
-        this.item = stack;
-        this.setChanged();
-    }
-
-    public ActionResultType onUse(PlayerEntity player, Hand hand) {
-        if (hand == Hand.MAIN_HAND) {
-            if (!item.isEmpty()) {
-                player.addItem(item);
-                item = ItemStack.EMPTY;
-                return ActionResultType.SUCCESS;
-            } else if (!player.getItemInHand(hand).isEmpty() && item.isEmpty()) {
-                item = player.getItemInHand(hand).copy();
-                item.setCount(1);
-                player.getItemInHand(hand).shrink(1);
-                if (player.getItemInHand(hand).isEmpty()) player.setItemInHand(hand, ItemStack.EMPTY);
-                return ActionResultType.SUCCESS;
-            }
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction direction) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return this.itemStackHandler.cast();
         }
-        return ActionResultType.PASS;
-    }
-
-    public void synchronize() {
-        this.setChanged();
-        assert level != null;
-        if (level.isClientSide)
-            ModNetwork.INSTANCE.sendToServer(new TileEntityUpdatePacket(worldPosition, save(new CompoundNBT())));
-        else
-            ModNetwork.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(worldPosition)), new TileEntityUpdatePacket(worldPosition, save(new CompoundNBT())));
+        return super.getCapability(cap, direction);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
-        CompoundNBT tag = pkt.getTag();
-        load(this.getBlockState(), tag);
+    public void readNetwork(CompoundNBT compound) {
+        this.itemStackHandler.ifPresent((handler) -> handler.deserializeNBT(compound.getCompound("inventory")));
+        this.lastChangeTime = compound.getLong("lastChangeTime");
     }
 
-    public void clearContent() {
-        this.item = ItemStack.EMPTY;
-        new ParticleUtil(ParticleTypes.SMOKE, this.getBlockPos().getX(), this.getBlockPos().getY() + 0.5, this.getBlockPos().getZ(), 0.0F, 5.0E-4D, 0.0F);
-        this.synchronize();
+    @Override
+    public CompoundNBT writeNetwork(CompoundNBT compound) {
+        this.itemStackHandler.ifPresent(handler -> compound.put("inventory", handler.serializeNBT()));
+        compound.putLong("lastChangeTime", this.lastChangeTime);
+        return compound;
     }
 
-    public void setRemoved() {
-        super.setRemoved();
+    @Override
+    protected void invalidateCaps() {
+        super.invalidateCaps();
+        this.itemStackHandler.invalidate();
     }
 }
+/*
+ * MIT License
+ *
+ * Copyright 2020 klikli-dev
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+ * associated documentation files (the "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
+ * portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */

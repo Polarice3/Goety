@@ -30,6 +30,7 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven { url = "https://maven.blamejared.com"}
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -49,6 +50,9 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
                 goety {
                     source sourceSets.main
@@ -62,6 +66,8 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
 
             property 'forge.logging.console.level', 'debug'
+
+            property 'mixin.env.disableRefMap', 'true'
 
             mods {
                 goety {
@@ -77,7 +83,9 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            property 'mixin.env.disableRefMap', 'true'
+
+            args '--mod', 'goety', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
                 goety {
@@ -98,6 +106,8 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.3:api")
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.2:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.2")
 
 }
 

@@ -22,8 +22,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 
 public class MutatedEntity extends AnimalEntity {
-    private static final DataParameter<Integer> STATE = EntityDataManager.defineId(CreeperEntity.class, DataSerializers.INT);
-    private static final DataParameter<Boolean> IGNITED = EntityDataManager.defineId(CreeperEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> STATE = EntityDataManager.defineId(MutatedEntity.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> IGNITED = EntityDataManager.defineId(MutatedEntity.class, DataSerializers.BOOLEAN);
     private int timeSinceIgnited;
     private int lastActiveTime;
     private int fuseTime = 20;

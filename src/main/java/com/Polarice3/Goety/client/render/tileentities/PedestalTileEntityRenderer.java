@@ -16,17 +16,19 @@ public class PedestalTileEntityRenderer extends TileEntityRenderer<PedestalTileE
     }
 
     public void render(PedestalTileEntity pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
-        ItemStack itemstack = pBlockEntity.getItem();
-        Minecraft minecraft = Minecraft.getInstance();
-        if (!itemstack.isEmpty()){
-            pMatrixStack.pushPose();
-            pMatrixStack.translate(0.5F, 1.0F, 0.5F);
-            pMatrixStack.scale(1.0F, 1.0F, 1.0F);
-            assert minecraft.level != null;
-            pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(3 * (minecraft.level.getGameTime() % 360 + pPartialTicks)));
-            minecraft.getItemRenderer().renderStatic(itemstack, ItemCameraTransforms.TransformType.GROUND, pCombinedLight, pCombinedOverlay, pMatrixStack, pBuffer);
-            pMatrixStack.popPose();
-        }
+        pBlockEntity.itemStackHandler.ifPresent(handler -> {
+            ItemStack stack = handler.getStackInSlot(0);
+            Minecraft minecraft = Minecraft.getInstance();
+            if (!stack.isEmpty()) {
+                pMatrixStack.pushPose();
+                pMatrixStack.translate(0.5F, 1.0F, 0.5F);
+                pMatrixStack.scale(1.0F, 1.0F, 1.0F);
+                assert minecraft.level != null;
+                pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(3 * (minecraft.level.getGameTime() % 360 + pPartialTicks)));
+                minecraft.getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, pCombinedLight, pCombinedOverlay, pMatrixStack, pBuffer);
+                pMatrixStack.popPose();
+            }
+        });
     }
 
 }

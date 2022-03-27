@@ -10,7 +10,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 
 public class ConfiguredStructures {
-    public static StructureFeature<?, ?> CONFIGURED_DARKMANOR= ModStructures.DARKMANOR.get().configured(NoFeatureConfig.NONE);
+    public static StructureFeature<?, ?> CONFIGURED_DARK_MANOR = ModStructures.DARK_MANOR.get().configured(NoFeatureConfig.NONE);
     public static StructureFeature<?, ?> CONFIGURED_PORTAL_OUTPOST= ModStructures.PORTAL_OUTPOST.get().configured(NoFeatureConfig.NONE);
     public static StructureFeature<?, ?> CONFIGURED_CURSED_GRAVEYARD= ModStructures.CURSED_GRAVEYARD.get().configured(NoFeatureConfig.NONE);
     public static StructureFeature<?, ?> CONFIGURED_SALVAGED_FORT = ModStructures.SALVAGED_FORT.get().configured(NoFeatureConfig.NONE);
@@ -18,8 +18,8 @@ public class ConfiguredStructures {
 
     public static void registerConfiguredStructures() {
         Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
-        Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_darkmanor"), CONFIGURED_DARKMANOR);
-        FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.DARKMANOR.get(), CONFIGURED_DARKMANOR);
+        Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_dark_manor"), CONFIGURED_DARK_MANOR);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.DARK_MANOR.get(), CONFIGURED_DARK_MANOR);
         Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_portal_outpost"), CONFIGURED_PORTAL_OUTPOST);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.PORTAL_OUTPOST.get(), CONFIGURED_PORTAL_OUTPOST);
         Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_cursed_graveyard"), CONFIGURED_CURSED_GRAVEYARD);
