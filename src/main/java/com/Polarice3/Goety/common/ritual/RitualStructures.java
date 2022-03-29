@@ -93,4 +93,32 @@ public class RitualStructures {
     public static boolean checkMinorNetherRequirements(ModTileEntity pTileEntity){
         return pTileEntity.first.size() >= 1 && pTileEntity.second.size() == 0 && pTileEntity.third.size() == 0;
     }
+
+    public static void findForgeStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+        pTileEntity.first.clear();
+        pTileEntity.second.clear();
+        pTileEntity.third.clear();
+        for (int i = -RANGE; i <= RANGE; ++i) {
+            for (int j = -RANGE; j <= RANGE; ++j) {
+                for (int k = -RANGE; k <= RANGE; ++k) {
+                    BlockPos blockpos1 = pPos.offset(i, j, k);
+                    assert pLevel != null;
+                    BlockState blockstate = pLevel.getBlockState(blockpos1);
+                    if (blockstate.getBlock() == Blocks.SMITHING_TABLE) {
+                        pTileEntity.first.add(blockpos1);
+                    }
+                    if (blockstate.getBlock() == Blocks.FURNACE || blockstate.getBlock() == Blocks.BLAST_FURNACE) {
+                        pTileEntity.second.add(blockpos1);
+                    }
+                    if (blockstate.getBlock() == Blocks.ANVIL || blockstate.getBlock() == Blocks.CHIPPED_ANVIL || blockstate.getBlock() == Blocks.DAMAGED_ANVIL) {
+                        pTileEntity.third.add(blockpos1);
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean checkForgeRequirements(ModTileEntity pTileEntity){
+        return pTileEntity.first.size() >= 1 && pTileEntity.second.size() >= 3 && pTileEntity.third.size() >= 4;
+    }
 }

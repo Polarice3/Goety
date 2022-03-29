@@ -1,0 +1,11 @@
+{
+  "name": "Rotting Focus",
+  "icon": "goety:rottingfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The first step to Necroturgy is to summon and command a Zombie. With this focus, you are well on your way of becoming a true Necroturge."
+    }
+  ]
+}

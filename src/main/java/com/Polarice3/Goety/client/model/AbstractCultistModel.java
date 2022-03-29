@@ -191,6 +191,28 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                 this.leftArm.zRot = -2.3561945F;
                 this.rightArm.yRot = 0.0F;
                 this.leftArm.yRot = 0.0F;
+                break;
+            case SPELL_AND_WEAPON:
+                if (!entityIn.getMainHandItem().isEmpty()) {
+                    if (entityIn.getMainArm() == HandSide.RIGHT) {
+                        ModelHelper.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
+                    } else {
+                        ModelHelper.swingWeaponDown(this.leftArm, this.rightArm, entityIn, this.attackTime, ageInTicks);
+                    }
+                }
+                if (entityIn.getMainArm() == HandSide.RIGHT){
+                    this.leftArm.z = 0.0F;
+                    this.leftArm.x = 5.0F;
+                    this.leftArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+                    this.leftArm.zRot = -2.3561945F;
+                    this.leftArm.yRot = 0.0F;
+                } else {
+                    this.rightArm.z = 0.0F;
+                    this.rightArm.x = -5.0F;
+                    this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+                    this.rightArm.zRot = 2.3561945F;
+                    this.rightArm.yRot = 0.0F;
+                }
         }
 
         if (this.leftArmPose == ArmPose.THROW_SPEAR) {

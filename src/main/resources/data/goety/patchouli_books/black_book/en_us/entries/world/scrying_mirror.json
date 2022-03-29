@@ -1,0 +1,28 @@
+{
+  "name": "Scrying Mirror",
+  "icon": "goety:scrying_mirror",
+  "category": "goety:world",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Within Woodland Mansions lies some odd statues made of Wool in a shape of an Illager's head, a Chicken or a Cat. Many theories have risen from these oddities. Some believed them to be objects of worship, some believed that they are conduits to channel their magics."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "After many studies and experimentation with Lapis Lazuli, you've finally found the answer to this riddle. These statues are used as a means of scrying, looking at different parts of the world through the eyes of other beings. The Illagers seems to be spying on others through the use of Chickens and Cats, perhaps there's a way to spy on them back."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:scrying_mirror",
+      "text": "Through the use of the Eye of Ender, you've found a way to spy on the Illagers back. Using the mirror on a Chicken or Cat will give you an idea on how they see you as a threat."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The fact that Illagers use Cats as a means of spying suddenly gave you an epiphany. It was through the eyes of the Cats that the Illagers are able to decipher where those who gain their scorn are located, and what Village is to be raided. You theorized that Cats have a more stronger connection than Chickens when it comes to scrying, at least ones within Villages, as the Illagers would spy on them more frequently."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "With such strong connection, perhaps it is possible to find one of their mansions by scrying one of the Village's Cats. By having an Empty Map offhand, you managed to write down the location of a Woodland Mansion, however, either you left some remnant of your spying or an Evoker spotted your scrying, the Illagers are aware of your ability to spy on them. It seems scrying for their mansions gives you a lot of Infamy among them."
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Biting Focus",
+  "icon": "goety:bitingfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Summons a row of Magical Fangs in front of you that deals damage that ignores the targets' armor(Unless it's enchanted). When crouching, summons circles of Fangs around you."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:bitingfocus"
+    }
+  ]
+}

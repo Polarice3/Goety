@@ -1,29 +1,39 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "ksk",
-    "ses",
-    "ksk"
-  ],
-  "key":
-  {
-    "e":
-    {
-      "item": "goety:emptycore"
-    },
-    "k":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:emptycore"
+  },
+  "craftType": "necroturgy",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
     {
       "item": "minecraft:skeleton_skull"
     },
-    "s":
     {
-      "item": "minecraft:soul_sand"
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "minecraft:skeleton_skull"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "minecraft:skeleton_skull"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "minecraft:skeleton_skull"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
     }
-  },
-  "result":
-  {
-    "item": "goety:soulskullfocus",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:soulskullfocus"
   }
 }

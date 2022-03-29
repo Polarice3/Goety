@@ -1,0 +1,15 @@
+{
+  "name": "Crawling Focus",
+  "icon": "goety:spiderlingfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Summons Spiderlings that will hunt down any hostile creatures near it."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:spiderlingfocus"
+    }
+  ]
+}

@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "texture_size": [32, 32],
   "textures": {
-    "0": "goety:items/darkbook",
-    "particle": "goety:items/darkbook"
+    "0": "goety:items/nether_book",
+    "particle": "goety:items/nether_book"
   },
   "elements": [
     {

@@ -1,28 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "fcf",
-    "flf"
-  ],
-  "key":
-  {
-    "f":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:darkhelm"
+  },
+  "craftType": "forge",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
     {
       "item": "goety:cursed_ingot"
     },
-    "l":
     {
-      "item": "goety:darkhelm"
+      "item": "goety:cursed_ingot"
     },
-    "c":
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
     {
       "item": "goety:soul_emerald"
     }
-  },
-  "result":
-  {
-    "item": "goety:darkarmoredhelm",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:darkarmoredhelm"
   }
 }

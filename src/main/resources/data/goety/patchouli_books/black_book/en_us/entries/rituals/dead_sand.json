@@ -2,7 +2,7 @@
   "name": "Dead Sands",
   "icon": "goety:dead_sand",
   "category": "goety:rituals",
-  "sortnum": 3,
+  "sortnum": 4,
   "pages": [
     {
       "type": "patchouli:text",

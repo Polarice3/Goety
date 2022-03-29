@@ -1,0 +1,11 @@
+{
+  "name": "Osseous Focus",
+  "icon": "goety:osseousfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Skeletons can be quite annoying to those who lack the patience to carry a Shield. Now you have the power to summon and command one to turn others into pincushions."
+    }
+  ]
+}

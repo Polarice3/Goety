@@ -1,0 +1,15 @@
+{
+  "name": "Brain Eater Focus",
+  "icon": "goety:braineaterfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Knowledge is power. But with this spell, it can also heal wounds as the spell drains Experience to heal yourself."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:braineaterfocus"
+    }
+  ]
+}

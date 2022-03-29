@@ -1,29 +1,30 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "cec",
-    "cdc",
-    "c c"
-  ],
-  "key":
-  {
-    "c":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:darkleggings"
+  },
+  "craftType": "forge",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
     {
       "item": "goety:cursed_ingot"
     },
-    "d":
     {
-      "item": "goety:darkleggings"
+      "item": "goety:cursed_ingot"
     },
-    "e":
     {
-      "item": "goety:soul_emerald"
+      "item": "goety:cursed_ingot"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    {
+      "item": "goety:magic_emerald"
     }
-  },
-  "result":
-  {
-    "item": "goety:darkarmoredleggings",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:darkarmoredleggings"
   }
 }

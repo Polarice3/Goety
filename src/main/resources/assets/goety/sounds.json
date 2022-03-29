@@ -1,0 +1,84 @@
+{
+  "apostle_ambient": {
+    "sounds": [
+      {
+        "name": "goety:apostle/idle1"
+      },
+      {
+        "name": "goety:apostle/idle2"
+      },
+      {
+        "name": "goety:apostle/idle3"
+      },
+      {
+        "name": "goety:apostle/idle4"
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_ambient"
+  },
+  "apostle_hurt": {
+    "sounds": [
+      {
+        "name": "goety:apostle/hurt1"
+      },
+      {
+        "name": "goety:apostle/hurt2"
+      },
+      {
+        "name": "goety:apostle/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_hurt"
+  },
+  "apostle_prepare_spell": {
+    "sounds": [
+      {
+        "name": "goety:apostle/prepare_spell1",
+        "volume": 0.25
+      },
+      {
+        "name": "goety:apostle/prepare_spell2",
+        "volume": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_prepare_spell"
+  },
+  "apostle_prepare_summon": {
+    "sounds": [
+      {
+        "name": "goety:apostle/prepare_summon",
+        "volume": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_prepare_summon"
+  },
+  "apostle_cast_spell": {
+  "sounds": [
+    {
+      "name": "goety:apostle/cast1",
+      "volume": 0.75
+    },
+    {
+      "name": "goety:apostle/cast2",
+      "volume": 0.75
+    }
+  ],
+  "subtitle": "subtitle.goety.apostle_cast_spell"
+},
+  "apostle_death": {
+    "sounds": [
+      {
+        "name": "goety:apostle/death1"
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_death"
+  },
+  "roar_spell": {
+    "sounds": [
+      {
+        "name": "goety:spell/roar_spell"
+      }
+    ],
+    "subtitle": "subtitle.goety.roar_spell"
+  }
+}

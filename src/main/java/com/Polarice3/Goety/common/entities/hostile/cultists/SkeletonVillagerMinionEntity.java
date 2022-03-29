@@ -1,8 +1,5 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.common.entities.ally.FriendlyTankEntity;
-import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -39,7 +36,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implements IRangedAttackMob{
+public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implements IRangedAttackMob {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(SkeletonVillagerMinionEntity.class, DataSerializers.OPTIONAL_UUID);
     public LivingEntity owner;
     public boolean limitedLifespan;
@@ -214,7 +211,9 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         this.populateDefaultEquipmentSlots(pDifficulty);
         this.populateDefaultEquipmentEnchantments(pDifficulty);
-        this.setCanPickUpLoot(this.random.nextFloat() < 0.55F * pDifficulty.getSpecialMultiplier());
+        for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+            this.setDropChance(equipmentslottype, 0.0F);
+        }
         if (this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
             int i = localdate.get(ChronoField.DAY_OF_MONTH);

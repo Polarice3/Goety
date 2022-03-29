@@ -1,0 +1,11 @@
+{
+  "name": "Soul Skull Focus",
+  "icon": "goety:soulskullfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A poor man's version of the Wither's projectile skulls. These skulls don't induce wither, but will heal you when a creature is slain with it. When crouching, the skull's explosion will break blocks."
+    }
+  ]
+}

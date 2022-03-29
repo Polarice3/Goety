@@ -1,29 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "flf",
-    "fcf",
-    "fff"
-  ],
-  "key":
-  {
-    "f":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:necrorobe"
+  },
+  "craftType": "forge",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
     {
       "item": "goety:cursed_ingot"
     },
-    "l":
     {
-      "item": "goety:necrorobe"
+      "item": "goety:cursed_ingot"
     },
-    "c":
     {
-      "item": "goety:soul_emerald"
+      "item": "goety:cursed_ingot"
+    },
+    {
+      "item": "goety:cursed_ingot"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    {
+      "item": "goety:magic_emerald"
     }
-  },
-  "result":
-  {
-    "item": "goety:necroarmoredrobe",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:necroarmoredrobe"
   }
 }

@@ -30,7 +30,8 @@
           "S": "minecraft:spawner"
         },
         "symmetrical": true
-      }
+      },
+      "enable_visualize": false
     }
   ]
 }

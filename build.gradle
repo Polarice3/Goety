@@ -21,16 +21,22 @@ group = 'com.Polarice3.Goety' // http://maven.apache.org/guides/mini/guide-namin
 archivesBaseName = 'Goety'
 
 repositories {
-    maven { url = "https://maven.theillusivec4.top/"}
     maven {
-        name = "Progwml6 maven"
+        name = "Curios"
+        url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        name = "Progwml6 maven/JEI"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    maven { url = "https://maven.blamejared.com"}
+    maven {
+        name = "Patchouli"
+        url = "https://maven.blamejared.com"
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -117,7 +123,7 @@ jar {
         attributes([
             "Specification-Title": "goety",
             "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"examplemodsareus",

@@ -1,0 +1,15 @@
+{
+  "name": "Breath Focus",
+  "icon": "goety:breathfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When casting this spell, your lungs are cleared of outside water and filled with breathable air."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:breathfocus"
+    }
+  ]
+}

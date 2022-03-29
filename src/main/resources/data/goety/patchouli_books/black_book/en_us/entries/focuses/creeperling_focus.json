@@ -1,0 +1,15 @@
+{
+  "name": "Creeping Crawlies Focus",
+  "icon": "goety:creeperlingfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Creepers are odd creatures that seems to possess gunpowder and a leafy exterior. By combining Leaves and TNT with a Crawling Focus, you've discovered a way to turn the Spiderlings into Creeperlings, which will explode near hostile creatures in the same manner as Creepers, but with the abilities of a Spider."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:creeperlingfocus"
+    }
+  ]
+}

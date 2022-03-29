@@ -31,7 +31,8 @@
           "S": "goety:cursed_cage"
         },
         "symmetrical": true
-      }
+      },
+      "enable_visualize": false
     },
     {
       "type": "patchouli:text",

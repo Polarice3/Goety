@@ -1,0 +1,9 @@
+{
+  "type": "goety:cursed_burner_recipes",
+  "ingredient": {
+    "item" : "minecraft:bone_block"
+  },
+  "result": "goety:savagetooth",
+  "experience": 0.0,
+  "cookingtime": 60
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Witch's Gale Focus",
+  "icon": "goety:witchgalefocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With the power of the Airy Focus, you've managed to create a Gale that curses creatures caught within its winds, weakening their arms and legs and poisoning their blood."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:witchgalefocus"
+    }
+  ]
+}

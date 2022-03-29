@@ -75,6 +75,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         ATTACKING,
         ZOMBIE,
         SPELLCASTING,
+        SPELL_AND_WEAPON,
         BOW_AND_ARROW,
         CROSSBOW_HOLD,
         CROSSBOW_CHARGE,

@@ -219,7 +219,9 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         float f = difficultyIn.getSpecialMultiplier();
-        this.setCanPickUpLoot(this.random.nextFloat() < 0.55F * f);
+        for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+            this.setDropChance(equipmentslottype, 0.0F);
+        }
         if (this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
             int i = localdate.get(ChronoField.DAY_OF_MONTH);

@@ -1,0 +1,15 @@
+{
+  "name": "Dragon's Wrath Focus",
+  "icon": "goety:dragonfireballfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Through this focus, you are able to shoot the Dragon's Acidic fireball towards your enemies. Be warn, the lingering acid does nothing but heal the Undead."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:dragonfireballfocus"
+    }
+  ]
+}

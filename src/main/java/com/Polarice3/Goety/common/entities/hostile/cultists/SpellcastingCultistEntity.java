@@ -8,7 +8,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -77,9 +79,6 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
 
     }
 
-    /**
-     * Called to update the entity's position/logic.
-     */
     public void tick() {
         super.tick();
         if (this.level.isClientSide && this.isSpellcasting()) {
@@ -87,9 +86,20 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
             double d0 = SpellcastingCultistEntity$spelltype.particleSpeed[0];
             double d1 = SpellcastingCultistEntity$spelltype.particleSpeed[1];
             double d2 = SpellcastingCultistEntity$spelltype.particleSpeed[2];
-            for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                double d = this.level.random.nextGaussian() * 0.2D;
-                this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX(), this.getEyeY(), this.getZ(), d0, d1, d2);
+            if (this.getEntity() instanceof ApostleEntity){
+                float f = this.yBodyRot * ((float)Math.PI / 180F) + MathHelper.cos((float)this.tickCount * 0.6662F) * 0.25F;
+                float f1 = MathHelper.cos(f);
+                float f2 = MathHelper.sin(f);
+                if (this.getMainArm() == HandSide.RIGHT){
+                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double)f1 * 0.6D, this.getY() + 1.8D, this.getZ() + (double)f2 * 0.6D, d0, d1, d2);
+                } else {
+                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double)f1 * 0.6D, this.getY() + 1.8D, this.getZ() - (double)f2 * 0.6D, d0, d1, d2);
+                }
+            } else {
+                for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
+                    double d = this.level.random.nextGaussian() * 0.2D;
+                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX(), this.getEyeY(), this.getZ(), d0, d1, d2);
+                }
             }
         }
 
@@ -106,33 +116,20 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
             return SpellcastingCultistEntity.this.getSpellTicks() > 0;
         }
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
         public void start() {
             super.start();
             SpellcastingCultistEntity.this.navigation.stop();
         }
 
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
         public void stop() {
             super.stop();
             SpellcastingCultistEntity.this.setSpellType(SpellType.NONE);
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             if (SpellcastingCultistEntity.this.getTarget() != null) {
                 SpellcastingCultistEntity.this.getLookControl().setLookAt(SpellcastingCultistEntity.this.getTarget(), (float) SpellcastingCultistEntity.this.getMaxHeadYRot(), (float) SpellcastingCultistEntity.this.getMaxHeadXRot());
@@ -144,8 +141,8 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
     public enum SpellType {
         NONE(0, 0.0D, 0.0D, 0.0D),
         FIRE(1, 0.1D, 0.1D, 0.2D),
-        ZOMBIE(3, 0.7D, 0.7D, 0.8D),
-        ROAR(4, 0.3D, 0.3D, 0.8D);
+        ZOMBIE(2, 0.7D, 0.7D, 0.8D),
+        ROAR(3, 0.3D, 0.3D, 0.8D);
 
         private final int id;
         private final double[] particleSpeed;
@@ -173,10 +170,6 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
         protected UseSpellGoal() {
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
             LivingEntity livingentity = SpellcastingCultistEntity.this.getTarget();
             if (livingentity != null && livingentity.isAlive()) {
@@ -190,17 +183,11 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
             }
         }
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
         public boolean canContinueToUse() {
             LivingEntity livingentity = SpellcastingCultistEntity.this.getTarget();
             return livingentity != null && livingentity.isAlive() && this.spellWarmup > 0;
         }
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
         public void start() {
             this.spellWarmup = this.getCastWarmupTime();
             SpellcastingCultistEntity.this.spellTicks = this.getCastingTime();
@@ -213,13 +200,11 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
             SpellcastingCultistEntity.this.setSpellType(this.getSpellType());
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             --this.spellWarmup;
             if (this.spellWarmup == 0) {
                 this.castSpell();
+                SpellcastingCultistEntity.this.setSpellType(SpellType.NONE);
                 SpellcastingCultistEntity.this.playSound(SpellcastingCultistEntity.this.getCastingSoundEvent (), 1.0F, 1.0F);
             }
 

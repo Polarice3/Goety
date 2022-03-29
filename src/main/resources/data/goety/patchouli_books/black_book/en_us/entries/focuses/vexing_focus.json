@@ -1,0 +1,11 @@
+{
+  "name": "Vexing Focus",
+  "icon": "goety:vexingfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Summons multiple Vexes that will aid you and attack any hostile creatures around them."
+    }
+  ]
+}

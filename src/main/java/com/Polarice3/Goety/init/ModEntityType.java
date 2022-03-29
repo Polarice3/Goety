@@ -12,6 +12,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
+import com.Polarice3.Goety.common.entities.utilities.FireRainTrapEntity;
 import com.Polarice3.Goety.common.entities.utilities.LightningTrapEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -125,6 +126,7 @@ public class ModEntityType {
     public static final RegistryObject<EntityType<ApostleEntity>> APOSTLE = ENTITY_TYPES.register("apostle",
             () -> EntityType.Builder.of(ApostleEntity::new, EntityClassification.MONSTER)
                     .canSpawnFarFromPlayer()
+                    .fireImmune()
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "apostle").toString()));
@@ -299,5 +301,13 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "lightningtrap").toString()));
+
+    public static final RegistryObject<EntityType<FireRainTrapEntity>> FIRERAINTRAP = ENTITY_TYPES.register("fireraintrap",
+            () -> EntityType.Builder.<FireRainTrapEntity>of(FireRainTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
 
 }

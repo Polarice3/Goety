@@ -1,11 +1,26 @@
 {
-  "type": "minecraft:smithing",
-  "base": {
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
     "item": "goety:darkbootsofwander"
   },
-  "addition": {
-    "item": "minecraft:skeleton_skull"
-  },
+  "craftType": "necroturgy",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:skeleton_skull"
+    },
+    {
+      "item": "minecraft:skeleton_skull"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  ],
   "result": {
     "item": "goety:necrobootsofwander"
   }

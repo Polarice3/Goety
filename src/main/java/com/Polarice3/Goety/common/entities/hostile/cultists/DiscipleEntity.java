@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -93,7 +94,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.level.random.nextInt(3);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.DARKBOOK.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.NETHER_BOOK.get()));
         this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
         this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTHELM.get()));
         this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.CULTISTROBE.get()));
@@ -350,7 +351,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         public void castSpell() {
             DiscipleEntity.this.setFiring(true);
-            DiscipleEntity.this.playSound(SoundEvents.RAVAGER_ROAR, 1.0F, 1.0F);
+            DiscipleEntity.this.playSound(ModSounds.ROAR_SPELL.get(), 1.0F, 1.0F);
             DiscipleEntity.this.cooldown = 0;
         }
 

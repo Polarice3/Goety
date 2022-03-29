@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
@@ -257,6 +258,15 @@ public class ModEvents {
             if (event.getTarget() != null) {
                 if (RobeArmorFinder.FindArachnoHelm(event.getTarget()) && RobeArmorFinder.FindArachnoArmor(event.getTarget())) {
                     ((SpiderEntity) event.getEntityLiving()).setTarget(null);
+                }
+            }
+        }
+        if (event.getEntityLiving() instanceof MonsterEntity){
+            if (event.getEntityLiving().getMobType() == CreatureAttribute.UNDEAD || event.getEntityLiving() instanceof CreeperEntity){
+                if (event.getTarget() != null){
+                    if (event.getTarget() instanceof ApostleEntity){
+                        ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                    }
                 }
             }
         }

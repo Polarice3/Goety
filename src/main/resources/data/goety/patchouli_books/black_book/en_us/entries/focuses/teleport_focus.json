@@ -1,0 +1,15 @@
+{
+  "name": "Teleport Focus",
+  "icon": "goety:teleportfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With the power of the Chorus Fruits and Ender Pearls, you are able to teleport with less risk and more control than using either of the former items."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:teleportfocus"
+    }
+  ]
+}

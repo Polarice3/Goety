@@ -1,0 +1,15 @@
+{
+  "name": "Roaring Focus",
+  "icon": "goety:roaringfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "When cast, you will let out a terrible roar that pushes creatures surrounding you away, while also deal some damage."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:roaringfocus"
+    }
+  ]
+}

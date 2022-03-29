@@ -1,28 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "ede",
-    "s s"
-  ],
-  "key":
-  {
-    "d":
-    {
-      "item": "goety:darkbootsofwander"
-    },
-    "e":
-    {
-      "item": "minecraft:spider_eye"
-    },
-    "s":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:darkbootsofwander"
+  },
+  "craftType": "animalis",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
     {
       "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
     }
-  },
-  "result":
-  {
-    "item": "goety:arachnobootsofwander",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:arachnobootsofwander"
   }
 }

@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3i;
@@ -172,9 +173,23 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
         recipeLayout.getItemStacks().set(index, this.darkAltar);
         index++;
 
-        recipeLayout.getItemStacks().init(index, false, 0, 0);
-        recipeLayout.getItemStacks().set(index, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-        index++;
+        if (recipe.getCraftType().contains("animalis")){
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(ModRegistry.ANIMALISCORE.get()));
+            index++;
+        } else if (recipe.getCraftType().contains("necroturgy")){
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(Items.ZOMBIE_HEAD));
+            index++;
+        } else if (recipe.getCraftType().contains("forge")){
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(Items.ANVIL));
+            index++;
+        } else {
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(Items.OBSIDIAN));
+            index++;
+        }
 
         if (recipe.requiresItemUse()) {
             int infotextY = 0;
