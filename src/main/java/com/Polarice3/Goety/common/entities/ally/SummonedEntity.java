@@ -1,7 +1,10 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -10,8 +13,10 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,6 +25,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -27,6 +33,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -69,6 +76,16 @@ public class SummonedEntity extends CreatureEntity {
         return entityLiving.level.getNearbyEntities(SummonedEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
     }
 
+    protected boolean isSunBurnTick() {
+        if (this.level.isDay() && !this.level.isClientSide) {
+            float f = this.getBrightness();
+            BlockPos blockpos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
+            return f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.level.canSeeSky(blockpos);
+        }
+
+        return false;
+    }
+
     public ItemStack getProjectile(ItemStack pShootable) {
         if (pShootable.getItem() instanceof ShootableItem) {
             Predicate<ItemStack> predicate = ((ShootableItem)pShootable.getItem()).getSupportedHeldProjectiles();
@@ -93,6 +110,45 @@ public class SummonedEntity extends CreatureEntity {
                 if (this.getMobType() == CreatureAttribute.UNDEAD){
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 1, false, false, false));
                 }
+            }
+            if (this.getMobType() == CreatureAttribute.UNDEAD) {
+                if (!this.isOnFire()) {
+                    if (MainConfig.UndeadMinionHeal.get() && this.getHealth() < this.getMaxHealth()) {
+                        if (this.getTrueOwner() instanceof PlayerEntity) {
+                            if (RobeArmorFinder.FindNecroArmor(this.getTrueOwner())) {
+                                PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
+                                ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
+                                if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
+                                    if (this.tickCount % 20 == 0) {
+                                        this.heal(1.0F);
+                                        Vector3d vector3d = this.getDeltaMovement();
+                                        new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                        GoldTotemItem.decreaseSouls(foundStack, MainConfig.UndeadMinionHealCost.get());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+        if (flag) {
+            ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
+            if (!itemstack.isEmpty()) {
+                if (itemstack.isDamageableItem()) {
+                    itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                    if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                        this.broadcastBreakEvent(EquipmentSlotType.HEAD);
+                        this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                    }
+                }
+
+                flag = false;
+            }
+
+            if (flag) {
+                this.setSecondsOnFire(8);
             }
         }
         if (this.getTarget() instanceof SummonedEntity){
@@ -135,6 +191,10 @@ public class SummonedEntity extends CreatureEntity {
             return true;
         }
         return super.isAlliedTo(entityIn);
+    }
+
+    protected boolean isSunSensitive() {
+        return false;
     }
 
     public boolean hurt(@Nonnull DamageSource source, float amount) {

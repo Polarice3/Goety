@@ -35,13 +35,13 @@ public class RitualRecipe extends ShapelessRecipe {
     private final EntityType<?> entityToSummon;
     private final Ingredient itemToUse;
     private final int duration;
-    private final int spiritMaxAge;
+    private final int summonLife;
     private final float durationPerIngredient;
     private final String entityToSacrificeDisplayName;
 
 
     public RitualRecipe(ResourceLocation id, String group, String pCraftType, ResourceLocation ritualType,
-                        ItemStack result, EntityType<?> entityToSummon, Ingredient activationItem, NonNullList<Ingredient> input, int duration, int spiritMaxAge, int pSoulCost,
+                        ItemStack result, EntityType<?> entityToSummon, Ingredient activationItem, NonNullList<Ingredient> input, int duration, int summonLife, int pSoulCost,
                         ITag<EntityType<?>> entityToSacrifice, String entityToSacrificeDisplayName, Ingredient itemToUse) {
         super(id, group, result, input);
         this.craftType = pCraftType;
@@ -51,7 +51,7 @@ public class RitualRecipe extends ShapelessRecipe {
         this.ritual = ModRituals.RITUAL_FACTORIES.getValue(this.ritualType).create(this);
         this.activationItem = activationItem;
         this.duration = duration;
-        this.spiritMaxAge = spiritMaxAge;
+        this.summonLife = summonLife;
         this.durationPerIngredient = this.duration / (float) (this.getIngredients().size() + 1);
         this.entityToSacrifice = entityToSacrifice;
         this.entityToSacrificeDisplayName = entityToSacrificeDisplayName;
@@ -134,8 +134,8 @@ public class RitualRecipe extends ShapelessRecipe {
         return this.entityToSacrificeDisplayName;
     }
 
-    public int getSpiritMaxAge() {
-        return this.spiritMaxAge;
+    public int getSummonLife() {
+        return this.summonLife;
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RitualRecipe> {
@@ -165,7 +165,7 @@ public class RitualRecipe extends ShapelessRecipe {
             Ingredient activationItem = Ingredient.fromJson(activationItemElement);
 
             int duration = JSONUtils.getAsInt(json, "duration", 30);
-            int spiritMaxAge = JSONUtils.getAsInt(json, "spirit_max_age", -1);
+            int summonLife = JSONUtils.getAsInt(json, "summonLife", -1);
             int soulCost = JSONUtils.getAsInt(json, "soulCost", 0);
 
             ITag<EntityType<?>> entityToSacrifice = null;
@@ -187,7 +187,7 @@ public class RitualRecipe extends ShapelessRecipe {
 
             return new RitualRecipe(recipeId, group, craftType, ritualType,
                     result, entityToSummon, activationItem, ingredients, duration,
-                    spiritMaxAge, soulCost, entityToSacrifice, entityToSacrificeDisplayName, itemToUse);
+                    summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName, itemToUse);
         }
 
         private static NonNullList<Ingredient> itemsFromJson(JsonArray pIngredientArray) {
@@ -216,7 +216,7 @@ public class RitualRecipe extends ShapelessRecipe {
             }
 
             int duration = buffer.readVarInt();
-            int spiritMaxAge = buffer.readVarInt();
+            int summonLife = buffer.readVarInt();
             int soulCost = buffer.readVarInt();
 
             Ingredient activationItem = Ingredient.fromNetwork(buffer);
@@ -235,7 +235,7 @@ public class RitualRecipe extends ShapelessRecipe {
 
             assert recipe != null;
             return new RitualRecipe(recipe.getId(), recipe.getGroup(), craftType, ritualType, recipe.getResultItem(), entityToSummon,
-                    activationItem, recipe.getIngredients(), duration, spiritMaxAge, soulCost, entityToSacrifice, entityToSacrificeDisplayName, itemToUse);
+                    activationItem, recipe.getIngredients(), duration, summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName, itemToUse);
         }
 
         @Override
@@ -249,7 +249,7 @@ public class RitualRecipe extends ShapelessRecipe {
                 buffer.writeRegistryId(recipe.entityToSummon);
 
             buffer.writeVarInt(recipe.duration);
-            buffer.writeVarInt(recipe.spiritMaxAge);
+            buffer.writeVarInt(recipe.summonLife);
             buffer.writeVarInt(recipe.soulCost);
             recipe.activationItem.toNetwork(buffer);
             buffer.writeBoolean(recipe.entityToSacrifice != null);

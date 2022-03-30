@@ -116,6 +116,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullFire;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullZombie;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullSkeleton;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> VexTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
@@ -367,6 +369,10 @@ public class MainConfig {
                 .defineInRange("creeperlingExplosionRadius", 1.25, 0.0, Double.MAX_VALUE);
         SoulSkullFire = BUILDER.comment("Soul Skulls when shot from Staffs sets ground aflame, Default: false")
                 .define("soulSkullFire", false);
+        SoulSkullZombie = BUILDER.comment("Zombies killed by Soul Skull converts into a Servant, Default: true")
+                .define("soulSkullZombies", true);
+        SoulSkullSkeleton = BUILDER.comment("Skeletons killed by Soul Skull converts into a Servant, Default: true")
+                .define("soulSkullSkeletons", true);
         BUILDER.pop();
         BUILDER.push("Robe Repairs");
         DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 20")

@@ -1,25 +1,34 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
+import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
+import net.minecraft.entity.monster.SkeletonEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,9 +76,12 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             Entity entity = pResult.getEntity();
             Entity entity1 = this.getOwner();
             boolean flag;
+            boolean flag2;
             if (entity1 instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)entity1;
+                World worldIn = livingentity.level;
                 flag = entity.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
+                flag2 = RobeArmorFinder.FindNecroSet(livingentity);
                 if (flag) {
                     if (entity.isAlive()) {
                         this.doEnchantDamageEffects(livingentity, entity);
@@ -81,6 +93,42 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                             livingentity.heal(5.0F);
                         } else {
                             livingentity.heal(2.0F);
+                        }
+                        if (MainConfig.SoulSkullZombie.get()) {
+                            if (entity instanceof ZombieEntity) {
+                                if (flag2) {
+                                    ZombieMinionEntity summonedentity = ((ZombieEntity) entity).convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
+                                    if (summonedentity != null) {
+                                        summonedentity.setOwnerId(livingentity.getUUID());
+                                        summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                                        summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
+                                        summonedentity.setUpgraded(false);
+                                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, summonedentity);
+                                        new SoundUtil(entity.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
+                                            new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (MainConfig.SoulSkullSkeleton.get()) {
+                            if (entity instanceof SkeletonEntity) {
+                                if (flag2) {
+                                    SkeletonMinionEntity summonedentity = ((SkeletonEntity) entity).convertTo(ModEntityType.SKELETON_MINION.get(), false);
+                                    if (summonedentity != null) {
+                                        summonedentity.setOwnerId(livingentity.getUUID());
+                                        summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                                        summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
+                                        summonedentity.setUpgraded(false);
+                                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, summonedentity);
+                                        new SoundUtil(entity.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
+                                            new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

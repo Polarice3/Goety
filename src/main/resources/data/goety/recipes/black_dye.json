@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "goety:haunted_cactus"
+  },
+  "result": "minecraft:black_dye",
+  "experience": 0.35,
+  "cookingtime": 200
+}

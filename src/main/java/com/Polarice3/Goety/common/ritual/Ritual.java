@@ -228,20 +228,17 @@ public abstract class Ritual {
     }
 
     public void prepareLivingEntityForSpawn(LivingEntity livingEntity, World world, BlockPos darkAltarPos,
-                                            DarkAltarTileEntity tileEntity, PlayerEntity castingPlayer, String spiritName) {
-        this.prepareLivingEntityForSpawn(livingEntity, world, darkAltarPos, tileEntity, castingPlayer, spiritName, true);
+                                            DarkAltarTileEntity tileEntity, PlayerEntity castingPlayer) {
+        this.prepareLivingEntityForSpawn(livingEntity, world, darkAltarPos, tileEntity, castingPlayer, true);
     }
 
     public void prepareLivingEntityForSpawn(LivingEntity livingEntity, World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
-                                            PlayerEntity castingPlayer, String spiritName, boolean setTamed) {
+                                            PlayerEntity castingPlayer, boolean setTamed) {
         if (setTamed && livingEntity instanceof TameableEntity) {
-
             ((TameableEntity) livingEntity).tame(castingPlayer);
         }
         livingEntity.absMoveTo(darkAltarPos.getX(), darkAltarPos.getY(), darkAltarPos.getZ(),
                 world.random.nextInt(360), 0);
-        if (spiritName.length() > 0)
-            livingEntity.setCustomName(new StringTextComponent(spiritName));
         if (livingEntity instanceof MobEntity)
             ((MobEntity) livingEntity).finalizeSpawn((ServerWorld) world, world.getCurrentDifficultyAt(darkAltarPos),
                     SpawnReason.MOB_SUMMONED, null,

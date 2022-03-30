@@ -2,6 +2,7 @@ package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.ritual.CraftItemRitual;
+import com.Polarice3.Goety.common.ritual.SummonRitual;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -15,6 +16,14 @@ public class ModRituals {
     public static final RegistryObject<ModRitualFactory> CRAFT_RITUAL =
             RITUALS.register("craft",
                     () -> new ModRitualFactory(CraftItemRitual::new));
+
+    public static final RegistryObject<ModRitualFactory> SUMMON_RITUAL =
+            RITUALS.register("summon",
+                    () -> new ModRitualFactory((ritual) -> new SummonRitual(ritual, false)));
+
+    public static final RegistryObject<ModRitualFactory> SUMMON_TAMED_RITUAL =
+            RITUALS.register("summon_tamed",
+                    () -> new ModRitualFactory((ritual) -> new SummonRitual(ritual, false)));
 
 }
 /*

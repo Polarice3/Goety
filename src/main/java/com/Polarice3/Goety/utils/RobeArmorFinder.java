@@ -39,6 +39,10 @@ public class RobeArmorFinder {
                 livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.NECROARMOREDROBE.get();
     }
 
+    public static boolean FindNecroSet(LivingEntity livingEntity){
+        return FindNecroHelm(livingEntity) && FindNecroArmor(livingEntity);
+    }
+
     public static boolean FindArachnoHelm(LivingEntity livingEntity){
         return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.ARACHNOHELM.get() ||
                 livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.ARACHNOARMOREDHELM.get();
@@ -47,6 +51,10 @@ public class RobeArmorFinder {
     public static boolean FindArachnoArmor(LivingEntity livingEntity){
         return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.ARACHNOROBE.get() ||
                 livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.ARACHNOARMOREDROBE.get();
+    }
+
+    public static boolean FindArachnoSet(LivingEntity livingEntity){
+        return FindArachnoHelm(livingEntity) && FindArachnoArmor(livingEntity);
     }
 
     public static boolean FindBootsofWander(LivingEntity livingEntity){

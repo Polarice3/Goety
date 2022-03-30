@@ -1,12 +1,12 @@
 package com.Polarice3.Goety.common.events;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
+import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
@@ -14,16 +14,15 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
-import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.common.items.SoulWand;
+import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModRegistry;
-import com.Polarice3.Goety.init.ModRitualFactory;
-import com.Polarice3.Goety.init.ModRituals;
 import com.Polarice3.Goety.utils.*;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,7 +48,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -58,12 +56,9 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -187,7 +182,54 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void LivingEffects(LivingEvent.LivingUpdateEvent event){
-
+        LivingEntity livingEntity = event.getEntityLiving();
+        if (livingEntity != null){
+            if (livingEntity.getMobType() == CreatureAttribute.UNDEAD){
+                BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
+                if (blockState.getBlock() instanceof IDeadBlock){
+                    livingEntity.clearFire();
+                }
+            }
+            if (livingEntity instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) livingEntity;
+                World world = player.level;
+                if (RobeArmorFinder.FindNecroSet(player)) {
+                    BlockState blockState = player.level.getBlockState(player.blockPosition().below());
+                    if (!(blockState.getBlock() instanceof IDeadBlock)) {
+                        if (!world.isClientSide && world.isDay()) {
+                            float f = player.getBrightness();
+                            BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                            if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                                player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1));
+                                player.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
+                            }
+                        }
+                    } else {
+                        if (player.hasEffect(Effects.WEAKNESS)) {
+                            player.removeEffect(Effects.WEAKNESS);
+                        }
+                        if (player.hasEffect(Effects.HUNGER)) {
+                            player.removeEffect(Effects.HUNGER);
+                        }
+                    }
+                }
+                if (RobeArmorFinder.FindArachnoSet(player)) {
+                    if (!world.isClientSide) {
+                        if (world.isDay()) {
+                            float f = player.getBrightness();
+                            BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                            if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                                player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 0, false, false));
+                            } else {
+                                player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                            }
+                        } else {
+                            player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -195,7 +237,7 @@ public class ModEvents {
         PlayerEntity player = event.getPlayer();
         if (player.hasEffect(ModRegistry.NOMINE.get())){
             if (event.getState().getMaterial() == Material.STONE && !(event.getState().getBlock() == ModRegistry.GUARDIAN_OBELISK.get())){
-                player.level.playSound(player, event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 event.setCanceled(true);
             }
         }
@@ -256,7 +298,7 @@ public class ModEvents {
     public static void TargetSelection(LivingSetAttackTargetEvent event){
         if (event.getEntityLiving() instanceof SpiderEntity){
             if (event.getTarget() != null) {
-                if (RobeArmorFinder.FindArachnoHelm(event.getTarget()) && RobeArmorFinder.FindArachnoArmor(event.getTarget())) {
+                if (RobeArmorFinder.FindArachnoSet(event.getTarget())) {
                     ((SpiderEntity) event.getEntityLiving()).setTarget(null);
                 }
             }
@@ -305,7 +347,7 @@ public class ModEvents {
         }
         if (killed instanceof BatEntity){
             if (killer instanceof LivingEntity) {
-                if (RobeArmorFinder.FindArachnoHelm((LivingEntity) killer) && RobeArmorFinder.FindArachnoArmor((LivingEntity) killer)) {
+                if (RobeArmorFinder.FindArachnoSet((LivingEntity) killer)) {
                     killed.spawnAtLocation(new ItemStack(ModRegistry.DEADBAT.get()));
                 }
             }
