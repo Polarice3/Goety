@@ -1,7 +1,8 @@
 {
   "name": "Scrying Mirror",
   "icon": "goety:scrying_mirror",
-  "category": "goety:world",
+  "category": "goety:crafts",
+  "sortnum": 0,
   "pages": [
     {
       "type": "patchouli:text",

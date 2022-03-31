@@ -255,8 +255,8 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "creeperling_minion").toString()));
 
-    public static final RegistryObject<EntityType<TamedSpiderEntity>> TAMED_SPIDER = ENTITY_TYPES.register("tamed_spider",
-            () -> EntityType.Builder.of(TamedSpiderEntity::new, EntityClassification.MONSTER)
+    public static final RegistryObject<EntityType<LoyalSpiderEntity>> TAMED_SPIDER = ENTITY_TYPES.register("tamed_spider",
+            () -> EntityType.Builder.of(LoyalSpiderEntity::new, EntityClassification.MONSTER)
                     .sized(1.4F, 0.9F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "tamed_spider").toString()));

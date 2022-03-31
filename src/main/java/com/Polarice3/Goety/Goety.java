@@ -161,7 +161,7 @@ public class Goety {
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());
-        event.put(ModEntityType.TAMED_SPIDER.get(), TamedSpiderEntity.setCustomAttributes().build());
+        event.put(ModEntityType.TAMED_SPIDER.get(), LoyalSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.VIZIER.get(), VizierEntity.setCustomAttributes().build());
         event.put(ModEntityType.IRK.get(), IrkEntity.setCustomAttributes().build());
         event.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());

@@ -1,0 +1,27 @@
+{
+  "name": "Arachnea Robes",
+  "icon": "goety:arachnohelm",
+  "category": "goety:crafts",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Spiders, you love Spiders, hence why you've crafted yourself a specialize Robe set to convey your love for them. The Spiders will see your love for them and will love you back, not attacking you even if you try to murder them!"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:arachnohelm",
+      "text": "The Arachnea Helm allows you to see better in the Dark, but will Blind you in Daylight."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:arachnorobe",
+      "text": "When injured by another creature, a Spiderling will crawl out of your Robe and defend you."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:arachnobootsofwander",
+      "text": "Wearing these specialize boots will cause all your Loyal Spiders to move quickly."
+    }
+  ]
+}

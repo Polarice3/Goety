@@ -1,0 +1,35 @@
+{
+  "name": "Taming Spiders",
+  "icon": "goety:deadbat",
+  "category": "goety:crafts",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:deadbat",
+      "text": "If you were to slay a Bat while wearing both the Helm and Robe, you obtain it's webbed carcass. If you were to feed a Spider with these carcasses, while still wearing the two of course, you would be able to tame one!"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Tamed Spiders, or Loyal Spiders, will come with a Collar that you can dye and can be ordered to sit like a tamed Wolf."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "minecraft:brewing_stand",
+      "text": "Giving Loyal Spiders certain potions gives them some special attributes. A Poison Potion will turn them smaller and weaker, but will give them the ability to imbue poison upon your foes."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A Strength Potion allows them to be ridden like a Horse. A Slow Falling Potion makes them immune to Fall Damage."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:mutatedsteak_uncooked",
+      "text": "If they have less than 25 Hearts (50 Hitpoints) they will grow stronger each time you feed them a Raw Mutated Meat, increasing their Max Health and Attack Damage. The meat also heals 5 Hearts of damage."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Wearing both Helm and Robe also allows your Spider(s) to heal using the Soul Energy from your Totem. If you have multiple Loyal Spiders, feeding them a Carrion Bat will cause them to breed and make a new Loyal Spider. However, when breeding, one of the Spiders will attack on another, dealing a large amount of damage and giving Weakness Effect. Throw a Slowness Potion at them to stop their cannibalism."
+    }
+  ]
+}

@@ -1,21 +1,21 @@
 package com.Polarice3.Goety.client.render.layers;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.entities.ally.TamedSpiderEntity;
+import com.Polarice3.Goety.client.model.LoyalSpiderModel;
+import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.SpiderModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class TamedSpiderCollarLayer <T extends TamedSpiderEntity> extends LayerRenderer<T, SpiderModel<T>> {
+public class LoyalSpiderCollarLayer<T extends LoyalSpiderEntity> extends LayerRenderer<T, LoyalSpiderModel<T>> {
     private static final ResourceLocation COLLAR_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/tamed_spider_collar.png");
 
-    public TamedSpiderCollarLayer(IEntityRenderer<T, SpiderModel<T>> p_i50914_1_) {
+    public LoyalSpiderCollarLayer(IEntityRenderer<T, LoyalSpiderModel<T>> p_i50914_1_) {
         super(p_i50914_1_);
     }
 

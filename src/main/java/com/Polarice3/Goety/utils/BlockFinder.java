@@ -12,7 +12,7 @@ import net.minecraftforge.common.Tags;
 public class BlockFinder {
     public static boolean NotDeadSandImmune(BlockState state, IWorldReader world, BlockPos pos, BlockPos sand){
         return !state.is(ModTags.Blocks.DEAD_SAND_IMMUNE) && state.canOcclude()
-                && state.getMaterial() != Material.AIR && state.getMaterial() != Material.WATER && state.getMaterial() != Material.NETHER_WOOD
+                && state.getMaterial() != Material.AIR && state.getMaterial() != Material.NETHER_WOOD
                 && state.getMaterial() != Material.LAVA;
     }
 

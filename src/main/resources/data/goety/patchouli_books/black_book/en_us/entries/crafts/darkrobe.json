@@ -1,0 +1,27 @@
+{
+  "name": "Dark Robes",
+  "icon": "goety:darkhelm",
+  "category": "goety:crafts",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Evokers wear such snazzy robes, that you wonder if they're just for show or there's something special about them. By utilizing Dark and Magic Fabrics, you've managed to not only replicate their Robes, but also make some new additions, and discover they hold some special properties."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:darkhelm",
+      "text": "The Robe's helm helps you focus on your spells, reducing the time needed to cast them."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:darkrobe",
+      "text": "The Robes worn by Evokers help channel their magic more efficiently, utilizing half of the Soul Cost needed to cast the spell."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:darkleggings",
+      "text": "The Leggings seemed to provide nothing at first, but when summoning minions, you've noticed how at times you are not inflicted by the Summon Down effect."
+    }
+  ]
+}

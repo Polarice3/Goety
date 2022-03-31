@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
@@ -190,7 +191,7 @@ public class ZombieMinionEntity extends SummonedEntity {
                     double d0 = this.random.nextGaussian() * 0.02D;
                     double d1 = this.random.nextGaussian() * 0.02D;
                     double d2 = this.random.nextGaussian() * 0.02D;
-                    this.level.addParticle(ParticleTypes.HEART, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    this.level.addParticle(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
                 }
                 return ActionResultType.CONSUME;
             }

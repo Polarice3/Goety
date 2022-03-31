@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -45,20 +46,21 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
-    protected static final DataParameter<Byte> STATUS = EntityDataManager.defineId(TamedSpiderEntity.class, DataSerializers.BYTE);
-    protected static final DataParameter<Byte> SITTING = EntityDataManager.defineId(TamedSpiderEntity.class, DataSerializers.BYTE);
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(TamedSpiderEntity.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(TamedSpiderEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> DATA_COLLAR_COLOR = EntityDataManager.defineId(TamedSpiderEntity.class, DataSerializers.INT);
+public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
+    protected static final DataParameter<Byte> STATUS = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> SITTING = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
+    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.OPTIONAL_UUID);
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> DATA_COLLAR_COLOR = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.INT);
     private boolean sitting;
     public boolean poison;
     public boolean rideable;
     public boolean fallImmune;
+    public boolean saddled;
     protected boolean Jumping;
     protected float jumpPower;
 
-    public TamedSpiderEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
+    public LoyalSpiderEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -89,7 +91,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         }
         if (MainConfig.TamedSpiderHeal.get() && this.getHealth() < this.getMaxHealth()){
             if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
-                if (RobeArmorFinder.FindArachnoArmor(this.getTrueOwner())) {
+                if (RobeArmorFinder.FindArachnoSet(this.getTrueOwner())) {
                     PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                     ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
                     if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
@@ -204,6 +206,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
             compound.putUUID("Owner", this.getOwnerId());
         }
         compound.putBoolean("Sitting", this.isSitting());
+        compound.putBoolean("Saddled", this.isSaddled());
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -212,6 +215,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.rideable = compound.getBoolean("Rideable");
         this.sitting = compound.getBoolean("Sitting");
         this.fallImmune = compound.getBoolean("FallImmune");
+        this.saddled = compound.getBoolean("Saddled");
         UUID uuid;
         if (compound.hasUUID("Owner")) {
             uuid = compound.getUUID("Owner");
@@ -233,6 +237,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.setRideable(this.rideable);
         this.setPoison(this.poison);
         this.setFallImmune(this.fallImmune);
+        this.setSaddled(this.saddled);
     }
 
     private boolean getStatusFlag(int mask) {
@@ -422,6 +427,14 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.setStatusFlag(4, fallImmune);
     }
 
+    public boolean isSaddled() {
+        return this.getStatusFlag(8);
+    }
+
+    public void setSaddled(boolean saddled) {
+        this.setStatusFlag(8, saddled);
+    }
+
     public DyeColor getCollarColor() {
         return DyeColor.byId(this.entityData.get(DATA_COLLAR_COLOR));
     }
@@ -439,20 +452,20 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
-        TamedSpiderEntity partner = (TamedSpiderEntity) p_241840_2_;
-        TamedSpiderEntity tamedSpiderEntity = new TamedSpiderEntity(ModEntityType.TAMED_SPIDER.get(), p_241840_1_);
+        LoyalSpiderEntity partner = (LoyalSpiderEntity) p_241840_2_;
+        LoyalSpiderEntity loyalSpiderEntity = new LoyalSpiderEntity(ModEntityType.TAMED_SPIDER.get(), p_241840_1_);
         UUID uuid = this.getOwnerId();
         if (uuid != null) {
-            tamedSpiderEntity.setOwnerId(uuid);
+            loyalSpiderEntity.setOwnerId(uuid);
         }
         if (this.isPoison() || partner.isPoison()){
-            tamedSpiderEntity.setPoison(true);
+            loyalSpiderEntity.setPoison(true);
         }
         if (this.isFallImmune() || partner.isFallImmune()){
-            tamedSpiderEntity.setFallImmune(true);
+            loyalSpiderEntity.setFallImmune(true);
         }
 
-        return tamedSpiderEntity;
+        return loyalSpiderEntity;
     }
 
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
@@ -490,6 +503,13 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         return item == ModRegistry.DEADBAT.get();
     }
 
+    public void die(DamageSource cause) {
+        if (this.isSaddled()){
+            this.spawnAtLocation(new ItemStack(Items.SADDLE));
+        }
+        super.die(cause);
+    }
+
     public ActionResultType mobInteract(PlayerEntity pPlayer, Hand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         Item item = itemstack.getItem();
@@ -509,7 +529,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
-                new ParticleUtil(ParticleTypes.HEART, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+                new ParticleUtil(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
             }
             if (this.isBaby()) {
                 this.usePlayerItem(pPlayer, itemstack);
@@ -589,77 +609,91 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
                 return ActionResultType.PASS;
             }
         }
-        if (this.isRideable() && !pPlayer.isCrouching() && pPlayer.getMainHandItem().getItem() == Items.AIR){
+        if (item instanceof SaddleItem) {
+            if (!this.isSaddled() && this.isRideable() && !this.isBaby()) {
+                this.setSaddled(true);
+                if (!pPlayer.abilities.instabuild) {
+                    itemstack.shrink(1);
+                }
+                return ActionResultType.SUCCESS;
+            } else {
+                return ActionResultType.PASS;
+            }
+        }
+        if (this.isRideable() && this.isSaddled() && !pPlayer.isCrouching() && pPlayer.getMainHandItem().getItem() == Items.AIR){
             this.doPlayerRide(pPlayer);
             this.setSitting(false);
         } else {
             this.setSitting(!this.isSitting());
+            this.jumping = false;
+            this.navigation.stop();
+            this.setTarget((LivingEntity) null);
+            return ActionResultType.SUCCESS;
         }
-        this.jumping = false;
-        this.navigation.stop();
-        this.setTarget((LivingEntity) null);
         return ActionResultType.SUCCESS;
     }
 
     public void travel(Vector3d pTravelVector) {
         if (this.isAlive()) {
-            if (this.isVehicle() && this.canBeControlledByRider()) {
-                LivingEntity livingentity = (LivingEntity)this.getControllingPassenger();
-                assert livingentity != null;
-                this.yRot = livingentity.yRot;
-                this.yRotO = this.yRot;
-                this.xRot = livingentity.xRot * 0.5F;
-                this.setRot(this.yRot, this.xRot);
-                this.yBodyRot = this.yRot;
-                this.yHeadRot = this.yBodyRot;
-                float f = livingentity.xxa * 0.5F;
-                float f1 = livingentity.zza;
-                if (f1 <= 0.0F) {
-                    f1 *= 0.25F;
-                }
-
-                if (this.jumpPower > 0.0F && !this.isJumping() && this.onGround) {
-                    double d0 = this.getCustomJump() * (double)this.jumpPower * (double)this.getBlockJumpFactor();
-                    double d1;
-                    if (this.hasEffect(Effects.JUMP)) {
-                        d1 = d0 + (double)((float)(Objects.requireNonNull(this.getEffect(Effects.JUMP)).getAmplifier() + 1) * 0.1F);
-                    } else {
-                        d1 = d0;
+            if (!this.isSitting()) {
+                if (this.isVehicle() && this.canBeControlledByRider()) {
+                    LivingEntity livingentity = (LivingEntity) this.getControllingPassenger();
+                    assert livingentity != null;
+                    this.yRot = livingentity.yRot;
+                    this.yRotO = this.yRot;
+                    this.xRot = livingentity.xRot * 0.5F;
+                    this.setRot(this.yRot, this.xRot);
+                    this.yBodyRot = this.yRot;
+                    this.yHeadRot = this.yBodyRot;
+                    float f = livingentity.xxa * 0.5F;
+                    float f1 = livingentity.zza;
+                    if (f1 <= 0.0F) {
+                        f1 *= 0.25F;
                     }
 
-                    Vector3d vector3d = this.getDeltaMovement();
-                    this.setDeltaMovement(vector3d.x, d1, vector3d.z);
-                    this.setJumping(true);
-                    this.hasImpulse = true;
-                    net.minecraftforge.common.ForgeHooks.onLivingJump(this);
-                    if (f1 > 0.0F) {
-                        float f2 = MathHelper.sin(this.yRot * ((float)Math.PI / 180F));
-                        float f3 = MathHelper.cos(this.yRot * ((float)Math.PI / 180F));
-                        this.setDeltaMovement(this.getDeltaMovement().add((double)(-0.4F * f2 * this.jumpPower), 0.0D, (double)(0.4F * f3 * this.jumpPower)));
+                    if (this.jumpPower > 0.0F && !this.isJumping() && this.onGround) {
+                        double d0 = this.getCustomJump() * (double) this.jumpPower * (double) this.getBlockJumpFactor();
+                        double d1;
+                        if (this.hasEffect(Effects.JUMP)) {
+                            d1 = d0 + (double) ((float) (Objects.requireNonNull(this.getEffect(Effects.JUMP)).getAmplifier() + 1) * 0.1F);
+                        } else {
+                            d1 = d0;
+                        }
+
+                        Vector3d vector3d = this.getDeltaMovement();
+                        this.setDeltaMovement(vector3d.x, d1, vector3d.z);
+                        this.setJumping(true);
+                        this.hasImpulse = true;
+                        net.minecraftforge.common.ForgeHooks.onLivingJump(this);
+                        if (f1 > 0.0F) {
+                            float f2 = MathHelper.sin(this.yRot * ((float) Math.PI / 180F));
+                            float f3 = MathHelper.cos(this.yRot * ((float) Math.PI / 180F));
+                            this.setDeltaMovement(this.getDeltaMovement().add((double) (-0.4F * f2 * this.jumpPower), 0.0D, (double) (0.4F * f3 * this.jumpPower)));
+                        }
+
+                        this.jumpPower = 0.0F;
                     }
 
-                    this.jumpPower = 0.0F;
-                }
+                    this.flyingSpeed = this.getSpeed() * 0.1F;
+                    if (this.isControlledByLocalInstance()) {
+                        this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                        super.travel(new Vector3d(f, pTravelVector.y, f1));
+                        this.lerpSteps = 0;
+                        this.setClimbing(this.horizontalCollision);
+                    } else if (livingentity instanceof PlayerEntity) {
+                        this.setDeltaMovement(Vector3d.ZERO);
+                    }
 
-                this.flyingSpeed = this.getSpeed() * 0.1F;
-                if (this.isControlledByLocalInstance()) {
-                    this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    super.travel(new Vector3d(f, pTravelVector.y, f1));
-                    this.lerpSteps = 0;
-                    this.setClimbing(this.horizontalCollision);
-                } else if (livingentity instanceof PlayerEntity) {
-                    this.setDeltaMovement(Vector3d.ZERO);
-                }
+                    if (this.onGround) {
+                        this.jumpPower = 0.0F;
+                        this.setJumping(false);
+                    }
 
-                if (this.onGround) {
-                    this.jumpPower = 0.0F;
-                    this.setJumping(false);
+                    this.calculateEntityAnimation(this, false);
+                } else {
+                    this.flyingSpeed = 0.02F;
+                    super.travel(pTravelVector);
                 }
-
-                this.calculateEntityAnimation(this, false);
-            } else {
-                this.flyingSpeed = 0.02F;
-                super.travel(pTravelVector);
             }
         }
     }
@@ -695,9 +729,9 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
     }
 
     public class SitGoal extends Goal {
-        private final TamedSpiderEntity tamedSpider;
+        private final LoyalSpiderEntity tamedSpider;
 
-        public SitGoal(TamedSpiderEntity entityIn) {
+        public SitGoal(LoyalSpiderEntity entityIn) {
             this.tamedSpider = entityIn;
             this.setFlags(EnumSet.of(Flag.JUMP, Flag.MOVE));
         }
@@ -735,13 +769,13 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         private LivingEntity attacker;
         private int timestamp;
 
-        public OwnerHurtTargetGoal(TamedSpiderEntity tamedSpiderEntity) {
-            super(tamedSpiderEntity, false);
+        public OwnerHurtTargetGoal(LoyalSpiderEntity loyalSpiderEntity) {
+            super(loyalSpiderEntity, false);
             this.setFlags(EnumSet.of(Flag.TARGET));
         }
 
         public boolean canUse() {
-            LivingEntity livingentity = TamedSpiderEntity.this.getTrueOwner();
+            LivingEntity livingentity = LoyalSpiderEntity.this.getTrueOwner();
             if (livingentity == null) {
                 return false;
             } else {
@@ -753,7 +787,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
 
         public void start() {
             this.mob.setTarget(this.attacker);
-            LivingEntity livingentity = TamedSpiderEntity.this.getTrueOwner();
+            LivingEntity livingentity = LoyalSpiderEntity.this.getTrueOwner();
             if (livingentity != null) {
                 this.timestamp = livingentity.getLastHurtMobTimestamp();
             }
@@ -766,13 +800,13 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         private LivingEntity attacker;
         private int timestamp;
 
-        public OwnerHurtByTargetGoal(TamedSpiderEntity tamedSpiderEntity) {
-            super(tamedSpiderEntity, false);
+        public OwnerHurtByTargetGoal(LoyalSpiderEntity loyalSpiderEntity) {
+            super(loyalSpiderEntity, false);
             this.setFlags(EnumSet.of(Flag.TARGET));
         }
 
         public boolean canUse() {
-            LivingEntity livingentity = TamedSpiderEntity.this.getTrueOwner();
+            LivingEntity livingentity = LoyalSpiderEntity.this.getTrueOwner();
             if (livingentity == null) {
                 return false;
             } else {
@@ -784,7 +818,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
 
         public void start() {
             this.mob.setTarget(this.attacker);
-            LivingEntity livingentity = TamedSpiderEntity.this.getTrueOwner();
+            LivingEntity livingentity = LoyalSpiderEntity.this.getTrueOwner();
             if (livingentity != null) {
                 this.timestamp = livingentity.getLastHurtByMobTimestamp();
             }
@@ -794,7 +828,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
     }
 
     public static class FollowOwnerGoal extends Goal {
-        private final TamedSpiderEntity tamedSpiderEntity;
+        private final LoyalSpiderEntity loyalSpiderEntity;
         private LivingEntity owner;
         private final IWorldReader level;
         private final double followSpeed;
@@ -805,31 +839,27 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
         private float oldWaterCost;
         private final boolean teleportToLeaves;
 
-        public FollowOwnerGoal(TamedSpiderEntity tamedSpiderEntity, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
-            this.tamedSpiderEntity = tamedSpiderEntity;
-            this.level = tamedSpiderEntity.level;
+        public FollowOwnerGoal(LoyalSpiderEntity loyalSpiderEntity, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
+            this.loyalSpiderEntity = loyalSpiderEntity;
+            this.level = loyalSpiderEntity.level;
             this.followSpeed = speed;
-            this.navigation = tamedSpiderEntity.getNavigation();
+            this.navigation = loyalSpiderEntity.getNavigation();
             this.minDist = minDist;
             this.maxDist = maxDist;
             this.teleportToLeaves = teleportToLeaves;
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-            if (!(tamedSpiderEntity.getNavigation() instanceof GroundPathNavigator) && !(tamedSpiderEntity.getNavigation() instanceof FlyingPathNavigator)) {
+            if (!(loyalSpiderEntity.getNavigation() instanceof GroundPathNavigator) && !(loyalSpiderEntity.getNavigation() instanceof FlyingPathNavigator)) {
                 throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
             }
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
-            LivingEntity livingentity = this.tamedSpiderEntity.getTrueOwner();
+            LivingEntity livingentity = this.loyalSpiderEntity.getTrueOwner();
             if (livingentity == null) {
                 return false;
             } else if (livingentity.isSpectator()) {
                 return false;
-            } else if (this.tamedSpiderEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
+            } else if (this.loyalSpiderEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
                 return false;
             } else {
                 this.owner = livingentity;
@@ -837,35 +867,32 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
             }
         }
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
         public boolean canContinueToUse() {
             if (this.navigation.isDone()) {
                 return false;
             } else {
-                return !(this.tamedSpiderEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));
+                return !(this.loyalSpiderEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));
             }
         }
 
         public void start() {
             this.timeToRecalcPath = 0;
-            this.oldWaterCost = this.tamedSpiderEntity.getPathfindingMalus(PathNodeType.WATER);
-            this.tamedSpiderEntity.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+            this.oldWaterCost = this.loyalSpiderEntity.getPathfindingMalus(PathNodeType.WATER);
+            this.loyalSpiderEntity.setPathfindingMalus(PathNodeType.WATER, 0.0F);
         }
 
         public void stop() {
             this.owner = null;
             this.navigation.stop();
-            this.tamedSpiderEntity.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
+            this.loyalSpiderEntity.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
         }
 
         public void tick() {
-            this.tamedSpiderEntity.getLookControl().setLookAt(this.owner, 10.0F, (float)this.tamedSpiderEntity.getMaxHeadXRot());
+            this.loyalSpiderEntity.getLookControl().setLookAt(this.owner, 10.0F, (float)this.loyalSpiderEntity.getMaxHeadXRot());
             if (--this.timeToRecalcPath <= 0) {
                 this.timeToRecalcPath = 10;
-                if (!this.tamedSpiderEntity.isLeashed() && !this.tamedSpiderEntity.isPassenger()) {
-                    if (this.tamedSpiderEntity.distanceToSqr(this.owner) >= 144.0D) {
+                if (!this.loyalSpiderEntity.isLeashed() && !this.loyalSpiderEntity.isPassenger()) {
+                    if (this.loyalSpiderEntity.distanceToSqr(this.owner) >= 144.0D) {
                         this.tryToTeleportNearEntity();
                     } else {
                         this.navigation.moveTo(this.owner, this.followSpeed);
@@ -896,7 +923,7 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
             } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
                 return false;
             } else {
-                this.tamedSpiderEntity.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tamedSpiderEntity.yRot, this.tamedSpiderEntity.xRot);
+                this.loyalSpiderEntity.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.loyalSpiderEntity.yRot, this.loyalSpiderEntity.xRot);
                 this.navigation.stop();
                 return true;
             }
@@ -911,14 +938,14 @@ public class TamedSpiderEntity extends AnimalEntity implements IJumpingMount{
                 if (!this.teleportToLeaves && blockstate.getBlock() instanceof LeavesBlock) {
                     return false;
                 } else {
-                    BlockPos blockpos = pos.subtract(this.tamedSpiderEntity.blockPosition());
-                    return this.level.noCollision(this.tamedSpiderEntity, this.tamedSpiderEntity.getBoundingBox().move(blockpos));
+                    BlockPos blockpos = pos.subtract(this.loyalSpiderEntity.blockPosition());
+                    return this.level.noCollision(this.loyalSpiderEntity, this.loyalSpiderEntity.getBoundingBox().move(blockpos));
                 }
             }
         }
 
         private int getRandomNumber(int min, int max) {
-            return this.tamedSpiderEntity.getRandom().nextInt(max - min + 1) + min;
+            return this.loyalSpiderEntity.getRandom().nextInt(max - min + 1) + min;
         }
     }
 }

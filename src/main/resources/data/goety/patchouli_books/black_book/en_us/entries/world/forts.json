@@ -1,0 +1,20 @@
+{
+  "name": "Decrepit Forts",
+  "icon": "minecraft:mossy_cobblestone",
+  "category": "goety:world",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "In ancient times these Fortresses were manned by what you presume to be the same beings that build other ruined structures across the lands, now they are haunted by the dead and/or infested with Spiders."
+    },
+    {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/decrepit_fort.png"],
+      "border": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "However, you hear whispers that some forts have been repurposed by other beings. Who or what would be using these forts for?"
+    }
+  ]
+}

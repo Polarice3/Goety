@@ -5,13 +5,18 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.common.items.*;
-import com.Polarice3.Goety.common.potions.*;
+import com.Polarice3.Goety.common.potions.CosmicEffect;
+import com.Polarice3.Goety.common.potions.IllagueEffect;
+import com.Polarice3.Goety.common.potions.ModEffects;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.SimpleFoiledItem;
+import net.minecraft.item.TallBlockItem;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.common.ToolType;
@@ -80,7 +85,6 @@ public class ModRegistry {
     public static final RegistryObject<Item> SCRYING_MIRROR = ITEMS.register("scrying_mirror", ScryingMirrorItem::new);
     public static final RegistryObject<Item> TREASURE_POUCH = ITEMS.register("treasure_pouch", TreasurePouchItem::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
-
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));
@@ -175,7 +179,6 @@ public class ModRegistry {
     public static final RegistryObject<Block> PEDESTAL = BLOCKS.register("pedestal", PedestalBlock::new);
     public static final RegistryObject<Block> DEAD_SAND = BLOCKS.register("dead_sand", DeadSandBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE = BLOCKS.register("dead_sandstone", DeadSandStoneBlock::new);
-
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
 

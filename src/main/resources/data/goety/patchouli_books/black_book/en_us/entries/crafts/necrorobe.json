@@ -1,0 +1,31 @@
+{
+  "name": "Necro Robes",
+  "icon": "goety:necrohelm",
+  "category": "goety:crafts",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The power of commanding Zombies and Skeletons sounds wonderful, but with the use of Necro Robes, your Necroturgic abilities enhance even further."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:necrohelm",
+      "text": "The Necro Helm keeps your undead horde from decaying like Vexes."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:necrorobe",
+      "text": "The Necro Robe increases your Necroturgic power, Skeletons would occasionally shoot Weakness Arrows, and Zombies will turn natural Zombies into more Servants that obeys you."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:necrobootsofwander",
+      "text": "Wearing these specialize boots will cause all your Undead Servants to move far more quickly."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Such wonderful caveats comes with a price however. Wearing both a Necro Helm and Robe will cause you to become more closer to the Undead. The Sun will not burn you for you are still alive, but it will weaken cause you to go hungry."
+    }
+  ]
+}

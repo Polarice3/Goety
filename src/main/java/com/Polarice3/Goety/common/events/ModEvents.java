@@ -190,45 +190,6 @@ public class ModEvents {
                     livingEntity.clearFire();
                 }
             }
-            if (livingEntity instanceof PlayerEntity) {
-                PlayerEntity player = (PlayerEntity) livingEntity;
-                World world = player.level;
-                if (RobeArmorFinder.FindNecroSet(player)) {
-                    BlockState blockState = player.level.getBlockState(player.blockPosition().below());
-                    if (!(blockState.getBlock() instanceof IDeadBlock)) {
-                        if (!world.isClientSide && world.isDay()) {
-                            float f = player.getBrightness();
-                            BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                            if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                                player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1));
-                                player.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
-                            }
-                        }
-                    } else {
-                        if (player.hasEffect(Effects.WEAKNESS)) {
-                            player.removeEffect(Effects.WEAKNESS);
-                        }
-                        if (player.hasEffect(Effects.HUNGER)) {
-                            player.removeEffect(Effects.HUNGER);
-                        }
-                    }
-                }
-                if (RobeArmorFinder.FindArachnoSet(player)) {
-                    if (!world.isClientSide) {
-                        if (world.isDay()) {
-                            float f = player.getBrightness();
-                            BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                            if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                                player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 0, false, false));
-                            } else {
-                                player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
-                            }
-                        } else {
-                            player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -250,6 +211,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerEquipment(TickEvent.PlayerTickEvent event){
         PlayerEntity player = event.player;
+        World world = player.level;
         if (KeyPressed.openWandandBag() && player.getMainHandItem().getItem() instanceof SoulWand){
             SoulWand.BagonKeyPressed(player.getMainHandItem(), player);
         }
@@ -264,6 +226,41 @@ public class ModEvents {
         }
         if (player.hasEffect(ModRegistry.LAUNCH.get())){
             player.setDeltaMovement(player.getDeltaMovement().add(0, 1, 0));
+        }
+        if (RobeArmorFinder.FindNecroSet(player)) {
+            BlockState blockState = player.level.getBlockState(player.blockPosition().below());
+            if (!(blockState.getBlock() instanceof IDeadBlock)) {
+                if (!world.isClientSide && world.isDay()) {
+                    float f = player.getBrightness();
+                    BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                    if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                        player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1));
+                        player.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
+                    }
+                }
+            } else {
+                if (player.hasEffect(Effects.WEAKNESS)) {
+                    player.removeEffect(Effects.WEAKNESS);
+                }
+                if (player.hasEffect(Effects.HUNGER)) {
+                    player.removeEffect(Effects.HUNGER);
+                }
+            }
+        }
+        if (RobeArmorFinder.FindArachnoHelm(player)) {
+            if (!world.isClientSide) {
+                if (world.isDay()) {
+                    float f = player.getBrightness();
+                    BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                    if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                        player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 0, false, false));
+                    } else {
+                        player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                    }
+                } else {
+                    player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                }
+            }
         }
     }
 

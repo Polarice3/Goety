@@ -1,9 +1,9 @@
 {
   "name": "Dead Sand Research",
   "icon": "goety:dead_sandstone",
-  "category": "goety:rituals",
+  "category": "goety:crafts",
   "advancement": "goety:goety/craft_dead_sand",
-  "sortnum": 5,
+  "sortnum": 6,
   "pages": [
     {
       "type": "patchouli:text",
@@ -13,6 +13,10 @@
       "type": "patchouli:spotlight",
       "item": "goety:dead_sandstone",
       "text": "However, not every Block is converted to Dead Sand. It seems that in the text, the people constructed a Wall using only Cobblestone and Wooden Planks to halt the spread of the Sands. It also mentions how the Sand doesn't convert non-full blocks."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "You found that when an Undead Creature stands upon this odd Sand, they will no longer burn under the heat of the Sun. This also applies to any Undead Minions you've conjured up. In fact, the negative effects of wearing full Necro Robes in daylight are negated when standing on the Sands as well."
     },
     {
       "type": "patchouli:text",

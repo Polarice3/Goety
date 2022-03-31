@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.entities.ally.TamedSpiderEntity;
+import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.LivingEntity;
@@ -49,7 +49,7 @@ public class DeadBatItem extends Item {
                 if (!world.isClientSide && target.isAlive()) {
                     if (random == 0){
                         target.remove();
-                        TamedSpiderEntity tamedSpider = new TamedSpiderEntity(ModEntityType.TAMED_SPIDER.get(), world);
+                        LoyalSpiderEntity tamedSpider = new LoyalSpiderEntity(ModEntityType.TAMED_SPIDER.get(), world);
                         tamedSpider.moveTo(target.getX(), target.getY(), target.getZ(), target.yRot, target.xRot);
                         tamedSpider.setNoAi(((SpiderEntity) target).isNoAi());
                         if (target.hasCustomName()) {

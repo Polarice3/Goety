@@ -115,7 +115,7 @@ public class SummonedEntity extends CreatureEntity {
                 if (!this.isOnFire()) {
                     if (MainConfig.UndeadMinionHeal.get() && this.getHealth() < this.getMaxHealth()) {
                         if (this.getTrueOwner() instanceof PlayerEntity) {
-                            if (RobeArmorFinder.FindNecroArmor(this.getTrueOwner())) {
+                            if (RobeArmorFinder.FindNecroSet(this.getTrueOwner())) {
                                 PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                                 ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
                                 if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {

@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Summons Spiderlings that will hunt down any hostile creatures near it."
+      "text": "This focus will summon Spiderlings that will hunt down any hostile creatures near it. In spite of the name, Spiderlings are actually small fully grown Spiders, so don't think you're sending a large amount of babies to the grave."
     },
     {
       "type": "patchouli:crafting",

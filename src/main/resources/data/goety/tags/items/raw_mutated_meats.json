@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "goety:mutatedsteak_uncooked",
+    "goety:mutatedchicken_uncooked",
+    "goety:mutatedmutton_uncooked",
+    "goety:mutatedporkchop_uncooked",
+    "goety:mutatedrabbit_uncooked"
+  ]
+}
