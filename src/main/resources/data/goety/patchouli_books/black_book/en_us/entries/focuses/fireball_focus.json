@@ -1,0 +1,13 @@
+{
+  "name": "Fireball Focus",
+  "icon": "goety:fireballfocus",
+  "category": "goety:focuses",
+  "advancement": "goety:goety/read_nether_book",
+  "secret": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The power of the Blazes are now at your finger tip. No longer will you need to use a Dispenser and Fire Charges, now you can be the Dispenser!"
+    }
+  ]
+}

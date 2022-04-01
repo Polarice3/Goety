@@ -25,6 +25,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -241,6 +242,17 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
                     }
 
+                    if (recipe.getCraftType().contains("adept_nether")){
+                        if (!this.level.dimensionType().ultraWarm()) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
                 } else {
                     if (this.level.getGameTime() % 20 == 0) {
                         double d0 = (double) this.worldPosition.getX() + this.level.random.nextDouble();
@@ -287,9 +299,19 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     ).findFirst().orElse(null);
 
                     if (ritualRecipe != null) {
-                        if (ritualRecipe.getRitual().isValid(world, pos, this, player, activationItem,
-                                ritualRecipe.getIngredients())) {
-                            this.startRitual(player, activationItem, ritualRecipe);
+                        if (ritualRecipe.getRitual().isValid(world, pos, this, player, activationItem, ritualRecipe.getIngredients())) {
+                            if (ritualRecipe.getCraftType().contains("adept_nether")){
+                                CompoundNBT playerData = player.getPersistentData();
+                                CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+                                if (data.getBoolean("goety:readNetherBook")){
+                                    this.startRitual(player, activationItem, ritualRecipe);
+                                } else {
+                                    player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.fail"), true);
+                                    return false;
+                                }
+                            } else {
+                                this.startRitual(player, activationItem, ritualRecipe);
+                            }
                         } else {
                             return false;
                         }

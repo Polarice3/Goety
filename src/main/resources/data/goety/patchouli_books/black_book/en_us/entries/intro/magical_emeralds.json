@@ -2,7 +2,7 @@
   "name": "Magical Emeralds",
   "icon": "minecraft:emerald",
   "category": "goety:intro",
-  "sortnum": 2,
+  "sortnum": 3,
   "pages": [
     {
       "type": "patchouli:text",

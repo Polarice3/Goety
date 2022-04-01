@@ -6,6 +6,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 
 public class RobeArmorFinder {
+    public static boolean FindAnySet(LivingEntity livingEntity){
+        return FindHelm(livingEntity) && FindArmor(livingEntity);
+    }
+
     public static boolean FindHelm(LivingEntity livingEntity){
         return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.DARKHELM.get() ||
                 livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.DARKARMOREDHELM.get() ||

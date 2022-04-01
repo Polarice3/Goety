@@ -39,6 +39,10 @@ public class CastSpells {
                 return new CreeperlingSpell();
             case 14:
                 return new BreathSpell();
+            case 15:
+                return new FireballSpell();
+            case 16:
+                return new LavaballSpell();
             default:
                 return null;
         }

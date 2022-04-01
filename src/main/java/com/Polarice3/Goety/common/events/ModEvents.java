@@ -19,10 +19,13 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.WebBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.merchant.IReputationType;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,6 +43,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.village.GossipManager;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -218,6 +222,15 @@ public class ModEvents {
         if (KeyPressed.openWand() && player.getMainHandItem().getItem() instanceof SoulWand){
             SoulWand.onKeyPressed(player.getMainHandItem(), player);
         }
+        if (MainConfig.VillagerHate.get()) {
+            if (RobeArmorFinder.FindAnySet(player)) {
+                for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
+                    if (villager.getPlayerReputation(player) > -25 && villager.getPlayerReputation(player) < 100) {
+                        villager.onReputationEventFrom(IReputationType.VILLAGER_HURT, player);
+                    }
+                }
+            }
+        }
         if (RobeArmorFinder.FindBootsofWander(player)){
             FluidState fluidstate = player.level.getFluidState(player.blockPosition());
             if (player.isInWater() && player.isAffectedByFluids() && !player.canStandOnFluid(fluidstate.getType()) && !player.hasEffect(Effects.DOLPHINS_GRACE)){
@@ -225,7 +238,7 @@ public class ModEvents {
             }
         }
         if (player.hasEffect(ModRegistry.LAUNCH.get())){
-            player.setDeltaMovement(player.getDeltaMovement().add(0, 1, 0));
+            player.setDeltaMovement(player.getDeltaMovement().add(0, 0.75, 0));
         }
         if (RobeArmorFinder.FindNecroSet(player)) {
             BlockState blockState = player.level.getBlockState(player.blockPosition().below());

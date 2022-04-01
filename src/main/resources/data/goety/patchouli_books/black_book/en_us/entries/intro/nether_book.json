@@ -1,0 +1,27 @@
+{
+  "name": "Liber Barathrum",
+  "icon": "goety:nether_book",
+  "category": "goety:intro",
+  "advancement": "goety:goety/read_nether_book",
+  "secret": true,
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You've managed to transcribe the Unholy book of those Cultists. Apparently they call themselves 'The Sharmat' or the Awakened, and this is but one of the many copies of the original Liber Barathrum."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:nether_book",
+      "text": "The book was penned by the Sharmat's Prophet, an individual known as 'Scirpan', who used to be a regular Villager who came across a Ruined Portal one day and drank the dripping liquid fallen from a Crying Obsidian."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The liquid seemed to have given him visions and revelations of the Nether, or what the Sharmat calls, The Great Flame. They would penned down said revelations and even detailed some of their exploits after obtaining them."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "These scriptures would help you understand more on the Nether, and most importantly, on the magics that lay there."
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.inventory.container.SoulItemContainer;
 import com.Polarice3.Goety.client.inventory.container.WandandBagContainer;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
@@ -12,6 +13,8 @@ import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.IReputationType;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -24,6 +27,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -243,6 +247,12 @@ public class SoulWand extends Item{
         } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("breath")) {
             this.setSpellConditions(new BreathSpell(), itemStack);
             this.setSpell(14, itemStack);
+        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("fireball")) {
+            this.setSpellConditions(new FireballSpell(), itemStack);
+            this.setSpell(15, itemStack);
+        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("lavaball")) {
+            this.setSpellConditions(new LavaballSpell(), itemStack);
+            this.setSpell(16, itemStack);
         }
     }
 
@@ -306,6 +316,11 @@ public class SoulWand extends Item{
             GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
             assert stack.getTag() != null;
             this.getSpell(stack).WandResult(worldIn, entityLiving);
+            if (MainConfig.VillagerHateSpells.get() > 0){
+                for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                    villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                }
+            }
         } else {
             worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.items;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.ImmutableMultimap;
@@ -8,12 +9,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
 
 public class SoulStaff extends SoulWand{
@@ -37,6 +40,11 @@ public class SoulStaff extends SoulWand{
         if (this.getSpell(stack) != null && !foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)) {
             GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
             this.getSpell(stack).StaffResult(worldIn, entityLiving);
+            if (MainConfig.VillagerHateSpells.get() > 0){
+                for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                    villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                }
+            }
         } else {
             worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

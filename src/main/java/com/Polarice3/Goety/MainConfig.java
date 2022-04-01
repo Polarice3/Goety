@@ -27,6 +27,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FireballCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LavaballCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -41,6 +43,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
@@ -57,6 +60,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FireballInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -105,6 +110,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
@@ -127,6 +133,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
+
+    public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
@@ -209,6 +217,10 @@ public class MainConfig {
                 .defineInRange("creeperlingCost", 8, 0, Integer.MAX_VALUE);
         BreathingCost = BUILDER.comment("Breathing Spell Cost per second, Default: 2")
                 .defineInRange("breathingCost", 2, 0, Integer.MAX_VALUE);
+        FireballCost = BUILDER.comment("Fireball Spell Cost, Default: 4")
+                .defineInRange("fireballCost", 4, 0, Integer.MAX_VALUE);
+        LavaballCost = BUILDER.comment("Lava Bomb Spell Cost, Default: 16")
+                .defineInRange("lavaBombCost", 16, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -237,6 +249,8 @@ public class MainConfig {
                 .defineInRange("creeperlingTime", 10, 0, 72000);
         BreathingDuration = BUILDER.comment("Time to cast Breathing Spell per second, Default: 10")
                 .defineInRange("breathingTime", 10, 0, 72000);
+        LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 30")
+                .defineInRange("lavaBombTime", 30, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
@@ -325,6 +339,10 @@ public class MainConfig {
                 .defineInRange("creeperlingInfamyChance", 128, 0, Integer.MAX_VALUE);
         BreathingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Breathing Spell per second, Default: 0")
                 .defineInRange("breathingInfamyChance", 0, 0, Integer.MAX_VALUE);
+        FireballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fireball Spell, Default: 0")
+                .defineInRange("fireballInfamyChance", 0, 0, Integer.MAX_VALUE);
+        LavaballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Lava Bomb Spell, Default: 0")
+                .defineInRange("lavaBombInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")
@@ -354,9 +372,9 @@ public class MainConfig {
         TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Arachnid Robes, Default: true")
                 .define("loyalSpiderHeal", true);
         UndeadMinionHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Undead Minion to heal, Default: 1")
-                .defineInRange("undeadMinionHealCost", 1, 1, Integer.MAX_VALUE);
+                .defineInRange("undeadMinionHealCost", 1, 0, Integer.MAX_VALUE);
         TamedSpiderHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Loyal Spider to heal, Default: 1")
-                .defineInRange("loyalSpiderHealCost", 1, 1, Integer.MAX_VALUE);
+                .defineInRange("loyalSpiderHealCost", 1, 0, Integer.MAX_VALUE);
         WandVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a wand, without instantly dying, around the player, Default: 8")
                 .defineInRange("wandVexLimit", 8, 1, Integer.MAX_VALUE);
         StaffVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a staff, without instantly dying, around the player, Default: 16")
@@ -381,6 +399,12 @@ public class MainConfig {
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
         WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 20")
                 .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Villagers");
+        VillagerHate = BUILDER.comment("Wearing a Dark Helm and Robe, along with variants, causes Villagers around the Player to have a negative Reputation unless said Player has 100 or more reputation among them, Default: false")
+                .define("villagerHate", false);
+        VillagerHateSpells = BUILDER.comment("Casting Spell in the presence of Villagers will cause the Player to lose a number of Reputation, set 0 to disable, Default: 0")
+                .defineInRange("villagerHateSpells", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Misc");
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")

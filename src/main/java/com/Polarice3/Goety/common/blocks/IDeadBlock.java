@@ -3,24 +3,31 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.BlockFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.RotatedPillarBlock;
+import com.Polarice3.Goety.utils.SoundUtil;
+import com.google.common.collect.Lists;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+
+import static net.minecraft.block.Block.dropResources;
 
 public interface IDeadBlock {
 
@@ -42,6 +49,10 @@ public interface IDeadBlock {
                     pLevel.playSound(null, blockpos, SoundEvents.SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     pLevel.setBlockAndUpdate(blockpos, ModRegistry.DEAD_SAND.get().defaultBlockState());
                 }
+            }
+
+            if (dryUpWater(pLevel, pPos)){
+                new SoundUtil(pPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
 
             if (BlockFinder.NotDeadSandImmune(blockState, pLevel, blockpos, pPos.below())) {
@@ -137,5 +148,52 @@ public interface IDeadBlock {
         int i = (int)(150.0D * d0);
         pLevel.sendParticles(new BlockParticleData(ParticleTypes.BLOCK, pState).setPos(pPos), pPos.getX(), pPos.getY(), pPos.getZ(), i, 0.0D, 0.0D, 0.0D, (double)0.15F);
 
+    }
+
+    default boolean dryUpWater(World pLevel, BlockPos pPos) {
+        Queue<Tuple<BlockPos, Integer>> queue = Lists.newLinkedList();
+        queue.add(new Tuple<>(pPos, 0));
+        int i = 0;
+
+        while(!queue.isEmpty()) {
+            Tuple<BlockPos, Integer> tuple = queue.poll();
+            BlockPos blockpos = tuple.getA();
+            int j = tuple.getB();
+
+            for(Direction direction : Direction.values()) {
+                BlockPos blockpos1 = blockpos.relative(direction);
+                BlockState blockstate = pLevel.getBlockState(blockpos1);
+                FluidState fluidstate = pLevel.getFluidState(blockpos1);
+                Material material = blockstate.getMaterial();
+                if (fluidstate.is(FluidTags.WATER)) {
+                    if (blockstate.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)blockstate.getBlock()).takeLiquid(pLevel, blockpos1, blockstate) != Fluids.EMPTY) {
+                        ++i;
+                        if (j < 6) {
+                            queue.add(new Tuple<>(blockpos1, j + 1));
+                        }
+                    } else if (blockstate.getBlock() instanceof FlowingFluidBlock) {
+                        pLevel.setBlock(blockpos1, Blocks.AIR.defaultBlockState(), 3);
+                        ++i;
+                        if (j < 6) {
+                            queue.add(new Tuple<>(blockpos1, j + 1));
+                        }
+                    } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
+                        TileEntity tileentity = blockstate.hasTileEntity() ? pLevel.getBlockEntity(blockpos1) : null;
+                        dropResources(blockstate, pLevel, blockpos1, tileentity);
+                        pLevel.setBlock(blockpos1, Blocks.AIR.defaultBlockState(), 3);
+                        ++i;
+                        if (j < 6) {
+                            queue.add(new Tuple<>(blockpos1, j + 1));
+                        }
+                    }
+                }
+            }
+
+            if (i > 32) {
+                break;
+            }
+        }
+
+        return i > 0;
     }
 }

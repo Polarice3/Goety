@@ -78,7 +78,8 @@ public class ModRegistry {
     public static final RegistryObject<MutatedRabbitItem> MUTATED_RABBIT = ITEMS.register("mutatedrabbit", MutatedRabbitItem::new);
     public static final RegistryObject<Item> DARKFABRIC = ITEMS.register("darkfabric", ItemBase::new);
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
-    public static final RegistryObject<Item> NETHER_BOOK = ITEMS.register("nether_book", ItemBase::new);
+    public static final RegistryObject<Item> NETHER_BOOK = ITEMS.register("nether_book", NetherBookRawItem::new);
+    public static final RegistryObject<Item> NETHER_BOOK_TRANSLATED = ITEMS.register("nether_book_translated", NetherBookItem::new);
     public static final RegistryObject<Item> DEADBAT = ITEMS.register("deadbat", DeadBatItem::new);
     public static final RegistryObject<Item> MAGIC_EMERALD = ITEMS.register("magic_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> SOUL_EMERALD = ITEMS.register("soul_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
@@ -99,9 +100,11 @@ public class ModRegistry {
     public static final RegistryObject<Item> SOULSKULLFOCUS = ITEMS.register("soulskullfocus", () -> new MagicFocusItem(MainConfig.SoulSkullCost.get()));
     public static final RegistryObject<Item> FEASTFOCUS = ITEMS.register("feastfocus", () -> new MagicFocusItem(MainConfig.FeastCost.get()));
     public static final RegistryObject<Item> TEMPTINGFOCUS = ITEMS.register("temptingfocus", () -> new MagicFocusItem(MainConfig.TemptingCost.get()));
-    public static final RegistryObject<Item> DRAGONFIREBALLFOCUS = ITEMS.register("dragonfireballfocus", () -> new MagicFocusItem(MainConfig.DragonFireballCost.get()));
+    public static final RegistryObject<Item> DRAGONFIREBALLFOCUS = ITEMS.register("dragonballfocus", () -> new MagicFocusItem(MainConfig.DragonFireballCost.get()));
     public static final RegistryObject<Item> CREEPERLINGFOCUS = ITEMS.register("creeperlingfocus", () -> new MagicFocusItem(MainConfig.CreeperlingCost.get()));
     public static final RegistryObject<Item> BREATHFOCUS = ITEMS.register("breathfocus", () -> new MagicFocusItem(MainConfig.BreathingCost.get()));
+    public static final RegistryObject<Item> FIREBALLFOCUS = ITEMS.register("fireballfocus", () -> new MagicFocusItem(MainConfig.FireballCost.get()));
+    public static final RegistryObject<Item> LAVABALLFOCUS = ITEMS.register("lavaballfocus", () -> new MagicFocusItem(MainConfig.LavaballCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

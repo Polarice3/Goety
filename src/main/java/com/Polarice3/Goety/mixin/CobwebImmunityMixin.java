@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.WebBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -20,9 +21,16 @@ public class CobwebImmunityMixin extends Block implements IForgeShearable {
 
     @Override
     public void entityInside(BlockState pState, World pLevel, BlockPos pPos, Entity pEntity)  {
-        boolean flag = RobeArmorFinder.FindArachnoArmor((LivingEntity) pEntity);
+        boolean flag = false;
+        if (!(pEntity instanceof SpiderEntity)) {
+            if (RobeArmorFinder.FindArachnoArmor((LivingEntity) pEntity)) {
+                flag = true;
+            }
+        }
         if (!flag) {
             pEntity.makeStuckInBlock(pState, new Vector3d(0.25D, (double) 0.05F, 0.25D));
+        } else {
+            super.entityInside(pState, pLevel, pPos, pEntity);
         }
     }
 }

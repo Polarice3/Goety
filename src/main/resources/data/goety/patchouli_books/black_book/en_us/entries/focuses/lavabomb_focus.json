@@ -1,0 +1,13 @@
+{
+  "name": "Lava Bomb Focus",
+  "icon": "goety:lavaballfocus",
+  "category": "goety:focuses",
+  "advancement": "goety:goety/read_nether_book",
+  "secret": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You can feel the power of the Nether overtaking you. Unlike the Ghasts, you do not weep. After all, it is a good pain."
+    }
+  ]
+}
