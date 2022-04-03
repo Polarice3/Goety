@@ -157,10 +157,10 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
                     if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
                         if (this.level.random.nextInt(16) == 0) {
-                            new ParticleUtil(ParticleTypes.SMOKE, this.worldPosition.getX() + this.level.random.nextGaussian(),
+                            new ParticleUtil(ParticleTypes.WITCH, this.worldPosition.getX() + this.level.random.nextGaussian(),
                                     this.worldPosition.getY() + 0.5,
                                     this.worldPosition.getZ() + this.level.random.nextGaussian(), 0.0F, 0.0F, 0.0F);
-                            new ParticleUtil(ParticleTypes.SMOKE, this.worldPosition.getX() + this.level.random.nextGaussian(),
+                            new ParticleUtil(ParticleTypes.WITCH, this.worldPosition.getX() + this.level.random.nextGaussian(),
                                     this.worldPosition.getY() + 0.5,
                                     this.worldPosition.getZ() + this.level.random.nextGaussian(), 0.0F, 0.0F, 0.0F);
                         }
@@ -233,6 +233,18 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     if (recipe.getCraftType().contains("forge")){
                         RitualStructures.findForgeStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkForgeRequirements(this)) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
+                    if (recipe.getCraftType().contains("sabbath")){
+                        RitualStructures.findSabbathStructure(this, this.worldPosition, this.level);
+                        if (!RitualStructures.checkSabbathRequirements(this)) {
                             ++this.structureTime;
                             if (this.structureTime >= 60){
                                 this.stopRitual(false);

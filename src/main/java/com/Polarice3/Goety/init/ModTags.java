@@ -1,7 +1,8 @@
 package com.Polarice3.Goety.init;
 
 import net.minecraft.block.Block;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.entity.EntityType;
+import net.minecraft.tags.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
@@ -9,6 +10,7 @@ public class ModTags {
     public static void init ()
     {
         ModTags.Blocks.init();
+        ModTags.EntityTypes.init();
     }
 
     public static class Blocks
@@ -23,6 +25,17 @@ public class ModTags {
         private static Tags.IOptionalNamedTag<Block> tag(String name)
         {
             return BlockTags.createOptional(new ResourceLocation("goety", name));
+        }
+    }
+
+    public static class EntityTypes
+    {
+        private static void init(){}
+
+        public static final ITag.INamedTag<EntityType<?>> VILLAGERS = tag(new ResourceLocation("forge", "villagers"));
+
+        public static ITag.INamedTag<EntityType<?>> tag(ResourceLocation id) {
+            return EntityTypeTags.bind(id.toString());
         }
     }
 }

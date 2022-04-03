@@ -3,13 +3,7 @@ package com.Polarice3.Goety.common.entities.ally;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
-import com.Polarice3.Goety.common.entities.hostile.ScorchEntity;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.init.ModRegistry;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.init.ModEffects;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -32,13 +26,10 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
@@ -181,7 +172,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
     }
 
     public boolean canBeAffected(EffectInstance potioneffectIn) {
-        return potioneffectIn.getEffect() != ModRegistry.HOSTED.get();
+        return potioneffectIn.getEffect() != ModEffects.HOSTED.get();
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {

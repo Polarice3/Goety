@@ -111,6 +111,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LichHealCost;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
@@ -144,6 +145,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DecrepitFortGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichHardcore;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
 
     static {
         BUILDER.push("General");
@@ -405,6 +409,16 @@ public class MainConfig {
                 .define("villagerHate", false);
         VillagerHateSpells = BUILDER.comment("Casting Spell in the presence of Villagers will cause the Player to lose a number of Reputation, set 0 to disable, Default: 0")
                 .defineInRange("villagerHateSpells", 0, 0, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Spoilers");
+        LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 0")
+                .defineInRange("lichHealCost", 10, 0, Integer.MAX_VALUE);
+        LichHardcore = BUILDER.comment("If on Hardcore, being a Lich will provide a 90% discount on when the Player gets the Death Protect Effect, Default: true")
+                .define("lichHardcore", true);
+        LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Arachnea Helm will no longer give Blindness during day, Default: true")
+                .define("lichNightVision", true);
+        LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")
+                .define("lichUndeadFriendly", true);
         BUILDER.pop();
         BUILDER.push("Misc");
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")

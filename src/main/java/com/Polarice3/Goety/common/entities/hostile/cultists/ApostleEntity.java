@@ -1,21 +1,18 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
-import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
+import com.Polarice3.Goety.common.entities.projectiles.FireTornadoEntity;
 import com.Polarice3.Goety.common.entities.utilities.FireRainTrapEntity;
-import com.Polarice3.Goety.common.entities.utilities.LightningTrapEntity;
+import com.Polarice3.Goety.common.entities.utilities.FireTornadoTrapEntity;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -33,7 +30,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -164,6 +160,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         for (FireRainTrapEntity fireRainTrap: this.level.getEntitiesOfClass(FireRainTrapEntity.class, this.getBoundingBox().inflate(64))){
             fireRainTrap.remove();
         }
+        for (FireTornadoTrapEntity fireTornadoTrapEntity: this.level.getEntitiesOfClass(FireTornadoTrapEntity.class, this.getBoundingBox().inflate(64))){
+            fireTornadoTrapEntity.remove();
+        }
+        for (FireTornadoEntity fireTornadoEntity: this.level.getEntitiesOfClass(FireTornadoEntity.class, this.getBoundingBox().inflate(64))){
+            fireTornadoEntity.remove();
+        }
         super.die(cause);
     }
 
@@ -223,7 +225,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
                 break;
             case 11:
-                this.setArrowEffect(ModRegistry.CURSED.get());
+                this.setArrowEffect(ModEffects.CURSED.get());
                 break;
         }
     }
@@ -294,6 +296,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 ++this.hitTimes;
             }
         }
+        if (pSource == DamageSource.LIGHTNING_BOLT){
+            return false;
+        }
+        if (this.level.dimensionType().respawnAnchorWorks()){
+            return super.hurt(pSource, pAmount/4);
+        }
         return super.hurt(pSource, pAmount);
     }
 
@@ -346,46 +354,46 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     public void aiStep() {
         super.aiStep();
         LivingEntity livingEntity = this.getTarget();
-        if (this.isSecondPhase()){
-            if (this.Regen()){
-                if (this.tickCount % 50 == 0){
-                    if (this.getHealth() < this.getMaxHealth()){
+        if (this.isSecondPhase()) {
+            if (this.Regen()) {
+                if (this.tickCount % 50 == 0) {
+                    if (this.getHealth() < this.getMaxHealth()) {
                         this.heal(1.0F);
                     }
                 }
             } else {
-                if (this.tickCount % 100 == 0){
-                    if (this.getHealth() < this.getMaxHealth()){
+                if (this.tickCount % 100 == 0) {
+                    if (this.getHealth() < this.getMaxHealth()) {
                         this.heal(1.0F);
                     }
                 }
             }
-            if (this.hitTimes >= 1){
+            if (this.hitTimes >= 1) {
                 this.teleport();
             }
-            if (this.cooldown < 50){
+            if (this.cooldown < 50) {
                 ++this.cooldown;
             } else {
                 this.spellcycle = 0;
             }
         } else {
-            if (this.Regen()){
-                if (this.tickCount % 100 == 0){
-                    if (this.getHealth() < this.getMaxHealth()){
+            if (this.Regen()) {
+                if (this.tickCount % 100 == 0) {
+                    if (this.getHealth() < this.getMaxHealth()) {
                         this.heal(1.0F);
                     }
                 }
             } else {
-                if (this.tickCount % 200 == 0){
-                    if (this.getHealth() < this.getMaxHealth()){
+                if (this.tickCount % 200 == 0) {
+                    if (this.getHealth() < this.getMaxHealth()) {
                         this.heal(1.0F);
                     }
                 }
             }
-            if (this.hitTimes >= 2){
+            if (this.hitTimes >= 2) {
                 this.teleport();
             }
-            if (this.cooldown < 100){
+            if (this.cooldown < 100) {
                 ++this.cooldown;
             } else {
                 this.spellcycle = 0;
@@ -425,6 +433,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.teleport();
                 this.setFiring(false);
                 this.f = 0;
+            }
+        }
+        if (this.level.dimensionType().respawnAnchorWorks()){
+            LivingEntity target = this.getTarget();
+            if (target != null){
+                target.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 100));
             }
         }
     }
@@ -680,11 +694,11 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                         blockpos$mutable.move(Direction.DOWN);
                     }
 
-                    LightningTrapEntity lightningTrapEntity = new LightningTrapEntity(ModEntityType.LIGHTNINGTRAP.get(), ApostleEntity.this.level);
-                    lightningTrapEntity.setPos(blockpos$mutable.getX(), blockpos$mutable.getY() + 1, blockpos$mutable.getZ());
-                    lightningTrapEntity.setOwner(ApostleEntity.this);
-                    lightningTrapEntity.setDuration(60);
-                    ApostleEntity.this.level.addFreshEntity(lightningTrapEntity);
+                    FireTornadoTrapEntity fireTornadoTrapEntity = new FireTornadoTrapEntity(ModEntityType.FIRETORNADOTRAP.get(), ApostleEntity.this.level);
+                    fireTornadoTrapEntity.setPos(blockpos$mutable.getX(), blockpos$mutable.getY() + 1, blockpos$mutable.getZ());
+                    fireTornadoTrapEntity.setOwner(ApostleEntity.this);
+                    fireTornadoTrapEntity.setDuration(60);
+                    ApostleEntity.this.level.addFreshEntity(fireTornadoTrapEntity);
                 }
                 ApostleEntity.this.teleport();
                 ApostleEntity.this.cooldown = 0;

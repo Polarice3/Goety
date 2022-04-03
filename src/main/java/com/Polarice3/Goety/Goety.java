@@ -112,6 +112,7 @@ public class Goety {
         forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
 
         ModRegistry.init();
+        ModEffects.init();
         ModSounds.init();
         ModStructures.init();
         ModFeatures.init();

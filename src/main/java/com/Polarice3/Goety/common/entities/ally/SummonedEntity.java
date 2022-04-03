@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
@@ -292,7 +293,7 @@ public class SummonedEntity extends CreatureEntity {
     }
 
     public boolean canBeAffected(EffectInstance pPotioneffect) {
-        return pPotioneffect.getEffect() != ModRegistry.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
+        return pPotioneffect.getEffect() != ModEffects.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
     }
 
     static class ZombieAttackGoal extends MeleeAttackGoal {

@@ -15,16 +15,15 @@ import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.items.SoulWand;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.WebBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.merchant.IReputationType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
@@ -43,7 +42,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.village.GossipManager;
+import net.minecraft.village.GossipType;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -194,13 +193,18 @@ public class ModEvents {
                     livingEntity.clearFire();
                 }
             }
+            if (livingEntity.hasEffect(ModEffects.APOSTLE_CURSE.get())){
+                if (livingEntity.hasEffect(Effects.FIRE_RESISTANCE)){
+                    livingEntity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
+                }
+            }
         }
     }
 
     @SubscribeEvent
     public static void onBreakingBlock(BlockEvent.BreakEvent event){
         PlayerEntity player = event.getPlayer();
-        if (player.hasEffect(ModRegistry.NOMINE.get())){
+        if (player.hasEffect(ModEffects.NOMINE.get())){
             if (event.getState().getMaterial() == Material.STONE && !(event.getState().getBlock() == ModRegistry.GUARDIAN_OBELISK.get())){
                 new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 event.setCanceled(true);
@@ -226,7 +230,9 @@ public class ModEvents {
             if (RobeArmorFinder.FindAnySet(player)) {
                 for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
                     if (villager.getPlayerReputation(player) > -25 && villager.getPlayerReputation(player) < 100) {
-                        villager.onReputationEventFrom(IReputationType.VILLAGER_HURT, player);
+                        if (player.tickCount % 20 == 0) {
+                            villager.getGossips().add(player.getUUID(), GossipType.MINOR_NEGATIVE, 25);
+                        }
                     }
                 }
             }
@@ -237,41 +243,45 @@ public class ModEvents {
                 player.setDeltaMovement(player.getDeltaMovement().x * 1.0175, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.0175);
             }
         }
-        if (player.hasEffect(ModRegistry.LAUNCH.get())){
+        if (player.hasEffect(ModEffects.LAUNCH.get())){
             player.setDeltaMovement(player.getDeltaMovement().add(0, 0.75, 0));
         }
         if (RobeArmorFinder.FindNecroSet(player)) {
             BlockState blockState = player.level.getBlockState(player.blockPosition().below());
-            if (!(blockState.getBlock() instanceof IDeadBlock)) {
-                if (!world.isClientSide && world.isDay()) {
-                    float f = player.getBrightness();
-                    BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                    if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                        player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1));
-                        player.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
+            if (!LichdomUtil.isLich(player)) {
+                if (!(blockState.getBlock() instanceof IDeadBlock)) {
+                    if (!world.isClientSide && world.isDay()) {
+                        float f = player.getBrightness();
+                        BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                        if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                            player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1));
+                            player.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
+                        }
                     }
-                }
-            } else {
-                if (player.hasEffect(Effects.WEAKNESS)) {
-                    player.removeEffect(Effects.WEAKNESS);
-                }
-                if (player.hasEffect(Effects.HUNGER)) {
-                    player.removeEffect(Effects.HUNGER);
+                } else {
+                    if (player.hasEffect(Effects.WEAKNESS)) {
+                        player.removeEffect(Effects.WEAKNESS);
+                    }
+                    if (player.hasEffect(Effects.HUNGER)) {
+                        player.removeEffect(Effects.HUNGER);
+                    }
                 }
             }
         }
         if (RobeArmorFinder.FindArachnoHelm(player)) {
             if (!world.isClientSide) {
-                if (world.isDay()) {
-                    float f = player.getBrightness();
-                    BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                    if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                        player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 0, false, false));
+                if (!LichdomUtil.isLich(player) && !MainConfig.LichNightVision.get()) {
+                    if (world.isDay()) {
+                        float f = player.getBrightness();
+                        BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                        if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                            player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 0, false, false));
+                        } else {
+                            player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                        }
                     } else {
                         player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
                     }
-                } else {
-                    player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
                 }
             }
         }
@@ -327,8 +337,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void HurtEvent(LivingHurtEvent event){
         LivingEntity entity = event.getEntityLiving();
-        if (entity.hasEffect(ModRegistry.CURSED.get())){
-            EffectInstance effectInstance = entity.getEffect(ModRegistry.CURSED.get());
+        if (entity.hasEffect(ModEffects.CURSED.get())){
+            EffectInstance effectInstance = entity.getEffect(ModEffects.CURSED.get());
             assert effectInstance != null;
             int i = effectInstance.getAmplifier() + 1;
             event.setAmount(event.getAmount() * 0.5F + i);
@@ -348,8 +358,8 @@ public class ModEvents {
         Entity killed = event.getEntity();
         Entity killer = event.getSource().getEntity();
         if (killed instanceof CreatureEntity){
-            if (((CreatureEntity) killed).hasEffect(ModRegistry.GOLDTOUCHED.get())){
-                int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModRegistry.GOLDTOUCHED.get())).getAmplifier() + 1;
+            if (((CreatureEntity) killed).hasEffect(ModEffects.GOLDTOUCHED.get())){
+                int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModEffects.GOLDTOUCHED.get())).getAmplifier() + 1;
                 for(int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
                     killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
                 }
@@ -427,13 +437,13 @@ public class ModEvents {
     @SubscribeEvent
     public static void ExtraExpDrop(LivingExperienceDropEvent event){
         if (event.getAttackingPlayer() != null) {
-            if (event.getAttackingPlayer().hasEffect(ModRegistry.COSMIC.get())) {
-                int a = Objects.requireNonNull(event.getAttackingPlayer().getEffect(ModRegistry.COSMIC.get())).getAmplifier() + 2;
+            if (event.getAttackingPlayer().hasEffect(ModEffects.COSMIC.get())) {
+                int a = Objects.requireNonNull(event.getAttackingPlayer().getEffect(ModEffects.COSMIC.get())).getAmplifier() + 2;
                 int a1 = MathHelper.clamp(a, 2, 8);
                 event.setDroppedExperience(event.getDroppedExperience() * a1);
             }
         }
-        if (event.getEntityLiving().hasEffect(ModRegistry.NECROPOWER.get())){
+        if (event.getEntityLiving().hasEffect(ModEffects.NECROPOWER.get())){
             event.setDroppedExperience(event.getDroppedExperience() * 2);
         }
     }
@@ -462,7 +472,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void Mutation(PotionEvent.PotionAddedEvent event){
-        if (event.getPotionEffect().getEffect() == ModRegistry.COSMIC.get()){
+        if (event.getPotionEffect().getEffect() == ModEffects.COSMIC.get()){
             World world = event.getEntityLiving().level;
             LivingEntity entity = event.getEntityLiving();
             for(int i = 0; i < world.random.nextInt(35) + 10; ++i) {

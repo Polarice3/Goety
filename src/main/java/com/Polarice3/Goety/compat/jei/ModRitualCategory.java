@@ -165,7 +165,7 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
         } else {
             recipeLayout.getItemStacks()
                     .init(index, false, this.ritualCenterX + this.recipeOutputOffsetX, this.ritualCenterY - 15);
-            recipeLayout.getItemStacks().set(index, ingredients.getOutputs(VanillaTypes.ITEM).get(1));
+            recipeLayout.getItemStacks().set(index, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
             index++;
         }
         recipeLayout.getItemStacks()
@@ -188,6 +188,10 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
         } else if (recipe.getCraftType().contains("adept_nether")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.NETHERRACK));
+            index++;
+        } else if (recipe.getCraftType().contains("sabbath")){
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(Items.CRYING_OBSIDIAN));
             index++;
         } else {
             recipeLayout.getItemStacks().init(index, false, 0, 0);
@@ -220,29 +224,28 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
 
         int infotextY = 0;
         if (recipe.requiresSacrifice()) {
-            infotextY += 10;
+            infotextY += 13;
             this.drawStringCentered(matrixStack, Minecraft.getInstance().font,
                     I18n.get("jei.goety.sacrifice", I18n.get(recipe.getEntityToSacrificeDisplayName())), 84, infotextY);
         }
 
         if (recipe.requiresItemUse()) {
-            infotextY += 10;
+            infotextY += 13;
             String text = I18n.get("jei.goety.item_to_use");
             this.drawStringCentered(matrixStack, Minecraft.getInstance().font, text, 84, infotextY);
         }
 
         if (recipe.getEntityToSummon() != null) {
-            infotextY += 10;
+            infotextY += 13;
             this.drawStringCentered(matrixStack, Minecraft.getInstance().font,
                     I18n.get("jei.goety.summon", I18n.get(recipe.getEntityToSummon().getDescriptionId())),
                     84, infotextY);
         }
 
         if (recipe.getCraftType() != null) {
-            infotextY += 5;
             this.drawStringCentered(matrixStack, Minecraft.getInstance().font,
                     I18n.get("jei.goety.craftType." + I18n.get(recipe.getCraftType())),
-                    84, infotextY);
+                    84, 5);
         }
 
     }

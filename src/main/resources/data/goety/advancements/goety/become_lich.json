@@ -1,0 +1,15 @@
+{
+  "parent": "goety:goety/root",
+  "criteria": {
+    "requirement": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:undeath_potion"
+          }
+        ]
+      }
+    }
+  }
+}

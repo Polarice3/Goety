@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,7 +67,7 @@ public class WindTotemTileEntity extends TotemTileEntity {
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
                     if (!player.isCreative()) {
-                        player.addEffect(new EffectInstance(ModRegistry.LAUNCH.get(), 2, 0, false, false));
+                        player.addEffect(new EffectInstance(ModEffects.LAUNCH.get(), 2, 0, false, false));
                         player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 100));
                     }
                 } else {

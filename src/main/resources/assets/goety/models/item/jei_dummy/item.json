@@ -1,3 +1,6 @@
 {
-  "parent": "minecraft:items/emerald"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "minecraft:items/emerald"
+  }
 }

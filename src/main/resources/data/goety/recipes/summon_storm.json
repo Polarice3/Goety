@@ -1,0 +1,28 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:summon",
+  "activation_item": {
+    "item": "minecraft:netherrack"
+  },
+  "craftType": "necroturgy",
+  "entity_to_summon": "goety:stormutil",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:clock"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "tag": "forge:mushrooms"
+    }
+  ],
+  "result": {
+    "item": "goety:jei_dummy/none"
+  }
+}

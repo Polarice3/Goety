@@ -20,6 +20,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -43,6 +44,7 @@ public class DarkAltarBlock extends ContainerBlock implements IForgeBlock {
                 .noOcclusion()
         );
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, Boolean.FALSE));
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -107,7 +109,6 @@ public class DarkAltarBlock extends ContainerBlock implements IForgeBlock {
     public void livingDeath(LivingDeathEvent event) {
         LivingEntity entityLivingBase = event.getEntityLiving();
         if (!entityLivingBase.level.isClientSide) {
-            //Limit to player kills
             if (event.getSource().getEntity() instanceof PlayerEntity) {
                 BlockPos pos = entityLivingBase.blockPosition();
                 int range = Ritual.SACRIFICE_DETECTION_RANGE;

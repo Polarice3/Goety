@@ -9,6 +9,7 @@ import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -79,14 +80,28 @@ public class GoldTotemItem extends Item {
         if (stack.getTag().getInt(SOULSAMOUNT) < 0){
             stack.getTag().putInt(SOULSAMOUNT, 0);
         }
-        if (entityIn instanceof PlayerEntity){
-            if (stack.getTag().getInt(SOULSAMOUNT) == MAXSOULS){
-                ItemStack foundStack = GoldTotemFinder.FindTotem((PlayerEntity) entityIn);
-                if (!foundStack.isEmpty()) {
-                    ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistry.DEATHPROTECT.get(), 20));
+/*        if (MainConfig.TotemUndying.get()) {
+            if (entityIn instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) entityIn;
+                if (MainConfig.LichHardcore.get()){
+                    if (LichdomUtil.isLich(player) && player.level.getLevelData().isHardcore()){
+                        if (stack.getTag().getInt(SOULSAMOUNT) >= MAXSOULS * 0.9) {
+                            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
+                            if (!foundStack.isEmpty()) {
+                                ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistry.DEATHPROTECT.get(), 20, 0, false, false));
+                            }
+                        }
+                    }
+                } else {
+                    if (stack.getTag().getInt(SOULSAMOUNT) == MAXSOULS) {
+                        ItemStack foundStack = GoldTotemFinder.FindTotem(player);
+                        if (!foundStack.isEmpty()) {
+                            ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistry.DEATHPROTECT.get(), 20, 0, false, false));
+                        }
+                    }
                 }
             }
-        }
+        }*/
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
@@ -104,6 +119,31 @@ public class GoldTotemItem extends Item {
         assert itemStack.getTag() != null;
         int Soulcount = itemStack.getTag().getInt(SOULSAMOUNT);
         return Soulcount == 0;
+    }
+
+    public static boolean UndyingEffect(PlayerEntity player){
+        ItemStack itemStack = GoldTotemFinder.FindTotem(player);
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getTag() != null) {
+                if (MainConfig.TotemUndying.get()) {
+                    if (MainConfig.LichHardcore.get()) {
+                        if (LichdomUtil.isLich(player) && player.level.getLevelData().isHardcore()) {
+                            return itemStack.getTag().getInt(SOULSAMOUNT) >= MAXSOULS * 0.9;
+                        } else {
+                            return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
+                        }
+                    } else {
+                        return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     public static int currentSouls(ItemStack itemStack){
@@ -139,8 +179,10 @@ public class GoldTotemItem extends Item {
 
     public static void EmptySoulTotem(PlayerEntity playerEntity){
         ItemStack foundStack = GoldTotemFinder.FindTotem(playerEntity);
-        foundStack.setCount(0);
-        playerEntity.addItem(new ItemStack(ModRegistry.SPENTTOTEM.get()));
+        if (GoldTotemItem.isFull(foundStack)){
+            foundStack.setCount(0);
+            playerEntity.addItem(new ItemStack(ModRegistry.SPENTTOTEM.get()));
+        }
     }
 
     public static int SoulMultiply(PlayerEntity playerEntity){
@@ -151,6 +193,14 @@ public class GoldTotemItem extends Item {
         } else {
             return 1;
         }
+    }
+
+    public static void setSoulsamount(ItemStack itemStack, int souls){
+        if (itemStack.getItem() != ModRegistry.GOLDTOTEM.get()) {
+            return;
+        }
+        assert itemStack.getTag() != null;
+        itemStack.getTag().putInt(SOULSAMOUNT, souls);
     }
 
     public static void increaseSouls(ItemStack itemStack, int souls) {

@@ -121,4 +121,32 @@ public class RitualStructures {
     public static boolean checkForgeRequirements(ModTileEntity pTileEntity){
         return pTileEntity.first.size() >= 1 && pTileEntity.second.size() >= 3 && pTileEntity.third.size() >= 4;
     }
+
+    public static void findSabbathStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+        pTileEntity.first.clear();
+        pTileEntity.second.clear();
+        pTileEntity.third.clear();
+        for (int i = -RANGE; i <= RANGE; ++i) {
+            for (int j = -RANGE; j <= RANGE; ++j) {
+                for (int k = -RANGE; k <= RANGE; ++k) {
+                    BlockPos blockpos1 = pPos.offset(i, j, k);
+                    assert pLevel != null;
+                    BlockState blockstate = pLevel.getBlockState(blockpos1);
+                    if (blockstate.getBlock() == Blocks.CRYING_OBSIDIAN) {
+                        pTileEntity.first.add(blockpos1);
+                    }
+                    if (blockstate.getBlock() == Blocks.OBSIDIAN) {
+                        pTileEntity.second.add(blockpos1);
+                    }
+                    if (blockstate.getBlock() == Blocks.SOUL_LANTERN) {
+                        pTileEntity.third.add(blockpos1);
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean checkSabbathRequirements(ModTileEntity pTileEntity){
+        return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 8;
+    }
 }

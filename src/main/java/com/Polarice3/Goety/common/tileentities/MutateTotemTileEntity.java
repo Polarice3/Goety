@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.*;
@@ -46,10 +46,10 @@ public class MutateTotemTileEntity extends TotemTileEntity {
     public void SpecialEffect() {
         this.playSound(SoundEvents.ILLUSIONER_CAST_SPELL);
         if (this.target != null) {
-            if (!this.target.hasEffect(ModRegistry.COSMIC.get())
+            if (!this.target.hasEffect(ModEffects.COSMIC.get())
                     && (this.target instanceof CowEntity || this.target instanceof ChickenEntity || this.target instanceof SheepEntity
                     || this.target instanceof PigEntity || this.target instanceof RabbitEntity)) {
-                this.target.addEffect(new EffectInstance(ModRegistry.COSMIC.get(), 200));
+                this.target.addEffect(new EffectInstance(ModEffects.COSMIC.get(), 200));
             }
         }
     }

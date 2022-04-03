@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -8,7 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -111,10 +111,10 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
         if (pEntity instanceof LivingEntity){
             if (pEntity instanceof PlayerEntity){
                 if (!((PlayerEntity) pEntity).isCreative()){
-                    ((LivingEntity) pEntity).addEffect(new EffectInstance(ModRegistry.CURSED.get(), 600));
+                    ((LivingEntity) pEntity).addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
                 }
             } else {
-                ((LivingEntity) pEntity).addEffect(new EffectInstance(ModRegistry.CURSED.get(), 600));
+                ((LivingEntity) pEntity).addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
             }
         }
     }

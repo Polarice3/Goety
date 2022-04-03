@@ -13,7 +13,9 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.FireRainTrapEntity;
+import com.Polarice3.Goety.common.entities.utilities.FireTornadoTrapEntity;
 import com.Polarice3.Goety.common.entities.utilities.LightningTrapEntity;
+import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -81,6 +83,12 @@ public class ModEntityType {
                     .sized(1.0f,1.0f)
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchgale").toString()));
+
+    public static final RegistryObject<EntityType<FireTornadoEntity>> FIRETORNADO = ENTITY_TYPES.register("fire_tornado",
+            () -> EntityType.Builder.<FireTornadoEntity>of(FireTornadoEntity::new, EntityClassification.MISC)
+                    .sized(2.0f,3.0f)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fire_tornado").toString()));
 
     public static final RegistryObject<EntityType<ChannellerEntity>> CHANNELLER = ENTITY_TYPES.register("channeller",
             () -> EntityType.Builder.of(ChannellerEntity::new, EntityClassification.MONSTER)
@@ -309,5 +317,21 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
+
+    public static final RegistryObject<EntityType<FireTornadoTrapEntity>> FIRETORNADOTRAP = ENTITY_TYPES.register("firetornadotrap",
+            () -> EntityType.Builder.<FireTornadoTrapEntity>of(FireTornadoTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
+
+    public static final RegistryObject<EntityType<StormEntity>> STORMUTIL = ENTITY_TYPES.register("stormutil",
+            () -> EntityType.Builder.of(StormEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.0F, 0.0F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "stormutil").toString()));
 
 }

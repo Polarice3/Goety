@@ -1,0 +1,18 @@
+{
+  "name": "The Cultist's Book",
+  "icon": "goety:nether_book",
+  "category": "goety:world",
+  "advancement": "goety:goety/gain_nether_book",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "It seems that a Cult Leader dropped what appears to be their holy book. You tried reading it, but you can't understand a word or meaning from it. It might be some ramblings penned by a mad man, or it could be something more..."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:nether_book",
+      "text": "In any case, perhaps a Librarian from a nearby Village can help decipher this mystery. You feel like you shouldn't use that Mending Librarian you worked hard to obtain to decipher it, you just have a bad feeling that it's not a good idea to do so."
+    }
+  ]
+}

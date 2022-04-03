@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -51,8 +51,8 @@ public class GuardianObeliskTileEntity extends TileEntity implements ITickableTi
             for (Entity entity: this.level.getEntitiesOfClass(Entity.class, (new AxisAlignedBB(i, j, k, i, j + 1, k)).inflate(32.0D))){
                 if (entity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) entity;
-                    if (!player.isCreative() && !player.hasEffect(ModRegistry.NOMINE.get())){
-                        player.addEffect(new EffectInstance(ModRegistry.NOMINE.get(), 120, 0, false, true));
+                    if (!player.isCreative() && !player.hasEffect(ModEffects.NOMINE.get())){
+                        player.addEffect(new EffectInstance(ModEffects.NOMINE.get(), 120, 0, false, true));
                     }
                 }
                 if (entity instanceof TNTEntity){

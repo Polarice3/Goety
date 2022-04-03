@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
@@ -25,11 +25,11 @@ public abstract class SummonSpells extends Spells{
     }
 
     public void SummonDown(LivingEntity entityLiving){
-        EffectInstance effectinstance1 = entityLiving.getEffect(ModRegistry.SUMMONDOWN.get());
+        EffectInstance effectinstance1 = entityLiving.getEffect(ModEffects.SUMMONDOWN.get());
         int i = 1;
         if (effectinstance1 != null) {
             i += effectinstance1.getAmplifier();
-            entityLiving.removeEffectNoUpdate(ModRegistry.SUMMONDOWN.get());
+            entityLiving.removeEffectNoUpdate(ModEffects.SUMMONDOWN.get());
         } else {
             --i;
         }
@@ -46,7 +46,7 @@ public abstract class SummonSpells extends Spells{
         } else {
             s = SummonDownDuration();
         }
-        EffectInstance effectinstance = new EffectInstance(ModRegistry.SUMMONDOWN.get(), s, i, false, false, true);
+        EffectInstance effectinstance = new EffectInstance(ModEffects.SUMMONDOWN.get(), s, i, false, false, true);
         entityLiving.addEffect(effectinstance);
     }
 

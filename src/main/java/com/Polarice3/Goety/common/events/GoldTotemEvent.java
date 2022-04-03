@@ -1,20 +1,19 @@
 package com.Polarice3.Goety.common.events;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.LichdomUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.Hand;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -66,30 +65,24 @@ public class GoldTotemEvent {
             }
         }
 
-        if (event.getEntityLiving() instanceof PlayerEntity && MainConfig.TotemUndying.get()){
-            if (event.getEntityLiving().hasEffect(ModRegistry.DEATHPROTECT.get())){
-                event.getEntityLiving().setHealth(1.0F);
-                event.getEntityLiving().removeAllEffects();
-                event.getEntityLiving().addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
-                event.getEntityLiving().addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
-                event.getEntityLiving().addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                event.getEntityLiving().level.broadcastEntityEvent(event.getEntityLiving(), (byte)35);
-                GoldTotemItem.EmptySoulTotem((PlayerEntity) event.getEntityLiving());
+        if (event.getEntityLiving() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            if (GoldTotemItem.UndyingEffect(player)){
+                player.setHealth(1.0F);
+                player.removeAllEffects();
+                player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
+                player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
+                player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                player.level.broadcastEntityEvent(player, (byte)35);
+                if (LichdomUtil.isLich(player)){
+                    GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
+                } else {
+                    GoldTotemItem.EmptySoulTotem(player);
+                }
                 event.setCanceled(true);
             }
         }
 
-    }
-
-    private static ItemStack getTotemItem(PlayerEntity player) {
-        for(Hand hand : Hand.values()) {
-            ItemStack itemstack = player.getItemInHand(hand);
-            if (itemstack.getItem() == ModRegistry.GOLDTOTEM.get()) {
-                return itemstack;
-            }
-        }
-
-        return new ItemStack(ModRegistry.GOLDTOTEM.get());
     }
 
 }

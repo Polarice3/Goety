@@ -6,7 +6,7 @@ import net.minecraft.potion.EffectType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IllagueEffect extends ModEffects{
+public class IllagueEffect extends ModEffect {
 
     public IllagueEffect() {
         super(EffectType.HARMFUL, 9804699);

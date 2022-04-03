@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,7 +29,7 @@ public class UncookedMutatedItem extends Item {
             if (effectinstance1 == null) {
                 EffectInstance effectinstance = new EffectInstance(Effects.HUNGER, 600, 0);
                 entityLiving.addEffect(effectinstance);
-                EffectInstance effectinstance2 = new EffectInstance(ModRegistry.HOSTED.get(), 600, 0);
+                EffectInstance effectinstance2 = new EffectInstance(ModEffects.HOSTED.get(), 600, 0);
                 entityLiving.addEffect(effectinstance2);
             } else {
                 int amp = effectinstance1.getAmplifier();
@@ -38,7 +38,7 @@ public class UncookedMutatedItem extends Item {
                 entityLiving.removeEffectNoUpdate(Effects.HUNGER);
                 EffectInstance effectinstance = new EffectInstance(Effects.HUNGER, 600, i);
                 entityLiving.addEffect(effectinstance);
-                EffectInstance effectinstance2 = new EffectInstance(ModRegistry.HOSTED.get(), 600, i);
+                EffectInstance effectinstance2 = new EffectInstance(ModEffects.HOSTED.get(), 600, i);
                 entityLiving.addEffect(effectinstance2);
             }
         }

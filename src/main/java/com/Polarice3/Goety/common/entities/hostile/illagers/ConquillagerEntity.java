@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,7 +19,6 @@ import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.PatrollerEntity;
-import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -32,11 +31,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.*;
@@ -87,13 +84,13 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
             if (!(entity instanceof PatrollerEntity)) {
                 if (entity instanceof PlayerEntity){
                     if (!((PlayerEntity) entity).isCreative()){
-                        entity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), 12000, 0, false, false));
+                        entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 12000, 0, false, false));
 
                     }
                 } else if (entity instanceof AbstractVillagerEntity) {
-                    entity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), 12000, 0, false, false));
+                    entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 12000, 0, false, false));
                 } else {
-                    entity.addEffect(new EffectInstance(ModRegistry.ILLAGUE.get(), 2000, 0, false, false));
+                    entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 2000, 0, false, false));
                 }
             }
         }

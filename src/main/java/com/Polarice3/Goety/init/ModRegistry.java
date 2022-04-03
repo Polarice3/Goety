@@ -5,20 +5,14 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.common.items.*;
-import com.Polarice3.Goety.common.potions.CosmicEffect;
-import com.Polarice3.Goety.common.potions.IllagueEffect;
-import com.Polarice3.Goety.common.potions.ModEffects;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SimpleFoiledItem;
 import net.minecraft.item.TallBlockItem;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -29,13 +23,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModRegistry {
     public static DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Goety.MOD_ID);
     public static DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Goety.MOD_ID);
-    public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Goety.MOD_ID);
     public static KeyBinding[] keyBindings;
 
     public static void init(){
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
         keyBindings = new KeyBinding[2];
 
         keyBindings[0] = new KeyBinding("key.goety.wand", 90, "key.goety.category");
@@ -86,6 +78,8 @@ public class ModRegistry {
     public static final RegistryObject<Item> SCRYING_MIRROR = ITEMS.register("scrying_mirror", ScryingMirrorItem::new);
     public static final RegistryObject<Item> TREASURE_POUCH = ITEMS.register("treasure_pouch", TreasurePouchItem::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
+    public static final RegistryObject<Item> APOSTLE_BLOOD = ITEMS.register("apostle_blood_bottle", ItemBase::new);
+    public static final RegistryObject<Item> UNDEATH_POTION = ITEMS.register("undeath_potion", UndeathPotionItem::new);
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));
@@ -336,36 +330,6 @@ public class ModRegistry {
             "jei_dummy/sacrifice", () -> new DummyItem(new Item.Properties()));
     public static final RegistryObject<DummyItem> JEI_DUMMY_REQUIRE_ITEM_USE = ITEMS.register(
             "jei_dummy/item", () -> new DummyItem(new Item.Properties()));
-    //Effects
-    public static final RegistryObject<Effect> DEATHPROTECT = EFFECTS.register("deathprotect",
-            () -> new ModEffects(EffectType.BENEFICIAL, 0));
-
-    public static final RegistryObject<Effect> GOLDTOUCHED = EFFECTS.register("goldtouched",
-            () -> new ModEffects(EffectType.HARMFUL, 4866583));
-
-    public static final RegistryObject<Effect> HOSTED = EFFECTS.register("hosted",
-            () -> new ModEffects(EffectType.HARMFUL, 10044730));
-
-    public static final RegistryObject<Effect> SUMMONDOWN = EFFECTS.register("summondown",
-            () -> new ModEffects(EffectType.HARMFUL, 0));
-
-    public static final RegistryObject<Effect> COSMIC = EFFECTS.register("cosmic",
-            CosmicEffect::new);
-
-    public static final RegistryObject<Effect> CURSED = EFFECTS.register("cursed",
-            () -> new ModEffects(EffectType.HARMFUL, 10044730));
-
-    public static final RegistryObject<Effect> ILLAGUE = EFFECTS.register("illague",
-            IllagueEffect::new);
-
-    public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
-            () -> new ModEffects(EffectType.NEUTRAL, 4393481));
-
-    public static final RegistryObject<Effect> LAUNCH = EFFECTS.register("launch",
-            () -> new ModEffects(EffectType.NEUTRAL, 0));
-
-    public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
-            () -> new ModEffects(EffectType.HARMFUL, 10044730));
 
     public static Item.Properties defaultProperties() {
         return new Item.Properties().tab(Goety.TAB);

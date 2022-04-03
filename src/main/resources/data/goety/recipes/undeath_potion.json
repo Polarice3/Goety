@@ -1,0 +1,52 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "minecraft:glass_bottle"
+  },
+  "craftType": "necroturgy",
+  "entity_to_sacrifice": {
+    "tag": "forge:villagers",
+    "display_name": "info.goety.ritual.villager"
+  },
+  "soulCost": 10,
+  "duration": 60,
+  "ingredients": [
+    {
+      "item": "goety:apostle_blood_bottle"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "item": "minecraft:allium"
+    },
+    {
+      "item": "minecraft:poisonous_potato"
+    },
+    {
+      "item": "minecraft:totem_of_undying"
+    },
+    {
+      "item": "minecraft:end_crystal"
+    },
+    {
+      "item": "minecraft:nether_wart"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    },
+    {
+      "item": "minecraft:fermented_spider_eye"
+    }
+  ],
+  "result": {
+    "item": "goety:undeath_potion"
+  }
+}

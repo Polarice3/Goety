@@ -2,7 +2,7 @@
   "name": "Forge Ritual",
   "icon": "minecraft:anvil",
   "category": "goety:rituals",
-  "sortnum": 3,
+  "sortnum": 4,
   "pages": [
     {
       "type": "patchouli:text",
