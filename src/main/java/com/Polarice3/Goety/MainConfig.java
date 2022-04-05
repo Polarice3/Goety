@@ -29,6 +29,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -44,6 +45,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
@@ -62,6 +64,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -225,6 +228,8 @@ public class MainConfig {
                 .defineInRange("fireballCost", 4, 0, Integer.MAX_VALUE);
         LavaballCost = BUILDER.comment("Lava Bomb Spell Cost, Default: 16")
                 .defineInRange("lavaBombCost", 16, 0, Integer.MAX_VALUE);
+        SoulShieldCost = BUILDER.comment("Soul Shield Spell Cost, Default: 32")
+                .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -255,6 +260,8 @@ public class MainConfig {
                 .defineInRange("breathingTime", 10, 0, 72000);
         LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 30")
                 .defineInRange("lavaBombTime", 30, 0, 72000);
+        SoulShieldDuration = BUILDER.comment("Time to cast Soul Shield Spell, Default: 20")
+                .defineInRange("soulShieldTime", 20, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
@@ -347,6 +354,8 @@ public class MainConfig {
                 .defineInRange("fireballInfamyChance", 0, 0, Integer.MAX_VALUE);
         LavaballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Lava Bomb Spell, Default: 0")
                 .defineInRange("lavaBombInfamyChance", 0, 0, Integer.MAX_VALUE);
+        SoulShieldInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Shield Spell, Default: 0")
+                .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")

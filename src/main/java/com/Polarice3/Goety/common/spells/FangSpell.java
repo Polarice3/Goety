@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -137,7 +137,7 @@ public class FangSpell extends Spells{
         } while(blockpos.getY() >= MathHelper.floor(p_190876_5_) - 1);
 
         if (flag) {
-            livingEntity.level.addFreshEntity(new EvokerFangsEntity(livingEntity.level, p_190876_1_, (double)blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, livingEntity));
+            livingEntity.level.addFreshEntity(new FangEntity(livingEntity.level, p_190876_1_, (double)blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, livingEntity));
         }
 
     }

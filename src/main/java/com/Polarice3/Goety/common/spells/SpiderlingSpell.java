@@ -32,6 +32,7 @@ public class SpiderlingSpell extends ChargingSpells{
         BlockPos blockpos = entityLiving.blockPosition();
         SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), worldIn);
         summonedentity.setOwnerId(entityLiving.getUUID());
+        summonedentity.setUpgraded(this.ArachnoPower(entityLiving));
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
         summonedentity.setLimitedLife(180);
         worldIn.addFreshEntity(summonedentity);
@@ -47,6 +48,7 @@ public class SpiderlingSpell extends ChargingSpells{
         for(int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
             SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
+            summonedentity.setUpgraded(this.ArachnoPower(entityLiving));
             summonedentity.moveTo(blockpos, 0.0F, 0.0F);
             summonedentity.setLimitedLife(360);
             worldIn.addFreshEntity(summonedentity);

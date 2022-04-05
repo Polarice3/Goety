@@ -78,6 +78,13 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
+    public static final RegistryObject<EntityType<FangEntity>> FANG = ENTITY_TYPES.register("fang",
+            () -> EntityType.Builder.<FangEntity>of(FangEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.8F)
+                    .clientTrackingRange(6)
+                    .updateInterval(2)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fang").toString()));
+
     public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
                     .sized(1.0f,1.0f)

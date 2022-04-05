@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 public class SpiderlingMinionEntity extends SummonedEntity {
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(SpiderlingMinionEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Boolean> DATA_IS_UPGRADED = EntityDataManager.defineId(SpiderlingMinionEntity.class, DataSerializers.BOOLEAN);
 
     public SpiderlingMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -70,6 +71,15 @@ public class SpiderlingMinionEntity extends SummonedEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(CLIMBING, (byte)0);
+        this.entityData.define(DATA_IS_UPGRADED, false);
+    }
+
+    public boolean isUpgraded() {
+        return this.entityData.get(DATA_IS_UPGRADED);
+    }
+
+    public void setUpgraded(boolean upgraded) {
+        this.entityData.set(DATA_IS_UPGRADED, upgraded);
     }
 
     protected SoundEvent getAmbientSound() {
@@ -105,6 +115,14 @@ public class SpiderlingMinionEntity extends SummonedEntity {
 
     public CreatureAttribute getMobType() {
         return CreatureAttribute.ARTHROPOD;
+    }
+
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (this.isUpgraded()){
+            return false;
+        } else {
+            return super.hurt(pSource, pAmount);
+        }
     }
 
     public boolean canBeAffected(EffectInstance potioneffectIn) {

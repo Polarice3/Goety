@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
+import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
@@ -28,6 +29,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -254,8 +256,8 @@ public class ModEvents {
                         float f = player.getBrightness();
                         BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
                         if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                            player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1));
-                            player.addEffect(new EffectInstance(Effects.HUNGER, 100, 1));
+                            player.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
+                            player.addEffect(new EffectInstance(Effects.HUNGER, 20, 1));
                         }
                     }
                 } else {
@@ -318,7 +320,7 @@ public class ModEvents {
     public static void TargetSelection(LivingSetAttackTargetEvent event){
         if (event.getEntityLiving() instanceof SpiderEntity){
             if (event.getTarget() != null) {
-                if (RobeArmorFinder.FindArachnoSet(event.getTarget())) {
+                if (RobeArmorFinder.FindArachnoHelm(event.getTarget())) {
                     ((SpiderEntity) event.getEntityLiving()).setTarget(null);
                 }
             }
@@ -341,15 +343,28 @@ public class ModEvents {
             EffectInstance effectInstance = entity.getEffect(ModEffects.CURSED.get());
             assert effectInstance != null;
             int i = effectInstance.getAmplifier() + 1;
-            event.setAmount(event.getAmount() * 0.5F + i);
+            event.setAmount(event.getAmount() * (1.0F + i));
         }
-        if (RobeArmorFinder.FindArachnoArmor(entity) && event.getSource().getEntity() != null){
-            BlockPos blockpos = entity.blockPosition();
-            SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), entity.level);
-            summonedentity.setOwnerId(entity.getUUID());
-            summonedentity.moveTo(blockpos, 0.0F, 0.0F);
-            summonedentity.setLimitedLife(180);
-            entity.level.addFreshEntity(summonedentity);
+        if (entity.hasEffect(ModEffects.SOUL_SHIELD.get())){
+            if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
+                event.setCanceled(true);
+            }
+        }
+        if (RobeArmorFinder.FindArachnoArmor(entity)){
+            if (event.getSource().getEntity() != null) {
+                BlockPos blockpos = entity.blockPosition();
+                SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), entity.level);
+                summonedentity.setOwnerId(entity.getUUID());
+                summonedentity.moveTo(blockpos, 0.0F, 0.0F);
+                summonedentity.setLimitedLife(180);
+                entity.level.addFreshEntity(summonedentity);
+            }
+            if (event.getSource().getEntity() instanceof CreeperlingMinionEntity){
+                CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getSource().getEntity();
+                if (creeperlingMinion.getTrueOwner() == entity){
+                    event.setAmount(0);
+                }
+            }
         }
     }
 

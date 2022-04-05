@@ -10,10 +10,7 @@ import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
@@ -48,6 +45,7 @@ import java.util.function.Predicate;
 
 public class SummonedEntity extends CreatureEntity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.OPTIONAL_UUID);
+    private static final DataParameter<Boolean> WANDERING = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BOOLEAN);
     public final EntityPredicate summonCountTargeting = (new EntityPredicate()).range(64.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
     public LivingEntity owner;
     public boolean limitedLifespan;
@@ -215,14 +213,24 @@ public class SummonedEntity extends CreatureEntity {
         }
     }
 
+    public boolean isWandering() {
+        return this.entityData.get(WANDERING);
+    }
+
+    public void setWandering(boolean wandering) {
+        this.entityData.set(WANDERING, wandering);
+    }
+
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
+        this.entityData.define(WANDERING, false);
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.upgraded = compound.getBoolean("Upgraded");
+        this.entityData.set(WANDERING, compound.getBoolean("wandering"));
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
@@ -247,6 +255,10 @@ public class SummonedEntity extends CreatureEntity {
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Upgraded", this.upgraded);
+
+        if (this.entityData.get(WANDERING)) {
+            compound.putBoolean("wandering", true);
+        }
 
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
@@ -340,8 +352,8 @@ public class SummonedEntity extends CreatureEntity {
         private LivingEntity attacker;
         private int timestamp;
 
-        public OwnerHurtTargetGoal(SummonedEntity friendlyVexEntity) {
-            super(friendlyVexEntity, false);
+        public OwnerHurtTargetGoal(SummonedEntity summonedEntity) {
+            super(summonedEntity, false);
             this.setFlags(EnumSet.of(Flag.TARGET));
         }
 
@@ -424,10 +436,6 @@ public class SummonedEntity extends CreatureEntity {
             }
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
             LivingEntity livingentity = this.summonedEntity.getTrueOwner();
             if (livingentity == null) {
@@ -436,15 +444,14 @@ public class SummonedEntity extends CreatureEntity {
                 return false;
             } else if (this.summonedEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
                 return false;
+            } else if (this.summonedEntity.isWandering()) {
+                return false;
             } else {
                 this.owner = livingentity;
                 return true;
             }
         }
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
         public boolean canContinueToUse() {
             if (this.navigation.isDone()) {
                 return false;

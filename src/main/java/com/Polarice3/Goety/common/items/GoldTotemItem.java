@@ -80,28 +80,6 @@ public class GoldTotemItem extends Item {
         if (stack.getTag().getInt(SOULSAMOUNT) < 0){
             stack.getTag().putInt(SOULSAMOUNT, 0);
         }
-/*        if (MainConfig.TotemUndying.get()) {
-            if (entityIn instanceof PlayerEntity) {
-                PlayerEntity player = (PlayerEntity) entityIn;
-                if (MainConfig.LichHardcore.get()){
-                    if (LichdomUtil.isLich(player) && player.level.getLevelData().isHardcore()){
-                        if (stack.getTag().getInt(SOULSAMOUNT) >= MAXSOULS * 0.9) {
-                            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
-                            if (!foundStack.isEmpty()) {
-                                ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistry.DEATHPROTECT.get(), 20, 0, false, false));
-                            }
-                        }
-                    }
-                } else {
-                    if (stack.getTag().getInt(SOULSAMOUNT) == MAXSOULS) {
-                        ItemStack foundStack = GoldTotemFinder.FindTotem(player);
-                        if (!foundStack.isEmpty()) {
-                            ((LivingEntity) entityIn).addEffect(new EffectInstance(ModRegistry.DEATHPROTECT.get(), 20, 0, false, false));
-                        }
-                    }
-                }
-            }
-        }*/
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
@@ -147,8 +125,11 @@ public class GoldTotemItem extends Item {
     }
 
     public static int currentSouls(ItemStack itemStack){
-        assert itemStack.getTag() != null;
-        return itemStack.getTag().getInt(SOULSAMOUNT);
+        if (itemStack.getTag() != null){
+            return itemStack.getTag().getInt(SOULSAMOUNT);
+        } else {
+            return 0;
+        }
     }
 
     public static void handleKill(PlayerEntity playerEntity, LivingEntity victim) {

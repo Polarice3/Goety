@@ -13,6 +13,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -349,6 +350,10 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     @Override
     protected SoundEvent getCastingSoundEvent() {
         return ModSounds.APOSTLE_CAST_SPELL.get();
+    }
+
+    protected boolean canRide(Entity pEntity) {
+        return false;
     }
 
     public void aiStep() {

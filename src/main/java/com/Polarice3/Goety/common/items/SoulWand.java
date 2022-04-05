@@ -4,17 +4,22 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.inventory.container.SoulItemContainer;
 import com.Polarice3.Goety.client.inventory.container.WandandBagContainer;
+import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
+import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.CaveSpiderEntity;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -67,7 +72,6 @@ public class SoulWand extends Item{
                 compound.putInt(COOL, 0);
             }
             if (getFocus(stack) != ItemStack.EMPTY && getFocus(stack).getTag() != null) {
-                stack.getTag().putString(CURRENTFOCUS, FOCUS);
                 this.ChangeFocus(stack);
                 stack.getTag().putString(CURRENTFOCUS, FOCUS);
             } else {
@@ -113,6 +117,31 @@ public class SoulWand extends Item{
         } else {
             return CastDuration(stack);
         }
+    }
+
+    @Nonnull
+    @Override
+    public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand){
+        if (target instanceof SummonedEntity){
+            SummonedEntity summonedEntity = (SummonedEntity) target;
+            if (summonedEntity.getTrueOwner() == player){
+                if (player.isCrouching()){
+                    summonedEntity.kill();
+                } else {
+                    if (!summonedEntity.isWandering()){
+                        summonedEntity.setWandering(true);
+                        player.displayClientMessage(new TranslationTextComponent("info.goety.minion.wander", target.getDisplayName()), true);
+                    } else {
+                        summonedEntity.setWandering(false);
+                        player.displayClientMessage(new TranslationTextComponent("info.goety.minion.follow", target.getDisplayName()), true);
+                    }
+                    new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+                }
+                return ActionResultType.SUCCESS;
+            }
+        }
+        return super.interactLivingEntity(stack, player, target, hand);
+
     }
 
     public void onUseTick(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
