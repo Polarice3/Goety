@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -14,21 +15,28 @@ import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PotionEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
@@ -43,6 +51,7 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new CastingSpellGoal());
         this.goalSelector.addGoal(2, new HealingSelfSpellGoal());
+        this.goalSelector.addGoal(2, new ThrowPotionGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
@@ -89,6 +98,14 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
         this.populateDefaultEquipmentSlots(pDifficulty);
         this.populateDefaultEquipmentEnchantments(pDifficulty);
         return ilivingentitydata;
+    }
+
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
+        if (source == DamageSource.MAGIC){
+            return false;
+        } else {
+            return super.hurt(source, amount);
+        }
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
@@ -202,6 +219,60 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
 
         protected SpellType getSpell() {
             return SpellType.SUMMON_VEX;
+        }
+    }
+
+    static class ThrowPotionGoal extends Goal{
+        public int bombTimer;
+        public InquillagerEntity inquillager;
+
+        public ThrowPotionGoal(InquillagerEntity inquillager){
+            this.inquillager = inquillager;
+        }
+
+        @Override
+        public boolean canUse() {
+            if (this.inquillager.getTarget() != null){
+                LivingEntity entity = this.inquillager.getTarget();
+                return this.inquillager.distanceTo(entity) > 4.0;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.inquillager.getTarget() != null && !this.inquillager.getTarget().isDeadOrDying();
+        }
+
+        @Override
+        public void stop() {
+            this.bombTimer = 0;
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+            ++this.bombTimer;
+            if (this.bombTimer >= 60) {
+                LivingEntity livingEntity = this.inquillager.getTarget();
+                if (livingEntity != null) {
+                    Vector3d vector3d = livingEntity.getDeltaMovement();
+                    double d0 = livingEntity.getX() + vector3d.x - this.inquillager.getX();
+                    double d1 = livingEntity.getEyeY() - (double) 1.1F - this.inquillager.getY();
+                    double d2 = livingEntity.getZ() + vector3d.z - this.inquillager.getZ();
+                    float f = MathHelper.sqrt(d0 * d0 + d2 * d2);
+                    PotionEntity potionentity = new PotionEntity(this.inquillager.level, this.inquillager);
+                    potionentity.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), Potions.HARMING));
+                    potionentity.xRot -= -20.0F;
+                    potionentity.shoot(d0, d1 + (double) (f * 0.2F), d2, 0.75F, 8.0F);
+                    if (!this.inquillager.isSilent()) {
+                        this.inquillager.level.playSound((PlayerEntity) null, this.inquillager.getX(), this.inquillager.getY(), this.inquillager.getZ(), SoundEvents.WITCH_THROW, this.inquillager.getSoundSource(), 1.0F, 0.8F + this.inquillager.random.nextFloat() * 0.4F);
+                    }
+                    this.inquillager.level.addFreshEntity(potionentity);
+                    this.bombTimer = 0;
+                }
+            }
         }
     }
 }

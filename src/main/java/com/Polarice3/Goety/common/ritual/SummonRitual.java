@@ -31,27 +31,29 @@ public class SummonRitual extends Ritual {
     }
 
     @Override
-    public void finish(World world, BlockPos goldenBowlPosition, DarkAltarTileEntity tileEntity,
+    public void finish(World world, BlockPos blockPos, DarkAltarTileEntity tileEntity,
                        PlayerEntity castingPlayer, ItemStack activationItem) {
-        super.finish(world, goldenBowlPosition, tileEntity, castingPlayer, activationItem);
+        super.finish(world, blockPos, tileEntity, castingPlayer, activationItem);
 
         ItemStack copy = activationItem.copy();
         activationItem.shrink(1);
 
-        ((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, goldenBowlPosition.getX() + 0.5,
-                goldenBowlPosition.getY() + 0.5, goldenBowlPosition.getZ() + 0.5, 1, 0, 0, 0, 0);
+        ((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, blockPos.getX() + 0.5,
+                blockPos.getY() + 0.5, blockPos.getZ() + 0.5, 1, 0, 0, 0, 0);
 
         EntityType<?> entityType = this.recipe.getEntityToSummon();
         if (entityType != null) {
-            Entity entity = this.createSummonedEntity(entityType, world, goldenBowlPosition, tileEntity, castingPlayer);
+            Entity entity = this.createSummonedEntity(entityType, world, blockPos, tileEntity, castingPlayer);
             if (entity instanceof LivingEntity) {
                 LivingEntity living = (LivingEntity) entity;
-                this.prepareLivingEntityForSpawn(living, world, goldenBowlPosition, tileEntity, castingPlayer, this.tame);
+                this.prepareLivingEntityForSpawn(living, world, blockPos, tileEntity, castingPlayer, this.tame);
 
-                this.initSummoned(living, world, goldenBowlPosition, tileEntity, castingPlayer);
+                this.initSummoned(living, world, blockPos, tileEntity, castingPlayer);
 
                 this.spawnEntity(living, world);
 
+            } else {
+                this.spawnEntity(entity, world);
             }
         }
     }

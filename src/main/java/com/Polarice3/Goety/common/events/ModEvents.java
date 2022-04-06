@@ -13,6 +13,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
+import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.items.SoulWand;
@@ -89,6 +90,12 @@ public class ModEvents {
                 InfamyHelper.sendInfamyUpdatePacket(player);
             }
 
+        }
+        if (entity instanceof StormEntity){
+            if (!entity.level.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) entity.level;
+                serverWorld.setWeatherParameters(0, 6000, true, true);
+            }
         }
     }
 

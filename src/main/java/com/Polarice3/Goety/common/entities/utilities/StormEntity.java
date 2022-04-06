@@ -36,7 +36,9 @@ public class StormEntity extends Entity {
         if (!this.level.isClientSide) {
             ServerWorld serverWorld = (ServerWorld) this.level;
             if (this.tickCount % 20 == 0) {
-                serverWorld.setWeatherParameters(0, 6000, true, true);
+                if (!serverWorld.isThundering()) {
+                    serverWorld.setWeatherParameters(0, 6000, true, true);
+                }
                 this.remove();
             }
         }

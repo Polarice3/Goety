@@ -336,7 +336,7 @@ public class ModEntityType {
     public static final RegistryObject<EntityType<StormEntity>> STORMUTIL = ENTITY_TYPES.register("stormutil",
             () -> EntityType.Builder.of(StormEntity::new, EntityClassification.MISC)
                     .fireImmune()
-                    .sized(0.0F, 0.0F)
+                    .sized(0.5F, 0.5F)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "stormutil").toString()));

@@ -5,6 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.common.items.*;
+import com.Polarice3.Goety.common.items.curios.CurioItem;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -80,6 +81,7 @@ public class ModRegistry {
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
     public static final RegistryObject<Item> APOSTLE_BLOOD = ITEMS.register("apostle_blood_bottle", ItemBase::new);
     public static final RegistryObject<Item> UNDEATH_POTION = ITEMS.register("undeath_potion", UndeathPotionItem::new);
+    public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", CurioItem::new);
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));

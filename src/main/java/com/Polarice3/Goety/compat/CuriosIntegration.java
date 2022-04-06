@@ -31,6 +31,7 @@ public class CuriosIntegration implements ICompatable {
     private static final Map<Item, String> TYPES = ImmutableMap.<Item, String>builder()
             .put(ModRegistry.GOLDTOTEM.get(), "charm")
             .put(ModRegistry.FOCUSBAG.get(), "belt")
+            .put(ModRegistry.EMERALD_AMULET.get(), "necklace")
             .build();
 
     public void setup(FMLCommonSetupEvent event) {

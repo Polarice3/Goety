@@ -170,6 +170,19 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         super.die(cause);
     }
 
+    protected float getDamageAfterMagicAbsorb(DamageSource source, float damage) {
+        damage = super.getDamageAfterMagicAbsorb(source, damage);
+        if (source.getEntity() == this) {
+            damage = 0.0F;
+        }
+
+        if (source.isMagic()) {
+            damage = (float)((double)damage * 0.15D);
+        }
+
+        return damage;
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);

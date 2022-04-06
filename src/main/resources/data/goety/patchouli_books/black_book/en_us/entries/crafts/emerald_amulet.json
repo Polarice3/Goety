@@ -1,0 +1,17 @@
+{
+  "name": "Emerald Amulet",
+  "icon": "goety:emerald_amulet",
+  "category": "goety:crafts",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Through the power of the Concentrated Emerald, you've found a way to create an Amulet that increases the power of the Fangs spawned from the Biting Spell."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:emerald_amulet",
+      "text": "By having it on the Hotbar, or in the Necklace Slot if Curios is installed, Fangs will deal 5 Hearts of Damage instead of 3."
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "icon": "goety:dead_sandstone",
   "category": "goety:crafts",
   "advancement": "goety:goety/craft_dead_sand",
-  "sortnum": 6,
+  "sortnum": 7,
   "pages": [
     {
       "type": "patchouli:text",

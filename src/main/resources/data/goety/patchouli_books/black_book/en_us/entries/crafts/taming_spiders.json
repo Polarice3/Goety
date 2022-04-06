@@ -2,7 +2,7 @@
   "name": "Taming Spiders",
   "icon": "goety:deadbat",
   "category": "goety:crafts",
-  "sortnum": 7,
+  "sortnum": 8,
   "pages": [
     {
       "type": "patchouli:spotlight",
