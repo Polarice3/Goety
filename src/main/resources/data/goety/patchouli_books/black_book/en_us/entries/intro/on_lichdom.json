@@ -2,7 +2,7 @@
   "name": "Caveats of being a Lich",
   "icon": "minecraft:skeleton_skull",
   "category": "goety:crafts",
-  "advancement": "goety:goety/kill_a_apostle",
+  "advancement": "goety:goety/become_lich",
   "secret": true,
   "pages": [
     {

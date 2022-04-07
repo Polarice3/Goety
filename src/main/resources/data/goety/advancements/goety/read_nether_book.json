@@ -1,17 +1,18 @@
 {
   "parent": "goety:goety/root",
   "criteria": {
-    "requirement": {
+    "nether_book": {
       "trigger": "minecraft:consume_item",
       "conditions": {
-        "items": [
-          {
-            "item": "goety:nether_book_translated"
-          }
-        ]
+        "item": {
+          "item": "goety:nether_book_translated"
+        }
       }
     }
   },
+  "requirement": [
+    "nether_book"
+  ],
   "rewards": {
     "experience": 50
   }

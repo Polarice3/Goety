@@ -8,6 +8,7 @@ import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
+import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
@@ -38,10 +39,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -97,6 +95,7 @@ public class ModEvents {
                 serverWorld.setWeatherParameters(0, 6000, true, true);
             }
         }
+
     }
 
     @SubscribeEvent
@@ -205,6 +204,16 @@ public class ModEvents {
             if (livingEntity.hasEffect(ModEffects.APOSTLE_CURSE.get())){
                 if (livingEntity.hasEffect(Effects.FIRE_RESISTANCE)){
                     livingEntity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
+                }
+            }
+            if (MainConfig.DeadSandSpread.get()) {
+                if (livingEntity instanceof CreeperEntity) {
+                    BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
+                    if (blockState.getBlock() instanceof IDeadBlock) {
+                        if (livingEntity.tickCount % 20 == 0) {
+                            livingEntity.hurt(DamageSource.DRY_OUT, 5);
+                        }
+                    }
                 }
             }
         }
@@ -384,6 +393,21 @@ public class ModEvents {
                 int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModEffects.GOLDTOUCHED.get())).getAmplifier() + 1;
                 for(int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
                     killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
+                }
+            }
+        }
+        if (MainConfig.DeadSandSpread.get()) {
+            if (killed instanceof CreeperEntity) {
+                if (event.getSource() == DamageSource.DRY_OUT) {
+                    BlockState blockState = killed.level.getBlockState(killed.blockPosition().below());
+                    if (blockState.getBlock() instanceof IDeadBlock) {
+                        BoomerEntity boomer = ((CreeperEntity) killed).convertTo(ModEntityType.BOOMER.get(), false);
+                        if (boomer != null) {
+                            boomer.finalizeSpawn((IServerWorld) boomer.level, boomer.level.getCurrentDifficultyAt(boomer.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                            net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, boomer);
+                            new SoundUtil(boomer.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        }
+                    }
                 }
             }
         }

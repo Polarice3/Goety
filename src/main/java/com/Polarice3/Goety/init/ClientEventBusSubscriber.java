@@ -50,6 +50,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CONQUILLAGER.get(), ConquillagerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.TORMENTOR.get(), TormentorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HUSKARL.get(), HuskarlRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BOOMER.get(), BoomerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_COW.get(), MutatedCowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepRenderer::new);

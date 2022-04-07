@@ -1,15 +1,19 @@
 {
   "parent": "goety:goety/root",
   "criteria": {
-    "requirement": {
+    "undeath": {
       "trigger": "minecraft:consume_item",
       "conditions": {
-        "items": [
-          {
-            "item": "goety:undeath_potion"
-          }
-        ]
+        "item": {
+          "item": "goety:undeath_potion"
+        }
       }
     }
+  },
+  "requirement": [
+    "undeath"
+  ],
+  "rewards": {
+    "experience": 50
   }
 }

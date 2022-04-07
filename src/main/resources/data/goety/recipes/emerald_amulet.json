@@ -6,7 +6,7 @@
   },
   "craftType": "forge",
   "soulCost": 1,
-  "duration": 30,
+  "duration": 10,
   "ingredients": [
     {
       "item": "minecraft:gold_ingot"

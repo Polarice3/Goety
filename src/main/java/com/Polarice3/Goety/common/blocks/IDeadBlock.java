@@ -35,7 +35,7 @@ public interface IDeadBlock {
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             BlockState blockState = pLevel.getBlockState(blockpos);
-            if (BlockFinder.NotDeadSandImmune(blockState, pLevel, blockpos, pPos)) {
+            if (BlockFinder.NotDeadSandImmune(blockState)) {
                 if (blockState.getMaterial() == Material.STONE) {
                     pLevel.removeBlock(blockpos, false);
                     pLevel.playSound(null, blockpos, SoundEvents.STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -55,7 +55,7 @@ public interface IDeadBlock {
                 new SoundUtil(pPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
 
-            if (BlockFinder.NotDeadSandImmune(blockState, pLevel, blockpos, pPos.below())) {
+            if (BlockFinder.NotDeadSandImmune(blockState)) {
                 for (int l1 = -4; l1 <= 0; ++l1) {
                     int random = pRandom.nextInt(2);
                     int l2 = random == 0 ? l1 : 0;
@@ -120,7 +120,7 @@ public interface IDeadBlock {
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             BlockState blockState = pLevel.getBlockState(blockpos);
-            if (BlockFinder.NotDeadSandImmune(blockState, pLevel, blockpos, pPos)
+            if (BlockFinder.NotDeadSandImmune(blockState)
                     && blockState.getMaterial() != Material.STONE
                     && !blockState.is(BlockTags.LOGS)) {
                 pLevel.removeBlock(blockpos, false);

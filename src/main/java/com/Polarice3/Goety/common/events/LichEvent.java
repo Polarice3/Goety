@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
+import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
@@ -168,6 +169,16 @@ public class LichEvent {
                             if (LichdomUtil.isLich(player)) {
                                 ((MonsterEntity) event.getEntityLiving()).setTarget(null);
                             }
+                        }
+                    }
+                }
+            }
+            if (event.getEntityLiving() instanceof IDeadMob){
+                if (event.getTarget() != null) {
+                    if (event.getTarget() instanceof PlayerEntity) {
+                        PlayerEntity player = (PlayerEntity) event.getTarget();
+                        if (LichdomUtil.isLich(player)) {
+                            ((MonsterEntity) event.getEntityLiving()).setTarget(null);
                         }
                     }
                 }

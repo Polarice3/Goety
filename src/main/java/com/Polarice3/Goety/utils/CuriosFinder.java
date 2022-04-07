@@ -19,7 +19,7 @@ public class CuriosFinder {
                     ImmutableTriple::getRight).orElse(ItemStack.EMPTY);
         }
 
-        for (int i = 0; i <= 9; i++) {
+        for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
             ItemStack itemStack = playerEntity.inventory.getItem(i);
             if (!itemStack.isEmpty() && isMatchingItem(itemStack)) {
                 foundStack = itemStack;

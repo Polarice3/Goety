@@ -149,6 +149,7 @@ public class Goety {
         event.put(ModEntityType.CONQUILLAGER.get(), ConquillagerEntity.setCustomAttributes().build());
         event.put(ModEntityType.TORMENTOR.get(), TormentorEntity.setCustomAttributes().build());
         event.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
+        event.put(ModEntityType.BOOMER.get(), BoomerEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepEntity.setCustomAttributes().build());

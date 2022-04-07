@@ -1,9 +1,12 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,14 +110,19 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
     }
 
     public void entityInside(BlockState pState, World pLevel, BlockPos pPos, Entity pEntity) {
-        pEntity.hurt(DamageSource.CACTUS, 1.0F);
         if (pEntity instanceof LivingEntity){
-            if (pEntity instanceof PlayerEntity){
-                if (!((PlayerEntity) pEntity).isCreative()){
-                    ((LivingEntity) pEntity).addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
+            LivingEntity livingEntity = (LivingEntity) pEntity;
+            if (pEntity instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) livingEntity;
+                if (!player.isCreative() && !LichdomUtil.isLich(player)) {
+                    player.hurt(DamageSource.CACTUS, 1.0F);
+                    player.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
                 }
             } else {
-                ((LivingEntity) pEntity).addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
+                if (livingEntity.getMobType() != CreatureAttribute.UNDEAD && !(pEntity instanceof IDeadMob)){
+                    livingEntity.hurt(DamageSource.CACTUS, 1.0F);
+                    livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
+                }
             }
         }
     }

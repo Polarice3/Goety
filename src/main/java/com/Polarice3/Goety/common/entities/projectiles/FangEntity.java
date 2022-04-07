@@ -31,12 +31,12 @@ public class FangEntity extends Entity {
         super(p_i50170_1_, p_i50170_2_);
     }
 
-    public FangEntity(World p_i47276_1_, double p_i47276_2_, double p_i47276_4_, double p_i47276_6_, float p_i47276_8_, int p_i47276_9_, LivingEntity p_i47276_10_) {
-        this(ModEntityType.FANG.get(), p_i47276_1_);
-        this.warmupDelayTicks = p_i47276_9_;
-        this.setOwner(p_i47276_10_);
+    public FangEntity(World world, double pPosX, double pPosY, double pPosZ, float p_i47276_8_, int pWarmUp, LivingEntity owner) {
+        this(ModEntityType.FANG.get(), world);
+        this.warmupDelayTicks = pWarmUp;
+        this.setOwner(owner);
         this.yRot = p_i47276_8_ * (180F / (float)Math.PI);
-        this.setPos(p_i47276_2_, p_i47276_4_, p_i47276_6_);
+        this.setPos(pPosX, pPosY, pPosZ);
     }
 
     protected void defineSynchedData() {

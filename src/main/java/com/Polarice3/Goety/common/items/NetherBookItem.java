@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -27,32 +26,28 @@ public class NetherBookItem extends Item {
 
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
-        if (itemstack.getItem() instanceof NetherBookItem) {
-            if (!worldIn.isClientSide) {
-                CompoundNBT playerData = playerIn.getPersistentData();
-                CompoundNBT data;
+        if (!worldIn.isClientSide){
+            CompoundNBT playerData = playerIn.getPersistentData();
+            CompoundNBT data;
 
-                if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                    data = new CompoundNBT();
-                } else {
-                    data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-                }
+            if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
+                data = new CompoundNBT();
+            } else {
+                data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+            }
 
-                if (!data.getBoolean("goety:readNetherBook")) {
-                    data.putBoolean("goety:readNetherBook", true);
-                    playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
-                    CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity) playerIn, itemstack);
-                    playerIn.displayClientMessage(new TranslationTextComponent("info.goety.research.nether"), true);
-                    itemstack.shrink(1);
-                    return ActionResult.consume(playerIn.getItemInHand(handIn));
-                } else {
-                    return ActionResult.pass(playerIn.getItemInHand(handIn));
-                }
+            if (!data.getBoolean("goety:readNetherBook")) {
+                data.putBoolean("goety:readNetherBook", true);
+                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+                CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity) playerIn, itemstack);
+                playerIn.displayClientMessage(new TranslationTextComponent("info.goety.research.nether"), true);
+                itemstack.shrink(1);
+                return ActionResult.consume(playerIn.getItemInHand(handIn));
             } else {
                 return ActionResult.pass(playerIn.getItemInHand(handIn));
             }
         } else {
-            return super.use(worldIn, playerIn, handIn);
+            return ActionResult.pass(playerIn.getItemInHand(handIn));
         }
     }
 }
