@@ -100,7 +100,9 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                                     ZombieMinionEntity summonedentity = ((ZombieEntity) entity).convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
                                     if (summonedentity != null) {
                                         summonedentity.setOwnerId(livingentity.getUUID());
-                                        summonedentity.setWandering(true);
+                                        if (MainConfig.SoulSkullMinionWander.get()) {
+                                            summonedentity.setWandering(true);
+                                        }
                                         summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
@@ -119,7 +121,9 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                                     SkeletonMinionEntity summonedentity = ((SkeletonEntity) entity).convertTo(ModEntityType.SKELETON_MINION.get(), false);
                                     if (summonedentity != null) {
                                         summonedentity.setOwnerId(livingentity.getUUID());
-                                        summonedentity.setWandering(true);
+                                        if (MainConfig.SoulSkullMinionWander.get()) {
+                                            summonedentity.setWandering(true);
+                                        }
                                         summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);

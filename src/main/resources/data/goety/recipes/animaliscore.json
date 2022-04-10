@@ -15,7 +15,7 @@
       "tag": "minecraft:boats"
     },
     {
-      "item": "minecraft:leather"
+      "tag": "forge:leather"
     },
     {
       "item": "minecraft:feather"

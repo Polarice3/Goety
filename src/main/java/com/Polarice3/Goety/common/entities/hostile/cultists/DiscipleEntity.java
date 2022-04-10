@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
@@ -94,10 +94,10 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.level.random.nextInt(3);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.NETHER_BOOK.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NETHER_BOOK.get()));
         this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTHELM.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModRegistry.CULTISTROBE.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTISTHELM.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.CULTISTROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
         this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
         switch (random){

@@ -7,8 +7,9 @@ import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
+import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,7 +25,6 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -64,7 +64,7 @@ public class GoldTotemItem extends Item {
             GoldTotemItem.decreaseSouls(container, MainConfig.CraftingSouls.get());
             return container;
         } else {
-            return new ItemStack(ModRegistry.SPENTTOTEM.get());
+            return new ItemStack(ModItems.SPENTTOTEM.get());
         }
     }
 
@@ -162,7 +162,7 @@ public class GoldTotemItem extends Item {
         ItemStack foundStack = GoldTotemFinder.FindTotem(playerEntity);
         if (GoldTotemItem.isFull(foundStack)){
             foundStack.setCount(0);
-            playerEntity.addItem(new ItemStack(ModRegistry.SPENTTOTEM.get()));
+            playerEntity.addItem(new ItemStack(ModItems.SPENTTOTEM.get()));
         }
     }
 
@@ -177,7 +177,7 @@ public class GoldTotemItem extends Item {
     }
 
     public static void setSoulsamount(ItemStack itemStack, int souls){
-        if (itemStack.getItem() != ModRegistry.GOLDTOTEM.get()) {
+        if (itemStack.getItem() != ModItems.GOLDTOTEM.get()) {
             return;
         }
         assert itemStack.getTag() != null;
@@ -185,7 +185,7 @@ public class GoldTotemItem extends Item {
     }
 
     public static void increaseSouls(ItemStack itemStack, int souls) {
-        if (itemStack.getItem() != ModRegistry.GOLDTOTEM.get()) {
+        if (itemStack.getItem() != ModItems.GOLDTOTEM.get()) {
             return;
         }
         assert itemStack.getTag() != null;
@@ -197,7 +197,7 @@ public class GoldTotemItem extends Item {
     }
 
     public static void decreaseSouls(ItemStack itemStack, int souls) {
-        if (itemStack.getItem() != ModRegistry.GOLDTOTEM.get()) {
+        if (itemStack.getItem() != ModItems.GOLDTOTEM.get()) {
             return;
         }
         assert itemStack.getTag() != null;
@@ -227,10 +227,10 @@ public class GoldTotemItem extends Item {
         World world = pContext.getLevel();
         BlockPos blockpos = pContext.getClickedPos();
         BlockState blockstate = world.getBlockState(blockpos);
-        if (blockstate.is(ModRegistry.CURSED_CAGE_BLOCK.get()) && !blockstate.getValue(CursedCageBlock.POWERED)) {
+        if (blockstate.is(ModBlocks.CURSED_CAGE_BLOCK.get()) && !blockstate.getValue(CursedCageBlock.POWERED)) {
             ItemStack itemstack = pContext.getItemInHand();
             if (!world.isClientSide) {
-                ((CursedCageBlock) ModRegistry.CURSED_CAGE_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
+                ((CursedCageBlock) ModBlocks.CURSED_CAGE_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
                 world.levelEvent(null, 1010, blockpos, Item.getId(this));
                 itemstack.shrink(1);
             }

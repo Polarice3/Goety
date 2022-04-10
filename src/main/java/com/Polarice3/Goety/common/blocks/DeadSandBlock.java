@@ -40,8 +40,7 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
     }
 
     public void randomTick(BlockState pState, ServerWorld pLevel, BlockPos pPos, Random pRandom) {
-        this.spreadSand(pState, pLevel, pPos, pRandom);
-        this.growHauntedCactus(pState, pLevel, pPos, pRandom);
+        this.spreadSand(pLevel, pPos, pRandom);
     }
 
     public BlockRenderType getRenderShape(BlockState state) {

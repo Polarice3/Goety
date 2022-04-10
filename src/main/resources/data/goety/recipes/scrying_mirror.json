@@ -10,11 +10,11 @@
   {
     "g":
     {
-      "item": "minecraft:glass_pane"
+      "tag": "forge:glass_panes/colorless"
     },
     "l":
     {
-      "item": "minecraft:lapis_lazuli"
+      "tag": "forge:gems/lapis"
     },
     "m":
     {
@@ -22,7 +22,7 @@
     },
     "s":
     {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "e":
     {

@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 public class PitchforkEntity extends AbstractArrowEntity {
     private static final DataParameter<Byte> ID_LOYALTY = EntityDataManager.defineId(PitchforkEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Boolean> ID_FOIL = EntityDataManager.defineId(PitchforkEntity.class, DataSerializers.BOOLEAN);
-    private ItemStack tridentItem = new ItemStack(ModRegistry.PITCHFORK.get());
+    private ItemStack tridentItem = new ItemStack(ModItems.PITCHFORK.get());
     private boolean dealtDamage;
     public int clientSideReturnTridentTickCount;
 

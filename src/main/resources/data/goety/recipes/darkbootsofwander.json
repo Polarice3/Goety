@@ -15,10 +15,10 @@
       "item": "goety:magicfabric"
     },
     {
-      "item": "minecraft:leather"
+      "tag": "forge:gems/lapis"
     },
     {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     },
     {
       "item": "minecraft:rabbit_foot"

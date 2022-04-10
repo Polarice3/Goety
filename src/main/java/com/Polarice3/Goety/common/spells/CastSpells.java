@@ -43,6 +43,8 @@ public class CastSpells {
                 return new FireballSpell();
             case 16:
                 return new LavaballSpell();
+            case 17:
+                return new WebBallSpell();
             default:
                 return null;
         }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "goety:blocks/dead_sandstone_bottom",
+    "top": "goety:blocks/dead_sandstone_top",
+    "side": "goety:blocks/dead_sandstone"
+  }
+}

@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.blocks;
 
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -124,6 +124,8 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
                     livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
                 }
             }
+        } else {
+            pEntity.hurt(DamageSource.CACTUS, 1.0F);
         }
     }
 
@@ -143,7 +145,7 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
     public boolean canSustainThis(BlockState state, IBlockReader world, BlockPos pos, Direction facing, net.minecraftforge.common.IPlantable plantable) {
         BlockState plant = plantable.getPlant(world, pos.relative(facing));
         if (plant.getBlock() == this.getBlock()){
-            return state.is(ModRegistry.HAUNTED_CACTUS.get()) || state.is(ModRegistry.DEAD_SAND.get());
+            return state.is(ModBlocks.HAUNTED_CACTUS.get()) || state.is(ModBlocks.DEAD_SAND.get());
         } else {
             return false;
         }

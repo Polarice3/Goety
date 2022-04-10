@@ -3,7 +3,8 @@ package com.Polarice3.Goety.compat.jei;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModItems;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.constants.VanillaTypes;
@@ -30,9 +31,9 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
     private final IDrawable background;
     private final IDrawable arrow;
     private final String localizedName;
-    private final ItemStack darkAltar = new ItemStack(ModRegistry.DARK_ALTAR.get());
-    private final ItemStack pedestals = new ItemStack(ModRegistry.PEDESTAL_DUMMY.get());
-    private final ItemStack requireSacrifice = new ItemStack(ModRegistry.JEI_DUMMY_REQUIRE_SACRIFICE.get());
+    private final ItemStack darkAltar = new ItemStack(ModBlocks.DARK_ALTAR.get());
+    private final ItemStack pedestals = new ItemStack(ModItems.PEDESTAL_DUMMY.get());
+    private final ItemStack requireSacrifice = new ItemStack(ModItems.JEI_DUMMY_REQUIRE_SACRIFICE.get());
     private final int iconWidth = 16;
     private final int ritualCenterX;
     private final int ritualCenterY;
@@ -157,7 +158,7 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
 
         }
 
-        if (recipe.getResultItem().getItem() != ModRegistry.JEI_DUMMY_NONE.get()) {
+        if (recipe.getResultItem().getItem() != ModItems.JEI_DUMMY_NONE.get()) {
             recipeLayout.getItemStacks()
                     .init(index, false, this.ritualCenterX + this.recipeOutputOffsetX, this.ritualCenterY - 15);
             recipeLayout.getItemStacks().set(index, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
@@ -175,7 +176,7 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
 
         if (recipe.getCraftType().contains("animalis")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);
-            recipeLayout.getItemStacks().set(index, new ItemStack(ModRegistry.ANIMALISCORE.get()));
+            recipeLayout.getItemStacks().set(index, new ItemStack(ModItems.ANIMALISCORE.get()));
             index++;
         } else if (recipe.getCraftType().contains("necroturgy")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);

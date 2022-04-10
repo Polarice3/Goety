@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "sfs",
+    "nsn",
     "fef",
-    "sfs"
+    "bfb"
   ],
   "key":
   {
@@ -19,6 +19,14 @@
     "s":
     {
       "item": "minecraft:pufferfish"
+    },
+    "b":
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    "n":
+    {
+      "item": "minecraft:nether_wart"
     }
   },
   "result":

@@ -111,7 +111,9 @@ public class Goety {
 
         forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
 
-        ModRegistry.init();
+        ModItems.init();
+        ModKeybindings.init();
+        ModBlocks.init();
         ModEffects.init();
         ModSounds.init();
         ModStructures.init();
@@ -258,7 +260,7 @@ public class Goety {
     public static final ItemGroup TAB = new ItemGroup("goetyTab") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(ModRegistry.GOLDTOTEM.get());
+            return new ItemStack(ModItems.GOLDTOTEM.get());
         }
     };
 }

@@ -13,13 +13,13 @@
       "item": "goety:nether_book"
     },
     {
-      "item": "minecraft:gold_block"
+      "tag": "forge:storage_blocks/gold"
     },
     {
-      "item": "minecraft:gold_block"
+      "tag": "forge:storage_blocks/gold"
     },
     {
-      "item": "minecraft:netherite_block"
+      "tag": "forge:ingots/netherite"
     }
   ],
   "result": {

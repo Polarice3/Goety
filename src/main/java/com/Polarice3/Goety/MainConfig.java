@@ -29,6 +29,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WebballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
@@ -45,6 +46,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WebballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
@@ -64,6 +66,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WebballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
@@ -128,6 +131,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullFire;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullZombie;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullSkeleton;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullMinionWander;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> VexTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
@@ -228,6 +232,8 @@ public class MainConfig {
                 .defineInRange("fireballCost", 4, 0, Integer.MAX_VALUE);
         LavaballCost = BUILDER.comment("Lava Bomb Spell Cost, Default: 16")
                 .defineInRange("lavaBombCost", 16, 0, Integer.MAX_VALUE);
+        WebballCost = BUILDER.comment("Web Ball Spell Cost, Default: 4")
+                .defineInRange("webBallCost", 4, 0, Integer.MAX_VALUE);
         SoulShieldCost = BUILDER.comment("Soul Shield Spell Cost, Default: 32")
                 .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -260,6 +266,8 @@ public class MainConfig {
                 .defineInRange("breathingTime", 10, 0, 72000);
         LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 30")
                 .defineInRange("lavaBombTime", 30, 0, 72000);
+        WebballDuration = BUILDER.comment("Time to cast Web Ball Spell, Default: 10")
+                .defineInRange("webBallTime", 10, 0, 72000);
         SoulShieldDuration = BUILDER.comment("Time to cast Soul Shield Spell, Default: 20")
                 .defineInRange("soulShieldTime", 20, 0, 72000);
         BUILDER.pop();
@@ -354,6 +362,8 @@ public class MainConfig {
                 .defineInRange("fireballInfamyChance", 0, 0, Integer.MAX_VALUE);
         LavaballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Lava Bomb Spell, Default: 0")
                 .defineInRange("lavaBombInfamyChance", 0, 0, Integer.MAX_VALUE);
+        WebballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Web Ball Spell, Default: 0")
+                .defineInRange("webBallInfamyChance", 0, 0, Integer.MAX_VALUE);
         SoulShieldInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Shield Spell, Default: 0")
                 .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -404,6 +414,8 @@ public class MainConfig {
                 .define("soulSkullZombies", true);
         SoulSkullSkeleton = BUILDER.comment("Skeletons killed by Soul Skull converts into a Servant, Default: true")
                 .define("soulSkullSkeletons", true);
+        SoulSkullMinionWander = BUILDER.comment("Servants converted by Soul Skulls will automatically be in Wander Mode, Default: true")
+                .define("soulSkullServantWander", true);
         BUILDER.pop();
         BUILDER.push("Robe Repairs");
         DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 20")

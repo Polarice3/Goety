@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "goety:block/dead_sandstone_cut_slab"
+    },
+    "type=double": {
+      "model": "goety:block/dead_sandstone_cut"
+    },
+    "type=top": {
+      "model": "goety:block/dead_sandstone_cut_slab_top"
+    }
+  }
+}

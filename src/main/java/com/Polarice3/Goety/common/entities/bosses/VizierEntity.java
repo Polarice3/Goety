@@ -3,7 +3,7 @@ package com.Polarice3.Goety.common.entities.bosses;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -269,7 +269,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-        ItemEntity itementity = this.spawnAtLocation(ModRegistry.SOULRUBY.get());
+        ItemEntity itementity = this.spawnAtLocation(ModItems.SOULRUBY.get());
         if (itementity != null) {
             itementity.setExtendedLifetime();
         }

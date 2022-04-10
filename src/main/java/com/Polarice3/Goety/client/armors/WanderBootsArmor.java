@@ -3,8 +3,8 @@ package com.Polarice3.Goety.client.armors;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.model.RobeModel;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.init.ModRegistry;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -86,11 +86,11 @@ public class WanderBootsArmor extends ArmorItem {
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        if (stack.getItem() == ModRegistry.DARKBOOTSOFWANDER.get()){
+        if (stack.getItem() == ModItems.DARKBOOTSOFWANDER.get()){
             return "goety:textures/models/armor/darkrobearmor.png";
-        } else if (stack.getItem() == ModRegistry.NECROBOOTSOFWANDER.get()){
+        } else if (stack.getItem() == ModItems.NECROBOOTSOFWANDER.get()){
             return "goety:textures/models/armor/necrorobearmor.png";
-        } else if (stack.getItem() == ModRegistry.ARACHNOBOOTSOFWANDER.get()){
+        } else if (stack.getItem() == ModItems.ARACHNOBOOTSOFWANDER.get()){
             return "goety:textures/models/armor/arachnorobearmor.png";
         } else {
             return "goety:textures/models/armor/darkrobearmor.png";

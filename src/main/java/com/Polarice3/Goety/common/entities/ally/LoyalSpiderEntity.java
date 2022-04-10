@@ -5,7 +5,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -115,6 +116,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, false, (entity) ->
                 entity instanceof IMob
                         && !(entity instanceof CreeperEntity && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
+                        && !(entity instanceof SpiderEntity && this.getTrueOwner() != null && RobeArmorFinder.FindArachnoHelm(this.getTrueOwner()))
                         && !(entity instanceof SummonedEntity && ((SummonedEntity) entity).getTrueOwner() == this.getTrueOwner())));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -500,7 +502,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
 
     public boolean isFood(ItemStack pStack) {
         Item item = pStack.getItem();
-        return item == ModRegistry.DEADBAT.get();
+        return item == ModItems.DEADBAT.get();
     }
 
     public void die(DamageSource cause) {

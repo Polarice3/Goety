@@ -71,7 +71,7 @@ public class FireTornadoTrapEntity extends Entity {
             float f7 = MathHelper.sqrt(this.random.nextFloat()) * f;
             float f8 = MathHelper.cos(f6) * f7;
             float f9 = MathHelper.sin(f6) * f7;
-            new ParticleUtil(ParticleTypes.LAVA, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D);
+            new ParticleUtil(ParticleTypes.ASH, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D);
         }
         if (this.tickCount >= this.getDuration()) {
             if (this.owner != null) {
@@ -84,7 +84,7 @@ public class FireTornadoTrapEntity extends Entity {
                         double d3 = livingentity.getZ() - this.getZ();
                         FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.owner, d1, d2, d3);
                         fireTornadoEntity.setOwnerId(this.owner.getUUID());
-                        fireTornadoEntity.setTotallife(1200);
+                        fireTornadoEntity.setTotallife(6000);
                         fireTornadoEntity.setPos(fireTornadoEntity.getX(), this.getY(), fireTornadoEntity.getZ());
                         this.level.addFreshEntity(fireTornadoEntity);
                         this.remove();
@@ -92,14 +92,14 @@ public class FireTornadoTrapEntity extends Entity {
                 } else {
                     FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.owner, 0, 0, 0);
                     fireTornadoEntity.setOwnerId(this.owner.getUUID());
-                    fireTornadoEntity.setTotallife(1200);
+                    fireTornadoEntity.setTotallife(6000);
                     fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
                     this.level.addFreshEntity(fireTornadoEntity);
                     this.remove();
                 }
             } else {
                 FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(ModEntityType.FIRETORNADO.get(), this.level);
-                fireTornadoEntity.setTotallife(1200);
+                fireTornadoEntity.setTotallife(6000);
                 fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
                 this.level.addFreshEntity(fireTornadoEntity);
                 this.remove();

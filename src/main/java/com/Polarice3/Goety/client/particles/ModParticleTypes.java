@@ -2,9 +2,7 @@ package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.Goety;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.HeartParticle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.particle.SpellParticle;
+import net.minecraft.client.particle.*;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,6 +26,12 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> HEAL_EFFECT = PARTICLE_TYPES.register("heal",
             () -> new BasicParticleType(false));
 
+    public static final RegistryObject<BasicParticleType> DEAD_SAND_EXPLOSION = PARTICLE_TYPES.register("deadsandsplosion",
+            () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> DEAD_SAND_EXPLOSION_EMITTER = PARTICLE_TYPES.register("deadsandsplosion_emitter",
+            () -> new BasicParticleType(true));
+
     @SubscribeEvent
     public static void registerFactories(ParticleFactoryRegisterEvent event) {
         ParticleManager particles = Minecraft.getInstance().particleEngine;
@@ -35,5 +39,7 @@ public class ModParticleTypes {
         particles.register(ModParticleTypes.TOTEM_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
+        particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
+        particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
     }
 }

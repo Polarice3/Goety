@@ -9,13 +9,13 @@
   "duration": 10,
   "ingredients": [
     {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     },
     {
-      "item": "minecraft:carrot"
+      "tag": "forge:crops/carrot"
     },
     {
-      "item": "minecraft:potato"
+      "tag": "forge:crops/potato"
     },
     {
       "item": "minecraft:rotten_flesh"

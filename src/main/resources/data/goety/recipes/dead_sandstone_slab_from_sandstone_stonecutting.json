@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "goety:dead_sandstone"
+  },
+  "result": "goety:dead_sandstone_slab",
+  "count": 2
+}

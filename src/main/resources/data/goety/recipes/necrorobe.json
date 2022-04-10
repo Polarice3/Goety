@@ -15,13 +15,13 @@
       "item": "minecraft:skeleton_skull"
     },
     {
-      "item": "minecraft:lapis_lazuli"
+      "tag": "forge:gems/lapis"
     },
     {
-      "item": "minecraft:lapis_lazuli"
+      "tag": "forge:gems/lapis"
     },
     {
-      "item": "minecraft:bone"
+      "tag": "forge:bones"
     }
   ],
   "result": {

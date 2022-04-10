@@ -4,7 +4,6 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
@@ -55,7 +55,7 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
     }
 
     public int getSouls(){
-        if (this.item.getItem() == ModRegistry.GOLDTOTEM.get()) {
+        if (this.item.getItem() == ModItems.GOLDTOTEM.get()) {
             assert this.item.getTag() != null;
             return this.item.getTag().getInt(SOULSAMOUNT);
         } else {
@@ -64,7 +64,7 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
     }
 
     public void decreaseSouls(int souls) {
-        if (this.item.getItem() != ModRegistry.GOLDTOTEM.get()) {
+        if (this.item.getItem() != ModItems.GOLDTOTEM.get()) {
             return;
         }
         assert this.item.getTag() != null;

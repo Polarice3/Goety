@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,7 +14,6 @@ import net.minecraft.entity.ai.controller.JumpController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -335,7 +334,7 @@ public class MutatedRabbitEntity extends MutatedEntity {
             int random = this.level.random.nextInt(4 - looting);
             int random2 = this.level.random.nextInt(8 - looting);
             if (random == 1) {
-                this.spawnAtLocation(ModRegistry.MUTATED_RABBIT_UNCOOKED.get());
+                this.spawnAtLocation(ModItems.MUTATED_RABBIT_UNCOOKED.get());
                 for (int i = 0; i < 4 + this.level.random.nextInt(8); ++i) {
                     this.spawnAtLocation(Items.RABBIT_HIDE);
                 }

@@ -12,25 +12,25 @@
       "item": "minecraft:ghast_tear"
     },
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     {
       "item": "minecraft:ghast_tear"
     },
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     {
       "item": "minecraft:lava_bucket"
     },
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     {
       "item": "minecraft:lava_bucket"
     },
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     }
   ],
   "result": {

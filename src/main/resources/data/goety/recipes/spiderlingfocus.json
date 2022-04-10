@@ -14,7 +14,7 @@
     },
     "f":
     {
-      "item": "minecraft:string"
+      "tag": "forge:string"
     },
     "s":
     {

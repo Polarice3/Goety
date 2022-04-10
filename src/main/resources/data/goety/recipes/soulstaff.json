@@ -22,7 +22,7 @@
     },
     "l":
     {
-      "item": "minecraft:lapis_block"
+      "tag": "forge:storage_blocks/lapis"
     }
   },
   "result":

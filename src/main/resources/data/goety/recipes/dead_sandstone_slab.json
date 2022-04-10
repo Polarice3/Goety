@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "goety:dead_sandstone"
+      },
+      {
+        "item": "goety:dead_sandstone_chiseled"
+      }
+    ]
+  },
+  "result": {
+    "item": "goety:dead_sandstone_slab",
+    "count": 6
+  }
+}

@@ -218,6 +218,10 @@ public class TormentorEntity extends AbstractIllagerEntity {
         this.setDropChance(EquipmentSlotType.MAINHAND, 0.0F);
     }
 
+    public boolean canBeLeader() {
+        return false;
+    }
+
     class ChargeAttackGoal extends Goal {
         public ChargeAttackGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));

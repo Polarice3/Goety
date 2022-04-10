@@ -3,7 +3,7 @@ package com.Polarice3.Goety.compat.jei;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -31,8 +31,8 @@ public class GoetyJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModRegistry.CURSED_BURNER.get()), CursedBurnerCategory.UID);
-        registration.addRecipeCatalyst(new ItemStack(ModRegistry.DARK_ALTAR.get()), ModRecipeSerializer.RITUAL.getId());
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CURSED_BURNER.get()), CursedBurnerCategory.UID);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.DARK_ALTAR.get()), ModRecipeSerializer.RITUAL.getId());
     }
 
     public void registerRecipes(IRecipeRegistration registration) {

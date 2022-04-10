@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "goety:dead_sandstone_smooth"
+  },
+  "result": "goety:dead_sandstone_smooth_stairs",
+  "count": 1
+}

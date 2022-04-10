@@ -87,7 +87,7 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
         super.customServerAiStep();
     }
 
-    protected boolean isMagic(){
+    public boolean isMagic(){
         return this.getOffhandItem().getItem() == Items.TOTEM_OF_UNDYING;
     }
 

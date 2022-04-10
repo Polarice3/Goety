@@ -2,7 +2,7 @@ package com.Polarice3.Goety.compat.jei;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.inventory.crafting.CursedBurnerRecipes;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -37,7 +37,7 @@ public class CursedBurnerCategory implements IRecipeCategory<CursedBurnerRecipes
 
 
     public CursedBurnerCategory(IGuiHelper guiHelper) {
-        icon = guiHelper.createDrawableIngredient(new ItemStack(ModRegistry.CURSED_BURNER.get()));
+        icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.CURSED_BURNER.get()));
         background = guiHelper.drawableBuilder(new ResourceLocation(Goety.MOD_ID, "textures/gui/jei/jei_gui.png"), 0, 220, 82, 34)
                 .addPadding(0, 10, 0, 0)
                 .build();

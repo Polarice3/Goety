@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.client.inventory.crafting;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -12,7 +12,7 @@ public class CursedBurnerRecipes extends ModCookingRecipe {
     }
 
     public ItemStack getToastSymbol() {
-        return new ItemStack(ModRegistry.CURSED_BURNER.get());
+        return new ItemStack(ModBlocks.CURSED_BURNER.get());
     }
 
     public IRecipeSerializer<?> getSerializer() {

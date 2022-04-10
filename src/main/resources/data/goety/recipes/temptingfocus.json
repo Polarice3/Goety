@@ -18,19 +18,19 @@
     },
     "s":
     {
-      "item": "minecraft:wheat_seeds"
+      "tag": "forge:seeds"
     },
     "c":
     {
-      "item": "minecraft:carrot"
+      "tag": "forge:crops/carrot"
     },
     "w":
     {
-      "item": "minecraft:wheat"
+      "tag": "forge:crops/wheat"
     },
     "p":
     {
-      "item": "minecraft:potato"
+      "tag": "forge:crops/potato"
     }
   },
   "result":

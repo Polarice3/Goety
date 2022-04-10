@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -64,7 +64,7 @@ public class MutatedCowEntity extends MutatedEntity {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
         int random = this.level.random.nextInt(4);
         if (random == 1 || looting > 2) {
-            this.spawnAtLocation(ModRegistry.MUTATED_STEAK_UNCOOKED.get());
+            this.spawnAtLocation(ModItems.MUTATED_STEAK_UNCOOKED.get());
             for (int i = 0; i < 4 + this.level.random.nextInt(8); ++i) {
                 this.spawnAtLocation(Items.LEATHER);
             }

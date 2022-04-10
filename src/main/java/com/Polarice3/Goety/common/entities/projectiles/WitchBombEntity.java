@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
@@ -31,7 +31,7 @@ public class WitchBombEntity extends ProjectileItemEntity {
     }
 
     protected Item getDefaultItem() {
-        return ModRegistry.WITCHBOMB.get();
+        return ModItems.WITCHBOMB.get();
     }
 
     @OnlyIn(Dist.CLIENT)

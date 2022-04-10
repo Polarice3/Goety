@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -294,7 +294,7 @@ public class MutatedSheepEntity extends MutatedEntity implements IForgeShearable
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
         int random = this.level.random.nextInt(4);
         if (random == 1 || looting > 2) {
-            this.spawnAtLocation(ModRegistry.MUTATED_MUTTON_UNCOOKED.get());
+            this.spawnAtLocation(ModItems.MUTATED_MUTTON_UNCOOKED.get());
         } else {
             for (int i = 0; i < 4 + this.level.random.nextInt(8); ++i) {
                 this.spawnAtLocation(Items.ROTTEN_FLESH);

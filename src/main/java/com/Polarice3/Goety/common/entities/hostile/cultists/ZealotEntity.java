@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -99,7 +99,7 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
             case 3:
                 this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
         }
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModRegistry.CULTISTHELM.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTISTHELM.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
     }
 

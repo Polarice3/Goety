@@ -5,7 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -13,10 +13,8 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -115,12 +113,12 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     }
 
     public boolean hasBomb(){
-        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModRegistry.WITCHBOMB.get();
+        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModItems.WITCHBOMB.get();
     }
 
     @Override
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
-        PitchforkEntity pitchforkEntity = new PitchforkEntity(this.level, this, new ItemStack(ModRegistry.PITCHFORK.get()));
+        PitchforkEntity pitchforkEntity = new PitchforkEntity(this.level, this, new ItemStack(ModItems.PITCHFORK.get()));
         double d0 = pTarget.getX() - this.getX();
         double d1 = pTarget.getY(0.3333333333333333D) - pitchforkEntity.getY();
         double d2 = pTarget.getZ() - this.getZ();
@@ -264,7 +262,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
                     this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_SHOVEL));
             }
         } else {
-            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModRegistry.PITCHFORK.get()));
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.PITCHFORK.get()));
         }
         switch (random2){
             case 0:
@@ -279,13 +277,13 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
                 this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
         }
         if (witchbomb == 0) {
-            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModRegistry.WITCHBOMB.get()));
+            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.WITCHBOMB.get()));
         }
     }
 
     protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
         super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
-        if (this.getMainHandItem().getItem() == ModRegistry.PITCHFORK.get()) {
+        if (this.getMainHandItem().getItem() == ModItems.PITCHFORK.get()) {
             for (int i = 0; i < this.random.nextInt(3) + (pLooting > 0 ? this.random.nextInt(pLooting) : 0); ++i){
                 this.spawnAtLocation(Items.WHEAT);
             }
@@ -301,7 +299,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         }
 
         public boolean canUse() {
-            return super.canUse() && this.fanatic.getMainHandItem().getItem() == ModRegistry.PITCHFORK.get();
+            return super.canUse() && this.fanatic.getMainHandItem().getItem() == ModItems.PITCHFORK.get();
         }
 
         public void start() {

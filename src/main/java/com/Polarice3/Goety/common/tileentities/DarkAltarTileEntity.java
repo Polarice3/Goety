@@ -7,7 +7,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.DarkAltarBlock;
 import com.Polarice3.Goety.common.ritual.Ritual;
 import com.Polarice3.Goety.common.ritual.RitualStructures;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
@@ -423,7 +423,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
         assert this.level != null;
         BlockPos pos = new BlockPos(this.getBlockPos().getX(), this.getBlockPos().getY() - 1, this.getBlockPos().getZ());
         BlockState blockState = this.level.getBlockState(pos);
-        if (blockState.is(ModRegistry.CURSED_CAGE_BLOCK.get())){
+        if (blockState.is(ModBlocks.CURSED_CAGE_BLOCK.get())){
             TileEntity tileentity = this.level.getBlockEntity(pos);
             if (tileentity instanceof CursedCageTileEntity){
                 this.cursedCageTile = (CursedCageTileEntity) tileentity;

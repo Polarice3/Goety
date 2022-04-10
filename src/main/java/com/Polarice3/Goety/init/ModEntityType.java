@@ -78,6 +78,13 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
+    public static final RegistryObject<EntityType<WebBallEntity>> WEB_BALL = ENTITY_TYPES.register("web_ball",
+            () -> EntityType.Builder.<WebBallEntity>of(WebBallEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "web_ball").toString()));
+
     public static final RegistryObject<EntityType<FangEntity>> FANG = ENTITY_TYPES.register("fang",
             () -> EntityType.Builder.<FangEntity>of(FangEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.8F)

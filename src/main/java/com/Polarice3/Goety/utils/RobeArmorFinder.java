@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.client.armors.WanderBootsArmor;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 
@@ -11,36 +11,36 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindHelm(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.DARKHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.DARKARMOREDHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.NECROHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.NECROARMOREDHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.ARACHNOHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.ARACHNOARMOREDHELM.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.DARKHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.DARKARMOREDHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROARMOREDHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.ARACHNOHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.ARACHNOARMOREDHELM.get();
     }
 
     public static boolean FindArmor(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.DARKROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.DARKARMOREDROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.NECROROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.NECROARMOREDROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.ARACHNOROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.ARACHNOARMOREDROBE.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.DARKROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.DARKARMOREDROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROARMOREDROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.ARACHNOROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.ARACHNOARMOREDROBE.get();
     }
 
     public static boolean FindLeggings(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ModRegistry.DARKLEGGINGS.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ModRegistry.DARKARMOREDLEGGINGS.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ModItems.DARKLEGGINGS.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ModItems.DARKARMOREDLEGGINGS.get();
     }
 
     public static boolean FindNecroHelm(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.NECROHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.NECROARMOREDHELM.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROARMOREDHELM.get();
     }
 
     public static boolean FindNecroArmor(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.NECROROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.NECROARMOREDROBE.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROARMOREDROBE.get();
     }
 
     public static boolean FindNecroSet(LivingEntity livingEntity){
@@ -48,13 +48,13 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindArachnoHelm(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.ARACHNOHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModRegistry.ARACHNOARMOREDHELM.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.ARACHNOHELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.ARACHNOARMOREDHELM.get();
     }
 
     public static boolean FindArachnoArmor(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.ARACHNOROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModRegistry.ARACHNOARMOREDROBE.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.ARACHNOROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.ARACHNOARMOREDROBE.get();
     }
 
     public static boolean FindArachnoSet(LivingEntity livingEntity){
@@ -66,6 +66,6 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindArachnoBootsofWander(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModRegistry.ARACHNOBOOTSOFWANDER.get();
+        return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.ARACHNOBOOTSOFWANDER.get();
     }
 }

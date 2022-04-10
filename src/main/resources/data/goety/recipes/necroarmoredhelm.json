@@ -15,7 +15,7 @@
       "item": "goety:cursed_ingot"
     },
     {
-      "item": "minecraft:lapis_lazuli"
+      "tag": "forge:gems/lapis"
     },
     {
       "item": "goety:soul_emerald"

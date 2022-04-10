@@ -3,7 +3,7 @@ package com.Polarice3.Goety.common.entities.ally;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import com.Polarice3.Goety.utils.ParticleUtil;
@@ -107,7 +107,7 @@ public class SummonedEntity extends CreatureEntity {
             } else if (this.limitedLifeTicks > 0){
                 this.limitedLifespan = true;
             }
-            if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModRegistry.NECROBOOTSOFWANDER.get()){
+            if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECROBOOTSOFWANDER.get()){
                 if (this.getMobType() == CreatureAttribute.UNDEAD){
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 1, false, false, false));
                 }

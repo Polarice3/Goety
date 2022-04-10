@@ -10,13 +10,13 @@
   "duration": 10,
   "ingredients": [
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     {
       "item": "minecraft:clock"
     },
     {
-      "item": "minecraft:redstone"
+      "tag": "forge:dusts/redstone"
     },
     {
       "tag": "forge:mushrooms"

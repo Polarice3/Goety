@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModRegistry;
 import com.Polarice3.Goety.utils.BlockFinder;
+import com.Polarice3.Goety.utils.DeadSandExplosion;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
@@ -25,7 +25,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -36,6 +35,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -233,43 +233,22 @@ public class BoomerEntity extends MonsterEntity implements IChargeableMob, IDead
         }
     }
 
+    public DeadSandExplosion explode(World world, @Nullable Entity pExploder, double pX, double pY, double pZ, float pSize, DeadSandExplosion.Mode pBlockInteraction) {
+        DeadSandExplosion explosion = new DeadSandExplosion(world, pExploder, pX, pY, pZ, pSize, pBlockInteraction);
+        explosion.explode();
+        explosion.finalizeExplosion(true);
+        return explosion;
+    }
+
     private void explodeCreeper() {
         if (!this.level.isClientSide) {
             float f = this.isPowered() ? 2.0F : 1.0F;
             float explosion = (int) (this.explosionRadius * f);
             this.dead = true;
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), explosion, Explosion.Mode.NONE);
             if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
-                Iterable<BlockPos> blocksToCheck = BlockPos.randomBetweenClosed(this.random, 150,
-                        (int) (this.getX() - explosion), (int) (this.getY() - explosion), (int) (this.getZ() - explosion),
-                        (int) (this.getX() + explosion), (int) (this.getY() + explosion), (int) (this.getZ() + explosion));
-                for (BlockPos blockToCheck : blocksToCheck) {
-                    BlockState blockState = this.level.getBlockState(blockToCheck);
-                    if (BlockFinder.NotDeadSandImmune(blockState)) {
-                        if (blockState.getMaterial() == Material.STONE) {
-                            this.level.removeBlock(blockToCheck, false);
-                            this.level.setBlockAndUpdate(blockToCheck, ModRegistry.DEAD_SANDSTONE.get().defaultBlockState());
-                        } else if (blockState.is(BlockTags.LOGS)) {
-                            this.level.removeBlock(blockToCheck, false);
-                            this.level.setBlockAndUpdate(blockToCheck, ModRegistry.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)));
-                        } else {
-                            this.level.removeBlock(blockToCheck, false);
-                            this.level.setBlockAndUpdate(blockToCheck, ModRegistry.DEAD_SAND.get().defaultBlockState());
-                        }
-                    }
-                }
-            }
-            for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(explosion))){
-                if (livingEntity.getMobType() != CreatureAttribute.UNDEAD){
-                    if (livingEntity instanceof PlayerEntity){
-                        PlayerEntity player = (PlayerEntity) livingEntity;
-                        if (!player.isCreative() && !LichdomUtil.isLich(player)){
-                            livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 300));
-                        }
-                    } else {
-                        livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 300));
-                    }
-                }
+                this.explode(this.level, this, this.getX(), this.getY(), this.getZ(), explosion, DeadSandExplosion.Mode.SPREAD);
+            } else {
+                this.explode(this.level, this, this.getX(), this.getY(), this.getZ(), explosion, DeadSandExplosion.Mode.NONE);
             }
             this.remove();
             this.spawnLingeringCloud();

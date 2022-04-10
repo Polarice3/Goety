@@ -15,13 +15,13 @@
       "item": "minecraft:cobweb"
     },
     {
-      "item": "minecraft:lapis_lazuli"
+      "tag": "forge:gems/lapis"
     },
     {
-      "item": "minecraft:lapis_lazuli"
+      "tag": "forge:gems/lapis"
     },
     {
-      "item": "minecraft:string"
+      "tag": "forge:string"
     }
   ],
   "result": {

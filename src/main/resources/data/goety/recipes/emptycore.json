@@ -14,7 +14,7 @@
     },
     "g":
     {
-      "item": "minecraft:glass"
+      "tag": "forge:glass/colorless"
     }
   },
   "result":

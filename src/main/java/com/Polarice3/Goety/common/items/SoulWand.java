@@ -4,22 +4,18 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.inventory.container.SoulItemContainer;
 import com.Polarice3.Goety.client.inventory.container.WandandBagContainer;
-import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.CaveSpiderEntity;
-import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -85,7 +81,7 @@ public class SoulWand extends Item{
     }
 
     private static boolean isMatchingItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModRegistry.FOCUSBAG.get();
+        return itemStack.getItem() == ModItems.FOCUSBAG.get();
     }
 
     public boolean SoulDiscount(LivingEntity entityLiving){
@@ -282,6 +278,9 @@ public class SoulWand extends Item{
         } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("lavaball")) {
             this.setSpellConditions(new LavaballSpell(), itemStack);
             this.setSpell(16, itemStack);
+        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("webball")) {
+            this.setSpellConditions(new WebBallSpell(), itemStack);
+            this.setSpell(17, itemStack);
         }
     }
 

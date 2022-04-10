@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "goety:dead_sandstone_smooth"
+    }
+  },
+  "result": {
+    "item": "goety:dead_sandstone_smooth_stairs",
+    "count": 4
+  }
+}

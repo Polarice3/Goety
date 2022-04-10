@@ -18,16 +18,16 @@
       "item": "minecraft:arrow"
     },
     {
-      "item": "minecraft:bone"
+      "tag": "forge:bones"
     },
     {
-      "item": "minecraft:bone"
+      "tag": "forge:bones"
     },
     {
-      "item": "minecraft:bone"
+      "tag": "forge:bones"
     },
     {
-      "item": "minecraft:bone"
+      "tag": "forge:bones"
     }
   ],
   "result": {

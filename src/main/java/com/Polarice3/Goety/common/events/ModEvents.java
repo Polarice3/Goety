@@ -18,9 +18,7 @@ import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.items.SoulWand;
-import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -95,7 +93,6 @@ public class ModEvents {
                 serverWorld.setWeatherParameters(0, 6000, true, true);
             }
         }
-
     }
 
     @SubscribeEvent
@@ -113,8 +110,8 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void openBagandWand(InputEvent.KeyInputEvent event){
-        KeyPressed.setWand(ModRegistry.keyBindings[0].isDown());
-        KeyPressed.setWandandbag(ModRegistry.keyBindings[1].isDown());
+        KeyPressed.setWand(ModKeybindings.keyBindings[0].isDown());
+        KeyPressed.setWandandbag(ModKeybindings.keyBindings[1].isDown());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -184,7 +181,7 @@ public class ModEvents {
             }
 
             if (!data.getBoolean("goety:gotTotem")) {
-                event.getPlayer().addItem(new ItemStack(ModRegistry.GOLDTOTEM.get()));
+                event.getPlayer().addItem(new ItemStack(ModItems.GOLDTOTEM.get()));
                 data.putBoolean("goety:gotTotem", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
             }
@@ -198,6 +195,7 @@ public class ModEvents {
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD){
                 BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
                 if (blockState.getBlock() instanceof IDeadBlock){
+                    livingEntity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 0, false, false));
                     livingEntity.clearFire();
                 }
             }
@@ -223,7 +221,7 @@ public class ModEvents {
     public static void onBreakingBlock(BlockEvent.BreakEvent event){
         PlayerEntity player = event.getPlayer();
         if (player.hasEffect(ModEffects.NOMINE.get())){
-            if (event.getState().getMaterial() == Material.STONE && !(event.getState().getBlock() == ModRegistry.GUARDIAN_OBELISK.get())){
+            if (event.getState().getMaterial() == Material.STONE && !(event.getState().getBlock() == ModBlocks.GUARDIAN_OBELISK.get())){
                 new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 event.setCanceled(true);
             }
@@ -235,7 +233,7 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerEquipment(TickEvent.PlayerTickEvent event){
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         PlayerEntity player = event.player;
         World world = player.level;
         if (KeyPressed.openWandandBag() && player.getMainHandItem().getItem() instanceof SoulWand){
@@ -268,15 +266,22 @@ public class ModEvents {
             BlockState blockState = player.level.getBlockState(player.blockPosition().below());
             if (!LichdomUtil.isLich(player)) {
                 if (!(blockState.getBlock() instanceof IDeadBlock)) {
-                    if (!world.isClientSide && world.isDay()) {
-                        float f = player.getBrightness();
-                        BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                        if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                            player.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
-                            player.addEffect(new EffectInstance(Effects.HUNGER, 20, 1));
+                    if (!world.isClientSide) {
+                        if (world.isDay()){
+                            float f = player.getBrightness();
+                            BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                            if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                                player.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
+                                player.addEffect(new EffectInstance(Effects.HUNGER, 20, 1));
+                            } else {
+                                player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
+                            }
+                        } else {
+                            player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
                         }
                     }
                 } else {
+                    player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
                     if (player.hasEffect(Effects.WEAKNESS)) {
                         player.removeEffect(Effects.WEAKNESS);
                     }
@@ -299,6 +304,23 @@ public class ModEvents {
                         }
                     } else {
                         player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                    }
+                }
+            }
+        }
+        if (RobeArmorFinder.FindArachnoArmor(player)){
+            BlockFinder.WebMovement(player);
+        }
+        if (RobeArmorFinder.FindArachnoBootsofWander(player)){
+            BlockFinder.ClimbAnyWall(player);
+        }
+        IInfamy infamy = InfamyHelper.getCapability(player);
+        int i = infamy.getInfamy();
+        if (i > MainConfig.InfamyThreshold.get() * 2){
+            for (AbstractRaiderEntity pillagerEntity : player.level.getEntitiesOfClass(AbstractRaiderEntity.class, player.getBoundingBox().inflate(32))){
+                if (pillagerEntity.getTarget() == player) {
+                    if (!pillagerEntity.isAggressive()) {
+                        pillagerEntity.setAggressive(true);
                     }
                 }
             }
@@ -414,7 +436,7 @@ public class ModEvents {
         if (killed instanceof BatEntity){
             if (killer instanceof LivingEntity) {
                 if (RobeArmorFinder.FindArachnoSet((LivingEntity) killer)) {
-                    killed.spawnAtLocation(new ItemStack(ModRegistry.DEADBAT.get()));
+                    killed.spawnAtLocation(new ItemStack(ModItems.DEADBAT.get()));
                 }
             }
         }
@@ -497,13 +519,13 @@ public class ModEvents {
     @SubscribeEvent
     public static void PotionAddedEvents(PotionEvent.PotionAddedEvent event){
         if (event.getPotionEffect().getEffect() == Effects.LEVITATION){
-            if (event.getEntityLiving().getMainHandItem().getItem() == ModRegistry.EMPTYCORE.get()){
+            if (event.getEntityLiving().getMainHandItem().getItem() == ModItems.EMPTYCORE.get()){
                 event.getEntityLiving().getMainHandItem().setCount(0);
-                event.getEntityLiving().setItemInHand(Hand.MAIN_HAND, new ItemStack(ModRegistry.AIRYCORE.get()));
+                event.getEntityLiving().setItemInHand(Hand.MAIN_HAND, new ItemStack(ModItems.AIRYCORE.get()));
             }
-            if (event.getEntityLiving().getOffhandItem().getItem() == ModRegistry.EMPTYCORE.get()){
+            if (event.getEntityLiving().getOffhandItem().getItem() == ModItems.EMPTYCORE.get()){
                 event.getEntityLiving().getOffhandItem().setCount(0);
-                event.getEntityLiving().setItemInHand(Hand.OFF_HAND, new ItemStack(ModRegistry.AIRYCORE.get()));
+                event.getEntityLiving().setItemInHand(Hand.OFF_HAND, new ItemStack(ModItems.AIRYCORE.get()));
             }
         }
         if (event.getPotionEffect().getEffect() == Effects.HERO_OF_THE_VILLAGE){

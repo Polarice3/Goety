@@ -1,11 +1,9 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.*;
-import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
@@ -22,7 +20,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Nonnull;
 
@@ -46,7 +43,7 @@ public class NetherBookRawItem extends Item {
             VillagerEntity villager = (VillagerEntity) target;
             if (villager.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN){
                 ItemEntity itemEntity = new ItemEntity(EntityType.ITEM, world);
-                itemEntity.setItem(new ItemStack(ModRegistry.NETHER_BOOK_TRANSLATED.get()));
+                itemEntity.setItem(new ItemStack(ModItems.NETHER_BOOK_TRANSLATED.get()));
                 itemEntity.setPos(villager.getX(), villager.getY(), villager.getZ());
                 world.addFreshEntity(itemEntity);
                 if (!world.isClientSide){

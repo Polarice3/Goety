@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.ritual;
 
+import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.tileentities.ModTileEntity;
-import com.Polarice3.Goety.init.ModRegistry;
+import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
@@ -52,7 +54,7 @@ public class RitualStructures {
                     BlockPos blockpos1 = pPos.offset(i, j, k);
                     assert pLevel != null;
                     BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == ModRegistry.DEAD_SAND.get() || blockstate.getBlock() == ModRegistry.DEAD_SANDSTONE.get()) {
+                    if (blockstate.getBlock() instanceof IDeadBlock) {
                         pTileEntity.first.add(blockpos1);
                     }
                     if (blockstate.getBlock() instanceof SlabBlock) {
