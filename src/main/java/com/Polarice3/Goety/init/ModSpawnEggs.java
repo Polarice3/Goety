@@ -49,6 +49,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> BOOMER_SPAWN_EGG = ITEMS.register("boomer_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.BOOMER, 0x423b42, 0x616061, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> DUNE_SPIDER_SPAWN_EGG = ITEMS.register("dune_spider_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.DUNE_SPIDER, 0x525144, 0x6d6d5a, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> VIZIER_SPAWN_EGG = ITEMS.register("vizier_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.VIZIER, 0x1e1c1a, 0x440a67, new Item.Properties().tab(Goety.TAB)));
 

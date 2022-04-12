@@ -3,15 +3,14 @@ package com.Polarice3.Goety.common.events;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
@@ -32,6 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -54,16 +54,6 @@ public class LichEvent {
         if (LichdomUtil.isLich(player)){
             player.getFoodData().setFoodLevel(17);
             boolean burn = false;
-            BlockState blockState;
-            Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
-                    player.blockPosition().offset(-4, -4, -4),
-                    player.blockPosition().offset(4, 4, 4));
-            for (BlockPos blockToCheck : blocksToCheck) {
-                blockState = world.getBlockState(blockToCheck);
-                if (blockState.getBlock() instanceof IDeadBlock) {
-                    result.add(blockState);
-                }
-            }
             if (!world.isClientSide && world.isDay()) {
                 float f = player.getBrightness();
                 BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
@@ -72,19 +62,33 @@ public class LichEvent {
                 }
             }
 
-            if (result.size() >= 16){
-                player.clearFire();
-                burn = false;
+            if (!MainConfig.DeadSandDarkSky.get()) {
+                BlockState blockState;
+                Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
+                        player.blockPosition().offset(-4, -4, -4),
+                        player.blockPosition().offset(4, 4, 4));
+                for (BlockPos blockToCheck : blocksToCheck) {
+                    blockState = world.getBlockState(blockToCheck);
+                    if (blockState.getBlock() instanceof IDeadBlock) {
+                        result.add(blockState);
+                    }
+                }
+                if (result.size() >= 16){
+                    player.clearFire();
+                    burn = false;
+                }
             }
 
             if (burn){
                 ItemStack helmet = player.getItemBySlot(EquipmentSlotType.HEAD);
                 if (!helmet.isEmpty()) {
-                    if (helmet.isDamageableItem()) {
-                        helmet.setDamageValue(helmet.getDamageValue() + world.random.nextInt(2));
-                        if (helmet.getDamageValue() >= helmet.getMaxDamage()) {
-                            player.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                            player.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                    if (!player.isCreative()) {
+                        if (helmet.isDamageableItem()) {
+                            helmet.setDamageValue(helmet.getDamageValue() + world.random.nextInt(2));
+                            if (helmet.getDamageValue() >= helmet.getMaxDamage()) {
+                                player.broadcastBreakEvent(EquipmentSlotType.HEAD);
+                                player.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                            }
                         }
                     }
                     burn = false;
@@ -131,9 +135,22 @@ public class LichEvent {
             }
             if (player.isAlive()){
                 if (MainConfig.LichNightVision.get()) {
-                    player.addEffect(new EffectInstance(Effects.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
+                    player.addEffect(new EffectInstance(Effects.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false, false));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderHUD(final RenderGameOverlayEvent.Pre event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.FOOD) {
+            return;
+        }
+
+        final PlayerEntity player = Minecraft.getInstance().player;
+
+        if (player != null && LichdomUtil.isLich(player)) {
+            event.setCanceled(true);
         }
     }
 

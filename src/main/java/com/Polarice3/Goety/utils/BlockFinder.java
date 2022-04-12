@@ -1,20 +1,61 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.WebBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
 public class BlockFinder {
     public static boolean NotDeadSandImmune(BlockState state){
         return !state.is(ModTags.Blocks.DEAD_SAND_IMMUNE) && state.canOcclude()
                 && state.getMaterial() != Material.AIR && state.getMaterial() != Material.NETHER_WOOD
                 && state.getMaterial() != Material.LAVA && !state.hasTileEntity();
+    }
+
+    public static void DeadSandReplace(BlockPos pPos, World pLevel){
+        BlockState blockstate = pLevel.getBlockState(pPos);
+        if (BlockFinder.NotDeadSandImmune(blockstate)) {
+            if (blockstate.getMaterial() == Material.STONE) {
+                pLevel.destroyBlock(pPos, false);
+                pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+            } else if (blockstate.is(BlockTags.LOGS)) {
+                pLevel.destroyBlock(pPos, false);
+                pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockstate.getValue(RotatedPillarBlock.AXIS)));
+            } else if (blockstate.is(BlockTags.ICE)) {
+                pLevel.destroyBlock(pPos, false);
+            } else {
+                pLevel.destroyBlock(pPos, false);
+                pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SAND.get().defaultBlockState());
+            }
+        }
+    }
+
+    public static void DeadSandReplaceLagFree(BlockPos pPos, World pLevel){
+        BlockState blockstate = pLevel.getBlockState(pPos);
+        if (BlockFinder.NotDeadSandImmune(blockstate)) {
+            if (blockstate.getMaterial() == Material.STONE) {
+                pLevel.removeBlock(pPos, false);
+                pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+            } else if (blockstate.is(BlockTags.LOGS)) {
+                pLevel.removeBlock(pPos, false);
+                pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockstate.getValue(RotatedPillarBlock.AXIS)));
+            } else if (blockstate.is(BlockTags.ICE)) {
+                pLevel.removeBlock(pPos, false);
+            } else {
+                pLevel.removeBlock(pPos, false);
+                pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SAND.get().defaultBlockState());
+            }
+        }
     }
 
     public static void WebMovement(LivingEntity livingEntity){

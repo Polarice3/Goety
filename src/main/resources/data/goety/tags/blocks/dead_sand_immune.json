@@ -10,6 +10,8 @@
     "#forge:storage_blocks",
     "#forge:barrels",
     "#forge:chests",
+    "#forge:fences",
+    "#forge:fence_gates",
     "#minecraft:planks",
     "#minecraft:slabs",
     "#minecraft:base_stone_nether",
@@ -17,6 +19,8 @@
     "#minecraft:fire",
     "#minecraft:soul_fire_base_blocks",
     "#minecraft:stone_bricks",
-    "#minecraft:shulker_boxes"
+    "#minecraft:shulker_boxes",
+    "#minecraft:carpets",
+    "#minecraft:walls"
   ]
 }

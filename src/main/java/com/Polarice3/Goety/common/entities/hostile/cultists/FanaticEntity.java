@@ -140,7 +140,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         public boolean canUse() {
             if (this.fanatic.getTarget() != null && this.fanatic.hasBomb()){
                 LivingEntity entity = this.fanatic.getTarget();
-                return this.fanatic.distanceTo(entity) > 2.0;
+                return this.fanatic.distanceTo(entity) > 2.0 && this.fanatic.distanceTo(entity) <= 10 && this.fanatic.canSee(entity);
             } else {
                 return false;
             }

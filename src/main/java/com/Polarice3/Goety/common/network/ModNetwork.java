@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.network;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.infamy.InfamyUpdatePacket;
+import com.Polarice3.Goety.common.lichdom.LichUpdatePacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -22,6 +23,7 @@ public class ModNetwork {
         INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Goety.MOD_ID, "channel"), () -> "1.0", s -> true, s -> true);
 
         INSTANCE.registerMessage(nextID(), InfamyUpdatePacket.class, InfamyUpdatePacket::encode, InfamyUpdatePacket::decode, InfamyUpdatePacket::consume);
+        INSTANCE.registerMessage(nextID(), LichUpdatePacket.class, LichUpdatePacket::encode, LichUpdatePacket::decode, LichUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), TileEntityUpdatePacket.class, TileEntityUpdatePacket::encode, TileEntityUpdatePacket::decode, TileEntityUpdatePacket::consume);
     }
 

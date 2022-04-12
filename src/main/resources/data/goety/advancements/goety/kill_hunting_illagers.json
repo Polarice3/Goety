@@ -1,0 +1,58 @@
+{
+  "parent": "goety:goety/kill_a_envioker",
+  "criteria": {
+    "envioker": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:envioker"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "inquillager": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:inquillager"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "conquillager": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:conquillager"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "envioker"
+    ],
+    [
+      "inquillager"
+    ],
+    [
+      "conquillager"
+    ]
+  ]
+}

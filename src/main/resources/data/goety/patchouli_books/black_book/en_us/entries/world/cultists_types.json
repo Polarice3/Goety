@@ -1,0 +1,56 @@
+{
+  "name": "Members of the Cult",
+  "icon": "goety:witchbomb",
+  "category": "goety:world",
+  "advancement": "goety:goety/kill_most_cultists",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Encountering strange outposts stationed near Ruined Portals and Salvaged Forts, you've decided to start pointing down who and what these strange cultists are. Overall, these cultists are less uniformed and refined than the Illagers, but that doesn't mean they're no threat."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "As mentioned, these cultists seemed to have a lot in common with Witches. They don't attack nor viscerally hate the Villagers like the Illagers do and while there are some rumors of them partaking in a Raid, they don't seemed to attack Villagers themselves, and looks to be 'on for a ride'."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:fanatic"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Considering how varied their uniforms and weapons are, these Fanatics seems to be regular Villagers turned, well, fanatical towards a strange worship of the Nether. They don't seemed to have great strength or resilience compared to Vindicators, but they have a lot more variety in their arsenal, from Pickaxes and Pitchforks to Swords and Axes with some even mad enough to start wielding Witch's Bombs."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:zealot"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Unlike Pillagers, these Zealots are comfortable defending their structures without needing to head out and start harassing beings like you or Villages. Unlike the uniformed Pillagers, these Zealots seemed to simply use whatever Range Weapon they can find, hence why some used Crossbows while others Bows."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:thug"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Strong, brutish Cultists that are akin to Iron Golems and Ravagers, only weaker than either of them. They're either a result of magical experiments or simply big meaty Villagers radicalized with the Cult."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:disciple"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "These Cultists have read their unholy text far more closely than the others. Through research, faith and training, these Disciples know how to breath flames, summon Servants and let loose a Roar that throws those close to them away."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:channeller"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "What you assumed to be the local leaders of the Cult, the Channeller rely on their brethren to defend them by channelling their powers on to one of them. When channelling their power, they take less damage and siphon health from their host, but the host will become stronger and faster through the Channeller's power. They seemed to hold a much stronger version of the text held by Disciples, as they always drop them intact when slain."
+    }
+  ]
+}

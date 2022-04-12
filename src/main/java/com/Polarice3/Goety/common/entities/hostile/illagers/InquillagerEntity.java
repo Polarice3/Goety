@@ -234,7 +234,7 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
         public boolean canUse() {
             if (this.inquillager.getTarget() != null){
                 LivingEntity entity = this.inquillager.getTarget();
-                return this.inquillager.distanceTo(entity) > 4.0;
+                return this.inquillager.distanceTo(entity) > 4.0 && this.inquillager.distanceTo(entity) <= 10;
             } else {
                 return false;
             }

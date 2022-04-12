@@ -1,0 +1,92 @@
+{
+  "parent": "goety:goety/kill_a_envioker",
+  "criteria": {
+    "fanatic": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:fanatic"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "zealot": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:zealot"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "thug": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:thug"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "disciple": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:disciple"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "channeller": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:channeller"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fanatic"
+    ],
+    [
+      "zealot"
+    ],
+    [
+      "thug"
+    ],
+    [
+      "disciple"
+    ],
+    [
+      "channeller"
+    ]
+  ]
+}

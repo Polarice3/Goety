@@ -5,8 +5,11 @@ import com.Polarice3.Goety.common.blocks.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.TallBlockItem;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -46,6 +49,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_SANDSTONE_CUT = BLOCKS.register("dead_sandstone_cut", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE_SMOOTH = BLOCKS.register("dead_sandstone_smooth", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> TEMP_WEB = BLOCKS.register("temp_web", TempWebBlock::new);
+    public static final RegistryObject<Block> DARK_CLOUD = BLOCKS.register("dark_cloud", DarkCloudBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -208,6 +212,8 @@ public class ModBlocks {
             () -> new BlockItemBase(DEAD_SANDSTONE_WALL_BLOCK.get()));
     public static final RegistryObject<Item> HAUNTED_CACTUS_ITEM = BLOCK_ITEMS.register("haunted_cactus",
             () -> new BlockItemBase(HAUNTED_CACTUS.get()));
+    public static final RegistryObject<Item> DARK_CLOUD_ITEM = BLOCK_ITEMS.register("dark_cloud",
+            () -> new BlockItemBase(DARK_CLOUD.get()));
     //TreeItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
             () -> new BlockItemBase(HAUNTED_PLANKS.get()));
@@ -235,5 +241,10 @@ public class ModBlocks {
             () -> new BlockItemBase(HAUNTED_SLAB.get()));
     public static final RegistryObject<Item> HAUNTED_STAIRS_ITEM = BLOCK_ITEMS.register("haunted_stairs",
             () -> new BlockItemBase(HAUNTED_STAIRS.get()));
+
+
+    public static Boolean never(BlockState p_235427_0_, IBlockReader p_235427_1_, BlockPos p_235427_2_, EntityType<?> p_235427_3_) {
+        return false;
+    }
 
 }

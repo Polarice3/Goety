@@ -207,19 +207,7 @@ public class DeadSandExplosion {
             Collections.shuffle(this.toBlow, this.level.random);
 
             for (BlockPos blockpos : this.toBlow) {
-                BlockState blockstate = this.level.getBlockState(blockpos);
-                if (BlockFinder.NotDeadSandImmune(blockstate)) {
-                    if (blockstate.getMaterial() == Material.STONE) {
-                        this.level.removeBlock(blockpos, false);
-                        this.level.setBlockAndUpdate(blockpos, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-                    } else if (blockstate.is(BlockTags.LOGS)) {
-                        this.level.removeBlock(blockpos, false);
-                        this.level.setBlockAndUpdate(blockpos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockstate.getValue(RotatedPillarBlock.AXIS)));
-                    } else {
-                        this.level.removeBlock(blockpos, false);
-                        this.level.setBlockAndUpdate(blockpos, ModBlocks.DEAD_SAND.get().defaultBlockState());
-                    }
-                }
+                BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
             }
 
             for (Pair<ItemStack, BlockPos> pair : objectarraylist) {

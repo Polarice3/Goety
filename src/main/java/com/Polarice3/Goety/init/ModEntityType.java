@@ -206,6 +206,12 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "boomer").toString()));
 
+    public static final RegistryObject<EntityType<DuneSpiderEntity>> DUNE_SPIDER = ENTITY_TYPES.register("dune_spider",
+            () -> EntityType.Builder.of(DuneSpiderEntity::new, EntityClassification.MONSTER)
+                    .sized(1.4F, 0.9F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "dune_spider").toString()));
+
     public static final RegistryObject<EntityType<MutatedCowEntity>> MUTATED_COW = ENTITY_TYPES.register("mutatedcow",
             () -> EntityType.Builder.of(MutatedCowEntity::new, EntityClassification.MONSTER)
                     .sized(0.9F, 1.95F)

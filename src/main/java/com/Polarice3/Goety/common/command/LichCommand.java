@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.command;
 
+import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.LichdomUtil;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -34,16 +36,11 @@ public class LichCommand {
 
     private static int grantLichdom(CommandSource pSource, Collection<ServerPlayerEntity> targets) throws CommandSyntaxException {
         for (ServerPlayerEntity player : targets){
-            CompoundNBT playerData = player.getPersistentData();
-            CompoundNBT data;
-            if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                data = new CompoundNBT();
-            } else {
-                data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-            }
-            if (!data.getBoolean("goety:isLich")) {
-                data.putBoolean("goety:isLich", true);
-                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+            ILichdom lichdom = LichdomHelper.getCapability(player);
+            boolean isLich = lichdom.getLichdom();
+            if (!isLich) {
+                lichdom.setLichdom(true);
+                LichdomHelper.sendLichUpdatePacket(player);
                 pSource.sendSuccess(new TranslationTextComponent("commands.lich.turnlich.success", player.getDisplayName()), false);
             } else {
                 throw ERROR_ALREADY_LICH.create();
@@ -54,19 +51,11 @@ public class LichCommand {
 
     private static int revokeLichdom(CommandSource pSource, Collection<ServerPlayerEntity> targets) throws CommandSyntaxException {
         for (ServerPlayerEntity player : targets){
-            CompoundNBT playerData = player.getPersistentData();
-            CompoundNBT data;
-            if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                data = new CompoundNBT();
-            } else {
-                data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-            }
-            if (data.getBoolean("goety:isLich")) {
-                data.putBoolean("goety:isLich", false);
-                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
-                if (player.hasEffect(Effects.NIGHT_VISION)){
-                    player.removeEffectNoUpdate(Effects.NIGHT_VISION);
-                }
+            ILichdom lichdom = LichdomHelper.getCapability(player);
+            boolean isLich = lichdom.getLichdom();
+            if (isLich) {
+                lichdom.setLichdom(false);
+                LichdomHelper.sendLichUpdatePacket(player);
                 pSource.sendSuccess(new TranslationTextComponent("commands.lich.delich.success", player.getDisplayName()), false);
             } else {
                 throw ERROR_ALREADY_NOT_LICH.create();
@@ -76,8 +65,9 @@ public class LichCommand {
     }
 
     private static int queryLich(CommandSource pSource, ServerPlayerEntity pPlayer) {
-        boolean i = LichdomUtil.isLich(pPlayer);
-        if (i){
+        ILichdom lichdom = LichdomHelper.getCapability(pPlayer);
+        boolean isLich = lichdom.getLichdom();
+        if (isLich){
             pSource.sendSuccess(new TranslationTextComponent("commands.lich.query.true", pPlayer.getDisplayName()), false);
         } else {
             pSource.sendSuccess(new TranslationTextComponent("commands.lich.query.false", pPlayer.getDisplayName()), false);

@@ -17,9 +17,11 @@ import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyImp;
 import com.Polarice3.Goety.common.infamy.InfamyStore;
+import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.common.lichdom.LichImp;
+import com.Polarice3.Goety.common.lichdom.LichStore;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.potions.ModPotions;
-import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
@@ -122,6 +124,7 @@ public class Goety {
 
     private void setup(final FMLCommonSetupEvent event) {
         CapabilityManager.INSTANCE.register(IInfamy.class, new InfamyStore(), InfamyImp::new);
+        CapabilityManager.INSTANCE.register(ILichdom.class, new LichStore(), LichImp::new);
         MinecraftForge.EVENT_BUS.register(RegisterCommands.class);
         ModNetwork.init();
 
@@ -152,6 +155,7 @@ public class Goety {
         event.put(ModEntityType.TORMENTOR.get(), TormentorEntity.setCustomAttributes().build());
         event.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
         event.put(ModEntityType.BOOMER.get(), BoomerEntity.setCustomAttributes().build());
+        event.put(ModEntityType.DUNE_SPIDER.get(), DuneSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepEntity.setCustomAttributes().build());

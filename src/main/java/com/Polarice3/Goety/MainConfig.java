@@ -124,6 +124,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandSpread;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSky;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryWater;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryAnimals;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
@@ -176,6 +179,12 @@ public class MainConfig {
         BUILDER.push("Blocks");
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
                 .define("deadSandSpread", true);
+        DeadSandDarkSky = BUILDER.comment("Dead Sand will produce a Dark Cloud at the height of the world if surrounded by other Dead Blocks, Default: true")
+                .define("deadSandDarkSky", true);
+        DeadSandDryWater = BUILDER.comment("Dead Sand will dry up surrounding Waters, Default: true")
+                .define("deadSandDryWater", true);
+        DeadSandDryAnimals = BUILDER.comment("Dead Sand will dry up animals, slowly killing them, Default: true")
+                .define("deadSandDryAnimals", true);
         BUILDER.pop();
         BUILDER.push("Soul Taken");
         UndeadSouls = BUILDER.comment("Undead Killed, Default: 5")
@@ -262,8 +271,8 @@ public class MainConfig {
                 .defineInRange("dragonFireballTime", 30, 0, 72000);
         CreeperlingDuration = BUILDER.comment("Time to cast Creeperling Spell per second, Default: 10")
                 .defineInRange("creeperlingTime", 10, 0, 72000);
-        BreathingDuration = BUILDER.comment("Time to cast Breathing Spell per second, Default: 10")
-                .defineInRange("breathingTime", 10, 0, 72000);
+        BreathingDuration = BUILDER.comment("Time to cast Breathing Spell per second, Default: 1")
+                .defineInRange("breathingTime", 1, 0, 72000);
         LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 30")
                 .defineInRange("lavaBombTime", 30, 0, 72000);
         WebballDuration = BUILDER.comment("Time to cast Web Ball Spell, Default: 10")
@@ -432,8 +441,8 @@ public class MainConfig {
                 .defineInRange("villagerHateSpells", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Spoilers");
-        LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 0")
-                .defineInRange("lichHealCost", 10, 0, Integer.MAX_VALUE);
+        LichHealCost = BUILDER.comment("How much Soul Energy is cost to give food to the Player per second if they've become a Lich, Default: 0")
+                .defineInRange("lichHungerCost", 10, 0, Integer.MAX_VALUE);
         LichHardcore = BUILDER.comment("If on Hardcore, being a Lich will provide a 90% discount on when the Player gets the Death Protect Effect, Default: true")
                 .define("lichHardcore", true);
         LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Arachnea Helm will no longer give Blindness during day, Default: true")

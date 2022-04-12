@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.*;
@@ -80,7 +81,7 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
             this.remove();
         }
         for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(AreaofEffect()))) {
-            if (entity != this.getTrueOwner()) {
+            if (!(entity instanceof ApostleEntity)) {
                 entity.setSecondsOnFire(30);
                 entity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 1200));
                 if (entity.hasEffect(Effects.FIRE_RESISTANCE)){
@@ -101,7 +102,6 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
     public double AreaofEffect(){
         return 2.0D;
     }
-
 
     public boolean isOnFire() {
         return false;

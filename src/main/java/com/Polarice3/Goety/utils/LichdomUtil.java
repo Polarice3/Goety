@@ -1,13 +1,13 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.lichdom.ILichdom;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class LichdomUtil {
     public static boolean isLich(PlayerEntity player){
-        CompoundNBT playerData = player.getPersistentData();
-        CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-        return data.getBoolean("goety:isLich");
+        ILichdom lichdom = LichdomHelper.getCapability(player);
+        return lichdom.getLichdom();
     }
 
 }

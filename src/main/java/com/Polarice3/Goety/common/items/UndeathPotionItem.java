@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.LivingEntity;
@@ -30,19 +32,13 @@ public class UndeathPotionItem extends Item {
         if (pEntityLiving instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) pEntityLiving;
             if (!pLevel.isClientSide) {
+                ILichdom lichdom = LichdomHelper.getCapability(player);
+                boolean isLich = lichdom.getLichdom();
                 ServerWorld serverWorld = (ServerWorld) pLevel;
-                CompoundNBT playerData = player.getPersistentData();
-                CompoundNBT data;
-
-                if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                    data = new CompoundNBT();
-                } else {
-                    data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-                }
                 if (serverWorld.getMoonBrightness() > 0.9F && RobeArmorFinder.FindNecroSet(pEntityLiving)){
-                    if (!data.getBoolean("goety:isLich")) {
-                        data.putBoolean("goety:isLich", true);
-                        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+                    if (!isLich) {
+                        lichdom.setLichdom(true);
+                        LichdomHelper.sendLichUpdatePacket(player);
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.success"), true);
                         player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 1));
                         player.addEffect(new EffectInstance(Effects.CONFUSION, 20, 1));
@@ -61,7 +57,7 @@ public class UndeathPotionItem extends Item {
                         player.heal(20.0F);
                     }
                 } else {
-                    if (!data.getBoolean("goety:isLich")) {
+                    if (!isLich) {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.fail"), true);
                         player.hurt(DamageSource.MAGIC, 50.0F);
                     } else {

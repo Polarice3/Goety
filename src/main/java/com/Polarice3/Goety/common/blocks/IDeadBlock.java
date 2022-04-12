@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.utils.BlockFinder;
-import com.Polarice3.Goety.utils.SoundUtil;
 import com.google.common.collect.Lists;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -35,26 +34,12 @@ public interface IDeadBlock {
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             BlockState blockState = pLevel.getBlockState(blockpos);
-            if (BlockFinder.NotDeadSandImmune(blockState)) {
-                if (blockState.getMaterial() == Material.STONE) {
-                    pLevel.destroyBlock(blockpos, false);
-                    pLevel.setBlockAndUpdate(blockpos, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-                } else if (blockState.is(BlockTags.LOGS)) {
-                    pLevel.destroyBlock(blockpos, false);
-                    pLevel.setBlockAndUpdate(blockpos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)));
-                } else {
-                    pLevel.destroyBlock(blockpos, false);
-                    pLevel.playSound(null, blockpos, SoundEvents.SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    pLevel.setBlockAndUpdate(blockpos, ModBlocks.DEAD_SAND.get().defaultBlockState());
-                }
-            }
+            BlockFinder.DeadSandReplace(blockpos, pLevel);
 
-            if (dryUpWater(pLevel, pPos)){
-                new SoundUtil(pPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            }
-
+            dryUpWater(pLevel, pPos);
             dryUpAnimals(pLevel, pPos);
             growHauntedCactus(pLevel, pPos, pRandom);
+            blockSky(pLevel, pPos);
 
             if (BlockFinder.NotDeadSandImmune(blockState)) {
                 for (int l1 = -4; l1 <= 0; ++l1) {
@@ -137,7 +122,8 @@ public interface IDeadBlock {
             BlockState blockState = pLevel.getBlockState(blockpos);
             if (BlockFinder.NotDeadSandImmune(blockState)
                     && blockState.getMaterial() != Material.STONE
-                    && !blockState.is(BlockTags.LOGS)) {
+                    && !blockState.is(BlockTags.LOGS)
+                    && !blockState.is(BlockTags.ICE)) {
                 pLevel.destroyBlock(blockpos, false);
                 pLevel.playSound(null, blockpos, SoundEvents.SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 pLevel.setBlockAndUpdate(blockpos, ModBlocks.DEAD_SAND.get().defaultBlockState());
@@ -159,8 +145,8 @@ public interface IDeadBlock {
         }
     }
 
-    default boolean dryUpWater(World pLevel, BlockPos pPos) {
-        if (MainConfig.DeadSandSpread.get()) {
+    default void dryUpWater(World pLevel, BlockPos pPos) {
+        if (MainConfig.DeadSandDryWater.get()) {
             if (pLevel.isDay() && !pLevel.isRaining() && !pLevel.isThundering()) {
                 Queue<Tuple<BlockPos, Integer>> queue = Lists.newLinkedList();
                 queue.add(new Tuple<>(pPos, 0));
@@ -205,38 +191,62 @@ public interface IDeadBlock {
                     }
                 }
 
-                return i > 0;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
     }
 
     default void dryUpAnimals(ServerWorld pLevel, BlockPos pPos){
-        List<Block> result = new ArrayList<>();
-        List<Block> result2 = new ArrayList<>();
-        Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
-                pPos.offset(-16, -2, -16),
-                pPos.offset(16, 2, 16));
-        for (BlockPos blockToCheck : blocksToCheck) {
-            BlockState blockState = pLevel.getBlockState(blockToCheck);
-            if (blockState.getBlock() instanceof IDeadBlock){
-                result.add(blockState.getBlock());
+        if (MainConfig.DeadSandDryAnimals.get()) {
+            List<Block> result = new ArrayList<>();
+            List<Block> result2 = new ArrayList<>();
+            Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
+                    pPos.offset(-16, -2, -16),
+                    pPos.offset(16, 2, 16));
+            for (BlockPos blockToCheck : blocksToCheck) {
+                BlockState blockState = pLevel.getBlockState(blockToCheck);
+                if (blockState.getBlock() instanceof IDeadBlock) {
+                    result.add(blockState.getBlock());
+                }
+                if (blockState.getFluidState().is(FluidTags.WATER)) {
+                    result2.add(blockState.getBlock());
+                }
             }
-            if (blockState.getFluidState().is(FluidTags.WATER)){
-                result2.add(blockState.getBlock());
+            if (result.size() > 32 && result2.isEmpty()) {
+                if (pLevel.isDay() && !pLevel.isRaining() && !pLevel.isThundering()) {
+                    for (LivingEntity livingEntity : pLevel.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(pPos.above()))) {
+                        if (livingEntity instanceof AnimalEntity) {
+                            livingEntity.hurt(DamageSource.DRY_OUT, 1.0F);
+                            livingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 1200));
+                            livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
+                        }
+                    }
+                }
             }
         }
-        if (result.size() > 32 && result2.isEmpty()) {
-            if (pLevel.isDay() && !pLevel.isRaining() && !pLevel.isThundering()) {
-                for (LivingEntity livingEntity : pLevel.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(pPos.above()))) {
-                    if (livingEntity instanceof AnimalEntity) {
-                        livingEntity.hurt(DamageSource.DRY_OUT, 1.0F);
-                        livingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 1200));
-                        livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
-                    }
+    }
+
+    default void blockSky(ServerWorld pLevel, BlockPos pPos){
+        if (MainConfig.DeadSandDarkSky.get()) {
+            List<Block> result = new ArrayList<>();
+            Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
+                    pPos.offset(-8, -8, -8),
+                    pPos.offset(8, 8, 8));
+            for (BlockPos blockToCheck : blocksToCheck) {
+                BlockState blockState = pLevel.getBlockState(blockToCheck);
+                if (blockState.getBlock() instanceof IDeadBlock) {
+                    result.add(blockState.getBlock());
+                }
+            }
+            if (result.size() > 32) {
+                BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(pPos.getX(), pPos.getY(), pPos.getZ());
+
+                while (blockpos$mutable.getY() < 255 && (pLevel.getBlockState(blockpos$mutable).isAir() || pLevel.getBlockState(blockpos$mutable).getBlock() instanceof IDeadBlock)) {
+                    blockpos$mutable.move(Direction.UP);
+                }
+
+                BlockState ceiling = pLevel.getBlockState(blockpos$mutable);
+                if (ceiling.isAir() && blockpos$mutable.getY() > 254) {
+                    pLevel.setBlockAndUpdate(blockpos$mutable, ModBlocks.DARK_CLOUD.get().defaultBlockState());
                 }
             }
         }

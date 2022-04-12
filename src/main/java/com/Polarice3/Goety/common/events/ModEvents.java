@@ -9,6 +9,7 @@ import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
+import com.Polarice3.Goety.common.entities.hostile.DuneSpiderEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
@@ -18,6 +19,8 @@ import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.items.SoulWand;
+import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.common.lichdom.LichProvider;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
@@ -73,6 +76,7 @@ public class ModEvents {
     public static void onPlayerCapabilityAttachEvent(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "infamy"), new InfamyProvider());
+            event.addCapability(new ResourceLocation(Goety.MOD_ID, "lichdom"), new LichProvider());
         }
     }
 
@@ -84,6 +88,14 @@ public class ModEvents {
                 PlayerEntity player = (PlayerEntity) entity;
 
                 InfamyHelper.sendInfamyUpdatePacket(player);
+                LichdomHelper.sendLichUpdatePacket(player);
+                CompoundNBT playerData = player.getPersistentData();
+                CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+                if (data.getBoolean("goety:isLich")){
+                    ILichdom lichdom = LichdomHelper.getCapability(player);
+                    lichdom.setLichdom(true);
+                    LichdomHelper.sendLichUpdatePacket(player);
+                }
             }
 
         }
@@ -105,6 +117,12 @@ public class ModEvents {
             player.getCapability(InfamyProvider.CAPABILITY)
                     .ifPresent(infamy ->
                             infamy.setInfamy(capability.getInfamy() > 0 ? capability.getInfamy() - MainConfig.DeathLoseInfamy.get() : 0));
+
+            ILichdom capability2 = event.getOriginal().getCapability(LichProvider.CAPABILITY).resolve().get();
+
+            player.getCapability(LichProvider.CAPABILITY)
+                    .ifPresent(lichdom ->
+                            lichdom.setLichdom(capability2.getLichdom()));
         }
     }
 
@@ -195,7 +213,6 @@ public class ModEvents {
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD){
                 BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
                 if (blockState.getBlock() instanceof IDeadBlock){
-                    livingEntity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20, 0, false, false));
                     livingEntity.clearFire();
                 }
             }
@@ -267,10 +284,9 @@ public class ModEvents {
             if (!LichdomUtil.isLich(player)) {
                 if (!(blockState.getBlock() instanceof IDeadBlock)) {
                     if (!world.isClientSide) {
-                        if (world.isDay()){
-                            float f = player.getBrightness();
+                        if (world.isDay() && !world.isRaining() && !world.isThundering()){
                             BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                            if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                            if (world.canSeeSky(blockpos)) {
                                 player.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
                                 player.addEffect(new EffectInstance(Effects.HUNGER, 20, 1));
                             } else {
@@ -428,6 +444,18 @@ public class ModEvents {
                             boomer.finalizeSpawn((IServerWorld) boomer.level, boomer.level.getCurrentDifficultyAt(boomer.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                             net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, boomer);
                             new SoundUtil(boomer.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        }
+                    }
+                }
+            }
+            if (killed instanceof SpiderEntity){
+                if (event.getSource() == DamageSource.CACTUS){
+                    if (((SpiderEntity) killed).hasEffect(ModEffects.CURSED.get())){
+                        DuneSpiderEntity duneSpiderEntity = ((SpiderEntity) killed).convertTo(ModEntityType.DUNE_SPIDER.get(), false);
+                        if (duneSpiderEntity != null) {
+                            duneSpiderEntity.finalizeSpawn((IServerWorld) duneSpiderEntity.level, duneSpiderEntity.level.getCurrentDifficultyAt(duneSpiderEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                            net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, duneSpiderEntity);
+                            new SoundUtil(duneSpiderEntity.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         }
                     }
                 }

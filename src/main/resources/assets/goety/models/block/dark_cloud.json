@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "goety:blocks/dark_cloud_side",
+    "side": "goety:blocks/dark_cloud"
+  }
+}

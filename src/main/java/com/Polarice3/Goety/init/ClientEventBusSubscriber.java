@@ -52,6 +52,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.TORMENTOR.get(), TormentorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HUSKARL.get(), HuskarlRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BOOMER.get(), BoomerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DUNE_SPIDER.get(), DuneSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_COW.get(), MutatedCowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepRenderer::new);
@@ -85,6 +86,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.TEMP_WEB.get(), ModTileEntityRenderer::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_CAGE_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_BARS_BLOCK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.DARK_CLOUD.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.TEMP_WEB.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_CACTUS.get(), RenderType.cutout());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
