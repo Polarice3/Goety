@@ -78,6 +78,13 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
+    public static final RegistryObject<EntityType<SoulBulletEntity>> SOUL_BULLET = ENTITY_TYPES.register("soul_bullet",
+            () -> EntityType.Builder.<SoulBulletEntity>of(SoulBulletEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "soul_bullet").toString()));
+
     public static final RegistryObject<EntityType<WebBallEntity>> WEB_BALL = ENTITY_TYPES.register("web_ball",
             () -> EntityType.Builder.<WebBallEntity>of(WebBallEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)
@@ -164,6 +171,13 @@ public class ModEntityType {
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "skeletonvillagerminion").toString()));
+
+    public static final RegistryObject<EntityType<IllusionCloneEntity>> ILLUSION_CLONE = ENTITY_TYPES.register("illusion_clone",
+            () -> EntityType.Builder.of(IllusionCloneEntity::new, EntityClassification.MISC)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .fireImmune()
+                    .build(new ResourceLocation(Goety.MOD_ID, "illusion_clone").toString()));
 
     public static final RegistryObject<EntityType<EnviokerEntity>> ENVIOKER = ENTITY_TYPES.register("envioker",
             () -> EntityType.Builder.of(EnviokerEntity::new, EntityClassification.MONSTER)

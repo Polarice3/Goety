@@ -1,29 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "sfs",
-    "fef",
-    "sfs"
-  ],
-  "key":
-  {
-    "e":
-    {
-      "item": "goety:airycore"
-    },
-    "f":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:emptycore"
+  },
+  "craftType": "air",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
     {
       "item": "minecraft:fermented_spider_eye"
     },
-    "s":
+    {
+      "item": "minecraft:fermented_spider_eye"
+    },
     {
       "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:nether_wart"
+    },
+    {
+      "item": "minecraft:blaze_powder"
     }
-  },
-  "result":
-  {
-    "item": "goety:witchgalefocus",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:witchgalefocus"
   }
 }

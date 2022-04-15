@@ -406,6 +406,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public void aiStep() {
         if (this.isSettingupSecond()){
+            this.serverAiStep();
             if (this.tickCount % 10 == 0) {
                 this.heal(10.0F);
             }

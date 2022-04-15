@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.blocks.ArcaBlock;
 import com.Polarice3.Goety.common.blocks.CursedCageBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
@@ -231,6 +232,15 @@ public class GoldTotemItem extends Item {
             ItemStack itemstack = pContext.getItemInHand();
             if (!world.isClientSide) {
                 ((CursedCageBlock) ModBlocks.CURSED_CAGE_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
+                world.levelEvent(null, 1010, blockpos, Item.getId(this));
+                itemstack.shrink(1);
+            }
+
+            return ActionResultType.sidedSuccess(world.isClientSide);
+        } else if (blockstate.is(ModBlocks.ARCA_BLOCK.get()) && !blockstate.getValue(ArcaBlock.POWERED)) {
+            ItemStack itemstack = pContext.getItemInHand();
+            if (!world.isClientSide) {
+                ((ArcaBlock) ModBlocks.ARCA_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
                 world.levelEvent(null, 1010, blockpos, Item.getId(this));
                 itemstack.shrink(1);
             }

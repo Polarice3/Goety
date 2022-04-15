@@ -22,7 +22,7 @@
     },
     {
       "type": "patchouli:entity",
-      "entity": "goety:zealot"
+      "entity": "goety:zealot{ArmorItems:[{},{},{},{Count:1,id:\"goety:cultisthelm\"}]}"
     },
     {
       "type": "patchouli:text",
@@ -38,7 +38,7 @@
     },
     {
       "type": "patchouli:entity",
-      "entity": "goety:disciple"
+      "entity": "goety:disciple{ArmorItems:[{},{},{Count:1,id:\"goety:cultistrobe\"},{Count:1,id:\"goety:cultisthelm\"}]}"
     },
     {
       "type": "patchouli:text",

@@ -17,10 +17,10 @@ public class DarkCloudBlock extends Block {
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
 
     public DarkCloudBlock() {
-        super(Properties.of(Material.WOOL)
-                .strength(0.2F)
+        super(Properties.of(Material.WEB)
                 .sound(SoundType.WOOL)
-                .harvestLevel(0)
+                .randomTicks()
+                .instabreak()
                 .noCollission()
                 .isValidSpawn(ModBlocks::never)
         );

@@ -16,10 +16,10 @@
       "item": "goety:apostle_blood_bottle"
     },
     {
-      "item": "minecraft:spider_eye"
+      "item": "minecraft:wither_rose"
     },
     {
-      "item": "minecraft:allium"
+      "item": "minecraft:honey_bottle"
     },
     {
       "item": "minecraft:poisonous_potato"
@@ -34,13 +34,13 @@
       "item": "minecraft:nether_wart"
     },
     {
-      "item": "minecraft:rotten_flesh"
+      "item": "minecraft:phantom_membrane"
     },
     {
       "item": "minecraft:enchanted_golden_apple"
     },
     {
-      "item": "minecraft:ghast_tear"
+      "item": "minecraft:suspicious_stew"
     },
     {
       "item": "minecraft:fermented_spider_eye"

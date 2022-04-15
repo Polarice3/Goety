@@ -34,6 +34,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<CursedCageTileEntity>> CURSED_CAGE = TILEENTITY_TYPES.register("cursed_cage",
             () -> TileEntityType.Builder.of(CursedCageTileEntity::new, ModBlocks.CURSED_CAGE_BLOCK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<ArcaTileEntity>> ARCA = TILEENTITY_TYPES.register("arca",
+            () -> TileEntityType.Builder.of(ArcaTileEntity::new, ModBlocks.ARCA_BLOCK.get()).build(null));
+
     public static final RegistryObject<TileEntityType<DarkAltarTileEntity>> DARK_ALTAR = TILEENTITY_TYPES.register("dark_altar",
             () -> TileEntityType.Builder.of(DarkAltarTileEntity::new, ModBlocks.DARK_ALTAR.get()).build(null));
 

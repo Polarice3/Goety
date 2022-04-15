@@ -2,18 +2,13 @@ package com.Polarice3.Goety.common.command;
 
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.utils.LichdomHelper;
-import com.Polarice3.Goety.utils.LichdomUtil;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Collection;

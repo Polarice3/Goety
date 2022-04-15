@@ -281,6 +281,9 @@ public class SoulWand extends Item{
         } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("webball")) {
             this.setSpellConditions(new WebBallSpell(), itemStack);
             this.setSpell(17, itemStack);
+        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("illusion")) {
+            this.setSpellConditions(new IllusionSpell(), itemStack);
+            this.setSpell(18, itemStack);
         }
     }
 

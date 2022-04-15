@@ -13,4 +13,5 @@ public class LichImp implements ILichdom{
     public void setLichdom(boolean lichdom) {
         this.lichdom = lichdom;
     }
+
 }

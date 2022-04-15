@@ -19,12 +19,14 @@ import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -53,6 +55,7 @@ public class LichEvent {
         World world = player.level;
         if (LichdomUtil.isLich(player)){
             player.getFoodData().setFoodLevel(17);
+            player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
             boolean burn = false;
             if (!world.isClientSide && world.isDay()) {
                 float f = player.getBrightness();
@@ -83,18 +86,24 @@ public class LichEvent {
                 ItemStack helmet = player.getItemBySlot(EquipmentSlotType.HEAD);
                 if (!helmet.isEmpty()) {
                     if (!player.isCreative()) {
-                        if (helmet.isDamageableItem()) {
-                            helmet.setDamageValue(helmet.getDamageValue() + world.random.nextInt(2));
-                            if (helmet.getDamageValue() >= helmet.getMaxDamage()) {
-                                player.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                                player.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                        if (!player.hasEffect(Effects.FIRE_RESISTANCE)) {
+                            if (helmet.isDamageableItem()) {
+                                helmet.setDamageValue(helmet.getDamageValue() + world.random.nextInt(2));
+                                if (helmet.getDamageValue() >= helmet.getMaxDamage()) {
+                                    player.broadcastBreakEvent(EquipmentSlotType.HEAD);
+                                    player.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                                }
                             }
                         }
                     }
                     burn = false;
                 }
                 if (burn){
-                    player.setSecondsOnFire(8);
+                    if (player.hasEffect(Effects.FIRE_RESISTANCE) && !player.isCreative() && !player.isSpectator()){
+                        player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1, false, false));
+                    } else {
+                        player.setSecondsOnFire(8);
+                    }
                 }
             }
 
@@ -103,6 +112,9 @@ public class LichEvent {
             }
             if (player.hasEffect(Effects.POISON)){
                 player.removeEffectNoUpdate(Effects.POISON);
+            }
+            if (player.hasEffect(Effects.BLINDNESS)){
+                player.removeEffectNoUpdate(Effects.BLINDNESS);
             }
             if (player.hasEffect(Effects.HUNGER)){
                 player.removeEffectNoUpdate(Effects.HUNGER);
@@ -128,6 +140,11 @@ public class LichEvent {
                     if (player.tickCount % 20 == 0) {
                         villager.getGossips().add(player.getUUID(), GossipType.MAJOR_NEGATIVE, 25);
                     }
+                }
+            }
+            for (IronGolemEntity ironGolem : player.level.getEntitiesOfClass(IronGolemEntity.class, player.getBoundingBox().inflate(16.0D))) {
+                if (!ironGolem.isPlayerCreated() && ironGolem.getTarget() != player) {
+                    ironGolem.setTarget(player);
                 }
             }
             if (player.isEyeInFluid(FluidTags.WATER)){
@@ -165,6 +182,9 @@ public class LichEvent {
                 if (event.getPotionEffect().getEffect() == Effects.REGENERATION){
                     event.setResult(Event.Result.DENY);
                 }
+                if (event.getPotionEffect().getEffect() == Effects.BLINDNESS){
+                    event.setResult(Event.Result.DENY);
+                }
                 if (event.getPotionEffect().getEffect() == Effects.HUNGER){
                     event.setResult(Event.Result.DENY);
                 }
@@ -184,7 +204,13 @@ public class LichEvent {
                         if (event.getTarget() instanceof PlayerEntity) {
                             PlayerEntity player = (PlayerEntity) event.getTarget();
                             if (LichdomUtil.isLich(player)) {
-                                ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                if (MainConfig.LichPowerfulFoes.get()) {
+                                    if (event.getEntityLiving().getMaxHealth() < 100) {
+                                        ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                    }
+                                } else {
+                                    ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                }
                             }
                         }
                     }
@@ -218,17 +244,28 @@ public class LichEvent {
                 if (event.getSource() == DamageSource.DROWN){
                     event.setCanceled(true);
                 }
+                if (event.getSource().isMagic()){
+                    event.setAmount(event.getAmount() * 0.15F);
+                }
                 if (MainConfig.LichUndeadFriends.get()) {
                     if (RobeArmorFinder.FindNecroSet(player) && event.getSource().getEntity() != null) {
                         if (event.getSource().getEntity() instanceof LivingEntity) {
                             LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
                             for (MonsterEntity undead : player.level.getEntitiesOfClass(MonsterEntity.class, player.getBoundingBox().inflate(16))) {
-                                if (undead.getMobType() == CreatureAttribute.UNDEAD && !(undead instanceof WitherEntity)) {
+                                if (undead.getMobType() == CreatureAttribute.UNDEAD && undead.getMaxHealth() < 100) {
                                     undead.setTarget(attacker);
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+        if (event.getSource().getEntity() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) event.getSource().getEntity();
+            if (LichdomUtil.isLich(player)){
+                if (player.getMainHandItem().isEmpty()){
+                    event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
                 }
             }
         }

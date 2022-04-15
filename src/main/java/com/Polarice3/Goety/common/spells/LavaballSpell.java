@@ -38,7 +38,7 @@ public class LavaballSpell extends Spells{
         double d4 = random.nextGaussian() * 0.01D + vector3d.z;
         FireballEntity fireballEntity = new FireballEntity(worldIn, entityLiving, d2, d3, d4);
         fireballEntity.setOwner(entityLiving);
-        fireballEntity.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D), entityLiving.getZ() + vector3d.z * 2.0D);
+        fireballEntity.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D) + 0.5D, entityLiving.getZ() + vector3d.z * 2.0D);
         worldIn.addFreshEntity(fireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);

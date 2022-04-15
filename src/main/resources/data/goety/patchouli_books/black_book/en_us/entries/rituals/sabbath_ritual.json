@@ -4,7 +4,7 @@
   "category": "goety:rituals",
   "advancement": "goety:goety/read_nether_book",
   "secret": true,
-  "sortnum": 6,
+  "sortnum": 7,
   "pages": [
     {
       "type": "patchouli:text",

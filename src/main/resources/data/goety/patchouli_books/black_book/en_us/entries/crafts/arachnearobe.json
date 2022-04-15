@@ -16,12 +16,12 @@
     {
       "type": "patchouli:spotlight",
       "item": "goety:arachnorobe",
-      "text": "When injured by another creature, a Spiderling will crawl out of your Robe and defend you."
+      "text": "When injured by another creature, a Spiderling will crawl out of your Robe and defend you. You will also walk through Cobwebs easier."
     },
     {
       "type": "patchouli:spotlight",
       "item": "goety:arachnobootsofwander",
-      "text": "Wearing these specialize boots will cause all your Loyal Spiders to move quickly."
+      "text": "Wearing these specialize boots will give you the ability to climb up walls and cause all of your Loyal Spiders to move quickly."
     }
   ]
 }

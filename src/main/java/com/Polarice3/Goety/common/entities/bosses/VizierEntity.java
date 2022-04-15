@@ -187,7 +187,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         } else if (super.isAlliedTo(entityIn)) {
             return true;
         } else if (entityIn instanceof IrkEntity) {
-            return this.isAlliedTo(((IrkEntity)entityIn).getOwner());
+            return this.isAlliedTo(((IrkEntity)entityIn).owner);
         } else if (entityIn instanceof LivingEntity && ((LivingEntity)entityIn).getMobType() == CreatureAttribute.ILLAGER) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else {

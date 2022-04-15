@@ -33,7 +33,7 @@ public class FireballSpell extends InstantCastSpells{
         double d4 = random.nextGaussian() * 0.01D + vector3d.z;
         SmallFireballEntity smallFireballEntity = new SmallFireballEntity(worldIn, entityLiving, d2, d3, d4);
         smallFireballEntity.setOwner(entityLiving);
-        smallFireballEntity.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D), entityLiving.getZ() + vector3d.z * 2.0D);
+        smallFireballEntity.setPos(entityLiving.getX() + vector3d.x * 2.0D, entityLiving.getY(0.5D) + 0.5D, entityLiving.getZ() + vector3d.z * 2.0D);
         worldIn.addFreshEntity(smallFireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);

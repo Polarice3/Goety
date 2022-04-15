@@ -4,19 +4,13 @@
   "activation_item": {
     "item": "minecraft:netherrack"
   },
-  "craftType": "necroturgy",
+  "craftType": "air",
   "entity_to_summon": "goety:stormutil",
   "soulCost": 1,
   "duration": 10,
   "ingredients": [
     {
-      "tag": "forge:gunpowder"
-    },
-    {
       "item": "minecraft:clock"
-    },
-    {
-      "tag": "forge:dusts/redstone"
     },
     {
       "tag": "forge:mushrooms"

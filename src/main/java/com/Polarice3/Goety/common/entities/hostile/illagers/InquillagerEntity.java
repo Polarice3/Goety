@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -22,7 +21,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
@@ -151,12 +149,31 @@ public class InquillagerEntity extends SpellcastingIllagerEntity {
         }
     }
 
+    public void playAmbientSound() {
+        SoundEvent soundevent = this.getAmbientSound();
+        if (soundevent != null) {
+            this.playSound(soundevent, 1.0F, 1.5F);
+        }
+    }
+
+    protected void playHurtSound(DamageSource pSource) {
+        SoundEvent soundevent = this.getHurtSound(pSource);
+        if (soundevent != null) {
+            this.playSound(soundevent, 1.0F, 1.5F);
+        }
+    }
+
+    public void die(DamageSource pCause) {
+        SoundEvent soundevent = SoundEvents.VINDICATOR_DEATH;
+        this.playSound(soundevent, 1.0F, 1.5F);
+    }
+
     protected SoundEvent getAmbientSound() {
         return SoundEvents.VINDICATOR_AMBIENT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.VINDICATOR_DEATH;
+        return null;
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {

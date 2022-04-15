@@ -265,6 +265,17 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
                     }
 
+                    if (recipe.getCraftType().contains("air")){
+                        if (!(this.getBlockPos().getY() >= 128)) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
                 } else {
                     if (this.level.getGameTime() % 20 == 0) {
                         double d0 = (double) this.worldPosition.getX() + this.level.random.nextDouble();

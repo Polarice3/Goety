@@ -30,6 +30,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> WebballCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllusionCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
@@ -47,6 +48,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> WebballDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
@@ -67,6 +69,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> WebballInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
@@ -158,6 +161,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichHardcore;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
 
     static {
         BUILDER.push("General");
@@ -243,6 +247,8 @@ public class MainConfig {
                 .defineInRange("lavaBombCost", 16, 0, Integer.MAX_VALUE);
         WebballCost = BUILDER.comment("Web Ball Spell Cost, Default: 4")
                 .defineInRange("webBallCost", 4, 0, Integer.MAX_VALUE);
+        IllusionCost = BUILDER.comment("Illusion Spell Cost, Default: 20")
+                .defineInRange("illusionCost", 20, 0, Integer.MAX_VALUE);
         SoulShieldCost = BUILDER.comment("Soul Shield Spell Cost, Default: 32")
                 .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -277,6 +283,8 @@ public class MainConfig {
                 .defineInRange("lavaBombTime", 30, 0, 72000);
         WebballDuration = BUILDER.comment("Time to cast Web Ball Spell, Default: 10")
                 .defineInRange("webBallTime", 10, 0, 72000);
+        IllusionDuration = BUILDER.comment("Time to cast Illusion Spell, Default: 40")
+                .defineInRange("illusionTime", 40, 0, 72000);
         SoulShieldDuration = BUILDER.comment("Time to cast Soul Shield Spell, Default: 20")
                 .defineInRange("soulShieldTime", 20, 0, 72000);
         BUILDER.pop();
@@ -373,6 +381,8 @@ public class MainConfig {
                 .defineInRange("lavaBombInfamyChance", 0, 0, Integer.MAX_VALUE);
         WebballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Web Ball Spell, Default: 0")
                 .defineInRange("webBallInfamyChance", 0, 0, Integer.MAX_VALUE);
+        IllusionInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Illusion Spell, Default: 1")
+                .defineInRange("webBallInfamyChance", 1, 0, Integer.MAX_VALUE);
         SoulShieldInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Shield Spell, Default: 0")
                 .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -449,6 +459,8 @@ public class MainConfig {
                 .define("lichNightVision", true);
         LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")
                 .define("lichUndeadFriendly", true);
+        LichPowerfulFoes = BUILDER.comment("If Lich Undead Friendly is set to true, Only undead that have lower than 50 Hearts are friendly, Default: true")
+                .define("lichPowerfulHostile", true);
         BUILDER.pop();
         BUILDER.push("Misc");
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")

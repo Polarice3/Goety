@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -42,8 +43,8 @@ public class UndeathPotionItem extends Item {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.success"), true);
                         player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 1));
                         player.addEffect(new EffectInstance(Effects.CONFUSION, 20, 1));
-                        player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 0.5F);
-                        player.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 0.5F);
+                        new SoundUtil(player.blockPosition(), SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                        new SoundUtil(player.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 1.0F, 0.5F);
                         for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
                             double d = pLevel.random.nextGaussian() * 0.2D;
                             new ParticleUtil(ParticleTypes.LARGE_SMOKE, player.getX(), player.getEyeY(), player.getZ(), d, d, d);
@@ -56,6 +57,7 @@ public class UndeathPotionItem extends Item {
                         }
                         player.heal(20.0F);
                     }
+                    return new ItemStack(Items.GLASS_BOTTLE);
                 } else {
                     if (!isLich) {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.fail"), true);
@@ -67,6 +69,7 @@ public class UndeathPotionItem extends Item {
                         }
                         player.heal(20.0F);
                     }
+                    return new ItemStack(Items.GLASS_BOTTLE);
                 }
             }
         }

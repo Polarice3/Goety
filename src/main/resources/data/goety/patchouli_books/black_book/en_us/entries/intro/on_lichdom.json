@@ -1,7 +1,7 @@
 {
   "name": "Caveats of being a Lich",
   "icon": "minecraft:skeleton_skull",
-  "category": "goety:crafts",
+  "category": "goety:intro",
   "advancement": "goety:goety/become_lich",
   "secret": true,
   "pages": [
@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "On the plus side, all Undead creatures no longer attack you, you can never drown and you can stay in the Sunlight all day long if you're near a whole bunch of Dead Sand or Dead Sandstone. Necrotic Totems also cast their beneficial magic on you as well!"
+      "text": "On the plus side, most Undead creatures no longer attack you, you're most resistant to magic and harmful potions, you can never drown and you can stay in the Sunlight all day long if you're near a whole bunch of Dead Sand or Dead Sandstone. Necrotic Totems also cast their beneficial magic on you as well!"
     },
     {
       "type": "patchouli:text",

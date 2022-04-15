@@ -26,6 +26,9 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> HEAL_EFFECT = PARTICLE_TYPES.register("heal",
             () -> new BasicParticleType(false));
 
+    public static final RegistryObject<BasicParticleType> BULLET_EFFECT = PARTICLE_TYPES.register("bullet_effect",
+            () -> new BasicParticleType(false));
+
     public static final RegistryObject<BasicParticleType> DEAD_SAND_EXPLOSION = PARTICLE_TYPES.register("deadsandsplosion",
             () -> new BasicParticleType(true));
 
@@ -38,6 +41,7 @@ public class ModParticleTypes {
 
         particles.register(ModParticleTypes.TOTEM_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());

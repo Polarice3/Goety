@@ -45,6 +45,8 @@ public class CastSpells {
                 return new LavaballSpell();
             case 17:
                 return new WebBallSpell();
+            case 18:
+                return new IllusionSpell();
             default:
                 return null;
         }
