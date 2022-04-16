@@ -231,6 +231,7 @@ public class IllagerSpawner {
             return false;
         } else {
             PatrollerEntity illager = null;
+            int i = 0;
             switch (r){
                 case 0:
                 case 1:
@@ -248,19 +249,46 @@ public class IllagerSpawner {
                 case 11:
                 case 12:
                 case 13:
-                case 14:
                     illager = EntityType.VINDICATOR.create(worldIn);
+                    break;
+                case 14:
+                    illager = EntityType.RAVAGER.create(worldIn);
                     break;
                 case 15:
                     illager = EntityType.RAVAGER.create(worldIn);
+                    ++i;
                     break;
             }
             if (illager != null) {
-                illager.setPos((double)p_222695_2_.getX(), (double)p_222695_2_.getY(), (double)p_222695_2_.getZ());
+                illager.setPos(p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ());
                 if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(illager, worldIn, p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ(), null, SpawnReason.PATROL) == -1) return false;
                 illager.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
                 illager.goalSelector.addGoal(0, new MoveTowardsTargetGoal<>(illager));
                 worldIn.addFreshEntityWithPassengers(illager);
+                if (i > 0){
+                    PatrollerEntity rider = null;
+                    int riding = random.nextInt(4);
+                    switch (riding){
+                        case 0:
+                            rider = EntityType.PILLAGER.create(worldIn);
+                            break;
+                        case 1:
+                            rider = EntityType.VINDICATOR.create(worldIn);
+                            break;
+                        case 2:
+                            rider = ModEntityType.CONQUILLAGER.get().create(worldIn);
+                            break;
+                        case 3:
+                            rider = ModEntityType.INQUILLAGER.get().create(worldIn);
+                            break;
+                    }
+                    if (rider != null){
+                        rider.setPos(p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ());
+                        rider.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
+                        rider.startRiding(illager);
+                        worldIn.addFreshEntity(rider);
+                    }
+                }
                 return true;
             } else {
                 return false;

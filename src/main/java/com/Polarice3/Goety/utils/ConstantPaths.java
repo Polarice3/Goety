@@ -13,4 +13,8 @@ public class ConstantPaths {
         return Goety.location("decrepit_fort");
     }
 
+    public static ResourceLocation getDarkManor(){
+        return Goety.location("dark_manor");
+    }
+
 }

@@ -95,8 +95,10 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
             }
         }
         if (this.level.isClientSide) {
-            for(int i = 0; i < 2; ++i) {
-                new ParticleUtil(ModParticleTypes.PLAGUE_EFFECT.get(), this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.5D, 0.0D);
+            if (this.tickCount % 20 == 0){
+                for(int i = 0; i < 8; ++i) {
+                    new ParticleUtil(ModParticleTypes.PLAGUE_EFFECT.get(), this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.5D, 0.0D);
+                }
             }
         }
     }

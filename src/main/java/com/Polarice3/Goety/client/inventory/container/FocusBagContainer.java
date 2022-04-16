@@ -63,6 +63,6 @@ public class FocusBagContainer extends Container {
 
     @Override
     public boolean stillValid(PlayerEntity player) {
-        return (player.getMainHandItem() == stack || player.getOffhandItem() == stack) && !stack.isEmpty();
+        return !stack.isEmpty();
     }
 }

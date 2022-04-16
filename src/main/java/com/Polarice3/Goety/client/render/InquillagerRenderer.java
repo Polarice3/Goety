@@ -23,7 +23,7 @@ public class InquillagerRenderer<T extends InquillagerEntity> extends MobRendere
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/inquillager.png");
 
     public InquillagerRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new InquillagerModel<>(0.0F, 0.5F), 0.5F);
+        super(renderManagerIn, new InquillagerModel<>(0.0F, 0.0F), 0.5F);
         this.addLayer(new HeldItemLayer<T, InquillagerModel<T>>(this) {
             public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
                 if (entitylivingbaseIn.isAggressive()) {

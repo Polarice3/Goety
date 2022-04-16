@@ -2,8 +2,10 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.inventory.container.FocusBagContainer;
+import com.Polarice3.Goety.client.inventory.container.SoulItemContainer;
 import com.Polarice3.Goety.common.items.capability.FocusBagItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
+import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
@@ -71,6 +73,14 @@ public class FocusBagItem extends Item implements ICurioItem {
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && slotChanged;
+    }
+
+    public static void onKeyPressed(ItemStack stack, PlayerEntity playerEntity){
+        if (!playerEntity.level.isClientSide) {
+            SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider(
+                    (id, inventory, player) -> new FocusBagContainer(id, inventory, FocusBagItemHandler.get(stack), stack), stack.getDisplayName());
+            NetworkHooks.openGui((ServerPlayerEntity) playerEntity, provider, (buffer) -> {});
+        }
     }
 
     @Override

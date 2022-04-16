@@ -5,6 +5,7 @@ import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.IParticleData;
@@ -37,9 +38,13 @@ public class SoulBulletEntity extends DamagingProjectileEntity {
         Entity entity = pResult.getEntity();
         Entity entity1 = this.getOwner();
         LivingEntity livingentity = entity1 instanceof LivingEntity ? (LivingEntity)entity1 : null;
-        boolean flag = entity.hurt(DamageSource.indirectMobAttack(this, livingentity).setProjectile(), 4.0F);
-        if (flag) {
-            this.doEnchantDamageEffects(livingentity, entity);
+        if (livingentity != null && livingentity.getAttribute(Attributes.ATTACK_DAMAGE) != null) {
+            boolean flag = entity.hurt(DamageSource.indirectMagic(this, livingentity).setProjectile(), (float) livingentity.getAttributeValue(Attributes.ATTACK_DAMAGE));
+            if (flag) {
+                this.doEnchantDamageEffects(livingentity, entity);
+            }
+        } else {
+            entity.hurt(DamageSource.MAGIC.setProjectile(), 4.0F);
         }
 
     }

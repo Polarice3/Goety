@@ -20,7 +20,7 @@ public class ConquillagerRenderer<T extends ConquillagerEntity> extends MobRende
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/conquillager.png");
 
     public ConquillagerRenderer(EntityRendererManager renderManagerIn) {
-        super(renderManagerIn, new ConquillagerModel<>(0.0F, 0.5F), 0.5F);
+        super(renderManagerIn, new ConquillagerModel<>(0.0F, 0.0F), 0.5F);
         this.addLayer(new HeldItemLayer<>(this));
         this.addLayer(new BipedArmorLayer<>(this, new ACArmorModel<>(0.5F), new ACArmorModel<>(1.0F)));
     }

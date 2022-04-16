@@ -18,6 +18,7 @@ import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
+import com.Polarice3.Goety.common.items.FocusBagItem;
 import com.Polarice3.Goety.common.items.SoulWand;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.lichdom.LichProvider;
@@ -130,6 +131,7 @@ public class ModEvents {
     public static void openBagandWand(InputEvent.KeyInputEvent event){
         KeyPressed.setWand(ModKeybindings.keyBindings[0].isDown());
         KeyPressed.setWandandbag(ModKeybindings.keyBindings[1].isDown());
+        KeyPressed.setBag(ModKeybindings.keyBindings[2].isDown());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -158,11 +160,13 @@ public class ModEvents {
     }
 
     private static final Map<ServerWorld, IllagerSpawner> ILLAGER_SPAWNER_MAP = new HashMap<>();
+    private static final Map<ServerWorld, IllagueEvent> ILLAGUE_EVENT_MAP = new HashMap<>();
 
     @SubscribeEvent
     public static void worldLoad(WorldEvent.Load evt) {
         if (!evt.getWorld().isClientSide() && evt.getWorld() instanceof ServerWorld) {
             ILLAGER_SPAWNER_MAP.put((ServerWorld) evt.getWorld(), new IllagerSpawner());
+            ILLAGUE_EVENT_MAP.put((ServerWorld) evt.getWorld(), new IllagueEvent());
         }
     }
 
@@ -170,6 +174,7 @@ public class ModEvents {
     public static void worldUnload(WorldEvent.Unload evt) {
         if (!evt.getWorld().isClientSide() && evt.getWorld() instanceof ServerWorld) {
             ILLAGER_SPAWNER_MAP.remove(evt.getWorld());
+            ILLAGUE_EVENT_MAP.remove(evt.getWorld());
         }
     }
 
@@ -177,7 +182,11 @@ public class ModEvents {
     public static void onServerTick(TickEvent.WorldTickEvent tick){
         if(!tick.world.isClientSide && tick.world instanceof ServerWorld){
             ServerWorld serverWorld = (ServerWorld)tick.world;
+            IllagueEvent spawner = ILLAGUE_EVENT_MAP.get(serverWorld);
             IllagerSpawner spawner2 = ILLAGER_SPAWNER_MAP.get(serverWorld);
+            if (spawner != null){
+                spawner.tick(serverWorld);
+            }
             if (spawner2 != null){
                 spawner2.tick(serverWorld);
             }
@@ -258,6 +267,9 @@ public class ModEvents {
         }
         if (KeyPressed.openWand() && player.getMainHandItem().getItem() instanceof SoulWand){
             SoulWand.onKeyPressed(player.getMainHandItem(), player);
+        }
+        if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != null){
+            FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
         }
         if (MainConfig.VillagerHate.get()) {
             if (RobeArmorFinder.FindAnySet(player)) {
@@ -546,16 +558,6 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void PotionAddedEvents(PotionEvent.PotionAddedEvent event){
-        if (event.getPotionEffect().getEffect() == Effects.LEVITATION){
-            if (event.getEntityLiving().getMainHandItem().getItem() == ModItems.EMPTYCORE.get()){
-                event.getEntityLiving().getMainHandItem().setCount(0);
-                event.getEntityLiving().setItemInHand(Hand.MAIN_HAND, new ItemStack(ModItems.AIRYCORE.get()));
-            }
-            if (event.getEntityLiving().getOffhandItem().getItem() == ModItems.EMPTYCORE.get()){
-                event.getEntityLiving().getOffhandItem().setCount(0);
-                event.getEntityLiving().setItemInHand(Hand.OFF_HAND, new ItemStack(ModItems.AIRYCORE.get()));
-            }
-        }
         if (event.getPotionEffect().getEffect() == Effects.HERO_OF_THE_VILLAGE){
             if (event.getEntityLiving() instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) event.getEntityLiving();

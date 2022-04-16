@@ -54,8 +54,6 @@ import java.util.UUID;
 public class IrkEntity extends MonsterEntity {
     protected static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.defineId(IrkEntity.class, DataSerializers.BYTE);
     public MobEntity owner;
-    @Nullable
-    private BlockPos boundOrigin;
     private boolean limitedLifespan;
     private int limitedLifeTicks;
     private int shootTime;
@@ -110,7 +108,7 @@ public class IrkEntity extends MonsterEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 6.0D)
+                .add(Attributes.MAX_HEALTH, 12.0D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
@@ -128,9 +126,6 @@ public class IrkEntity extends MonsterEntity {
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("BoundX")) {
-            this.boundOrigin = new BlockPos(compound.getInt("BoundX"), compound.getInt("BoundY"), compound.getInt("BoundZ"));
-        }
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
@@ -142,11 +137,6 @@ public class IrkEntity extends MonsterEntity {
 
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
-        if (this.boundOrigin != null) {
-            compound.putInt("BoundX", this.boundOrigin.getX());
-            compound.putInt("BoundY", this.boundOrigin.getY());
-            compound.putInt("BoundZ", this.boundOrigin.getZ());
-        }
 
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
@@ -201,15 +191,6 @@ public class IrkEntity extends MonsterEntity {
 
     public void setIsCharging(boolean charging) {
         this.setVexFlag(1, charging);
-    }
-
-    @Nullable
-    public BlockPos getBoundOrigin() {
-        return this.boundOrigin;
-    }
-
-    public void setBoundOrigin(@Nullable BlockPos boundOriginIn) {
-        this.boundOrigin = boundOriginIn;
     }
 
     public void setOwner(MobEntity ownerIn) {
@@ -362,10 +343,7 @@ public class IrkEntity extends MonsterEntity {
         }
 
         public void tick() {
-            BlockPos blockpos = IrkEntity.this.getBoundOrigin();
-            if (blockpos == null) {
-                blockpos = IrkEntity.this.blockPosition();
-            }
+            BlockPos blockpos = IrkEntity.this.blockPosition();
 
             for(int i = 0; i < 3; ++i) {
                 BlockPos blockpos1 = blockpos.offset(IrkEntity.this.random.nextInt(8) - 4, IrkEntity.this.random.nextInt(6) - 2, IrkEntity.this.random.nextInt(8) - 4);

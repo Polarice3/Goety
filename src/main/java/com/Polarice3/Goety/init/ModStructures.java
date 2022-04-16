@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class ModStructures {
     public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, Goety.MOD_ID);
-    public static final RegistryObject<Structure<NoFeatureConfig>> DARK_MANOR = STRUCTURES.register("dark_manor", () -> (new DarkManorStructure(NoFeatureConfig.CODEC)));
+    public static final RegistryObject<Structure<NoFeatureConfig>> DARK_MANOR = STRUCTURES.register("dark_manor", DarkManorStructure::new);
     public static final RegistryObject<Structure<NoFeatureConfig>> PORTAL_OUTPOST = STRUCTURES.register("portal_outpost", () -> (new PortalOutpostStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> CURSED_GRAVEYARD = STRUCTURES.register("cursed_graveyard", () -> (new CursedGraveyardStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", SalvagedFortStructure::new);
