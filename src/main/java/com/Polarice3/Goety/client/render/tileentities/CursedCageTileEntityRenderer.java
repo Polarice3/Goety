@@ -23,7 +23,11 @@ public class CursedCageTileEntityRenderer extends TileEntityRenderer<CursedCageT
             pMatrixStack.translate(0.5F, 0.25F, 0.5F);
             pMatrixStack.scale(1.0F, 1.0F, 1.0F);
             assert minecraft.level != null;
-            pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(3 * (minecraft.level.getGameTime() % 360 + pPartialTicks)));
+            if (pBlockEntity.getSpinning() > 0){
+                pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(12 * (minecraft.level.getGameTime() % 360 + pPartialTicks)));
+            } else {
+                pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(3 * (minecraft.level.getGameTime() % 360 + pPartialTicks)));
+            }
             minecraft.getItemRenderer().renderStatic(itemStack, ItemCameraTransforms.TransformType.GROUND, pCombinedLight, pCombinedOverlay, pMatrixStack, pBuffer);
             pMatrixStack.popPose();
         }

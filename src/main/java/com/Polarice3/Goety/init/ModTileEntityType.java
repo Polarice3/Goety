@@ -31,6 +31,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<CursedBurnerTileEntity>> CURSEDBURNER = TILEENTITY_TYPES.register("cursed_burner",
             () -> TileEntityType.Builder.of(CursedBurnerTileEntity::new, ModBlocks.CURSED_BURNER.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<CursedKilnTileEntity>> CURSED_KILN = TILEENTITY_TYPES.register("cursed_kiln",
+            () -> TileEntityType.Builder.of(CursedKilnTileEntity::new, ModBlocks.CURSED_KILN.get()).build(null));
+
     public static final RegistryObject<TileEntityType<CursedCageTileEntity>> CURSED_CAGE = TILEENTITY_TYPES.register("cursed_cage",
             () -> TileEntityType.Builder.of(CursedCageTileEntity::new, ModBlocks.CURSED_CAGE_BLOCK.get()).build(null));
 
@@ -45,5 +48,4 @@ public class ModTileEntityType {
 
     public static final RegistryObject<TileEntityType<TempWebTileEntity>> TEMP_WEB = TILEENTITY_TYPES.register("temp_web",
             () -> TileEntityType.Builder.of(TempWebTileEntity::new, ModBlocks.TEMP_WEB.get()).build(null));
-
 }

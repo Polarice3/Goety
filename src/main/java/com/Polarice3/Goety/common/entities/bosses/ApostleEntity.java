@@ -1,6 +1,10 @@
-package com.Polarice3.Goety.common.entities.hostile.cultists;
+package com.Polarice3.Goety.common.entities.bosses;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.SkeletonVillagerMinionEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.SpellcastingCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ZombieVillagerMinionEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FireTornadoEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.FireRainTrapEntity;
@@ -14,6 +18,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -82,6 +87,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         this.goalSelector.addGoal(3, new ZombieSpellGoal());
         this.goalSelector.addGoal(3, new SkeletonSpellGoal());
         this.goalSelector.addGoal(3, new RoarSpellGoal());
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -306,7 +312,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     @Override
-    public AbstractCultistEntity.ArmPose getArmPose() {
+    public ArmPose getArmPose() {
         if (this.getMainHandItem().getItem() == Items.BOW) {
             if (this.isAggressive() && !this.isSpellcasting()){
                 return ArmPose.BOW_AND_ARROW;
@@ -610,7 +616,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
 
         protected int getCastingTime() {
-            return 20;
+            return MainConfig.LavaballDuration.get();
         }
 
         protected int getCastingInterval() {

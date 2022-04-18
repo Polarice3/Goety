@@ -1,12 +1,7 @@
 package com.Polarice3.Goety.common.world.structures.pieces;
 
-import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
-import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
-import com.Polarice3.Goety.utils.ModLootTables;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -15,7 +10,6 @@ import net.minecraft.entity.monster.IllusionerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;

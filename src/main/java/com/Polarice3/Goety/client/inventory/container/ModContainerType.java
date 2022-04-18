@@ -12,9 +12,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModContainerType {
     public static DeferredRegister<ContainerType<?>> CONTAINER_TYPE = DeferredRegister.create(ForgeRegistries.CONTAINERS, Goety.MOD_ID);
 
-/*    public static final RegistryObject<ContainerType<SoulForgeContainer>> SOULFORGE = CONTAINER_TYPE.register("soulforge",
-            () -> IForgeContainerType.create(SoulForgeContainer::new));*/
-
     public static final RegistryObject<ContainerType<SoulItemContainer>> WAND = CONTAINER_TYPE.register("wand",
         () -> IForgeContainerType.create(SoulItemContainer::createContainerClientSide));
 
@@ -23,6 +20,4 @@ public class ModContainerType {
 
     public static final RegistryObject<ContainerType<WandandBagContainer>> WANDANDBAG = CONTAINER_TYPE.register("wandandbag",
             () -> IForgeContainerType.create(WandandBagContainer::createContainerClientSide));
-
-
 }

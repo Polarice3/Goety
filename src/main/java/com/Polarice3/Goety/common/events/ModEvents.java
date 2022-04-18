@@ -10,7 +10,7 @@ import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
 import com.Polarice3.Goety.common.entities.hostile.DuneSpiderEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
@@ -336,6 +336,13 @@ public class ModEvents {
                 }
             }
         }
+        if (player.hasEffect(ModEffects.SOUL_SHIELD.get())){
+            for (AbstractArrowEntity arrowEntity: player.level.getEntitiesOfClass(AbstractArrowEntity.class, player.getBoundingBox().inflate(2.0D))){
+                if (arrowEntity.getOwner() != player){
+                    arrowEntity.remove();
+                }
+            }
+        }
         if (RobeArmorFinder.FindArachnoArmor(player)){
             BlockFinder.WebMovement(player);
         }
@@ -411,11 +418,6 @@ public class ModEvents {
             int i = effectInstance.getAmplifier() + 1;
             event.setAmount(event.getAmount() * (1.0F + i));
         }
-        if (entity.hasEffect(ModEffects.SOUL_SHIELD.get())){
-            if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
-                event.setCanceled(true);
-            }
-        }
         if (RobeArmorFinder.FindArachnoArmor(entity)){
             if (event.getSource().getEntity() != null) {
                 BlockPos blockpos = entity.blockPosition();
@@ -429,6 +431,29 @@ public class ModEvents {
                 CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getSource().getEntity();
                 if (creeperlingMinion.getTrueOwner() == entity){
                     event.setAmount(0);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void DamageEvent(LivingDamageEvent event){
+        LivingEntity entity = event.getEntityLiving();
+        if (entity.hasEffect(ModEffects.SOUL_SHIELD.get())){
+            if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void VisibilityEvent(LivingEvent.LivingVisibilityEvent event){
+        LivingEntity entity = event.getEntityLiving();
+        if (event.getLookingEntity() instanceof LivingEntity){
+            LivingEntity looker = (LivingEntity) event.getLookingEntity();
+            if (RobeArmorFinder.FindNecroHelm(entity)){
+                if (looker.getMobType() == CreatureAttribute.UNDEAD){
+                    event.modifyVisibility(0.5);
                 }
             }
         }

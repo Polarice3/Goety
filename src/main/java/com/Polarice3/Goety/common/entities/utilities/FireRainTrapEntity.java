@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.utilities;
 
-import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.material.PushReaction;

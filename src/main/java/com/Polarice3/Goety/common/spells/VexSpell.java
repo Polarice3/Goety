@@ -57,9 +57,6 @@ public class VexSpell extends SummonSpells {
             worldIn.addFreshEntity(vexentity);
         }
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
-        }
         this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
         this.SummonDown(entityLiving);
     }
@@ -84,9 +81,6 @@ public class VexSpell extends SummonSpells {
         this.SummonDown(entityLiving);
         this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
-        }
     }
 
     public int VexLimit(LivingEntity entityLiving){

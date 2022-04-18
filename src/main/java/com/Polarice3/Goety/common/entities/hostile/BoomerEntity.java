@@ -166,6 +166,10 @@ public class BoomerEntity extends MonsterEntity implements IChargeableMob, IDead
                 this.ignite();
             }
 
+            if (this.isInWater()){
+                this.ignite();
+            }
+
         }
 
         super.tick();

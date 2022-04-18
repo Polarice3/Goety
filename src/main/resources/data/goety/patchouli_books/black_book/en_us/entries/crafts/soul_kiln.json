@@ -1,0 +1,22 @@
+{
+  "name": "Dead Sand Research",
+  "icon": "goety:cursed_kiln",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/read_nether_book",
+  "sortnum": 9,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "There are times where you've grown tired of running out of coal or wished to used them for crafting torches, you've discovered a way to smelt ores and other items using Soul Energy."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:cursed_kiln",
+      "text": "The Soul Kiln is a Cursed Infuser that burns and smelts items instead of infusing them with magic. The Soul Kiln needs to be on top of a Cursed Cage that has a Totem in it to work."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Unlike the Infuser, multiple items can be inserted into Soul Kiln, either by hand or through Hoppers. However, the Soul Kiln shoots out the resulting items rather than have it stay in place."
+    }
+  ]
+}

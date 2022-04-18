@@ -121,6 +121,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
     public static final ForgeConfigSpec.ConfigValue<Integer> LichHealCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulKilnCost;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
@@ -189,6 +190,8 @@ public class MainConfig {
                 .define("deadSandDryWater", true);
         DeadSandDryAnimals = BUILDER.comment("Dead Sand will dry up animals, slowly killing them, Default: true")
                 .define("deadSandDryAnimals", true);
+        SoulKilnCost = BUILDER.comment("The amount of Soul Energy used up to smelt items per second, Default: 10")
+                .defineInRange("soulKilnFuel", 10, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Soul Taken");
         UndeadSouls = BUILDER.comment("Undead Killed, Default: 5")
@@ -279,8 +282,8 @@ public class MainConfig {
                 .defineInRange("creeperlingTime", 10, 0, 72000);
         BreathingDuration = BUILDER.comment("Time to cast Breathing Spell per second, Default: 1")
                 .defineInRange("breathingTime", 1, 0, 72000);
-        LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 30")
-                .defineInRange("lavaBombTime", 30, 0, 72000);
+        LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 20")
+                .defineInRange("lavaBombTime", 20, 0, 72000);
         WebballDuration = BUILDER.comment("Time to cast Web Ball Spell, Default: 10")
                 .defineInRange("webBallTime", 10, 0, 72000);
         IllusionDuration = BUILDER.comment("Time to cast Illusion Spell, Default: 40")
@@ -310,7 +313,7 @@ public class MainConfig {
         InfamySpawn = BUILDER.comment("Special Illagers Spawning due to Infamy, Default: true")
                 .define("infamySpawn", true);
         InfamySpawnFreq = BUILDER.comment("Spawn Frequency for Illagers Hunting the Player, Default: 12000")
-                .defineInRange("infamySpawnFreq", 12000, 0, 72000);
+                .defineInRange("infamySpawnFreq", 12000, 0, Integer.MAX_VALUE);
         InfamySpawnChance = BUILDER.comment("Spawn Chance for Illagers Hunting the Player every Infamy Spawn Frequency, the lower the more likelier, Default: 5")
                 .defineInRange("infamySpawnChance", 5, 0, Integer.MAX_VALUE);
         InfamySpell = BUILDER.comment("Casting Spells have a chance of giving Player Infamy, Default: true")

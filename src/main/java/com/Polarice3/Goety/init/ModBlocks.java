@@ -41,6 +41,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
     public static final RegistryObject<Block> GUARDIAN_OBELISK = BLOCKS.register("guardian_obelisk", GuardianObeliskBlock::new);
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
+    public static final RegistryObject<Block> CURSED_KILN = BLOCKS.register("cursed_kiln", CursedKilnBlock::new);
     public static final RegistryObject<Block> DARK_ALTAR = BLOCKS.register("dark_altar", DarkAltarBlock::new);
     public static final RegistryObject<Block> PEDESTAL = BLOCKS.register("pedestal", PedestalBlock::new);
     public static final RegistryObject<Block> DEAD_SAND = BLOCKS.register("dead_sand", DeadSandBlock::new);
@@ -185,6 +186,8 @@ public class ModBlocks {
             () -> new BlockItemBase(GUARDIAN_OBELISK.get()));
     public static final RegistryObject<Item> CURSED_BURNER_ITEM = BLOCK_ITEMS.register("cursed_burner",
             () -> new BlockItemBase(CURSED_BURNER.get()));
+    public static final RegistryObject<Item> CURSED_KILN_ITEM = BLOCK_ITEMS.register("cursed_kiln",
+            () -> new BlockItemBase(CURSED_KILN.get()));
     public static final RegistryObject<Item> DARK_ALTAR_ITEM = BLOCK_ITEMS.register("dark_altar",
             () -> new BlockItemBase(DARK_ALTAR.get()));
     public static final RegistryObject<Item> PEDESTAL_ITEM = BLOCK_ITEMS.register("pedestal",

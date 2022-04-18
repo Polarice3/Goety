@@ -1,0 +1,30 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:cursed_burner"
+  },
+  "craftType": "forge",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
+    {
+      "item": "goety:cursed_stone"
+    },
+    {
+      "item": "goety:cursed_stone"
+    },
+    {
+      "item": "goety:cursed_stone_chiseled"
+    },
+    {
+      "item": "minecraft:crying_obsidian"
+    },
+    {
+      "item": "goety:cursed_stone_chiseled"
+    }
+  ],
+  "result": {
+    "item": "goety:cursed_kiln"
+  }
+}

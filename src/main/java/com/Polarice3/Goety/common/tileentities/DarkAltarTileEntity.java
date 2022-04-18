@@ -312,7 +312,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
             if (this.checkCage()){
                 ItemStack activationItem = player.getItemInHand(hand);
                 if (activationItem == ItemStack.EMPTY){
-                    return false;
+                    this.RemoveItem();
                 }
 
                 if (this.getCurrentRitualRecipe() == null) {
@@ -349,6 +349,27 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
             }
         }
         return true;
+    }
+
+    public void RemoveItem(){
+        IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
+        ItemStack itemStack = handler.getStackInSlot(0);
+        if (itemStack != ItemStack.EMPTY){
+            InventoryHelper.dropItemStack(this.level, this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(),
+                    handler.extractItem(0, 1, false));
+        }
+        this.currentRitualRecipe = null;
+        this.castingPlayerId = null;
+        this.castingPlayer = null;
+        this.currentTime = 0;
+        this.sacrificeProvided = false;
+        this.itemUseProvided = false;
+        if (this.remainingAdditionalIngredients != null)
+            this.remainingAdditionalIngredients.clear();
+        this.consumedIngredients.clear();
+        this.structureTime = 0;
+        this.setChanged();
+        this.markNetworkDirty();
     }
 
     public void startRitual(PlayerEntity player, ItemStack activationItem, RitualRecipe ritualRecipe) {

@@ -11,13 +11,15 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import static com.Polarice3.Goety.common.items.GoldTotemItem.SOULSAMOUNT;
 
-public class CursedCageTileEntity extends TileEntity implements IClearable {
+public class CursedCageTileEntity extends TileEntity implements IClearable, ITickableTileEntity {
     private ItemStack item = ItemStack.EMPTY;
+    private int spinning;
 
     public CursedCageTileEntity() {
         super(ModTileEntityType.CURSED_CAGE.get());
@@ -77,6 +79,10 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
         }
     }
 
+    public int getSpinning(){
+        return this.spinning;
+    }
+
     public void makeWorkParticles() {
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();
@@ -85,8 +91,11 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-            new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            for (int p = 0; p < 4; ++p) {
+                new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);
+                new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
+            }
+            this.spinning = 20;
         }
     }
 
@@ -100,4 +109,10 @@ public class CursedCageTileEntity extends TileEntity implements IClearable {
         this.setItem(ItemStack.EMPTY);
     }
 
+    @Override
+    public void tick() {
+        if (this.spinning > 0){
+            --this.spinning;
+        }
+    }
 }

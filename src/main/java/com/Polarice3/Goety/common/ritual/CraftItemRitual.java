@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
 
 public class CraftItemRitual extends Ritual{
 
@@ -22,10 +23,15 @@ public class CraftItemRitual extends Ritual{
 
         activationItem.shrink(1);
 
-        new ParticleUtil(ParticleTypes.LARGE_SMOKE, darkAltarPos.getX() + 0.5,
-                darkAltarPos.getY() + 0.5, darkAltarPos.getZ() + 0.5, 0, 0, 0);
+        for(int i = 0; i < 20; ++i) {
+            double d0 = world.random.nextGaussian() * 0.02D;
+            double d1 = world.random.nextGaussian() * 0.02D;
+            double d2 = world.random.nextGaussian() * 0.02D;
+            new ParticleUtil(ParticleTypes.POOF, darkAltarPos.getX(), darkAltarPos.getY(), darkAltarPos.getZ(), d0, d1, d2);
+        }
 
         ItemStack result = this.recipe.getResultItem().copy();
-        this.dropResult(world, darkAltarPos, tileEntity, castingPlayer, result);
+        IItemHandler handler = tileEntity.itemStackHandler.orElseThrow(RuntimeException::new);
+        handler.insertItem(0, result.split(1), false);
     }
 }

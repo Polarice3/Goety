@@ -36,9 +36,6 @@ public class CreeperlingSpell extends ChargingSpells{
         summonedentity.setLimitedLife(180);
         worldIn.addFreshEntity(summonedentity);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
-        }
         this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
@@ -51,9 +48,6 @@ public class CreeperlingSpell extends ChargingSpells{
         summonedentity.setLimitedLife(360);
         worldIn.addFreshEntity(summonedentity);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
-        }
         this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 

@@ -1,16 +1,18 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.client.inventory.crafting.CursedBurnerRecipes;
-import com.Polarice3.Goety.client.inventory.crafting.ModRecipeType;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.CursedBurnerBlock;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -23,30 +25,35 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-public class CursedBurnerTileEntity extends TileEntity implements IClearable, ITickableTileEntity, ISidedInventory {
-    private static final int[] SLOTS = new int[]{0};
-    private final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
-    private final int[] cookingProgress = new int[1];
-    private final int[] cookingTime = new int[1];
+public class CursedKilnTileEntity extends TileEntity implements IClearable, ITickableTileEntity, ISidedInventory {
+    private static final int[] SLOTS = IntStream.range(0, 64).toArray();
+    private CursedCageTileEntity cursedCageTile;
+    private final NonNullList<ItemStack> items = NonNullList.withSize(64, ItemStack.EMPTY);
+    private final int[] cookingProgress = new int[64];
+    private final int[] cookingTime = new int[64];
 
-    public CursedBurnerTileEntity() {
-        super(ModTileEntityType.CURSEDBURNER.get());
+    public CursedKilnTileEntity() {
+        super(ModTileEntityType.CURSED_KILN.get());
     }
 
     public void tick() {
-        boolean flag = checkSpawner();
+        boolean flag = checkCage();
         assert this.level != null;
         boolean flag1 = this.level.isClientSide;
         if (flag1) {
             if (flag) {
                 this.makeParticles();
             }
-
+            if (!this.items.get(0).isEmpty()){
+                this.makeWorkParticles();
+                this.cursedCageTile.makeWorkParticles();
+            }
         } else {
             if (flag) {
                 this.work();
@@ -58,7 +65,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                 }
             }
         }
-        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(CursedBurnerBlock.LIT, this.checkSpawner()), 3);
+        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(CursedBurnerBlock.LIT, this.checkCage()), 3);
     }
 
     private void work() {
@@ -68,14 +75,18 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                 IInventory iinventory = new Inventory(itemstack);
                 assert this.level != null;
                 ItemStack itemstack1 = this.level.getRecipeManager()
-                        .getRecipeFor(ModRecipeType.CURSED_BURNER_RECIPES, iinventory, this.level)
+                        .getRecipeFor(IRecipeType.SMELTING, iinventory, this.level)
                         .map((recipes) -> recipes.assemble(iinventory)).orElse(itemstack);
-                if (itemstack != itemstack1){
+                if (this.cursedCageTile.getSouls() > 0){
                     this.cookingProgress[i]++;
-                    this.makeWorkParticles();
+                }
+                if (this.cookingProgress[i] % 20 == 0){
+                    this.cursedCageTile.decreaseSouls(MainConfig.SoulKilnCost.get());
                 }
                 if (this.cookingProgress[i] >= this.cookingTime[i]) {
-                    this.items.set(i, itemstack1);
+                    this.items.set(i, ItemStack.EMPTY);
+                    BlockPos blockpos = this.getBlockPos();
+                    InventoryHelper.dropItemStack(this.level, (double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), itemstack1);
                     this.level.playSound(null, this.getBlockPos(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     this.markUpdated();
                     this.cookingProgress[i] = 0;
@@ -93,13 +104,18 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                 this.cookingProgress[i] = 0;
                 this.items.set(i, pStack.split(1));
                 assert this.level != null;
-                this.level.playSound(null, this.getBlockPos(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.level.playSound(null, this.getBlockPos(), SoundEvents.BLAZE_SHOOT, SoundCategory.BLOCKS, 0.75F, 1.0F);
                 this.markUpdated();
                 return true;
             }
         }
 
         return false;
+    }
+
+    @Override
+    public int getContainerSize() {
+        return this.items.size();
     }
 
     public boolean isEmpty() {
@@ -110,11 +126,6 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
         }
 
         return true;
-    }
-
-    @Override
-    public int getContainerSize() {
-        return this.items.size();
     }
 
     @Override
@@ -134,7 +145,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
 
     @Override
     public void setItem(int pIndex, ItemStack pStack) {
-        Optional<CursedBurnerRecipes> optional = this.getRecipes(pStack);
+        Optional<FurnaceRecipe> optional = this.getRecipes(pStack);
         optional.ifPresent(furnaceRecipe -> this.placeItem(pStack, furnaceRecipe.getCookingTime()));
     }
 
@@ -159,15 +170,15 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
             if (this.getBlockState().getValue(CursedBurnerBlock.WATERLOGGED)){
                 if (t % 20L == 0L) {
                     for (int p = 0; p < 4; ++p) {
-                        MINECRAFT.level.addParticle(ParticleTypes.BUBBLE, d0, d1, d2, 0, 0, 0);
-                        MINECRAFT.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, d0, d1, d2, 0.0D, 0.04D, 0.0D);
+                        new ParticleUtil(ParticleTypes.BUBBLE, d0, d1, d2, 0, 0, 0);
+                        new ParticleUtil(ParticleTypes.BUBBLE_COLUMN_UP, d0, d1, d2, 0.0D, 0.04D, 0.0D);
                     }
                 }
             } else {
                 if (t % 20L == 0L) {
                     for (int p = 0; p < 4; ++p) {
-                        MINECRAFT.level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);
-                        MINECRAFT.level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
+                        new ParticleUtil(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);
+                        new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
                     }
                 }
             }
@@ -184,13 +195,13 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
             if (this.getBlockState().getValue(CursedBurnerBlock.WATERLOGGED)){
                 for (int p = 0; p < 4; ++p) {
-                    MINECRAFT.level.addParticle(ParticleTypes.BUBBLE, d0, d1, d2, 0, 0, 0);
-                    MINECRAFT.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, d0, d1, d2, 0.0D, 0.04D, 0.0D);
+                    new ParticleUtil(ParticleTypes.BUBBLE, d0, d1, d2, 0, 0, 0);
+                    new ParticleUtil(ParticleTypes.BUBBLE_COLUMN_UP, d0, d1, d2, 0.0D, 0.04D, 0.0D);
                 }
             } else {
                 for (int p = 0; p < 6; ++p) {
-                    MINECRAFT.level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);
-                    MINECRAFT.level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
+                    new ParticleUtil(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);
+                    new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
                 }
             }
         }
@@ -249,13 +260,25 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
         this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 
-    private boolean checkSpawner() {
+    private boolean checkCage() {
         assert this.level != null;
-        return this.level.getBlockState(new BlockPos(this.getBlockPos().getX(), this.getBlockPos().getY() - 1, this.getBlockPos().getZ())).is(Blocks.SPAWNER);
+        BlockPos pos = new BlockPos(this.getBlockPos().getX(), this.getBlockPos().getY() - 1, this.getBlockPos().getZ());
+        BlockState blockState = this.level.getBlockState(pos);
+        if (blockState.is(ModBlocks.CURSED_CAGE_BLOCK.get())){
+            TileEntity tileentity = this.level.getBlockEntity(pos);
+            if (tileentity instanceof CursedCageTileEntity){
+                this.cursedCageTile = (CursedCageTileEntity) tileentity;
+                return !cursedCageTile.getItem().isEmpty();
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
-    public Optional<CursedBurnerRecipes> getRecipes(ItemStack pStack) {
-        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.level.getRecipeManager().getRecipeFor(ModRecipeType.CURSED_BURNER_RECIPES, new Inventory(pStack), this.level);
+    public Optional<FurnaceRecipe> getRecipes(ItemStack pStack) {
+        return this.items.stream().noneMatch(ItemStack::isEmpty) ? Optional.empty() : this.level.getRecipeManager().getRecipeFor(IRecipeType.SMELTING, new Inventory(pStack), this.level);
     }
 
     @Override
@@ -270,9 +293,9 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
 
     @Override
     public boolean canPlaceItemThroughFace(int pIndex, ItemStack pItemStack, @Nullable Direction pDirection) {
-        Optional<CursedBurnerRecipes> optional = this.getRecipes(pItemStack);
+        Optional<FurnaceRecipe> optional = this.getRecipes(pItemStack);
         if (!optional.isPresent()) return false;
-        if (!this.checkSpawner()) return false;
+        if (!this.checkCage()) return false;
         assert this.level != null;
         return !this.level.isClientSide && this.placeItem(pItemStack, optional.get().getCookingTime());
     }

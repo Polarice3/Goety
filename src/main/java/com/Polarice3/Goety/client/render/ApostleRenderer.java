@@ -2,9 +2,8 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.ACArmorModel;
-import com.Polarice3.Goety.client.model.AbstractCultistModel;
 import com.Polarice3.Goety.client.model.ApostleModel;
-import com.Polarice3.Goety.common.entities.hostile.cultists.ApostleEntity;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;

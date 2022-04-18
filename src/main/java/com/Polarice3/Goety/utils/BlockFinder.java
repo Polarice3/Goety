@@ -12,6 +12,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -91,6 +93,37 @@ public class BlockFinder {
                 movement = new Vector3d(movement.x, 0.2D, movement.z);
             }
             livingEntity.setDeltaMovement(movement);
+        }
+    }
+
+    public static double spawnY(LivingEntity livingEntity, BlockPos blockPos) {
+        BlockPos blockpos = blockPos;
+        boolean flag = false;
+        double d0 = 0.0D;
+
+        do {
+            BlockPos blockpos1 = blockpos.below();
+            BlockState blockstate = livingEntity.level.getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(livingEntity.level, blockpos1, Direction.UP)) {
+                if (!livingEntity.level.isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = livingEntity.level.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(livingEntity.level, blockpos);
+                    if (!voxelshape.isEmpty()) {
+                        d0 = voxelshape.max(Direction.Axis.Y);
+                    }
+                }
+
+                flag = true;
+                break;
+            }
+
+            blockpos = blockpos.below();
+        } while(blockpos.getY() >= MathHelper.floor(livingEntity.getY()) - 1);
+
+        if (flag) {
+            return blockpos.getY() + d0;
+        } else {
+            return livingEntity.getY();
         }
     }
 
