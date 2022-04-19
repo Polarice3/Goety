@@ -35,7 +35,6 @@ public class SummonRitual extends Ritual {
                        PlayerEntity castingPlayer, ItemStack activationItem) {
         super.finish(world, blockPos, tileEntity, castingPlayer, activationItem);
 
-        ItemStack copy = activationItem.copy();
         activationItem.shrink(1);
 
         ((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, blockPos.getX() + 0.5,
@@ -53,6 +52,8 @@ public class SummonRitual extends Ritual {
                 this.spawnEntity(living, world);
 
             } else {
+                entity.absMoveTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                        world.random.nextInt(360), 0);
                 this.spawnEntity(entity, world);
             }
         }

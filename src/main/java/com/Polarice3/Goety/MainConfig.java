@@ -271,8 +271,8 @@ public class MainConfig {
                 .defineInRange("crippleTime", 20, 0, 72000);
         SpiderlingDuration = BUILDER.comment("Time to cast Spiderling Spell per second, Default: 10")
                 .defineInRange("spiderlingTime", 10, 0, 72000);
-        BrainEaterDuration = BUILDER.comment("Time to cast Brain Eater Spell per second, Default: 5")
-                .defineInRange("brainEaterTime", 5, 0, 72000);
+        BrainEaterDuration = BUILDER.comment("Time to cast Brain Eater Spell per second, Default: 1")
+                .defineInRange("brainEaterTime", 1, 0, 72000);
         FeastDuration = BUILDER.comment("Time to cast Feasting Spell per second, Default: 20")
                 .defineInRange("feastTime", 20, 0, 72000);
         TemptingDuration = BUILDER.comment("Time to cast Tempting Spell per second, Default: 20")

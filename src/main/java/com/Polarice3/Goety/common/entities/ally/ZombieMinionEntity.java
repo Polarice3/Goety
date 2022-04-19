@@ -177,92 +177,96 @@ public class ZombieMinionEntity extends SummonedEntity {
     }
 
     public ActionResultType mobInteract(PlayerEntity p_230254_1_, Hand p_230254_2_) {
-        ItemStack itemstack = p_230254_1_.getItemInHand(p_230254_2_);
-        Item item = itemstack.getItem();
-        ItemStack itemstack2 = this.getMainHandItem();
-        if (this.getTrueOwner() != null && p_230254_1_ == this.getTrueOwner()) {
-            if (item == Items.ROTTEN_FLESH && this.getHealth() < this.getMaxHealth()) {
-                if (!p_230254_1_.abilities.instabuild) {
-                    itemstack.shrink(1);
+        if (!this.level.isClientSide){
+            ItemStack itemstack = p_230254_1_.getItemInHand(p_230254_2_);
+            Item item = itemstack.getItem();
+            ItemStack itemstack2 = this.getMainHandItem();
+            if (this.getTrueOwner() != null && p_230254_1_ == this.getTrueOwner()) {
+                if (item == Items.ROTTEN_FLESH && this.getHealth() < this.getMaxHealth()) {
+                    if (!p_230254_1_.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+                    this.heal(2.0F);
+                    for (int i = 0; i < 7; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    return ActionResultType.CONSUME;
                 }
-                this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
-                this.heal(2.0F);
-                for (int i = 0; i < 7; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.02D;
-                    double d1 = this.random.nextGaussian() * 0.02D;
-                    double d2 = this.random.nextGaussian() * 0.02D;
-                    this.level.addParticle(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                if (item instanceof SwordItem) {
+                    if (!p_230254_1_.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    this.playSound(SoundEvents.ANVIL_USE, 1.0F, 1.0F);
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
+                    this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
+                    this.spawnAtLocation(itemstack2);
+                    for (int i = 0; i < 7; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    return ActionResultType.CONSUME;
                 }
-                return ActionResultType.CONSUME;
-            }
-            if (item instanceof SwordItem){
-                if (!p_230254_1_.abilities.instabuild) {
-                    itemstack.shrink(1);
+                if (item instanceof AxeItem) {
+                    if (!p_230254_1_.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    this.playSound(SoundEvents.ANVIL_USE, 1.0F, 1.0F);
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
+                    this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
+                    this.spawnAtLocation(itemstack2);
+                    for (int i = 0; i < 7; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    return ActionResultType.CONSUME;
                 }
-                this.playSound(SoundEvents.ANVIL_USE, 1.0F, 1.0F);
-                this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
-                this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
-                this.spawnAtLocation(itemstack2);
-                for (int i = 0; i < 7; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.02D;
-                    double d1 = this.random.nextGaussian() * 0.02D;
-                    double d2 = this.random.nextGaussian() * 0.02D;
-                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                if (item instanceof ArmorItem) {
+                    ItemStack helmet = this.getItemBySlot(EquipmentSlotType.HEAD);
+                    ItemStack chestplate = this.getItemBySlot(EquipmentSlotType.CHEST);
+                    ItemStack legging = this.getItemBySlot(EquipmentSlotType.LEGS);
+                    ItemStack boots = this.getItemBySlot(EquipmentSlotType.FEET);
+                    if (!p_230254_1_.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+                    if (((ArmorItem) item).getSlot() == EquipmentSlotType.HEAD) {
+                        this.setItemSlot(EquipmentSlotType.HEAD, itemstack.copy());
+                        this.setGuaranteedDrop(EquipmentSlotType.HEAD);
+                        this.spawnAtLocation(helmet);
+                    }
+                    if (((ArmorItem) item).getSlot() == EquipmentSlotType.CHEST) {
+                        this.setItemSlot(EquipmentSlotType.CHEST, itemstack.copy());
+                        this.setGuaranteedDrop(EquipmentSlotType.CHEST);
+                        this.spawnAtLocation(chestplate);
+                    }
+                    if (((ArmorItem) item).getSlot() == EquipmentSlotType.LEGS) {
+                        this.setItemSlot(EquipmentSlotType.LEGS, itemstack.copy());
+                        this.setGuaranteedDrop(EquipmentSlotType.LEGS);
+                        this.spawnAtLocation(legging);
+                    }
+                    if (((ArmorItem) item).getSlot() == EquipmentSlotType.FEET) {
+                        this.setItemSlot(EquipmentSlotType.FEET, itemstack.copy());
+                        this.setGuaranteedDrop(EquipmentSlotType.FEET);
+                        this.spawnAtLocation(boots);
+                    }
+                    for (int i = 0; i < 7; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    return ActionResultType.CONSUME;
+                } else {
+                    return ActionResultType.PASS;
                 }
-                return ActionResultType.CONSUME;
-            }
-            if (item instanceof AxeItem){
-                if (!p_230254_1_.abilities.instabuild) {
-                    itemstack.shrink(1);
-                }
-                this.playSound(SoundEvents.ANVIL_USE, 1.0F, 1.0F);
-                this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
-                this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
-                this.spawnAtLocation(itemstack2);
-                for (int i = 0; i < 7; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.02D;
-                    double d1 = this.random.nextGaussian() * 0.02D;
-                    double d2 = this.random.nextGaussian() * 0.02D;
-                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
-                }
-                return ActionResultType.CONSUME;
-            }
-            if (item instanceof ArmorItem){
-                ItemStack helmet = this.getItemBySlot(EquipmentSlotType.HEAD);
-                ItemStack chestplate = this.getItemBySlot(EquipmentSlotType.CHEST);
-                ItemStack legging = this.getItemBySlot(EquipmentSlotType.LEGS);
-                ItemStack boots = this.getItemBySlot(EquipmentSlotType.FEET);
-                if (!p_230254_1_.abilities.instabuild) {
-                    itemstack.shrink(1);
-                }
-                this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
-                if (((ArmorItem) item).getSlot() == EquipmentSlotType.HEAD){
-                    this.setItemSlot(EquipmentSlotType.HEAD, itemstack.copy());
-                    this.setGuaranteedDrop(EquipmentSlotType.HEAD);
-                    this.spawnAtLocation(helmet);
-                }
-                if (((ArmorItem) item).getSlot() == EquipmentSlotType.CHEST){
-                    this.setItemSlot(EquipmentSlotType.CHEST, itemstack.copy());
-                    this.setGuaranteedDrop(EquipmentSlotType.CHEST);
-                    this.spawnAtLocation(chestplate);
-                }
-                if (((ArmorItem) item).getSlot() == EquipmentSlotType.LEGS){
-                    this.setItemSlot(EquipmentSlotType.LEGS, itemstack.copy());
-                    this.setGuaranteedDrop(EquipmentSlotType.LEGS);
-                    this.spawnAtLocation(legging);
-                }
-                if (((ArmorItem) item).getSlot() == EquipmentSlotType.FEET){
-                    this.setItemSlot(EquipmentSlotType.FEET, itemstack.copy());
-                    this.setGuaranteedDrop(EquipmentSlotType.FEET);
-                    this.spawnAtLocation(boots);
-                }
-                for (int i = 0; i < 7; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.02D;
-                    double d1 = this.random.nextGaussian() * 0.02D;
-                    double d2 = this.random.nextGaussian() * 0.02D;
-                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
-                }
-                return ActionResultType.CONSUME;
             } else {
                 return ActionResultType.PASS;
             }

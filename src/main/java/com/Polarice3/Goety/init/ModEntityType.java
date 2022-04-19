@@ -13,10 +13,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
-import com.Polarice3.Goety.common.entities.utilities.FireRainTrapEntity;
-import com.Polarice3.Goety.common.entities.utilities.FireTornadoTrapEntity;
-import com.Polarice3.Goety.common.entities.utilities.LightningTrapEntity;
-import com.Polarice3.Goety.common.entities.utilities.StormEntity;
+import com.Polarice3.Goety.common.entities.utilities.*;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -374,5 +371,13 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "stormutil").toString()));
+
+    public static final RegistryObject<EntityType<SummonApostleTrapEntity>> SUMMON_APOSTLE = ENTITY_TYPES.register("summon_apostle",
+            () -> EntityType.Builder.of(SummonApostleTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "summon_apostle").toString()));
 
 }

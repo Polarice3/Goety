@@ -8,7 +8,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Requirements: $(li)8 Crying Obsidian $(li)16 Obsidian $(li)8 Soul Lanterns"
+      "text": "Requirements: $(li)8 Crying Obsidian $(li)16 Obsidian $(li)4 Soul Fires"
     },
     {
       "type": "patchouli:image",

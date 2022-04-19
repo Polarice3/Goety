@@ -345,7 +345,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     this.stopRitual(false);
                 }
             } else {
-                return false;
+                this.RemoveItem();
             }
         }
         return true;

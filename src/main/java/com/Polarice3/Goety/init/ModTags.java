@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.init;
 
+import com.Polarice3.Goety.Goety;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.tags.*;
@@ -24,7 +25,7 @@ public class ModTags {
 
         private static Tags.IOptionalNamedTag<Block> tag(String name)
         {
-            return BlockTags.createOptional(new ResourceLocation("goety", name));
+            return BlockTags.createOptional(Goety.location(name));
         }
     }
 

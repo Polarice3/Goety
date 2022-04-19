@@ -140,7 +140,7 @@ public class RitualStructures {
                     if (blockstate.getBlock() == Blocks.OBSIDIAN) {
                         pTileEntity.second.add(blockpos1);
                     }
-                    if (blockstate.getBlock() == Blocks.SOUL_LANTERN) {
+                    if (blockstate.getBlock() == Blocks.SOUL_FIRE) {
                         pTileEntity.third.add(blockpos1);
                     }
                 }
@@ -149,6 +149,6 @@ public class RitualStructures {
     }
 
     public static boolean checkSabbathRequirements(ModTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 8;
+        return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 4;
     }
 }

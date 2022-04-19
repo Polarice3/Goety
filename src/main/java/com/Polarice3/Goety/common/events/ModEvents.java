@@ -444,6 +444,14 @@ public class ModEvents {
                 event.setCanceled(true);
             }
         }
+        if (event.getSource().getEntity() instanceof SummonedEntity){
+            SummonedEntity summonedEntity = (SummonedEntity) event.getSource().getEntity();
+            if (summonedEntity.getTrueOwner() != null){
+                if (summonedEntity.getTrueOwner() == entity){
+                    event.setCanceled(true);
+                }
+            }
+        }
     }
 
     @SubscribeEvent
