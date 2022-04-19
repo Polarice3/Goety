@@ -147,6 +147,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
@@ -198,7 +199,7 @@ public class MainConfig {
                 .defineInRange("undeadSouls", 5, 0, Integer.MAX_VALUE);
         AnthropodSouls = BUILDER.comment("Anthropods Killed, Default: 5")
                 .defineInRange("anthropodSouls", 5, 0, Integer.MAX_VALUE);
-        IllagerSouls = BUILDER.comment("Illagers, Witches, Cultists, Protectors Killed, Default: 25")
+        IllagerSouls = BUILDER.comment("Illagers, Witches, Cultists Killed, Default: 25")
                 .defineInRange("illagerSouls", 25, 0, Integer.MAX_VALUE);
         VillagerSouls = BUILDER.comment("Villagers Killed, Default: 50")
                 .defineInRange("villagerSouls", 50, 0, Integer.MAX_VALUE);
@@ -468,6 +469,8 @@ public class MainConfig {
         BUILDER.push("Misc");
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")
                 .define("illagueSpread", true);
+        IllagerSteal = BUILDER.comment("Whether Enviokers, Inquillagers and Conquillagers can steal Totems of Souls or Totems of Undying, Default: true")
+                .define("illagueSteal", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

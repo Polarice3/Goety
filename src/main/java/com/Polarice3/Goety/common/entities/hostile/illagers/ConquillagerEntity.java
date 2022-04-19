@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.Lists;
@@ -46,28 +47,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossbowUser {
+public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbowUser {
     private static final DataParameter<Boolean> IS_CHARGING_CROSSBOW = EntityDataManager.defineId(ConquillagerEntity.class, DataSerializers.BOOLEAN);
-    private final Inventory inventory = new Inventory(5);
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
 
-    public ConquillagerEntity(EntityType<? extends AbstractIllagerEntity> p_i48556_1_, World p_i48556_2_) {
+    public ConquillagerEntity(EntityType<? extends ConquillagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
         this.xpReward = 20;
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new FindTargetGoal(this, 10.0F));
         this.goalSelector.addGoal(3, new RangedCrossbowAttackGoal<>(this, 1.0D, 16.0F));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 15.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -103,6 +95,11 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         }
     }
 
+    @Override
+    protected SoundEvent getCastingSoundEvent() {
+        return null;
+    }
+
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(IS_CHARGING_CROSSBOW, false);
@@ -125,20 +122,6 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         this.noActionTime = 0;
     }
 
-    public void addAdditionalSaveData(CompoundNBT pCompound) {
-        super.addAdditionalSaveData(pCompound);
-        ListNBT listnbt = new ListNBT();
-
-        for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
-            ItemStack itemstack = this.inventory.getItem(i);
-            if (!itemstack.isEmpty()) {
-                listnbt.add(itemstack.save(new CompoundNBT()));
-            }
-        }
-
-        pCompound.put("Inventory", listnbt);
-    }
-
     @OnlyIn(Dist.CLIENT)
     public ArmPose getArmPose() {
         if (this.isChargingCrossbow()) {
@@ -148,20 +131,6 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         } else {
             return this.isAggressive() ? ArmPose.ATTACKING : ArmPose.NEUTRAL;
         }
-    }
-
-    public void readAdditionalSaveData(CompoundNBT pCompound) {
-        super.readAdditionalSaveData(pCompound);
-        ListNBT listnbt = pCompound.getList("Inventory", 10);
-
-        for(int i = 0; i < listnbt.size(); ++i) {
-            ItemStack itemstack = ItemStack.of(listnbt.getCompound(i));
-            if (!itemstack.isEmpty()) {
-                this.inventory.addItem(itemstack);
-            }
-        }
-
-        this.setCanPickUpLoot(true);
     }
 
     public float getWalkTargetValue(BlockPos pPos, IWorldReader pLevel) {
@@ -267,43 +236,6 @@ public class ConquillagerEntity extends AbstractIllagerEntity implements ICrossb
         DyeColor dyecolor = Util.getRandom(DyeColor.values(), random);
         int i = random.nextInt(3);
         return getFirework(dyecolor, i);
-    }
-
-    protected void pickUpItem(ItemEntity pItemEntity) {
-        ItemStack itemstack = pItemEntity.getItem();
-        if (itemstack.getItem() instanceof BannerItem) {
-            super.pickUpItem(pItemEntity);
-        } else {
-            Item item = itemstack.getItem();
-            if (this.wantsItem(item)) {
-                this.onItemPickup(pItemEntity);
-                ItemStack itemstack1 = this.inventory.addItem(itemstack);
-                if (itemstack1.isEmpty()) {
-                    pItemEntity.remove();
-                } else {
-                    itemstack.setCount(itemstack1.getCount());
-                }
-            }
-        }
-
-    }
-
-    private boolean wantsItem(Item p_213672_1_) {
-        return this.hasActiveRaid() && p_213672_1_ == Items.WHITE_BANNER;
-    }
-
-    public boolean setSlot(int pSlotIndex, ItemStack pStack) {
-        if (super.setSlot(pSlotIndex, pStack)) {
-            return true;
-        } else {
-            int i = pSlotIndex - 300;
-            if (i >= 0 && i < this.inventory.getContainerSize()) {
-                this.inventory.setItem(i, pStack);
-                return true;
-            } else {
-                return false;
-            }
-        }
     }
 
     public void applyRaidBuffs(int pWave, boolean p_213660_2_) {

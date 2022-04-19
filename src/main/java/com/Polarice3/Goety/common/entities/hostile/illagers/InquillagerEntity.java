@@ -38,26 +38,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class InquillagerEntity extends SpellcastingIllagerEntity {
-    public InquillagerEntity(EntityType<? extends SpellcastingIllagerEntity> p_i48556_1_, World p_i48556_2_) {
+public class InquillagerEntity extends HuntingIllagerEntity {
+    public InquillagerEntity(EntityType<? extends InquillagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
         this.xpReward = 20;
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new CastingSpellGoal());
         this.goalSelector.addGoal(2, new HealingSelfSpellGoal());
         this.goalSelector.addGoal(2, new ThrowPotionGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){

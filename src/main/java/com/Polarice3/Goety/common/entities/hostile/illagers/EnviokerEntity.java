@@ -6,13 +6,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.monster.VexEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -35,7 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class EnviokerEntity extends SpellcastingIllagerEntity {
+public class EnviokerEntity extends HuntingIllagerEntity {
 
     public EnviokerEntity(EntityType<? extends EnviokerEntity> p_i50207_1_, World p_i50207_2_) {
         super(p_i50207_1_, p_i50207_2_);
@@ -44,19 +39,11 @@ public class EnviokerEntity extends SpellcastingIllagerEntity {
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new CastingSpellGoal());
         this.goalSelector.addGoal(2, new AttackGoal(this));
         this.goalSelector.addGoal(4, new SummonSpellGoal());
         this.goalSelector.addGoal(5, new AttackSpellGoal());
         this.goalSelector.addGoal(6, new SoulSkullSpellGoal());
-        this.goalSelector.addGoal(8, new RandomWalkingGoal(this, 0.6D));
-        this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this, AbstractRaiderEntity.class)).setAlertOthers());
-        this.targetSelector.addGoal(2, (new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){

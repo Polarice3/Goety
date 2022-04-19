@@ -268,7 +268,7 @@ public class ModEvents {
         if (KeyPressed.openWand() && player.getMainHandItem().getItem() instanceof SoulWand){
             SoulWand.onKeyPressed(player.getMainHandItem(), player);
         }
-        if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != null){
+        if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != ItemStack.EMPTY){
             FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
         }
         if (MainConfig.VillagerHate.get()) {
