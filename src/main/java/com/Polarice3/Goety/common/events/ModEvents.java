@@ -124,11 +124,15 @@ public class ModEvents {
             player.getCapability(LichProvider.CAPABILITY)
                     .ifPresent(lichdom ->
                             lichdom.setLichdom(capability2.getLichdom()));
+            player.getCapability(LichProvider.CAPABILITY)
+                    .ifPresent(lichdom ->
+                            lichdom.setArcaBlock(capability2.getArcaBlock()));
+
         }
     }
 
     @SubscribeEvent
-    public static void openBagandWand(InputEvent.KeyInputEvent event){
+    public static void KeyInputs(InputEvent.KeyInputEvent event){
         KeyPressed.setWand(ModKeybindings.keyBindings[0].isDown());
         KeyPressed.setWandandbag(ModKeybindings.keyBindings[1].isDown());
         KeyPressed.setBag(ModKeybindings.keyBindings[2].isDown());
@@ -293,7 +297,7 @@ public class ModEvents {
         }
         if (RobeArmorFinder.FindNecroSet(player)) {
             BlockState blockState = player.level.getBlockState(player.blockPosition().below());
-            if (!LichdomUtil.isLich(player)) {
+            if (!LichdomHelper.isLich(player)) {
                 if (!(blockState.getBlock() instanceof IDeadBlock)) {
                     if (!world.isClientSide) {
                         if (world.isDay() && !world.isRaining() && !world.isThundering()){
@@ -321,7 +325,7 @@ public class ModEvents {
         }
         if (RobeArmorFinder.FindArachnoHelm(player)) {
             if (!world.isClientSide) {
-                if (!LichdomUtil.isLich(player) && !MainConfig.LichNightVision.get()) {
+                if (!LichdomHelper.isLich(player) && !MainConfig.LichNightVision.get()) {
                     if (world.isDay()) {
                         float f = player.getBrightness();
                         BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());

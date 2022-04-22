@@ -12,6 +12,7 @@ import com.Polarice3.Goety.common.entities.utilities.FireTornadoTrapEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -395,9 +396,9 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         Vector3d vector3d = new Vector3d(this.getX() - entity.getX(), this.getY(0.5D) - entity.getEyeY(), this.getZ() - entity.getZ());
         vector3d = vector3d.normalize();
         double d0 = 16.0D;
-        double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.x * 16.0D;
-        double d2 = this.getY() + (double)(this.random.nextInt(16) - 8) - vector3d.y * 16.0D;
-        double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.z * 16.0D;
+        double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.x * d0;
+        double d2 = this.getY() + (double)(this.random.nextInt(16) - 8) - vector3d.y * d0;
+        double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.z * d0;
         this.teleport(d1, d2, d3);
     }
 
@@ -414,7 +415,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (this.isSettingupSecond()){
             this.serverAiStep();
             if (this.tickCount % 10 == 0) {
-                this.heal(10.0F);
+                this.heal(5.0F);
             }
             for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D), field_213690_b)) {
                 if (!(entity instanceof AbstractCultistEntity)) {
@@ -432,6 +433,14 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 if (!this.level.isClientSide){
                     ServerWorld serverWorld = (ServerWorld) ApostleEntity.this.level;
                     serverWorld.setWeatherParameters(0, 6000, true, true);
+                }
+                for(int k = 0; k < 200; ++k) {
+                    float f2 = random.nextFloat() * 4.0F;
+                    float f1 = random.nextFloat() * ((float)Math.PI * 2F);
+                    double d1 = MathHelper.cos(f1) * f2;
+                    double d2 = 0.01D + random.nextDouble() * 0.5D;
+                    double d3 = MathHelper.sin(f1) * f2;
+                    new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
                 }
                 this.setSettingupSecond(false);
                 this.setSecondPhase(true);
@@ -685,7 +694,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 Random r = ApostleEntity.this.random;
                 int random = r.nextInt(2);
                 if (livingentity != null) {
-                    if (i < 4) {
+                    if (i < 4 && !LichdomHelper.isLich((PlayerEntity) livingentity)) {
                         if (random == 0) {
                             BlockPos blockpos = ApostleEntity.this.blockPosition();
                             ZombieVillagerMinionEntity summonedentity = new ZombieVillagerMinionEntity(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ApostleEntity.this.level);
@@ -783,7 +792,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 Random r = ApostleEntity.this.random;
                 int random = r.nextInt(2);
                 if (livingentity != null) {
-                    if (i < 4) {
+                    if (i < 4 && !LichdomHelper.isLich((PlayerEntity) livingentity)) {
                         if (random == 0) {
                             BlockPos blockpos = ApostleEntity.this.blockPosition();
                             SkeletonVillagerMinionEntity summonedentity = new SkeletonVillagerMinionEntity(ModEntityType.SKELETON_VILLAGER_MINION.get(), ApostleEntity.this.level);

@@ -57,6 +57,22 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
     }
 
     public int getSouls(){
+        if (this.item.getItem() == ModItems.SOUL_TRANSFER.get()){
+            int x = this.item.getTag().getInt("X");
+            int y = this.item.getTag().getInt("Y");
+            int z = this.item.getTag().getInt("Z");
+            TileEntity tileEntity = level.getBlockEntity(new BlockPos(x, y, z));
+            if (tileEntity instanceof ArcaTileEntity){
+                ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
+                if (!arcaTileEntity.getItem().isEmpty()){
+                    return arcaTileEntity.getSouls();
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
         if (this.item.getItem() == ModItems.GOLDTOTEM.get()) {
             assert this.item.getTag() != null;
             return this.item.getTag().getInt(SOULSAMOUNT);
@@ -66,17 +82,33 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
     }
 
     public void decreaseSouls(int souls) {
-        if (this.item.getItem() != ModItems.GOLDTOTEM.get()) {
-            return;
-        }
-        assert this.item.getTag() != null;
-        int Soulcount = this.item.getTag().getInt(SOULSAMOUNT);
-        if (!this.item.isEmpty()) {
-            if (Soulcount > 0){
-                Soulcount -= souls;
-                this.item.getTag().putInt(SOULSAMOUNT, Soulcount);
+        if (this.item.getItem() == ModItems.GOLDTOTEM.get()) {
+            assert this.item.getTag() != null;
+            int Soulcount = this.item.getTag().getInt(SOULSAMOUNT);
+            if (!this.item.isEmpty()) {
+                if (Soulcount > 0){
+                    Soulcount -= souls;
+                    this.item.getTag().putInt(SOULSAMOUNT, Soulcount);
+                }
             }
         }
+        if (this.item.getItem() == ModItems.SOUL_TRANSFER.get()) {
+            int x = this.item.getTag().getInt("X");
+            int y = this.item.getTag().getInt("Y");
+            int z = this.item.getTag().getInt("Z");
+            TileEntity tileEntity = level.getBlockEntity(new BlockPos(x, y, z));
+            if (tileEntity instanceof ArcaTileEntity){
+                ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
+                if (!arcaTileEntity.getItem().isEmpty()){
+                    int Soulcount = arcaTileEntity.getSouls();
+                    if (Soulcount > 0){
+                        arcaTileEntity.decreaseSouls(souls);
+                        arcaTileEntity.makeWorkParticles();
+                    }
+                }
+            }
+        }
+
     }
 
     public int getSpinning(){
@@ -84,6 +116,9 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
     }
 
     public void makeWorkParticles() {
+        if (this.getSouls() <= 0){
+            return;
+        }
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();
 

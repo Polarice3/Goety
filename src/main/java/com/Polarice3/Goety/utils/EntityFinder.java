@@ -1,11 +1,17 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.network.EntityUpdatePacket;
+import com.Polarice3.Goety.common.network.ModNetwork;
+import com.Polarice3.Goety.common.network.TileEntityUpdatePacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -50,5 +56,9 @@ public class EntityFinder {
     public static EntityType<?> entityTypeFromNbt(CompoundNBT nbtTagCompound) {
         ResourceLocation typeId = new ResourceLocation(nbtTagCompound.getString("id"));
         return ForgeRegistries.ENTITIES.getValue(typeId);
+    }
+
+    public static void sendEntityUpdatePacket(PlayerEntity player, LivingEntity livingEntity) {
+        ModNetwork.sendTo(player, new EntityUpdatePacket(livingEntity.getUUID(), livingEntity.getPersistentData()));
     }
 }

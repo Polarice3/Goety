@@ -46,7 +46,7 @@ public class SoulEnergyGui extends AbstractGui {
         int SoulEnergy = 0;
         if (!stack.isEmpty()) {
             if (stack.getTag() != null) {
-                SoulEnergy = Objects.requireNonNull(stack.getTag()).getInt(GoldTotemItem.SOULSAMOUNT);
+                SoulEnergy = GoldTotemItem.currentSouls(stack);
             }
         }
         int SoulEnergyTotal = MainConfig.MaxSouls.get();

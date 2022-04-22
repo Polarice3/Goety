@@ -36,7 +36,7 @@ public class UndeathPotionItem extends Item {
                 ILichdom lichdom = LichdomHelper.getCapability(player);
                 boolean isLich = lichdom.getLichdom();
                 ServerWorld serverWorld = (ServerWorld) pLevel;
-                if (serverWorld.getMoonBrightness() > 0.9F && RobeArmorFinder.FindNecroSet(pEntityLiving)){
+                if (serverWorld.getMoonBrightness() > 0.9F && RobeArmorFinder.FindAnySet(pEntityLiving)){
                     if (!isLich) {
                         lichdom.setLichdom(true);
                         LichdomHelper.sendLichUpdatePacket(player);
@@ -57,7 +57,6 @@ public class UndeathPotionItem extends Item {
                         }
                         player.heal(20.0F);
                     }
-                    return new ItemStack(Items.GLASS_BOTTLE);
                 } else {
                     if (!isLich) {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.fail"), true);
@@ -69,8 +68,8 @@ public class UndeathPotionItem extends Item {
                         }
                         player.heal(20.0F);
                     }
-                    return new ItemStack(Items.GLASS_BOTTLE);
                 }
+                return new ItemStack(Items.GLASS_BOTTLE);
             }
         }
 

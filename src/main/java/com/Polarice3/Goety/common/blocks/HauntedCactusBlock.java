@@ -3,8 +3,11 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.LichdomUtil;
-import net.minecraft.block.*;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -114,7 +117,7 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
             LivingEntity livingEntity = (LivingEntity) pEntity;
             if (pEntity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) livingEntity;
-                if (!player.isCreative() && !LichdomUtil.isLich(player)) {
+                if (!player.isCreative() && !LichdomHelper.isLich(player)) {
                     player.hurt(DamageSource.CACTUS, 1.0F);
                     player.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
                 }

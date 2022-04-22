@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -228,14 +229,14 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
         return -0.6D;
     }
 
-    public ActionResultType mobInteract(PlayerEntity p_230254_1_, Hand p_230254_2_) {
+    public ActionResultType mobInteract(PlayerEntity pPlayer, Hand p_230254_2_) {
         if (!this.level.isClientSide) {
-            ItemStack itemstack = p_230254_1_.getItemInHand(p_230254_2_);
+            ItemStack itemstack = pPlayer.getItemInHand(p_230254_2_);
             Item item = itemstack.getItem();
             ItemStack itemstack2 = this.getMainHandItem();
-            if (this.getTrueOwner() != null && p_230254_1_ == this.getTrueOwner()) {
+            if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
                 if (item == Items.BONE && this.getHealth() < this.getMaxHealth()) {
-                    if (!p_230254_1_.abilities.instabuild) {
+                    if (!pPlayer.abilities.instabuild) {
                         itemstack.shrink(1);
                     }
                     this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
@@ -249,10 +250,10 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof SwordItem) {
-                    if (!p_230254_1_.abilities.instabuild) {
+                    if (!pPlayer.abilities.instabuild) {
                         itemstack.shrink(1);
                     }
-                    this.playSound(SoundEvents.ANVIL_USE, 1.0F, 1.0F);
+                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
                     this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
                     this.spawnAtLocation(itemstack2);
@@ -262,13 +263,14 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
                         double d2 = this.random.nextGaussian() * 0.02D;
                         this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
                     }
+                    EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof BowItem) {
-                    if (!p_230254_1_.abilities.instabuild) {
+                    if (!pPlayer.abilities.instabuild) {
                         itemstack.shrink(1);
                     }
-                    this.playSound(SoundEvents.ANVIL_USE, 1.0F, 1.0F);
+                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
                     this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
                     this.spawnAtLocation(itemstack2);
@@ -278,16 +280,17 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
                         double d2 = this.random.nextGaussian() * 0.02D;
                         this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
                     }
+                    EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof ArmorItem) {
+                    if (!pPlayer.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
                     ItemStack helmet = this.getItemBySlot(EquipmentSlotType.HEAD);
                     ItemStack chestplate = this.getItemBySlot(EquipmentSlotType.CHEST);
                     ItemStack legging = this.getItemBySlot(EquipmentSlotType.LEGS);
                     ItemStack boots = this.getItemBySlot(EquipmentSlotType.FEET);
-                    if (!p_230254_1_.abilities.instabuild) {
-                        itemstack.shrink(1);
-                    }
                     this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                     if (((ArmorItem) item).getSlot() == EquipmentSlotType.HEAD) {
                         this.setItemSlot(EquipmentSlotType.HEAD, itemstack.copy());
@@ -315,6 +318,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
                         double d2 = this.random.nextGaussian() * 0.02D;
                         this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
                     }
+                    EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;
                 } else {
                     return ActionResultType.PASS;

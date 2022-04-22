@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
-import com.Polarice3.Goety.utils.LichdomUtil;
+import com.Polarice3.Goety.utils.LichdomHelper;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -62,7 +62,7 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
                 entity.addEffect(new EffectInstance(ModEffects.NECROPOWER.get(), 900, 0, false, false));
             }
             if (entity instanceof PlayerEntity){
-                if (LichdomUtil.isLich((PlayerEntity) entity) && entity.getActiveEffects().isEmpty()){
+                if (LichdomHelper.isLich((PlayerEntity) entity) && entity.getActiveEffects().isEmpty()){
                     entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 900, 1));
                     entity.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 900, 1));
                     entity.addEffect(new EffectInstance(Effects.ABSORPTION, 900, 1));

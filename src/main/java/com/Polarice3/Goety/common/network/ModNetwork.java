@@ -24,6 +24,7 @@ public class ModNetwork {
 
         INSTANCE.registerMessage(nextID(), InfamyUpdatePacket.class, InfamyUpdatePacket::encode, InfamyUpdatePacket::decode, InfamyUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), LichUpdatePacket.class, LichUpdatePacket::encode, LichUpdatePacket::decode, LichUpdatePacket::consume);
+        INSTANCE.registerMessage(nextID(), EntityUpdatePacket.class, EntityUpdatePacket::encode, EntityUpdatePacket::decode, EntityUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), TileEntityUpdatePacket.class, TileEntityUpdatePacket::encode, TileEntityUpdatePacket::decode, TileEntityUpdatePacket::consume);
     }
 

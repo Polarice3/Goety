@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.IllusionCloneEntity;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ILivingEntityData;
@@ -54,14 +55,10 @@ public class IllusionSpell extends Spells{
             }
         }
         for (int i1 = 0; i1 < 4; ++i1) {
-            BlockPos.Mutable blockpos$mutable = entityLiving.blockPosition().mutable().move(0, 0, 0);
-            blockpos$mutable.setX(blockpos$mutable.getX() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
-            blockpos$mutable.setY(worldIn.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
-            blockpos$mutable.setZ(blockpos$mutable.getZ() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
             IllusionCloneEntity summonedentity = new IllusionCloneEntity(ModEntityType.ILLUSION_CLONE.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
-            summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
-            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+            summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(1200);
             summonedentity.setPersistenceRequired();
             worldIn.addFreshEntity(summonedentity);
@@ -92,14 +89,10 @@ public class IllusionSpell extends Spells{
             }
         }
         for (int i1 = 0; i1 < 4 + entityLiving.level.random.nextInt(4); ++i1) {
-            BlockPos.Mutable blockpos$mutable = entityLiving.blockPosition().mutable().move(0, 0, 0);
-            blockpos$mutable.setX(blockpos$mutable.getX() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
-            blockpos$mutable.setY(worldIn.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
-            blockpos$mutable.setZ(blockpos$mutable.getZ() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
             IllusionCloneEntity summonedentity = new IllusionCloneEntity(ModEntityType.ILLUSION_CLONE.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
-            summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
-            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+            summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(1200);
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(true);

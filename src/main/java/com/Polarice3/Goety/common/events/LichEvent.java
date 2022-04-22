@@ -5,17 +5,13 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.LichdomUtil;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -53,7 +49,7 @@ public class LichEvent {
         List<BlockState> result = new ArrayList<>();
         PlayerEntity player = event.player;
         World world = player.level;
-        if (LichdomUtil.isLich(player)){
+        if (LichdomHelper.isLich(player)){
             player.getFoodData().setFoodLevel(17);
             player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
             boolean burn = false;
@@ -166,7 +162,7 @@ public class LichEvent {
 
         final PlayerEntity player = Minecraft.getInstance().player;
 
-        if (player != null && LichdomUtil.isLich(player)) {
+        if (player != null && LichdomHelper.isLich(player)) {
             event.setCanceled(true);
         }
     }
@@ -175,7 +171,7 @@ public class LichEvent {
     public static void SpecialPotionEffects(PotionEvent.PotionApplicableEvent event){
         if (event.getEntityLiving() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            if (LichdomUtil.isLich(player)){
+            if (LichdomHelper.isLich(player)){
                 if (event.getPotionEffect().getEffect() == Effects.POISON){
                     event.setResult(Event.Result.DENY);
                 }
@@ -203,7 +199,7 @@ public class LichEvent {
                     if (event.getTarget() != null) {
                         if (event.getTarget() instanceof PlayerEntity) {
                             PlayerEntity player = (PlayerEntity) event.getTarget();
-                            if (LichdomUtil.isLich(player)) {
+                            if (LichdomHelper.isLich(player)) {
                                 if (MainConfig.LichPowerfulFoes.get()) {
                                     if (event.getEntityLiving().getMaxHealth() < 100) {
                                         ((MonsterEntity) event.getEntityLiving()).setTarget(null);
@@ -220,7 +216,7 @@ public class LichEvent {
                 if (event.getTarget() != null) {
                     if (event.getTarget() instanceof PlayerEntity) {
                         PlayerEntity player = (PlayerEntity) event.getTarget();
-                        if (LichdomUtil.isLich(player)) {
+                        if (LichdomHelper.isLich(player)) {
                             ((MonsterEntity) event.getEntityLiving()).setTarget(null);
                         }
                     }
@@ -233,7 +229,7 @@ public class LichEvent {
     public static void HurtEvent(LivingHurtEvent event){
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            if (LichdomUtil.isLich(player)){
+            if (LichdomHelper.isLich(player)){
                 if (event.getSource().getEntity() instanceof LivingEntity){
                     LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
                     if (attacker.getMainHandItem().isEnchanted()){
@@ -263,7 +259,7 @@ public class LichEvent {
         }
         if (event.getSource().getEntity() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getSource().getEntity();
-            if (LichdomUtil.isLich(player)){
+            if (LichdomHelper.isLich(player)){
                 if (player.getMainHandItem().isEmpty()){
                     event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
                 }

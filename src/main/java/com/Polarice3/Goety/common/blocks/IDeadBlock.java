@@ -240,8 +240,14 @@ public interface IDeadBlock {
             if (result.size() > 32) {
                 BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(pPos.getX(), pPos.getY(), pPos.getZ());
 
-                while (blockpos$mutable.getY() < 255 && (pLevel.getBlockState(blockpos$mutable).isAir() || pLevel.getBlockState(blockpos$mutable).getBlock() instanceof IDeadBlock)) {
-                    blockpos$mutable.move(Direction.UP);
+                if (MainConfig.DeadSandDarkSkyNoOcclude.get()){
+                    while (blockpos$mutable.getY() < 255) {
+                        blockpos$mutable.move(Direction.UP);
+                    }
+                } else {
+                    while (blockpos$mutable.getY() < 255 && (pLevel.getBlockState(blockpos$mutable).isAir() || pLevel.getBlockState(blockpos$mutable).getBlock() instanceof IDeadBlock)) {
+                        blockpos$mutable.move(Direction.UP);
+                    }
                 }
 
                 BlockState ceiling = pLevel.getBlockState(blockpos$mutable);

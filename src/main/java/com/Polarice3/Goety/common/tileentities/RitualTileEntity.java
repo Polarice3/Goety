@@ -11,12 +11,12 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class ModTileEntity extends TileEntity {
+public class RitualTileEntity extends TileEntity {
     public final List<BlockPos> first = Lists.newArrayList();
     public final List<BlockPos> second = Lists.newArrayList();
     public final List<BlockPos> third = Lists.newArrayList();
 
-    public ModTileEntity(TileEntityType<?> p_i48289_1_) {
+    public RitualTileEntity(TileEntityType<?> p_i48289_1_) {
         super(p_i48289_1_);
     }
 

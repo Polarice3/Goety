@@ -96,6 +96,12 @@ public class BlockFinder {
         }
     }
 
+    public static boolean noWall(LivingEntity livingEntity){
+        World world = livingEntity.level;
+        BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
+        return world.hasChunksAt(blockpos$mutable.getX() - 10, blockpos$mutable.getY() - 10, blockpos$mutable.getZ() - 10, blockpos$mutable.getX() + 10, blockpos$mutable.getY() + 10, blockpos$mutable.getZ() + 10);
+    }
+
     public static double spawnY(LivingEntity livingEntity, BlockPos blockPos) {
         BlockPos blockpos = blockPos;
         boolean flag = false;
@@ -124,6 +130,18 @@ public class BlockFinder {
             return blockpos.getY() + d0;
         } else {
             return livingEntity.getY();
+        }
+    }
+
+    public static BlockPos SummonRadius(LivingEntity livingEntity, World world){
+        BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
+        blockpos$mutable.setX(blockpos$mutable.getX() + world.random.nextInt(5) - world.random.nextInt(5));
+        blockpos$mutable.setY((int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()));
+        blockpos$mutable.setZ(blockpos$mutable.getZ() + world.random.nextInt(5) - world.random.nextInt(5));
+        if (noWall(livingEntity)){
+            return blockpos$mutable;
+        } else {
+            return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()), 0);
         }
     }
 

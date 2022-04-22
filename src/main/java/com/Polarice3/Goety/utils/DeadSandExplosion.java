@@ -2,7 +2,6 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
-import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -10,25 +9,19 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -175,7 +168,7 @@ public class DeadSandExplosion {
                         if (livingEntity.getMobType() != CreatureAttribute.UNDEAD && !(livingEntity instanceof IDeadMob)){
                             if (livingEntity instanceof PlayerEntity){
                                 PlayerEntity player = (PlayerEntity) livingEntity;
-                                if (!player.isCreative() && !LichdomUtil.isLich(player)){
+                                if (!player.isCreative() && !LichdomHelper.isLich(player)){
                                     livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 300));
                                 }
                             } else {

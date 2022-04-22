@@ -104,6 +104,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnFreq;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> InfamyMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> NecroArmoredRobeRepairAmount;
@@ -129,6 +130,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSky;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSkyNoOcclude;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryWater;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryAnimals;
 
@@ -160,7 +162,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DecrepitFortGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> LichHardcore;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
@@ -187,12 +188,14 @@ public class MainConfig {
                 .define("deadSandSpread", true);
         DeadSandDarkSky = BUILDER.comment("Dead Sand will produce a Dark Cloud at the height of the world if surrounded by other Dead Blocks, Default: true")
                 .define("deadSandDarkSky", true);
+        DeadSandDarkSkyNoOcclude = BUILDER.comment("Dark Cloud will be produced if the Dead Sand cannot see the sky, Default: true")
+                .define("deadSandDarkSkyNoOcclude", true);
         DeadSandDryWater = BUILDER.comment("Dead Sand will dry up surrounding Waters, Default: true")
                 .define("deadSandDryWater", true);
         DeadSandDryAnimals = BUILDER.comment("Dead Sand will dry up animals, slowly killing them, Default: true")
                 .define("deadSandDryAnimals", true);
-        SoulKilnCost = BUILDER.comment("The amount of Soul Energy used up to smelt items per second, Default: 10")
-                .defineInRange("soulKilnFuel", 10, 0, Integer.MAX_VALUE);
+        SoulKilnCost = BUILDER.comment("The amount of Soul Energy used up to smelt items per second, Default: 1")
+                .defineInRange("soulKilnFuel", 1, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Soul Taken");
         UndeadSouls = BUILDER.comment("Undead Killed, Default: 5")
@@ -321,8 +324,10 @@ public class MainConfig {
                 .define("infamySpell", true);
         InfamySpellGive = BUILDER.comment("How much Infamy is given when casting Spells, Default: 1")
                 .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
-        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 1")
-                .defineInRange("infamyDeathLoss", 1, 0, Integer.MAX_VALUE);
+        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 10")
+                .defineInRange("infamyDeathLoss", 10, 0, Integer.MAX_VALUE);
+        InfamyMax = BUILDER.comment("Maximum amount of Infamy the Player can attained, Default: 500")
+                .defineInRange("infamyMax", 500, 1, Integer.MAX_VALUE);
         InfamyThreshold = BUILDER.comment("How much Infamy is required for Special Illagers to spawn, Default: 25")
                 .defineInRange("infamyThreshold", 25, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -386,7 +391,7 @@ public class MainConfig {
         WebballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Web Ball Spell, Default: 0")
                 .defineInRange("webBallInfamyChance", 0, 0, Integer.MAX_VALUE);
         IllusionInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Illusion Spell, Default: 1")
-                .defineInRange("webBallInfamyChance", 1, 0, Integer.MAX_VALUE);
+                .defineInRange("illusionInfamyChance", 1, 0, Integer.MAX_VALUE);
         SoulShieldInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Shield Spell, Default: 0")
                 .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -457,8 +462,6 @@ public class MainConfig {
         BUILDER.push("Spoilers");
         LichHealCost = BUILDER.comment("How much Soul Energy is cost to give food to the Player per second if they've become a Lich, Default: 0")
                 .defineInRange("lichHungerCost", 10, 0, Integer.MAX_VALUE);
-        LichHardcore = BUILDER.comment("If on Hardcore, being a Lich will provide a 90% discount on when the Player gets the Death Protect Effect, Default: true")
-                .define("lichHardcore", true);
         LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Arachnea Helm will no longer give Blindness during day, Default: true")
                 .define("lichNightVision", true);
         LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")

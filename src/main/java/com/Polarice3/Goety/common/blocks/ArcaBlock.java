@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.common.items.SoulWand;
+import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
-import com.mojang.authlib.GameProfile;
+import com.Polarice3.Goety.utils.LichdomHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -9,7 +11,6 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -23,7 +24,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeBlock;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +32,7 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
 
     public ArcaBlock() {
         super(AbstractBlock.Properties.of(Material.STONE)
-                .strength(50.0F, 1200.0F)
+                .strength(100.0F, 2400.0F)
                 .sound(SoundType.METAL)
                 .requiresCorrectToolForDrops()
                 .noOcclusion()
@@ -43,21 +43,6 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
     public void setPlacedBy(World pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
         TileEntity tileentity = pLevel.getBlockEntity(pPos);
-        if (tileentity instanceof ArcaTileEntity){
-            ArcaTileEntity arcaTile = (ArcaTileEntity) tileentity;
-            GameProfile gameprofile = null;
-            if (pStack.hasTag()) {
-                CompoundNBT compoundnbt = pStack.getTag();
-                assert compoundnbt != null;
-                if (compoundnbt.contains("Owner", 10)) {
-                    gameprofile = NBTUtil.readGameProfile(compoundnbt.getCompound("Owner"));
-                } else if (compoundnbt.contains("Owner", 8) && !StringUtils.isBlank(compoundnbt.getString("Owner"))) {
-                    gameprofile = new GameProfile(null, compoundnbt.getString("Owner"));
-                }
-            }
-
-            arcaTile.setOwner(gameprofile);
-        }
         CompoundNBT compoundnbt = pStack.getOrCreateTag();
         if (compoundnbt.contains("BlockEntityTag")) {
             CompoundNBT compoundnbt1 = compoundnbt.getCompound("BlockEntityTag");
@@ -65,28 +50,38 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                 pLevel.setBlock(pPos, pState.setValue(POWERED, Boolean.TRUE), 2);
             }
         }
-
+        if (pPlacer instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) pPlacer;
+            ILichdom lichdom = LichdomHelper.getCapability(player);
+            lichdom.setArcaBlock(pPos);
+            if (tileentity instanceof ArcaTileEntity){
+                ArcaTileEntity arcaTile = (ArcaTileEntity) tileentity;
+                arcaTile.setOwnerId(pPlacer.getUUID());
+            }
+        }
     }
 
     public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
         if (pState.hasTileEntity()) {
             TileEntity tileEntity = pLevel.getBlockEntity(pPos);
-            if (tileEntity instanceof ArcaTileEntity) {
-                ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
-                if (pState.getValue(POWERED) && arcaTileEntity.getOwnerProfile().getId() == pPlayer.getUUID()) {
-                    this.dropItem(pLevel, pPos);
-                    pState = pState.setValue(POWERED, Boolean.FALSE);
-                    pLevel.setBlock(pPos, pState, 2);
-                    return ActionResultType.sidedSuccess(pLevel.isClientSide);
-                } else {
-                    return ActionResultType.PASS;
+            if (pPlayer.getMainHandItem().isEmpty()) {
+                if (tileEntity instanceof ArcaTileEntity) {
+                    ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
+                    if (arcaTileEntity.getTrueOwner() == pPlayer) {
+                        if (pState.getValue(POWERED)) {
+                            this.dropItem(pLevel, pPos);
+                            pState = pState.setValue(POWERED, Boolean.FALSE);
+                            pLevel.setBlock(pPos, pState, 2);
+                            return ActionResultType.sidedSuccess(pLevel.isClientSide);
+                        } else if (pPlayer.isCrouching()) {
+                            pLevel.destroyBlock(pPos, true);
+                            return ActionResultType.sidedSuccess(pLevel.isClientSide);
+                        }
+                    }
                 }
-            } else {
-                return ActionResultType.PASS;
             }
-        } else {
-            return ActionResultType.PASS;
         }
+        return ActionResultType.PASS;
     }
 
     public void setItem(IWorld pLevel, BlockPos pPos, BlockState pState, ItemStack pStack) {
@@ -107,9 +102,9 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                     pLevel.levelEvent(1010, pPos, 0);
                     cageTileEntity.clearContent();
                     float f = 0.7F;
-                    double d0 = (double)(pLevel.random.nextFloat() * 0.7F) + (double)0.15F;
-                    double d1 = (double)(pLevel.random.nextFloat() * 0.7F) + (double)0.060000002F + 0.6D;
-                    double d2 = (double)(pLevel.random.nextFloat() * 0.7F) + (double)0.15F;
+                    double d0 = (double)(pLevel.random.nextFloat() * f) + (double)0.15F;
+                    double d1 = (double)(pLevel.random.nextFloat() * f) + (double)0.060000002F + 0.6D;
+                    double d2 = (double)(pLevel.random.nextFloat() * f) + (double)0.15F;
                     ItemStack itemstack1 = itemstack.copy();
                     ItemEntity itementity = new ItemEntity(pLevel, (double)pPos.getX() + d0, (double)pPos.getY() + d1, (double)pPos.getZ() + d2, itemstack1);
                     itementity.setDefaultPickUpDelay();

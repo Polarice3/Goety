@@ -56,14 +56,10 @@ public class ZombieSpell extends SummonSpells{
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }
         } else {
-            BlockPos.Mutable blockpos$mutable = entityLiving.blockPosition().mutable().move(0, 0, 0);
-            blockpos$mutable.setX(blockpos$mutable.getX() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
-            blockpos$mutable.setY((int) BlockFinder.spawnY(entityLiving, entityLiving.blockPosition()));
-            blockpos$mutable.setZ(blockpos$mutable.getZ() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
             ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
-            summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
-            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+            summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(20 * (30 + entityLiving.level.random.nextInt(90)));
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(this.NecroPower(entityLiving));
@@ -95,14 +91,10 @@ public class ZombieSpell extends SummonSpells{
             }
         } else {
             for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
-                BlockPos.Mutable blockpos$mutable = entityLiving.blockPosition().mutable().move(0, 0, 0);
-                blockpos$mutable.setX(blockpos$mutable.getX() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
-                blockpos$mutable.setY((int) BlockFinder.spawnY(entityLiving, entityLiving.blockPosition()));
-                blockpos$mutable.setZ(blockpos$mutable.getZ() + worldIn.random.nextInt(5) - worldIn.random.nextInt(5));
                 ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
-                summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
-                summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+                summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setLimitedLife(60 * (90 + entityLiving.level.random.nextInt(180)));
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));

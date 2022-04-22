@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModTileEntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
@@ -13,7 +12,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class PedestalTileEntity extends ModTileEntity {
+public class PedestalTileEntity extends RitualTileEntity {
     public long lastChangeTime;
     public LazyOptional<ItemStackHandler> itemStackHandler = LazyOptional.of(
             () -> new ItemStackHandler(1) {

@@ -87,7 +87,7 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
                     this.items.set(i, ItemStack.EMPTY);
                     BlockPos blockpos = this.getBlockPos();
                     InventoryHelper.dropItemStack(this.level, (double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), itemstack1);
-                    this.level.playSound(null, this.getBlockPos(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.level.playSound(null, this.getBlockPos(), SoundEvents.BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     this.markUpdated();
                     this.cookingProgress[i] = 0;
                 }
@@ -104,7 +104,7 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
                 this.cookingProgress[i] = 0;
                 this.items.set(i, pStack.split(1));
                 assert this.level != null;
-                this.level.playSound(null, this.getBlockPos(), SoundEvents.BLAZE_SHOOT, SoundCategory.BLOCKS, 0.75F, 1.0F);
+                this.level.playSound(null, this.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundCategory.BLOCKS, 0.75F, 1.0F);
                 this.markUpdated();
                 return true;
             }

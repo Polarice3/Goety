@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.infamy;
 
+import com.Polarice3.Goety.MainConfig;
+
 public class InfamyImp implements IInfamy{
 
     private int infamy = 0;
@@ -16,10 +18,10 @@ public class InfamyImp implements IInfamy{
 
     @Override
     public boolean increaseInfamy(int increase) {
-        if (this.infamy >= 500) {
+        if (this.infamy >= MainConfig.InfamyMax.get()) {
             return false;
         }
-        this.infamy = Math.min(this.infamy + increase, 500);
+        this.infamy = Math.min(this.infamy + increase, MainConfig.InfamyMax.get());
         return true;
     }
 

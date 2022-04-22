@@ -11,7 +11,6 @@ import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -105,15 +104,7 @@ public class GoldTotemItem extends Item {
         if (!itemStack.isEmpty()) {
             if (itemStack.getTag() != null) {
                 if (MainConfig.TotemUndying.get()) {
-                    if (MainConfig.LichHardcore.get()) {
-                        if (LichdomUtil.isLich(player) && player.level.getLevelData().isHardcore()) {
-                            return itemStack.getTag().getInt(SOULSAMOUNT) >= MAXSOULS * 0.9;
-                        } else {
-                            return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
-                        }
-                    } else {
-                        return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
-                    }
+                    return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
                 } else {
                     return false;
                 }

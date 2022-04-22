@@ -1,9 +1,7 @@
 package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.tileentities.ModTileEntity;
-import com.Polarice3.Goety.init.ModBlocks;
-import com.Polarice3.Goety.init.ModTags;
+import com.Polarice3.Goety.common.tileentities.RitualTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerPotBlock;
@@ -15,7 +13,7 @@ public class RitualStructures {
 
     public static final int RANGE = 8;
 
-    public static void findAnimaStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+    public static void findAnimaStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
         pTileEntity.first.clear();
         pTileEntity.second.clear();
         pTileEntity.third.clear();
@@ -40,11 +38,11 @@ public class RitualStructures {
         }
     }
 
-    public static boolean checkAnimaRequirements(ModTileEntity pTileEntity){
+    public static boolean checkAnimaRequirements(RitualTileEntity pTileEntity){
         return pTileEntity.first.size() >= 15 && pTileEntity.second.size() >= 15 && pTileEntity.third.size() >= 1;
     }
 
-    public static void findNecroStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+    public static void findNecroStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
         pTileEntity.first.clear();
         pTileEntity.second.clear();
         pTileEntity.third.clear();
@@ -70,11 +68,11 @@ public class RitualStructures {
         }
     }
 
-    public static boolean checkNecroRequirements(ModTileEntity pTileEntity){
+    public static boolean checkNecroRequirements(RitualTileEntity pTileEntity){
         return pTileEntity.first.size() >= 16 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 8;
     }
 
-    public static void findMinorNetherStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+    public static void findMinorNetherStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
         pTileEntity.first.clear();
         pTileEntity.second.clear();
         pTileEntity.third.clear();
@@ -92,11 +90,11 @@ public class RitualStructures {
         }
     }
 
-    public static boolean checkMinorNetherRequirements(ModTileEntity pTileEntity){
+    public static boolean checkMinorNetherRequirements(RitualTileEntity pTileEntity){
         return pTileEntity.first.size() >= 1 && pTileEntity.second.size() == 0 && pTileEntity.third.size() == 0;
     }
 
-    public static void findForgeStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+    public static void findForgeStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
         pTileEntity.first.clear();
         pTileEntity.second.clear();
         pTileEntity.third.clear();
@@ -120,11 +118,11 @@ public class RitualStructures {
         }
     }
 
-    public static boolean checkForgeRequirements(ModTileEntity pTileEntity){
+    public static boolean checkForgeRequirements(RitualTileEntity pTileEntity){
         return pTileEntity.first.size() >= 1 && pTileEntity.second.size() >= 3 && pTileEntity.third.size() >= 4;
     }
 
-    public static void findSabbathStructure(ModTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+    public static void findSabbathStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
         pTileEntity.first.clear();
         pTileEntity.second.clear();
         pTileEntity.third.clear();
@@ -148,7 +146,7 @@ public class RitualStructures {
         }
     }
 
-    public static boolean checkSabbathRequirements(ModTileEntity pTileEntity){
+    public static boolean checkSabbathRequirements(RitualTileEntity pTileEntity){
         return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 4;
     }
 }

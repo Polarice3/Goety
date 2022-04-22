@@ -4,10 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.LichdomUtil;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
@@ -62,7 +59,7 @@ public class SummonedEntity extends CreatureEntity {
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, false, (entity) ->
                 entity instanceof IMob
                         && !(entity instanceof CreeperEntity && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
-                        && !(entity.getMobType() == CreatureAttribute.UNDEAD && this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity && LichdomUtil.isLich((PlayerEntity) this.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
+                        && !(entity.getMobType() == CreatureAttribute.UNDEAD && this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) this.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
                         && !(entity instanceof SummonedEntity && ((SummonedEntity) entity).getTrueOwner() == this.getTrueOwner())));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

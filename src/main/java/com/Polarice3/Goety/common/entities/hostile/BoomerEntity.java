@@ -1,14 +1,9 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.init.ModBlocks;
-import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.DeadSandExplosion;
-import com.Polarice3.Goety.utils.LichdomUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -25,11 +20,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;

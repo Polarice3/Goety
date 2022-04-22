@@ -1,8 +1,8 @@
 {
-  "name": "Dead Sand Research",
+  "name": "Soul Kiln",
   "icon": "goety:cursed_kiln",
   "category": "goety:crafts",
-  "advancement": "goety:goety/read_nether_book",
+  "advancement": "goety:goety/get_crying_obsidian",
   "sortnum": 9,
   "pages": [
     {

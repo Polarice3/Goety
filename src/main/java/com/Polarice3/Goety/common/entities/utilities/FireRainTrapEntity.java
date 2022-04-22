@@ -79,9 +79,13 @@ public class FireRainTrapEntity extends Entity {
         while(blockpos$mutable.getY() < this.getY() + 32.0D && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
             blockpos$mutable.move(Direction.UP);
         }
-        SmallFireballEntity fireballEntity = new SmallFireballEntity(level, this.owner, 0, -900D, 0);
-        fireballEntity.setPos(this.getX() + this.random.nextInt(5), blockpos$mutable.getY(), this.getZ() + this.random.nextInt(5));
-        level.addFreshEntity(fireballEntity);
+        if (this.owner != null) {
+            SmallFireballEntity fireballEntity = new SmallFireballEntity(level, this.owner, 0, -900D, 0);
+            fireballEntity.setPos(this.getX() + this.random.nextInt(5), blockpos$mutable.getY(), this.getZ() + this.random.nextInt(5));
+            level.addFreshEntity(fireballEntity);
+        } else {
+            this.remove();
+        }
         if (this.tickCount >= this.getDuration()) {
             this.remove();
         }

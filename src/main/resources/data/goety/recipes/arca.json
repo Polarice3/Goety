@@ -1,0 +1,39 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:cursed_cage"
+  },
+  "craftType": "forge",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "item": "minecraft:respawn_anchor"
+    },
+    {
+      "tag": "forge:ender_pearls"
+    },
+    {
+      "item": "minecraft:lava_bucket"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    }
+  ],
+  "result": {
+    "item": "goety:arca"
+  }
+}

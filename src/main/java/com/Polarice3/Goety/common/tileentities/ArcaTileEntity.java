@@ -3,25 +3,30 @@ package com.Polarice3.Goety.common.tileentities;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
-import com.mojang.authlib.GameProfile;
+import com.Polarice3.Goety.utils.TileEntityHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IClearable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
+import static com.Polarice3.Goety.common.items.GoldTotemItem.MAXSOULS;
 import static com.Polarice3.Goety.common.items.GoldTotemItem.SOULSAMOUNT;
 
-public class ArcaTileEntity extends TileEntity implements IClearable {
-    private GameProfile owner;
+public class ArcaTileEntity extends TileEntity implements IClearable, ITickableTileEntity {
+    private UUID ownerUUID;
     private ItemStack item = ItemStack.EMPTY;
 
     public ArcaTileEntity() {
@@ -29,22 +34,46 @@ public class ArcaTileEntity extends TileEntity implements IClearable {
     }
 
     @Override
+    public void tick() {
+        if (!this.item.isEmpty()){
+            if (this.item.getTag() == null){
+                CompoundNBT compound = this.item.getOrCreateTag();
+                compound.putInt(SOULSAMOUNT, 0);
+            }
+            if (this.item.getTag().getInt(SOULSAMOUNT) > MAXSOULS){
+                this.item.getTag().putInt(SOULSAMOUNT, MAXSOULS);
+            }
+            if (this.item.getTag().getInt(SOULSAMOUNT) <= 0){
+                this.item.getTag().putInt(SOULSAMOUNT, 0);
+            }
+        }
+    }
+
+    @Override
     public void load(BlockState state, CompoundNBT tag) {
         super.load(state, tag);
-        item = ItemStack.of(tag.getCompound("item"));
-        if (tag.contains("Owner", 10)) {
-            this.setOwner(NBTUtil.readGameProfile(tag.getCompound("Owner")));
+        this.setItem(ItemStack.of(tag.getCompound("item")));
+        UUID uuid;
+        if (tag.hasUUID("Owner")) {
+            uuid = tag.getUUID("Owner");
+        } else {
+            String s = tag.getString("Owner");
+            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.level.getServer(), s);
+        }
+        if (uuid != null) {
+            try {
+                this.setOwnerId(uuid);
+            } catch (Throwable ignored) {
+            }
         }
     }
 
     @Override
     public CompoundNBT save(CompoundNBT tag) {
         tag = super.save(tag);
-        tag.put("item", item.save(new CompoundNBT()));
-        if (this.owner != null) {
-            CompoundNBT compoundnbt = new CompoundNBT();
-            NBTUtil.writeGameProfile(compoundnbt, this.owner);
-            tag.put("Owner", compoundnbt);
+        tag.put("item", this.getItem().save(new CompoundNBT()));
+        if (this.getOwnerId() != null) {
+            tag.putUUID("Owner", this.getOwnerId());
         }
         return tag;
     }
@@ -67,12 +96,26 @@ public class ArcaTileEntity extends TileEntity implements IClearable {
         this.setChanged();
     }
 
-    public void setOwner(@Nullable GameProfile pOwner) {
-        this.owner = pOwner;
+    @Nullable
+    public UUID getOwnerId() {
+        return this.ownerUUID;
     }
 
-    public GameProfile getOwnerProfile() {
-        return this.owner;
+    public void setOwnerId(@Nullable UUID p_184754_1_) {
+        this.ownerUUID = p_184754_1_;
+    }
+
+    public LivingEntity getTrueOwner() {
+        try {
+            UUID uuid = this.getOwnerId();
+            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+        } catch (IllegalArgumentException illegalargumentexception) {
+            return null;
+        }
+    }
+
+    public PlayerEntity getPlayer(){
+        return (PlayerEntity) this.getTrueOwner();
     }
 
     public int getSouls(){
@@ -95,10 +138,25 @@ public class ArcaTileEntity extends TileEntity implements IClearable {
                 Soulcount -= souls;
                 this.item.getTag().putInt(SOULSAMOUNT, Soulcount);
             }
+            TileEntityHelper.sendArcaUpdatePacket(this.getPlayer());
+        }
+    }
+
+    public void setSouls(int souls) {
+        if (this.item.getItem() != ModItems.GOLDTOTEM.get()) {
+            return;
+        }
+        assert this.item.getTag() != null;
+        if (!this.item.isEmpty()) {
+            this.item.getTag().putInt(SOULSAMOUNT, souls);
+            TileEntityHelper.sendArcaUpdatePacket(this.getPlayer());
         }
     }
 
     public void makeWorkParticles() {
+        if (this.getSouls() <= 0){
+            return;
+        }
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();
 
@@ -106,8 +164,10 @@ public class ArcaTileEntity extends TileEntity implements IClearable {
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-            new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+            for (int p = 0; p < 4; ++p) {
+                new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);
+                new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
+            }
         }
     }
 

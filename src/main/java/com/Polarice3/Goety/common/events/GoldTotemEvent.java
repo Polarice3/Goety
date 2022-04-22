@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
@@ -15,6 +16,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -69,7 +71,34 @@ public class GoldTotemEvent {
         if (event.getEntityLiving() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             Minecraft minecraft = Minecraft.getInstance();
-            if (GoldTotemItem.UndyingEffect(player)){
+            if (GoldTotemFinder.FindArca(player) != null) {
+                if (LichdomHelper.isLich(player)) {
+                    if (GoldTotemFinder.FindArca(player).getSouls() > MainConfig.MaxSouls.get()/4) {
+                        BlockPos blockPos = GoldTotemFinder.FindArca(player).getBlockPos();
+                        player.setHealth(1.0F);
+                        player.removeAllEffects();
+                        player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
+                        player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                        new SoundUtil(player.blockPosition(), SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                        GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
+                        TileEntityHelper.sendArcaUpdatePacket(player);
+                        event.setCanceled(true);
+                    }
+                } else if (GoldTotemItem.UndyingEffect(player)){
+                    player.setHealth(1.0F);
+                    player.removeAllEffects();
+                    player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
+                    player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
+                    player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                    new ParticleUtil(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(), player.getZ(), 0.0F, 0.0F, 0.0F);
+                    new SoundUtil(player.blockPosition(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    minecraft.gameRenderer.displayItemActivation(GoldTotemFinder.FindTotem(player));
+                    GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
+                    TileEntityHelper.sendArcaUpdatePacket(player);
+                    event.setCanceled(true);
+                }
+            } else if (GoldTotemItem.UndyingEffect(player)){
                 player.setHealth(1.0F);
                 player.removeAllEffects();
                 player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
@@ -78,7 +107,7 @@ public class GoldTotemEvent {
                 new ParticleUtil(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(), player.getZ(), 0.0F, 0.0F, 0.0F);
                 new SoundUtil(player.blockPosition(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 minecraft.gameRenderer.displayItemActivation(GoldTotemFinder.FindTotem(player));
-                if (LichdomUtil.isLich(player)){
+                if (LichdomHelper.isLich(player)){
                     GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
                 } else {
                     GoldTotemItem.EmptySoulTotem(player);
