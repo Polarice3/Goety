@@ -35,7 +35,7 @@ public class SoulEnergyGui extends AbstractGui {
         return this.minecraft.font;
     }
 
-    public void drawHUD(MatrixStack ms, float pt) {
+    public void drawHUD(MatrixStack ms) {
         this.screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
         this.screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
         if(!shouldDisplayBar()) {

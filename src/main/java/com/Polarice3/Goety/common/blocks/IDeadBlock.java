@@ -33,7 +33,6 @@ public interface IDeadBlock {
     default void spreadSand(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
-            BlockState blockState = pLevel.getBlockState(blockpos);
             BlockFinder.DeadSandReplace(blockpos, pLevel);
 
             dryUpWater(pLevel, pPos);
@@ -41,17 +40,15 @@ public interface IDeadBlock {
             growHauntedCactus(pLevel, pPos, pRandom);
             blockSky(pLevel, pPos);
 
-            if (BlockFinder.NotDeadSandImmune(blockState)) {
-                for (int l1 = -4; l1 <= 0; ++l1) {
-                    int random = pRandom.nextInt(2);
-                    int l2 = random == 0 ? l1 : 0;
-                    BlockPos blockpos1 = pPos.offset(0, l2, 0);
-                    BlockState blockState1 = pLevel.getBlockState(blockpos1);
+            for (int l1 = -4; l1 <= 0; ++l1) {
+                int random = pRandom.nextInt(2);
+                int l2 = random == 0 ? l1 : 0;
+                BlockPos blockpos1 = pPos.offset(0, l2, 0);
+                BlockState blockState1 = pLevel.getBlockState(blockpos1);
 
-                    if (blockState1.getMaterial() == Material.STONE) {
-                        pLevel.destroyBlock(blockpos1, false);
-                        pLevel.setBlockAndUpdate(blockpos1, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-                    }
+                if (blockState1.getMaterial() == Material.STONE && BlockFinder.NotDeadSandImmune(blockState1)) {
+                    pLevel.destroyBlock(blockpos1, false);
+                    pLevel.setBlockAndUpdate(blockpos1, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
                 }
             }
 
@@ -59,9 +56,11 @@ public interface IDeadBlock {
                 BlockPos blockpos1 = pPos.offset(0, k1, 0);
                 BlockState blockState1 = pLevel.getBlockState(blockpos1);
 
-                if (blockState1.is(BlockTags.LOGS) && blockState1.getBlock() != ModBlocks.HAUNTED_LOG.get()) {
-                    pLevel.destroyBlock(blockpos1, false);
-                    pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState1.getValue(RotatedPillarBlock.AXIS)));
+                if (BlockFinder.NotDeadSandImmune(blockState1)) {
+                    if (blockState1.is(BlockTags.LOGS) && blockState1.getBlock() != ModBlocks.HAUNTED_LOG.get()) {
+                        pLevel.destroyBlock(blockpos1, false);
+                        pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState1.getValue(RotatedPillarBlock.AXIS)));
+                    }
                 }
             }
         }
@@ -135,12 +134,14 @@ public interface IDeadBlock {
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             BlockState blockState = pLevel.getBlockState(blockpos);
-            if (blockState.is(BlockTags.LOGS)) {
-                pLevel.destroyBlock(blockpos, false);
-                pLevel.setBlockAndUpdate(blockpos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)));
-            }
-            if (blockState.getBlock() instanceof LeavesBlock) {
-                pLevel.removeBlock(blockpos, false);
+            if (BlockFinder.NotDeadSandImmune(blockState)) {
+                if (blockState.is(BlockTags.LOGS)) {
+                    pLevel.destroyBlock(blockpos, false);
+                    pLevel.setBlockAndUpdate(blockpos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)));
+                }
+                if (blockState.getBlock() instanceof LeavesBlock) {
+                    pLevel.removeBlock(blockpos, false);
+                }
             }
         }
     }

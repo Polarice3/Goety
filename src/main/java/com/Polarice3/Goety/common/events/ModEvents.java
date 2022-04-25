@@ -158,7 +158,7 @@ public class ModEvents {
 
         if (player != null) {
             if (!GoldTotemFinder.FindTotem(player).isEmpty()) {
-                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack(), event.getPartialTicks());
+                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
             }
         }
     }
@@ -306,13 +306,28 @@ public class ModEvents {
                                 player.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
                                 player.addEffect(new EffectInstance(Effects.HUNGER, 20, 1));
                             } else {
+                                if (player.tickCount % 50 == 0){
+                                    if (player.getHealth() < player.getMaxHealth()) {
+                                        player.heal(1.0F);
+                                    }
+                                }
                                 player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
                             }
                         } else {
+                            if (player.tickCount % 50 == 0){
+                                if (player.getHealth() < player.getMaxHealth()) {
+                                    player.heal(1.0F);
+                                }
+                            }
                             player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
                         }
                     }
                 } else {
+                    if (player.tickCount % 50 == 0){
+                        if (player.getHealth() < player.getMaxHealth()) {
+                            player.heal(1.0F);
+                        }
+                    }
                     player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
                     if (player.hasEffect(Effects.WEAKNESS)) {
                         player.removeEffect(Effects.WEAKNESS);
