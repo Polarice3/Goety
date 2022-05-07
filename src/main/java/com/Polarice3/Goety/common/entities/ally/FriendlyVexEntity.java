@@ -39,7 +39,6 @@ import java.util.UUID;
 
 public class FriendlyVexEntity extends MinionEntity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(FriendlyVexEntity.class, DataSerializers.OPTIONAL_UUID);
-    private LivingEntity owner;
     @Nullable
     private BlockPos boundOrigin;
     private boolean limitedLifespan;
@@ -188,10 +187,6 @@ public class FriendlyVexEntity extends MinionEntity {
         this.boundOrigin = boundOriginIn;
     }
 
-    public void setOwner(LivingEntity ownerIn) {
-        this.owner = ownerIn;
-    }
-
     public void setLimitedLife(int limitedLifeTicksIn) {
         this.limitedLifespan = true;
         this.limitedLifeTicks = limitedLifeTicksIn;
@@ -257,16 +252,10 @@ public class FriendlyVexEntity extends MinionEntity {
             FriendlyVexEntity.this.playSound(SoundEvents.VEX_CHARGE, 1.0F, 1.0F);
         }
 
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
         public void stop() {
             FriendlyVexEntity.this.setIsCharging(false);
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             LivingEntity livingentity = FriendlyVexEntity.this.getTarget();
             assert livingentity != null;

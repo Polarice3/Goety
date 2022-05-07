@@ -2,7 +2,6 @@ package com.Polarice3.Goety.client.render.layers;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.TormentorModel;
-import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

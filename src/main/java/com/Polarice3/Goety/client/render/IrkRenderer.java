@@ -4,10 +4,8 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.IrkModel;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 

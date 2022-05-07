@@ -1,0 +1,19 @@
+{
+  "name": "Zombie Servant",
+  "icon": "minecraft:zombie_head",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Zombie Servants are simple in their functions, kill anyone who hurts you or any hostile creatures and follow you much like Tamed Wolves, only taller and stinkier"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:zombie_minion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "You can right click a Zombie Servant can accept any Armor but only Swords/Axes."
+    }
+  ]
+}

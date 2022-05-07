@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "sfs",
+    "sbs",
     "fef",
     "sfs"
   ],
@@ -11,6 +11,10 @@
     "e":
     {
       "item": "goety:emptycore"
+    },
+    "b":
+    {
+      "item": "goety:brain"
     },
     "f":
     {

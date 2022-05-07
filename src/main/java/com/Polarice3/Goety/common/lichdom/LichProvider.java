@@ -1,7 +1,5 @@
 package com.Polarice3.Goety.common.lichdom;
 
-import com.Polarice3.Goety.common.infamy.IInfamy;
-import com.Polarice3.Goety.common.infamy.InfamyImp;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;

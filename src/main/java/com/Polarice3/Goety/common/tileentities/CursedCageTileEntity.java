@@ -44,7 +44,7 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.getBlockPos(), 3, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.getBlockPos(), -1, this.getUpdateTag());
     }
 
     public ItemStack getItem() {

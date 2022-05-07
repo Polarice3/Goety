@@ -23,7 +23,7 @@ public class ModRituals {
 
     public static final RegistryObject<ModRitualFactory> SUMMON_TAMED_RITUAL =
             RITUALS.register("summon_tamed",
-                    () -> new ModRitualFactory((ritual) -> new SummonRitual(ritual, false)));
+                    () -> new ModRitualFactory((ritual) -> new SummonRitual(ritual, true)));
 
 }
 /*

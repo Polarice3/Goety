@@ -10,8 +10,11 @@
       "text": "There are times where you've grown tired of running out of coal or wished to used them for crafting torches, you've discovered a way to smelt ores and other items using Soul Energy."
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:cursed_kiln",
+      "type": "goety:ritual",
+      "recipe": "goety:cursed_kiln"
+    },
+    {
+      "type": "patchouli:text",
       "text": "The Soul Kiln is a Cursed Infuser that burns and smelts items instead of infusing them with magic. The Soul Kiln needs to be on top of a Cursed Cage that has a Totem in it to work."
     },
     {

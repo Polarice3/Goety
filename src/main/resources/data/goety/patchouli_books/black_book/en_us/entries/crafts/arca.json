@@ -8,8 +8,11 @@
       "text": "After some research, you've found a way to create a more powerful version of the Cursed Cage. The Arca not only holds your Totem like a regular Cursed Cage, it will absorb and distribute Soul Energy as if the Totem was on you."
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:arca",
+      "type": "goety:ritual",
+      "recipe": "goety:arca"
+    },
+    {
+      "type": "patchouli:text",
       "text": "The Arca is one of the thoughest blocks you have encountered, as it's strength and Explosive Resistance is greater than Obsidian."
     },
     {

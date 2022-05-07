@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.client.inventory.crafting.CursedBurnerRecipes;
 import com.Polarice3.Goety.common.tileentities.CursedKilnTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;

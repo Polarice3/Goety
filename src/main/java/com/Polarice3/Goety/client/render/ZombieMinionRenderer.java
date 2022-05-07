@@ -2,7 +2,6 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.ZombieMinionModel;
-import com.Polarice3.Goety.client.render.layers.ZombieMinionClothingLayer;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

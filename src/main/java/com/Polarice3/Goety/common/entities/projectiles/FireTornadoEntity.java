@@ -3,7 +3,10 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
-import net.minecraft.entity.*;
+import com.Polarice3.Goety.utils.EntityFinder;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -58,7 +61,7 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
     public LivingEntity getTrueOwner() {
         try {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
         } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }

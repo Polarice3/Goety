@@ -1,0 +1,27 @@
+{
+  "name": "Shades",
+  "icon": "goety:shade_spawn_egg",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Shades are the incorporeal dead summoned to this world by dark wizard for various purposes. Summoning one aggravates the Shade causing them to become hostile."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:shade"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:summon_shade"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "These Shades however, have a surprising weakness. They can be leashed using a lead, and once leashed, the Shade loses it's ability to fly and will ground itself. They also seemed to lose the will to attack, making it easy to move them without fear or reprisal."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Due to their ghostly natures, Shades cannot take damage from conventional weapons. Only through magic, can they be banished back to the other world. Blocks do not hinder them and their attacks go through unenchanted armor."
+    }
+  ]
+}

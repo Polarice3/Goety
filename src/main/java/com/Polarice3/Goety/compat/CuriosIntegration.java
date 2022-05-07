@@ -32,6 +32,7 @@ public class CuriosIntegration implements ICompatable {
             .put(ModItems.GOLDTOTEM.get(), "charm")
             .put(ModItems.FOCUSBAG.get(), "belt")
             .put(ModItems.EMERALD_AMULET.get(), "necklace")
+            .put(ModItems.VAMPIRIC_AMULET.get(), "necklace")
             .build();
 
     public void setup(FMLCommonSetupEvent event) {

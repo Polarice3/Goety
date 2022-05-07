@@ -18,6 +18,8 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -46,6 +48,16 @@ public class ArcaTileEntity extends TileEntity implements IClearable, ITickableT
             if (this.item.getTag().getInt(SOULSAMOUNT) <= 0){
                 this.item.getTag().putInt(SOULSAMOUNT, 0);
             }
+            if (this.level instanceof ServerWorld) {
+                ChunkPos chunkPos = this.level.getChunkAt(this.worldPosition).getPos();
+                ServerWorld world = (ServerWorld) this.level;
+                if (!world.getForcedChunks().contains(chunkPos.toLong())) {
+                    world.setChunkForced(chunkPos.x, chunkPos.z, true);
+                    if (!world.isAreaLoaded(this.worldPosition, 2)) {
+                        world.getChunkAt(this.worldPosition).setLoaded(true);
+                    }
+                }
+            }
         }
     }
 
@@ -71,7 +83,9 @@ public class ArcaTileEntity extends TileEntity implements IClearable, ITickableT
     @Override
     public CompoundNBT save(CompoundNBT tag) {
         tag = super.save(tag);
-        tag.put("item", this.getItem().save(new CompoundNBT()));
+        if (!this.getItem().isEmpty()) {
+            tag.put("item", this.getItem().save(new CompoundNBT()));
+        }
         if (this.getOwnerId() != null) {
             tag.putUUID("Owner", this.getOwnerId());
         }
@@ -84,7 +98,7 @@ public class ArcaTileEntity extends TileEntity implements IClearable, ITickableT
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.getBlockPos(), 3, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.getBlockPos(), -1, this.getUpdateTag());
     }
 
     public ItemStack getItem() {
@@ -179,5 +193,6 @@ public class ArcaTileEntity extends TileEntity implements IClearable, ITickableT
 
     public void clearContent() {
         this.setItem(ItemStack.EMPTY);
+        TileEntityHelper.sendArcaUpdatePacket(this.getPlayer());
     }
 }

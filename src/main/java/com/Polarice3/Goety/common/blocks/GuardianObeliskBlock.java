@@ -1,12 +1,8 @@
 package com.Polarice3.Goety.common.blocks;
 
 import com.Polarice3.Goety.common.tileentities.GuardianObeliskTileEntity;
-import com.Polarice3.Goety.common.tileentities.ObeliskTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;

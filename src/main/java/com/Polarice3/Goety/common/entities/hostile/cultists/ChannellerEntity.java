@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
@@ -12,8 +11,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -49,6 +46,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new RunAwayGoal<>(PlayerEntity.class));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
@@ -174,7 +172,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
                             this.getAllyTarget().setTarget(this.getTarget());
                             this.getAllyTarget().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
                             this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
-                            this.getAllyTarget().addEffect(new EffectInstance(Effects.REGENERATION, 60, 1));
+                            this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
                             this.getAllyTarget().setPersistenceRequired();
                             if (this.getHealth() < this.getMaxHealth()) {
                                 ++this.healTick;
@@ -192,38 +190,16 @@ public class ChannellerEntity extends AbstractCultistEntity {
                         }
                     } else {
                         this.prayingTick = 0;
-                        this.RunAway();
                     }
                 }
             } else {
                 this.prayingTick = 0;
-                this.RunAway();
             }
         } else {
             if (this.prayingCooldown > 0){
                 --this.prayingCooldown;
             }
             this.prayingTick = 0;
-            this.RunAway();
-        }
-    }
-
-    public void RunAway(){
-        LivingEntity enemy = this.getTarget();
-        this.setIsPraying(false);
-        if (enemy != null) {
-            this.level.broadcastEntityEvent(this, (byte) 42);
-            PathNavigator navigation = this.getNavigation();
-            Vector3d vector3d = RandomPositionGenerator.getLandPosAvoid(this, 16, 7, enemy.position());
-            if (vector3d != null && enemy.distanceToSqr(vector3d.x, vector3d.y, vector3d.z) < enemy.distanceToSqr(this)) {
-                Path path = navigation.createPath(vector3d.x, vector3d.y, vector3d.z, 0);
-                navigation.moveTo(path, 0.6D);
-                if (this.distanceToSqr(enemy) < 49.0D) {
-                    this.getNavigation().setSpeedModifier(1.0D);
-                } else {
-                    this.getNavigation().setSpeedModifier(0.6D);
-                }
-            }
         }
     }
 
@@ -255,6 +231,17 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public boolean canBeLeader() {
         return false;
+    }
+
+    class RunAwayGoal<T extends LivingEntity> extends AvoidEntityGoal<T>{
+
+        public RunAwayGoal(Class<T> tClass) {
+            super(ChannellerEntity.this, tClass, 15.0F, 1.0D, 1.2D);
+        }
+
+        public boolean canUse() {
+            return !ChannellerEntity.this.isPraying();
+        }
     }
 
 }

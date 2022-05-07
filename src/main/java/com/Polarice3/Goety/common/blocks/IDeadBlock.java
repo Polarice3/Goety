@@ -45,10 +45,13 @@ public interface IDeadBlock {
                 int l2 = random == 0 ? l1 : 0;
                 BlockPos blockpos1 = pPos.offset(0, l2, 0);
                 BlockState blockState1 = pLevel.getBlockState(blockpos1);
+                BlockState blockState2 = pLevel.getBlockState(pPos.below());
 
                 if (blockState1.getMaterial() == Material.STONE && BlockFinder.NotDeadSandImmune(blockState1)) {
-                    pLevel.destroyBlock(blockpos1, false);
-                    pLevel.setBlockAndUpdate(blockpos1, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+                    if (BlockFinder.NotDeadSandImmune(blockState2)) {
+                        pLevel.destroyBlock(blockpos1, false);
+                        pLevel.setBlockAndUpdate(blockpos1, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+                    }
                 }
             }
 

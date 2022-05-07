@@ -1,8 +1,6 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModTileEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -11,8 +9,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -70,6 +66,6 @@ public class TempWebTileEntity extends TileEntity implements ITickableTileEntity
 
     @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 3, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
     }
 }

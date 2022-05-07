@@ -1,0 +1,23 @@
+{
+  "name": "Zombie Farmer Servant",
+  "icon": "minecraft:hay_block",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Through the use of the Brain, you've managed to recreate a Zombie Servant to have the ability to farm crops! When set to Wandering, these Zombies will find the nearest fully grown crop, and will harvest, gather and plant it."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:summon_farmer_minion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "When harvesting crops, the Hoe they're holding will start to break. While they can still gather and crops/seeds dropped on the ground, they can not longer plant or harvest crops without a Hoe. Fortunately the summoner can simply provide them a new Hoe by right clicking on them with one."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "If the summoner right clicks on them, while crouching, the Zombie will drop all of its seeds/crops onto them. Despite being remade into a Farmer, they will still attempt to attack any hostile creatures near them, and they will not accept any weapons/tools other than hoes."
+    }
+  ]
+}

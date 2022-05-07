@@ -2,7 +2,10 @@ package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.Goety;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.HeartParticle;
+import net.minecraft.client.particle.LargeExplosionParticle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;

@@ -5,6 +5,10 @@
     "item": "goety:cursed_burner"
   },
   "craftType": "forge",
+  "entity_to_sacrifice": {
+    "tag": "goety:shade",
+    "display_name": "info.goety.ritual.shade"
+  },
   "soulCost": 1,
   "duration": 30,
   "ingredients": [

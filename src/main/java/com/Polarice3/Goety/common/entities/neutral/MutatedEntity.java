@@ -4,7 +4,6 @@ import com.Polarice3.Goety.common.entities.hostile.ParasiteEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;

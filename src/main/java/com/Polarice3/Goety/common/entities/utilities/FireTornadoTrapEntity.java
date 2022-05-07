@@ -88,6 +88,8 @@ public class FireTornadoTrapEntity extends Entity {
                         fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
                         this.level.addFreshEntity(fireTornadoEntity);
                         this.remove();
+                    } else {
+                        this.remove();
                     }
                 } else {
                     FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.owner, 0, 0, 0);

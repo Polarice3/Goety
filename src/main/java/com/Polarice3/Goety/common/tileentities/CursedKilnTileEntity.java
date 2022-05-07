@@ -7,7 +7,6 @@ import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
@@ -25,7 +24,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -248,7 +246,7 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
 
     @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 13, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
     }
 
     public CompoundNBT getUpdateTag() {

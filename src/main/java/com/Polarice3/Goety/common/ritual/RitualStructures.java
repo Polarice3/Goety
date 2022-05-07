@@ -149,4 +149,32 @@ public class RitualStructures {
     public static boolean checkSabbathRequirements(RitualTileEntity pTileEntity){
         return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 4;
     }
+
+    public static void findExpertNetherStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+        pTileEntity.first.clear();
+        pTileEntity.second.clear();
+        pTileEntity.third.clear();
+        for (int i = -RANGE; i <= RANGE; ++i) {
+            for (int j = -RANGE; j <= RANGE; ++j) {
+                for (int k = -RANGE; k <= RANGE; ++k) {
+                    BlockPos blockpos1 = pPos.offset(i, j, k);
+                    assert pLevel != null;
+                    BlockState blockstate = pLevel.getBlockState(blockpos1);
+                    if (blockstate.getBlock() == Blocks.CHISELED_NETHER_BRICKS) {
+                        pTileEntity.first.add(blockpos1);
+                    }
+                    if (blockstate.getBlock() == Blocks.NETHER_BRICKS || blockstate.getBlock() == Blocks.RED_NETHER_BRICKS) {
+                        pTileEntity.second.add(blockpos1);
+                    }
+                    if (blockstate.getBlock() == Blocks.NETHER_WART) {
+                        pTileEntity.third.add(blockpos1);
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean checkExpertNetherRequirements(RitualTileEntity pTileEntity){
+        return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 32 && pTileEntity.third.size() >= 8;
+    }
 }

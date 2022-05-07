@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.entity.IllagerRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.client.renderer.entity.model.IllagerModel;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
-import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class EnviokerRenderer <T extends EnviokerEntity> extends IllagerRenderer<T> {

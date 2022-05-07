@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
@@ -30,13 +31,24 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
 public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implements IRangedAttackMob {
+    private final RangedBowAttackGoal<SkeletonVillagerMinionEntity> bowGoal = new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F);
+    private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
+
+        public void stop() {
+            super.stop();
+            SkeletonVillagerMinionEntity.this.setAggressive(false);
+        }
+
+        public void start() {
+            super.start();
+            SkeletonVillagerMinionEntity.this.setAggressive(true);
+        }
+    };
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(SkeletonVillagerMinionEntity.class, DataSerializers.OPTIONAL_UUID);
     public LivingEntity owner;
     public boolean limitedLifespan;
@@ -44,11 +56,11 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
 
     public SkeletonVillagerMinionEntity(EntityType<? extends AbstractCultistEntity> type, World worldIn) {
         super(type, worldIn);
+        this.reassessWeaponGoal();
     }
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -69,6 +81,31 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
             this.hurt(DamageSource.STARVE, 1.0F);
         }
         super.tick();
+    }
+
+    public void reassessWeaponGoal() {
+        if (this.level != null && !this.level.isClientSide) {
+            this.goalSelector.removeGoal(this.meleeGoal);
+            this.goalSelector.removeGoal(this.bowGoal);
+            ItemStack itemstack = this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem));
+            if (itemstack.getItem() == Items.BOW) {
+                int i = 20;
+
+                this.bowGoal.setMinAttackInterval(i);
+                this.goalSelector.addGoal(4, this.bowGoal);
+            } else {
+                this.goalSelector.addGoal(4, this.meleeGoal);
+            }
+
+        }
+    }
+
+    public void setItemSlot(EquipmentSlotType pSlot, ItemStack pStack) {
+        super.setItemSlot(pSlot, pStack);
+        if (!this.level.isClientSide) {
+            this.reassessWeaponGoal();
+        }
+
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -109,6 +146,7 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
+        this.reassessWeaponGoal();
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
@@ -145,7 +183,7 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
     public LivingEntity getTrueOwner() {
         try {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
         } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }
@@ -211,17 +249,9 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         this.populateDefaultEquipmentSlots(pDifficulty);
         this.populateDefaultEquipmentEnchantments(pDifficulty);
+        this.reassessWeaponGoal();
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
             this.setDropChance(equipmentslottype, 0.0F);
-        }
-        if (this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
-            LocalDate localdate = LocalDate.now();
-            int i = localdate.get(ChronoField.DAY_OF_MONTH);
-            int j = localdate.get(ChronoField.MONTH_OF_YEAR);
-            if (j == 10 && i == 31 && this.random.nextFloat() < 0.25F) {
-                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(this.random.nextFloat() < 0.1F ? Blocks.JACK_O_LANTERN : Blocks.CARVED_PUMPKIN));
-                this.armorDropChances[EquipmentSlotType.HEAD.getIndex()] = 0.0F;
-            }
         }
 
         return pSpawnData;

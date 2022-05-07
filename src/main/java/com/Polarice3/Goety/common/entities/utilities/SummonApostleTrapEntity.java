@@ -6,7 +6,6 @@ import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.block.material.PushReaction;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;

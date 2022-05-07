@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -26,7 +25,6 @@ import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 public class CursedBurnerTileEntity extends TileEntity implements IClearable, ITickableTileEntity, ISidedInventory {
     private static final int[] SLOTS = new int[]{0};
@@ -237,7 +235,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
 
     @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 13, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
     }
 
     public CompoundNBT getUpdateTag() {

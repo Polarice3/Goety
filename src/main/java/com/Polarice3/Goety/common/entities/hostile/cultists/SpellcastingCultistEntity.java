@@ -13,8 +13,6 @@ import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -41,15 +39,6 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SpellTicks", this.spellTicks);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public AbstractCultistEntity.ArmPose getArmPose() {
-        if (this.isSpellcasting()) {
-            return ArmPose.BOW_AND_ARROW;
-        } else {
-            return AbstractCultistEntity.ArmPose.NEUTRAL;
-        }
     }
 
     public boolean isSpellcasting() {

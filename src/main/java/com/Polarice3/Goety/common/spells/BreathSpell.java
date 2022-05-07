@@ -3,12 +3,10 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class BreathSpell extends ChargingSpells{

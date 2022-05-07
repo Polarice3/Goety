@@ -9,18 +9,27 @@
       "text": "The power of commanding Zombies and Skeletons sounds wonderful, but with the use of Necro Robes, your Necroturgic abilities enhance even further."
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:necrohelm",
+      "type": "goety:ritual",
+      "recipe": "goety:necrohelm"
+    },
+    {
+      "type": "patchouli:text",
       "text": "The Necro Helm keeps your undead horde from decaying like Vexes."
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:necrorobe",
+      "type": "goety:ritual",
+      "recipe": "goety:necrorobe"
+    },
+    {
+      "type": "patchouli:text",
       "text": "The Necro Robe increases your Necroturgic power, Skeletons would occasionally shoot Weakness Arrows, and Zombies will turn natural Zombies into more Servants that obeys you."
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:necrobootsofwander",
+      "type": "goety:ritual",
+      "recipe": "goety:necrobootsofwander"
+    },
+    {
+      "type": "patchouli:text",
       "text": "Wearing these specialize boots will cause all your Undead Servants to move far more quickly."
     },
     {

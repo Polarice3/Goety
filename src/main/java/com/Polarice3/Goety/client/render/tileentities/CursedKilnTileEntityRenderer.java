@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.client.render.tileentities;
 
-import com.Polarice3.Goety.common.tileentities.CursedBurnerTileEntity;
 import com.Polarice3.Goety.common.tileentities.CursedKilnTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;

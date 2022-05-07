@@ -47,9 +47,6 @@ public class SoulFireballEntity extends DamagingProjectileEntity {
         }
     }
 
-    /**
-     * Called when this EntityFireball hits a block or entity.
-     */
     protected void onHit(RayTraceResult result) {
         super.onHit(result);
         if (!this.level.isClientSide) {

@@ -1,10 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.common.entities.ally.FriendlyTankEntity;
-import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -31,8 +28,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -139,7 +134,7 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
     public LivingEntity getTrueOwner() {
         try {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
         } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }
@@ -222,15 +217,6 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
             this.setDropChance(equipmentslottype, 0.0F);
         }
-        if (this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
-            LocalDate localdate = LocalDate.now();
-            int i = localdate.get(ChronoField.DAY_OF_MONTH);
-            int j = localdate.get(ChronoField.MONTH_OF_YEAR);
-            if (j == 10 && i == 31 && this.random.nextFloat() < 0.25F) {
-                this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(this.random.nextFloat() < 0.1F ? Blocks.JACK_O_LANTERN : Blocks.CARVED_PUMPKIN));
-                this.armorDropChances[EquipmentSlotType.HEAD.getIndex()] = 0.0F;
-            }
-        }
         this.handleAttributes(f);
         return spawnDataIn;
     }
@@ -253,25 +239,16 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
             this.zombie = zombieIn;
         }
 
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
         public void start() {
             super.start();
             this.raiseArmTicks = 0;
         }
 
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
         public void stop() {
             super.stop();
             this.zombie.setAggressive(false);
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             super.tick();
             ++this.raiseArmTicks;

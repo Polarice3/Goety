@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.gui.overlay;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -11,8 +11,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.Objects;
 
 public class SoulEnergyGui extends AbstractGui {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy.png");

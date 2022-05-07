@@ -8,6 +8,10 @@
     {
       "type": "patchouli:text",
       "text": "You can feel the power of the Nether overtaking you. Unlike the Ghasts, you do not weep. After all, it is a good pain."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:lavaballfocus"
     }
   ]
 }

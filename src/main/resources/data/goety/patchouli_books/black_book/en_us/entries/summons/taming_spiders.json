@@ -1,8 +1,7 @@
 {
   "name": "Taming Spiders",
   "icon": "goety:deadbat",
-  "category": "goety:crafts",
-  "sortnum": 8,
+  "category": "goety:summons",
   "pages": [
     {
       "type": "patchouli:spotlight",

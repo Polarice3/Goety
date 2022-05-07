@@ -1,0 +1,19 @@
+{
+  "name": "Spiderlings",
+  "icon": "minecraft:spider_spawn_egg",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Tiny Spiders that have the same attributes as their bigger and more aggressive cousins with significantly less health and size. When summoned wearing the Arachnea set, they will be invulnerable, but they would still perish after a couple of seconds."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:spiderling_minion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "As mentioned on the Crawling Focus, these spiders aren't young/child spiders, they're just small."
+    }
+  ]
+}

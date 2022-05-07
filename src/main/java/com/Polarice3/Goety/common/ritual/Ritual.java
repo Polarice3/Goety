@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
+import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
+import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
 import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import com.Polarice3.Goety.common.tileentities.PedestalTileEntity;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -236,6 +237,14 @@ public abstract class Ritual {
                                             PlayerEntity castingPlayer, boolean setTamed) {
         if (setTamed && livingEntity instanceof TameableEntity) {
             ((TameableEntity) livingEntity).tame(castingPlayer);
+        }
+        if (setTamed && livingEntity instanceof SummonedEntity) {
+            SummonedEntity summonedEntity = (SummonedEntity) livingEntity;
+            summonedEntity.setOwnerId(castingPlayer.getUUID());
+            summonedEntity.setWandering(false);
+        }
+        if (livingEntity instanceof ShadeEntity){
+            ((ShadeEntity) livingEntity).setBoundOrigin(darkAltarPos);
         }
         livingEntity.absMoveTo(darkAltarPos.getX(), darkAltarPos.getY(), darkAltarPos.getZ(),
                 world.random.nextInt(360), 0);

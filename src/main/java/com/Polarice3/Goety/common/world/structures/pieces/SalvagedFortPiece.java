@@ -1,14 +1,16 @@
 package com.Polarice3.Goety.common.world.structures.pieces;
 
-import com.Polarice3.Goety.utils.ModLootTables;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
+import com.Polarice3.Goety.utils.ModLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -54,7 +56,7 @@ public class SalvagedFortPiece extends ModStructurePiece {
 
             this.createChest(pLevel, pSbb, pRandom, pPos, ModLootTables.SALVAGED_FORT_TREASURE, blockstate);
         } else {
-            AbstractCultistEntity cultist = null;
+            MonsterEntity cultist = null;
             switch (function) {
                 case "fanatic":
                     cultist = ModEntityType.FANATIC.get().create(pLevel.getLevel());
@@ -69,7 +71,7 @@ public class SalvagedFortPiece extends ModStructurePiece {
                     cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
                     break;
                 case "apostle":
-                    int random = pRandom.nextInt(3);
+                    int random = pRandom.nextInt(4);
                     switch (random){
                         case 0:
                             cultist = ModEntityType.FANATIC.get().create(pLevel.getLevel());
@@ -79,6 +81,9 @@ public class SalvagedFortPiece extends ModStructurePiece {
                             break;
                         case 2:
                             cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
+                            break;
+                        case 3:
+                            cultist = EntityType.WITCH.create(pLevel.getLevel());
                             break;
                     }
                     break;
@@ -92,7 +97,7 @@ public class SalvagedFortPiece extends ModStructurePiece {
             assert cultist != null;
             cultist.setPersistenceRequired();
             cultist.moveTo(pPos, 0.0F, 0.0F);
-            cultist.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(cultist.blockPosition()), SpawnReason.STRUCTURE, (ILivingEntityData) null, (CompoundNBT) null);
+            cultist.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(cultist.blockPosition()), SpawnReason.STRUCTURE, null, null);
             pLevel.addFreshEntityWithPassengers(cultist);
             pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(), 2);
         }

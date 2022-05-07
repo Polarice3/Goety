@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.world.structures;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.world.structures.pieces.DecrepitFortPiece;
-import com.Polarice3.Goety.common.world.structures.pieces.SalvagedFortPiece;
 import com.Polarice3.Goety.init.ModStructures;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

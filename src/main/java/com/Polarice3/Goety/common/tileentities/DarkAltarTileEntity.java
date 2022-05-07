@@ -14,7 +14,7 @@ import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -23,7 +23,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -31,7 +33,10 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.items.IItemHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class DarkAltarTileEntity extends PedestalTileEntity implements ITickableTileEntity {
     private CursedCageTileEntity cursedCageTile;
@@ -132,10 +137,13 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
     @Override
     public void tick() {
         boolean flag = this.checkCage();
+        assert this.level != null;
         if (flag) {
             if (this.cursedCageTile.getSouls() > 0){
                 RitualRecipe recipe = this.getCurrentRitualRecipe();
-                assert this.level != null;
+                double d0 = (double)this.worldPosition.getX() + this.level.random.nextDouble();
+                double d1 = (double)this.worldPosition.getY() + this.level.random.nextDouble();
+                double d2 = (double)this.worldPosition.getZ() + this.level.random.nextDouble();
                 if (!this.level.isClientSide && recipe != null) {
                     this.restoreCastingPlayer();
 
@@ -156,20 +164,12 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     }
 
                     if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
-                        if (this.level.random.nextInt(16) == 0) {
-                            new ParticleUtil(ParticleTypes.WITCH, this.worldPosition.getX() + this.level.random.nextGaussian(),
-                                    this.worldPosition.getY() + 0.5,
-                                    this.worldPosition.getZ() + this.level.random.nextGaussian(), 0.0F, 0.0F, 0.0F);
-                            new ParticleUtil(ParticleTypes.WITCH, this.worldPosition.getX() + this.level.random.nextGaussian(),
-                                    this.worldPosition.getY() + 0.5,
-                                    this.worldPosition.getZ() + this.level.random.nextGaussian(), 0.0F, 0.0F, 0.0F);
+                        for (int p = 0; p < 4; ++p) {
+                            new ParticleUtil(ParticleTypes.FLAME, d0, d1, d2, 0.0F, 0.0F, 0.0F);
                         }
                         return;
                     }
 
-                    double d0 = (double)this.worldPosition.getX() + this.level.random.nextDouble();
-                    double d1 = (double)this.worldPosition.getY() + this.level.random.nextDouble();
-                    double d2 = (double)this.worldPosition.getZ() + this.level.random.nextDouble();
                     for (int p = 0; p < 4; ++p) {
                         new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
                     }
@@ -265,6 +265,22 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
                     }
 
+                    if (recipe.getCraftType().contains("expert_nether")){
+                        if (!this.level.dimensionType().ultraWarm()) {
+                            RitualStructures.findExpertNetherStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkExpertNetherRequirements(this)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= 60){
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
                     if (recipe.getCraftType().contains("air")){
                         if (!(this.getBlockPos().getY() >= 128)) {
                             ++this.structureTime;
@@ -278,9 +294,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
                 } else {
                     if (this.level.getGameTime() % 20 == 0) {
-                        double d0 = (double) this.worldPosition.getX() + this.level.random.nextDouble();
-                        double d1 = (double) this.worldPosition.getY() + this.level.random.nextDouble();
-                        double d2 = (double) this.worldPosition.getZ() + this.level.random.nextDouble();
                         for (int p = 0; p < 4; ++p) {
                             new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
                         }
@@ -323,7 +336,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
                     if (ritualRecipe != null) {
                         if (ritualRecipe.getRitual().isValid(world, pos, this, player, activationItem, ritualRecipe.getIngredients())) {
-                            if (ritualRecipe.getCraftType().contains("adept_nether")){
+                            if (ritualRecipe.getCraftType().contains("adept_nether") || ritualRecipe.getCraftType().contains("sabbath") || ritualRecipe.getCraftType().contains("expert_nether")){
                                 CompoundNBT playerData = player.getPersistentData();
                                 CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
                                 if (data.getBoolean("goety:readNetherBook")){

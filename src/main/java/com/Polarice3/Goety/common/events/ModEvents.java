@@ -7,14 +7,16 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
 import com.Polarice3.Goety.common.entities.hostile.DuneSpiderEntity;
-import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
+import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
@@ -29,6 +31,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
@@ -41,11 +44,15 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.GossipType;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -453,6 +460,15 @@ public class ModEvents {
                 }
             }
         }
+        if (event.getSource().getEntity() instanceof FangEntity){
+            FangEntity fangEntity = (FangEntity) event.getSource().getEntity();
+            if (fangEntity.getOwner() instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) fangEntity.getOwner();
+                if (CuriosFinder.findCurio(player).getItem() == ModItems.VAMPIRIC_AMULET.get()) {
+                    player.heal(event.getAmount());
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -490,11 +506,14 @@ public class ModEvents {
     public static void SpecialDeath(LivingDeathEvent event){
         Entity killed = event.getEntity();
         Entity killer = event.getSource().getEntity();
+        World world = killed.getCommandSenderWorld();
         if (killed instanceof CreatureEntity){
             if (((CreatureEntity) killed).hasEffect(ModEffects.GOLDTOUCHED.get())){
-                int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModEffects.GOLDTOUCHED.get())).getAmplifier() + 1;
-                for(int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
-                    killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
+                if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                    int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModEffects.GOLDTOUCHED.get())).getAmplifier() + 1;
+                    for (int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
+                        killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
+                    }
                 }
             }
         }
@@ -528,7 +547,9 @@ public class ModEvents {
         if (killed instanceof BatEntity){
             if (killer instanceof LivingEntity) {
                 if (RobeArmorFinder.FindArachnoSet((LivingEntity) killer)) {
-                    killed.spawnAtLocation(new ItemStack(ModItems.DEADBAT.get()));
+                    if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                        killed.spawnAtLocation(new ItemStack(ModItems.DEADBAT.get()));
+                    }
                 }
             }
         }
@@ -588,6 +609,21 @@ public class ModEvents {
                         } else {
                             InfamyHelper.increaseInfamy(player, MainConfig.OtherInfamy.get());
                         }
+                    }
+                }
+            }
+        }
+        if (killer instanceof PlayerEntity){
+            int r1 = world.random.nextInt(4);
+            int r2 = world.random.nextInt(16);
+            if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
+                if (killed instanceof AbstractVillagerEntity || killed instanceof SpellcastingIllagerEntity || killed instanceof ChannellerEntity){
+                    if (r1 == 0){
+                        killed.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                    }
+                } else if (killed instanceof PatrollerEntity){
+                    if (r2 == 0){
+                        killed.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                     }
                 }
             }

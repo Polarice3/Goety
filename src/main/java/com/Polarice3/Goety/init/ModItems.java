@@ -5,6 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.items.*;
 import com.Polarice3.Goety.common.items.curios.CurioItem;
+import com.Polarice3.Goety.common.items.BrainItem;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
@@ -38,7 +39,6 @@ public class ModItems {
     public static final RegistryObject<Item> CURSED_INGOT = ITEMS.register("cursed_ingot", ItemBase::new);
     public static final RegistryObject<Item> SAVAGETOOTH = ITEMS.register("savagetooth", ItemBase::new);
     public static final RegistryObject<Item> EMPTYCORE = ITEMS.register("emptycore", ItemBase::new);
-    public static final RegistryObject<Item> AIRYCORE = ITEMS.register("airycore", ItemBase::new);
     public static final RegistryObject<Item> ANIMALISCORE = ITEMS.register("animaliscore", ItemBase::new);
     public static final RegistryObject<UncookedMutatedItem> MUTATED_STEAK_UNCOOKED = ITEMS.register("mutatedsteak_uncooked", UncookedMutatedItem::new);
     public static final RegistryObject<MutatedSteakItem> MUTATED_STEAK = ITEMS.register("mutatedsteak", MutatedSteakItem::new);
@@ -63,7 +63,9 @@ public class ModItems {
     public static final RegistryObject<Item> APOSTLE_BLOOD = ITEMS.register("apostle_blood_bottle", () -> new Item(new Item.Properties().fireResistant().rarity(Rarity.RARE).tab(Goety.TAB)));
     public static final RegistryObject<Item> UNDEATH_POTION = ITEMS.register("undeath_potion", UndeathPotionItem::new);
     public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", CurioItem::new);
+    public static final RegistryObject<Item> VAMPIRIC_AMULET = ITEMS.register("vampiric_amulet", CurioItem::new);
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
+    public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
     //Focuses
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));

@@ -4,11 +4,17 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
@@ -68,10 +74,6 @@ public class SummonedEntity extends CreatureEntity {
     public void aiStep() {
         this.updateSwingTime();
         super.aiStep();
-    }
-
-    public int SummonLimit(LivingEntity entityLiving){
-        return entityLiving.level.getNearbyEntities(SummonedEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
     }
 
     protected boolean isSunBurnTick() {

@@ -1,11 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
-import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
-import com.Polarice3.Goety.common.entities.neutral.MutatedRabbitEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
-import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
@@ -13,25 +9,14 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.SmallFireballEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShootableItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.*;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -43,13 +28,9 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Optional;
-import java.util.UUID;
 
 public class IrkEntity extends MonsterEntity {
     protected static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.defineId(IrkEntity.class, DataSerializers.BYTE);

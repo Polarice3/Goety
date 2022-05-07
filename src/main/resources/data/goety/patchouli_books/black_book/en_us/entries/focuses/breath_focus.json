@@ -8,7 +8,7 @@
       "text": "When casting this spell, your lungs are cleared of outside water and filled with breathable air."
     },
     {
-      "type": "patchouli:crafting",
+      "type": "goety:ritual",
       "recipe": "goety:breathfocus"
     }
   ]

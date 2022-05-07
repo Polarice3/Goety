@@ -18,8 +18,6 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 
 public class FriendlyScorchEntity extends FriendlyVexEntity {
 

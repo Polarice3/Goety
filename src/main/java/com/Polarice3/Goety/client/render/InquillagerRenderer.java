@@ -2,18 +2,13 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.ACArmorModel;
-import com.Polarice3.Goety.client.model.AbstractCultistModel;
 import com.Polarice3.Goety.client.model.InquillagerModel;
-import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.IllagerRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.layers.HeadLayer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;

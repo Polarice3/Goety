@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
-import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
@@ -16,10 +15,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 
 public class SkeletonSpell extends SummonSpells{

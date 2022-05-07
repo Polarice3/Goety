@@ -178,8 +178,8 @@ public class MainConfig {
                 .defineInRange("maxEnchant", 3, 1, 10);
         StarterTotem = BUILDER.comment("Gives Players a Totem of Souls when first entering World, Default: false")
                 .define("starterTotem", false);
-        CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 20")
-                .defineInRange("craftSouls", 20, 0, Integer.MAX_VALUE);
+        CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 1")
+                .defineInRange("craftSouls", 1, 0, Integer.MAX_VALUE);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
                 .define("showNumber", false);
         BUILDER.pop();

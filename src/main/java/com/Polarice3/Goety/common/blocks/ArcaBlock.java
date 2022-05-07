@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.items.SoulWand;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.utils.LichdomHelper;

@@ -71,6 +71,7 @@ public class SoulWand extends Item{
                 this.ChangeFocus(stack);
                 stack.getTag().putString(CURRENTFOCUS, FOCUS);
             } else {
+                stack.getTag().remove(SPELL);
                 stack.getTag().putString(CURRENTFOCUS, "none");
                 this.setSpellConditions(null, stack);
             }
@@ -78,10 +79,6 @@ public class SoulWand extends Item{
             stack.getTag().putInt(CASTTIME, CastTime(livingEntity, stack));
         }
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-    }
-
-    private static boolean isMatchingItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModItems.FOCUSBAG.get();
     }
 
     public boolean SoulDiscount(LivingEntity entityLiving){
@@ -227,63 +224,68 @@ public class SoulWand extends Item{
     }
 
     public void ChangeFocus(ItemStack itemStack){
-        if (getFocus(itemStack).getTag().getString(FOCUS).contains("vexing")) {
-            this.setSpellConditions(new VexSpell(), itemStack);
-            this.setSpell(0, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("biting")) {
-            this.setSpellConditions(new FangSpell(), itemStack);
-            this.setSpell(1, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("roaring")) {
-            this.setSpellConditions(new RoarSpell(), itemStack);
-            this.setSpell(2, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("rotting")) {
-            this.setSpellConditions(new ZombieSpell(), itemStack);
-            this.setSpell(3, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("osseous")) {
-            this.setSpellConditions(new SkeletonSpell(), itemStack);
-            this.setSpell(4, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("witchgale")) {
-            this.setSpellConditions(new WitchGaleSpell(), itemStack);
-            this.setSpell(5, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("spiderling")) {
-            this.setSpellConditions(new SpiderlingSpell(), itemStack);
-            this.setSpell(6, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("brain")) {
-            this.setSpellConditions(new BrainEaterSpell(), itemStack);
-            this.setSpell(7, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("teleport")) {
-            this.setSpellConditions(new TeleportSpell(), itemStack);
-            this.setSpell(8, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("soulskull")) {
-            this.setSpellConditions(new SoulSkullSpell(), itemStack);
-            this.setSpell(9, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("feast")) {
-            this.setSpellConditions(new FeastSpell(), itemStack);
-            this.setSpell(10, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("tempting")) {
-            this.setSpellConditions(new TemptingSpell(), itemStack);
-            this.setSpell(11, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("dragon")) {
-            this.setSpellConditions(new DragonFireballSpell(), itemStack);
-            this.setSpell(12, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("creeperling")) {
-            this.setSpellConditions(new CreeperlingSpell(), itemStack);
-            this.setSpell(13, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("breath")) {
-            this.setSpellConditions(new BreathSpell(), itemStack);
-            this.setSpell(14, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("fireball")) {
-            this.setSpellConditions(new FireballSpell(), itemStack);
-            this.setSpell(15, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("lavaball")) {
-            this.setSpellConditions(new LavaballSpell(), itemStack);
-            this.setSpell(16, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("webball")) {
-            this.setSpellConditions(new WebBallSpell(), itemStack);
-            this.setSpell(17, itemStack);
-        } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("illusion")) {
-            this.setSpellConditions(new IllusionSpell(), itemStack);
-            this.setSpell(18, itemStack);
+        if (!getFocus(itemStack).isEmpty()) {
+            if (getFocus(itemStack).getTag().getString(FOCUS).contains("vexing")) {
+                this.setSpellConditions(new VexSpell(), itemStack);
+                this.setSpell(0, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("biting")) {
+                this.setSpellConditions(new FangSpell(), itemStack);
+                this.setSpell(1, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("roaring")) {
+                this.setSpellConditions(new RoarSpell(), itemStack);
+                this.setSpell(2, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("rotting")) {
+                this.setSpellConditions(new ZombieSpell(), itemStack);
+                this.setSpell(3, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("osseous")) {
+                this.setSpellConditions(new SkeletonSpell(), itemStack);
+                this.setSpell(4, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("witchgale")) {
+                this.setSpellConditions(new WitchGaleSpell(), itemStack);
+                this.setSpell(5, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("spiderling")) {
+                this.setSpellConditions(new SpiderlingSpell(), itemStack);
+                this.setSpell(6, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("brain")) {
+                this.setSpellConditions(new BrainEaterSpell(), itemStack);
+                this.setSpell(7, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("teleport")) {
+                this.setSpellConditions(new TeleportSpell(), itemStack);
+                this.setSpell(8, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("soulskull")) {
+                this.setSpellConditions(new SoulSkullSpell(), itemStack);
+                this.setSpell(9, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("feast")) {
+                this.setSpellConditions(new FeastSpell(), itemStack);
+                this.setSpell(10, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("tempting")) {
+                this.setSpellConditions(new TemptingSpell(), itemStack);
+                this.setSpell(11, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("dragon")) {
+                this.setSpellConditions(new DragonFireballSpell(), itemStack);
+                this.setSpell(12, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("creeperling")) {
+                this.setSpellConditions(new CreeperlingSpell(), itemStack);
+                this.setSpell(13, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("breath")) {
+                this.setSpellConditions(new BreathSpell(), itemStack);
+                this.setSpell(14, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("fireball")) {
+                this.setSpellConditions(new FireballSpell(), itemStack);
+                this.setSpell(15, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("lavaball")) {
+                this.setSpellConditions(new LavaballSpell(), itemStack);
+                this.setSpell(16, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("webball")) {
+                this.setSpellConditions(new WebBallSpell(), itemStack);
+                this.setSpell(17, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("illusion")) {
+                this.setSpellConditions(new IllusionSpell(), itemStack);
+                this.setSpell(18, itemStack);
+            }
+        } else {
+            this.setSpellConditions(null, itemStack);
+            this.setSpell(-1, itemStack);
         }
     }
 

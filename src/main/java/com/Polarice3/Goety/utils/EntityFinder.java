@@ -45,6 +45,22 @@ public class EntityFinder {
         return Optional.empty();
     }
 
+    public static LivingEntity getLivingEntityByUuiD(UUID uuid) {
+        return getLivingEntityByUuiD(ServerLifecycleHooks.getCurrentServer(), uuid);
+    }
+
+    public static LivingEntity getLivingEntityByUuiD(MinecraftServer server, UUID uuid){
+        if (uuid != null && server != null) {
+            for (ServerWorld world : server.getAllLevels()) {
+                Entity entity = world.getEntity(uuid);
+                if (entity instanceof LivingEntity){
+                    return (LivingEntity) entity;
+                }
+            }
+        }
+        return null;
+    }
+
     public static Entity entityFromNBT(World world, CompoundNBT nbtTagCompound) {
         ResourceLocation typeId = new ResourceLocation(nbtTagCompound.getString("id"));
 

@@ -125,11 +125,13 @@ public class FangEntity extends Entity {
                 }
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
+                    float damage;
                     if (CuriosFinder.findCurio(player).getItem() == ModItems.EMERALD_AMULET.get()){
-                        target.hurt(DamageSource.indirectMagic(this, livingentity), 10.0F);
+                        damage = 10.0F;
                     } else {
-                        target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
+                        damage = 6.0F;
                     }
+                    target.hurt(DamageSource.indirectMagic(this, livingentity), damage);
                 } else {
                     target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
                 }

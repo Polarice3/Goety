@@ -150,11 +150,14 @@ public class Goety {
         event.put(ModEntityType.APOSTLE.get(), ApostleEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ZombieVillagerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZPIGLIN_MINION.get(), ZPiglinMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ZPiglinMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ENVIOKER.get(), EnviokerEntity.setCustomAttributes().build());
         event.put(ModEntityType.INQUILLAGER.get(), InquillagerEntity.setCustomAttributes().build());
         event.put(ModEntityType.CONQUILLAGER.get(), ConquillagerEntity.setCustomAttributes().build());
         event.put(ModEntityType.TORMENTOR.get(), TormentorEntity.setCustomAttributes().build());
         event.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SHADE.get(), ShadeEntity.setCustomAttributes().build());
         event.put(ModEntityType.BOOMER.get(), BoomerEntity.setCustomAttributes().build());
         event.put(ModEntityType.DUNE_SPIDER.get(), DuneSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
@@ -168,6 +171,7 @@ public class Goety {
         event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FARMER_MINION.get(), FarmerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneEntity.setCustomAttributes().build());
         event.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());

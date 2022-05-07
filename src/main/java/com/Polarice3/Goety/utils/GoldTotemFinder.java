@@ -1,11 +1,10 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.compat.CuriosLoaded;
-import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModItems;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -13,6 +12,7 @@ import org.apache.commons.lang3.tuple.ImmutableTriple;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public class GoldTotemFinder {
+
     private static boolean isMatchingItem(ItemStack itemStack) {
         return itemStack.getItem() == ModItems.GOLDTOTEM.get();
     }

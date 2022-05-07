@@ -5,9 +5,12 @@
   "sortnum": 4,
   "pages": [
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:darkbootsofwander",
+      "type": "patchouli:text",
       "text": "A true Dark Wizard knows how to cast fast, and move fast. These Dark Boots of Wander will aid you on the latter apartment. With the Boots, you not only run faster and jump higher, but you're also able to swim faster."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkbootsofwander"
     }
   ]
 }

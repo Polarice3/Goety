@@ -13,8 +13,11 @@
       "text": "When you were in a Nether, you somehow came across an image. Whether it was a vision or you spotted an image of it while travelling through a structure, you can't recall, but you can recall what you saw. A Dark Altar, four pedestals, in front of a Nether Portal, with a Soul Sand, Netherrack, Bone and Rotten Flesh on the Pedestals and Sand on the Altar."
     },
     {
-      "type": "patchouli:spotlight",
-      "item": "goety:dead_sand",
+      "type": "goety:ritual",
+      "recipe": "goety:dead_sand"
+    },
+    {
+      "type": "patchouli:text",
       "text": "What you've made is some sort of odd sand. You feel ominous just by looking at it, and you feel that you should research more, before doing anything with it."
     }
   ]

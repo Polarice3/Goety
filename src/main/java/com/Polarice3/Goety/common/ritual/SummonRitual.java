@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
+import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
 import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
@@ -66,6 +67,10 @@ public class SummonRitual extends Ritual {
 
     public void initSummoned(LivingEntity living, World world, BlockPos goldenBowlPosition, DarkAltarTileEntity tileEntity,
                              PlayerEntity castingPlayer) {
+        if (living instanceof ShadeEntity){
+            ShadeEntity shadeEntity = (ShadeEntity) living;
+            shadeEntity.setLimitedLife(600);
+        }
     }
 }
 /*

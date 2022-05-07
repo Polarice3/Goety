@@ -8,6 +8,10 @@
       "text": "A poor man's version of the Wither's projectile skulls. These skulls don't induce wither, but will heal you when a creature is slain with it. When crouching, the skull's explosion will break blocks."
     },
     {
+      "type": "goety:ritual",
+      "recipe": "goety:soulskullfocus"
+    },
+    {
       "type": "patchouli:text",
       "text": "If you were to wear both a Necro Helm and Robe, any Zombie or Skeleton killed with a Soul Skull will be converted to be your Servant."
     }

@@ -2,10 +2,8 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.inventory.container.FocusBagContainer;
-import com.Polarice3.Goety.client.inventory.container.SoulItemContainer;
 import com.Polarice3.Goety.common.items.capability.FocusBagItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
-import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;

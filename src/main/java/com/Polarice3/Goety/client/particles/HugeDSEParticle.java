@@ -1,12 +1,10 @@
 package com.Polarice3.Goety.client.particles;
 
-import net.minecraft.client.particle.HugeExplosionParticle;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.MetaParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

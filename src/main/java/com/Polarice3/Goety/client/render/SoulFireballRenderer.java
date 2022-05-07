@@ -33,7 +33,7 @@ public class SoulFireballRenderer extends EntityRenderer<SoulFireballEntity> {
 
     public void render(SoulFireballEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
-        matrixStackIn.scale(2.0F, 2.0F, 2.0F);
+        matrixStackIn.scale(1.5F, 1.5F, 1.5F);
         matrixStackIn.mulPose(this.entityRenderDispatcher.cameraOrientation());
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
         MatrixStack.Entry matrixstack$entry = matrixStackIn.last();

@@ -126,7 +126,7 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
 
     @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.worldPosition, 3, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
     }
 
     private void SpawnParticles(){

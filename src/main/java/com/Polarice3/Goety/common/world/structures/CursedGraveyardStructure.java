@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.world.structures;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
