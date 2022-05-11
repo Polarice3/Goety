@@ -3,6 +3,8 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -46,14 +48,21 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
             if (stack.isDamaged()) {
                 stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
                 ItemStack foundStack = GoldTotemFinder.FindTotem(player);
-                if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0){
+                if (!SEHelper.getSEActive(player)) {
+                    if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 5) {
+                        if (stack.getTag().getInt(COOL) > 20) {
+                            stack.getTag().putInt(COOL, 0);
+                            stack.setDamageValue(stack.getDamageValue() - 1);
+                            GoldTotemItem.decreaseSouls(foundStack, 5);
+                        }
+                    }
+                } else if (SEHelper.getSESouls(player) > 5){
                     if (stack.getTag().getInt(COOL) > 20) {
                         stack.getTag().putInt(COOL, 0);
                         stack.setDamageValue(stack.getDamageValue() - 1);
                         GoldTotemItem.decreaseSouls(foundStack, 5);
                     }
                 }
-
             }
         }
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);

@@ -6,6 +6,7 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +35,8 @@ public class PortalOutpostStructure extends Structure<NoFeatureConfig> {
     private static final List<MobSpawnInfo.Spawners> ENEMIES = ImmutableList.of(
             new MobSpawnInfo.Spawners(ModEntityType.FANATIC.get(), 2, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.ZEALOT.get(), 2, 1, 1),
-            new MobSpawnInfo.Spawners(ModEntityType.DISCIPLE.get(), 1, 1, 1));
+            new MobSpawnInfo.Spawners(ModEntityType.DISCIPLE.get(), 1, 1, 1),
+            new MobSpawnInfo.Spawners(EntityType.WITCH, 1, 1, 1));
 
     public PortalOutpostStructure(Codec<NoFeatureConfig> codec) {
         super(codec);

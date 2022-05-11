@@ -4,10 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.LichdomHelper;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
@@ -118,7 +115,14 @@ public class SummonedEntity extends CreatureEntity {
                             if (RobeArmorFinder.FindNecroSet(this.getTrueOwner())) {
                                 PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                                 ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
-                                if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
+                                if (SEHelper.getSEActive(owner) && SEHelper.getSESouls(owner) > MainConfig.UndeadMinionHealCost.get()){
+                                    if (this.tickCount % 20 == 0) {
+                                        this.heal(1.0F);
+                                        Vector3d vector3d = this.getDeltaMovement();
+                                        new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                        GoldTotemItem.decreaseSouls(foundStack, MainConfig.UndeadMinionHealCost.get());
+                                    }
+                                } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > MainConfig.UndeadMinionHealCost.get()) {
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
@@ -307,46 +311,6 @@ public class SummonedEntity extends CreatureEntity {
 
     public boolean canBeAffected(EffectInstance pPotioneffect) {
         return pPotioneffect.getEffect() != ModEffects.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
-    }
-
-    static class ZombieAttackGoal extends MeleeAttackGoal {
-        private final SummonedEntity zombie;
-        private int raiseArmTicks;
-
-        public ZombieAttackGoal(SummonedEntity zombieIn, double speedIn, boolean longMemoryIn) {
-            super(zombieIn, speedIn, longMemoryIn);
-            this.zombie = zombieIn;
-        }
-
-        /**
-         * Execute a one shot task or start executing a continuous task
-         */
-        public void start() {
-            super.start();
-            this.raiseArmTicks = 0;
-        }
-
-        /**
-         * Reset the task's internal state. Called when this task is interrupted by another one
-         */
-        public void stop() {
-            super.stop();
-            this.zombie.setAggressive(false);
-        }
-
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
-        public void tick() {
-            super.tick();
-            ++this.raiseArmTicks;
-            if (this.raiseArmTicks >= 5 && this.getTicksUntilNextAttack() < this.getAttackInterval() / 2) {
-                this.zombie.setAggressive(true);
-            } else {
-                this.zombie.setAggressive(false);
-            }
-
-        }
     }
 
     class OwnerHurtTargetGoal extends TargetGoal {

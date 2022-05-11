@@ -12,11 +12,4 @@ public class TileEntityHelper {
             ModNetwork.sendTo(player, new TileEntityUpdatePacket(blockPos, GoldTotemFinder.FindArca(player).getUpdateTag()));
         }
     }
-
-    public static void sendArcaServerUpdatePacket(PlayerEntity player) {
-        if (GoldTotemFinder.FindArca(player) != null) {
-            BlockPos blockPos = GoldTotemFinder.FindArca(player).getBlockPos();
-            ModNetwork.sendToServer(new TileEntityUpdatePacket(blockPos, GoldTotemFinder.FindArca(player).getUpdateTag()));
-        }
-    }
 }

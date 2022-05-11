@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.SEHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -26,7 +27,11 @@ public class SoulEnergyGui extends AbstractGui {
 
     public boolean shouldDisplayBar(){
         ItemStack stack = GoldTotemFinder.FindTotem(player);
-        return !stack.isEmpty();
+        if (SEHelper.getSEActive(player)){
+            return true;
+        } else {
+            return !stack.isEmpty();
+        }
     }
 
     public FontRenderer getFont() {
@@ -42,12 +47,15 @@ public class SoulEnergyGui extends AbstractGui {
 
         ItemStack stack = GoldTotemFinder.FindTotem(player);
         int SoulEnergy = 0;
-        if (!stack.isEmpty()) {
+        int SoulEnergyTotal = MainConfig.MaxSouls.get();
+        if (SEHelper.getSEActive(player)){
+            SoulEnergy = SEHelper.getSESouls(player);
+            SoulEnergyTotal = MainConfig.MaxArcaSouls.get();
+        } else if (!stack.isEmpty()) {
             if (stack.getTag() != null) {
                 SoulEnergy = GoldTotemItem.currentSouls(stack);
             }
         }
-        int SoulEnergyTotal = MainConfig.MaxSouls.get();
 
         int i = (this.screenWidth/2) + 100;
         int energylength = 117;
@@ -55,8 +63,13 @@ public class SoulEnergyGui extends AbstractGui {
 
         int height = this.screenHeight - 5;
 
-        Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder.png"));
-        blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
+        if (SEHelper.getSEActive(player)){
+            Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder2.png"));
+            blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
+        } else {
+            Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder.png"));
+            blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
+        }
         Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy.png"));
         blit(ms,i + 9, height - 7, 0, 0, energylength,5, 117, 5);
         if (MainConfig.ShowNum.get()) {

@@ -11,6 +11,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -26,6 +27,15 @@ public class SoulFireballEntity extends DamagingProjectileEntity {
 
     public SoulFireballEntity(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
         super(ModEntityType.SOUL_FIREBALL.get(), shooter, accelX, accelY, accelZ, worldIn);
+    }
+
+    public void tick() {
+        super.tick();
+        Vector3d vector3d = this.getDeltaMovement();
+        double d0 = this.getX() + vector3d.x;
+        double d1 = this.getY() + vector3d.y;
+        double d2 = this.getZ() + vector3d.z;
+        this.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, d0 + level.random.nextDouble()/2, d1 + 0.5D, d2 + level.random.nextDouble()/2, 0.0D, 0.0D, 0.0D);
     }
 
     protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
@@ -70,7 +80,7 @@ public class SoulFireballEntity extends DamagingProjectileEntity {
     }
 
     protected IParticleData getTrailParticle() {
-        return ParticleTypes.SOUL_FIRE_FLAME;
+        return ParticleTypes.SMOKE;
     }
 
     protected boolean shouldBurn() {

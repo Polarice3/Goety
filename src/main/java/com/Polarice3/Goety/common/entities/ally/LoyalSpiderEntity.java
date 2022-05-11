@@ -6,10 +6,7 @@ import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RawFoodFinder;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
@@ -98,7 +95,16 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 if (RobeArmorFinder.FindArachnoSet(this.getTrueOwner())) {
                     PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                     ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
-                    if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
+                    if (SEHelper.getSEActive(owner)){
+                        if (SEHelper.getSESouls(owner) > MainConfig.TamedSpiderHealCost.get()){
+                            if (this.tickCount % 20 == 0) {
+                                this.heal(1.0F);
+                                Vector3d vector3d = this.getDeltaMovement();
+                                new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                GoldTotemItem.decreaseSouls(foundStack, MainConfig.TamedSpiderHealCost.get());
+                            }
+                        }
+                    } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
                         if (this.tickCount % 20 == 0) {
                             this.heal(1.0F);
                             Vector3d vector3d = this.getDeltaMovement();

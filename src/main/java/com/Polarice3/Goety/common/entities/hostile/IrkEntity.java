@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
+import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
@@ -44,7 +45,7 @@ public class IrkEntity extends MonsterEntity {
         this.xpReward = 3;
         this.shootTime = 0;
         this.navigation = this.createNavigation(p_i50190_2_);
-        this.moveControl = new IrkEntity.MoveHelperController(this);
+        this.moveControl = new EntityHelper.MoveHelperController(this);
     }
 
     public void move(MoverType typeIn, Vector3d pos) {
@@ -271,7 +272,7 @@ public class IrkEntity extends MonsterEntity {
                 }
                 IrkEntity.this.setIsCharging(IrkEntity.this.shootTime <= 10);
                 if (IrkEntity.this.shootTime == 0){
-                    IrkEntity.this.shootTime = 30;
+                    IrkEntity.this.shootTime = 20;
                 } else {
                     int k = (4 + random.nextInt(4)) * (random.nextBoolean() ? -1 : 1);
                     int l = (4 + random.nextInt(4)) * (random.nextBoolean() ? -1 : 1);
@@ -477,35 +478,6 @@ public class IrkEntity extends MonsterEntity {
 
         private int getRandomNumber(int min, int max) {
             return this.summonedEntity.getRandom().nextInt(max - min + 1) + min;
-        }
-    }
-
-    class MoveHelperController extends MovementController {
-        public MoveHelperController(IrkEntity vex) {
-            super(vex);
-        }
-
-        public void tick() {
-            if (this.operation == Action.MOVE_TO) {
-                Vector3d vector3d = new Vector3d(this.wantedX - IrkEntity.this.getX(), this.wantedY - IrkEntity.this.getY(), this.wantedZ - IrkEntity.this.getZ());
-                double d0 = vector3d.length();
-                if (d0 < IrkEntity.this.getBoundingBox().getSize()) {
-                    this.operation = Action.WAIT;
-                    IrkEntity.this.setDeltaMovement(IrkEntity.this.getDeltaMovement().scale(0.5D));
-                } else {
-                    IrkEntity.this.setDeltaMovement(IrkEntity.this.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d0)));
-                    if (IrkEntity.this.getTarget() == null) {
-                        Vector3d vector3d1 = IrkEntity.this.getDeltaMovement();
-                        IrkEntity.this.yRot = -((float) MathHelper.atan2(vector3d1.x, vector3d1.z)) * (180F / (float)Math.PI);
-                    } else {
-                        double d2 = IrkEntity.this.getTarget().getX() - IrkEntity.this.getX();
-                        double d1 = IrkEntity.this.getTarget().getZ() - IrkEntity.this.getZ();
-                        IrkEntity.this.yRot = -((float)MathHelper.atan2(d2, d1)) * (180F / (float)Math.PI);
-                    }
-                    IrkEntity.this.yBodyRot = IrkEntity.this.yRot;
-                }
-
-            }
         }
     }
 

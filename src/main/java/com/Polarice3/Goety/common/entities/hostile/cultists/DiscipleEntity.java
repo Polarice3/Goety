@@ -4,7 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
-import net.minecraft.client.Minecraft;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -35,14 +35,10 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
     private int f;
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
     private boolean roarparticles;
-    private int cooldown;
-    private int spellcycle;
 
     public DiscipleEntity(EntityType<? extends SpellcastingCultistEntity> type, World worldIn) {
         super(type, worldIn);
         this.f = 0;
-        this.cooldown = 200;
-        this.spellcycle = 0;
     }
 
     protected void registerGoals() {
@@ -85,7 +81,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 spider.setPersistenceRequired();
             }
             spider.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
-            spider.finalizeSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, (ILivingEntityData)null, (CompoundNBT)null);
+            spider.finalizeSpawn(worldIn, difficultyIn, SpawnReason.JOCKEY, null, null);
             this.startRiding(spider);
             worldIn.addFreshEntity(spider);
         }
@@ -129,11 +125,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     public void aiStep() {
         super.aiStep();
-        if (this.cooldown < 200){
-            ++this.cooldown;
-        } else {
-            this.spellcycle = 0;
-        }
         if (this.isFiring()) {
             ++this.f;
             if (this.f % 2 == 0 && this.f < 10) {
@@ -144,13 +135,11 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                     }
                 }
                 Vector3d vector3d = this.getBoundingBox().getCenter();
-                Minecraft MINECRAFT = Minecraft.getInstance();
                 for(int i = 0; i < 40; ++i) {
                     double d0 = this.random.nextGaussian() * 0.2D;
                     double d1 = this.random.nextGaussian() * 0.2D;
                     double d2 = this.random.nextGaussian() * 0.2D;
-                    assert MINECRAFT.level != null;
-                    MINECRAFT.level.addParticle(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                    new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
                 }
             }
             if (this.f >= 10){
@@ -184,11 +173,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         public boolean canUse() {
-            if (!super.canUse()) {
-                return false;
-            } else {
-                return DiscipleEntity.this.spellcycle == 0;
-            }
+            return super.canUse();
         }
 
         protected int getCastingTime() {
@@ -215,8 +200,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 if (!DiscipleEntity.this.isSilent()) {
                     DiscipleEntity.this.level.levelEvent(null, 1016, DiscipleEntity.this.blockPosition(), 0);
                 }
-                DiscipleEntity.this.cooldown = 0;
-                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -236,9 +219,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         public boolean canUse() {
-            if (!super.canUse()) {
-                return false;
-            }  else return DiscipleEntity.this.cooldown >= 180 && DiscipleEntity.this.spellcycle == 1;
+            return super.canUse();
         }
 
         protected int getCastingTime() {
@@ -260,8 +241,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setTarget(livingentity);
                 DiscipleEntity.this.level.addFreshEntity(summonedentity);
-                DiscipleEntity.this.cooldown = 0;
-                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -281,9 +260,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         public boolean canUse() {
-            if (!super.canUse()) {
-                return false;
-            }  else return DiscipleEntity.this.cooldown >= 180 && DiscipleEntity.this.spellcycle == 1;
+            return super.canUse();
         }
 
         protected int getCastingTime() {
@@ -305,8 +282,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
                 summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setTarget(livingentity);
                 DiscipleEntity.this.level.addFreshEntity(summonedentity);
-                DiscipleEntity.this.cooldown = 0;
-                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -352,7 +327,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         public void castSpell() {
             DiscipleEntity.this.setFiring(true);
             DiscipleEntity.this.playSound(ModSounds.ROAR_SPELL.get(), 1.0F, 1.0F);
-            DiscipleEntity.this.cooldown = 0;
         }
 
         protected SoundEvent getSpellPrepareSound() {

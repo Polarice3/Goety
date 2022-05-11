@@ -12,6 +12,7 @@ public class MainConfig {
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxSouls;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxArcaSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> VexCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarCost;
@@ -169,7 +170,9 @@ public class MainConfig {
     static {
         BUILDER.push("General");
         MaxSouls = BUILDER.comment("Totem Maximum Soul Count, Default: 10000")
-                .defineInRange("maxSouls", 10000, 100, Integer.MAX_VALUE);
+                .defineInRange("maxSouls", 10000, 10, Integer.MAX_VALUE);
+        MaxArcaSouls = BUILDER.comment("Arca Maximum Soul Count, Default: 100000")
+                .defineInRange("maxArcaSouls", 100000, 10, Integer.MAX_VALUE);
         SoulRepair = BUILDER.comment("Dark and Necro Robes repair themselves using Soul Energy, Default: true")
                 .define("soulRepair", true);
         TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy, Default: true")

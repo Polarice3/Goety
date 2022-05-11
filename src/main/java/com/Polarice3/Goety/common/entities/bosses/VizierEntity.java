@@ -4,11 +4,11 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
@@ -48,14 +48,14 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof VizierEntity);
     };
     protected static final DataParameter<Byte> VIZIER_FLAGS = EntityDataManager.defineId(VizierEntity.class, DataSerializers.BYTE);
-    private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.PROGRESS));
+    private final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.PROGRESS);
     public int casting;
     public int finishcasting;
     public int casttimes;
 
     public VizierEntity(EntityType<? extends VizierEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveControl = new MoveHelperController(this);
+        this.moveControl = new EntityHelper.MoveHelperController(this);
         this.xpReward = 50;
         this.finishcasting = 0;
     }
@@ -154,8 +154,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                     int random = this.level.random.nextInt(2);
                     if (random == 1 || this.level.getDifficulty() == Difficulty.HARD) {
                         IrkEntity irk = new IrkEntity(ModEntityType.IRK.get(), this.level);
-                        irk.setItemInHand(Hand.MAIN_HAND, new ItemStack(Items.CROSSBOW));
-                        irk.setDropChance(EquipmentSlotType.MAINHAND, 0.0F);
                         irk.setPos(this.getX(), this.getY(), this.getZ());
                         irk.setOwner(this);
                         this.level.addFreshEntity(irk);
@@ -232,7 +230,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         return this.getVizierFlag(1);
     }
 
-    public void setChargingCrossbow(boolean charging) {
+    public void setCharging(boolean charging) {
         this.setVizierFlag(1, charging);
     }
 
@@ -322,13 +320,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             VizierEntity.this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, 1.0F, 1.0F);
             VizierEntity.this.setSpellcasting(true);
         }
-
-/*        public boolean canContinueToUse() {
-            return VizierEntity.this.getMoveControl().hasWanted()
-                    && VizierEntity.this.isSpellcasting()
-                    && VizierEntity.this.getTarget() != null
-                    && VizierEntity.this.getTarget().isAlive();
-        }*/
 
         public void stop() {
             VizierEntity.this.setSpellcasting(false);
@@ -476,19 +467,19 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             LivingEntity livingentity = VizierEntity.this.getTarget();
             Vector3d vector3d = livingentity.position();
             VizierEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, 1.0D);
-            VizierEntity.this.setChargingCrossbow(true);
+            VizierEntity.this.setCharging(true);
             VizierEntity.this.playSound(SoundEvents.EVOKER_CELEBRATE, 1.0F, 1.0F);
         }
 
         public void stop() {
-            VizierEntity.this.setChargingCrossbow(false);
+            VizierEntity.this.setCharging(false);
         }
 
         public void tick() {
             LivingEntity livingentity = VizierEntity.this.getTarget();
             if (VizierEntity.this.getBoundingBox().inflate(1.0D).intersects(livingentity.getBoundingBox())) {
                 VizierEntity.this.doHurtTarget(livingentity);
-                VizierEntity.this.setChargingCrossbow(false);
+                VizierEntity.this.setCharging(false);
             } else {
                 double d0 = VizierEntity.this.distanceToSqr(livingentity);
                 if (d0 < 9.0D) {
@@ -497,35 +488,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                 }
             }
 
-        }
-    }
-
-    class MoveHelperController extends MovementController {
-        public MoveHelperController(VizierEntity vizier) {
-            super(vizier);
-        }
-
-        public void tick() {
-            if (this.operation == Action.MOVE_TO) {
-                Vector3d vector3d = new Vector3d(this.wantedX - VizierEntity.this.getX(), this.wantedY - VizierEntity.this.getY(), this.wantedZ - VizierEntity.this.getZ());
-                double d0 = vector3d.length();
-                if (d0 < VizierEntity.this.getBoundingBox().getSize()) {
-                    this.operation = Action.WAIT;
-                    VizierEntity.this.setDeltaMovement(VizierEntity.this.getDeltaMovement().scale(0.5D));
-                } else {
-                    VizierEntity.this.setDeltaMovement(VizierEntity.this.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d0)));
-                    if (VizierEntity.this.getTarget() == null) {
-                        Vector3d vector3d1 = VizierEntity.this.getDeltaMovement();
-                        VizierEntity.this.yRot = -((float) MathHelper.atan2(vector3d1.x, vector3d1.z)) * (180F / (float)Math.PI);
-                    } else {
-                        double d2 = VizierEntity.this.getTarget().getX() - VizierEntity.this.getX();
-                        double d1 = VizierEntity.this.getTarget().getZ() - VizierEntity.this.getZ();
-                        VizierEntity.this.yRot = -((float)MathHelper.atan2(d2, d1)) * (180F / (float)Math.PI);
-                    }
-                    VizierEntity.this.yBodyRot = VizierEntity.this.yRot;
-                }
-
-            }
         }
     }
 }

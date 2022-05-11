@@ -18,6 +18,11 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class BlockFinder {
+
+    public static boolean NoBreak(BlockState state){
+        return state.getMaterial() == Material.STONE || state.getMaterial() == Material.METAL || state.getMaterial() == Material.HEAVY_METAL;
+    }
+
     public static boolean NotDeadSandImmune(BlockState state){
         return !state.is(ModTags.Blocks.DEAD_SAND_IMMUNE) && state.canOcclude()
                 && state.getMaterial() != Material.AIR && state.getMaterial() != Material.NETHER_WOOD

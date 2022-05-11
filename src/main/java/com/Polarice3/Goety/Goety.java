@@ -23,6 +23,9 @@ import com.Polarice3.Goety.common.lichdom.LichImp;
 import com.Polarice3.Goety.common.lichdom.LichStore;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.potions.ModPotions;
+import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.common.soulenergy.SEImp;
+import com.Polarice3.Goety.common.soulenergy.SEStore;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
@@ -126,6 +129,7 @@ public class Goety {
     private void setup(final FMLCommonSetupEvent event) {
         CapabilityManager.INSTANCE.register(IInfamy.class, new InfamyStore(), InfamyImp::new);
         CapabilityManager.INSTANCE.register(ILichdom.class, new LichStore(), LichImp::new);
+        CapabilityManager.INSTANCE.register(ISoulEnergy.class, new SEStore(), SEImp::new);
         MinecraftForge.EVENT_BUS.register(RegisterCommands.class);
         ModNetwork.init();
 

@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.tileentities;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IClearable;
@@ -64,8 +65,12 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
             TileEntity tileEntity = level.getBlockEntity(new BlockPos(x, y, z));
             if (tileEntity instanceof ArcaTileEntity){
                 ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
-                if (!arcaTileEntity.getItem().isEmpty()){
-                    return arcaTileEntity.getSouls();
+                if (arcaTileEntity.getPlayer() != null) {
+                    if (SEHelper.getSEActive(arcaTileEntity.getPlayer())) {
+                        return SEHelper.getSESouls(arcaTileEntity.getPlayer());
+                    } else {
+                        return 0;
+                    }
                 } else {
                     return 0;
                 }
@@ -99,11 +104,13 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
             TileEntity tileEntity = level.getBlockEntity(new BlockPos(x, y, z));
             if (tileEntity instanceof ArcaTileEntity){
                 ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
-                if (!arcaTileEntity.getItem().isEmpty()){
-                    int Soulcount = arcaTileEntity.getSouls();
-                    if (Soulcount > 0){
-                        arcaTileEntity.decreaseSouls(souls);
-                        arcaTileEntity.makeWorkParticles();
+                if (arcaTileEntity.getPlayer() != null) {
+                    if (SEHelper.getSEActive(arcaTileEntity.getPlayer())) {
+                        int Soulcount = SEHelper.getSESouls(arcaTileEntity.getPlayer());
+                        if (Soulcount > 0) {
+                            SEHelper.decreaseSESouls(arcaTileEntity.getPlayer(), souls);
+                            arcaTileEntity.makeWorkParticles();
+                        }
                     }
                 }
             }

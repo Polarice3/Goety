@@ -4,6 +4,8 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.model.RobeModel;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -33,12 +35,23 @@ public class DarkRobeArmor extends ArmorItem {
                 compound.putInt(COOL, 0);
             }
             ItemStack foundStack = GoldTotemFinder.FindTotem(player);
-            if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0 && stack.isDamaged()) {
-                stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
-                if (stack.getTag().getInt(COOL) > 20) {
-                    stack.getTag().putInt(COOL, 0);
-                    GoldTotemItem.decreaseSouls(foundStack, 1);
-                    stack.setDamageValue(stack.getDamageValue() - 1);
+            if (stack.isDamaged()){
+                if (SEHelper.getSEActive(player)){
+                    if (SEHelper.getSESouls(player) > 0){
+                        stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
+                        if (stack.getTag().getInt(COOL) > 20) {
+                            stack.getTag().putInt(COOL, 0);
+                            SEHelper.decreaseSESouls(player, 1);
+                            stack.setDamageValue(stack.getDamageValue() - 1);
+                        }
+                    }
+                } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
+                    stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
+                    if (stack.getTag().getInt(COOL) > 20) {
+                        stack.getTag().putInt(COOL, 0);
+                        GoldTotemItem.decreaseSouls(foundStack, 1);
+                        stack.setDamageValue(stack.getDamageValue() - 1);
+                    }
                 }
             }
         }

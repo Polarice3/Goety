@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.events;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
+import com.Polarice3.Goety.common.blocks.ArcaBlock;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
@@ -24,6 +25,9 @@ import com.Polarice3.Goety.common.items.FocusBagItem;
 import com.Polarice3.Goety.common.items.SoulWand;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.lichdom.LichProvider;
+import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.common.soulenergy.SEProvider;
+import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
@@ -44,6 +48,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -65,9 +70,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.world.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -76,6 +79,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -85,6 +89,7 @@ public class ModEvents {
         if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "infamy"), new InfamyProvider());
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "lichdom"), new LichProvider());
+            event.addCapability(new ResourceLocation(Goety.MOD_ID, "soulenergy"), new SEProvider());
         }
     }
 
@@ -97,6 +102,7 @@ public class ModEvents {
 
                 InfamyHelper.sendInfamyUpdatePacket(player);
                 LichdomHelper.sendLichUpdatePacket(player);
+                SEHelper.sendSEUpdatePacket(player);
                 CompoundNBT playerData = player.getPersistentData();
                 CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
                 if (data.getBoolean("goety:isLich")){
@@ -131,9 +137,18 @@ public class ModEvents {
             player.getCapability(LichProvider.CAPABILITY)
                     .ifPresent(lichdom ->
                             lichdom.setLichdom(capability2.getLichdom()));
-            player.getCapability(LichProvider.CAPABILITY)
-                    .ifPresent(lichdom ->
-                            lichdom.setArcaBlock(capability2.getArcaBlock()));
+
+            ISoulEnergy capability3 = event.getOriginal().getCapability(SEProvider.CAPABILITY).resolve().get();
+            
+            player.getCapability(SEProvider.CAPABILITY)
+                    .ifPresent(soulEnergy ->
+                            soulEnergy.setSEActive(capability3.getSEActive()));
+            player.getCapability(SEProvider.CAPABILITY)
+                    .ifPresent(soulEnergy ->
+                            soulEnergy.setSoulEnergy(capability3.getSoulEnergy()));
+            player.getCapability(SEProvider.CAPABILITY)
+                    .ifPresent(soulEnergy ->
+                            soulEnergy.setArcaBlock(capability3.getArcaBlock()));
 
         }
     }
@@ -164,7 +179,9 @@ public class ModEvents {
         final PlayerEntity player = Minecraft.getInstance().player;
 
         if (player != null) {
-            if (!GoldTotemFinder.FindTotem(player).isEmpty()) {
+            if (SEHelper.getSEActive(player)){
+                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
+            } else if (!GoldTotemFinder.FindTotem(player).isEmpty()) {
                 new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
             }
         }
@@ -258,7 +275,7 @@ public class ModEvents {
     public static void onBreakingBlock(BlockEvent.BreakEvent event){
         PlayerEntity player = event.getPlayer();
         if (player.hasEffect(ModEffects.NOMINE.get())){
-            if (event.getState().getMaterial() == Material.STONE && !(event.getState().getBlock() == ModBlocks.GUARDIAN_OBELISK.get())){
+            if (BlockFinder.NoBreak(event.getState()) && !(event.getState().getBlock() == ModBlocks.GUARDIAN_OBELISK.get())){
                 new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 event.setCanceled(true);
             }
@@ -281,6 +298,50 @@ public class ModEvents {
         }
         if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != ItemStack.EMPTY){
             FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
+        }
+        if (!SEHelper.getSEActive(player) && SEHelper.getSESouls(player) > 0){
+            player.addEffect(new EffectInstance(Effects.WEAKNESS, 60));
+            player.addEffect(new EffectInstance(Effects.HUNGER, 60));
+            player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60));
+            if (player.tickCount % 5 == 0){
+                SEHelper.decreaseSESouls(player, 1);
+            }
+        }
+        ISoulEnergy soulEnergy = SEHelper.getCapability(player);
+        if (soulEnergy.getArcaBlock() != null){
+            if (!world.isClientSide()) {
+                BlockPos blockPos = soulEnergy.getArcaBlock();
+                TileEntity tileEntity = world.getBlockEntity(blockPos);
+                if (tileEntity instanceof ArcaTileEntity) {
+                    ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
+                    if (arcaTile.getPlayer() == player) {
+                        Random pRand = world.random;
+                        if (pRand.nextInt(12) == 0) {
+                            for (int i = 0; i < 3; ++i) {
+                                int j = pRand.nextInt(2) * 2 - 1;
+                                int k = pRand.nextInt(2) * 2 - 1;
+                                double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
+                                double d1 = (float) blockPos.getY() + pRand.nextFloat();
+                                double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
+                                double d3 = pRand.nextFloat() * (float) j;
+                                double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
+                                double d5 = pRand.nextFloat() * (float) k;
+                                new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
+                            }
+                        }
+                    } else {
+                        if (soulEnergy.getSEActive()) {
+                            soulEnergy.setSEActive(false);
+                            SEHelper.sendSEUpdatePacket(player);
+                        }
+                    }
+                } else {
+                    if (soulEnergy.getSEActive()) {
+                        soulEnergy.setSEActive(false);
+                        SEHelper.sendSEUpdatePacket(player);
+                    }
+                }
+            }
         }
         if (MainConfig.VillagerHate.get()) {
             if (RobeArmorFinder.FindAnySet(player)) {

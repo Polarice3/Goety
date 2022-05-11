@@ -14,11 +14,6 @@ public class LichStore implements Capability.IStorage<ILichdom>{
     public INBT writeNBT(Capability<ILichdom> capability, ILichdom instance, Direction side) {
         CompoundNBT compound = new CompoundNBT();
         compound.putBoolean("lichdom", instance.getLichdom());
-        if (instance.getArcaBlock() != null) {
-            compound.putInt("arcax", instance.getArcaBlock().getX());
-            compound.putInt("arcay", instance.getArcaBlock().getY());
-            compound.putInt("arcaz", instance.getArcaBlock().getZ());
-        }
         return compound;
     }
 
@@ -26,6 +21,5 @@ public class LichStore implements Capability.IStorage<ILichdom>{
     public void readNBT(Capability<ILichdom> capability, ILichdom instance, Direction side, INBT nbt) {
         CompoundNBT compound = (CompoundNBT) nbt;
         instance.setLichdom(compound.getBoolean("lichdom"));
-        instance.setArcaBlock(new BlockPos(compound.getInt("arcax"), compound.getInt("arcay"), compound.getInt("arcaz")));
     }
 }

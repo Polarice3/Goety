@@ -8,6 +8,8 @@ import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
+import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
@@ -345,13 +347,39 @@ public class SoulWand extends Item{
         ItemStack foundStack;
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
         foundStack = GoldTotemFinder.FindTotem(playerEntity);
-        if (this.getSpell(stack) != null && !foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)) {
-            GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
-            assert stack.getTag() != null;
-            this.getSpell(stack).WandResult(worldIn, entityLiving);
-            if (MainConfig.VillagerHateSpells.get() > 0){
-                for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
-                    villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+        ISoulEnergy soulEnergy = SEHelper.getCapability(playerEntity);
+        if (this.getSpell(stack) != null) {
+            if (SEHelper.getSEActive(playerEntity)){
+                if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)){
+                    soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
+                    assert stack.getTag() != null;
+                    this.getSpell(stack).WandResult(worldIn, entityLiving);
+                    if (MainConfig.VillagerHateSpells.get() > 0){
+                        for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                            villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                        }
+                    }
+                } else {
+                    worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                    for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                        double d = worldIn.random.nextGaussian() * 0.2D;
+                        new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), d, d, d);
+                    }
+                }
+            } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)){
+                GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
+                assert stack.getTag() != null;
+                this.getSpell(stack).WandResult(worldIn, entityLiving);
+                if (MainConfig.VillagerHateSpells.get() > 0){
+                    for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                        villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                    }
+                }
+            } else {
+                worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                    double d = worldIn.random.nextGaussian() * 0.2D;
+                    new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), d, d, d);
                 }
             }
         } else {

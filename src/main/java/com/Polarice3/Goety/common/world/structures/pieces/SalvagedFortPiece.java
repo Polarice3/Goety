@@ -71,7 +71,7 @@ public class SalvagedFortPiece extends ModStructurePiece {
                     cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
                     break;
                 case "apostle":
-                    int random = pRandom.nextInt(4);
+                    int random = pRandom.nextInt(3);
                     switch (random){
                         case 0:
                             cultist = ModEntityType.FANATIC.get().create(pLevel.getLevel());
@@ -80,9 +80,6 @@ public class SalvagedFortPiece extends ModStructurePiece {
                             cultist = ModEntityType.ZEALOT.get().create(pLevel.getLevel());
                             break;
                         case 2:
-                            cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
-                            break;
-                        case 3:
                             cultist = EntityType.WITCH.create(pLevel.getLevel());
                             break;
                     }

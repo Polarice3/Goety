@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -49,7 +50,7 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
     }
 
     protected void applyEntityAI() {
-        this.goalSelector.addGoal(2, new ZombieAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(2, new CreatureZombieAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(AbstractCultistEntity.class));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombieVillagerMinionEntity.class));
@@ -228,36 +229,5 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
             Objects.requireNonNull(this.getAttribute(Attributes.FOLLOW_RANGE)).addPermanentModifier(new AttributeModifier("random zombie-spawn bonus", d0, AttributeModifier.Operation.MULTIPLY_TOTAL));
         }
 
-    }
-
-    static class ZombieAttackGoal extends MeleeAttackGoal {
-        private final ZombieVillagerMinionEntity zombie;
-        private int raiseArmTicks;
-
-        public ZombieAttackGoal(ZombieVillagerMinionEntity zombieIn, double speedIn, boolean longMemoryIn) {
-            super(zombieIn, speedIn, longMemoryIn);
-            this.zombie = zombieIn;
-        }
-
-        public void start() {
-            super.start();
-            this.raiseArmTicks = 0;
-        }
-
-        public void stop() {
-            super.stop();
-            this.zombie.setAggressive(false);
-        }
-
-        public void tick() {
-            super.tick();
-            ++this.raiseArmTicks;
-            if (this.raiseArmTicks >= 5 && this.getTicksUntilNextAttack() < this.getAttackInterval() / 2) {
-                this.zombie.setAggressive(true);
-            } else {
-                this.zombie.setAggressive(false);
-            }
-
-        }
     }
 }

@@ -124,42 +124,49 @@ public class GoldTotemItem extends Item {
         }
     }
 
-    public static void handleKill(PlayerEntity playerEntity, LivingEntity victim) {
-        ItemStack foundStack = GoldTotemFinder.FindTotem(playerEntity);
-
-        if (!foundStack.isEmpty()) {
-            if (!(victim instanceof SummonedEntity || victim instanceof FriendlyVexEntity)) {
-                if (victim.getMobType() == CreatureAttribute.UNDEAD) {
-                    increaseSouls(foundStack, MainConfig.UndeadSouls.get() * SoulMultiply(playerEntity));
-                } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
-                    increaseSouls(foundStack, MainConfig.AnthropodSouls.get() * SoulMultiply(playerEntity));
-                } else if (victim instanceof AbstractRaiderEntity) {
-                    increaseSouls(foundStack, MainConfig.IllagerSouls.get() * SoulMultiply(playerEntity));
-                } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
-                    increaseSouls(foundStack, MainConfig.VillagerSouls.get() * SoulMultiply(playerEntity));
-                }  else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
-                    increaseSouls(foundStack, MainConfig.PiglinSouls.get() * SoulMultiply(playerEntity));
-                } else if (victim instanceof EnderDragonEntity) {
-                    increaseSouls(foundStack, MainConfig.EnderDragonSouls.get() * SoulMultiply(playerEntity));
-                } else if (victim instanceof PlayerEntity) {
-                    increaseSouls(foundStack, MainConfig.PlayerSouls.get() * SoulMultiply(playerEntity));
-                } else {
-                    increaseSouls(foundStack, MainConfig.DefaultSouls.get() * SoulMultiply(playerEntity));
+    public static void handleKill(LivingEntity killer, LivingEntity victim) {
+        PlayerEntity player = null;
+        if (killer instanceof PlayerEntity){
+            player = (PlayerEntity) killer;
+        } else if (killer instanceof SummonedEntity){
+            SummonedEntity summonedEntity = (SummonedEntity) killer;
+            if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
+                player = (PlayerEntity) summonedEntity.getTrueOwner();
+            }
+        } else if (killer instanceof FriendlyVexEntity){
+            FriendlyVexEntity friendlyVex = (FriendlyVexEntity) killer;
+            if (friendlyVex.getTrueOwner() instanceof PlayerEntity){
+                player = (PlayerEntity) friendlyVex.getTrueOwner();
+            }
+        }
+        if (player != null) {
+            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
+            if (!foundStack.isEmpty()) {
+                if (!(victim instanceof SummonedEntity || victim instanceof FriendlyVexEntity)) {
+                    if (victim.getMobType() == CreatureAttribute.UNDEAD) {
+                        increaseSouls(foundStack, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
+                    } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
+                        increaseSouls(foundStack, MainConfig.AnthropodSouls.get() * SoulMultiply(killer));
+                    } else if (victim instanceof AbstractRaiderEntity) {
+                        increaseSouls(foundStack, MainConfig.IllagerSouls.get() * SoulMultiply(killer));
+                    } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
+                        increaseSouls(foundStack, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
+                    } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
+                        increaseSouls(foundStack, MainConfig.PiglinSouls.get() * SoulMultiply(killer));
+                    } else if (victim instanceof EnderDragonEntity) {
+                        increaseSouls(foundStack, MainConfig.EnderDragonSouls.get() * SoulMultiply(killer));
+                    } else if (victim instanceof PlayerEntity) {
+                        increaseSouls(foundStack, MainConfig.PlayerSouls.get() * SoulMultiply(killer));
+                    } else {
+                        increaseSouls(foundStack, MainConfig.DefaultSouls.get() * SoulMultiply(killer));
+                    }
                 }
             }
         }
     }
 
-    public static void EmptySoulTotem(PlayerEntity playerEntity){
-        ItemStack foundStack = GoldTotemFinder.FindTotem(playerEntity);
-        if (GoldTotemItem.isFull(foundStack)){
-            foundStack.setCount(0);
-            playerEntity.addItem(new ItemStack(ModItems.SPENTTOTEM.get()));
-        }
-    }
-
-    public static int SoulMultiply(PlayerEntity playerEntity){
-        ItemStack weapon= playerEntity.getMainHandItem();
+    public static int SoulMultiply(LivingEntity livingEntity){
+        ItemStack weapon= livingEntity.getMainHandItem();
         int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantmentsType.SOULEATER.get(), weapon);
         if (i > 0){
             return i + 1;
@@ -223,15 +230,6 @@ public class GoldTotemItem extends Item {
             ItemStack itemstack = pContext.getItemInHand();
             if (!world.isClientSide) {
                 ((CursedCageBlock) ModBlocks.CURSED_CAGE_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
-                world.levelEvent(null, 1010, blockpos, Item.getId(this));
-                itemstack.shrink(1);
-            }
-
-            return ActionResultType.sidedSuccess(world.isClientSide);
-        } else if (blockstate.is(ModBlocks.ARCA_BLOCK.get()) && !blockstate.getValue(ArcaBlock.POWERED)) {
-            ItemStack itemstack = pContext.getItemInHand();
-            if (!world.isClientSide) {
-                ((ArcaBlock) ModBlocks.ARCA_BLOCK.get()).setItem(world, blockpos, blockstate, itemstack);
                 world.levelEvent(null, 1010, blockpos, Item.getId(this));
                 itemstack.shrink(1);
             }

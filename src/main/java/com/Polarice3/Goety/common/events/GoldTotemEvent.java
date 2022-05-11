@@ -28,13 +28,18 @@ public class GoldTotemEvent {
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
+        LivingEntity slayer = (LivingEntity) killer;
         Entity killed = event.getEntity();
 
         if (killer instanceof PlayerEntity && killed instanceof MobEntity){
-            PlayerEntity slayer = (PlayerEntity) killer;
+            PlayerEntity player = (PlayerEntity) killer;
             LivingEntity victim = (LivingEntity) killed;
-            if (!(slayer instanceof FakePlayer)){
-                GoldTotemItem.handleKill(slayer, victim);
+            if (!(player instanceof FakePlayer)){
+                if (SEHelper.getSEActive(player)){
+                    SEHelper.handleKill(player, victim);
+                } else {
+                    GoldTotemItem.handleKill(player, victim);
+                }
             }
         }
 
@@ -43,10 +48,14 @@ public class GoldTotemEvent {
             if (owner != null){
                 if (owner instanceof PlayerEntity) {
                     if (RobeArmorFinder.FindArmor(owner)) {
-                        PlayerEntity slayer = (PlayerEntity) owner;
+                        PlayerEntity playerEntity = (PlayerEntity) owner;
                         LivingEntity victim = (LivingEntity) killed;
-                        if (!(slayer instanceof FakePlayer)) {
-                            GoldTotemItem.handleKill(slayer, victim);
+                        if (!(playerEntity instanceof FakePlayer)) {
+                            if (SEHelper.getSEActive(playerEntity)){
+                                SEHelper.handleKill(slayer, victim);
+                            } else {
+                                GoldTotemItem.handleKill(slayer, victim);
+                            }
                         }
                     }
                 }
@@ -58,10 +67,14 @@ public class GoldTotemEvent {
             if (owner != null){
                 if (owner instanceof PlayerEntity) {
                     if (RobeArmorFinder.FindArmor(owner)) {
-                        PlayerEntity slayer = (PlayerEntity) owner;
+                        PlayerEntity playerEntity = (PlayerEntity) owner;
                         LivingEntity victim = (LivingEntity) killed;
-                        if (!(slayer instanceof FakePlayer)) {
-                            GoldTotemItem.handleKill(slayer, victim);
+                        if (!(playerEntity instanceof FakePlayer)) {
+                            if (SEHelper.getSEActive(playerEntity)){
+                                SEHelper.handleKill(slayer, victim);
+                            } else {
+                                GoldTotemItem.handleKill(slayer, victim);
+                            }
                         }
                     }
                 }
@@ -71,9 +84,9 @@ public class GoldTotemEvent {
         if (event.getEntityLiving() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             Minecraft minecraft = Minecraft.getInstance();
-            if (GoldTotemFinder.FindArca(player) != null) {
-                if (LichdomHelper.isLich(player)) {
-                    if (GoldTotemFinder.FindArca(player).getSouls() > MainConfig.MaxSouls.get()/4) {
+            if (SEHelper.getSEActive(player)){
+                if (GoldTotemFinder.FindArca(player) != null) {
+                    if (SEHelper.getSESouls(player) > MainConfig.MaxSouls.get()) {
                         BlockPos blockPos = GoldTotemFinder.FindArca(player).getBlockPos();
                         player.setHealth(1.0F);
                         player.removeAllEffects();
@@ -81,22 +94,10 @@ public class GoldTotemEvent {
                         player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
                         new SoundUtil(player.blockPosition(), SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
                         player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                        GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
-                        TileEntityHelper.sendArcaUpdatePacket(player);
+                        SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
+                        SEHelper.sendSEUpdatePacket(player);
                         event.setCanceled(true);
                     }
-                } else if (GoldTotemItem.UndyingEffect(player)){
-                    player.setHealth(1.0F);
-                    player.removeAllEffects();
-                    player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
-                    player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
-                    player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                    new ParticleUtil(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(), player.getZ(), 0.0F, 0.0F, 0.0F);
-                    new SoundUtil(player.blockPosition(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    minecraft.gameRenderer.displayItemActivation(GoldTotemFinder.FindTotem(player));
-                    GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
-                    TileEntityHelper.sendArcaUpdatePacket(player);
-                    event.setCanceled(true);
                 }
             } else if (GoldTotemItem.UndyingEffect(player)){
                 player.setHealth(1.0F);
@@ -107,11 +108,7 @@ public class GoldTotemEvent {
                 new ParticleUtil(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(), player.getZ(), 0.0F, 0.0F, 0.0F);
                 new SoundUtil(player.blockPosition(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 minecraft.gameRenderer.displayItemActivation(GoldTotemFinder.FindTotem(player));
-                if (LichdomHelper.isLich(player)){
-                    GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
-                } else {
-                    GoldTotemItem.EmptySoulTotem(player);
-                }
+                GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
                 event.setCanceled(true);
             }
         }

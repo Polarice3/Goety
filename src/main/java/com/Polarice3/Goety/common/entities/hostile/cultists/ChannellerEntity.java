@@ -33,20 +33,16 @@ public class ChannellerEntity extends AbstractCultistEntity {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof ChannellerEntity);
     };
     private static final DataParameter<Integer> TARGET_ALLY = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.INT);
-    private MonsterEntity AllyTarget;
     private int prayingTick;
-    private int prayingCooldown;
     private int healTick;
 
     public ChannellerEntity(EntityType<? extends ChannellerEntity> type, World worldIn) {
         super(type, worldIn);
-        this.prayingCooldown = 0;
     }
 
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(2, new RunAwayGoal<>(PlayerEntity.class));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(5, new LookRandomlyGoal(this));
@@ -80,14 +76,12 @@ public class ChannellerEntity extends AbstractCultistEntity {
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.prayingTick = compound.getInt("prayingTick");
-        this.prayingCooldown = compound.getInt("prayingCooldown");
         this.healTick = compound.getInt("healTick");
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("prayingTick", this.prayingTick);
-        compound.putInt("prayingCooldown", this.prayingCooldown);
         compound.putInt("healTick", this.healTick);
     }
 
@@ -150,55 +144,48 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public void aiStep() {
         super.aiStep();
-        if (this.prayingCooldown == 0) {
-            List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
-            if (!list.isEmpty() && !this.hasAllyTarget()) {
-                MonsterEntity ally = list.get(this.random.nextInt(list.size()));
-                this.setAllyTarget(ally.getId());
-            }
-            if (this.hasAllyTarget()) {
-                if (this.prayingTick < 20) {
-                    ++this.prayingTick;
-                } else {
-                    if (this.getAllyTarget() != null) {
-                        if (this.distanceTo(this.getAllyTarget()) >= 12.0D) {
-                            Vector3d vector3d = getAllyTarget().position();
-                            this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
-                        } else {
-                            this.navigation.stop();
-                            this.noActionTime = 0;
-                            this.setIsPraying(true);
-                            this.getLookControl().setLookAt(this.getAllyTarget(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
-                            this.getAllyTarget().setTarget(this.getTarget());
-                            this.getAllyTarget().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
-                            this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
-                            this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
-                            this.getAllyTarget().setPersistenceRequired();
-                            if (this.getHealth() < this.getMaxHealth()) {
-                                ++this.healTick;
-                                if (this.healTick >= 10) {
-                                    this.getAllyTarget().hurt(DamageSource.STARVE, 1.0F);
-                                    this.heal(1.0F);
-                                    this.healTick = 0;
-                                }
+        List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
+        if (!list.isEmpty() && !this.hasAllyTarget()) {
+            MonsterEntity ally = list.get(this.random.nextInt(list.size()));
+            this.setAllyTarget(ally.getId());
+        }
+        if (this.hasAllyTarget()) {
+            if (this.prayingTick < 20) {
+                ++this.prayingTick;
+            } else {
+                if (this.getAllyTarget() != null) {
+                    if (this.distanceTo(this.getAllyTarget()) >= 12.0D) {
+                        Vector3d vector3d = getAllyTarget().position();
+                        this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
+                    } else {
+                        this.navigation.stop();
+                        this.noActionTime = 0;
+                        this.setIsPraying(true);
+                        this.getLookControl().setLookAt(this.getAllyTarget(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
+                        this.getAllyTarget().setTarget(this.getTarget());
+                        this.getAllyTarget().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
+                        this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
+                        this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
+                        this.getAllyTarget().addEffect(new EffectInstance(Effects.ABSORPTION, 60, 1));
+                        this.getAllyTarget().setPersistenceRequired();
+                        if (this.getHealth() < this.getMaxHealth()) {
+                            ++this.healTick;
+                            if (this.healTick >= 10) {
+                                this.getAllyTarget().hurt(DamageSource.STARVE, 1.0F);
+                                this.heal(1.0F);
+                                this.healTick = 0;
                             }
                         }
-                        if (this.getAllyTarget().isDeadOrDying()) {
-                            this.setAllyTarget(0);
-                            this.setIsPraying(false);
-                            this.prayingCooldown = 300;
-                        }
-                    } else {
-                        this.prayingTick = 0;
                     }
+                    if (this.getAllyTarget().isDeadOrDying()) {
+                        this.setAllyTarget(0);
+                        this.setIsPraying(false);
+                    }
+                } else {
+                    this.prayingTick = 0;
                 }
-            } else {
-                this.prayingTick = 0;
             }
         } else {
-            if (this.prayingCooldown > 0){
-                --this.prayingCooldown;
-            }
             this.prayingTick = 0;
         }
     }
@@ -231,17 +218,6 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public boolean canBeLeader() {
         return false;
-    }
-
-    class RunAwayGoal<T extends LivingEntity> extends AvoidEntityGoal<T>{
-
-        public RunAwayGoal(Class<T> tClass) {
-            super(ChannellerEntity.this, tClass, 15.0F, 1.0D, 1.2D);
-        }
-
-        public boolean canUse() {
-            return !ChannellerEntity.this.isPraying();
-        }
     }
 
 }

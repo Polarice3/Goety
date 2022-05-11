@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
@@ -19,7 +20,7 @@ public class MinionEntity extends CreatureEntity {
     public MinionEntity(EntityType<? extends MinionEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
         this.navigation = this.createNavigation(p_i50190_2_);
-        this.moveControl = new MoveHelperController(this);
+        this.moveControl = new EntityHelper.MoveHelperController(this);
     }
 
     public void move(MoverType typeIn, Vector3d pos) {
@@ -68,35 +69,6 @@ public class MinionEntity extends CreatureEntity {
 
     public void setIsCharging(boolean charging) {
         this.setVexFlag(1, charging);
-    }
-
-    class MoveHelperController extends MovementController {
-        public MoveHelperController(MinionEntity vex) {
-            super(vex);
-        }
-
-        public void tick() {
-            if (this.operation == Action.MOVE_TO) {
-                Vector3d vector3d = new Vector3d(this.wantedX - MinionEntity.this.getX(), this.wantedY - MinionEntity.this.getY(), this.wantedZ - MinionEntity.this.getZ());
-                double d0 = vector3d.length();
-                if (d0 < MinionEntity.this.getBoundingBox().getSize()) {
-                    this.operation = Action.WAIT;
-                    MinionEntity.this.setDeltaMovement(MinionEntity.this.getDeltaMovement().scale(0.5D));
-                } else {
-                    MinionEntity.this.setDeltaMovement(MinionEntity.this.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d0)));
-                    if (MinionEntity.this.getTarget() == null) {
-                        Vector3d vector3d1 = MinionEntity.this.getDeltaMovement();
-                        MinionEntity.this.yRot = -((float) MathHelper.atan2(vector3d1.x, vector3d1.z)) * (180F / (float)Math.PI);
-                    } else {
-                        double d2 = MinionEntity.this.getTarget().getX() - MinionEntity.this.getX();
-                        double d1 = MinionEntity.this.getTarget().getZ() - MinionEntity.this.getZ();
-                        MinionEntity.this.yRot = -((float)MathHelper.atan2(d2, d1)) * (180F / (float)Math.PI);
-                    }
-                    MinionEntity.this.yBodyRot = MinionEntity.this.yRot;
-                }
-
-            }
-        }
     }
 
 }

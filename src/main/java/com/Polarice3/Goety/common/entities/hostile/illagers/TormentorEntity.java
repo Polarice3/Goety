@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -40,7 +41,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
 
     public TormentorEntity(EntityType<? extends AbstractIllagerEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
-        this.moveControl = new TormentorEntity.MoveHelperController(this);
+        this.moveControl = new EntityHelper.MoveHelperController(this);
         this.xpReward = 6;
     }
 
@@ -241,7 +242,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
         public void start() {
             LivingEntity livingentity = TormentorEntity.this.getTarget();
             assert livingentity != null;
-            Vector3d vector3d = livingentity.getEyePosition(1.0F);
+            Vector3d vector3d = livingentity.position();
             TormentorEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, 1.0D);
             TormentorEntity.this.setIsCharging(true);
             TormentorEntity.this.playSound(SoundEvents.VINDICATOR_CELEBRATE, 1.0F, 0.15F);
@@ -254,7 +255,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
         public void tick() {
             LivingEntity livingentity = TormentorEntity.this.getTarget();
             assert livingentity != null;
-            if (TormentorEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
+            if (TormentorEntity.this.getBoundingBox().inflate(1.0F).intersects(livingentity.getBoundingBox())) {
                 TormentorEntity.this.doHurtTarget(livingentity);
                 TormentorEntity.this.setIsCharging(false);
             } else {
@@ -285,58 +286,19 @@ public class TormentorEntity extends AbstractIllagerEntity {
         }
     }
 
-    class MoveHelperController extends MovementController {
-        public MoveHelperController(TormentorEntity vex) {
-            super(vex);
-        }
-
-        public void tick() {
-            if (this.operation == Action.MOVE_TO) {
-                Vector3d vector3d = new Vector3d(this.wantedX - TormentorEntity.this.getX(), this.wantedY - TormentorEntity.this.getY(), this.wantedZ - TormentorEntity.this.getZ());
-                double d0 = vector3d.length();
-                if (d0 < TormentorEntity.this.getBoundingBox().getSize()) {
-                    this.operation = Action.WAIT;
-                    TormentorEntity.this.setDeltaMovement(TormentorEntity.this.getDeltaMovement().scale(0.5D));
-                } else {
-                    TormentorEntity.this.setDeltaMovement(TormentorEntity.this.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d0)));
-                    if (TormentorEntity.this.getTarget() == null) {
-                        Vector3d vector3d1 = TormentorEntity.this.getDeltaMovement();
-                        TormentorEntity.this.yRot = -((float) MathHelper.atan2(vector3d1.x, vector3d1.z)) * (180F / (float)Math.PI);
-                    } else {
-                        double d2 = TormentorEntity.this.getTarget().getX() - TormentorEntity.this.getX();
-                        double d1 = TormentorEntity.this.getTarget().getZ() - TormentorEntity.this.getZ();
-                        TormentorEntity.this.yRot = -((float)MathHelper.atan2(d2, d1)) * (180F / (float)Math.PI);
-                    }
-                    TormentorEntity.this.yBodyRot = TormentorEntity.this.yRot;
-                }
-
-            }
-        }
-    }
-
     class MoveRandomGoal extends Goal {
         public MoveRandomGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
             return !TormentorEntity.this.getMoveControl().hasWanted() && TormentorEntity.this.random.nextInt(7) == 0;
         }
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
         public boolean canContinueToUse() {
             return false;
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             BlockPos blockpos = TormentorEntity.this.getBoundOrigin();
             if (blockpos == null) {

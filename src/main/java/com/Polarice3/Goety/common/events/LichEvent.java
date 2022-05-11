@@ -5,10 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.LichdomHelper;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -115,6 +112,9 @@ public class LichEvent {
             if (player.hasEffect(Effects.BLINDNESS)){
                 player.removeEffectNoUpdate(Effects.BLINDNESS);
             }
+            if (player.hasEffect(Effects.CONFUSION)){
+                player.removeEffectNoUpdate(Effects.CONFUSION);
+            }
             if (player.hasEffect(Effects.HUNGER)){
                 player.removeEffectNoUpdate(Effects.HUNGER);
             }
@@ -122,7 +122,18 @@ public class LichEvent {
                 player.removeEffectNoUpdate(Effects.SATURATION);
             }
             ItemStack goldtotem = GoldTotemFinder.FindTotem(player);
-            if (!goldtotem.isEmpty()){
+            if (SEHelper.getSEActive(player)){
+                if (!player.isOnFire()) {
+                    if (player.isHurt() || player.getHealth() < player.getMaxHealth()) {
+                        if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
+                            player.heal(1.0F);
+                            Vector3d vector3d = player.getDeltaMovement();
+                            new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            SEHelper.decreaseSESouls(player, MainConfig.LichHealCost.get());
+                        }
+                    }
+                }
+            } else if (!goldtotem.isEmpty()){
                 if (!player.isOnFire()) {
                     if (player.isHurt() || player.getHealth() < player.getMaxHealth()) {
                         if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
@@ -182,6 +193,9 @@ public class LichEvent {
                     event.setResult(Event.Result.DENY);
                 }
                 if (event.getPotionEffect().getEffect() == Effects.BLINDNESS){
+                    event.setResult(Event.Result.DENY);
+                }
+                if (event.getPotionEffect().getEffect() == Effects.CONFUSION){
                     event.setResult(Event.Result.DENY);
                 }
                 if (event.getPotionEffect().getEffect() == Effects.HUNGER){

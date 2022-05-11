@@ -2,10 +2,8 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
-import com.Polarice3.Goety.utils.LichdomHelper;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
-import com.Polarice3.Goety.utils.SoundUtil;
+import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -33,10 +31,11 @@ public class UndeathPotionItem extends Item {
             PlayerEntity player = (PlayerEntity) pEntityLiving;
             if (!pLevel.isClientSide) {
                 ILichdom lichdom = LichdomHelper.getCapability(player);
+                ISoulEnergy soulEnergy = SEHelper.getCapability(player);
                 boolean isLich = lichdom.getLichdom();
                 ServerWorld serverWorld = (ServerWorld) pLevel;
                 if (serverWorld.getMoonBrightness() > 0.9F && RobeArmorFinder.FindAnySet(pEntityLiving)){
-                    if (!isLich) {
+                    if (!isLich && soulEnergy.getSEActive() && soulEnergy.getArcaBlock() != null) {
                         lichdom.setLichdom(true);
                         LichdomHelper.sendLichUpdatePacket(player);
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.success"), true);

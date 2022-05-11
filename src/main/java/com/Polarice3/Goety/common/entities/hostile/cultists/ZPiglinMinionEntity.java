@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -47,7 +48,7 @@ public class ZPiglinMinionEntity extends MonsterEntity {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new ZombieAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(2, new CreatureZombieAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
@@ -238,36 +239,5 @@ public class ZPiglinMinionEntity extends MonsterEntity {
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-    }
-
-    static class ZombieAttackGoal extends MeleeAttackGoal {
-        private final ZPiglinMinionEntity zombie;
-        private int raiseArmTicks;
-
-        public ZombieAttackGoal(ZPiglinMinionEntity zombieIn, double speedIn, boolean longMemoryIn) {
-            super(zombieIn, speedIn, longMemoryIn);
-            this.zombie = zombieIn;
-        }
-
-        public void start() {
-            super.start();
-            this.raiseArmTicks = 0;
-        }
-
-        public void stop() {
-            super.stop();
-            this.zombie.setAggressive(false);
-        }
-
-        public void tick() {
-            super.tick();
-            ++this.raiseArmTicks;
-            if (this.raiseArmTicks >= 5 && this.getTicksUntilNextAttack() < this.getAttackInterval() / 2) {
-                this.zombie.setAggressive(true);
-            } else {
-                this.zombie.setAggressive(false);
-            }
-
-        }
     }
 }

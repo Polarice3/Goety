@@ -1,33 +1,26 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
-import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.PathType;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
 import javax.annotation.Nullable;
 
 public class ArcaBlock extends ContainerBlock implements IForgeBlock {
-    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public ArcaBlock() {
         super(AbstractBlock.Properties.of(Material.STONE)
@@ -36,26 +29,22 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                 .requiresCorrectToolForDrops()
                 .noOcclusion()
         );
-        this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, Boolean.FALSE));
     }
 
     public void setPlacedBy(World pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
         TileEntity tileentity = pLevel.getBlockEntity(pPos);
-        CompoundNBT compoundnbt = pStack.getOrCreateTag();
-        if (compoundnbt.contains("BlockEntityTag")) {
-            CompoundNBT compoundnbt1 = compoundnbt.getCompound("BlockEntityTag");
-            if (compoundnbt1.contains("item")) {
-                pLevel.setBlock(pPos, pState.setValue(POWERED, Boolean.TRUE), 2);
-            }
-        }
         if (pPlacer instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) pPlacer;
-            ILichdom lichdom = LichdomHelper.getCapability(player);
-            lichdom.setArcaBlock(pPos);
+            ISoulEnergy soulEnergy = SEHelper.getCapability(player);
+            soulEnergy.setArcaBlock(pPos);
+            soulEnergy.setSEActive(true);
             if (tileentity instanceof ArcaTileEntity){
                 ArcaTileEntity arcaTile = (ArcaTileEntity) tileentity;
                 arcaTile.setOwnerId(pPlacer.getUUID());
+            }
+            if (!pLevel.isClientSide()){
+                SEHelper.sendSEUpdatePacket(player);
             }
         }
     }
@@ -66,13 +55,18 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
             if (pPlayer.getMainHandItem().isEmpty()) {
                 if (tileEntity instanceof ArcaTileEntity) {
                     ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
-                    if (arcaTileEntity.getTrueOwner() == pPlayer) {
-                        if (pState.getValue(POWERED)) {
-                            this.dropItem(pLevel, pPos);
-                            pState = pState.setValue(POWERED, Boolean.FALSE);
-                            pLevel.setBlock(pPos, pState, 2);
-                            return ActionResultType.sidedSuccess(pLevel.isClientSide);
-                        } else if (pPlayer.isCrouching()) {
+                    if (arcaTileEntity.getPlayer() == pPlayer) {
+                        ISoulEnergy soulEnergy = SEHelper.getCapability(arcaTileEntity.getPlayer());
+                        if (!pPlayer.isCrouching()){
+                            if (soulEnergy.getArcaBlock() == null){
+                                soulEnergy.setArcaBlock(arcaTileEntity.getBlockPos());
+                                if (!soulEnergy.getSEActive()){
+                                    soulEnergy.setSEActive(true);
+                                }
+                                SEHelper.sendSEUpdatePacket(arcaTileEntity.getPlayer());
+                                return ActionResultType.SUCCESS;
+                            }
+                        } else {
                             pLevel.destroyBlock(pPos, true);
                             return ActionResultType.sidedSuccess(pLevel.isClientSide);
                         }
@@ -83,39 +77,21 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
         return ActionResultType.PASS;
     }
 
-    public void setItem(IWorld pLevel, BlockPos pPos, BlockState pState, ItemStack pStack) {
-        TileEntity tileentity = pLevel.getBlockEntity(pPos);
-        if (tileentity instanceof ArcaTileEntity) {
-            ((ArcaTileEntity)tileentity).setItem(pStack.copy());
-            pLevel.setBlock(pPos, pState.setValue(POWERED, Boolean.TRUE), 2);
-        }
-    }
-
-    public void dropItem(World pLevel, BlockPos pPos) {
-        if (!pLevel.isClientSide) {
-            TileEntity tileentity = pLevel.getBlockEntity(pPos);
-            if (tileentity instanceof ArcaTileEntity) {
-                ArcaTileEntity cageTileEntity = (ArcaTileEntity)tileentity;
-                ItemStack itemstack = cageTileEntity.getItem();
-                if (!itemstack.isEmpty()) {
-                    pLevel.levelEvent(1010, pPos, 0);
-                    cageTileEntity.clearContent();
-                    float f = 0.7F;
-                    double d0 = (double)(pLevel.random.nextFloat() * f) + (double)0.15F;
-                    double d1 = (double)(pLevel.random.nextFloat() * f) + (double)0.060000002F + 0.6D;
-                    double d2 = (double)(pLevel.random.nextFloat() * f) + (double)0.15F;
-                    ItemStack itemstack1 = itemstack.copy();
-                    ItemEntity itementity = new ItemEntity(pLevel, (double)pPos.getX() + d0, (double)pPos.getY() + d1, (double)pPos.getZ() + d2, itemstack1);
-                    itementity.setDefaultPickUpDelay();
-                    pLevel.addFreshEntity(itementity);
-                }
-            }
-        }
-    }
 
     public void onRemove(BlockState pState, World pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
-            this.dropItem(pLevel, pPos);
+            TileEntity tileEntity = pLevel.getBlockEntity(pPos);
+            if (tileEntity instanceof ArcaTileEntity){
+                ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
+                if (arcaTileEntity.getPlayer() != null){
+                    ISoulEnergy soulEnergy = SEHelper.getCapability(arcaTileEntity.getPlayer());
+                    if (soulEnergy.getArcaBlock() == arcaTileEntity.getBlockPos()) {
+                        soulEnergy.setSEActive(false);
+                        soulEnergy.setArcaBlock(null);
+                        SEHelper.sendSEUpdatePacket(arcaTileEntity.getPlayer());
+                    }
+                }
+            }
             super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
         }
     }
@@ -126,10 +102,6 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
 
     public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
-    }
-
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(POWERED);
     }
 
     @Nullable

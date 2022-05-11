@@ -39,7 +39,8 @@ public class FeastSpell extends ChargingSpells {
             float f = (float) MathHelper.atan2(entity.getZ() - entityLiving.getZ(), entity.getX() - entityLiving.getX());
             if (entity != entityLiving){
                 this.spawnFangs(entityLiving, entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f, 1);
-            }        }
+            }
+        }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
@@ -54,6 +55,14 @@ public class FeastSpell extends ChargingSpells {
             float f = (float) MathHelper.atan2(entity.getZ() - entityLiving.getZ(), entity.getX() - entityLiving.getX());
             if (entity != entityLiving){
                 this.spawnFangs(entityLiving, entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f, 1);
+                for(int i1 = 0; i1 < 5; ++i1) {
+                    float f1 = f + (float)i1 * (float)Math.PI * 0.4F;
+                    this.spawnFangs(entityLiving,entity.getX() + (double)MathHelper.cos(f1) * 1.5D, entity.getZ() + (double)MathHelper.sin(f1) * 1.5D, entity.getY(), entity.getY() + 1.0D, f1, 0);
+                }
+                for(int k1 = 0; k1 < 8; ++k1) {
+                    float f2 = f + (float)k1 * (float)Math.PI * 2.0F / 8.0F + 1.2566371F;
+                    this.spawnFangs(entityLiving,entity.getX() + (double)MathHelper.cos(f2) * 2.5D, entity.getZ() + (double)MathHelper.sin(f2) * 2.5D, entity.getY(), entity.getY() + 1.0D, f2, 3);
+                }
             }
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {

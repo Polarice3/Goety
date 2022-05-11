@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.utils;
 
-import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.compat.CuriosLoaded;
 import com.Polarice3.Goety.init.ModItems;
@@ -18,11 +17,11 @@ public class GoldTotemFinder {
     }
 
     public static ArcaTileEntity FindArca(PlayerEntity playerEntity){
-        ILichdom lichdom = LichdomHelper.getCapability(playerEntity);
-        TileEntity tileentity = playerEntity.level.getBlockEntity(lichdom.getArcaBlock());
+        ISoulEnergy soulEnergy = SEHelper.getCapability(playerEntity);
+        TileEntity tileentity = playerEntity.level.getBlockEntity(soulEnergy.getArcaBlock());
         if (tileentity instanceof ArcaTileEntity){
             ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileentity;
-            if (!arcaTileEntity.getItem().isEmpty() && isMatchingItem(arcaTileEntity.getItem())){
+            if (arcaTileEntity.getPlayer() == playerEntity){
                 return arcaTileEntity;
             }
         }
@@ -31,11 +30,7 @@ public class GoldTotemFinder {
 
     public static ItemStack FindTotem(PlayerEntity playerEntity){
         ItemStack foundStack = ItemStack.EMPTY;
-        if (FindArca(playerEntity) != null &&
-                !FindArca(playerEntity).getItem().isEmpty() &&
-                isMatchingItem(FindArca(playerEntity).getItem())) {
-            foundStack = FindArca(playerEntity).getItem();
-        } else {
+        if (!SEHelper.getSEActive(playerEntity)) {
             if (CuriosLoaded.CURIOS.isLoaded()) {
                 foundStack = CuriosApi.getCuriosHelper().findEquippedCurio(GoldTotemFinder::isMatchingItem, playerEntity).map(
                         ImmutableTriple::getRight).orElse(ItemStack.EMPTY);
