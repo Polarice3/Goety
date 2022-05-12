@@ -194,9 +194,6 @@ public class ZombieMinionEntity extends SummonedEntity {
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof SwordItem) {
-                    if (!pPlayer.abilities.instabuild) {
-                        itemstack.shrink(1);
-                    }
                     this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
                     this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
@@ -206,14 +203,14 @@ public class ZombieMinionEntity extends SummonedEntity {
                         double d1 = this.random.nextGaussian() * 0.02D;
                         double d2 = this.random.nextGaussian() * 0.02D;
                         this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    if (!pPlayer.abilities.instabuild) {
+                        itemstack.shrink(1);
                     }
                     EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof AxeItem) {
-                    if (!pPlayer.abilities.instabuild) {
-                        itemstack.shrink(1);
-                    }
                     this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
                     this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
@@ -224,13 +221,13 @@ public class ZombieMinionEntity extends SummonedEntity {
                         double d2 = this.random.nextGaussian() * 0.02D;
                         this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
                     }
+                    if (!pPlayer.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
                     EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof ArmorItem) {
-                    if (!pPlayer.abilities.instabuild) {
-                        itemstack.shrink(1);
-                    }
                     ItemStack helmet = this.getItemBySlot(EquipmentSlotType.HEAD);
                     ItemStack chestplate = this.getItemBySlot(EquipmentSlotType.CHEST);
                     ItemStack legging = this.getItemBySlot(EquipmentSlotType.LEGS);
@@ -261,6 +258,9 @@ public class ZombieMinionEntity extends SummonedEntity {
                         double d1 = this.random.nextGaussian() * 0.02D;
                         double d2 = this.random.nextGaussian() * 0.02D;
                         this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    if (!pPlayer.abilities.instabuild) {
+                        itemstack.shrink(1);
                     }
                     EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;

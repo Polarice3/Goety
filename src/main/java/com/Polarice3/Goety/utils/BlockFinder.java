@@ -8,6 +8,7 @@ import net.minecraft.block.WebBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,9 +25,8 @@ public class BlockFinder {
     }
 
     public static boolean NotDeadSandImmune(BlockState state){
-        return !state.is(ModTags.Blocks.DEAD_SAND_IMMUNE) && state.canOcclude()
-                && state.getMaterial() != Material.AIR && state.getMaterial() != Material.NETHER_WOOD
-                && state.getMaterial() != Material.LAVA && !state.hasTileEntity();
+        return state.canOcclude() && state.is(ModTags.Blocks.DEAD_SAND_SPREADABLE)
+                && state.getMaterial() != Material.AIR && state.getMaterial() != Material.LAVA && !state.hasTileEntity();
     }
 
     public static void DeadSandReplace(BlockPos pPos, World pLevel){

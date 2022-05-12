@@ -13,11 +13,15 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The Arca is one of the thoughest blocks you have encountered, as it's strength and Explosive Resistance is greater than Obsidian."
+      "text": "The Arca is one of the toughest blocks you have encountered, as it's strength and Explosive Resistance is greater than Obsidian."
     },
     {
       "type": "patchouli:text",
       "text": "When you place down an Arca, the Arca will see you as its owner. As the owner, you can instantly break your Arca by right-clicking on it while crouching, which is quite handy considering how hard it is. Also, the Arca now holds all Soul Energy the owner collects and use, and will override any Totem of Souls the Owner has."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Due to this, one should use Transfer Gems to power one's Cursed Cages as trying to fill up a Totem with an Arca can be a tricky process."
     },
     {
       "type": "patchouli:image",

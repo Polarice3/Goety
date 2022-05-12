@@ -20,7 +20,7 @@ public class ModTags {
     {
         private static void init(){}
 
-        public static final Tags.IOptionalNamedTag<Block> DEAD_SAND_IMMUNE = tag("dead_sand_immune");
+        public static final Tags.IOptionalNamedTag<Block> DEAD_SAND_SPREADABLE = tag("dead_sand_spreadable");
         public static final Tags.IOptionalNamedTag<Block> CURSED_BLOCKS = tag("cursed_blocks");
         public static final Tags.IOptionalNamedTag<Block> DEAD_SANDS = tag("dead_sands_blocks");
         public static final Tags.IOptionalNamedTag<Block> HAUNTED_WOOD = tag("haunted_wood_blocks");

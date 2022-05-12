@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "#goety:terracottas",
+    "#goety:prismarine",
+    "#forge:stone",
+    "#forge:dirt",
+    "#forge:gravel",
+    "#forge:sand",
+    "#forge:sandstone",
+    "#minecraft:base_stone_overworld",
+    "#minecraft:coral_blocks",
+    "#minecraft:logs_that_burn",
+    "#minecraft:wool",
+    "minecraft:pumpkin",
+    "minecraft:melon",
+    "minecraft:farmland",
+    "minecraft:hay_block",
+    "minecraft:grass_path",
+    "minecraft:dried_kelp_block"
+  ]
+}

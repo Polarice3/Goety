@@ -26,6 +26,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -121,6 +123,15 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
     @Override
     protected SoundEvent getCastingSoundEvent () {
         return SoundEvents.EVOKER_CAST_SPELL;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public AbstractCultistEntity.ArmPose getArmPose() {
+        if (this.isSpellcasting()) {
+            return ArmPose.BOW_AND_ARROW;
+        } else {
+            return AbstractCultistEntity.ArmPose.NEUTRAL;
+        }
     }
 
     public void aiStep() {
