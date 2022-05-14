@@ -5,15 +5,23 @@ import com.Polarice3.Goety.client.gui.screen.inventory.FocusBagScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.SoulItemScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.WandandBagScreen;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
+import com.Polarice3.Goety.client.particles.HugeDSEParticle;
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.particle.HeartParticle;
+import net.minecraft.client.particle.LargeExplosionParticle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.PiglinRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -103,11 +111,24 @@ public class ClientEventBusSubscriber {
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
         ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);
+        ModKeybindings.init();
     }
 
     @SubscribeEvent
     public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event){
         ModSpawnEggItem.initSpawnEggs();
+    }
+
+    @SubscribeEvent
+    public static void registerFactories(ParticleFactoryRegisterEvent event) {
+        ParticleManager particles = Minecraft.getInstance().particleEngine;
+
+        particles.register(ModParticleTypes.TOTEM_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
+        particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
+        particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
     }
 
 }

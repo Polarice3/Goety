@@ -51,17 +51,22 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotTypeMessage;
+import top.theillusivec4.curios.api.SlotTypePreset;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -86,39 +91,32 @@ public class Goety {
     }
 
     public Goety() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupEntityAttributeCreation);
+        ModEntityType.ENTITY_TYPES.register(eventBus);
+        ModTileEntityType.TILEENTITY_TYPES.register(eventBus);
+        ModSpawnEggs.ITEMS.register(eventBus);
+        ModPotions.POTIONS.register(eventBus);
+        ModContainerType.CONTAINER_TYPE.register(eventBus);
+        ModEnchantmentsType.ENCHANTMENT_TYPES.register(eventBus);
+        ModParticleTypes.PARTICLE_TYPES.register(eventBus);
+        ModRecipeSerializer.RECIPE_SERIALIZERS.register(eventBus);
 
-        ModEntityType.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        eventBus.addListener(this::setup);
+        eventBus.addListener(this::setupEntityAttributeCreation);
+        eventBus.addListener(this::enqueueIMC);
 
-        ModTileEntityType.TILEENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
-        ModSpawnEggs.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        ModPotions.POTIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        ModContainerType.CONTAINER_TYPE.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        ModEnchantmentsType.ENCHANTMENT_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        ModParticleTypes.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        ModRecipeSerializer.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-        MinecraftForge.EVENT_BUS.register(this);
+        forgeBus.register(this);
+        forgeBus.addListener(EventPriority.NORMAL, this::addDimensionalSpacing);
+        forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MainConfig.SPEC, "goety.toml");
 
         MainConfig.loadConfig(MainConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety.toml").toString());
 
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.addListener(EventPriority.NORMAL, this::addDimensionalSpacing);
-
-        forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
-
         ModItems.init();
-        ModKeybindings.init();
         ModBlocks.init();
         ModEffects.init();
         ModSounds.init();
@@ -185,6 +183,12 @@ public class Goety {
         event.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());
         event.put(ModEntityType.NETHERNAL.get(), NethernalEntity.setCustomAttributes().build());
         event.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
+    }
+
+    private void enqueueIMC(final InterModEnqueueEvent event) {
+        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BELT.getMessageBuilder().build());
+        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.CHARM.getMessageBuilder().build());
+        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {

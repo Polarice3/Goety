@@ -46,6 +46,7 @@ public class SoulStaff extends SoulWand{
             if (SEHelper.getSEActive(playerEntity)){
                 if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)){
                     soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
+                    SEHelper.sendSEUpdatePacket(playerEntity);
                     assert stack.getTag() != null;
                     this.getSpell(stack).StaffResult(worldIn, entityLiving);
                     if (MainConfig.VillagerHateSpells.get() > 0){

@@ -149,6 +149,9 @@ public class ModEvents {
             player.getCapability(SEProvider.CAPABILITY)
                     .ifPresent(soulEnergy ->
                             soulEnergy.setArcaBlock(capability3.getArcaBlock()));
+            player.getCapability(SEProvider.CAPABILITY)
+                    .ifPresent(soulEnergy ->
+                            soulEnergy.setArcaBlockDimension(capability3.getArcaBlockDimension()));
 
         }
     }
@@ -299,34 +302,48 @@ public class ModEvents {
         if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != ItemStack.EMPTY){
             FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
         }
-        if (!SEHelper.getSEActive(player) && SEHelper.getSESouls(player) > 0){
-            player.addEffect(new EffectInstance(Effects.WEAKNESS, 60));
-            player.addEffect(new EffectInstance(Effects.HUNGER, 60));
-            player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60));
-            if (player.tickCount % 5 == 0){
-                SEHelper.decreaseSESouls(player, 1);
+        ISoulEnergy soulEnergy = SEHelper.getCapability(player);
+        if (!soulEnergy.getSEActive() && soulEnergy.getSoulEnergy() > 0) {
+            if (!world.isClientSide()){
+                player.addEffect(new EffectInstance(Effects.WEAKNESS, 60));
+                player.addEffect(new EffectInstance(Effects.HUNGER, 60));
+                player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60));
+                if (player.tickCount % 5 == 0) {
+                    SEHelper.decreaseSESouls(player, 1);
+                    SEHelper.sendSEUpdatePacket(player);
+                }
             }
         }
-        ISoulEnergy soulEnergy = SEHelper.getCapability(player);
         if (soulEnergy.getArcaBlock() != null){
-            if (!world.isClientSide()) {
-                BlockPos blockPos = soulEnergy.getArcaBlock();
-                TileEntity tileEntity = world.getBlockEntity(blockPos);
-                if (tileEntity instanceof ArcaTileEntity) {
-                    ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
-                    if (arcaTile.getPlayer() == player) {
-                        Random pRand = world.random;
-                        if (pRand.nextInt(12) == 0) {
-                            for (int i = 0; i < 3; ++i) {
-                                int j = pRand.nextInt(2) * 2 - 1;
-                                int k = pRand.nextInt(2) * 2 - 1;
-                                double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
-                                double d1 = (float) blockPos.getY() + pRand.nextFloat();
-                                double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
-                                double d3 = pRand.nextFloat() * (float) j;
-                                double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
-                                double d5 = pRand.nextFloat() * (float) k;
-                                new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
+            if (soulEnergy.getArcaBlockDimension() == world.dimension()) {
+                if (!world.isClientSide()){
+                    BlockPos blockPos = soulEnergy.getArcaBlock();
+                    TileEntity tileEntity = world.getBlockEntity(blockPos);
+                    if (tileEntity instanceof ArcaTileEntity) {
+                        ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
+                        if (arcaTile.getPlayer() == player) {
+                            Random pRand = world.random;
+                            if (pRand.nextInt(12) == 0) {
+                                for (int i = 0; i < 3; ++i) {
+                                    int j = pRand.nextInt(2) * 2 - 1;
+                                    int k = pRand.nextInt(2) * 2 - 1;
+                                    double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
+                                    double d1 = (float) blockPos.getY() + pRand.nextFloat();
+                                    double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
+                                    double d3 = pRand.nextFloat() * (float) j;
+                                    double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
+                                    double d5 = pRand.nextFloat() * (float) k;
+                                    new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
+                                }
+                            }
+                            if (!soulEnergy.getSEActive()) {
+                                soulEnergy.setSEActive(true);
+                                SEHelper.sendSEUpdatePacket(player);
+                            }
+                        } else {
+                            if (soulEnergy.getSEActive()) {
+                                soulEnergy.setSEActive(false);
+                                SEHelper.sendSEUpdatePacket(player);
                             }
                         }
                     } else {
@@ -335,12 +352,10 @@ public class ModEvents {
                             SEHelper.sendSEUpdatePacket(player);
                         }
                     }
-                } else {
-                    if (soulEnergy.getSEActive()) {
-                        soulEnergy.setSEActive(false);
-                        SEHelper.sendSEUpdatePacket(player);
-                    }
                 }
+            } else if (soulEnergy.getArcaBlockDimension() == null){
+                soulEnergy.setArcaBlockDimension(world.dimension());
+                SEHelper.sendSEUpdatePacket(player);
             }
         }
         if (MainConfig.VillagerHate.get()) {
@@ -406,20 +421,18 @@ public class ModEvents {
                 }
             }
         }
-        if (RobeArmorFinder.FindArachnoHelm(player)) {
-            if (!world.isClientSide) {
-                if (!LichdomHelper.isLich(player) && !MainConfig.LichNightVision.get()) {
-                    if (world.isDay()) {
-                        float f = player.getBrightness();
-                        BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                        if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                            player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 0, false, false));
-                        } else {
-                            player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
-                        }
+        if (RobeArmorFinder.FindArachnoHelm(player) && !LichdomHelper.isLich(player)) {
+            if (!world.isClientSide()) {
+                if (world.isDay()) {
+                    float f = player.getBrightness();
+                    BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                    if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
+                        player.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false));
                     } else {
                         player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
                     }
+                } else {
+                    player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
                 }
             }
         }
@@ -619,31 +632,32 @@ public class ModEvents {
                 PlayerEntity player = (PlayerEntity) killer;
                 if (!GoldTotemFinder.FindTotem(player).isEmpty() || RobeArmorFinder.FindArmor(player)){
                     if (killed instanceof PillagerEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.PillagerInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.PillagerInfamy.get());
                     } else
                     if (killed instanceof VindicatorEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.VindicatorInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.VindicatorInfamy.get());
                     } else
                     if (killed instanceof EvokerEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.EvokerInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.EvokerInfamy.get());
                     } else
                     if (killed instanceof IllusionerEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.IllusionerInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.IllusionerInfamy.get());
                     } else
                     if (killed instanceof EnviokerEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.EnviokerInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.EnviokerInfamy.get());
                     } else
                     if (killed instanceof InquillagerEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.InquillagerInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.InquillagerInfamy.get());
                     } else
                     if (killed instanceof ConquillagerEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.ConquillagerInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.ConquillagerInfamy.get());
                     } else
                     if (killed instanceof VizierEntity){
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.VizierInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.VizierInfamy.get());
                     } else {
-                        InfamyHelper.increaseInfamy((PlayerEntity) killer, MainConfig.OtherInfamy.get());
+                        InfamyHelper.increaseInfamy(player, MainConfig.OtherInfamy.get());
                     }
+                    InfamyHelper.sendInfamyUpdatePacket(player);
                 }
             }
             if (killer instanceof SummonedEntity) {
@@ -670,6 +684,7 @@ public class ModEvents {
                         } else {
                             InfamyHelper.increaseInfamy(player, MainConfig.OtherInfamy.get());
                         }
+                        InfamyHelper.sendInfamyUpdatePacket(player);
                     }
                 }
             }
@@ -712,6 +727,7 @@ public class ModEvents {
                 PlayerEntity player = (PlayerEntity) event.getEntityLiving();
                 if (!GoldTotemFinder.FindTotem(player).isEmpty()){
                     InfamyHelper.increaseInfamy(player, 100);
+                    InfamyHelper.sendInfamyUpdatePacket(player);
                 }
             }
         }

@@ -43,6 +43,9 @@ public class DarkRobeArmor extends ArmorItem {
                             stack.getTag().putInt(COOL, 0);
                             SEHelper.decreaseSESouls(player, 1);
                             stack.setDamageValue(stack.getDamageValue() - 1);
+                            if (!world.isClientSide()){
+                                SEHelper.sendSEUpdatePacket(player);
+                            }
                         }
                     }
                 } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
@@ -80,9 +83,26 @@ public class DarkRobeArmor extends ArmorItem {
         return (A) model;
     }
 
+    public IArmorMaterial getArmorMaterial(ArmorItem armorItem){
+        return armorItem.getMaterial();
+    }
+
     @Nullable
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        return "goety:textures/models/armor/darkrobearmor.png";
+        if (stack.getItem() instanceof ArmorItem){
+            ArmorItem armorItem = (ArmorItem) stack.getItem();
+            if (getArmorMaterial(armorItem) == ModArmorMaterial.DARKMAGE){
+                return "goety:textures/models/armor/darkrobearmor.png";
+            } else if (getArmorMaterial(armorItem) == ModArmorMaterial.NECROTURGE){
+                return "goety:textures/models/armor/necrorobearmor.png";
+            } else if (getArmorMaterial(armorItem) == ModArmorMaterial.ARACHNOTURGE){
+                return "goety:textures/models/armor/arachnorobearmor.png";
+            } else {
+                return "goety:textures/models/armor/darkrobearmor.png";
+            }
+        } else {
+            return null;
+        }
     }
 }

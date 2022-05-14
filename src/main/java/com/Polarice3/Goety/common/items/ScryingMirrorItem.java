@@ -50,13 +50,17 @@ public class ScryingMirrorItem extends ItemBase{
                         player.addItem(itemstack);
                         IInfamy infamy = InfamyHelper.getCapability(player);
                         infamy.increaseInfamy(MainConfig.ScryingInfamy.get());
-                        return ActionResultType.SUCCESS;
+                        InfamyHelper.sendInfamyUpdatePacket(player);
+                    } else {
+                        IInfamy infamy = InfamyHelper.getCapability(player);
+                        int i = infamy.getInfamy();
+                        player.displayClientMessage(new TranslationTextComponent("info.goety.infamy.amount", i), true);
+                    }
+                } else {
+                    IInfamy infamy = InfamyHelper.getCapability(player);
+                    int i = infamy.getInfamy();
+                    player.displayClientMessage(new TranslationTextComponent("info.goety.infamy.amount", i), true);
                 }
-            }
-            } else {
-                IInfamy infamy = InfamyHelper.getCapability(player);
-                int i = infamy.getInfamy();
-                player.displayClientMessage(new TranslationTextComponent("info.goety.infamy.amount", i), true);
                 return ActionResultType.SUCCESS;
             }
         }

@@ -352,6 +352,7 @@ public class SoulWand extends Item{
             if (SEHelper.getSEActive(playerEntity)){
                 if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)){
                     soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
+                    SEHelper.sendSEUpdatePacket(playerEntity);
                     assert stack.getTag() != null;
                     this.getSpell(stack).WandResult(worldIn, entityLiving);
                     if (MainConfig.VillagerHateSpells.get() > 0){

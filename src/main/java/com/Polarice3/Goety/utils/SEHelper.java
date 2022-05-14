@@ -20,6 +20,7 @@ import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 public class SEHelper {
     public static ISoulEnergy getCapability(PlayerEntity player) {
@@ -40,6 +41,10 @@ public class SEHelper {
 
     public static void setSESouls(PlayerEntity player, int souls){
         getCapability(player).setSoulEnergy(souls);
+    }
+
+    public static BlockPos getArcaBlock(PlayerEntity player){
+        return getCapability(player).getArcaBlock();
     }
 
     public static boolean decreaseSESouls(PlayerEntity player, int souls){

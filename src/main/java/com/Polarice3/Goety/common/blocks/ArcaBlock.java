@@ -38,6 +38,7 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
             PlayerEntity player = (PlayerEntity) pPlacer;
             ISoulEnergy soulEnergy = SEHelper.getCapability(player);
             soulEnergy.setArcaBlock(pPos);
+            soulEnergy.setArcaBlockDimension(pLevel.dimension());
             soulEnergy.setSEActive(true);
             if (tileentity instanceof ArcaTileEntity){
                 ArcaTileEntity arcaTile = (ArcaTileEntity) tileentity;
@@ -60,6 +61,7 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                         if (!pPlayer.isCrouching()){
                             if (soulEnergy.getArcaBlock() == null){
                                 soulEnergy.setArcaBlock(arcaTileEntity.getBlockPos());
+                                soulEnergy.setArcaBlockDimension(pLevel.dimension());
                                 if (!soulEnergy.getSEActive()){
                                     soulEnergy.setSEActive(true);
                                 }
@@ -88,6 +90,7 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                     if (soulEnergy.getArcaBlock() == arcaTileEntity.getBlockPos()) {
                         soulEnergy.setSEActive(false);
                         soulEnergy.setArcaBlock(null);
+                        soulEnergy.setArcaBlockDimension(null);
                         SEHelper.sendSEUpdatePacket(arcaTileEntity.getPlayer());
                     }
                 }

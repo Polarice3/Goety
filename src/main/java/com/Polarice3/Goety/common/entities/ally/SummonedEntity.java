@@ -120,7 +120,10 @@ public class SummonedEntity extends CreatureEntity {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
                                         new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                                        GoldTotemItem.decreaseSouls(foundStack, MainConfig.UndeadMinionHealCost.get());
+                                        SEHelper.decreaseSESouls(owner, MainConfig.UndeadMinionHealCost.get());
+                                        if (!this.level.isClientSide){
+                                            SEHelper.sendSEUpdatePacket(owner);
+                                        }
                                     }
                                 } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > MainConfig.UndeadMinionHealCost.get()) {
                                     if (this.tickCount % 20 == 0) {

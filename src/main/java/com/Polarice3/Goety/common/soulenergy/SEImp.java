@@ -1,11 +1,14 @@
 package com.Polarice3.Goety.common.soulenergy;
 
 import com.Polarice3.Goety.MainConfig;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class SEImp implements ISoulEnergy{
     private boolean seActive;
     private int soulEnergy = 0;
+    private RegistryKey<World> dimension = World.OVERWORLD;
     private BlockPos ArcaBlock = new BlockPos(0, 0, 0);
 
     @Override
@@ -16,6 +19,16 @@ public class SEImp implements ISoulEnergy{
     @Override
     public void setArcaBlock(BlockPos blockPos) {
         this.ArcaBlock = blockPos;
+    }
+
+    @Override
+    public RegistryKey<World> getArcaBlockDimension() {
+        return this.dimension;
+    }
+
+    @Override
+    public void setArcaBlockDimension(RegistryKey<World> dimension) {
+        this.dimension = dimension;
     }
 
     @Override

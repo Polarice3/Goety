@@ -40,6 +40,7 @@ public class InfamyCommand {
         for(ServerPlayerEntity serverplayerentity : pTargets) {
             IInfamy infamy = InfamyHelper.getCapability(serverplayerentity);
             infamy.increaseInfamy(pAmount);
+            InfamyHelper.sendInfamyUpdatePacket(serverplayerentity);
         }
 
         if (pTargets.size() == 1) {
@@ -57,6 +58,7 @@ public class InfamyCommand {
         for(ServerPlayerEntity serverplayerentity : pTargets) {
             IInfamy infamy = InfamyHelper.getCapability(serverplayerentity);
             infamy.setInfamy(pAmount);
+            InfamyHelper.sendInfamyUpdatePacket(serverplayerentity);
             ++i;
         }
 
