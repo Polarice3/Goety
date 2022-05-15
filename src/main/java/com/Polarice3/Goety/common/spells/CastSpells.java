@@ -47,6 +47,8 @@ public class CastSpells {
                 return new WebBallSpell();
             case 18:
                 return new IllusionSpell();
+            case 19:
+                return new SoulShieldSpell();
             default:
                 return null;
         }

@@ -43,9 +43,7 @@ public class DarkRobeArmor extends ArmorItem {
                             stack.getTag().putInt(COOL, 0);
                             SEHelper.decreaseSESouls(player, 1);
                             stack.setDamageValue(stack.getDamageValue() - 1);
-                            if (!world.isClientSide()){
-                                SEHelper.sendSEUpdatePacket(player);
-                            }
+                            SEHelper.sendSEUpdatePacket(player);
                         }
                     }
                 } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {

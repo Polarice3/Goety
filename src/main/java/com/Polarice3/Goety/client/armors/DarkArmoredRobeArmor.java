@@ -43,9 +43,7 @@ public class DarkArmoredRobeArmor extends ArmorItem {
                             stack.getTag().putInt(COOL, 0);
                             SEHelper.decreaseSESouls(player, MainConfig.DarkArmoredRobeRepairAmount.get());
                             stack.setDamageValue(stack.getDamageValue() - 1);
-                            if (!world.isClientSide()){
-                                SEHelper.sendSEUpdatePacket(player);
-                            }
+                            SEHelper.sendSEUpdatePacket(player);
                         }
                     }
                 } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > MainConfig.DarkArmoredRobeRepairAmount.get()) {

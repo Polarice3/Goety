@@ -28,7 +28,7 @@ public class SoulShieldSpell extends Spells{
 
     public void WandResult(World worldIn, LivingEntity entityLiving) {
         entityLiving.addEffect(new EffectInstance(ModEffects.SOUL_SHIELD.get(), 600));
-        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.WITHER_AMBIENT, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }
@@ -37,7 +37,7 @@ public class SoulShieldSpell extends Spells{
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
         entityLiving.addEffect(new EffectInstance(ModEffects.SOUL_SHIELD.get(), 2400));
-        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.WITHER_AMBIENT, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
         }

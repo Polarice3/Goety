@@ -109,7 +109,7 @@ public class ShadeEntity extends MonsterEntity {
     }
 
     public void die(DamageSource cause) {
-        this.remove();
+        super.die(cause);
         new SoundUtil(this.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);

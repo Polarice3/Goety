@@ -73,7 +73,9 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                     this.makeWorkParticles();
                 }
                 if (this.cookingProgress[i] >= this.cookingTime[i]) {
-                    this.items.set(i, itemstack1);
+                    this.items.set(i, ItemStack.EMPTY);
+                    BlockPos blockpos = this.getBlockPos();
+                    InventoryHelper.dropItemStack(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), itemstack1);
                     this.level.playSound(null, this.getBlockPos(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     this.markUpdated();
                     this.cookingProgress[i] = 0;

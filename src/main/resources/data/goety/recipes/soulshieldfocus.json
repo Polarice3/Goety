@@ -2,29 +2,26 @@
   "type": "goety:ritual",
   "ritual_type": "goety:craft",
   "activation_item": {
-    "item": "goety:bitingfocus"
+    "item": "goety:emptycore"
   },
   "craftType": "magic",
   "soulCost": 1,
   "duration": 10,
   "ingredients": [
     {
-      "item": "goety:fang_totem"
+      "item": "minecraft:nether_star"
     },
     {
-      "tag": "forge:ender_pearls"
+      "item": "minecraft:shield"
     },
     {
-      "tag": "forge:ender_pearls"
-    },
-    {
-      "tag": "forge:ender_pearls"
+      "item": "minecraft:shield"
     },
     {
       "tag": "forge:ender_pearls"
     }
   ],
   "result": {
-    "item": "goety:feastfocus"
+    "item": "goety:soulshieldfocus"
   }
 }

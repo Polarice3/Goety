@@ -84,25 +84,25 @@ public class IllusionSpell extends Spells{
                     }
                 }
             }
-        }
-        for (int i1 = 0; i1 < 4 + entityLiving.level.random.nextInt(4); ++i1) {
-            IllusionCloneEntity summonedentity = new IllusionCloneEntity(ModEntityType.ILLUSION_CLONE.get(), worldIn);
-            summonedentity.setOwnerId(entityLiving.getUUID());
-            summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-            summonedentity.setLimitedLife(1200);
-            summonedentity.setPersistenceRequired();
-            summonedentity.setUpgraded(true);
-            worldIn.addFreshEntity(summonedentity);
-            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.CLOUD, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+            for (int i1 = 0; i1 < 4 + entityLiving.level.random.nextInt(4); ++i1) {
+                IllusionCloneEntity summonedentity = new IllusionCloneEntity(ModEntityType.ILLUSION_CLONE.get(), worldIn);
+                summonedentity.setOwnerId(entityLiving.getUUID());
+                summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+                summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                summonedentity.setLimitedLife(1200);
+                summonedentity.setPersistenceRequired();
+                summonedentity.setUpgraded(true);
+                worldIn.addFreshEntity(summonedentity);
+                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                    new ParticleUtil(ParticleTypes.CLOUD, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                }
             }
+            worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            }
+            this.IncreaseInfamy(MainConfig.IllusionInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
-        }
-        this.IncreaseInfamy(MainConfig.IllusionInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 }

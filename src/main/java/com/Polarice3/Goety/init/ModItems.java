@@ -87,6 +87,7 @@ public class ModItems {
     public static final RegistryObject<Item> LAVABALLFOCUS = ITEMS.register("lavaballfocus", () -> new MagicFocusItem(MainConfig.LavaballCost.get()));
     public static final RegistryObject<Item> WEBBALLFOCUS = ITEMS.register("webballfocus", () -> new MagicFocusItem(MainConfig.WebballCost.get()));
     public static final RegistryObject<Item> ILLUSIONFOCUS = ITEMS.register("illusionfocus", () -> new MagicFocusItem(MainConfig.IllusionCost.get()));
+    public static final RegistryObject<Item> SOULSHIELDFOCUS = ITEMS.register("soulshieldfocus", () -> new MagicFocusItem(MainConfig.SoulShieldCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

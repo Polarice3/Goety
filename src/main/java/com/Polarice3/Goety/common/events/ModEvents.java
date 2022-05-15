@@ -438,7 +438,7 @@ public class ModEvents {
         }
         if (player.hasEffect(ModEffects.SOUL_SHIELD.get())){
             for (AbstractArrowEntity arrowEntity: player.level.getEntitiesOfClass(AbstractArrowEntity.class, player.getBoundingBox().inflate(2.0D))){
-                if (arrowEntity.getOwner() != player){
+                if (arrowEntity.getOwner() != player && !(arrowEntity.getOwner() instanceof ApostleEntity)){
                     arrowEntity.remove();
                 }
             }
@@ -693,13 +693,18 @@ public class ModEvents {
             int r1 = world.random.nextInt(4);
             int r2 = world.random.nextInt(16);
             if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
-                if (killed instanceof AbstractVillagerEntity || killed instanceof SpellcastingIllagerEntity || killed instanceof ChannellerEntity){
-                    if (r1 == 0){
-                        killed.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
-                    }
-                } else if (killed instanceof PatrollerEntity){
-                    if (r2 == 0){
-                        killed.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                if (killed instanceof LivingEntity){
+                    LivingEntity killed1 = (LivingEntity) killed;
+                    if (killed1.getMobType() != CreatureAttribute.UNDEAD) {
+                        if (killed1 instanceof AbstractVillagerEntity || killed1 instanceof SpellcastingIllagerEntity || killed1 instanceof ChannellerEntity) {
+                            if (r1 == 0) {
+                                killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                            }
+                        } else if (killed1 instanceof PatrollerEntity) {
+                            if (r2 == 0) {
+                                killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                            }
+                        }
                     }
                 }
             }

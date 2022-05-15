@@ -242,6 +242,18 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
                     }
 
+                    if (recipe.getCraftType().contains("magic")){
+                        RitualStructures.findMagicStructure(this, this.worldPosition, this.level);
+                        if (!RitualStructures.checkMagicRequirements(this)) {
+                            ++this.structureTime;
+                            if (this.structureTime >= 60){
+                                this.stopRitual(false);
+                            }
+                        } else {
+                            this.structureTime = 0;
+                        }
+                    }
+
                     if (recipe.getCraftType().contains("sabbath")){
                         RitualStructures.findSabbathStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkSabbathRequirements(this)) {

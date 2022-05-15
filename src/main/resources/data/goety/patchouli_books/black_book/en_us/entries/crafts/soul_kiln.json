@@ -19,7 +19,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Unlike the Infuser, multiple items can be inserted into Soul Kiln, either by hand or through Hoppers. However, the Soul Kiln shoots out the resulting items rather than have it stay in place."
+      "text": "Unlike the Infuser, multiple items can be inserted into Soul Kiln, either by hand or through Hoppers."
     }
   ]
 }

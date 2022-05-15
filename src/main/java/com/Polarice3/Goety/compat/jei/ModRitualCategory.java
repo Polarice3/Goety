@@ -186,6 +186,10 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.ANVIL));
             index++;
+        } else if (recipe.getCraftType().contains("magic")){
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(Items.ENCHANTING_TABLE));
+            index++;
         } else if (recipe.getCraftType().contains("adept_nether")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.NETHERRACK));

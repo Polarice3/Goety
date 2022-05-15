@@ -117,12 +117,11 @@
 			"translation": [3, 2, 0]
 		},
 		"ground": {
-			"translation": [0, 2, 0]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
-			"rotation": [45, -45, 0],
-			"translation": [0, 2.75, 0],
-			"scale": [0.75, 0.75, 0.75]
+			"rotation": [25, -46, 0],
+			"scale": [0.6, 0.6, 0.6]
 		},
 		"fixed": {
 			"rotation": [-90, -45, 0],

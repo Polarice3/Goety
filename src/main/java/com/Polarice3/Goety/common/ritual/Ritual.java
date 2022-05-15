@@ -240,6 +240,7 @@ public abstract class Ritual {
         }
         if (setTamed && livingEntity instanceof SummonedEntity) {
             SummonedEntity summonedEntity = (SummonedEntity) livingEntity;
+            summonedEntity.setPersistenceRequired();
             summonedEntity.setOwnerId(castingPlayer.getUUID());
             summonedEntity.setWandering(false);
         }

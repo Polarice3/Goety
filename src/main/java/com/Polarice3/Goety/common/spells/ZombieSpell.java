@@ -38,72 +38,72 @@ public class ZombieSpell extends SummonSpells{
     }
 
     public void WandResult(World worldIn, LivingEntity entityLiving) {
-        if (entityLiving.isCrouching()){
-            if (!worldIn.isClientSide){
+        if (!worldIn.isClientSide()) {
+            if (entityLiving.isCrouching()) {
                 ServerWorld serverWorld = (ServerWorld) worldIn;
-                for (Entity entity: serverWorld.getAllEntities()){
-                    if (entity instanceof ZombieMinionEntity){
-                        if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving){
+                for (Entity entity : serverWorld.getAllEntities()) {
+                    if (entity instanceof ZombieMinionEntity) {
+                        if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving) {
                             entity.moveTo(entityLiving.position());
                         }
                     }
                 }
-                for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                     new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
                 }
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            }
-        } else {
-            ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
-            summonedentity.setOwnerId(entityLiving.getUUID());
-            summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-            summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-            summonedentity.setLimitedLife(20 * (30 + entityLiving.level.random.nextInt(90)));
-            summonedentity.setPersistenceRequired();
-            summonedentity.setUpgraded(this.NecroPower(entityLiving));
-            worldIn.addFreshEntity(summonedentity);
-            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
-            }
-            this.SummonDown(entityLiving);
-            this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
-        }
-    }
-
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
-        if (entityLiving.isCrouching()){
-            if (!worldIn.isClientSide){
-                ServerWorld serverWorld = (ServerWorld) worldIn;
-                for (Entity entity: serverWorld.getAllEntities()){
-                    if (entity instanceof ZombieMinionEntity){
-                        if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving){
-                            entity.moveTo(entityLiving.position());
-                        }
-                    }
-                }
-                for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
-                }
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            }
-        } else {
-            for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
+            } else {
                 ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
                 summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                summonedentity.setLimitedLife(60 * (90 + entityLiving.level.random.nextInt(180)));
+                summonedentity.setLimitedLife(20 * (30 + entityLiving.level.random.nextInt(90)));
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
                 worldIn.addFreshEntity(summonedentity);
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                     new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
                 }
+                this.SummonDown(entityLiving);
+                this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
             }
-            this.SummonDown(entityLiving);
-            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
+        }
+    }
+
+    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+        if (!worldIn.isClientSide()) {
+            if (entityLiving.isCrouching()) {
+                ServerWorld serverWorld = (ServerWorld) worldIn;
+                for (Entity entity : serverWorld.getAllEntities()) {
+                    if (entity instanceof ZombieMinionEntity) {
+                        if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving) {
+                            entity.moveTo(entityLiving.position());
+                        }
+                    }
+                }
+                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                    new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+                }
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            } else {
+                for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
+                    ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
+                    summonedentity.setOwnerId(entityLiving.getUUID());
+                    summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+                    summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                    summonedentity.setLimitedLife(60 * (90 + entityLiving.level.random.nextInt(180)));
+                    summonedentity.setPersistenceRequired();
+                    summonedentity.setUpgraded(this.NecroPower(entityLiving));
+                    worldIn.addFreshEntity(summonedentity);
+                    for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                        new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                    }
+                }
+                this.SummonDown(entityLiving);
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
+            }
         }
     }
 }

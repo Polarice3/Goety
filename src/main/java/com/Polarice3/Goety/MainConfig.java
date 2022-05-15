@@ -108,7 +108,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamyMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
-    public static final ForgeConfigSpec.ConfigValue<Integer> NecroArmoredRobeRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> WanderBootsRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> WandVexLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> StaffVexLimit;
@@ -449,12 +448,10 @@ public class MainConfig {
                 .define("soulSkullServantWander", true);
         BUILDER.pop();
         BUILDER.push("Robe Repairs");
-        DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 20")
-                .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
-        NecroArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Necro Armored Robes per second, Default: 20")
-                .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
-        WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 20")
-                .defineInRange("maxSouls", 20, 1, Integer.MAX_VALUE);
+        DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 10")
+                .defineInRange("darkArmoredRobeRepairSouls", 10, 1, Integer.MAX_VALUE);
+        WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 10")
+                .defineInRange("wanderBootsRepairSouls", 10, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Villagers");
         VillagerHate = BUILDER.comment("Wearing a Dark Helm and Robe, along with variants, causes Villagers around the Player to have a negative Reputation unless said Player has 100 or more reputation among them, Default: false")

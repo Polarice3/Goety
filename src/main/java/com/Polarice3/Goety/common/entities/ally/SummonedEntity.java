@@ -115,12 +115,19 @@ public class SummonedEntity extends CreatureEntity {
                             if (RobeArmorFinder.FindNecroSet(this.getTrueOwner())) {
                                 PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                                 ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
+                                int SoulCost = MainConfig.UndeadMinionHealCost.get();
+                                if (RobeArmorFinder.FindLeggings(owner)){
+                                    int random = this.random.nextInt(2);
+                                    if (random == 0){
+                                        SoulCost = 0;
+                                    }
+                                }
                                 if (SEHelper.getSEActive(owner) && SEHelper.getSESouls(owner) > MainConfig.UndeadMinionHealCost.get()){
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
                                         new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                                        SEHelper.decreaseSESouls(owner, MainConfig.UndeadMinionHealCost.get());
+                                        SEHelper.decreaseSESouls(owner, SoulCost);
                                         if (!this.level.isClientSide){
                                             SEHelper.sendSEUpdatePacket(owner);
                                         }
@@ -130,7 +137,7 @@ public class SummonedEntity extends CreatureEntity {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
                                         new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                                        GoldTotemItem.decreaseSouls(foundStack, MainConfig.UndeadMinionHealCost.get());
+                                        GoldTotemItem.decreaseSouls(foundStack, SoulCost);
                                     }
                                 }
                             }

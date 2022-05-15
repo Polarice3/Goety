@@ -38,47 +38,51 @@ public class VexSpell extends SummonSpells {
     }
 
     public void WandResult(World worldIn, LivingEntity entityLiving){
-        for (int i1 = 0; i1 < 3; ++i1) {
-            BlockPos blockpos = entityLiving.blockPosition();
-            FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
-            vexentity.setOwnerId(entityLiving.getUUID());
-            vexentity.moveTo(blockpos, 0.0F, 0.0F);
-            vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-            vexentity.setBoundOrigin(blockpos);
-            if (MainConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
-                vexentity.setLimitedLife(20 * (30 + entityLiving.level.random.nextInt(90)));
-            } else {
-                vexentity.setLimitedLife(1);
-                vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
-                vexentity.addEffect(new EffectInstance(Effects.WEAKNESS, 800, 1));
+        if (!worldIn.isClientSide()) {
+            for (int i1 = 0; i1 < 3; ++i1) {
+                BlockPos blockpos = entityLiving.blockPosition();
+                FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
+                vexentity.setOwnerId(entityLiving.getUUID());
+                vexentity.moveTo(blockpos, 0.0F, 0.0F);
+                vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                vexentity.setBoundOrigin(blockpos);
+                if (MainConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
+                    vexentity.setLimitedLife(20 * (30 + entityLiving.level.random.nextInt(90)));
+                } else {
+                    vexentity.setLimitedLife(1);
+                    vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
+                    vexentity.addEffect(new EffectInstance(Effects.WEAKNESS, 800, 1));
+                }
+                worldIn.addFreshEntity(vexentity);
             }
-            worldIn.addFreshEntity(vexentity);
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.SummonDown(entityLiving);
         }
-        worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
-        this.SummonDown(entityLiving);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving){
-        for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
-            BlockPos blockpos = entityLiving.blockPosition();
-            FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
-            vexentity.setOwnerId(entityLiving.getUUID());
-            vexentity.moveTo(blockpos, 0.0F, 0.0F);
-            vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-            vexentity.setBoundOrigin(blockpos);
-            if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
-                vexentity.setLimitedLife(40 * (60 + entityLiving.level.random.nextInt(180)));
-            } else {
-                vexentity.setLimitedLife(1);
-                vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
-                vexentity.addEffect(new EffectInstance(Effects.WEAKNESS, 800, 1));
+    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+        if (!worldIn.isClientSide()) {
+            for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
+                BlockPos blockpos = entityLiving.blockPosition();
+                FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
+                vexentity.setOwnerId(entityLiving.getUUID());
+                vexentity.moveTo(blockpos, 0.0F, 0.0F);
+                vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                vexentity.setBoundOrigin(blockpos);
+                if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
+                    vexentity.setLimitedLife(40 * (60 + entityLiving.level.random.nextInt(180)));
+                } else {
+                    vexentity.setLimitedLife(1);
+                    vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
+                    vexentity.addEffect(new EffectInstance(Effects.WEAKNESS, 800, 1));
+                }
+                worldIn.addFreshEntity(vexentity);
             }
-            worldIn.addFreshEntity(vexentity);
+            this.SummonDown(entityLiving);
+            this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         }
-        this.SummonDown(entityLiving);
-        this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
-        worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
     public int VexLimit(LivingEntity entityLiving){

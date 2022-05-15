@@ -44,9 +44,7 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                 ArcaTileEntity arcaTile = (ArcaTileEntity) tileentity;
                 arcaTile.setOwnerId(pPlacer.getUUID());
             }
-            if (!pLevel.isClientSide()){
-                SEHelper.sendSEUpdatePacket(player);
-            }
+            SEHelper.sendSEUpdatePacket(player);
         }
     }
 

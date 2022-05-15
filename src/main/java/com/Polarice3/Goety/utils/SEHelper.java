@@ -107,6 +107,8 @@ public class SEHelper {
     }
 
     public static void sendSEUpdatePacket(PlayerEntity player) {
-        ModNetwork.sendTo(player, new SEUpdatePacket(player));
+        if (!player.level.isClientSide()) {
+            ModNetwork.sendTo(player, new SEUpdatePacket(player));
+        }
     }
 }
