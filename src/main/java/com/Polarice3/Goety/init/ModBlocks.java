@@ -38,6 +38,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> MUTATE_TOTEM = BLOCKS.register("mutation_totem", MutateTotemBlock::new);
     public static final RegistryObject<Block> UNDEAD_TOTEM = BLOCKS.register("undead_totem", UndeadTotemBlock::new);
     public static final RegistryObject<Block> WIND_TOTEM = BLOCKS.register("wind_totem", WindTotemBlock::new);
+    public static final RegistryObject<Block> SOUL_FANG_TOTEM = BLOCKS.register("soul_fang_totem", SoulFangTotemBlock::new);
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
     public static final RegistryObject<Block> GUARDIAN_OBELISK = BLOCKS.register("guardian_obelisk", GuardianObeliskBlock::new);
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
@@ -180,6 +181,8 @@ public class ModBlocks {
             () -> new BlockItemBase(UNDEAD_TOTEM.get()));
     public static final RegistryObject<Item> WIND_TOTEM_ITEM = BLOCK_ITEMS.register("wind_totem",
             () -> new BlockItemBase(WIND_TOTEM.get()));
+    public static final RegistryObject<Item> SOUL_FANG_TOTEM_ITEM = BLOCK_ITEMS.register("soul_fang_totem",
+            () -> new BlockItemBase(SOUL_FANG_TOTEM.get()));
     public static final RegistryObject<Item> OBELISK_ITEM = BLOCK_ITEMS.register("obelisk",
             () -> new BlockItemBase(OBELISK.get()));
     public static final RegistryObject<Item> GUARDIAN_OBELISK_ITEM = BLOCK_ITEMS.register("guardian_obelisk",

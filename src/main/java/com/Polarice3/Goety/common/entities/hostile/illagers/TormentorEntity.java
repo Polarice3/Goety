@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -31,7 +32,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class TormentorEntity extends AbstractIllagerEntity {
+public class TormentorEntity extends AbstractIllagerEntity implements FlyingPhaseEntity {
     protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(TormentorEntity.class, DataSerializers.BYTE);
     private MobEntity owner;
     @Nullable

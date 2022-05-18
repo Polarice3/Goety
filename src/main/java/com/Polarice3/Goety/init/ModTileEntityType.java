@@ -48,4 +48,7 @@ public class ModTileEntityType {
 
     public static final RegistryObject<TileEntityType<TempWebTileEntity>> TEMP_WEB = TILEENTITY_TYPES.register("temp_web",
             () -> TileEntityType.Builder.of(TempWebTileEntity::new, ModBlocks.TEMP_WEB.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<SoulFangTotemTileEntity>> SOUL_FANG_TOTEM = TILEENTITY_TYPES.register("soul_fang_totem",
+            () -> TileEntityType.Builder.of(SoulFangTotemTileEntity::new, ModBlocks.SOUL_FANG_TOTEM.get()).build(null));
 }

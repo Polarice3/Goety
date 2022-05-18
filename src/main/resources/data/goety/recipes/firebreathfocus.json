@@ -2,11 +2,11 @@
   "type": "goety:ritual",
   "ritual_type": "goety:craft",
   "activation_item": {
-    "item": "goety:emptycore"
+    "item": "goety:fireballfocus"
   },
   "craftType": "air",
   "soulCost": 1,
-  "duration": 10,
+  "duration": 30,
   "ingredients": [
     {
       "item": "minecraft:glass_bottle"
@@ -18,16 +18,10 @@
       "item": "minecraft:glass_bottle"
     },
     {
-      "item": "minecraft:pufferfish"
-    },
-    {
-      "item": "minecraft:nether_wart"
-    },
-    {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:glass_bottle"
     }
   ],
   "result": {
-    "item": "goety:breathfocus"
+    "item": "goety:firebreathfocus"
   }
 }

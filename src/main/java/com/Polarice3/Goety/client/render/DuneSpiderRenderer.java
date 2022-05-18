@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class DuneSpiderRenderer <T extends DuneSpiderEntity> extends MobRenderer<T, DuneSpiderModel<T>> {
-    private static final ResourceLocation SPIDER_LOCATION = Goety.location("textures/entity/dune_spider.png");
+    private static final ResourceLocation SPIDER_LOCATION = Goety.location("textures/entity/spiders/dune_spider.png");
 
     public DuneSpiderRenderer(EntityRendererManager p_i46139_1_) {
         super(p_i46139_1_, new DuneSpiderModel<>(), 0.8F);

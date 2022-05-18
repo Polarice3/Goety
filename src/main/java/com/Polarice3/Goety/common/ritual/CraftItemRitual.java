@@ -24,10 +24,10 @@ public class CraftItemRitual extends Ritual{
         activationItem.shrink(1);
 
         for(int i = 0; i < 20; ++i) {
-            double d0 = world.random.nextGaussian() * 0.02D;
-            double d1 = world.random.nextGaussian() * 0.02D;
-            double d2 = world.random.nextGaussian() * 0.02D;
-            new ParticleUtil(ParticleTypes.POOF, darkAltarPos.getX(), darkAltarPos.getY(), darkAltarPos.getZ(), d0, d1, d2);
+            double d0 = (double)darkAltarPos.getX() + world.random.nextDouble();
+            double d1 = (double)darkAltarPos.getY() + world.random.nextDouble();
+            double d2 = (double)darkAltarPos.getZ() + world.random.nextDouble();
+            new ParticleUtil(ParticleTypes.POOF, d0, d1, d2, 0, 0, 0);
         }
 
         ItemStack result = this.recipe.getResultItem().copy();

@@ -1,0 +1,25 @@
+{
+  "name": "Soul Eating Totem",
+  "icon": "goety:soul_fang_totem",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/get_fang_totem",
+  "sortnum": 9,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "These Hungry Totems seems to simply summon fangs on any creature for no discernible reason. Were they made as a defense mechanism? Or something more?"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "After some tinkering and experimentation, you've discovered that the Hungry Totems seems to leech off some life energy from its victims. Using the knowledge of old and their discoveries, you've managed to create a Hungry Totem that, when slaying a creature with its fangs, will directly send the creature's Soul Energy towards you."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:soul_fang_totem"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The totem head works the same way other totem heads do. Placing three blocks of Cursed Totem Poles below it will activate it. Unlike Hungry Totems, these Totems will not attack the one who placed it down, nor any creature allied with them."
+    }
+  ]
+}

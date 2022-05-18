@@ -203,15 +203,6 @@ public class CreeperlingMinionEntity extends SummonedEntity implements IChargeab
         return CreatureAttribute.ARTHROPOD;
     }
 
-    public boolean canBeAffected(EffectInstance potioneffectIn) {
-        if (potioneffectIn.getEffect() == Effects.POISON) {
-            net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-            return event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW;
-        }
-        return super.canBeAffected(potioneffectIn);
-    }
-
     public boolean isBesideClimbableBlock() {
         return (this.entityData.get(CLIMBING) & 1) != 0;
     }

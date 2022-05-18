@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.model.SpiderModel;
 import net.minecraft.util.ResourceLocation;
 
 public class SpiderlingMinionRenderer <T extends SpiderlingMinionEntity> extends MobRenderer<T, SpiderModel<T>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiderling.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/spiderling.png");
 
     public SpiderlingMinionRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new SpiderModel<>(), 0.8F * 0.4F);

@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class LoyalSpiderCollarLayer<T extends LoyalSpiderEntity> extends LayerRenderer<T, LoyalSpiderModel<T>> {
-    private static final ResourceLocation COLLAR_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/tamed_spider_collar.png");
+    private static final ResourceLocation COLLAR_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/tamed_spider_collar.png");
 
     public LoyalSpiderCollarLayer(IEntityRenderer<T, LoyalSpiderModel<T>> p_i50914_1_) {
         super(p_i50914_1_);

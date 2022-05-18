@@ -15,16 +15,16 @@
     {
       "type": "patchouli:spotlight",
       "item": "minecraft:brewing_stand",
-      "text": "Giving Loyal Spiders certain potions gives them some special attributes. A Poison Potion will turn them smaller and weaker, but will give them the ability to imbue poison upon your foes."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "A Strength Potion allows them to be ridden like a Horse. A Slow Falling Potion makes them immune to Fall Damage."
+      "text": "Giving Loyal Spiders certain potions gives them some special attributes. A Poison Potion will turn them smaller and weaker, but will give them the ability to imbue poison upon your foes. A Slow Falling Potion makes them immune to Fall Damage."
     },
     {
       "type": "patchouli:spotlight",
       "item": "goety:mutatedsteak_uncooked",
-      "text": "If they have less than 25 Hearts (50 Hitpoints) they will grow stronger each time you feed them a Raw Mutated Meat, increasing their Max Health and Attack Damage. The meat also heals 5 Hearts of damage."
+      "text": "They will grow stronger each time you feed them a Raw Mutated Meat, levelling up in a sense, increasing their Max Health and Attack Damage though they will stop growing stronger after being fed 10 times. The meat also heals 5 Hearts of damage."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "After 4 or so times of being fed mutated meat, they can be saddled and be ridden. After reaching their maximum level, they will become Royal Spiders, which can command Spiders into attack its enemies."
     },
     {
       "type": "patchouli:text",

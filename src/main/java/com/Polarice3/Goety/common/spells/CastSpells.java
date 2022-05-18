@@ -44,11 +44,13 @@ public class CastSpells {
             case 16:
                 return new LavaballSpell();
             case 17:
-                return new WebBallSpell();
+                return new PoisonBallSpell();
             case 18:
                 return new IllusionSpell();
             case 19:
                 return new SoulShieldSpell();
+            case 20:
+                return new FireBreathSpell();
             default:
                 return null;
         }

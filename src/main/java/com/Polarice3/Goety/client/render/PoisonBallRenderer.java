@@ -2,7 +2,7 @@ package com.Polarice3.Goety.client.render;
 
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.entities.projectiles.WebBallEntity;
+import com.Polarice3.Goety.common.entities.projectiles.PoisonBallEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -19,19 +19,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class WebBallRenderer extends EntityRenderer<WebBallEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/web_ball.png");
+public class PoisonBallRenderer extends EntityRenderer<PoisonBallEntity> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/poison_ball.png");
     private static final RenderType field_229044_e_ = RenderType.entityCutoutNoCull(TEXTURE);
 
-    public WebBallRenderer(EntityRendererManager renderManagerIn) {
+    public PoisonBallRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);
     }
 
-    protected int getBlockLightLevel(WebBallEntity entityIn, BlockPos partialTicks) {
+    protected int getBlockLightLevel(PoisonBallEntity entityIn, BlockPos partialTicks) {
         return 15;
     }
 
-    public void render(WebBallEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(PoisonBallEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         matrixStackIn.scale(1.0F, 1.0F, 1.0F);
         matrixStackIn.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -55,7 +55,7 @@ public class WebBallRenderer extends EntityRenderer<WebBallEntity> {
     /**
      * Returns the location of an entity's texture.
      */
-    public ResourceLocation getTextureLocation(WebBallEntity entity) {
+    public ResourceLocation getTextureLocation(PoisonBallEntity entity) {
         return TEXTURE;
     }
 }

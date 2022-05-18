@@ -147,5 +147,6 @@ public abstract class HuntingIllagerEntity extends SpellcastingIllagerEntity {
             }
 
         }
+        super.die(pCause);
     }
 }

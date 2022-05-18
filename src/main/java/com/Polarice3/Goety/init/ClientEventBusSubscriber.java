@@ -18,7 +18,6 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.entity.PiglinRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -43,7 +42,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHERBALL.get(), NetherBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOULSKULL.get(), SoulSkullRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_BULLET.get(), SoulBulletRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WEB_BALL.get(), WebBallRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_BALL.get(), PoisonBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FANG.get(), FangRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHGALE.get(), WitchGaleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADO.get(), FireTornadoRenderer::new);
@@ -95,6 +94,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FANG_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MUTATE_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.WIND_TOTEM.get(), ModTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_FANG_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_KILN.get(), CursedKilnTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);

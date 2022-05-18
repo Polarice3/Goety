@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.bosses;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
+import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.EntityHelper;
@@ -43,7 +44,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob{
+public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob, FlyingPhaseEntity {
     private static final Predicate<Entity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof VizierEntity);
     };

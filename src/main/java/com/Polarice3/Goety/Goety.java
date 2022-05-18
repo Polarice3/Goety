@@ -26,6 +26,9 @@ import com.Polarice3.Goety.common.potions.ModPotions;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEImp;
 import com.Polarice3.Goety.common.soulenergy.SEStore;
+import com.Polarice3.Goety.common.spider.ISpiderLevels;
+import com.Polarice3.Goety.common.spider.SpiderLevelsImp;
+import com.Polarice3.Goety.common.spider.SpiderLevelsStore;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
@@ -128,6 +131,7 @@ public class Goety {
         CapabilityManager.INSTANCE.register(IInfamy.class, new InfamyStore(), InfamyImp::new);
         CapabilityManager.INSTANCE.register(ILichdom.class, new LichStore(), LichImp::new);
         CapabilityManager.INSTANCE.register(ISoulEnergy.class, new SEStore(), SEImp::new);
+        CapabilityManager.INSTANCE.register(ISpiderLevels.class, new SpiderLevelsStore(), SpiderLevelsImp::new);
         MinecraftForge.EVENT_BUS.register(RegisterCommands.class);
         ModNetwork.init();
 

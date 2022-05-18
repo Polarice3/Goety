@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class CreeperlingMinionRenderer extends MobRenderer<CreeperlingMinionEntity, SpiderModel<CreeperlingMinionEntity>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/creeperling.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/creeperling.png");
 
     public CreeperlingMinionRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new SpiderModel<>(), 0.8F * 0.4F);

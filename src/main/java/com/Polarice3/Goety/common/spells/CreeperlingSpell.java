@@ -3,13 +3,17 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Collection;
 
 public class CreeperlingSpell extends ChargingSpells{
 
@@ -32,8 +36,18 @@ public class CreeperlingSpell extends ChargingSpells{
         summonedentity.setOwnerId(entityLiving.getUUID());
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
         summonedentity.setLimitedLife(180);
+        if (RobeArmorFinder.FindArachnoSet(entityLiving)) {
+            Collection<EffectInstance> collection = entityLiving.getActiveEffects();
+            if (!collection.isEmpty()) {
+                for (EffectInstance effectinstance : collection) {
+                    if (!effectinstance.getEffect().isBeneficial()) {
+                        summonedentity.addEffect(new EffectInstance(effectinstance));
+                    }
+                }
+            }
+        }
         worldIn.addFreshEntity(summonedentity);
-        worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
@@ -44,8 +58,18 @@ public class CreeperlingSpell extends ChargingSpells{
         summonedentity.setUpgraded();
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
         summonedentity.setLimitedLife(360);
+        if (RobeArmorFinder.FindArachnoSet(entityLiving)) {
+            Collection<EffectInstance> collection = entityLiving.getActiveEffects();
+            if (!collection.isEmpty()) {
+                for (EffectInstance effectinstance : collection) {
+                    if (!effectinstance.getEffect().isBeneficial()) {
+                        summonedentity.addEffect(new EffectInstance(effectinstance));
+                    }
+                }
+            }
+        }
         worldIn.addFreshEntity(summonedentity);
-        worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 

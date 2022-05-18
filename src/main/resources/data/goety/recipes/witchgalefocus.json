@@ -12,19 +12,13 @@
       "item": "minecraft:fermented_spider_eye"
     },
     {
-      "item": "minecraft:fermented_spider_eye"
-    },
-    {
-      "item": "minecraft:sugar"
+      "item": "goety:poisonballfocus"
     },
     {
       "item": "minecraft:sugar"
     },
     {
       "item": "minecraft:nether_wart"
-    },
-    {
-      "item": "minecraft:blaze_powder"
     }
   ],
   "result": {

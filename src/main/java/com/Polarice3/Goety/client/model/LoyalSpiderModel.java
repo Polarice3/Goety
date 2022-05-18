@@ -9,6 +9,8 @@ import net.minecraft.util.math.MathHelper;
 
 public class LoyalSpiderModel<T extends Entity> extends SegmentedModel<T> {
     private final ModelRenderer head;
+    private final ModelRenderer mouth1;
+    private final ModelRenderer mouth2;
     private final ModelRenderer body0;
     private final ModelRenderer body1;
     private final ModelRenderer leg0;
@@ -27,8 +29,16 @@ public class LoyalSpiderModel<T extends Entity> extends SegmentedModel<T> {
         head = new ModelRenderer(this);
         head.setPos(0.0F, 15.0F, -3.0F);
         head.texOffs(32, 4).addBox(-4.0F, -4.0F, -8.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
-        head.texOffs(32, 4).addBox(1.0F, 1.0F, -10.0F, 2.0F, 4.0F, 2.0F, 0.0F, true);
-        head.texOffs(32, 4).addBox(-3.0F, 1.0F, -10.0F, 2.0F, 4.0F, 2.0F, 0.0F, false);
+
+        mouth1 = new ModelRenderer(this);
+        mouth1.setPos(0.0F, 0.0F, 0.0F);
+        head.addChild(mouth1);
+        mouth1.texOffs(32, 4).addBox(1.0F, 1.0F, -10.0F, 2.0F, 4.0F, 2.0F, 0.0F, true);
+
+        mouth2 = new ModelRenderer(this);
+        mouth2.setPos(0.0F, 0.0F, 0.0F);
+        head.addChild(mouth2);
+        mouth2.texOffs(32, 4).addBox(-3.0F, 1.0F, -10.0F, 2.0F, 4.0F, 2.0F, 0.0F, false);
 
         body0 = new ModelRenderer(this);
         body0.setPos(0.0F, 15.0F, 0.0F);
@@ -132,25 +142,30 @@ public class LoyalSpiderModel<T extends Entity> extends SegmentedModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
         this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
+        float n = 0.01F * (float)(pEntity.getId() % 10);
+        this.mouth1.xRot = MathHelper.sin((float)pEntity.tickCount * n) * 4.5F * ((float)Math.PI / 180F);
+        this.mouth1.zRot = MathHelper.cos((float)pEntity.tickCount * n) * 2.5F * ((float)Math.PI / 180F);
+        this.mouth2.xRot = -this.mouth1.xRot;
+        this.mouth2.zRot = -this.mouth1.zRot;
         float f = ((float)Math.PI / 4F);
-        this.leg0.zRot = (-(float)Math.PI / 4F);
-        this.leg1.zRot = ((float)Math.PI / 4F);
+        this.leg0.zRot = -f;
+        this.leg1.zRot = f;
         this.leg2.zRot = -0.58119464F;
         this.leg3.zRot = 0.58119464F;
         this.leg4.zRot = -0.58119464F;
         this.leg5.zRot = 0.58119464F;
-        this.leg6.zRot = (-(float)Math.PI / 4F);
-        this.leg7.zRot = ((float)Math.PI / 4F);
+        this.leg6.zRot = -f;
+        this.leg7.zRot = f;
         float f1 = -0.0F;
         float f2 = ((float)Math.PI / 8F);
-        this.leg0.yRot = ((float)Math.PI / 4F);
-        this.leg1.yRot = (-(float)Math.PI / 4F);
-        this.leg2.yRot = ((float)Math.PI / 8F);
-        this.leg3.yRot = (-(float)Math.PI / 8F);
-        this.leg4.yRot = (-(float)Math.PI / 8F);
-        this.leg5.yRot = ((float)Math.PI / 8F);
-        this.leg6.yRot = (-(float)Math.PI / 4F);
-        this.leg7.yRot = ((float)Math.PI / 4F);
+        this.leg0.yRot = f;
+        this.leg1.yRot = -f;
+        this.leg2.yRot = f2;
+        this.leg3.yRot = -f2;
+        this.leg4.yRot = -f2;
+        this.leg5.yRot = f2;
+        this.leg6.yRot = -f;
+        this.leg7.yRot = f;
         float f3 = -(MathHelper.cos(pLimbSwing * 0.6662F * 2.0F + 0.0F) * 0.4F) * pLimbSwingAmount;
         float f4 = -(MathHelper.cos(pLimbSwing * 0.6662F * 2.0F + (float)Math.PI) * 0.4F) * pLimbSwingAmount;
         float f5 = -(MathHelper.cos(pLimbSwing * 0.6662F * 2.0F + ((float)Math.PI / 2F)) * 0.4F) * pLimbSwingAmount;

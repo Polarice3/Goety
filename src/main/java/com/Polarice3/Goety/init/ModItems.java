@@ -82,12 +82,13 @@ public class ModItems {
     public static final RegistryObject<Item> TEMPTINGFOCUS = ITEMS.register("temptingfocus", () -> new MagicFocusItem(MainConfig.TemptingCost.get()));
     public static final RegistryObject<Item> DRAGONFIREBALLFOCUS = ITEMS.register("dragonballfocus", () -> new MagicFocusItem(MainConfig.DragonFireballCost.get()));
     public static final RegistryObject<Item> CREEPERLINGFOCUS = ITEMS.register("creeperlingfocus", () -> new MagicFocusItem(MainConfig.CreeperlingCost.get()));
-    public static final RegistryObject<Item> BREATHFOCUS = ITEMS.register("breathfocus", () -> new MagicFocusItem(MainConfig.BreathingCost.get()));
+    public static final RegistryObject<Item> BREATHFOCUS = ITEMS.register("airbreathfocus", () -> new MagicFocusItem(MainConfig.BreathingCost.get()));
     public static final RegistryObject<Item> FIREBALLFOCUS = ITEMS.register("fireballfocus", () -> new MagicFocusItem(MainConfig.FireballCost.get()));
     public static final RegistryObject<Item> LAVABALLFOCUS = ITEMS.register("lavaballfocus", () -> new MagicFocusItem(MainConfig.LavaballCost.get()));
-    public static final RegistryObject<Item> WEBBALLFOCUS = ITEMS.register("webballfocus", () -> new MagicFocusItem(MainConfig.WebballCost.get()));
+    public static final RegistryObject<Item> POISONBALLFOCUS = ITEMS.register("poisonballfocus", () -> new MagicFocusItem(MainConfig.PoisonballCost.get()));
     public static final RegistryObject<Item> ILLUSIONFOCUS = ITEMS.register("illusionfocus", () -> new MagicFocusItem(MainConfig.IllusionCost.get()));
     public static final RegistryObject<Item> SOULSHIELDFOCUS = ITEMS.register("soulshieldfocus", () -> new MagicFocusItem(MainConfig.SoulShieldCost.get()));
+    public static final RegistryObject<Item> FIREBREATHFOCUS = ITEMS.register("firebreathfocus", () -> new MagicFocusItem(MainConfig.FireBreathCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

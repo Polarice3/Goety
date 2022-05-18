@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=false": { "model": "goety:block/soul_fang_totem" },
+    "powered=true": {"model": "goety:block/soul_fang_totem_activated"}
+  }
+}

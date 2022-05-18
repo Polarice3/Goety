@@ -6,6 +6,7 @@ import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.blocks.ArcaBlock;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
+import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
@@ -27,6 +28,7 @@ import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.lichdom.LichProvider;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEProvider;
+import com.Polarice3.Goety.common.spider.SpiderLevelsProvider;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
@@ -91,6 +93,9 @@ public class ModEvents {
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "lichdom"), new LichProvider());
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "soulenergy"), new SEProvider());
         }
+        if (event.getObject() instanceof LoyalSpiderEntity){
+            event.addCapability(new ResourceLocation(Goety.MOD_ID, "spiderlevels"), new SpiderLevelsProvider());
+        }
     }
 
     @SubscribeEvent
@@ -109,6 +114,12 @@ public class ModEvents {
                     ILichdom lichdom = LichdomHelper.getCapability(player);
                     lichdom.setLichdom(true);
                     LichdomHelper.sendLichUpdatePacket(player);
+                }
+            }
+            if (entity instanceof LoyalSpiderEntity){
+                LoyalSpiderEntity loyalSpiderEntity = (LoyalSpiderEntity) entity;
+                if (loyalSpiderEntity.getPlayer() != null) {
+                    SpiderLevelsHelper.sendSpiderLevelsUpdatePacket(loyalSpiderEntity.getPlayer(), loyalSpiderEntity);
                 }
             }
 

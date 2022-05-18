@@ -30,29 +30,19 @@ public class WindTotemTileEntity extends TotemTileEntity {
         int j = this.worldPosition.getY();
         int k = this.worldPosition.getZ();
         assert this.level != null;
-        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D));
-        if (list.size() > 0) {
-            LivingEntity livingEntity = list.get(0);
+        for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))){
             if (!livingEntity.hasEffect(Effects.SLOW_FALLING)) {
                 if (livingEntity instanceof PlayerEntity) {
-                    if (((PlayerEntity) livingEntity).isCreative()) {
-                        if (list.size() > 1) {
-                            return list.get(this.level.random.nextInt(list.size()));
-                        } else {
-                            return null;
-                        }
-                    } else {
+                    PlayerEntity player = (PlayerEntity) livingEntity;
+                    if (!player.isCreative()) {
                         return livingEntity;
                     }
                 } else {
                     return livingEntity;
                 }
-            } else {
-                return null;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override

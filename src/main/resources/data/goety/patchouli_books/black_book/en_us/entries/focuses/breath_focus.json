@@ -1,6 +1,6 @@
 {
   "name": "Breath Focus",
-  "icon": "goety:breathfocus",
+  "icon": "goety:airbreathfocus",
   "category": "goety:focuses",
   "pages": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "type": "goety:ritual",
-      "recipe": "goety:breathfocus"
+      "recipe": "goety:airbreathfocus"
     }
   ]
 }

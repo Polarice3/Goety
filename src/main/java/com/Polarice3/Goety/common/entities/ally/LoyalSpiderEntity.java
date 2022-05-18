@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.spider.ISpiderLevels;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
@@ -20,6 +21,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -58,6 +60,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
     public boolean rideable;
     public boolean fallImmune;
     public boolean saddled;
+    public boolean royal;
     protected boolean Jumping;
     protected float jumpPower;
 
@@ -66,8 +69,14 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
     }
 
     public void tick() {
+        ISpiderLevels spiderLevels = SpiderLevelsHelper.getCapability(this);
         if (!this.level.isClientSide) {
             this.setClimbing(this.horizontalCollision);
+        }
+        if (!this.isRoyal()){
+            if (spiderLevels.getSpiderLevel() >= 10){
+                this.setRoyal(true);
+            }
         }
         if (this.getTarget() instanceof SummonedEntity){
             SummonedEntity summonedEntity = (SummonedEntity) this.getTarget();
@@ -90,18 +99,42 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 }
             }
         }
+        if (this.getTarget() != null && this.getTarget() != this.getTrueOwner()){
+            if (this.isRoyal()){
+                for (SpiderEntity spiderEntity : this.level.getEntitiesOfClass(SpiderEntity.class, this.getBoundingBox().inflate(16))){
+                    if (this.getTarget() != spiderEntity){
+                        spiderEntity.setTarget(this.getTarget());
+                    }
+                }
+            }
+        }
+        if (!this.isBaby()){
+            if (spiderLevels.getSpiderLevel() > 4 && !this.isRideable()){
+                this.setRideable(true);
+            }
+        }
         if (MainConfig.TamedSpiderHeal.get() && this.getHealth() < this.getMaxHealth()){
             if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
                 if (RobeArmorFinder.FindArachnoSet(this.getTrueOwner())) {
                     PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                     ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
+                    int SoulCost = MainConfig.TamedSpiderHealCost.get();
+                    if (RobeArmorFinder.FindLeggings(owner)){
+                        int random = this.random.nextInt(2);
+                        if (random == 0){
+                            SoulCost = 0;
+                        }
+                    }
                     if (SEHelper.getSEActive(owner)){
                         if (SEHelper.getSESouls(owner) > MainConfig.TamedSpiderHealCost.get()){
                             if (this.tickCount % 20 == 0) {
                                 this.heal(1.0F);
                                 Vector3d vector3d = this.getDeltaMovement();
                                 new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                                GoldTotemItem.decreaseSouls(foundStack, MainConfig.TamedSpiderHealCost.get());
+                                SEHelper.decreaseSESouls(owner, SoulCost);
+                                if (!this.level.isClientSide){
+                                    SEHelper.sendSEUpdatePacket(owner);
+                                }
                             }
                         }
                     } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
@@ -109,7 +142,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                             this.heal(1.0F);
                             Vector3d vector3d = this.getDeltaMovement();
                             new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                            GoldTotemItem.decreaseSouls(foundStack, MainConfig.TamedSpiderHealCost.get());
+                            GoldTotemItem.decreaseSouls(foundStack, SoulCost);
                         }
                     }
                 }
@@ -218,6 +251,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         }
         compound.putBoolean("Sitting", this.isSitting());
         compound.putBoolean("Saddled", this.isSaddled());
+        compound.putBoolean("Royal", this.isRoyal());
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -227,6 +261,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.sitting = compound.getBoolean("Sitting");
         this.fallImmune = compound.getBoolean("FallImmune");
         this.saddled = compound.getBoolean("Saddled");
+        this.royal = compound.getBoolean("Royal");
         UUID uuid;
         if (compound.hasUUID("Owner")) {
             uuid = compound.getUUID("Owner");
@@ -249,6 +284,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.setPoison(this.poison);
         this.setFallImmune(this.fallImmune);
         this.setSaddled(this.saddled);
+        this.setRoyal(this.royal);
     }
 
     private boolean getStatusFlag(int mask) {
@@ -274,6 +310,10 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }
+    }
+
+    public PlayerEntity getPlayer(){
+        return (PlayerEntity) this.getTrueOwner();
     }
 
     @Nullable
@@ -304,7 +344,11 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             return false;
         } else {
             if (pEntity instanceof LivingEntity && this.isPoison()) {
-                ((LivingEntity)pEntity).addEffect(new EffectInstance(Effects.POISON, 200));
+                if (this.isRoyal()){
+                    ((LivingEntity)pEntity).addEffect(new EffectInstance(Effects.POISON, 400, 1));
+                } else {
+                    ((LivingEntity)pEntity).addEffect(new EffectInstance(Effects.POISON, 200));
+                }
             }
 
             return true;
@@ -397,15 +441,26 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
     }
 
     public void levelBonus() {
-        if (this.getAttributeBaseValue(Attributes.MAX_HEALTH) < 50.0D) {
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 1.5D);
-            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.5D);
-            this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 0.5F);
-            for(int i = 0; i < 5; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                new ParticleUtil(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+        ISpiderLevels spiderLevels = SpiderLevelsHelper.getCapability(this);
+        if (!this.level.isClientSide()) {
+            if (spiderLevels.getSpiderLevel() < 10) {
+                spiderLevels.increaseSpiderLevel(1);
+                SpiderLevelsHelper.sendSpiderLevelsUpdatePacket(this.getPlayer(), this);
+                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 1.5D);
+                this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.5D);
+                this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 0.5F);
+                for (int i = 0; i < 5; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    new ParticleUtil(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+                }
+                if (spiderLevels.getSpiderLevel() % 20 == 0) {
+                    this.ArmorBonus();
+                }
+                if (spiderLevels.getSpiderLevel() > 4 && !this.isBaby() && !this.isRideable()) {
+                    this.setRideable(true);
+                }
             }
         }
     }
@@ -454,6 +509,14 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         this.entityData.set(DATA_COLLAR_COLOR, pCollarcolor.getId());
     }
 
+    public boolean isRoyal(){
+        return this.getStatusFlag(16);
+    }
+
+    public void setRoyal(boolean royal){
+        this.setStatusFlag(16, royal);
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -471,6 +534,9 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         }
         if (this.isPoison() || partner.isPoison()){
             loyalSpiderEntity.setPoison(true);
+        }
+        if (this.isRoyal() || partner.isRoyal()){
+            loyalSpiderEntity.setRoyal(true);
         }
         if (this.isFallImmune() || partner.isFallImmune()){
             loyalSpiderEntity.setFallImmune(true);
@@ -517,6 +583,9 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
     public void die(DamageSource cause) {
         if (this.isSaddled()){
             this.spawnAtLocation(new ItemStack(Items.SADDLE));
+        }
+        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayerEntity) {
+            this.getTrueOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
         }
         super.die(cause);
     }
@@ -581,19 +650,6 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 return ActionResultType.PASS;
             }
         }
-        if (PotionUtils.getPotion(itemstack) == Potions.STRENGTH){
-            if (!this.isRideable() && !this.isBaby()) {
-                this.playSound(SoundEvents.GENERIC_DRINK, 1.0F, 1.0F);
-                this.setRideable(true);
-                this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 1.0F);
-                if (!pPlayer.abilities.instabuild) {
-                    itemstack.shrink(1);
-                }
-                return ActionResultType.SUCCESS;
-            } else {
-                return ActionResultType.PASS;
-            }
-        }
         if (PotionUtils.getPotion(itemstack) == Potions.SLOW_FALLING){
             if (!this.isFallImmune()) {
                 this.playSound(SoundEvents.GENERIC_DRINK, 1.0F, 1.0F);
@@ -638,7 +694,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             this.setSitting(!this.isSitting());
             this.jumping = false;
             this.navigation.stop();
-            this.setTarget((LivingEntity) null);
+            this.setTarget(null);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.SUCCESS;
@@ -792,7 +848,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             } else {
                 this.attacker = livingentity.getLastHurtMob();
                 int i = livingentity.getLastHurtMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT);
+                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != LoyalSpiderEntity.this.getTrueOwner();
             }
         }
 
@@ -823,7 +879,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             } else {
                 this.attacker = livingentity.getLastHurtByMob();
                 int i = livingentity.getLastHurtByMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT);
+                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != LoyalSpiderEntity.this.getTrueOwner();
             }
         }
 
@@ -874,7 +930,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 return false;
             } else {
                 this.owner = livingentity;
-                return true;
+                return !this.loyalSpiderEntity.isSitting();
             }
         }
 

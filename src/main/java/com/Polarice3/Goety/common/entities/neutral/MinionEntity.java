@@ -4,17 +4,15 @@ import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-public class MinionEntity extends CreatureEntity {
+public class MinionEntity extends CreatureEntity implements FlyingPhaseEntity {
     protected static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.defineId(MinionEntity.class, DataSerializers.BYTE);
 
     public MinionEntity(EntityType<? extends MinionEntity> p_i50190_1_, World p_i50190_2_) {

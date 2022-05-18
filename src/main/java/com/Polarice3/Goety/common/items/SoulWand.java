@@ -8,11 +8,9 @@ import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
-import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -269,7 +267,7 @@ public class SoulWand extends Item{
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("creeperling")) {
                 this.setSpellConditions(new CreeperlingSpell(), itemStack);
                 this.setSpell(13, itemStack);
-            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("breath")) {
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("airbreath")) {
                 this.setSpellConditions(new BreathSpell(), itemStack);
                 this.setSpell(14, itemStack);
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("fireball")) {
@@ -278,8 +276,8 @@ public class SoulWand extends Item{
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("lavaball")) {
                 this.setSpellConditions(new LavaballSpell(), itemStack);
                 this.setSpell(16, itemStack);
-            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("webball")) {
-                this.setSpellConditions(new WebBallSpell(), itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("poisonball")) {
+                this.setSpellConditions(new PoisonBallSpell(), itemStack);
                 this.setSpell(17, itemStack);
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("illusion")) {
                 this.setSpellConditions(new IllusionSpell(), itemStack);
@@ -287,6 +285,9 @@ public class SoulWand extends Item{
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("soulshield")) {
                 this.setSpellConditions(new SoulShieldSpell(), itemStack);
                 this.setSpell(19, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("firebreath")) {
+                this.setSpellConditions(new FireBreathSpell(), itemStack);
+                this.setSpell(20, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

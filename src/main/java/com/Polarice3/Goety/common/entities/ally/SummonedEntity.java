@@ -73,6 +73,9 @@ public class SummonedEntity extends CreatureEntity {
         super.aiStep();
     }
 
+    public void checkDespawn() {
+    }
+
     protected boolean isSunBurnTick() {
         if (this.level.isDay() && !this.level.isClientSide) {
             float f = this.getBrightness();
@@ -339,7 +342,7 @@ public class SummonedEntity extends CreatureEntity {
             } else {
                 this.attacker = livingentity.getLastHurtMob();
                 int i = livingentity.getLastHurtMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT);
+                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != SummonedEntity.this.getTrueOwner();
             }
         }
 
@@ -370,7 +373,7 @@ public class SummonedEntity extends CreatureEntity {
             } else {
                 this.attacker = livingentity.getLastHurtByMob();
                 int i = livingentity.getLastHurtByMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT);
+                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != SummonedEntity.this.getTrueOwner();
             }
         }
 

@@ -289,7 +289,7 @@ public class FriendlyVexEntity extends MinionEntity {
             } else {
                 this.attacker = livingentity.getLastHurtMob();
                 int i = livingentity.getLastHurtMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT);
+                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != FriendlyVexEntity.this.getTrueOwner();
             }
         }
 
@@ -320,7 +320,7 @@ public class FriendlyVexEntity extends MinionEntity {
             } else {
                 this.attacker = livingentity.getLastHurtByMob();
                 int i = livingentity.getLastHurtByMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT);
+                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != FriendlyVexEntity.this.getTrueOwner();
             }
         }
 

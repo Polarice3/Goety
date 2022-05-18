@@ -69,7 +69,7 @@ public class SummonRitual extends Ritual {
                              PlayerEntity castingPlayer) {
         if (living instanceof ShadeEntity){
             ShadeEntity shadeEntity = (ShadeEntity) living;
-            shadeEntity.setLimitedLife(600);
+            shadeEntity.setLimitedLife(12000);
         }
     }
 }

@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.infamy.InfamyUpdatePacket;
 import com.Polarice3.Goety.common.lichdom.LichUpdatePacket;
 import com.Polarice3.Goety.common.soulenergy.SEUpdatePacket;
+import com.Polarice3.Goety.common.spider.SpiderLevelsUpdatePacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +27,7 @@ public class ModNetwork {
         INSTANCE.registerMessage(nextID(), InfamyUpdatePacket.class, InfamyUpdatePacket::encode, InfamyUpdatePacket::decode, InfamyUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), LichUpdatePacket.class, LichUpdatePacket::encode, LichUpdatePacket::decode, LichUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), SEUpdatePacket.class, SEUpdatePacket::encode, SEUpdatePacket::decode, SEUpdatePacket::consume);
+        INSTANCE.registerMessage(nextID(), SpiderLevelsUpdatePacket.class, SpiderLevelsUpdatePacket::encode, SpiderLevelsUpdatePacket::decode, SpiderLevelsUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), EntityUpdatePacket.class, EntityUpdatePacket::encode, EntityUpdatePacket::decode, EntityUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), TileEntityUpdatePacket.class, TileEntityUpdatePacket::encode, TileEntityUpdatePacket::decode, TileEntityUpdatePacket::consume);
     }

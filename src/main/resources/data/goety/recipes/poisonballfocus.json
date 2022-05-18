@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "csc",
+    "ses",
+    "csc"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "c":
+    {
+      "item": "minecraft:spider_eye"
+    },
+    "s":
+    {
+      "item": "minecraft:slime_ball"
+    }
+  },
+  "result":
+  {
+    "item": "goety:poisonballfocus",
+    "count": 1
+  }
+}

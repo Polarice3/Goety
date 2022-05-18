@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 
 public class LoyalSpiderSaddleLayer <T extends LoyalSpiderEntity> extends LayerRenderer<T, LoyalSpiderModel<T>> {
-    private static final ResourceLocation SADDLE_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/loyal_spider_saddle.png");
+    private static final ResourceLocation SADDLE_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/loyal_spider_saddle.png");
     private final LoyalSpiderModel<T> model = new LoyalSpiderModel<>();
 
     public LoyalSpiderSaddleLayer(IEntityRenderer<T, LoyalSpiderModel<T>> p_i50914_1_) {

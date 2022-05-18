@@ -2,6 +2,7 @@
   "name": "Feasting Focus",
   "icon": "goety:feastfocus",
   "category": "goety:focuses",
+  "advancement": "goety:goety/get_fang_totem",
   "pages": [
     {
       "type": "patchouli:text",

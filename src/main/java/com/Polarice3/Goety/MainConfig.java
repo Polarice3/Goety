@@ -30,9 +30,10 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballCost;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WebballCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PoisonballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -48,7 +49,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WebballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
 
@@ -69,9 +69,10 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WebballInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PoisonballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -176,8 +177,8 @@ public class MainConfig {
                 .define("soulRepair", true);
         TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy, Default: true")
                 .define("totemUndying", true);
-        MaxEnchant = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 3")
-                .defineInRange("maxEnchant", 3, 1, 10);
+        MaxEnchant = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")
+                .defineInRange("maxEnchant", 5, 1, 10);
         StarterTotem = BUILDER.comment("Gives Players a Totem of Souls when first entering World, Default: false")
                 .define("starterTotem", false);
         CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 1")
@@ -254,12 +255,14 @@ public class MainConfig {
                 .defineInRange("fireballCost", 4, 0, Integer.MAX_VALUE);
         LavaballCost = BUILDER.comment("Lava Bomb Spell Cost, Default: 16")
                 .defineInRange("lavaBombCost", 16, 0, Integer.MAX_VALUE);
-        WebballCost = BUILDER.comment("Web Ball Spell Cost, Default: 4")
-                .defineInRange("webBallCost", 4, 0, Integer.MAX_VALUE);
+        PoisonballCost = BUILDER.comment("Poison Ball Spell Cost, Default: 4")
+                .defineInRange("poisonBallCost", 4, 0, Integer.MAX_VALUE);
         IllusionCost = BUILDER.comment("Illusion Spell Cost, Default: 20")
                 .defineInRange("illusionCost", 20, 0, Integer.MAX_VALUE);
         SoulShieldCost = BUILDER.comment("Soul Shield Spell Cost, Default: 32")
                 .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
+        FireBreathCost = BUILDER.comment("Fire Breath Spell Cost per second, Default: 2")
+                .defineInRange("fireBreathCost", 2, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -290,8 +293,6 @@ public class MainConfig {
                 .defineInRange("breathingTime", 1, 0, 72000);
         LavaballDuration = BUILDER.comment("Time to cast Lava Bomb Spell, Default: 20")
                 .defineInRange("lavaBombTime", 20, 0, 72000);
-        WebballDuration = BUILDER.comment("Time to cast Web Ball Spell, Default: 10")
-                .defineInRange("webBallTime", 10, 0, 72000);
         IllusionDuration = BUILDER.comment("Time to cast Illusion Spell, Default: 40")
                 .defineInRange("illusionTime", 40, 0, 72000);
         SoulShieldDuration = BUILDER.comment("Time to cast Soul Shield Spell, Default: 20")
@@ -390,12 +391,14 @@ public class MainConfig {
                 .defineInRange("fireballInfamyChance", 0, 0, Integer.MAX_VALUE);
         LavaballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Lava Bomb Spell, Default: 0")
                 .defineInRange("lavaBombInfamyChance", 0, 0, Integer.MAX_VALUE);
-        WebballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Web Ball Spell, Default: 0")
-                .defineInRange("webBallInfamyChance", 0, 0, Integer.MAX_VALUE);
+        PoisonballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Poison Ball Spell, Default: 0")
+                .defineInRange("poisonBallInfamyChance", 0, 0, Integer.MAX_VALUE);
         IllusionInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Illusion Spell, Default: 1")
                 .defineInRange("illusionInfamyChance", 1, 0, Integer.MAX_VALUE);
         SoulShieldInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Shield Spell, Default: 0")
                 .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
+        FireBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fire Breath Spell, Default: 0")
+                .defineInRange("fireBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")
@@ -460,8 +463,8 @@ public class MainConfig {
                 .defineInRange("villagerHateSpells", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Spoilers");
-        LichHealCost = BUILDER.comment("How much Soul Energy is cost to give food to the Player per second if they've become a Lich, Default: 0")
-                .defineInRange("lichHungerCost", 10, 0, Integer.MAX_VALUE);
+        LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 1")
+                .defineInRange("lichHealCost", 1, 0, Integer.MAX_VALUE);
         LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Arachnea Helm will no longer give Blindness during day, Default: true")
                 .define("lichNightVision", true);
         LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")
@@ -479,7 +482,11 @@ public class MainConfig {
     }
 
     public static void loadConfig(ForgeConfigSpec config, String path) {
-        final CommentedFileConfig file = CommentedFileConfig.builder(new File(path)).preserveInsertionOrder().sync().autosave().writingMode(WritingMode.REPLACE).build();
+        final CommentedFileConfig file = CommentedFileConfig.builder(new File(path))
+                .sync()
+                .autosave()
+                .writingMode(WritingMode.REPLACE)
+                .build();
         file.load();
         config.setConfig(file);
     }

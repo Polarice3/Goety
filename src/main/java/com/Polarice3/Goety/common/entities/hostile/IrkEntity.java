@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
 import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.block.BlockState;
@@ -33,7 +34,7 @@ import net.minecraft.world.gen.Heightmap;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class IrkEntity extends MonsterEntity {
+public class IrkEntity extends MonsterEntity implements FlyingPhaseEntity {
     protected static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.defineId(IrkEntity.class, DataSerializers.BYTE);
     public MobEntity owner;
     private boolean limitedLifespan;

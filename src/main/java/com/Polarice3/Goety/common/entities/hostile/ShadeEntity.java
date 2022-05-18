@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.SoundUtil;
@@ -30,7 +31,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-public class ShadeEntity extends MonsterEntity {
+public class ShadeEntity extends MonsterEntity implements FlyingPhaseEntity {
     private boolean hasLimitedLife;
     private int limitedLifeTicks;
     @Nullable

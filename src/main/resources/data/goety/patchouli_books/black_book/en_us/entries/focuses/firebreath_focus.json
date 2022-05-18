@@ -1,0 +1,15 @@
+{
+  "name": "Fire Breath Focus",
+  "icon": "goety:firebreathfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Like a Dragon, you spew flames out in front of you, burning any creature in its path."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:firebreathfocus"
+    }
+  ]
+}
