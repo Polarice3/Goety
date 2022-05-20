@@ -2,7 +2,9 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.spider.ISpiderLevels;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -16,8 +18,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -78,8 +78,8 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 this.setRoyal(true);
             }
         }
-        if (this.getTarget() instanceof SummonedEntity){
-            SummonedEntity summonedEntity = (SummonedEntity) this.getTarget();
+        if (this.getTarget() instanceof OwnedEntity){
+            OwnedEntity summonedEntity = (OwnedEntity) this.getTarget();
             if (summonedEntity.getTrueOwner() == this.getTrueOwner()){
                 this.setTarget(null);
             }
@@ -155,11 +155,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new SitGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, false, (entity) ->
-                entity instanceof IMob
-                        && !(entity instanceof CreeperEntity && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
-                        && !(entity instanceof SpiderEntity && this.getTrueOwner() != null && RobeArmorFinder.FindArachnoHelm(this.getTrueOwner()))
-                        && !(entity instanceof SummonedEntity && ((SummonedEntity) entity).getTrueOwner() == this.getTrueOwner())));
+        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
@@ -219,10 +215,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 return livingentity.isAlliedTo(entityIn);
             }
         }
-        if (entityIn instanceof FriendlyVexEntity && ((FriendlyVexEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof SummonedEntity && ((SummonedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
+        if (entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
             return true;
         }
         if (entityIn instanceof FriendlyTankEntity && ((FriendlyTankEntity) entityIn).getOwner() == this.getTrueOwner()){
@@ -448,7 +441,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 SpiderLevelsHelper.sendSpiderLevelsUpdatePacket(this.getPlayer(), this);
                 this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 1.5D);
                 this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.5D);
-                this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 0.5F);
+                this.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
                 for (int i = 0; i < 5; ++i) {
                     double d0 = this.random.nextGaussian() * 0.02D;
                     double d1 = this.random.nextGaussian() * 0.02D;
@@ -460,6 +453,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 }
                 if (spiderLevels.getSpiderLevel() > 4 && !this.isBaby() && !this.isRideable()) {
                     this.setRideable(true);
+                    this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
                 }
             }
         }

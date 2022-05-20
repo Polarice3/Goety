@@ -1,20 +1,20 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -28,27 +28,19 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Predicate;
 
-public class SummonedEntity extends CreatureEntity {
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.OPTIONAL_UUID);
+public class SummonedEntity extends OwnedEntity {
     private static final DataParameter<Boolean> WANDERING = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BOOLEAN);
     public final EntityPredicate summonCountTargeting = (new EntityPredicate()).range(64.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
-    public LivingEntity owner;
     public boolean limitedLifespan;
     public int limitedLifeTicks;
     public boolean upgraded;
@@ -59,11 +51,7 @@ public class SummonedEntity extends CreatureEntity {
 
     protected void registerGoals() {
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F, false));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, false, (entity) ->
-                entity instanceof IMob
-                        && !(entity instanceof CreeperEntity && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
-                        && !(entity.getMobType() == CreatureAttribute.UNDEAD && this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) this.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
-                        && !(entity instanceof SummonedEntity && ((SummonedEntity) entity).getTrueOwner() == this.getTrueOwner())));
+        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
     }
@@ -176,40 +164,6 @@ public class SummonedEntity extends CreatureEntity {
         }
     }
 
-    public Team getTeam() {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (livingentity != null) {
-                return livingentity.getTeam();
-            }
-        }
-
-        return super.getTeam();
-    }
-
-    public boolean isAlliedTo(Entity entityIn) {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (entityIn == livingentity) {
-                return true;
-            }
-
-            if (livingentity != null) {
-                return livingentity.isAlliedTo(entityIn);
-            }
-        }
-        if (entityIn instanceof FriendlyVexEntity && ((FriendlyVexEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof SummonedEntity && ((SummonedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof FriendlyTankEntity && ((FriendlyTankEntity) entityIn).getOwner() == this.getTrueOwner()){
-            return true;
-        }
-        return super.isAlliedTo(entityIn);
-    }
-
     protected boolean isSunSensitive() {
         return false;
     }
@@ -241,7 +195,6 @@ public class SummonedEntity extends CreatureEntity {
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
         this.entityData.define(WANDERING, false);
     }
 
@@ -252,20 +205,6 @@ public class SummonedEntity extends CreatureEntity {
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-        UUID uuid;
-        if (compound.hasUUID("Owner")) {
-            uuid = compound.getUUID("Owner");
-        } else {
-            String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
-        }
-
-        if (uuid != null) {
-            try {
-                this.setOwnerId(uuid);
-            } catch (Throwable ignored) {
-            }
         }
 
     }
@@ -281,10 +220,6 @@ public class SummonedEntity extends CreatureEntity {
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
-        if (this.getOwnerId() != null) {
-            compound.putUUID("Owner", this.getOwnerId());
-        }
-
     }
 
     public boolean isUpgraded() {
@@ -295,28 +230,6 @@ public class SummonedEntity extends CreatureEntity {
         this.upgraded = attackAll;
     }
 
-    public LivingEntity getTrueOwner() {
-        try {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public UUID getOwnerId() {
-        return this.entityData.get(OWNER_UNIQUE_ID).orElse((UUID)null);
-    }
-
-    public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
-    }
-
-    public void setOwner(LivingEntity ownerIn) {
-        this.owner = ownerIn;
-    }
-
     public void setLimitedLife(int limitedLifeTicksIn) {
         this.limitedLifespan = true;
         this.limitedLifeTicks = limitedLifeTicksIn;
@@ -324,68 +237,6 @@ public class SummonedEntity extends CreatureEntity {
 
     public boolean canBeAffected(EffectInstance pPotioneffect) {
         return pPotioneffect.getEffect() != ModEffects.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
-    }
-
-    class OwnerHurtTargetGoal extends TargetGoal {
-        private LivingEntity attacker;
-        private int timestamp;
-
-        public OwnerHurtTargetGoal(SummonedEntity summonedEntity) {
-            super(summonedEntity, false);
-            this.setFlags(EnumSet.of(Flag.TARGET));
-        }
-
-        public boolean canUse() {
-            LivingEntity livingentity = SummonedEntity.this.getTrueOwner();
-            if (livingentity == null) {
-                return false;
-            } else {
-                this.attacker = livingentity.getLastHurtMob();
-                int i = livingentity.getLastHurtMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != SummonedEntity.this.getTrueOwner();
-            }
-        }
-
-        public void start() {
-            this.mob.setTarget(this.attacker);
-            LivingEntity livingentity = SummonedEntity.this.getTrueOwner();
-            if (livingentity != null) {
-                this.timestamp = livingentity.getLastHurtMobTimestamp();
-            }
-
-            super.start();
-        }
-    }
-
-    class OwnerHurtByTargetGoal extends TargetGoal {
-        private LivingEntity attacker;
-        private int timestamp;
-
-        public OwnerHurtByTargetGoal(SummonedEntity summonedEntity) {
-            super(summonedEntity, false);
-            this.setFlags(EnumSet.of(Flag.TARGET));
-        }
-
-        public boolean canUse() {
-            LivingEntity livingentity = SummonedEntity.this.getTrueOwner();
-            if (livingentity == null) {
-                return false;
-            } else {
-                this.attacker = livingentity.getLastHurtByMob();
-                int i = livingentity.getLastHurtByMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != SummonedEntity.this.getTrueOwner();
-            }
-        }
-
-        public void start() {
-            this.mob.setTarget(this.attacker);
-            LivingEntity livingentity = SummonedEntity.this.getTrueOwner();
-            if (livingentity != null) {
-                this.timestamp = livingentity.getLastHurtByMobTimestamp();
-            }
-
-            super.start();
-        }
     }
 
     public static class FollowOwnerGoal extends Goal {

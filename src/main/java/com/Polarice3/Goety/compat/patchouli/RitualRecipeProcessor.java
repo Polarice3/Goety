@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.compat.patchouli;
 
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
-import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;

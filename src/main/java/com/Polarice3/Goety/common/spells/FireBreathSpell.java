@@ -50,8 +50,8 @@ public class FireBreathSpell extends SpewingSpell{
 
     @Override
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
-        this.breathAttack(entityLiving);
-        Entity target = getTarget(entityLiving);
+        this.breathStaffAttack(entityLiving);
+        Entity target = getStaffTarget(entityLiving);
         if (target != null) {
             if (!target.fireImmune()){
                 target.setSecondsOnFire(60);

@@ -1,25 +1,35 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.SoundUtil;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.UUID;
 
 public class HuskarlEntity extends ZombieEntity {
+    public boolean shade;
+
     public HuskarlEntity(EntityType<? extends HuskarlEntity> p_i48549_1_, World p_i48549_2_) {
         super(p_i48549_1_, p_i48549_2_);
     }
@@ -51,6 +61,41 @@ public class HuskarlEntity extends ZombieEntity {
 
     protected SoundEvent getStepSound() {
         return SoundEvents.HUSK_STEP;
+    }
+
+    public void setShade(boolean shade){
+        this.shade = shade;
+    }
+
+    public boolean isShade(){
+        return this.shade;
+    }
+
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("shade", this.isShade());
+    }
+
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
+        this.shade = compound.getBoolean("shade");
+        this.setShade(this.shade);
+    }
+
+    public void die(DamageSource cause) {
+        super.die(cause);
+        if (!this.level.isClientSide) {
+            ServerWorld serverWorld = (ServerWorld) this.level;
+            if (this.isShade()) {
+                ShadeEntity shade = this.convertTo(ModEntityType.SHADE.get(), false);
+                shade.setPos(this.getX(), this.getY(), this.getZ());
+                if (this.hasCustomName()) {
+                    shade.setCustomName(this.getCustomName());
+                }
+                shade.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(this.blockPosition()), SpawnReason.CONVERSION, null, null);
+                serverWorld.addFreshEntity(shade);
+            }
+        }
     }
 
     public boolean doHurtTarget(Entity pEntity) {

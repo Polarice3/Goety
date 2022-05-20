@@ -1,18 +1,9 @@
 package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.Goety;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.HeartParticle;
-import net.minecraft.client.particle.LargeExplosionParticle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

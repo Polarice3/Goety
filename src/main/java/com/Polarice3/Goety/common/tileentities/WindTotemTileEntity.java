@@ -11,7 +11,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class WindTotemTileEntity extends TotemTileEntity {
 

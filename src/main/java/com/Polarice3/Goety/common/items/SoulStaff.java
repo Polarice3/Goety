@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.common.spells.BreathSpell;
+import com.Polarice3.Goety.common.spells.SpewingSpell;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
@@ -45,15 +45,28 @@ public class SoulStaff extends SoulWand{
         if (this.getSpell(stack) != null) {
             if (SEHelper.getSEActive(playerEntity)){
                 if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)){
-                    soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
-                    SEHelper.sendSEUpdatePacket(playerEntity);
-                    assert stack.getTag() != null;
-                    this.getSpell(stack).StaffResult(worldIn, entityLiving);
-                    if (MainConfig.VillagerHateSpells.get() > 0){
-                        for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
-                            villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                    int random = worldIn.random.nextInt(8);
+                    if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell){
+                        if (random == 0){
+                            soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
+                            SEHelper.sendSEUpdatePacket(playerEntity);
+                            if (MainConfig.VillagerHateSpells.get() > 0){
+                                for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                                    villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                                }
+                            }
+                        }
+                    } else {
+                        soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
+                        SEHelper.sendSEUpdatePacket(playerEntity);
+                        if (MainConfig.VillagerHateSpells.get() > 0){
+                            for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                                villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                            }
                         }
                     }
+                    assert stack.getTag() != null;
+                    this.getSpell(stack).StaffResult(worldIn, entityLiving);
                 } else {
                     worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                     for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
@@ -62,14 +75,26 @@ public class SoulStaff extends SoulWand{
                     }
                 }
             } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)){
-                GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
-                assert stack.getTag() != null;
-                this.getSpell(stack).StaffResult(worldIn, entityLiving);
-                if (MainConfig.VillagerHateSpells.get() > 0){
-                    for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
-                        villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                int random = worldIn.random.nextInt(8);
+                if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell){
+                    if (random == 0){
+                        GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
+                        if (MainConfig.VillagerHateSpells.get() > 0){
+                            for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                                villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                            }
+                        }
+                    }
+                } else {
+                    GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
+                    if (MainConfig.VillagerHateSpells.get() > 0){
+                        for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))){
+                            villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                        }
                     }
                 }
+                assert stack.getTag() != null;
+                this.getSpell(stack).StaffResult(worldIn, entityLiving);
             } else {
                 worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

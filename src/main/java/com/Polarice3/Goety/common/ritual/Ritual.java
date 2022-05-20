@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.ritual;
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import com.Polarice3.Goety.common.tileentities.PedestalTileEntity;
 import net.minecraft.entity.LivingEntity;
@@ -238,11 +239,13 @@ public abstract class Ritual {
         if (setTamed && livingEntity instanceof TameableEntity) {
             ((TameableEntity) livingEntity).tame(castingPlayer);
         }
-        if (setTamed && livingEntity instanceof SummonedEntity) {
-            SummonedEntity summonedEntity = (SummonedEntity) livingEntity;
+        if (setTamed && livingEntity instanceof OwnedEntity) {
+            OwnedEntity summonedEntity = (OwnedEntity) livingEntity;
             summonedEntity.setPersistenceRequired();
             summonedEntity.setOwnerId(castingPlayer.getUUID());
-            summonedEntity.setWandering(false);
+            if (summonedEntity instanceof SummonedEntity){
+                ((SummonedEntity) summonedEntity).setWandering(false);
+            }
         }
         if (livingEntity instanceof ShadeEntity){
             ((ShadeEntity) livingEntity).setBoundOrigin(darkAltarPos);

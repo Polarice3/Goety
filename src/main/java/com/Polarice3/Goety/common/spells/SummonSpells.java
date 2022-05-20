@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.EntityPredicate;
@@ -51,6 +51,6 @@ public abstract class SummonSpells extends Spells{
     }
 
     public int SummonLimit(LivingEntity entityLiving){
-        return entityLiving.level.getNearbyEntities(SummonedEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
+        return entityLiving.level.getNearbyEntities(OwnedEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
     }
 }

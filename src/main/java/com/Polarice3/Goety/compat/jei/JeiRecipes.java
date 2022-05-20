@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.compat.jei;
 
-import com.Polarice3.Goety.client.inventory.crafting.*;
+import com.Polarice3.Goety.client.inventory.crafting.CursedBurnerRecipes;
+import com.Polarice3.Goety.client.inventory.crafting.ModRecipeType;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.world.World;
 

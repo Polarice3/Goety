@@ -1,6 +1,9 @@
 package com.Polarice3.Goety.utils;
 
-import com.Polarice3.Goety.common.infamy.*;
+import com.Polarice3.Goety.common.infamy.IInfamy;
+import com.Polarice3.Goety.common.infamy.InfamyImp;
+import com.Polarice3.Goety.common.infamy.InfamyProvider;
+import com.Polarice3.Goety.common.infamy.InfamyUpdatePacket;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import net.minecraft.entity.player.PlayerEntity;
 

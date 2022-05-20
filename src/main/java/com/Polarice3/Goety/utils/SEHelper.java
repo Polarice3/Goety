@@ -2,9 +2,8 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
-import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEImp;
@@ -59,20 +58,15 @@ public class SEHelper {
         PlayerEntity player = null;
         if (killer instanceof PlayerEntity){
             player = (PlayerEntity) killer;
-        } else if (killer instanceof SummonedEntity){
-            SummonedEntity summonedEntity = (SummonedEntity) killer;
+        } else if (killer instanceof OwnedEntity){
+            OwnedEntity summonedEntity = (OwnedEntity) killer;
             if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
                 player = (PlayerEntity) summonedEntity.getTrueOwner();
-            }
-        } else if (killer instanceof FriendlyVexEntity){
-            FriendlyVexEntity friendlyVex = (FriendlyVexEntity) killer;
-            if (friendlyVex.getTrueOwner() instanceof PlayerEntity){
-                player = (PlayerEntity) friendlyVex.getTrueOwner();
             }
         }
         if (player != null) {
             if (getSEActive(player)) {
-                if (!(victim instanceof SummonedEntity || victim instanceof FriendlyVexEntity)) {
+                if (!(victim instanceof OwnedEntity)) {
                     if (victim.getMobType() == CreatureAttribute.UNDEAD) {
                         increaseSESouls(player, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
                     } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {

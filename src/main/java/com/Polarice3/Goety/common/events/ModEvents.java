@@ -3,12 +3,10 @@ package com.Polarice3.Goety.common.events;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
-import com.Polarice3.Goety.common.blocks.ArcaBlock;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
@@ -33,7 +31,6 @@ import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.BoatEntity;
@@ -44,6 +41,7 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -72,7 +70,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.*;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -432,18 +432,28 @@ public class ModEvents {
                 }
             }
         }
-        if (RobeArmorFinder.FindArachnoHelm(player) && !LichdomHelper.isLich(player)) {
-            if (!world.isClientSide()) {
-                if (world.isDay()) {
-                    float f = player.getBrightness();
-                    BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                    if (f > 0.5F && world.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && world.canSeeSky(blockpos)) {
-                        player.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false));
+        if (RobeArmorFinder.FindArachnoHelm(player)) {
+            boolean blind = false;
+            if (!world.isClientSide && world.isDay()) {
+                float f = player.getBrightness();
+                BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
+                if (f > 0.5F && world.canSeeSky(blockpos)) {
+                    blind = true;
+                }
+            }
+            if (!LichdomHelper.isLich(player)) {
+                if (!world.isClientSide) {
+                    if (blind) {
+                        if (player.hasEffect(Effects.NIGHT_VISION)){
+                            player.removeEffect(Effects.NIGHT_VISION);
+                        }
+                        player.addEffect(new EffectInstance(Effects.BLINDNESS, 40, 0, false, false));
                     } else {
-                        player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
+                        if (player.hasEffect(Effects.BLINDNESS)){
+                            player.removeEffect(Effects.BLINDNESS);
+                        }
+                        player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 210, 0, false, false));
                     }
-                } else {
-                    player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 600, 0, false, false));
                 }
             }
         }
@@ -564,8 +574,8 @@ public class ModEvents {
                 event.setCanceled(true);
             }
         }
-        if (event.getSource().getEntity() instanceof SummonedEntity){
-            SummonedEntity summonedEntity = (SummonedEntity) event.getSource().getEntity();
+        if (event.getSource().getEntity() instanceof OwnedEntity){
+            OwnedEntity summonedEntity = (OwnedEntity) event.getSource().getEntity();
             if (summonedEntity.getTrueOwner() != null){
                 if (summonedEntity.getTrueOwner() == entity){
                     event.setCanceled(true);
@@ -671,8 +681,8 @@ public class ModEvents {
                     InfamyHelper.sendInfamyUpdatePacket(player);
                 }
             }
-            if (killer instanceof SummonedEntity) {
-                SummonedEntity summonedEntity = (SummonedEntity) killer;
+            if (killer instanceof OwnedEntity) {
+                OwnedEntity summonedEntity = (OwnedEntity) killer;
                 if (summonedEntity.getTrueOwner() != null) {
                     if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
                         PlayerEntity player = (PlayerEntity) summonedEntity.getTrueOwner();

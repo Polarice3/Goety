@@ -2,12 +2,10 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.blocks.ArcaBlock;
 import com.Polarice3.Goety.common.blocks.CursedCageBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
-import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
@@ -128,21 +126,16 @@ public class GoldTotemItem extends Item {
         PlayerEntity player = null;
         if (killer instanceof PlayerEntity){
             player = (PlayerEntity) killer;
-        } else if (killer instanceof SummonedEntity){
-            SummonedEntity summonedEntity = (SummonedEntity) killer;
+        } else if (killer instanceof OwnedEntity){
+            OwnedEntity summonedEntity = (OwnedEntity) killer;
             if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
                 player = (PlayerEntity) summonedEntity.getTrueOwner();
-            }
-        } else if (killer instanceof FriendlyVexEntity){
-            FriendlyVexEntity friendlyVex = (FriendlyVexEntity) killer;
-            if (friendlyVex.getTrueOwner() instanceof PlayerEntity){
-                player = (PlayerEntity) friendlyVex.getTrueOwner();
             }
         }
         if (player != null) {
             ItemStack foundStack = GoldTotemFinder.FindTotem(player);
             if (!foundStack.isEmpty()) {
-                if (!(victim instanceof SummonedEntity || victim instanceof FriendlyVexEntity)) {
+                if (!(victim instanceof OwnedEntity)) {
                     if (victim.getMobType() == CreatureAttribute.UNDEAD) {
                         increaseSouls(foundStack, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
                     } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {

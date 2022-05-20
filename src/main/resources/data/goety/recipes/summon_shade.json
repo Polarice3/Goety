@@ -2,7 +2,7 @@
   "type": "goety:ritual",
   "ritual_type": "goety:summon",
   "activation_item": {
-    "item": "minecraft:gold_ingot"
+    "item": "minecraft:glowstone_dust"
   },
   "craftType": "necroturgy",
   "entity_to_summon": "goety:shade",

@@ -4,7 +4,7 @@
   "activation_item": {
     "item": "goety:fang_totem"
   },
-  "craftType": "magic",
+  "craftType": "necroturgy",
   "entity_to_sacrifice": {
     "tag": "goety:shade",
     "display_name": "info.goety.ritual.shade"

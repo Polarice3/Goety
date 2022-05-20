@@ -2,16 +2,16 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
-import com.Polarice3.Goety.common.entities.ally.FriendlyTankEntity;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -108,8 +108,8 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                         }
                     }
                 } else {
-                    if (livingEntity instanceof SummonedEntity) {
-                        SummonedEntity summonedEntity = (SummonedEntity) livingEntity;
+                    if (livingEntity instanceof OwnedEntity) {
+                        OwnedEntity summonedEntity = (OwnedEntity) livingEntity;
                         if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
                             return livingEntity;
                         }
@@ -124,7 +124,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                             return livingEntity;
                         }
                     } else {
-                        if (!(livingEntity instanceof FlyingPhaseEntity) && !(livingEntity instanceof FriendlyTankEntity)) {
+                        if (!(livingEntity instanceof FlyingPhaseEntity) && !(livingEntity instanceof VexEntity)) {
                             return livingEntity;
                         }
                     }
@@ -230,8 +230,8 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                         }
                     }
                 } else {
-                    if (entity instanceof SummonedEntity) {
-                        SummonedEntity summonedEntity = (SummonedEntity) entity;
+                    if (entity instanceof OwnedEntity) {
+                        OwnedEntity summonedEntity = (OwnedEntity) entity;
                         if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
@@ -246,7 +246,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
                     } else {
-                        if (!(entity instanceof FriendlyTankEntity) && !(entity instanceof FlyingPhaseEntity)) {
+                        if (!(entity instanceof FlyingPhaseEntity) || !(entity instanceof VexEntity)) {
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
                     }

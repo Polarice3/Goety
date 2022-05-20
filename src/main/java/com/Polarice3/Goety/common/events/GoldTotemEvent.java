@@ -2,8 +2,7 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.utils.*;
@@ -45,27 +44,8 @@ public class GoldTotemEvent {
             }
         }
 
-        if (killer instanceof SummonedEntity){
-            LivingEntity owner = ((SummonedEntity) killer).getTrueOwner();
-            if (owner != null){
-                if (owner instanceof PlayerEntity) {
-                    if (RobeArmorFinder.FindArmor(owner)) {
-                        PlayerEntity playerEntity = (PlayerEntity) owner;
-                        LivingEntity victim = (LivingEntity) killed;
-                        if (!(playerEntity instanceof FakePlayer)) {
-                            if (SEHelper.getSEActive(playerEntity)){
-                                SEHelper.handleKill(slayer, victim);
-                            } else {
-                                GoldTotemItem.handleKill(slayer, victim);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (killer instanceof FriendlyVexEntity){
-            LivingEntity owner = ((FriendlyVexEntity) killer).getTrueOwner();
+        if (killer instanceof OwnedEntity){
+            LivingEntity owner = ((OwnedEntity) killer).getTrueOwner();
             if (owner != null){
                 if (owner instanceof PlayerEntity) {
                     if (RobeArmorFinder.FindArmor(owner)) {

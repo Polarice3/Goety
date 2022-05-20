@@ -9,7 +9,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
@@ -100,10 +101,14 @@ public class ShadeEntity extends MonsterEntity implements FlyingPhaseEntity {
                 if (this.getBoundingBox().inflate(1.2F).intersects(livingEntity.getBoundingBox())) {
                     HuskarlEntity huskarlEntity = ((ZombieEntity) livingEntity).convertTo(ModEntityType.HUSKARL.get(), false);
                     huskarlEntity.setPos(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
+                    if (this.hasCustomName()){
+                        huskarlEntity.setCustomName(this.getCustomName());
+                    }
+                    huskarlEntity.setShade(true);
                     huskarlEntity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(livingEntity.blockPosition()), SpawnReason.CONVERSION, null, null);
                     serverWorld.addFreshEntity(huskarlEntity);
                     new SoundUtil(huskarlEntity.position(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
-                    this.die(DamageSource.MAGIC);
+                    this.remove();
                 }
             }
         }
@@ -111,7 +116,6 @@ public class ShadeEntity extends MonsterEntity implements FlyingPhaseEntity {
 
     public void die(DamageSource cause) {
         super.die(cause);
-        new SoundUtil(this.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
             new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
         }

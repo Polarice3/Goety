@@ -1,42 +1,37 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
-import com.Polarice3.Goety.utils.LichdomHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.*;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.*;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Optional;
-import java.util.UUID;
 
 public class FriendlyVexEntity extends MinionEntity {
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(FriendlyVexEntity.class, DataSerializers.OPTIONAL_UUID);
     @Nullable
     private BlockPos boundOrigin;
     private boolean limitedLifespan;
@@ -63,11 +58,7 @@ public class FriendlyVexEntity extends MinionEntity {
         this.goalSelector.addGoal(8, new MoveRandomGoal());
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, false, false, (entity) ->
-                entity instanceof IMob
-                        && !(entity instanceof CreeperEntity && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
-                        && !(entity.getMobType() == CreatureAttribute.UNDEAD && this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) this.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
-                        && !(entity instanceof SummonedEntity && ((SummonedEntity) entity).getTrueOwner() == this.getTrueOwner())));
+        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
     }
@@ -78,44 +69,6 @@ public class FriendlyVexEntity extends MinionEntity {
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
-    public Team getTeam() {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (livingentity != null) {
-                return livingentity.getTeam();
-            }
-        }
-
-        return super.getTeam();
-    }
-
-    public boolean isAlliedTo(Entity entityIn) {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (entityIn == livingentity) {
-                return true;
-            }
-
-            if (livingentity != null) {
-                return livingentity.isAlliedTo(entityIn);
-            }
-        }
-        if (entityIn instanceof FriendlyVexEntity && ((FriendlyVexEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof SummonedEntity && ((SummonedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
-            return true;
-        }
-        if (entityIn instanceof FriendlyTankEntity && ((FriendlyTankEntity) entityIn).getOwner() == this.getTrueOwner()){
-            return true;
-        }
-        return super.isAlliedTo(entityIn);
-    }
-
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
-    }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
@@ -125,20 +78,6 @@ public class FriendlyVexEntity extends MinionEntity {
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-        UUID uuid;
-        if (compound.hasUUID("Owner")) {
-            uuid = compound.getUUID("Owner");
-        } else {
-            String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
-        }
-
-        if (uuid != null) {
-            try {
-                this.setOwnerId(uuid);
-            } catch (Throwable ignored) {
-            }
         }
 
     }
@@ -154,28 +93,7 @@ public class FriendlyVexEntity extends MinionEntity {
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
-        if (this.getOwnerId() != null) {
-            compound.putUUID("Owner", this.getOwnerId());
-        }
 
-    }
-
-    public LivingEntity getTrueOwner() {
-        try {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public UUID getOwnerId() {
-        return this.entityData.get(OWNER_UNIQUE_ID).orElse((UUID)null);
-    }
-
-    public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
     }
 
     @Nullable
@@ -270,68 +188,6 @@ public class FriendlyVexEntity extends MinionEntity {
                 }
             }
 
-        }
-    }
-
-    class OwnerHurtTargetGoal extends TargetGoal {
-        private LivingEntity attacker;
-        private int timestamp;
-
-        public OwnerHurtTargetGoal(FriendlyVexEntity friendlyVexEntity) {
-            super(friendlyVexEntity, false);
-            this.setFlags(EnumSet.of(Flag.TARGET));
-        }
-
-        public boolean canUse() {
-            LivingEntity livingentity = FriendlyVexEntity.this.getTrueOwner();
-            if (livingentity == null) {
-                return false;
-            } else {
-                this.attacker = livingentity.getLastHurtMob();
-                int i = livingentity.getLastHurtMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != FriendlyVexEntity.this.getTrueOwner();
-            }
-        }
-
-        public void start() {
-            this.mob.setTarget(this.attacker);
-            LivingEntity livingentity = FriendlyVexEntity.this.getTrueOwner();
-            if (livingentity != null) {
-                this.timestamp = livingentity.getLastHurtMobTimestamp();
-            }
-
-            super.start();
-        }
-    }
-
-    class OwnerHurtByTargetGoal extends TargetGoal {
-        private LivingEntity attacker;
-        private int timestamp;
-
-        public OwnerHurtByTargetGoal(FriendlyVexEntity friendlyVexEntity) {
-            super(friendlyVexEntity, false);
-            this.setFlags(EnumSet.of(Flag.TARGET));
-        }
-
-        public boolean canUse() {
-            LivingEntity livingentity = FriendlyVexEntity.this.getTrueOwner();
-            if (livingentity == null) {
-                return false;
-            } else {
-                this.attacker = livingentity.getLastHurtByMob();
-                int i = livingentity.getLastHurtByMobTimestamp();
-                return i != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.attacker != FriendlyVexEntity.this.getTrueOwner();
-            }
-        }
-
-        public void start() {
-            this.mob.setTarget(this.attacker);
-            LivingEntity livingentity = FriendlyVexEntity.this.getTrueOwner();
-            if (livingentity != null) {
-                this.timestamp = livingentity.getLastHurtByMobTimestamp();
-            }
-
-            super.start();
         }
     }
 

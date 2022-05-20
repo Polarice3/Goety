@@ -5,7 +5,6 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.items.*;
 import com.Polarice3.Goety.common.items.curios.CurioItem;
-import com.Polarice3.Goety.common.items.BrainItem;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;

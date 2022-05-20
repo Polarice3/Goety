@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.client.model;
 
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
-import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelHelper;
 
