@@ -1,31 +1,23 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.UUID;
 
 public class HuskarlEntity extends ZombieEntity {
     public boolean shade;

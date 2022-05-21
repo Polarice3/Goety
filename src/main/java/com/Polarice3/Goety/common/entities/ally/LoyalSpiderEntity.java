@@ -113,6 +113,9 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 this.setRideable(true);
             }
         }
+        if (this.isRideable()){
+            this.maxUpStep = 1.0F;
+        }
         if (MainConfig.TamedSpiderHeal.get() && this.getHealth() < this.getMaxHealth()){
             if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
                 if (RobeArmorFinder.FindArachnoSet(this.getTrueOwner())) {
@@ -173,6 +176,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
                 .add(Attributes.ARMOR, 0.0F)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.0F)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D);
     }
 
@@ -439,9 +443,9 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             if (spiderLevels.getSpiderLevel() < 10) {
                 spiderLevels.increaseSpiderLevel(1);
                 SpiderLevelsHelper.sendSpiderLevelsUpdatePacket(this.getPlayer(), this);
-                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 1.5D);
-                this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.5D);
-                this.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) * 1.3D);
+                this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) * 1.25D);
+                this.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F, 0.5F);
                 for (int i = 0; i < 5; ++i) {
                     double d0 = this.random.nextGaussian() * 0.02D;
                     double d1 = this.random.nextGaussian() * 0.02D;
@@ -461,6 +465,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
 
     public void ArmorBonus(){
         this.getAttribute(Attributes.ARMOR).setBaseValue(this.getAttributeBaseValue(Attributes.ARMOR) + 1.0D);
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) + 0.15D);
     }
 
     public boolean isPoison() {
