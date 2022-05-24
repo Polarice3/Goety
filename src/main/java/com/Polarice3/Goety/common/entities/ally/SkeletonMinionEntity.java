@@ -55,7 +55,6 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
     public SkeletonMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
         this.reassessWeaponGoal();
-        this.setCanPickUpLoot(this.isUpgraded());
     }
 
     public void tick() {

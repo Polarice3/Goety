@@ -373,7 +373,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (pAmount > 20.0F){
             return super.hurt(pSource, 20.0F);
         } else {
-            if (this.level.dimensionType().respawnAnchorWorks()){
+            if (this.level.dimension() == World.NETHER){
                 return super.hurt(pSource, pAmount/4);
             } else {
                 return super.hurt(pSource, pAmount);

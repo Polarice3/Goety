@@ -124,18 +124,19 @@ public class LichEvent {
             ItemStack goldtotem = GoldTotemFinder.FindTotem(player);
             if (SEHelper.getSEActive(player)){
                 if (!player.isOnFire()) {
-                    if (player.isHurt() || player.getHealth() < player.getMaxHealth()) {
-                        if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
+                    if (player.getHealth() < player.getMaxHealth()) {
+                        if (player.tickCount % 20 == 0 && SEHelper.getSESouls(player) > MainConfig.LichHealCost.get()) {
                             player.heal(1.0F);
                             Vector3d vector3d = player.getDeltaMovement();
                             new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
                             SEHelper.decreaseSESouls(player, MainConfig.LichHealCost.get());
+                            SEHelper.sendSEUpdatePacket(player);
                         }
                     }
                 }
             } else if (!goldtotem.isEmpty()){
                 if (!player.isOnFire()) {
-                    if (player.isHurt() || player.getHealth() < player.getMaxHealth()) {
+                    if (player.getHealth() < player.getMaxHealth()) {
                         if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
                             player.heal(1.0F);
                             Vector3d vector3d = player.getDeltaMovement();
@@ -157,10 +158,8 @@ public class LichEvent {
                     ironGolem.setTarget(player);
                 }
             }
-            if (player.isEyeInFluid(FluidTags.WATER)){
-                player.setAirSupply(player.getMaxAirSupply());
-            }
             if (player.isAlive()){
+                player.setAirSupply(player.getMaxAirSupply());
                 if (MainConfig.LichNightVision.get()) {
                     player.addEffect(new EffectInstance(Effects.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false, false));
                 }

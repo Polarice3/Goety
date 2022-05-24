@@ -267,7 +267,7 @@ public class IllagerSpawner {
                 worldIn.addFreshEntityWithPassengers(illager);
                 if (i > 0){
                     PatrollerEntity rider = null;
-                    int riding = random.nextInt(4);
+                    int riding = random.nextInt(5);
                     switch (riding){
                         case 0:
                             rider = EntityType.PILLAGER.create(worldIn);
@@ -280,6 +280,9 @@ public class IllagerSpawner {
                             break;
                         case 3:
                             rider = ModEntityType.INQUILLAGER.get().create(worldIn);
+                            break;
+                        case 4:
+                            rider = ModEntityType.ENVIOKER.get().create(worldIn);
                             break;
                     }
                     if (rider != null){

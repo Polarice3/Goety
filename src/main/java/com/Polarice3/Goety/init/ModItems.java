@@ -4,7 +4,8 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.items.*;
-import com.Polarice3.Goety.common.items.curios.CurioItem;
+import com.Polarice3.Goety.common.items.curios.AmuletItem;
+import com.Polarice3.Goety.common.items.curios.RingItem;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Rarity;
@@ -61,8 +62,11 @@ public class ModItems {
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
     public static final RegistryObject<Item> APOSTLE_BLOOD = ITEMS.register("apostle_blood_bottle", () -> new Item(new Item.Properties().fireResistant().rarity(Rarity.RARE).tab(Goety.TAB)));
     public static final RegistryObject<Item> UNDEATH_POTION = ITEMS.register("undeath_potion", UndeathPotionItem::new);
-    public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", CurioItem::new);
-    public static final RegistryObject<Item> VAMPIRIC_AMULET = ITEMS.register("vampiric_amulet", CurioItem::new);
+    public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", AmuletItem::new);
+    public static final RegistryObject<Item> VAMPIRIC_AMULET = ITEMS.register("vampiric_amulet", AmuletItem::new);
+    public static final RegistryObject<Item> RING_OF_WANT_1 = ITEMS.register("ring_of_want_1", RingItem::new);
+    public static final RegistryObject<Item> RING_OF_WANT_2 = ITEMS.register("ring_of_want_2", RingItem::new);
+    public static final RegistryObject<Item> RING_OF_WANT_3 = ITEMS.register("ring_of_want_3", RingItem::new);
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
     //Focuses

@@ -49,7 +49,7 @@ public class DecrepitFortStructure extends ModStructureTemplate {
                 return false;
             }
         }
-        return MainConfig.DecrepitFortGen.get() && topBlock.getFluidState().isEmpty() && !isNearFort(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
+        return MainConfig.DecrepitFortGen.get() && topBlock.getFluidState().isEmpty() && !isNearVillage(chunkGenerator, seed, chunkrandom, chunkX, chunkZ) && !isNearFort(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
     }
 
     private boolean isNearFort(ChunkGenerator chunkGenerator, long l, SharedSeedRandom sharedSeedRandom, int i1, int i2) {
@@ -63,6 +63,22 @@ public class DecrepitFortStructure extends ModStructureTemplate {
                     }
                 }
             }
+        }
+        return false;
+    }
+
+    private boolean isNearVillage(ChunkGenerator p_242782_1_, long p_242782_2_, SharedSeedRandom p_242782_4_, int p_242782_5_, int p_242782_6_) {
+        StructureSeparationSettings structureseparationsettings = p_242782_1_.getSettings().getConfig(Structure.VILLAGE);
+        if (structureseparationsettings != null) {
+            for (int i = p_242782_5_ - 10; i <= p_242782_5_ + 10; ++i) {
+                for (int j = p_242782_6_ - 10; j <= p_242782_6_ + 10; ++j) {
+                    ChunkPos chunkpos = Structure.VILLAGE.getPotentialFeatureChunk(structureseparationsettings, p_242782_2_, p_242782_4_, i, j);
+                    if (i == chunkpos.x && j == chunkpos.z) {
+                        return true;
+                    }
+                }
+            }
+
         }
         return false;
     }

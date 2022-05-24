@@ -38,8 +38,7 @@ public class FangSpell extends Spells{
         if (!playerEntity.isCrouching()) {
             for (int l = 0; l < 16; ++l) {
                 double d2 = 1.25D * (double) (l + 1);
-                int j = l;
-                this.spawnFangs(entityLiving, entityLiving.getX() + (double) MathHelper.cos(f) * d2, entityLiving.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
+                this.spawnFangs(entityLiving, entityLiving.getX() + (double) MathHelper.cos(f) * d2, entityLiving.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, l);
             }
         } else {
             for(int i = 0; i < 5; ++i) {
@@ -53,7 +52,7 @@ public class FangSpell extends Spells{
             }
         }
         this.IncreaseInfamy(MainConfig.FangInfamyChance.get(), (PlayerEntity) entityLiving);
-        worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving){
@@ -107,13 +106,13 @@ public class FangSpell extends Spells{
         float f5 = MathHelper.sin(-f * ((float)Math.PI / 180F));
         float f6 = f3 * f4;
         float f7 = f2 * f4;
-        double d0 = player.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();;
+        double d0 = player.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();
         Vector3d vector3d1 = vector3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
         return worldIn.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
     }
 
-    private void spawnFangs(LivingEntity livingEntity, double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, float p_190876_9_, int p_190876_10_) {
-        BlockPos blockpos = new BlockPos(p_190876_1_, p_190876_7_, p_190876_3_);
+    private void spawnFangs(LivingEntity livingEntity, double pPosX, double pPosZ, double p_190876_5_, double p_190876_7_, float pYRot, int pWarmUp) {
+        BlockPos blockpos = new BlockPos(pPosX, p_190876_7_, pPosZ);
         boolean flag = false;
         double d0 = 0.0D;
 
@@ -137,7 +136,7 @@ public class FangSpell extends Spells{
         } while(blockpos.getY() >= MathHelper.floor(p_190876_5_) - 1);
 
         if (flag) {
-            livingEntity.level.addFreshEntity(new FangEntity(livingEntity.level, p_190876_1_, (double)blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, livingEntity));
+            livingEntity.level.addFreshEntity(new FangEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, pWarmUp, livingEntity));
         }
 
     }

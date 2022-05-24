@@ -40,6 +40,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -558,7 +559,7 @@ public class ModEvents {
             FangEntity fangEntity = (FangEntity) event.getSource().getEntity();
             if (fangEntity.getOwner() instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) fangEntity.getOwner();
-                if (CuriosFinder.findCurio(player).getItem() == ModItems.VAMPIRIC_AMULET.get()) {
+                if (CuriosFinder.findAmulet(player).getItem() == ModItems.VAMPIRIC_AMULET.get()) {
                     player.heal(event.getAmount());
                 }
             }
@@ -710,6 +711,7 @@ public class ModEvents {
             }
         }
         if (killer instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) killer;
             int r1 = world.random.nextInt(4);
             int r2 = world.random.nextInt(16);
             if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
@@ -723,6 +725,33 @@ public class ModEvents {
                         } else if (killed1 instanceof PatrollerEntity) {
                             if (r2 == 0) {
                                 killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                            }
+                        }
+                    }
+                    Entity entity = event.getSource().getDirectEntity();
+                    if (entity instanceof FangEntity){
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                            if (r1 == 0){
+                                if (killed1.getType() == EntityType.SKELETON){
+                                    killed1.spawnAtLocation(new ItemStack(Items.SKELETON_SKULL));
+                                }
+                                if (killed1.getType() == EntityType.ZOMBIE){
+                                    killed1.spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
+                                }
+                                if (killed1.getType() == EntityType.CREEPER){
+                                    killed1.spawnAtLocation(new ItemStack(Items.CREEPER_HEAD));
+                                }
+                                if (killed1.getType() == EntityType.WITHER_SKELETON){
+                                    killed1.spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
+                                }
+                            }
+                            if (killed1 instanceof PlayerEntity) {
+                                PlayerEntity player1 = (PlayerEntity) killed1;
+                                CompoundNBT tag = new CompoundNBT();
+                                tag.putString("SkullOwner", player1.getDisplayName().getString());
+                                ItemStack head = new ItemStack(Items.PLAYER_HEAD);
+                                head.setTag(tag);
+                                killed1.spawnAtLocation(head);
                             }
                         }
                     }
@@ -742,6 +771,75 @@ public class ModEvents {
         }
         if (event.getEntityLiving().hasEffect(ModEffects.NECROPOWER.get())){
             event.setDroppedExperience(event.getDroppedExperience() * 2);
+        }
+    }
+
+    @SubscribeEvent
+    public static void SpellLoot(LootingLevelEvent event){
+        if (!event.getEntityLiving().level.isClientSide) {
+            int looting = 0;
+            if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
+                Entity spell = event.getDamageSource().getDirectEntity();
+                if (spell instanceof FangEntity || spell instanceof DamagingProjectileEntity) {
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                        looting = 3;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                        looting = 2;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                        looting = 1;
+                    }
+                    event.setLootingLevel(event.getLootingLevel() + looting);
+                }
+                if (Objects.equals(event.getDamageSource(), DamageSource.mobAttack(player))) {
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                        looting = 3;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                        looting = 2;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                        looting = 1;
+                    }
+                    event.setLootingLevel(event.getLootingLevel() + looting);
+                }
+            }
+            if (event.getDamageSource().getEntity() instanceof OwnedEntity) {
+                OwnedEntity ownedEntity = (OwnedEntity) event.getDamageSource().getEntity();
+                if (ownedEntity.getMobType() != CreatureAttribute.UNDEAD) {
+                    if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
+                        PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                            looting = 3;
+                        } else
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                            looting = 2;
+                        } else
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                            looting = 1;
+                        }
+                        event.setLootingLevel(event.getLootingLevel() + looting);
+                    }
+                }
+            }
+            if (event.getDamageSource().getEntity() instanceof LoyalSpiderEntity) {
+                LoyalSpiderEntity loyalSpiderEntity = (LoyalSpiderEntity) event.getDamageSource().getEntity();
+                if (loyalSpiderEntity.getTrueOwner() instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity) loyalSpiderEntity.getTrueOwner();
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                        looting = 3;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                        looting = 2;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                        looting = 1;
+                    }
+                    event.setLootingLevel(event.getLootingLevel() + looting);
+                }
+            }
         }
     }
 

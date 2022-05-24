@@ -214,6 +214,7 @@ public class ModEntityType {
 
     public static final RegistryObject<EntityType<TormentorEntity>> TORMENTOR = ENTITY_TYPES.register("tormentor",
             () -> EntityType.Builder.of(TormentorEntity::new, EntityClassification.MONSTER)
+                    .fireImmune()
                     .canSpawnFarFromPlayer()
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)

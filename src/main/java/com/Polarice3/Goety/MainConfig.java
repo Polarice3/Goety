@@ -149,6 +149,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsMasterImmune;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> RoyalSpiderMinions;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
@@ -267,8 +268,8 @@ public class MainConfig {
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
                 .defineInRange("vexTime", 100, 0, 72000);
-        FangDuration = BUILDER.comment("Time to cast Fang Spell, Default: 80")
-                .defineInRange("fangTime", 80, 0, 72000);
+        FangDuration = BUILDER.comment("Time to cast Fang Spell, Default: 40")
+                .defineInRange("fangTime", 40, 0, 72000);
         RoarDuration = BUILDER.comment("Time to cast Roaring Spell, Default: 40")
                 .defineInRange("roarTime", 40, 0, 72000);
         ZombieDuration = BUILDER.comment("Time to cast Necroturgy Spell, Default: 60")
@@ -414,7 +415,7 @@ public class MainConfig {
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
                 .define("totemGen", true);
         BUILDER.pop();
-        BUILDER.push("Spells");
+        BUILDER.push("Minions");
         UndeadTeleport = BUILDER.comment("Whether Undead Minions can teleport to Players, Default: false")
                 .define("undeadTeleport", false);
         VexTeleport = BUILDER.comment("Whether Vex Minions can teleport to Players, Default: true")
@@ -425,8 +426,10 @@ public class MainConfig {
                 .define("minionMasterImmune", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
                 .define("undeadMinionHeal", true);
-        TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Arachnid Robes, Default: true")
+        TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Arachnea Robes, Default: true")
                 .define("loyalSpiderHeal", true);
+        RoyalSpiderMinions = BUILDER.comment("Whether Spiders will follow Royal Spiders around, Default: true")
+                .define("royalSpiderMinions", true);
         UndeadMinionHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Undead Minion to heal, Default: 1")
                 .defineInRange("undeadMinionHealCost", 1, 0, Integer.MAX_VALUE);
         TamedSpiderHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Loyal Spider to heal, Default: 1")

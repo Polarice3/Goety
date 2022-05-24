@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PotionEntity;
@@ -46,7 +47,7 @@ public class InquillagerEntity extends HuntingIllagerEntity {
         this.goalSelector.addGoal(1, new CastingSpellGoal());
         this.goalSelector.addGoal(2, new HealingSelfSpellGoal());
         this.goalSelector.addGoal(2, new ThrowPotionGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(2, new AttackGoal(this));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -278,6 +279,21 @@ public class InquillagerEntity extends HuntingIllagerEntity {
                     this.inquillager.level.addFreshEntity(potionentity);
                     this.bombTimer = 0;
                 }
+            }
+        }
+    }
+
+    class AttackGoal extends MeleeAttackGoal {
+        public AttackGoal(InquillagerEntity p_i50577_2_) {
+            super(p_i50577_2_, 1.0D, false);
+        }
+
+        protected double getAttackReachSqr(LivingEntity pAttackTarget) {
+            if (this.mob.getVehicle() instanceof RavagerEntity) {
+                float f = this.mob.getVehicle().getBbWidth() - 0.1F;
+                return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
+            } else {
+                return super.getAttackReachSqr(pAttackTarget);
             }
         }
     }

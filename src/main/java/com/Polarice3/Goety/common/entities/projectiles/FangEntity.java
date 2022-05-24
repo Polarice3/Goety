@@ -31,11 +31,11 @@ public class FangEntity extends Entity {
         super(p_i50170_1_, p_i50170_2_);
     }
 
-    public FangEntity(World world, double pPosX, double pPosY, double pPosZ, float p_i47276_8_, int pWarmUp, LivingEntity owner) {
+    public FangEntity(World world, double pPosX, double pPosY, double pPosZ, float pYRot, int pWarmUp, LivingEntity owner) {
         this(ModEntityType.FANG.get(), world);
         this.warmupDelayTicks = pWarmUp;
         this.setOwner(owner);
-        this.yRot = p_i47276_8_ * (180F / (float)Math.PI);
+        this.yRot = pYRot * (180F / (float)Math.PI);
         this.setPos(pPosX, pPosY, pPosZ);
     }
 
@@ -126,7 +126,7 @@ public class FangEntity extends Entity {
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
                     float damage;
-                    if (CuriosFinder.findCurio(player).getItem() == ModItems.EMERALD_AMULET.get()){
+                    if (CuriosFinder.findAmulet(player).getItem() == ModItems.EMERALD_AMULET.get()){
                         damage = 10.0F;
                     } else {
                         damage = 6.0F;

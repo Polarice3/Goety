@@ -70,11 +70,11 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
             if (!(entity instanceof PatrollerEntity)) {
                 if (entity instanceof PlayerEntity){
                     if (!((PlayerEntity) entity).isCreative()){
-                        entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 12000, 0, false, false));
+                        entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 6000, 0, false, false));
 
                     }
                 } else if (entity instanceof AbstractVillagerEntity) {
-                    entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 12000, 0, false, false));
+                    entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 6000, 0, false, false));
                 } else {
                     entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 2000, 0, false, false));
                 }

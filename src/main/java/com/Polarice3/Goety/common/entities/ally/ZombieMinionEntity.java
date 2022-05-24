@@ -38,7 +38,6 @@ public class ZombieMinionEntity extends SummonedEntity {
 
     public ZombieMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setCanPickUpLoot(this.isUpgraded());
     }
 
     public void tick() {

@@ -55,7 +55,11 @@ public class LoyalSpiderRenderer<T extends LoyalSpiderEntity> extends MobRendere
     protected void setupRotations(T pEntityLiving, MatrixStack pMatrixStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks) {
         super.setupRotations(pEntityLiving, pMatrixStack, pAgeInTicks, pRotationYaw, pPartialTicks);
         if (pEntityLiving.isSitting()){
-            pMatrixStack.translate(0, -0.5, 0);
+            if (pEntityLiving.isPoison() && !pEntityLiving.isRideable()){
+                pMatrixStack.translate(0, -0.25, 0);
+            } else {
+                pMatrixStack.translate(0, -0.5, 0);
+            }
         } else {
             pMatrixStack.translate(0, 0, 0);
         }

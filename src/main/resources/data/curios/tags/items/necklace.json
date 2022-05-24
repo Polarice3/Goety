@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "goety:emerald_amulet"
+    "goety:emerald_amulet",
+    "goety:vampiric_amulet"
   ]
 }

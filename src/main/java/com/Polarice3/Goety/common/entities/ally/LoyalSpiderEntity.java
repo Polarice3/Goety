@@ -77,6 +77,21 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             if (spiderLevels.getSpiderLevel() >= 10){
                 this.setRoyal(true);
             }
+        } else {
+            for (SpiderEntity spiderEntity : this.level.getEntitiesOfClass(SpiderEntity.class, this.getBoundingBox().inflate(16))){
+                if (this.getTarget() != null && this.getTarget() != this.getTrueOwner()){
+                    if (this.getTarget() != spiderEntity){
+                        spiderEntity.setTarget(this.getTarget());
+                    }
+                } else {
+                    if (MainConfig.RoyalSpiderMinions.get()) {
+                        spiderEntity.getLookControl().setLookAt(this, 10.0F, (float) spiderEntity.getMaxHeadXRot());
+                        if (spiderEntity.distanceTo(this) > 2.0F) {
+                            spiderEntity.getNavigation().moveTo(this, 1.0F);
+                        }
+                    }
+                }
+            }
         }
         if (this.getTarget() instanceof OwnedEntity){
             OwnedEntity summonedEntity = (OwnedEntity) this.getTarget();
@@ -96,15 +111,6 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             if (RobeArmorFinder.FindArachnoBootsofWander(this.getTrueOwner())) {
                 if (this.tickCount % 40 == 0) {
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 200, 0, false, false));
-                }
-            }
-        }
-        if (this.getTarget() != null && this.getTarget() != this.getTrueOwner()){
-            if (this.isRoyal()){
-                for (SpiderEntity spiderEntity : this.level.getEntitiesOfClass(SpiderEntity.class, this.getBoundingBox().inflate(16))){
-                    if (this.getTarget() != spiderEntity){
-                        spiderEntity.setTarget(this.getTarget());
-                    }
                 }
             }
         }

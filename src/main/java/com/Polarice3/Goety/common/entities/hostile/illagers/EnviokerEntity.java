@@ -7,6 +7,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -344,6 +345,15 @@ public class EnviokerEntity extends HuntingIllagerEntity {
         @Override
         public boolean canUse() {
             return !EnviokerEntity.this.isMagic() && EnviokerEntity.this.getTarget() != null;
+        }
+
+        protected double getAttackReachSqr(LivingEntity pAttackTarget) {
+            if (this.mob.getVehicle() instanceof RavagerEntity) {
+                float f = this.mob.getVehicle().getBbWidth() - 0.1F;
+                return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
+            } else {
+                return super.getAttackReachSqr(pAttackTarget);
+            }
         }
     }
 

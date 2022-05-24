@@ -51,7 +51,7 @@ public class IllagueEvent {
                         int r2 = level.random.nextInt(12000);
                         int a = level.random.nextInt(i2);
                         if (r2 == 0){
-                            infected.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 12000, i3, false, false));
+                            infected.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 6000, i3, false, false));
                         }
                         if (infected instanceof PlayerEntity){
                             switch (r) {
