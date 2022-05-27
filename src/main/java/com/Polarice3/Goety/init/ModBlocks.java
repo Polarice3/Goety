@@ -7,6 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.SignItem;
 import net.minecraft.item.TallBlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -29,6 +31,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> BLAZE_CORE_BLOCK = BLOCKS.register("blazecoreblock", TankCoreBlock::new);
     public static final RegistryObject<Block> CURSED_METAL_BLOCK = BLOCKS.register("cursed_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_BLOCK = BLOCKS.register("cursed_stone", CursedStoneBlock::new);
+    public static final RegistryObject<Block> CURSED_STONE_BRICK_BLOCK = BLOCKS.register("cursed_stone_bricks", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_BRICK_BLOCK = BLOCKS.register("cursed_bricks", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_CHISELED_BLOCK = BLOCKS.register("cursed_stone_chiseled", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_TILES_BLOCK = BLOCKS.register("cursed_tiles", CursedStoneBlock::new);
@@ -81,8 +84,18 @@ public class ModBlocks {
             () -> new FenceBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> HAUNTED_DOOR = BLOCKS.register("haunted_door",
             () -> new DoorBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> HAUNTED_SIGN = BLOCKS.register("haunted_sign",
+            () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.HAUNTED));
+    public static final RegistryObject<Block> HAUNTED_WALL_SIGN = BLOCKS.register("haunted_wall_sign",
+            () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(HAUNTED_SIGN.get()), ModWoodType.HAUNTED));
     //Slabs
     public static final RegistryObject<Block> CURSED_STONE_SLAB_BLOCK = BLOCKS.register("cursed_stone_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE)
+                    .strength(3.0F, 9.0F)
+                    .sound(SoundType.STONE)
+                    .harvestLevel(0)
+                    .harvestTool(ToolType.PICKAXE)));
+    public static final RegistryObject<Block> CURSED_STONE_BRICK_SLAB_BLOCK = BLOCKS.register("cursed_stone_bricks_slab",
             () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE)
                     .strength(3.0F, 9.0F)
                     .sound(SoundType.STONE)
@@ -120,6 +133,8 @@ public class ModBlocks {
     //Stairs
     public static final RegistryObject<Block> CURSED_STONE_STAIRS_BLOCK = BLOCKS.register("cursed_stone_stairs",
             () -> new StairsBlock(CURSED_STONE_BLOCK.get().defaultBlockState(), AbstractBlock.Properties.copy(CURSED_STONE_BLOCK.get())));
+    public static final RegistryObject<Block> CURSED_STONE_BRICKS_STAIRS_BLOCK = BLOCKS.register("cursed_stone_bricks_stairs",
+            () -> new StairsBlock(CURSED_STONE_BRICK_BLOCK.get().defaultBlockState(), AbstractBlock.Properties.copy(CURSED_STONE_BRICK_BLOCK.get())));
     public static final RegistryObject<Block> CURSED_BRICK_STAIRS_BLOCK = BLOCKS.register("cursed_bricks_stairs",
             () -> new StairsBlock(CURSED_BRICK_BLOCK.get().defaultBlockState(), AbstractBlock.Properties.copy(CURSED_BRICK_BLOCK.get())));
     public static final RegistryObject<Block> CURSED_TILES_STAIRS_BLOCK = BLOCKS.register("cursed_tiles_stairs",
@@ -131,6 +146,8 @@ public class ModBlocks {
     //Walls
     public static final RegistryObject<Block> CURSED_BRICK_WALL_BLOCK = BLOCKS.register("cursed_bricks_wall",
             () -> new WallBlock(AbstractBlock.Properties.copy(CURSED_BRICK_BLOCK.get())));
+    public static final RegistryObject<Block> CURSED_STONE_BRICK_WALL_BLOCK = BLOCKS.register("cursed_stone_bricks_wall",
+            () -> new WallBlock(AbstractBlock.Properties.copy(CURSED_STONE_BRICK_BLOCK.get())));
     public static final RegistryObject<Block> DEAD_SANDSTONE_WALL_BLOCK = BLOCKS.register("dead_sandstone_wall",
             () -> new WallBlock(AbstractBlock.Properties.copy(DEAD_SANDSTONE.get())));
     //Panes
@@ -151,6 +168,14 @@ public class ModBlocks {
             () -> new BlockItemBase(CURSED_STONE_SLAB_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_STONE_STAIRS_ITEM = BLOCK_ITEMS.register("cursed_stone_stairs",
             () -> new BlockItemBase(CURSED_STONE_STAIRS_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_STONE_BRICKS_ITEM = BLOCK_ITEMS.register("cursed_stone_bricks",
+            () -> new BlockItemBase(CURSED_STONE_BRICK_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_STONE_BRICKS_SLAB_ITEM = BLOCK_ITEMS.register("cursed_stone_bricks_slab",
+            () -> new BlockItemBase(CURSED_STONE_BRICK_SLAB_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_STONE_BRICKS_STAIRS_ITEM = BLOCK_ITEMS.register("cursed_stone_bricks_stairs",
+            () -> new BlockItemBase(CURSED_STONE_BRICKS_STAIRS_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_STONE_BRICK_WALL_ITEM = BLOCK_ITEMS.register("cursed_stone_bricks_wall",
+            () -> new BlockItemBase(CURSED_STONE_BRICK_WALL_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_BRICK_ITEM = BLOCK_ITEMS.register("cursed_bricks",
             () -> new BlockItemBase(CURSED_BRICK_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_BRICK_SLAB_ITEM = BLOCK_ITEMS.register("cursed_bricks_slab",
@@ -250,6 +275,8 @@ public class ModBlocks {
             () -> new BlockItemBase(HAUNTED_SLAB.get()));
     public static final RegistryObject<Item> HAUNTED_STAIRS_ITEM = BLOCK_ITEMS.register("haunted_stairs",
             () -> new BlockItemBase(HAUNTED_STAIRS.get()));
+    public static final RegistryObject<Item> HAUNTED_SIGN_ITEM = BLOCK_ITEMS.register("haunted_sign",
+            () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()));
 
 
     public static Boolean never(BlockState p_235427_0_, IBlockReader p_235427_1_, BlockPos p_235427_2_, EntityType<?> p_235427_3_) {

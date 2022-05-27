@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,6 +23,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -164,13 +166,13 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
         }
         this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1.0F, 1.0F);
 
-        Vector3d vector3d = this.getBoundingBox().getCenter();
-
-        for(int i = 0; i < 40; ++i) {
-            double d0 = this.random.nextGaussian() * 0.2D;
-            double d1 = this.random.nextGaussian() * 0.2D;
-            double d2 = this.random.nextGaussian() * 0.2D;
-            this.level.addParticle(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+        for(int k = 0; k < 200; ++k) {
+            float f2 = random.nextFloat() * 4.0F;
+            float f1 = random.nextFloat() * ((float)Math.PI * 2F);
+            double d1 = MathHelper.cos(f1) * f2;
+            double d2 = 0.01D + random.nextDouble() * 0.5D;
+            double d3 = MathHelper.sin(f1) * f2;
+            new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
         }
 
     }

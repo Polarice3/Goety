@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class WarpedSpearRenderer extends EntityRenderer<WarpedSpearEntity> {
-    public static final ResourceLocation SPEAR = new ResourceLocation(Goety.MOD_ID, "textures/entity/warped_spear.png");
+    public static final ResourceLocation SPEAR = new ResourceLocation(Goety.MOD_ID, "textures/entity/projectiles/warped_spear.png");
     private final WarpedSpearModel spearModel = new WarpedSpearModel();
 
     public WarpedSpearRenderer(EntityRendererManager renderManagerIn) {

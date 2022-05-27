@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class WitchGaleRenderer extends EntityRenderer<WitchGaleEntity> {
-    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID,"textures/entity/cripplegust.png");
+    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/cripplegust.png");
     private final WitchGaleModel<WitchGaleEntity> model = new WitchGaleModel<>();
 
     public WitchGaleRenderer(EntityRendererManager p_i46179_1_) {

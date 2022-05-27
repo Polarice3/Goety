@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class MutatedChickenRenderer extends MobRenderer<MutatedChickenEntity, MutatedChickenModel<MutatedChickenEntity>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedchicken.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedchicken.png");
 
     public MutatedChickenRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new MutatedChickenModel<>(), 0.5F);

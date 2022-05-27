@@ -10,7 +10,6 @@ import com.Polarice3.Goety.common.entities.utilities.FireTornadoTrapEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -738,7 +737,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 Random r = ApostleEntity.this.random;
                 int random = r.nextInt(2);
                 if (livingentity != null) {
-                    if (i < 4 && !LichdomHelper.isLich((PlayerEntity) livingentity)) {
+                    if (i < 4) {
                         if (random == 0) {
                             BlockPos blockpos = ApostleEntity.this.blockPosition();
                             ZombieVillagerMinionEntity summonedentity = new ZombieVillagerMinionEntity(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ApostleEntity.this.level);
@@ -835,7 +834,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 Random r = ApostleEntity.this.random;
                 int random = r.nextInt(2);
                 if (livingentity != null) {
-                    if (i < 4 && !LichdomHelper.isLich((PlayerEntity) livingentity)) {
+                    if (i < 4) {
                         if (random == 0) {
                             BlockPos blockpos = ApostleEntity.this.blockPosition();
                             ZPiglinBruteMinionEntity summonedentity = new ZPiglinBruteMinionEntity(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ApostleEntity.this.level);
@@ -928,7 +927,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 Random r = ApostleEntity.this.random;
                 int random = r.nextInt(2);
                 if (livingentity != null) {
-                    if (i < 4 && !LichdomHelper.isLich((PlayerEntity) livingentity)) {
+                    if (i < 4) {
                         if (random == 0) {
                             BlockPos blockpos = ApostleEntity.this.blockPosition();
                             SkeletonVillagerMinionEntity summonedentity = new SkeletonVillagerMinionEntity(ModEntityType.SKELETON_VILLAGER_MINION.get(), ApostleEntity.this.level);

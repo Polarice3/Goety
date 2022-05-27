@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ZPiglinMinionEntity extends MonsterEntity {
+public class ZPiglinMinionEntity extends MonsterEntity implements ICultistMinion{
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 0.05D, AttributeModifier.Operation.ADDITION);
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(ZPiglinMinionEntity.class, DataSerializers.OPTIONAL_UUID);

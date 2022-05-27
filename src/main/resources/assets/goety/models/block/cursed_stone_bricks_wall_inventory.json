@@ -1,0 +1,6 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "goety:blocks/cursed_stone_bricks"
+  }
+}

@@ -9,6 +9,7 @@ import com.Polarice3.Goety.client.particles.HugeDSEParticle;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
+import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -16,8 +17,10 @@ import net.minecraft.client.particle.HeartParticle;
 import net.minecraft.client.particle.LargeExplosionParticle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.particle.SpellParticle;
+import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -86,6 +89,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCORCH.get(), ScorchRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHERNAL.get(), NethernalRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PENANCE.get(), PenanceRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_BOAT.get(), ModBoatRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LIGHTNINGTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRERAINTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADOTRAP.get(), TrapRenderer::new);
@@ -102,6 +106,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.PEDESTAL.get(), PedestalTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.TEMP_WEB.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ARCA.get(), ArcaTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGN_TILE_ENTITIES.get(), SignTileEntityRenderer::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_CAGE_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.ARCA_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_BARS_BLOCK.get(), RenderType.translucent());
@@ -112,6 +117,9 @@ public class ClientEventBusSubscriber {
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
         ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);
         ModKeybindings.init();
+        event.enqueueWork(() -> {
+            Atlases.addWoodType(ModWoodType.HAUNTED);
+        });
     }
 
     @SubscribeEvent

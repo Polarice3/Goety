@@ -1,0 +1,17 @@
+{
+  "name": "Dark Staff",
+  "icon": "goety:dark_scroll",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/get_ruby",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Power of the Vizier's Ruby is unlike any other. You have no clue how the Illagers managed to create this ruby but you do know what it does. It appears to amplify the power of Soul Energy, causing spells to become more Potent."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:soulstaff",
+      "text": "By upgrading the Wand into a Staff with the Ruby at the top, your spells will be much greater than before."
+    }
+  ]
+}

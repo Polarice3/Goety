@@ -6,11 +6,11 @@
   ],
   "key": {
     "#": {
-      "item": "goety:cursed_stone"
+      "item": "goety:cursed_stone_bricks_slab"
     }
   },
   "result": {
     "item": "goety:cursed_bricks",
-    "count": 4
+    "count": 2
   }
 }

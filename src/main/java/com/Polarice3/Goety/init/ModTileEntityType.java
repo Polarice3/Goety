@@ -51,4 +51,7 @@ public class ModTileEntityType {
 
     public static final RegistryObject<TileEntityType<SoulFangTotemTileEntity>> SOUL_FANG_TOTEM = TILEENTITY_TYPES.register("soul_fang_totem",
             () -> TileEntityType.Builder.of(SoulFangTotemTileEntity::new, ModBlocks.SOUL_FANG_TOTEM.get()).build(null));
+
+    public static final RegistryObject<TileEntityType<ModSignTileEntity>> SIGN_TILE_ENTITIES = TILEENTITY_TYPES.register("sign",
+            () -> TileEntityType.Builder.of(ModSignTileEntity::new, ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()).build(null));
 }

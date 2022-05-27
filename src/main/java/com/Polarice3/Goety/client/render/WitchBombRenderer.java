@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class WitchBombRenderer extends EntityRenderer<WitchBombEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/witchbomb.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/witchbomb.png");
     private static final RenderType field_229044_e_ = RenderType.entityCutoutNoCull(TEXTURE);
 
     public WitchBombRenderer(EntityRendererManager renderManagerIn) {

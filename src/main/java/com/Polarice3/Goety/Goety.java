@@ -3,6 +3,7 @@ package com.Polarice3.Goety;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
@@ -34,6 +35,7 @@ import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
 import com.Polarice3.Goety.init.*;
 import com.mojang.serialization.Codec;
+import net.minecraft.block.WoodType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -139,6 +141,7 @@ public class Goety {
 
         event.enqueueWork(() -> {
             ModStructures.setupStructures();
+            WoodType.register(ModWoodType.HAUNTED);
             ConfiguredStructures.registerConfiguredStructures();
         });
 

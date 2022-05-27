@@ -11,12 +11,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 
 public class MutantRabbitRenderer extends MobRenderer<MutatedRabbitEntity, MutantRabbitModel<MutatedRabbitEntity>> {
-    private static final ResourceLocation RABBIT_BROWN_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedrabbit_brown.png");
-    private static final ResourceLocation RABBIT_WHITE_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedrabbit_white.png");
-    private static final ResourceLocation RABBIT_BLACK_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedrabbit_black.png");
-    private static final ResourceLocation RABBIT_GOLD_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedrabbit_gold.png");
-    private static final ResourceLocation RABBIT_SALT_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedrabbit_salt.png");
-    private static final ResourceLocation RABBIT_WHITE_SPLOTCHED_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedrabbit_splotched.png");
+    private static final ResourceLocation RABBIT_BROWN_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedrabbit_brown.png");
+    private static final ResourceLocation RABBIT_WHITE_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedrabbit_white.png");
+    private static final ResourceLocation RABBIT_BLACK_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedrabbit_black.png");
+    private static final ResourceLocation RABBIT_GOLD_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedrabbit_gold.png");
+    private static final ResourceLocation RABBIT_SALT_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedrabbit_salt.png");
+    private static final ResourceLocation RABBIT_WHITE_SPLOTCHED_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedrabbit_splotched.png");
 
     public MutantRabbitRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new MutantRabbitModel<>(), 0.5F);

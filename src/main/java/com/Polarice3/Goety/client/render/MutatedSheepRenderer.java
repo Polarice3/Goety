@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MutatedSheepRenderer extends MobRenderer<MutatedSheepEntity, MutatedSheepModel<MutatedSheepEntity>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedsheep.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedsheep.png");
 
     public MutatedSheepRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new MutatedSheepModel<>(), 0.5F);

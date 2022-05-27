@@ -8,7 +8,7 @@
       "text": "Like a Dragon, you spew flames out in front of you, burning any creature in its path."
     },
     {
-      "type": "goety:ritual",
+      "type": "patchouli:crafting",
       "recipe": "goety:firebreathfocus"
     }
   ]

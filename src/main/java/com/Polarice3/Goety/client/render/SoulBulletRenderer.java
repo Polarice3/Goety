@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class SoulBulletRenderer extends EntityRenderer<SoulBulletEntity> {
-    private static final ResourceLocation TEXTURE = Goety.location("textures/entity/soul_bullet.png");
+    private static final ResourceLocation TEXTURE = Goety.location("textures/entity/projectiles/soul_bullet.png");
     private final SmallCubeModel<SoulBulletEntity> model = new SmallCubeModel<>();
 
     public SoulBulletRenderer(EntityRendererManager p_i47202_1_) {

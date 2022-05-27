@@ -11,6 +11,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
+import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.*;
@@ -108,6 +109,12 @@ public class ModEntityType {
                     .sized(2.0f,3.0f)
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "fire_tornado").toString()));
+
+    public static final RegistryObject<EntityType<ModBoatEntity>> MOD_BOAT = ENTITY_TYPES.register("boat",
+            () -> EntityType.Builder.<ModBoatEntity>of(ModBoatEntity::new, EntityClassification.MISC)
+                    .sized(1.375F, 0.5625F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "boat").toString()));
 
     public static final RegistryObject<EntityType<ChannellerEntity>> CHANNELLER = ENTITY_TYPES.register("channeller",
             () -> EntityType.Builder.of(ChannellerEntity::new, EntityClassification.MONSTER)

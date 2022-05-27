@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -100,18 +101,32 @@ public class WitchGaleEntity extends DamagingProjectileEntity {
         }
     }
 
-    private void launch(Entity p_213688_1_) {
-        double d0 = p_213688_1_.getX() - this.getX();
-        double d1 = p_213688_1_.getZ() - this.getZ();
+    private void launch(Entity entity) {
+        double d0 = entity.getX() - this.getX();
+        double d1 = entity.getZ() - this.getZ();
         double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        p_213688_1_.push(d0 / d2 * 2.0D, 0.2D, d1 / d2 * 2.0D);
+        if (entity instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entity;
+            if (!player.isCreative() && !player.isSpectator()){
+                entity.push(d0 / d2 * 2.0D, 0.2D, d1 / d2 * 2.0D);
+            }
+        } else {
+            entity.push(d0 / d2 * 2.0D, 0.2D, d1 / d2 * 2.0D);
+        }
     }
 
-    private void upgradedlaunch(Entity p_213688_1_) {
-        double d0 = p_213688_1_.getX() - this.getX();
-        double d1 = p_213688_1_.getZ() - this.getZ();
+    private void upgradedlaunch(Entity entity) {
+        double d0 = entity.getX() - this.getX();
+        double d1 = entity.getZ() - this.getZ();
         double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        p_213688_1_.push(d0 / d2 * 4.0D, 0.4D, d1 / d2 * 4.0D);
+        if (entity instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entity;
+            if (!player.isCreative() && !player.isSpectator()){
+                entity.push(d0 / d2 * 4.0D, 0.4D, d1 / d2 * 4.0D);
+            }
+        } else {
+            entity.push(d0 / d2 * 4.0D, 0.4D, d1 / d2 * 4.0D);
+        }
     }
 
     public double AreaofEffect(){

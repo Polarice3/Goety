@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MutatedSheepWoolLayer extends LayerRenderer<MutatedSheepEntity, MutatedSheepModel<MutatedSheepEntity>> {
-    private static final ResourceLocation SHEEP_FUR_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedsheepwool.png");
+    private static final ResourceLocation SHEEP_FUR_LOCATION = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedsheepwool.png");
     private final MutatedSheepWoolModel<MutatedSheepEntity> model = new MutatedSheepWoolModel<>();
 
     public MutatedSheepWoolLayer(IEntityRenderer<MutatedSheepEntity, MutatedSheepModel<MutatedSheepEntity>> p_i50925_1_) {

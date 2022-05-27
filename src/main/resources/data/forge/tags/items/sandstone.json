@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "goety:dead_sandstone",
+    "goety:dead_sandstone_cut",
+    "goety:dead_sandstone_chiseled",
+    "goety:dead_sandstone_smooth"
+  ]
+}

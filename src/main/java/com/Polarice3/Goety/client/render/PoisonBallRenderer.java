@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PoisonBallRenderer extends EntityRenderer<PoisonBallEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/poison_ball.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/poison_ball.png");
     private static final RenderType field_229044_e_ = RenderType.entityCutoutNoCull(TEXTURE);
 
     public PoisonBallRenderer(EntityRendererManager renderManagerIn) {

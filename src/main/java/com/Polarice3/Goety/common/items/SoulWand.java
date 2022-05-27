@@ -355,7 +355,7 @@ public class SoulWand extends Item{
         if (this.getSpell(stack) != null) {
             if (SEHelper.getSEActive(playerEntity)){
                 if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)){
-                    int random = worldIn.random.nextInt(8);
+                    int random = worldIn.random.nextInt(4);
                     if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell){
                         if (random == 0){
                             soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
@@ -385,7 +385,7 @@ public class SoulWand extends Item{
                     }
                 }
             } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)){
-                int random = worldIn.random.nextInt(8);
+                int random = worldIn.random.nextInt(4);
                 if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell){
                     if (random == 0){
                         GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));

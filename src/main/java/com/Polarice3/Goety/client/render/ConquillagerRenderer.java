@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class ConquillagerRenderer<T extends ConquillagerEntity> extends MobRenderer<T, ConquillagerModel<T>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/conquillager.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/conquillager.png");
 
     public ConquillagerRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new ConquillagerModel<>(0.0F, 0.0F), 0.5F);

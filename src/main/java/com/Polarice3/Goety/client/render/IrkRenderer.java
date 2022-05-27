@@ -10,8 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class IrkRenderer extends MobRenderer<IrkEntity, IrkModel> {
-    private static final ResourceLocation VEX_TEXTURE = Goety.location("textures/entity/irk.png");
-    private static final ResourceLocation VEX_CHARGING_TEXTURE = Goety.location("textures/entity/irk_charging.png");
+    private static final ResourceLocation VEX_TEXTURE = Goety.location("textures/entity/illagers/irk.png");
+    private static final ResourceLocation VEX_CHARGING_TEXTURE = Goety.location("textures/entity/illagers/irk_charging.png");
 
     public IrkRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new IrkModel(), 0.3F);

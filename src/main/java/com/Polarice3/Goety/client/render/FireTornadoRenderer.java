@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class FireTornadoRenderer extends EntityRenderer<FireTornadoEntity> {
-    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID,"textures/entity/fire_tornado.png");
+    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/fire_tornado.png");
     private final FireTornadoModel<FireTornadoEntity> model = new FireTornadoModel<>();
 
     public FireTornadoRenderer(EntityRendererManager p_i46179_1_) {

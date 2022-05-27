@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class VizierRenderer extends MobRenderer<VizierEntity, VizierModel> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/vizier.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/vizier.png");
 
     public VizierRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new VizierModel(0.0F, 0.0F), 1.0F);

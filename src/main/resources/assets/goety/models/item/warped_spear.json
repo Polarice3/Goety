@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "texture_size": [32, 32],
   "textures": {
-    "0": "goety:entity/warped_spear_item",
+    "0": "goety:entity/projectiles/warped_spear_item",
     "1": "goety:items/warped_spear"
   },
   "elements": [

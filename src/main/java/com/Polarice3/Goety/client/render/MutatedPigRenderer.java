@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class MutatedPigRenderer extends MobRenderer<MutatedPigEntity, MutatedPigModel<MutatedPigEntity>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutatedpig.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/mutated/mutatedpig.png");
 
     public MutatedPigRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new MutatedPigModel<>(), 1.0F);

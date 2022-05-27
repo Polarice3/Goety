@@ -14,8 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 public class SoulSkullRenderer extends EntityRenderer<SoulSkullEntity> {
-    private static final ResourceLocation WITHER_INVULNERABLE_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/soulskull_destroy.png");
-    private static final ResourceLocation WITHER_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/soulskull.png");
+    private static final ResourceLocation WITHER_INVULNERABLE_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/soulskull_destroy.png");
+    private static final ResourceLocation WITHER_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/soulskull.png");
     private final GenericHeadModel model = new GenericHeadModel();
 
     public SoulSkullRenderer(EntityRendererManager p_i46129_1_) {

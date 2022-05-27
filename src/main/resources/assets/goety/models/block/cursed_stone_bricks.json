@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "goety:blocks/cursed_stone_bricks"
+  }
+}

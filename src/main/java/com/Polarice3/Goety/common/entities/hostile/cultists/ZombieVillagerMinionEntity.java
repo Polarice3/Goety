@@ -33,7 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ZombieVillagerMinionEntity extends AbstractCultistEntity {
+public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements ICultistMinion{
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(ZombieVillagerMinionEntity.class, DataSerializers.OPTIONAL_UUID);
     public LivingEntity owner;
     public boolean limitedLifespan;

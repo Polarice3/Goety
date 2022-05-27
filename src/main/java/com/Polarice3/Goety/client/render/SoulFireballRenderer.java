@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SoulFireballRenderer extends EntityRenderer<SoulFireballEntity> {
-    private static final ResourceLocation SOUL_FIREBALL_TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/soulfireball.png");
+    private static final ResourceLocation SOUL_FIREBALL_TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/soulfireball.png");
     private static final RenderType field_229044_e_ = RenderType.entityCutoutNoCull(SOUL_FIREBALL_TEXTURE);
 
     public SoulFireballRenderer(EntityRendererManager renderManagerIn) {

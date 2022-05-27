@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implements IRangedAttackMob {
+public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultistMinion {
     private final RangedBowAttackGoal<SkeletonVillagerMinionEntity> bowGoal = new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F);
     private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
 

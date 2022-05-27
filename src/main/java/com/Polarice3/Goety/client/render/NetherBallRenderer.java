@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class NetherBallRenderer extends EntityRenderer<NetherBallEntity> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/scorchball.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/scorchball.png");
     private static final RenderType field_229044_e_ = RenderType.entityCutoutNoCull(TEXTURE);
 
     public NetherBallRenderer(EntityRendererManager renderManagerIn) {

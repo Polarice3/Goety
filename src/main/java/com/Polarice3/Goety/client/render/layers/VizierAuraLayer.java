@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class VizierAuraLayer extends EnergyLayer<VizierEntity, VizierModel> {
-    private static final ResourceLocation VIZIER_ARMOR = new ResourceLocation(Goety.MOD_ID, "textures/entity/vizierarmor.png");
+    private static final ResourceLocation VIZIER_ARMOR = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/vizierarmor.png");
     private final VizierModel druidModel = new VizierModel(0.5F, 0.5F);
 
     public VizierAuraLayer(IEntityRenderer<VizierEntity, VizierModel> p_i50915_1_) {

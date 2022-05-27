@@ -3,10 +3,13 @@ package com.Polarice3.Goety.common.entities.bosses;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
 import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
+import com.Polarice3.Goety.common.entities.projectiles.SoulFireballEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.EntityHelper;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -126,29 +129,16 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                 if (!this.level.getGameRules().getBoolean(GameRules.RULE_DISABLE_RAIDS)) {
                     player.addEffect(effectinstance);
                 }
-                CompoundNBT playerData = player.getPersistentData();
-                CompoundNBT data;
-
-                if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                    data = new CompoundNBT();
-                } else {
-                    data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-                }
-
-                if (!data.getBoolean("goety:killedVizier")) {
-                    data.putBoolean("goety:killedVizier", true);
-                    playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
-                }
             }
         }
 
         super.die(cause);
     }
 
-    public boolean hurt(DamageSource source, float amount) {
-        Entity entity = source.getEntity();
-        if (entity instanceof LivingEntity){
-            if (entity instanceof IrkEntity){
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        LivingEntity livingEntity = this.getTarget();
+        if (livingEntity != null){
+            if (pSource.getEntity() instanceof IrkEntity){
                 return false;
             } else {
                 if (!MainConfig.VizierMinion.get()) {
@@ -170,13 +160,17 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                         this.level.addFreshEntity(irk);
                     }
                 }
-                return super.hurt(source, amount);
             }
-        } else if (this.isSpellcasting()){
-            super.hurt(source, amount/2);
-            return true;
+        }
+
+        if (pAmount > 20.0F){
+            return super.hurt(pSource, 20.0F);
         } else {
-            return super.hurt(source, amount);
+            if (this.isSpellcasting()){
+                return super.hurt(pSource, pAmount/2);
+            } else {
+                return super.hurt(pSource, pAmount);
+            }
         }
     }
 

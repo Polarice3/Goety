@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -13,12 +14,17 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class MutatedSteakItem extends Item {
-    public MutatedSteakItem() {
-        super(new Properties()
+public class MutatedFoodItem extends Item {
+    public int foodLevel;
+    public float saturation;
+
+    public MutatedFoodItem(int foodLevel, float saturation) {
+        super(new Item.Properties()
                 .tab(Goety.TAB)
                 .durability(8)
         );
+        this.foodLevel = foodLevel;
+        this.saturation = saturation;
     }
 
     public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
@@ -38,10 +44,8 @@ public class MutatedSteakItem extends Item {
             }
         }
         PlayerEntity playerentity = (PlayerEntity) entityLiving;
-        playerentity.getFoodData().eat(10, 1);
-        stack.hurtAndBreak(1, playerentity, (player) -> {
-            player.broadcastBreakEvent(playerentity.getUsedItemHand());
-        });
+        playerentity.getFoodData().eat(foodLevel, saturation);
+        ItemHelper.hurtAndRemove(stack, 1, playerentity);
         return stack;
     }
 
@@ -59,5 +63,4 @@ public class MutatedSteakItem extends Item {
     public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.EAT;
     }
-
 }

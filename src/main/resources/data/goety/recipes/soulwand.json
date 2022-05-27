@@ -3,8 +3,8 @@
   "pattern":
   [
     "ete",
-    " c ",
-    "scs"
+    " m ",
+    " c "
   ],
   "key":
   {
@@ -16,13 +16,13 @@
     {
       "tag": "forge:gems/lapis"
     },
+    "m":
+    {
+      "item": "goety:magicfabric"
+    },
     "c":
     {
-      "item": "goety:cursed_ingot"
-    },
-    "s":
-    {
-      "tag": "minecraft:soul_fire_base_blocks"
+      "item": "goety:haunted_planks"
     }
   },
   "result":

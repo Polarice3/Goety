@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -44,9 +45,7 @@ public class UncookedMutatedItem extends Item {
         }
         PlayerEntity playerentity = (PlayerEntity) entityLiving;
         playerentity.getFoodData().eat(4, 0.8F);
-        stack.hurtAndBreak(1, playerentity, (player) -> {
-            player.broadcastBreakEvent(playerentity.getUsedItemHand());
-        });
+        ItemHelper.hurtAndRemove(stack, 1, playerentity);
         return stack;
     }
 

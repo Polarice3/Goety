@@ -12,7 +12,7 @@ import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class EnviokerRenderer <T extends EnviokerEntity> extends IllagerRenderer<T> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/envioker.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/envioker.png");
 
     public EnviokerRenderer(EntityRendererManager p_i47207_1_) {
         super(p_i47207_1_, new IllagerModel<>(0.0F, 0.0F, 64, 64), 0.5F);

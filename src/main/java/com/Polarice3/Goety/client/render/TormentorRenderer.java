@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class TormentorRenderer extends BipedRenderer<TormentorEntity, TormentorModel<TormentorEntity>> {
-    private static final ResourceLocation TEXTURE = Goety.location("textures/entity/tormentor.png");
-    private static final ResourceLocation TEXTURE_CHARGE = Goety.location("textures/entity/tormentor_charge.png");
+    private static final ResourceLocation TEXTURE = Goety.location("textures/entity/illagers/tormentor.png");
+    private static final ResourceLocation TEXTURE_CHARGE = Goety.location("textures/entity/illagers/tormentor_charge.png");
 
     public TormentorRenderer(EntityRendererManager p_i47190_1_) {
         super(p_i47190_1_, new TormentorModel<>(0.0F, 0.5F), 0.5F);

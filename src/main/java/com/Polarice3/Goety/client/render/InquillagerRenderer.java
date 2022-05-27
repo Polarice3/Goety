@@ -15,7 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class InquillagerRenderer<T extends InquillagerEntity> extends MobRenderer<T, InquillagerModel<T>> {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/inquillager.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/inquillager.png");
 
     public InquillagerRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new InquillagerModel<>(0.0F, 0.0F), 0.5F);

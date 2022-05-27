@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ICultistMinion;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
@@ -218,7 +219,9 @@ public class LichEvent {
                             if (LichdomHelper.isLich(player)) {
                                 if (MainConfig.LichPowerfulFoes.get()) {
                                     if (event.getEntityLiving().getMaxHealth() < 100) {
-                                        ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                        if (!(event.getEntityLiving() instanceof ICultistMinion)) {
+                                            ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                        }
                                     }
                                 } else {
                                     ((MonsterEntity) event.getEntityLiving()).setTarget(null);

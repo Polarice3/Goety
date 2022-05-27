@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class PitchforkRenderer extends EntityRenderer<PitchforkEntity> {
-    public static final ResourceLocation TEXTURE = Goety.location("textures/entity/pitchfork.png");
+    public static final ResourceLocation TEXTURE = Goety.location("textures/entity/projectiles/pitchfork.png");
 
     private final PitchforkModel model = new PitchforkModel();
 

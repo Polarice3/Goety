@@ -1,27 +1,29 @@
 {
-  "type": "goety:ritual",
-  "ritual_type": "goety:craft",
-  "activation_item": {
-    "item": "goety:fireballfocus"
-  },
-  "craftType": "air",
-  "soulCost": 1,
-  "duration": 30,
-  "ingredients": [
-    {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:glass_bottle"
-    }
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "csc",
+    "ses",
+    "csc"
   ],
-  "result": {
-    "item": "goety:firebreathfocus"
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "s":
+    {
+      "tag": "minecraft:coals"
+    },
+    "c":
+    {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "result":
+  {
+    "item": "goety:firebreathfocus",
+    "count": 1
   }
 }

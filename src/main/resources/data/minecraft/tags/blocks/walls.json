@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "goety:cursed_stone_bricks_wall",
     "goety:cursed_bricks_wall",
     "goety:dead_sandstone_wall"
   ]
