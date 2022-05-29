@@ -111,8 +111,8 @@ public class FangSpell extends Spells{
         return worldIn.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
     }
 
-    private void spawnFangs(LivingEntity livingEntity, double pPosX, double pPosZ, double p_190876_5_, double p_190876_7_, float pYRot, int pWarmUp) {
-        BlockPos blockpos = new BlockPos(pPosX, p_190876_7_, pPosZ);
+    private void spawnFangs(LivingEntity livingEntity, double pPosX, double pPosZ, double PPPosY, double pOPosY, float pYRot, int pWarmUp) {
+        BlockPos blockpos = new BlockPos(pPosX, pOPosY, pPosZ);
         boolean flag = false;
         double d0 = 0.0D;
 
@@ -133,7 +133,7 @@ public class FangSpell extends Spells{
             }
 
             blockpos = blockpos.below();
-        } while(blockpos.getY() >= MathHelper.floor(p_190876_5_) - 1);
+        } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
 
         if (flag) {
             livingEntity.level.addFreshEntity(new FangEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, pWarmUp, livingEntity));

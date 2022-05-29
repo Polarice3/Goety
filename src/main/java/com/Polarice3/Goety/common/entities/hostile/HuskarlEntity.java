@@ -4,18 +4,22 @@ import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -33,6 +37,15 @@ public class HuskarlEntity extends ZombieEntity {
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.ARMOR, 8.0D)
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
+    }
+
+    public void tick(){
+        super.tick();
+        if (this.isAggressive()){
+            this.maxUpStep = 2.0F;
+        } else {
+            this.maxUpStep = 1.0F;
+        }
     }
 
     protected boolean isSunSensitive() {

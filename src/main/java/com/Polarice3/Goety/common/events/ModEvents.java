@@ -282,6 +282,14 @@ public class ModEvents {
                     }
                 }
             }
+            if (livingEntity instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) livingEntity;
+                if (RobeArmorFinder.FindBootsofWander(player)){
+                    BootsUtil.enableStepHeight(player);
+                } else {
+                    BootsUtil.disableStepHeight(player);
+                }
+            }
         }
     }
 
@@ -304,11 +312,19 @@ public class ModEvents {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         PlayerEntity player = event.player;
         World world = player.level;
-        if (KeyPressed.openWandandBag() && player.getMainHandItem().getItem() instanceof SoulWand){
-            SoulWand.BagonKeyPressed(player.getMainHandItem(), player);
+        if (KeyPressed.openWandandBag()){
+            if (player.getMainHandItem().getItem() instanceof SoulWand){
+                SoulWand.BagOnMainKeyPressed(player.getMainHandItem(), player);
+            } else if (player.getOffhandItem().getItem() instanceof SoulWand){
+                SoulWand.BagOnOffKeyPressed(player.getOffhandItem(), player);
+            }
         }
-        if (KeyPressed.openWand() && player.getMainHandItem().getItem() instanceof SoulWand){
-            SoulWand.onKeyPressed(player.getMainHandItem(), player);
+        if (KeyPressed.openWand()){
+            if (player.getMainHandItem().getItem() instanceof SoulWand){
+                SoulWand.onMainKeyPressed(player.getMainHandItem(), player);
+            } else if (player.getOffhandItem().getItem() instanceof SoulWand){
+                SoulWand.onOffKeyPressed(player.getOffhandItem(), player);
+            }
         }
         if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != ItemStack.EMPTY){
             FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
@@ -472,6 +488,9 @@ public class ModEvents {
         }
         IInfamy infamy = InfamyHelper.getCapability(player);
         int i = infamy.getInfamy();
+        if (i < 0){
+            infamy.setInfamy(0);
+        }
         if (i > MainConfig.InfamyThreshold.get() * 2){
             for (AbstractRaiderEntity pillagerEntity : player.level.getEntitiesOfClass(AbstractRaiderEntity.class, player.getBoundingBox().inflate(32))){
                 if (pillagerEntity.getTarget() == player) {
@@ -781,7 +800,7 @@ public class ModEvents {
             if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
                 Entity spell = event.getDamageSource().getDirectEntity();
-                if (spell instanceof FangEntity || spell instanceof DamagingProjectileEntity) {
+                if (spell instanceof FangEntity) {
                     if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
                         looting = 3;
                     } else
@@ -790,6 +809,29 @@ public class ModEvents {
                     } else
                     if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
                         looting = 1;
+                    }
+                    event.setLootingLevel(event.getLootingLevel() + looting);
+                }
+                if (spell instanceof DamagingProjectileEntity){
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                        looting = 3;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                        looting = 2;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                        looting = 1;
+                    }
+                    if (event.getDamageSource().isExplosion()){
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                            looting = 3;
+                        } else
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                            looting = 2;
+                        } else
+                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                            looting = 1;
+                        }
                     }
                     event.setLootingLevel(event.getLootingLevel() + looting);
                 }
@@ -808,20 +850,18 @@ public class ModEvents {
             }
             if (event.getDamageSource().getEntity() instanceof OwnedEntity) {
                 OwnedEntity ownedEntity = (OwnedEntity) event.getDamageSource().getEntity();
-                if (ownedEntity.getMobType() != CreatureAttribute.UNDEAD) {
-                    if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
-                        PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
-                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
-                            looting = 3;
-                        } else
-                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
-                            looting = 2;
-                        } else
-                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
-                            looting = 1;
-                        }
-                        event.setLootingLevel(event.getLootingLevel() + looting);
+                if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_3.get()) {
+                        looting = 3;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_2.get()) {
+                        looting = 2;
+                    } else
+                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT_1.get()) {
+                        looting = 1;
                     }
+                    event.setLootingLevel(event.getLootingLevel() + looting);
                 }
             }
             if (event.getDamageSource().getEntity() instanceof LoyalSpiderEntity) {

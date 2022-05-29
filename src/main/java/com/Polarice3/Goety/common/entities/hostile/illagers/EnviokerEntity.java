@@ -268,14 +268,16 @@ public class EnviokerEntity extends HuntingIllagerEntity {
         protected void performSpellCasting() {
             LivingEntity livingentity = EnviokerEntity.this.getTarget();
             if (livingentity != null) {
-                double d1 = livingentity.getX() - EnviokerEntity.this.getX();
-                double d2 = livingentity.getY(0.5D) - EnviokerEntity.this.getY(0.5D);
-                double d3 = livingentity.getZ() - EnviokerEntity.this.getZ();
-                SoulSkullEntity soulSkullEntity = new SoulSkullEntity(EnviokerEntity.this.level, EnviokerEntity.this, d1, d2, d3);
-                soulSkullEntity.setPos(soulSkullEntity.getX(), EnviokerEntity.this.getY(0.5), soulSkullEntity.getZ());
-                EnviokerEntity.this.level.addFreshEntity(soulSkullEntity);
-                if (!EnviokerEntity.this.isSilent()) {
-                    EnviokerEntity.this.level.levelEvent(null, 1024, EnviokerEntity.this.blockPosition(), 0);
+                if (EnviokerEntity.this.getSensing().canSee(livingentity)) {
+                    double d1 = livingentity.getX() - EnviokerEntity.this.getX();
+                    double d2 = livingentity.getY(0.5D) - EnviokerEntity.this.getY(0.5D);
+                    double d3 = livingentity.getZ() - EnviokerEntity.this.getZ();
+                    SoulSkullEntity soulSkullEntity = new SoulSkullEntity(EnviokerEntity.this.level, EnviokerEntity.this, d1, d2, d3);
+                    soulSkullEntity.setPos(soulSkullEntity.getX(), EnviokerEntity.this.getY(0.5), soulSkullEntity.getZ());
+                    EnviokerEntity.this.level.addFreshEntity(soulSkullEntity);
+                    if (!EnviokerEntity.this.isSilent()) {
+                        EnviokerEntity.this.level.levelEvent(null, 1024, EnviokerEntity.this.blockPosition(), 0);
+                    }
                 }
             }
 

@@ -33,17 +33,12 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
         int j = this.worldPosition.getY();
         int k = this.worldPosition.getZ();
         assert this.level != null;
-        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D));
-        if (list.size() > 0) {
-            LivingEntity livingEntity = list.get(0);
+        for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD && livingEntity.getActiveEffects().isEmpty()) {
                 return livingEntity;
-            } else {
-                return null;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -53,9 +48,9 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
         int k = this.worldPosition.getZ();
         this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR);
         for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
-            float f = (float) MathHelper.atan2(entity.getZ() - this.getBlockPos().getZ(), entity.getX() - this.getBlockPos().getX());
             if (entity.getMobType() == CreatureAttribute.UNDEAD && entity.getActiveEffects().isEmpty()){
                 entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 900, 1));
+                entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 900));
                 entity.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 900, 1));
                 entity.addEffect(new EffectInstance(Effects.ABSORPTION, 900, 1));
                 entity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 900, 1));
@@ -64,6 +59,7 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
             if (entity instanceof PlayerEntity){
                 if (LichdomHelper.isLich((PlayerEntity) entity) && entity.getActiveEffects().isEmpty()){
                     entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 900, 1));
+                    entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 900));
                     entity.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 900, 1));
                     entity.addEffect(new EffectInstance(Effects.ABSORPTION, 900, 1));
                     entity.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 900, 1));

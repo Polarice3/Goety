@@ -2,7 +2,8 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
-import net.minecraft.client.Minecraft;
+import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.monster.CreeperEntity;
@@ -19,7 +20,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class GuardianObeliskTileEntity extends TileEntity implements ITickableTileEntity {
@@ -52,19 +52,16 @@ public class GuardianObeliskTileEntity extends TileEntity implements ITickableTi
                 if (entity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) entity;
                     if (!player.isCreative() && !player.hasEffect(ModEffects.NOMINE.get())){
-                        player.addEffect(new EffectInstance(ModEffects.NOMINE.get(), 120, 0, false, true));
+                        player.addEffect(new EffectInstance(ModEffects.NOMINE.get(), 120, 0, false, false));
                     }
                 }
                 if (entity instanceof TNTEntity){
                     entity.spawnAtLocation(new ItemStack(Items.GUNPOWDER, 5));
-                    this.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    new SoundUtil(entity.blockPosition(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     entity.remove();
                 }
                 if (entity instanceof CreeperEntity){
-                    if (((CreeperEntity) entity).isIgnited()){
-                        this.level.explode(entity, entity.getX(), entity.getY(), entity.getZ(), 3.0F, Explosion.Mode.NONE);
-                        entity.remove();
-                    }
+                    entity.remove();
                 }
             }
         }
@@ -72,16 +69,15 @@ public class GuardianObeliskTileEntity extends TileEntity implements ITickableTi
 
     private void SpawnParticles(){
         BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
 
-        if (MINECRAFT.level != null) {
-            long t = MINECRAFT.level.getGameTime();
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + 1.0D + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
+        if (this.level != null) {
+            long t = this.level.getGameTime();
+            double d0 = (double)blockpos.getX() + this.level.random.nextDouble();
+            double d1 = (double)blockpos.getY() + 1.0D + this.level.random.nextDouble();
+            double d2 = (double)blockpos.getZ() + this.level.random.nextDouble();
             if (t % 40L == 0L) {
                 for (int p = 0; p < 4; ++p) {
-                    MINECRAFT.level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0, 5.0E-4D, 0.0);
+                    new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0, 5.0E-4D, 0.0);
                 }
             }
         }

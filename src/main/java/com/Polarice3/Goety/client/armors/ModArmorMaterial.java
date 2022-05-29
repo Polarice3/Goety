@@ -20,7 +20,7 @@ public enum ModArmorMaterial implements IArmorMaterial {
     NECROTURGE(Goety.MOD_ID + ":necroturge", 5, new int[] {1, 2, 2, 1}, 25,
             SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
     ARACHNOTURGE(Goety.MOD_ID + ":arachnoturge", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(Items.STRING);}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
     DARKARMOREDMAGE(Goety.MOD_ID + ":darkarmoredmage", 15, new int[]{2, 5, 6, 2}, 25,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.CURSED_INGOT.get());
     }),

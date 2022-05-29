@@ -103,8 +103,8 @@ public class IllagerSpawner {
                                                 blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
                                             }
                                         }
-                                        if (j1 >= MainConfig.InfamyThreshold.get() * 3) {
-                                            int j2 = j1/3;
+                                        if (j1 >= MainConfig.InfamyThreshold.get() * 2.5) {
+                                            int j2 = (int) (j1/2.5);
                                             int e2 = MathHelper.clamp(j2 / MainConfig.InfamyThreshold.get(), 1, 5) + 1;
                                             int e25 = world.random.nextInt(e2);
                                             for (int k1 = 0; k1 < e25; ++k1) {
@@ -122,8 +122,8 @@ public class IllagerSpawner {
                                                 blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
                                             }
                                         }
-                                        if (j1 >= MainConfig.InfamyThreshold.get() * 3) {
-                                            int j2 = j1/3;
+                                        if (j1 >= MainConfig.InfamyThreshold.get() * 2.5) {
+                                            int j2 = (int) (j1/2.5);
                                             int e2 = MathHelper.clamp(j2 / MainConfig.InfamyThreshold.get(), 1, 5) + 1;
                                             int e25 = world.random.nextInt(e2);
                                             for (int k1 = 0; k1 < e25; ++k1) {

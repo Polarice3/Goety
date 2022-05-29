@@ -42,12 +42,12 @@ public class IllagueEvent {
                         }
                     }
                     int amp = Objects.requireNonNull(infected.getEffect(ModEffects.ILLAGUE.get())).getAmplifier();
-                    int i1 = amp * 50;
+                    int i1 = MathHelper.clamp(amp * 50, 0, 250);
                     int i2 = amp + 1;
                     int i3 = MathHelper.clamp(i2, 0, 5);
-                    int random = level.random.nextInt(600 - i1);
+                    int random = level.random.nextInt(300 - i1);
                     if (random == 0) {
-                        int r = level.random.nextInt(7);
+                        int r = level.random.nextInt(8);
                         int r2 = level.random.nextInt(12000);
                         int a = level.random.nextInt(i2);
                         if (r2 == 0){
@@ -76,6 +76,9 @@ public class IllagueEvent {
                                 case 6:
                                     infected.addEffect(new EffectInstance(Effects.BLINDNESS, 400 * a, 0, false, false));
                                     break;
+                                case 7:
+                                    infected.addEffect(new EffectInstance(Effects.WITHER, 200, 0, false, false));
+                                    break;
                             }
                         } else {
                             switch (r) {
@@ -91,6 +94,9 @@ public class IllagueEvent {
                                 case 5:
                                 case 6:
                                     infected.addEffect(new EffectInstance(Effects.POISON, 400 * a, a, false, false));
+                                    break;
+                                case 7:
+                                    infected.addEffect(new EffectInstance(Effects.WITHER, 200, 0, false, false));
                                     break;
                             }
                         }

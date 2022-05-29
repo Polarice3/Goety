@@ -27,7 +27,7 @@ public class InfamyImp implements IInfamy{
 
     @Override
     public boolean decreaseInfamy(int decrease) {
-        if (this.infamy == 0) {
+        if (this.infamy <= 0) {
             return false;
         }
         this.infamy = Math.max(this.infamy - decrease, 0);

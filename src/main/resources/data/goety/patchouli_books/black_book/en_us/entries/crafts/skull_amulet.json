@@ -1,0 +1,16 @@
+{
+  "name": "Skull Amulet",
+  "icon": "goety:skull_amulet",
+  "category": "goety:crafts",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A Spooky Amulet that increases the damage inflicted by Soul Skulls instead of Fangs."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:skull_amulet"
+    }
+  ]
+}

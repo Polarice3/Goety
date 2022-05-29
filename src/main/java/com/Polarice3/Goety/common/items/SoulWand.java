@@ -204,7 +204,7 @@ public class SoulWand extends Item{
 
     }
 
-    public static void onKeyPressed(ItemStack stack, PlayerEntity playerEntity){
+    public static void onMainKeyPressed(ItemStack stack, PlayerEntity playerEntity){
         if (!playerEntity.level.isClientSide) {
             SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider(
                     (id, inventory, player) -> new SoulItemContainer(id, inventory, SoulUsingItemHandler.get(stack), stack, playerEntity.getUsedItemHand()), stack.getDisplayName());
@@ -212,13 +212,32 @@ public class SoulWand extends Item{
         }
     }
 
-    public static void BagonKeyPressed(ItemStack stack, PlayerEntity playerEntity){
+    public static void onOffKeyPressed(ItemStack stack, PlayerEntity playerEntity){
+        if (!playerEntity.level.isClientSide) {
+            SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider(
+                    (id, inventory, player) -> new SoulItemContainer(id, inventory, SoulUsingItemHandler.get(stack), stack, playerEntity.getUsedItemHand()), stack.getDisplayName());
+            NetworkHooks.openGui((ServerPlayerEntity) playerEntity, provider, (buffer) -> buffer.writeBoolean(playerEntity.getUsedItemHand() == Hand.OFF_HAND));
+        }
+    }
+
+    public static void BagOnMainKeyPressed(ItemStack stack, PlayerEntity playerEntity){
         if (!playerEntity.level.isClientSide) {
             ItemStack bag = FocusBagFinder.findBag(playerEntity);
             if (bag != ItemStack.EMPTY){
                 SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider(
                         (id, inventory, player) -> new WandandBagContainer(id, SoulUsingItemHandler.get(playerEntity.getMainHandItem()), FocusBagItemHandler.get(bag), playerEntity.getMainHandItem()), stack.getDisplayName());
                 NetworkHooks.openGui((ServerPlayerEntity) playerEntity, provider, (buffer) -> buffer.writeBoolean(playerEntity.getUsedItemHand() == Hand.MAIN_HAND));
+            }
+        }
+    }
+
+    public static void BagOnOffKeyPressed(ItemStack stack, PlayerEntity playerEntity){
+        if (!playerEntity.level.isClientSide) {
+            ItemStack bag = FocusBagFinder.findBag(playerEntity);
+            if (bag != ItemStack.EMPTY){
+                SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider(
+                        (id, inventory, player) -> new WandandBagContainer(id, SoulUsingItemHandler.get(playerEntity.getOffhandItem()), FocusBagItemHandler.get(bag), playerEntity.getOffhandItem()), stack.getDisplayName());
+                NetworkHooks.openGui((ServerPlayerEntity) playerEntity, provider, (buffer) -> buffer.writeBoolean(playerEntity.getUsedItemHand() == Hand.OFF_HAND));
             }
         }
     }

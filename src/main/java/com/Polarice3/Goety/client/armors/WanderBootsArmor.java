@@ -72,7 +72,6 @@ public class WanderBootsArmor extends ArmorItem {
                 }
             }
         }
-        player.maxUpStep = 1.0F;
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType pEquipmentSlot) {

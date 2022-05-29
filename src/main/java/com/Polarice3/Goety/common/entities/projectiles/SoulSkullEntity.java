@@ -4,12 +4,15 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -69,20 +72,27 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
     protected void onHitEntity(EntityRayTraceResult pResult) {
         super.onHitEntity(pResult);
         if (!this.level.isClientSide) {
-            Entity entity = pResult.getEntity();
-            Entity entity1 = this.getOwner();
+            Entity target = pResult.getEntity();
+            Entity owner = this.getOwner();
             boolean flag;
             boolean flag2;
-            if (entity1 instanceof LivingEntity) {
-                LivingEntity livingentity = (LivingEntity)entity1;
+            float damage = 6.0F;
+            if (owner instanceof LivingEntity) {
+                LivingEntity livingentity = (LivingEntity)owner;
                 World worldIn = livingentity.level;
-                flag = entity.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
+                if (livingentity instanceof PlayerEntity){
+                    PlayerEntity player = (PlayerEntity) livingentity;
+                    if (CuriosFinder.findAmulet(player).getItem() == ModItems.SKULL_AMULET.get()){
+                        damage = 10.0F;
+                    }
+                }
+                flag = target.hurt(DamageSource.indirectMagic(this, livingentity), damage);
                 flag2 = RobeArmorFinder.FindNecroSet(livingentity);
                 if (flag) {
-                    if (entity.isAlive()) {
-                        this.doEnchantDamageEffects(livingentity, entity);
+                    if (target.isAlive()) {
+                        this.doEnchantDamageEffects(livingentity, target);
                         if (this.isUpgraded()) {
-                            entity.setSecondsOnFire(30);
+                            target.setSecondsOnFire(30);
                         }
                     } else {
                         if (this.isUpgraded()){
@@ -91,19 +101,19 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                             livingentity.heal(2.0F);
                         }
                         if (MainConfig.SoulSkullZombie.get()) {
-                            if (entity instanceof ZombieEntity) {
+                            if (target instanceof ZombieEntity) {
                                 if (flag2) {
-                                    ZombieMinionEntity summonedentity = ((ZombieEntity) entity).convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
+                                    ZombieMinionEntity summonedentity = ((ZombieEntity) target).convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
                                     if (summonedentity != null) {
                                         summonedentity.setOwnerId(livingentity.getUUID());
                                         if (MainConfig.SoulSkullMinionWander.get()) {
                                             summonedentity.setWandering(true);
                                         }
-                                        summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                                        summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(target.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
-                                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, summonedentity);
-                                        new SoundUtil(entity.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) target, summonedentity);
+                                        new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                                         for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
                                             new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
                                         }
@@ -112,19 +122,19 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                             }
                         }
                         if (MainConfig.SoulSkullSkeleton.get()) {
-                            if (entity instanceof SkeletonEntity) {
+                            if (target instanceof SkeletonEntity) {
                                 if (flag2) {
-                                    SkeletonMinionEntity summonedentity = ((SkeletonEntity) entity).convertTo(ModEntityType.SKELETON_MINION.get(), false);
+                                    SkeletonMinionEntity summonedentity = ((SkeletonEntity) target).convertTo(ModEntityType.SKELETON_MINION.get(), false);
                                     if (summonedentity != null) {
                                         summonedentity.setOwnerId(livingentity.getUUID());
                                         if (MainConfig.SoulSkullMinionWander.get()) {
                                             summonedentity.setWandering(true);
                                         }
-                                        summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                                        summonedentity.finalizeSpawn((IServerWorld) worldIn, worldIn.getCurrentDifficultyAt(target.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
-                                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, summonedentity);
-                                        new SoundUtil(entity.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) target, summonedentity);
+                                        new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                                         for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
                                             new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
                                         }
@@ -135,7 +145,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                     }
                 }
             } else {
-                entity.hurt(DamageSource.MAGIC, 6.0F);
+                target.hurt(DamageSource.MAGIC, 6.0F);
             }
         }
     }

@@ -264,20 +264,23 @@ public class InquillagerEntity extends HuntingIllagerEntity {
             if (this.bombTimer >= 60) {
                 LivingEntity livingEntity = this.inquillager.getTarget();
                 if (livingEntity != null) {
-                    Vector3d vector3d = livingEntity.getDeltaMovement();
-                    double d0 = livingEntity.getX() + vector3d.x - this.inquillager.getX();
-                    double d1 = livingEntity.getEyeY() - (double) 1.1F - this.inquillager.getY();
-                    double d2 = livingEntity.getZ() + vector3d.z - this.inquillager.getZ();
-                    float f = MathHelper.sqrt(d0 * d0 + d2 * d2);
-                    PotionEntity potionentity = new PotionEntity(this.inquillager.level, this.inquillager);
-                    potionentity.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), Potions.HARMING));
-                    potionentity.xRot -= -20.0F;
-                    potionentity.shoot(d0, d1 + (double) (f * 0.2F), d2, 0.75F, 8.0F);
-                    if (!this.inquillager.isSilent()) {
-                        this.inquillager.level.playSound((PlayerEntity) null, this.inquillager.getX(), this.inquillager.getY(), this.inquillager.getZ(), SoundEvents.WITCH_THROW, this.inquillager.getSoundSource(), 1.0F, 0.8F + this.inquillager.random.nextFloat() * 0.4F);
+                    boolean flag = this.inquillager.getSensing().canSee(livingEntity);
+                    if (flag) {
+                        Vector3d vector3d = livingEntity.getDeltaMovement();
+                        double d0 = livingEntity.getX() + vector3d.x - this.inquillager.getX();
+                        double d1 = livingEntity.getEyeY() - (double) 1.1F - this.inquillager.getY();
+                        double d2 = livingEntity.getZ() + vector3d.z - this.inquillager.getZ();
+                        float f = MathHelper.sqrt(d0 * d0 + d2 * d2);
+                        PotionEntity potionentity = new PotionEntity(this.inquillager.level, this.inquillager);
+                        potionentity.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), Potions.HARMING));
+                        potionentity.xRot -= -20.0F;
+                        potionentity.shoot(d0, d1 + (double) (f * 0.2F), d2, 0.75F, 8.0F);
+                        if (!this.inquillager.isSilent()) {
+                            this.inquillager.level.playSound((PlayerEntity) null, this.inquillager.getX(), this.inquillager.getY(), this.inquillager.getZ(), SoundEvents.WITCH_THROW, this.inquillager.getSoundSource(), 1.0F, 0.8F + this.inquillager.random.nextFloat() * 0.4F);
+                        }
+                        this.inquillager.level.addFreshEntity(potionentity);
+                        this.bombTimer = 0;
                     }
-                    this.inquillager.level.addFreshEntity(potionentity);
-                    this.bombTimer = 0;
                 }
             }
         }

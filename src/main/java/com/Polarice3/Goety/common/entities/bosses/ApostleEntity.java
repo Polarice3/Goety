@@ -241,7 +241,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.setRegen(true);
                 break;
             case 1:
-                this.addEffect(new EffectInstance(Effects.ABSORPTION, Integer.MAX_VALUE, 0, false, false));
+                this.addEffect(new EffectInstance(Effects.ABSORPTION, Integer.MAX_VALUE, 1, false, false));
                 break;
             case 2:
                 this.setArrowEffect(Effects.POISON);
@@ -265,10 +265,10 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.setArrowEffect(Effects.MOVEMENT_SLOWDOWN);
                 break;
             case 9:
-                this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE, 0, false, false));
+                this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE, 1, false, false));
                 break;
             case 10:
-                this.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
+                this.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
                 break;
             case 11:
                 this.setArrowEffect(ModEffects.CURSED.get());
