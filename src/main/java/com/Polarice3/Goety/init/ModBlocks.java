@@ -56,6 +56,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> TEMP_WEB = BLOCKS.register("temp_web", TempWebBlock::new);
     public static final RegistryObject<Block> DARK_CLOUD = BLOCKS.register("dark_cloud", DarkCloudBlock::new);
     public static final RegistryObject<Block> ARCA_BLOCK = BLOCKS.register("arca", ArcaBlock::new);
+    public static final RegistryObject<Block> SOUL_LIGHT_BLOCK = BLOCKS.register("soul_light", SoulLightBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -248,6 +249,8 @@ public class ModBlocks {
             () -> new BlockItemBase(DARK_CLOUD.get()));
     public static final RegistryObject<Item> ARCA_ITEM = BLOCK_ITEMS.register("arca",
             () -> new BlockItemBase(ARCA_BLOCK.get()));
+    public static final RegistryObject<Item> SOUL_LIGHT_ITEM = BLOCK_ITEMS.register("soul_light",
+            () -> new BlockItemBase(SOUL_LIGHT_BLOCK.get()));
     //TreeItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
             () -> new BlockItemBase(HAUNTED_PLANKS.get()));

@@ -33,6 +33,7 @@ public class CuriosIntegration implements ICompatable {
             .put(ModItems.FOCUSBAG.get(), "belt")
             .put(ModItems.EMERALD_AMULET.get(), "necklace")
             .put(ModItems.VAMPIRIC_AMULET.get(), "necklace")
+            .put(ModItems.SKULL_AMULET.get(), "necklace")
             .put(ModItems.RING_OF_WANT_1.get(), "ring")
             .put(ModItems.RING_OF_WANT_2.get(), "ring")
             .put(ModItems.RING_OF_WANT_3.get(), "ring")

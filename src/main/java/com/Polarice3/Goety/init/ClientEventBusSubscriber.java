@@ -13,10 +13,7 @@ import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.client.particle.HeartParticle;
-import net.minecraft.client.particle.LargeExplosionParticle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.particle.SpellParticle;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -111,6 +108,7 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.ARCA_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_BARS_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.DARK_CLOUD.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.SOUL_LIGHT_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.TEMP_WEB.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_CACTUS.get(), RenderType.cutout());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
@@ -135,6 +133,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
+        particles.register(ModParticleTypes.SOUL_LIGHT_EFFECT.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
     }

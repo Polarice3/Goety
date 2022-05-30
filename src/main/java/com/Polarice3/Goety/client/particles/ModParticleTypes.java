@@ -22,6 +22,9 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> BULLET_EFFECT = PARTICLE_TYPES.register("bullet_effect",
             () -> new BasicParticleType(false));
 
+    public static final RegistryObject<BasicParticleType> SOUL_LIGHT_EFFECT = PARTICLE_TYPES.register("soul_light",
+            () -> new BasicParticleType(false));
+
     public static final RegistryObject<BasicParticleType> DEAD_SAND_EXPLOSION = PARTICLE_TYPES.register("deadsandsplosion",
             () -> new BasicParticleType(true));
 
