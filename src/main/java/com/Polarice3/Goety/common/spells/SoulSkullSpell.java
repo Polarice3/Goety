@@ -10,8 +10,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-import java.util.Random;
-
 public class SoulSkullSpell extends InstantCastSpells {
 
     @Override

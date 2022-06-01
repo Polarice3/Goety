@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "goety:items/ring_of_want1"
+    "layer0": "goety:spellicons/soullight_spell"
   }
 }

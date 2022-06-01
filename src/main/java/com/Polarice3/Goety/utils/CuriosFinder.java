@@ -18,13 +18,13 @@ public class CuriosFinder {
         if (CuriosLoaded.CURIOS.isLoaded()) {
             foundStack = CuriosApi.getCuriosHelper().findEquippedCurio(CuriosFinder::isAmulet, playerEntity).map(
                     ImmutableTriple::getRight).orElse(ItemStack.EMPTY);
-        }
-
-        for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
-            ItemStack itemStack = playerEntity.inventory.getItem(i);
-            if (!itemStack.isEmpty() && isAmulet(itemStack)) {
-                foundStack = itemStack;
-                break;
+        } else {
+            for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
+                ItemStack itemStack = playerEntity.inventory.getItem(i);
+                if (!itemStack.isEmpty() && isAmulet(itemStack)) {
+                    foundStack = itemStack;
+                    break;
+                }
             }
         }
 
@@ -40,13 +40,13 @@ public class CuriosFinder {
         if (CuriosLoaded.CURIOS.isLoaded()) {
             foundStack = CuriosApi.getCuriosHelper().findEquippedCurio(CuriosFinder::isRing, playerEntity).map(
                     ImmutableTriple::getRight).orElse(ItemStack.EMPTY);
-        }
-
-        for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
-            ItemStack itemStack = playerEntity.inventory.getItem(i);
-            if (!itemStack.isEmpty() && isRing(itemStack)) {
-                foundStack = itemStack;
-                break;
+        } else {
+            for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
+                ItemStack itemStack = playerEntity.inventory.getItem(i);
+                if (!itemStack.isEmpty() && isRing(itemStack)) {
+                    foundStack = itemStack;
+                    break;
+                }
             }
         }
 

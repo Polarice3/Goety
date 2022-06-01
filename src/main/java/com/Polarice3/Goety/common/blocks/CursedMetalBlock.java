@@ -9,7 +9,7 @@ public class CursedMetalBlock extends Block {
 
     public CursedMetalBlock() {
         super(Properties.of(Material.STONE)
-                .strength(5.0F)
+                .strength(5.0F, 6.0F)
                 .sound(SoundType.METAL)
                 .harvestLevel(0)
                 .requiresCorrectToolForDrops()

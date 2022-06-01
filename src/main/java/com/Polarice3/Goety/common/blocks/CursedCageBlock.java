@@ -29,7 +29,7 @@ public class CursedCageBlock extends ContainerBlock implements IForgeBlock {
 
     public CursedCageBlock() {
         super(Properties.of(Material.STONE)
-                .strength(3.5F)
+                .strength(5.0F)
                 .sound(SoundType.METAL)
                 .requiresCorrectToolForDrops()
                 .noOcclusion()

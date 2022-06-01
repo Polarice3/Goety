@@ -39,11 +39,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbowUser {
     private static final DataParameter<Boolean> IS_CHARGING_CROSSBOW = EntityDataManager.defineId(ConquillagerEntity.class, DataSerializers.BOOLEAN);
-    private final Predicate<Entity> field_213690_b = Entity::isAlive;
 
     public ConquillagerEntity(EntityType<? extends ConquillagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
@@ -239,9 +237,9 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
             ItemStack itemstack = new ItemStack(Items.CROSSBOW);
             Map<Enchantment, Integer> map = Maps.newHashMap();
             if (pWave > raid.getNumGroups(Difficulty.NORMAL)) {
-                map.put(Enchantments.QUICK_CHARGE, 2);
+                map.put(Enchantments.QUICK_CHARGE, 3);
             } else if (pWave > raid.getNumGroups(Difficulty.EASY)) {
-                map.put(Enchantments.QUICK_CHARGE, 1);
+                map.put(Enchantments.QUICK_CHARGE, 2);
             }
 
             map.put(Enchantments.MULTISHOT, 1);

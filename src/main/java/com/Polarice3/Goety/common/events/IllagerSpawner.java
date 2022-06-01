@@ -12,6 +12,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,16 +45,16 @@ public class IllagerSpawner {
                     return 0;
                 } else {
                     PlayerEntity playerentity = world.players().get(random.nextInt(j));
+                    IInfamy infamy = InfamyHelper.getCapability(playerentity);
+                    int j1 = infamy.getInfamy();
                     if (playerentity.isSpectator()) {
                         return 0;
-                    } else if (world.isCloseToVillage(playerentity.blockPosition(), 2)) {
+                    } else if (world.isCloseToVillage(playerentity.blockPosition(), 2) && j1 < MainConfig.InfamyThreshold.get() * 12) {
                         return 0;
                     } else {
                         if (random.nextInt(MainConfig.InfamySpawnChance.get()) != 0) {
                             return 0;
                         } else {
-                            IInfamy infamy = InfamyHelper.getCapability(playerentity);
-                            int j1 = infamy.getInfamy();
                             if (j1 > MainConfig.InfamyThreshold.get()) {
                                 int k = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
                                 int l = (24 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
@@ -73,11 +74,11 @@ public class IllagerSpawner {
                                             ++i1;
                                             blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
                                             if (k1 == 0) {
-                                                if (!this.spawnEnvioker(world, blockpos$mutable, random)) {
+                                                if (!this.spawnEnvioker(world, blockpos$mutable, random, j1)) {
                                                     break;
                                                 }
                                             } else {
-                                                this.spawnEnvioker(world, blockpos$mutable, random);
+                                                this.spawnEnvioker(world, blockpos$mutable, random, j1);
                                             }
 
                                             blockpos$mutable.setX(blockpos$mutable.getX() + random.nextInt(5) - random.nextInt(5));
@@ -92,11 +93,11 @@ public class IllagerSpawner {
                                                 int random1 = world.random.nextInt(16);
                                                 blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
                                                 if (k1 == 0) {
-                                                    if (!this.spawnRandomIllager(world, blockpos$mutable, random, random1)) {
+                                                    if (!this.spawnRandomIllager(world, blockpos$mutable, random, random1, j1)) {
                                                         break;
                                                     }
                                                 } else {
-                                                    this.spawnRandomIllager(world, blockpos$mutable, random, random1);
+                                                    this.spawnRandomIllager(world, blockpos$mutable, random, random1, j1);
                                                 }
 
                                                 blockpos$mutable.setX(blockpos$mutable.getX() + random.nextInt(5) - random.nextInt(5));
@@ -111,11 +112,11 @@ public class IllagerSpawner {
                                                 ++i1;
                                                 blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
                                                 if (k1 == 0) {
-                                                    if (!this.spawnInquillager(world, blockpos$mutable, random)) {
+                                                    if (!this.spawnInquillager(world, blockpos$mutable, random, j1)) {
                                                         break;
                                                     }
                                                 } else {
-                                                    this.spawnInquillager(world, blockpos$mutable, random);
+                                                    this.spawnInquillager(world, blockpos$mutable, random, j1);
                                                 }
 
                                                 blockpos$mutable.setX(blockpos$mutable.getX() + random.nextInt(5) - random.nextInt(5));
@@ -130,11 +131,11 @@ public class IllagerSpawner {
                                                 ++i1;
                                                 blockpos$mutable.setY(world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
                                                 if (k1 == 0) {
-                                                    if (!this.spawnConquillager(world, blockpos$mutable, random)) {
+                                                    if (!this.spawnConquillager(world, blockpos$mutable, random, j1)) {
                                                         break;
                                                     }
                                                 } else {
-                                                    this.spawnConquillager(world, blockpos$mutable, random);
+                                                    this.spawnConquillager(world, blockpos$mutable, random, j1);
                                                 }
 
                                                 blockpos$mutable.setX(blockpos$mutable.getX() + random.nextInt(5) - random.nextInt(5));
@@ -160,7 +161,7 @@ public class IllagerSpawner {
     }
 
 
-    private boolean spawnEnvioker(ServerWorld worldIn, BlockPos p_222695_2_, Random random) {
+    private boolean spawnEnvioker(ServerWorld worldIn, BlockPos p_222695_2_, Random random, int infamy) {
         BlockState blockstate = worldIn.getBlockState(p_222695_2_);
         if (!WorldEntitySpawner.isValidEmptySpawnBlock(worldIn, p_222695_2_, blockstate, blockstate.getFluidState(), ModEntityType.ENVIOKER.get())) {
             return false;
@@ -173,6 +174,12 @@ public class IllagerSpawner {
                 if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(illager, worldIn, p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ(), null, SpawnReason.PATROL) == -1) return false;
                 illager.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
                 illager.goalSelector.addGoal(0, new MoveTowardsTargetGoal<>(illager));
+                if (infamy > MainConfig.InfamyThreshold.get() * 5){
+                    illager.applyRaidBuffs(5, true);
+                }
+                if (random.nextInt(4) == 0){
+                    illager.setRider(true);
+                }
                 worldIn.addFreshEntityWithPassengers(illager);
                 return true;
             } else {
@@ -181,7 +188,7 @@ public class IllagerSpawner {
         }
     }
 
-    private boolean spawnInquillager(ServerWorld worldIn, BlockPos p_222695_2_, Random random) {
+    private boolean spawnInquillager(ServerWorld worldIn, BlockPos p_222695_2_, Random random, int infamy) {
         BlockState blockstate = worldIn.getBlockState(p_222695_2_);
         if (!WorldEntitySpawner.isValidEmptySpawnBlock(worldIn, p_222695_2_, blockstate, blockstate.getFluidState(), ModEntityType.INQUILLAGER.get())) {
             return false;
@@ -194,6 +201,12 @@ public class IllagerSpawner {
                 if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(illager, worldIn, p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ(), null, SpawnReason.PATROL) == -1) return false;
                 illager.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
                 illager.goalSelector.addGoal(0, new MoveTowardsTargetGoal<>(illager));
+                if (infamy > MainConfig.InfamyThreshold.get() * 5){
+                    illager.applyRaidBuffs(5, true);
+                }
+                if (random.nextInt(4) == 0){
+                    illager.setRider(true);
+                }
                 worldIn.addFreshEntityWithPassengers(illager);
                 return true;
             } else {
@@ -202,7 +215,7 @@ public class IllagerSpawner {
         }
     }
 
-    private boolean spawnConquillager(ServerWorld worldIn, BlockPos p_222695_2_, Random random) {
+    private boolean spawnConquillager(ServerWorld worldIn, BlockPos p_222695_2_, Random random, int infamy) {
         BlockState blockstate = worldIn.getBlockState(p_222695_2_);
         if (!WorldEntitySpawner.isValidEmptySpawnBlock(worldIn, p_222695_2_, blockstate, blockstate.getFluidState(), ModEntityType.CONQUILLAGER.get())) {
             return false;
@@ -215,6 +228,12 @@ public class IllagerSpawner {
                 if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(illager, worldIn, p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ(), null, SpawnReason.PATROL) == -1) return false;
                 illager.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
                 illager.goalSelector.addGoal(0, new MoveTowardsTargetGoal<>(illager));
+                if (infamy > MainConfig.InfamyThreshold.get() * 5){
+                    illager.applyRaidBuffs(5, true);
+                }
+                if (random.nextInt(4) == 0){
+                    illager.setRider(true);
+                }
                 worldIn.addFreshEntityWithPassengers(illager);
                 return true;
             } else {
@@ -223,14 +242,14 @@ public class IllagerSpawner {
         }
     }
 
-    private boolean spawnRandomIllager(ServerWorld worldIn, BlockPos p_222695_2_, Random random, int r) {
+    private boolean spawnRandomIllager(ServerWorld worldIn, BlockPos p_222695_2_, Random random, int r, int infamy) {
         BlockState blockstate = worldIn.getBlockState(p_222695_2_);
         if (!WorldEntitySpawner.isValidEmptySpawnBlock(worldIn, p_222695_2_, blockstate, blockstate.getFluidState(), EntityType.PILLAGER)) {
             return false;
         } else if (!PatrollerEntity.checkPatrollingMonsterSpawnRules(EntityType.PILLAGER, worldIn, SpawnReason.PATROL, p_222695_2_, random)) {
             return false;
         } else {
-            PatrollerEntity illager = null;
+            AbstractRaiderEntity illager = null;
             int i = 0;
             switch (r){
                 case 0:
@@ -264,9 +283,12 @@ public class IllagerSpawner {
                 if(net.minecraftforge.common.ForgeHooks.canEntitySpawn(illager, worldIn, p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ(), null, SpawnReason.PATROL) == -1) return false;
                 illager.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
                 illager.goalSelector.addGoal(0, new MoveTowardsTargetGoal<>(illager));
+                if (infamy > MainConfig.InfamyThreshold.get() * 5){
+                    illager.applyRaidBuffs(5, true);
+                }
                 worldIn.addFreshEntityWithPassengers(illager);
                 if (i > 0){
-                    PatrollerEntity rider = null;
+                    AbstractRaiderEntity rider = null;
                     int riding = random.nextInt(5);
                     switch (riding){
                         case 0:
@@ -289,6 +311,9 @@ public class IllagerSpawner {
                         rider.setPos(p_222695_2_.getX(), p_222695_2_.getY(), p_222695_2_.getZ());
                         rider.finalizeSpawn(worldIn, worldIn.getCurrentDifficultyAt(p_222695_2_), SpawnReason.PATROL, (ILivingEntityData)null, (CompoundNBT)null);
                         rider.startRiding(illager);
+                        if (infamy > MainConfig.InfamyThreshold.get() * 5){
+                            illager.applyRaidBuffs(5, true);
+                        }
                         worldIn.addFreshEntity(rider);
                     }
                 }

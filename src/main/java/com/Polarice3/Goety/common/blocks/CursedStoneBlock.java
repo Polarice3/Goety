@@ -9,7 +9,7 @@ public class CursedStoneBlock extends Block {
 
     public CursedStoneBlock() {
         super(Properties.of(Material.STONE)
-                .strength(3.0F, 9.0F)
+                .strength(5.0F, 9.0F)
                 .sound(SoundType.STONE)
                 .harvestLevel(0)
                 .harvestTool(ToolType.PICKAXE)

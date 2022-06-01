@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.utils.ParticleUtil;
+import com.google.common.collect.Maps;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -26,9 +28,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.raid.Raid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -176,7 +180,21 @@ public class InquillagerEntity extends HuntingIllagerEntity {
 
     @Override
     public void applyRaidBuffs(int pWave, boolean p_213660_2_) {
+        ItemStack itemstack = new ItemStack(Items.IRON_SWORD);
+        Raid raid = this.getCurrentRaid();
+        int i = 2;
+        if (pWave > raid.getNumGroups(Difficulty.NORMAL)) {
+            i = 4;
+        }
 
+        boolean flag = this.random.nextFloat() <= raid.getEnchantOdds();
+        if (flag) {
+            Map<Enchantment, Integer> map = Maps.newHashMap();
+            map.put(Enchantments.SHARPNESS, i);
+            EnchantmentHelper.setEnchantments(map, itemstack);
+        }
+
+        this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
     }
 
     class CastingSpellGoal extends CastingASpellGoal {
@@ -214,8 +232,11 @@ public class InquillagerEntity extends HuntingIllagerEntity {
 
         protected void performSpellCasting() {
             InquillagerEntity.this.heal(InquillagerEntity.this.getMaxHealth());
-            for(int i = 0; i < InquillagerEntity.this.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.WITCH, InquillagerEntity.this.getX() + InquillagerEntity.this.random.nextGaussian() * (double)0.13F, InquillagerEntity.this.getY() + InquillagerEntity.this.random.nextGaussian() * (double)0.13F, InquillagerEntity.this.getZ() + InquillagerEntity.this.random.nextGaussian() * (double)0.13F, 0, 0, 0);
+            for(int i = 0; i < 5; ++i) {
+                double d0 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
+                double d1 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
+                double d2 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
+                new ParticleUtil(ModParticleTypes.HEAL_EFFECT.get(), InquillagerEntity.this.getRandomX(1.0D), InquillagerEntity.this.getRandomY() + 1.0D, InquillagerEntity.this.getRandomZ(1.0D), d0, d1, d2);
             }
             InquillagerEntity.this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 2.0F);
         }

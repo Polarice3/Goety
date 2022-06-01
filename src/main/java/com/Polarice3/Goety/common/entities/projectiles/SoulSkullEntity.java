@@ -9,6 +9,8 @@ import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SoundUtil;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.ZombieEntity;
@@ -76,17 +78,19 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             Entity owner = this.getOwner();
             boolean flag;
             boolean flag2;
-            float damage = 6.0F;
+            float enchantment = 0;
             if (owner instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)owner;
                 World worldIn = livingentity.level;
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
                     if (CuriosFinder.findAmulet(player).getItem() == ModItems.SKULL_AMULET.get()){
-                        damage = 10.0F;
+                        if (CuriosFinder.findAmulet(player).isEnchanted()){
+                            enchantment = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, CuriosFinder.findAmulet(player));
+                        }
                     }
                 }
-                flag = target.hurt(DamageSource.indirectMagic(this, livingentity), damage);
+                flag = target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
                 flag2 = RobeArmorFinder.FindNecroSet(livingentity);
                 if (flag) {
                     if (target.isAlive()) {
@@ -153,7 +157,24 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
     protected void onHit(RayTraceResult pResult) {
         super.onHit(pResult);
         if (!this.level.isClientSide) {
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), this.isUpgraded() ? 1.75F : 1.0F, this.isUpgraded() && MainConfig.SoulSkullFire.get(), this.isDangerous() ? Explosion.Mode.BREAK : Explosion.Mode.NONE);
+            Entity owner = this.getOwner();
+            float enchantment = 0;
+            boolean flaming = false;
+            if (owner instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) owner;
+                if (CuriosFinder.findAmulet(player).getItem() == ModItems.SKULL_AMULET.get()){
+                    if (CuriosFinder.findAmulet(player).isEnchanted()){
+                        enchantment = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, CuriosFinder.findAmulet(player))/2.5F;
+                        if (this.isUpgraded()){
+                            enchantment = enchantment + 0.75F;
+                        }
+                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, CuriosFinder.findAmulet(player)) > 0){
+                            flaming = true;
+                        }
+                    }
+                }
+            }
+            this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, this.isDangerous() ? Explosion.Mode.BREAK : Explosion.Mode.NONE);
             this.remove();
         }
 
@@ -191,7 +212,6 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
     protected boolean shouldBurn() {
         return false;
     }
-
 
     @Override
     public IPacket<?> getAddEntityPacket() {

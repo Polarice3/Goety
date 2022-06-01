@@ -3,7 +3,7 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.CursedCageBlock;
-import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModBlocks;
@@ -160,7 +160,7 @@ public class GoldTotemItem extends Item {
 
     public static int SoulMultiply(LivingEntity livingEntity){
         ItemStack weapon= livingEntity.getMainHandItem();
-        int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantmentsType.SOULEATER.get(), weapon);
+        int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOULEATER.get(), weapon);
         if (i > 0){
             return i + 1;
         } else {

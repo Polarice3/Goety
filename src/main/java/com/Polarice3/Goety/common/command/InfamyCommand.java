@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.command;
 
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.utils.InfamyHelper;
+import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -24,7 +25,9 @@ public class InfamyCommand {
             return addInfamy(p_198445_0_.getSource(), EntityArgument.getPlayers(p_198445_0_, "targets"), IntegerArgumentType.getInteger(p_198445_0_, "amount"));
         })))).then(Commands.literal("set").then(Commands.argument("targets", EntityArgument.players()).then(Commands.argument("amount", IntegerArgumentType.integer(0)).executes((p_198439_0_) -> {
             return setInfamy(p_198439_0_.getSource(), EntityArgument.getPlayers(p_198439_0_, "targets"), IntegerArgumentType.getInteger(p_198439_0_, "amount"));
-        })))).then(Commands.literal("query").then(Commands.argument("targets", EntityArgument.player()).executes((p_198435_0_) -> {
+        })))).then(Commands.literal("query").executes((p_198352_0_) -> {
+            return queryInfamy(p_198352_0_.getSource(), p_198352_0_.getSource().getPlayerOrException());
+        }).then(Commands.argument("targets", EntityArgument.player()).executes((p_198435_0_) -> {
             return queryInfamy(p_198435_0_.getSource(), EntityArgument.getPlayer(p_198435_0_, "targets"));
         }))));
     }

@@ -6,10 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SignItem;
-import net.minecraft.item.TallBlockItem;
+import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -147,6 +144,7 @@ public class ModBlocks {
     //Walls
     public static final RegistryObject<Block> CURSED_BRICK_WALL_BLOCK = BLOCKS.register("cursed_bricks_wall",
             () -> new WallBlock(AbstractBlock.Properties.copy(CURSED_BRICK_BLOCK.get())));
+    public static final RegistryObject<Block> GRAVE_BRICK_WALL_BLOCK = BLOCKS.register("grave_bricks_wall", GraveWallBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_BRICK_WALL_BLOCK = BLOCKS.register("cursed_stone_bricks_wall",
             () -> new WallBlock(AbstractBlock.Properties.copy(CURSED_STONE_BRICK_BLOCK.get())));
     public static final RegistryObject<Block> DEAD_SANDSTONE_WALL_BLOCK = BLOCKS.register("dead_sandstone_wall",
@@ -251,6 +249,8 @@ public class ModBlocks {
             () -> new BlockItemBase(ARCA_BLOCK.get()));
     public static final RegistryObject<Item> SOUL_LIGHT_ITEM = BLOCK_ITEMS.register("soul_light",
             () -> new BlockItemBase(SOUL_LIGHT_BLOCK.get()));
+    public static final RegistryObject<Item> GRAVE_BRICK_WALL_ITEM = BLOCK_ITEMS.register("grave_bricks_wall",
+            () -> new BlockItem(GRAVE_BRICK_WALL_BLOCK.get(), new Item.Properties()));
     //TreeItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
             () -> new BlockItemBase(HAUNTED_PLANKS.get()));

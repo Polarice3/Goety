@@ -3,12 +3,19 @@ package com.Polarice3.Goety.common.entities.hostile.illagers;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.StealTotemGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.google.common.collect.Maps;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.SpellcastingIllagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,10 +25,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.raid.Raid;
+
+import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class HuntingIllagerEntity extends SpellcastingIllagerEntity {
+    private static final DataParameter<Boolean> RIDER = EntityDataManager.defineId(HuntingIllagerEntity.class, DataSerializers.BOOLEAN);
+    public final Predicate<Entity> field_213690_b = Entity::isAlive;
     public final Inventory inventory = new Inventory(1);
 
     protected HuntingIllagerEntity(EntityType<? extends HuntingIllagerEntity> p_i48551_1_, World p_i48551_2_) {
@@ -55,6 +72,29 @@ public abstract class HuntingIllagerEntity extends SpellcastingIllagerEntity {
                 }
             }
         }
+        for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D), field_213690_b)) {
+            if (this.isRider()){
+                if (entity instanceof RavagerEntity){
+                    RavagerEntity ravagerEntity = (RavagerEntity) entity;
+                    if (!ravagerEntity.isVehicle() && !this.isPassenger()){
+                        this.startRiding(ravagerEntity, true);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(RIDER, false);
+    }
+
+    public boolean isRider(){
+        return this.entityData.get(RIDER);
+    }
+
+    public void setRider(boolean pIsRider){
+        this.entityData.set(RIDER, pIsRider);
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {

@@ -10,6 +10,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -70,6 +72,13 @@ public class EntityFinder {
     public static EntityType<?> entityTypeFromNbt(CompoundNBT nbtTagCompound) {
         ResourceLocation typeId = new ResourceLocation(nbtTagCompound.getString("id"));
         return ForgeRegistries.ENTITIES.getValue(typeId);
+    }
+
+    public static PlayerEntity getNearbyPlayer(World world, BlockPos blockPos){
+        for (PlayerEntity player : world.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(blockPos).inflate(256))){
+            return player;
+        }
+        return null;
     }
 
     public static void sendEntityUpdatePacket(PlayerEntity player, LivingEntity livingEntity) {

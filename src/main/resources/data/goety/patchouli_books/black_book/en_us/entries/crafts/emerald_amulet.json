@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Through the power of the Concentrated Emerald, you've found a way to create an Amulet that increases the power of the Fangs spawned from the Biting Spell."
+      "text": "Through the power of the Concentrated Emerald, you've found a way to create an Amulet that increases the power of the Fangs spawned from the Biting Spell, but only after it's enchanted with Sharpness."
     },
     {
       "type": "goety:ritual",
@@ -14,7 +14,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "By having it on the Hotbar, or in the Necklace Slot if Curios is installed, Fangs will deal 5 Hearts of Damage instead of 3."
+      "text": "By having it on the Hotbar, or in the Necklace Slot if Curios is installed, Fangs will deal more damage depending on the level of Sharpness the Amulet has."
     }
   ]
 }

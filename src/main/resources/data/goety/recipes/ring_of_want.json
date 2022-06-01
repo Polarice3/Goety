@@ -21,19 +21,19 @@
       "tag": "forge:gems/lapis"
     },
     {
-      "item": "goety:magic_emerald"
+      "item": "goety:soul_emerald"
     },
     {
-      "item": "goety:magic_emerald"
+      "item": "goety:soul_emerald"
     },
     {
-      "item": "goety:magic_emerald"
+      "item": "goety:soul_emerald"
     },
     {
-      "item": "goety:magic_emerald"
+      "item": "goety:soul_emerald"
     }
   ],
   "result": {
-    "item": "goety:ring_of_want_1"
+    "item": "goety:ring_of_want"
   }
 }

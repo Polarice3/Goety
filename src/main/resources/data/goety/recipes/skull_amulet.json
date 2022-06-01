@@ -16,6 +16,9 @@
     },
     {
       "item": "minecraft:skeleton_skull"
+    },
+    {
+      "tag": "forge:bones"
     }
   ],
   "result": {

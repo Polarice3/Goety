@@ -4,7 +4,6 @@ import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -39,13 +38,8 @@ public class HuskarlEntity extends ZombieEntity {
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
     }
 
-    public void tick(){
-        super.tick();
-        if (this.isAggressive()){
-            this.maxUpStep = 2.0F;
-        } else {
-            this.maxUpStep = 1.0F;
-        }
+    protected PathNavigator createNavigation(World pLevel) {
+        return new HuskarlEntity.Navigator(this, pLevel);
     }
 
     protected boolean isSunSensitive() {
@@ -154,6 +148,26 @@ public class HuskarlEntity extends ZombieEntity {
 
     protected ItemStack getSkull() {
         return ItemStack.EMPTY;
+    }
+
+    static class Navigator extends GroundPathNavigator {
+        public Navigator(MobEntity p_i50754_1_, World p_i50754_2_) {
+            super(p_i50754_1_, p_i50754_2_);
+        }
+
+        protected PathFinder createPathFinder(int p_179679_1_) {
+            this.nodeEvaluator = new HuskarlEntity.Processor();
+            return new PathFinder(this.nodeEvaluator, p_179679_1_);
+        }
+    }
+
+    static class Processor extends WalkNodeProcessor {
+        private Processor() {
+        }
+
+        protected PathNodeType evaluateBlockPathType(IBlockReader pLevel, boolean pCanOpenDoors, boolean pCanEnterDoors, BlockPos pPos, PathNodeType pNodeType) {
+            return pNodeType == PathNodeType.FENCE ? PathNodeType.OPEN : super.evaluateBlockPathType(pLevel, pCanOpenDoors, pCanEnterDoors, pPos, pNodeType);
+        }
     }
 
 }

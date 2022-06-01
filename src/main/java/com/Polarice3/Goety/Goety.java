@@ -4,7 +4,7 @@ import com.Polarice3.Goety.client.inventory.container.ModContainerType;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
-import com.Polarice3.Goety.common.enchantments.ModEnchantmentsType;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
@@ -103,7 +103,7 @@ public class Goety {
         ModSpawnEggs.ITEMS.register(eventBus);
         ModPotions.POTIONS.register(eventBus);
         ModContainerType.CONTAINER_TYPE.register(eventBus);
-        ModEnchantmentsType.ENCHANTMENT_TYPES.register(eventBus);
+        ModEnchantments.ENCHANTMENTS.register(eventBus);
         ModParticleTypes.PARTICLE_TYPES.register(eventBus);
         ModRecipeSerializer.RECIPE_SERIALIZERS.register(eventBus);
 

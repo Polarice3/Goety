@@ -25,6 +25,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
 import net.minecraft.world.gen.feature.structure.*;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import org.apache.logging.log4j.Level;
 
 import java.util.List;
@@ -59,7 +60,23 @@ public class CursedGraveyardStructure extends Structure<NoFeatureConfig> {
         int landHeight = chunkGenerator.getFirstOccupiedHeight(centerOfChunk.getX(), centerOfChunk.getZ(), Heightmap.Type.WORLD_SURFACE_WG);
         IBlockReader columnOfBlocks = chunkGenerator.getBaseColumn(centerOfChunk.getX(), centerOfChunk.getZ());
         BlockState topBlock = columnOfBlocks.getBlockState(centerOfChunk.above(landHeight));
-        return MainConfig.CursedGraveyardGen.get() && topBlock.getFluidState().isEmpty();
+        return MainConfig.CursedGraveyardGen.get() && topBlock.getFluidState().isEmpty() && !isNearVillage(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
+    }
+
+    private boolean isNearVillage(ChunkGenerator p_242782_1_, long p_242782_2_, SharedSeedRandom p_242782_4_, int p_242782_5_, int p_242782_6_) {
+        StructureSeparationSettings structureseparationsettings = p_242782_1_.getSettings().getConfig(Structure.VILLAGE);
+        if (structureseparationsettings != null) {
+            for (int i = p_242782_5_ - 10; i <= p_242782_5_ + 10; ++i) {
+                for (int j = p_242782_6_ - 10; j <= p_242782_6_ + 10; ++j) {
+                    ChunkPos chunkpos = Structure.VILLAGE.getPotentialFeatureChunk(structureseparationsettings, p_242782_2_, p_242782_4_, i, j);
+                    if (i == chunkpos.x && j == chunkpos.z) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
     }
 
     public static class Start extends StructureStart<NoFeatureConfig> {

@@ -42,7 +42,7 @@ public class CursedKilnBlock extends ContainerBlock implements IWaterLoggable {
 
     public CursedKilnBlock() {
         super(Properties.of(Material.STONE)
-                .strength(3.5F)
+                .strength(5.0F)
                 .sound(SoundType.STONE)
                 .harvestLevel(0)
                 .harvestTool(ToolType.PICKAXE)

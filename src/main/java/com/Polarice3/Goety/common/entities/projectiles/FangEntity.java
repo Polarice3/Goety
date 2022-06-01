@@ -3,6 +3,8 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.CuriosFinder;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -125,13 +127,13 @@ public class FangEntity extends Entity {
                 }
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
-                    float damage;
-                    if (CuriosFinder.findAmulet(player).getItem() == ModItems.EMERALD_AMULET.get()){
-                        damage = 10.0F;
-                    } else {
-                        damage = 6.0F;
+                    float enchantment = 0;
+                    if (CuriosFinder.findAmulet(player).getItem() == ModItems.EMERALD_AMULET.get()) {
+                        if (CuriosFinder.findAmulet(player).isEnchanted()){
+                            enchantment = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SHARPNESS, CuriosFinder.findAmulet(player));
+                        }
                     }
-                    target.hurt(DamageSource.indirectMagic(this, livingentity), damage);
+                    target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
                 } else {
                     target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
                 }

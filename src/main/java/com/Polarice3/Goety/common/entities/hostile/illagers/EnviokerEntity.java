@@ -2,7 +2,11 @@ package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -22,14 +26,17 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.raid.Raid;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class EnviokerEntity extends HuntingIllagerEntity {
 
@@ -139,6 +146,22 @@ public class EnviokerEntity extends HuntingIllagerEntity {
     }
 
     public void applyRaidBuffs(int pWave, boolean p_213660_2_) {
+        ItemStack itemstack = new ItemStack(Items.IRON_SWORD);
+        Raid raid = this.getCurrentRaid();
+        int i = 1;
+        if (pWave > raid.getNumGroups(Difficulty.NORMAL)) {
+            i = 3;
+        }
+
+        boolean flag = this.random.nextFloat() <= raid.getEnchantOdds();
+        if (flag) {
+            Map<Enchantment, Integer> map = Maps.newHashMap();
+            map.put(Enchantments.SHARPNESS, i);
+            map.put(Enchantments.KNOCKBACK, i);
+            EnchantmentHelper.setEnchantments(map, itemstack);
+        }
+
+        this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack);
     }
 
     class AttackSpellGoal extends UseSpellGoal {

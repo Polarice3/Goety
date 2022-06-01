@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.blocks;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.tileentities.SoulLightTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.PushReaction;
@@ -11,6 +12,7 @@ import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -24,14 +26,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class SoulLightBlock extends Block implements IWaterLoggable {
+public class SoulLightBlock extends ContainerBlock implements IWaterLoggable {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     protected static final VoxelShape SHAPE = Block.box(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
 
     public SoulLightBlock() {
         super(Properties.of(Material.DECORATION)
                 .instabreak()
-                .sound(SoundType.WOOD)
+                .sound(SoundType.WOOL)
                 .noCollission()
                 .lightLevel((p_235443_0_) -> 10)
                 .noOcclusion()
@@ -93,9 +95,14 @@ public class SoulLightBlock extends Block implements IWaterLoggable {
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
         double d0 = (double)pPos.getX() + 0.5D;
-        double d1 = (double)pPos.getY() + 0.7D;
+        double d1 = (double)pPos.getY() + 0.6D;
         double d2 = (double)pPos.getZ() + 0.5D;
         pLevel.addParticle(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0.0D, 0.0D, 0.0D);
-        pLevel.addParticle(ModParticleTypes.SOUL_LIGHT_EFFECT.get(), d0, d1 - 0.2D, d2, 0, 0, 0);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
+        return new SoulLightTileEntity();
     }
 }

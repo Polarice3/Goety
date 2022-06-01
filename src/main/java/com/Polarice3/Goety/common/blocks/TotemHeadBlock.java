@@ -14,7 +14,7 @@ public abstract class TotemHeadBlock extends ContainerBlock implements IForgeBlo
 
     public TotemHeadBlock() {
         super(Properties.of(Material.STONE)
-                .strength(3.0F, 9.0F)
+                .strength(5.0F, 9.0F)
                 .sound(SoundType.STONE)
                 .harvestLevel(0)
                 .harvestTool(ToolType.PICKAXE)

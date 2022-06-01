@@ -34,6 +34,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -138,7 +139,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullFire;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullZombie;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullSkeleton;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullMinionWander;
@@ -153,6 +153,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerRaid;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
 
@@ -264,6 +265,8 @@ public class MainConfig {
                 .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         FireBreathCost = BUILDER.comment("Fire Breath Spell Cost per second, Default: 2")
                 .defineInRange("fireBreathCost", 2, 0, Integer.MAX_VALUE);
+        SoulLightCost = BUILDER.comment("Soul Light Spell Cost per second, Default: 2")
+                .defineInRange("soulLightCost", 2, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -444,8 +447,6 @@ public class MainConfig {
                 .defineInRange("skeletonLimit", 32, 1, Integer.MAX_VALUE);
         CreeperlingExplosionRadius = BUILDER.comment("The radius of a Creeperling's Explosion when not powered, Default: 1.25")
                 .defineInRange("creeperlingExplosionRadius", 1.25, 0.0, Double.MAX_VALUE);
-        SoulSkullFire = BUILDER.comment("Soul Skulls when shot from Staffs sets ground aflame, Default: false")
-                .define("soulSkullFire", false);
         SoulSkullZombie = BUILDER.comment("Zombies killed by Soul Skull converts into a Servant, Default: true")
                 .define("soulSkullZombies", true);
         SoulSkullSkeleton = BUILDER.comment("Skeletons killed by Soul Skull converts into a Servant, Default: true")
@@ -479,7 +480,9 @@ public class MainConfig {
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")
                 .define("illagueSpread", true);
         IllagerSteal = BUILDER.comment("Whether Enviokers, Inquillagers and Conquillagers can steal Totems of Souls or Totems of Undying, Default: true")
-                .define("illagueSteal", true);
+                .define("illagerSteal", true);
+        IllagerRaid = BUILDER.comment("Whether Enviokers, Inquillagers and Conquillagers can join Raids, Default: true")
+                .define("specialIllagerRaid", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

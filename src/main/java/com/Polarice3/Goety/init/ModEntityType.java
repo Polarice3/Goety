@@ -77,6 +77,13 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
+    public static final RegistryObject<EntityType<SoulLightEntity>> SOUL_LIGHT = ENTITY_TYPES.register("soul_light",
+            () -> EntityType.Builder.<SoulLightEntity>of(SoulLightEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "soul_light").toString()));
+
     public static final RegistryObject<EntityType<SoulBulletEntity>> SOUL_BULLET = ENTITY_TYPES.register("soul_bullet",
             () -> EntityType.Builder.<SoulBulletEntity>of(SoulBulletEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)

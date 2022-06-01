@@ -75,9 +75,7 @@ public class ModItems {
     public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", AmuletItem::new);
     public static final RegistryObject<Item> VAMPIRIC_AMULET = ITEMS.register("vampiric_amulet", AmuletItem::new);
     public static final RegistryObject<Item> SKULL_AMULET = ITEMS.register("skull_amulet", AmuletItem::new);
-    public static final RegistryObject<Item> RING_OF_WANT_1 = ITEMS.register("ring_of_want_1", RingItem::new);
-    public static final RegistryObject<Item> RING_OF_WANT_2 = ITEMS.register("ring_of_want_2", RingItem::new);
-    public static final RegistryObject<Item> RING_OF_WANT_3 = ITEMS.register("ring_of_want_3", RingItem::new);
+    public static final RegistryObject<Item> RING_OF_WANT = ITEMS.register("ring_of_want", RingItem::new);
 
     //Focuses
     public static final RegistryObject<Item> VEXINGFOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));
@@ -101,6 +99,7 @@ public class ModItems {
     public static final RegistryObject<Item> ILLUSIONFOCUS = ITEMS.register("illusionfocus", () -> new MagicFocusItem(MainConfig.IllusionCost.get()));
     public static final RegistryObject<Item> SOULSHIELDFOCUS = ITEMS.register("soulshieldfocus", () -> new MagicFocusItem(MainConfig.SoulShieldCost.get()));
     public static final RegistryObject<Item> FIREBREATHFOCUS = ITEMS.register("firebreathfocus", () -> new MagicFocusItem(MainConfig.FireBreathCost.get()));
+    public static final RegistryObject<Item> SOULLIGHTFOCUS = ITEMS.register("soullightfocus", () -> new MagicFocusItem(MainConfig.SoulLightCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

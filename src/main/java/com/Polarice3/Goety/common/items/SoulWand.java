@@ -307,6 +307,9 @@ public class SoulWand extends Item{
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("firebreath")) {
                 this.setSpellConditions(new FireBreathSpell(), itemStack);
                 this.setSpell(20, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("soullight")) {
+                this.setSpellConditions(new SoulLightSpell(), itemStack);
+                this.setSpell(21, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

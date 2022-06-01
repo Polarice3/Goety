@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "You've managed to craft an amulet that heals you the same amount of damage dealt by your Fangs. Unfortunately, the amulet no longer increases the potency of said fangs."
+      "text": "You've managed to craft an amulet that heals you the same amount of damage dealt by your Fangs. Unfortunately, the amulet no longer accepts Sharpness Enchantment."
     },
     {
       "type": "goety:ritual",

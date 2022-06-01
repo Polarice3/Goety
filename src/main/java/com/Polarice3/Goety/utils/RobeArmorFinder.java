@@ -65,6 +65,10 @@ public class RobeArmorFinder {
         return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() instanceof WanderBootsArmor;
     }
 
+    public static boolean FindNecroBootsofWander(LivingEntity livingEntity){
+        return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECROBOOTSOFWANDER.get();
+    }
+
     public static boolean FindArachnoBootsofWander(LivingEntity livingEntity){
         return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.ARACHNOBOOTSOFWANDER.get();
     }
