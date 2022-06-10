@@ -1,14 +1,12 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.CuriosFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
-import com.Polarice3.Goety.utils.SoundUtil;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -160,6 +158,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             Entity owner = this.getOwner();
             float enchantment = 0;
             boolean flaming = false;
+            boolean loot = false;
             if (owner instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) owner;
                 if (CuriosFinder.findAmulet(player).getItem() == ModItems.SKULL_AMULET.get()){
@@ -173,8 +172,18 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                         }
                     }
                 }
+                if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()){
+                    if (CuriosFinder.findRing(player).isEnchanted()){
+                        float wanting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                        if (wanting >= 3){
+                            loot = true;
+                        }
+                    }
+                }
             }
-            this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, this.isDangerous() ? Explosion.Mode.BREAK : Explosion.Mode.NONE);
+            Explosion.Mode explodeMode = this.isDangerous() ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
+            LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
+            ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, explodeMode, lootMode);
             this.remove();
         }
 

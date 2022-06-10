@@ -55,6 +55,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<SoulLightTileEntity>> SOUL_LIGHT = TILEENTITY_TYPES.register("soul_light",
             () -> TileEntityType.Builder.of(SoulLightTileEntity::new, ModBlocks.SOUL_LIGHT_BLOCK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<GlowLightTileEntity>> GLOW_LIGHT = TILEENTITY_TYPES.register("glow_light",
+            () -> TileEntityType.Builder.of(GlowLightTileEntity::new, ModBlocks.GLOW_LIGHT_BLOCK.get()).build(null));
+
     public static final RegistryObject<TileEntityType<ModSignTileEntity>> SIGN_TILE_ENTITIES = TILEENTITY_TYPES.register("sign",
             () -> TileEntityType.Builder.of(ModSignTileEntity::new, ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()).build(null));
 }

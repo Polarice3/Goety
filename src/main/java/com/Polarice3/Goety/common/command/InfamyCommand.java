@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.command;
 
+import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.events.IllagerSpawner;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.utils.InfamyHelper;
 import com.google.common.collect.ImmutableList;
@@ -29,6 +31,10 @@ public class InfamyCommand {
             return queryInfamy(p_198352_0_.getSource(), p_198352_0_.getSource().getPlayerOrException());
         }).then(Commands.argument("targets", EntityArgument.player()).executes((p_198435_0_) -> {
             return queryInfamy(p_198435_0_.getSource(), EntityArgument.getPlayer(p_198435_0_, "targets"));
+        }))).then(Commands.literal("spawn").executes((p_198352_0_) -> {
+            return spawnIllagers(p_198352_0_.getSource(), p_198352_0_.getSource().getPlayerOrException());
+        }).then(Commands.argument("targets", EntityArgument.player()).executes((p_198435_0_) -> {
+            return spawnIllagers(p_198435_0_.getSource(), EntityArgument.getPlayer(p_198435_0_, "targets"));
         }))));
     }
 
@@ -76,5 +82,19 @@ public class InfamyCommand {
 
             return pTargets.size();
         }
+    }
+
+    private static int spawnIllagers(CommandSource pSource, ServerPlayerEntity pPlayer) {
+        IInfamy infamy = InfamyHelper.getCapability(pPlayer);
+        int i = infamy.getInfamy();
+        if (i > MainConfig.InfamyThreshold.get()){
+            pSource.sendSuccess(new TranslationTextComponent("commands.infamy.spawn.success", pPlayer.getDisplayName()), false);
+            IllagerSpawner illagerSpawner = new IllagerSpawner();
+            illagerSpawner.forceSpawn(pPlayer.getLevel(), pPlayer);
+            return 1;
+        } else {
+            pSource.sendFailure(new TranslationTextComponent("commands.infamy.spawn.failure", pPlayer.getDisplayName()));
+        }
+        return i;
     }
 }

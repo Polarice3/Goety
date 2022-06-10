@@ -1,7 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
+import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.SoundUtil;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -19,10 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -51,7 +49,7 @@ public class EnviokerEntity extends HuntingIllagerEntity {
         this.goalSelector.addGoal(2, new AttackGoal(this));
         this.goalSelector.addGoal(4, new SummonSpellGoal());
         this.goalSelector.addGoal(5, new AttackSpellGoal());
-        this.goalSelector.addGoal(6, new SoulSkullSpellGoal());
+        this.goalSelector.addGoal(6, new ProjectileSpellGoal());
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -268,8 +266,8 @@ public class EnviokerEntity extends HuntingIllagerEntity {
         }
     }
 
-    class SoulSkullSpellGoal extends UseSpellGoal {
-        private SoulSkullSpellGoal() {
+    class ProjectileSpellGoal extends UseSpellGoal {
+        private ProjectileSpellGoal() {
         }
 
         public boolean canUse() {
@@ -295,11 +293,11 @@ public class EnviokerEntity extends HuntingIllagerEntity {
                     double d1 = livingentity.getX() - EnviokerEntity.this.getX();
                     double d2 = livingentity.getY(0.5D) - EnviokerEntity.this.getY(0.5D);
                     double d3 = livingentity.getZ() - EnviokerEntity.this.getZ();
-                    SoulSkullEntity soulSkullEntity = new SoulSkullEntity(EnviokerEntity.this.level, EnviokerEntity.this, d1, d2, d3);
+                    SoulBulletEntity soulSkullEntity = new SoulBulletEntity(EnviokerEntity.this.level, EnviokerEntity.this, d1, d2, d3);
                     soulSkullEntity.setPos(soulSkullEntity.getX(), EnviokerEntity.this.getY(0.5), soulSkullEntity.getZ());
                     EnviokerEntity.this.level.addFreshEntity(soulSkullEntity);
                     if (!EnviokerEntity.this.isSilent()) {
-                        EnviokerEntity.this.level.levelEvent(null, 1024, EnviokerEntity.this.blockPosition(), 0);
+                        new SoundUtil(EnviokerEntity.this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundCategory.HOSTILE, 1.0F, 1.0F);
                     }
                 }
             }

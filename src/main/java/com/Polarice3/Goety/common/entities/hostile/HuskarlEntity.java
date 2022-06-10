@@ -1,9 +1,11 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -29,6 +31,12 @@ public class HuskarlEntity extends ZombieEntity {
         super(p_i48549_1_, p_i48549_2_);
     }
 
+    @Override
+    protected void addBehaviourGoals() {
+        super.addBehaviourGoals();
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, FallenEntity.class, false));
+    }
+
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
@@ -47,7 +55,7 @@ public class HuskarlEntity extends ZombieEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.HUSK_AMBIENT;
+        return SoundEvents.ZOMBIE_AMBIENT;
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
@@ -59,7 +67,7 @@ public class HuskarlEntity extends ZombieEntity {
     }
 
     protected SoundEvent getStepSound() {
-        return SoundEvents.HUSK_STEP;
+        return SoundEvents.ZOMBIE_STEP;
     }
 
     public void setShade(boolean shade){
@@ -105,6 +113,14 @@ public class HuskarlEntity extends ZombieEntity {
         }
 
         return flag;
+    }
+
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.isProjectile()){
+            return false;
+        } else {
+            return super.hurt(source, amount);
+        }
     }
 
     protected boolean convertsInWater() {

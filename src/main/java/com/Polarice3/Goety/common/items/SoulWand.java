@@ -13,6 +13,7 @@ import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -121,14 +122,16 @@ public class SoulWand extends Item{
                 if (player.isCrouching()){
                     summonedEntity.kill();
                 } else {
-                    if (!summonedEntity.isWandering()){
-                        summonedEntity.setWandering(true);
-                        player.displayClientMessage(new TranslationTextComponent("info.goety.minion.wander", target.getDisplayName()), true);
-                    } else {
-                        summonedEntity.setWandering(false);
-                        player.displayClientMessage(new TranslationTextComponent("info.goety.minion.follow", target.getDisplayName()), true);
+                    if (summonedEntity.getMobType() == CreatureAttribute.UNDEAD) {
+                        if (!summonedEntity.isWandering()) {
+                            summonedEntity.setWandering(true);
+                            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.wander", target.getDisplayName()), true);
+                        } else {
+                            summonedEntity.setWandering(false);
+                            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.follow", target.getDisplayName()), true);
+                        }
+                        new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0f, 1.0f);
                     }
-                    new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0f, 1.0f);
                 }
                 return ActionResultType.SUCCESS;
             }
@@ -310,6 +313,9 @@ public class SoulWand extends Item{
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("soullight")) {
                 this.setSpellConditions(new SoulLightSpell(), itemStack);
                 this.setSpell(21, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("glowlight")) {
+                this.setSpellConditions(new GlowLightSpell(), itemStack);
+                this.setSpell(22, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

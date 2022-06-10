@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
@@ -62,6 +63,8 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         } else if (entityIn instanceof WitchEntity) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else if (entityIn instanceof AbstractCultistEntity) {
+            return this.getTeam() == null && entityIn.getTeam() == null;
+        } else if (entityIn instanceof IDeadMob) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else if (entityIn instanceof AbstractPiglinEntity){
             return this.isAlliedTo(entityIn);

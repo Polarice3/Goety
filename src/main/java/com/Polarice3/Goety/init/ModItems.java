@@ -28,22 +28,9 @@ public class ModItems {
     public static final RegistryObject<Item> BLAZE_CORE = ITEMS.register("blazecore", BlazeCoreItem::new);
     public static final RegistryObject<Item> BROKEN_BLAZE_CORE = ITEMS.register("brokenblazecore", BlazeCoreItem::new);
     public static final RegistryObject<Item> ROCKETBOOSTER = ITEMS.register("rocketbooster", RocketBoosterItem::new);
-    public static final RegistryObject<DarkSteak> DARKSTEAK = ITEMS.register("darksteak", DarkSteak::new);
-    public static final RegistryObject<FlameGunItem> FLAMEGUN = ITEMS.register("flamegun", FlameGunItem::new);
-    public static final RegistryObject<SacredFishItem> SACRED_FISH = ITEMS.register("sacred_fish", SacredFishItem::new);
     public static final RegistryObject<Item> DARK_SCROLL = ITEMS.register("dark_scroll", DarkScrollItem::new);
     public static final RegistryObject<PhilosophersStoneItem> PHILOSOPHERSSTONE = ITEMS.register("philosophersstone", PhilosophersStoneItem::new);
     public static final RegistryObject<WitchBombItem> WITCHBOMB = ITEMS.register("witchbomb", WitchBombItem::new);
-    public static final RegistryObject<UncookedMutatedItem> MUTATED_STEAK_UNCOOKED = ITEMS.register("mutatedsteak_uncooked", UncookedMutatedItem::new);
-    public static final RegistryObject<MutatedFoodItem> MUTATED_STEAK = ITEMS.register("mutatedsteak", () -> new MutatedFoodItem(10, 1));
-    public static final RegistryObject<UncookedMutatedItem> MUTATED_CHICKEN_UNCOOKED = ITEMS.register("mutatedchicken_uncooked", UncookedMutatedItem::new);
-    public static final RegistryObject<MutatedFoodItem> MUTATED_CHICKEN = ITEMS.register("mutatedchicken", () -> new MutatedFoodItem(8, 0.8F));
-    public static final RegistryObject<UncookedMutatedItem> MUTATED_MUTTON_UNCOOKED = ITEMS.register("mutatedmutton_uncooked", UncookedMutatedItem::new);
-    public static final RegistryObject<MutatedFoodItem> MUTATED_MUTTON = ITEMS.register("mutatedmutton", () -> new MutatedFoodItem(8, 1));
-    public static final RegistryObject<UncookedMutatedItem> MUTATED_PORKCHOP_UNCOOKED = ITEMS.register("mutatedporkchop_uncooked", UncookedMutatedItem::new);
-    public static final RegistryObject<MutatedFoodItem> MUTATED_PORKCHOP = ITEMS.register("mutatedporkchop", () -> new MutatedFoodItem(10, 1));
-    public static final RegistryObject<UncookedMutatedItem> MUTATED_RABBIT_UNCOOKED = ITEMS.register("mutatedrabbit_uncooked", UncookedMutatedItem::new);
-    public static final RegistryObject<MutatedFoodItem> MUTATED_RABBIT = ITEMS.register("mutatedrabbit", () -> new MutatedFoodItem(7, 0.8F));
     public static final RegistryObject<Item> NETHER_BOOK = ITEMS.register("nether_book", NetherBookRawItem::new);
     public static final RegistryObject<Item> NETHER_BOOK_TRANSLATED = ITEMS.register("nether_book_translated", NetherBookItem::new);
     public static final RegistryObject<Item> DEADBAT = ITEMS.register("deadbat", DeadBatItem::new);
@@ -57,6 +44,19 @@ public class ModItems {
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
 
+    //Food
+    public static final RegistryObject<SacredFishItem> SACRED_FISH = ITEMS.register("sacred_fish", SacredFishItem::new);
+    public static final RegistryObject<UncookedMutatedItem> MUTATED_STEAK_UNCOOKED = ITEMS.register("mutatedsteak_uncooked", UncookedMutatedItem::new);
+    public static final RegistryObject<UncookedMutatedItem> MUTATED_CHICKEN_UNCOOKED = ITEMS.register("mutatedchicken_uncooked", UncookedMutatedItem::new);
+    public static final RegistryObject<UncookedMutatedItem> MUTATED_MUTTON_UNCOOKED = ITEMS.register("mutatedmutton_uncooked", UncookedMutatedItem::new);
+    public static final RegistryObject<UncookedMutatedItem> MUTATED_PORKCHOP_UNCOOKED = ITEMS.register("mutatedporkchop_uncooked", UncookedMutatedItem::new);
+    public static final RegistryObject<UncookedMutatedItem> MUTATED_RABBIT_UNCOOKED = ITEMS.register("mutatedrabbit_uncooked", UncookedMutatedItem::new);
+    public static final RegistryObject<MutatedFoodItem> MUTATED_STEAK = ITEMS.register("mutatedsteak", () -> new MutatedFoodItem(10, 1));
+    public static final RegistryObject<MutatedFoodItem> MUTATED_CHICKEN = ITEMS.register("mutatedchicken", () -> new MutatedFoodItem(8, 0.8F));
+    public static final RegistryObject<MutatedFoodItem> MUTATED_MUTTON = ITEMS.register("mutatedmutton", () -> new MutatedFoodItem(8, 1));
+    public static final RegistryObject<MutatedFoodItem> MUTATED_PORKCHOP = ITEMS.register("mutatedporkchop", () -> new MutatedFoodItem(10, 1));
+    public static final RegistryObject<MutatedFoodItem> MUTATED_RABBIT = ITEMS.register("mutatedrabbit", () -> new MutatedFoodItem(7, 0.8F));
+
     //Basic
     public static final RegistryObject<Item> SOULRUBY = ITEMS.register("soulruby", ItemBase::new);
     public static final RegistryObject<Item> RIFTSHARD = ITEMS.register("riftshard", ItemBase::new);
@@ -68,6 +68,7 @@ public class ModItems {
     public static final RegistryObject<Item> DARKFABRIC = ITEMS.register("darkfabric", ItemBase::new);
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
+    public static final RegistryObject<Item> DRIED_REMNANT = ITEMS.register("dried_remnant", ItemBase::new);
 
     //Curios
     public static final RegistryObject<GoldTotemItem> GOLDTOTEM = ITEMS.register("goldtotem", GoldTotemItem::new);
@@ -100,6 +101,7 @@ public class ModItems {
     public static final RegistryObject<Item> SOULSHIELDFOCUS = ITEMS.register("soulshieldfocus", () -> new MagicFocusItem(MainConfig.SoulShieldCost.get()));
     public static final RegistryObject<Item> FIREBREATHFOCUS = ITEMS.register("firebreathfocus", () -> new MagicFocusItem(MainConfig.FireBreathCost.get()));
     public static final RegistryObject<Item> SOULLIGHTFOCUS = ITEMS.register("soullightfocus", () -> new MagicFocusItem(MainConfig.SoulLightCost.get()));
+    public static final RegistryObject<Item> GLOWLIGHTFOCUS = ITEMS.register("glowlightfocus", () -> new MagicFocusItem(MainConfig.GlowLightCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);
@@ -107,6 +109,7 @@ public class ModItems {
     public static final RegistryObject<Item> PHILOSOPHERS_MACE = ITEMS.register("philosophers_mace", PhilosophersMaceItem::new);
     public static final RegistryObject<Item> SOULWAND = ITEMS.register("soulwand", SoulWand::new);
     public static final RegistryObject<Item> SOULSTAFF = ITEMS.register("soulstaff", SoulStaff::new);
+    public static final RegistryObject<Item> CORRUPTSTAFF = ITEMS.register("corrupt_staff", CorruptStaff::new);
 
     //Armors
     public static final RegistryObject<Item> DARKHELM = ITEMS.register("darkhelm", () ->
@@ -166,8 +169,4 @@ public class ModItems {
             "jei_dummy/sacrifice", () -> new DummyItem(new Item.Properties()));
     public static final RegistryObject<DummyItem> JEI_DUMMY_REQUIRE_ITEM_USE = ITEMS.register(
             "jei_dummy/item", () -> new DummyItem(new Item.Properties()));
-
-    public static Item.Properties defaultProperties() {
-        return new Item.Properties().tab(Goety.TAB);
-    }
 }

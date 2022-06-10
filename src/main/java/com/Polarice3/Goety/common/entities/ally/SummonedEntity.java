@@ -108,8 +108,7 @@ public class SummonedEntity extends OwnedEntity {
                                 ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
                                 int SoulCost = MainConfig.UndeadMinionHealCost.get();
                                 if (RobeArmorFinder.FindLeggings(owner)){
-                                    int random = this.random.nextInt(2);
-                                    if (random == 0){
+                                    if (this.random.nextBoolean()){
                                         SoulCost = 0;
                                     }
                                 }
@@ -275,6 +274,8 @@ public class SummonedEntity extends OwnedEntity {
                 return false;
             } else if (this.summonedEntity.isWandering()) {
                 return false;
+            } else if (this.summonedEntity.isAggressive()) {
+                return false;
             } else {
                 this.owner = livingentity;
                 return true;
@@ -283,6 +284,8 @@ public class SummonedEntity extends OwnedEntity {
 
         public boolean canContinueToUse() {
             if (this.navigation.isDone()) {
+                return false;
+            } else if (this.summonedEntity.isAggressive()){
                 return false;
             } else {
                 return !(this.summonedEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));

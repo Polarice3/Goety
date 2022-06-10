@@ -1,0 +1,44 @@
+package com.Polarice3.Goety.client.render;
+
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.entities.projectiles.CorruptSkullEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.GenericHeadModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+
+public class CorruptSkullRenderer extends EntityRenderer<CorruptSkullEntity> {
+    private static final ResourceLocation WITHER_INVULNERABLE_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/corruptskull_destroy.png");
+    private static final ResourceLocation WITHER_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/corruptskull.png");
+    private final GenericHeadModel model = new GenericHeadModel();
+
+    public CorruptSkullRenderer(EntityRendererManager p_i46129_1_) {
+        super(p_i46129_1_);
+    }
+
+    protected int getBlockLightLevel(CorruptSkullEntity pEntity, BlockPos pPos) {
+        return 15;
+    }
+
+    public void render(CorruptSkullEntity pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
+        pMatrixStack.pushPose();
+        pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
+        float f = MathHelper.rotlerp(pEntity.yRotO, pEntity.yRot, pPartialTicks);
+        float f1 = MathHelper.lerp(pPartialTicks, pEntity.xRotO, pEntity.xRot);
+        IVertexBuilder ivertexbuilder = pBuffer.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));
+        this.model.setupAnim(0.0F, f, f1);
+        this.model.renderToBuffer(pMatrixStack, ivertexbuilder, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        pMatrixStack.popPose();
+        super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+    }
+
+    public ResourceLocation getTextureLocation(CorruptSkullEntity pEntity) {
+        return pEntity.isDangerous() ? WITHER_INVULNERABLE_LOCATION : WITHER_LOCATION;
+    }
+}

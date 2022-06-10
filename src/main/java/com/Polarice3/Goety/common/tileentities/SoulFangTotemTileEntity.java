@@ -8,8 +8,10 @@ import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -102,7 +104,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))){
                 if (livingEntity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) livingEntity;
-                    if (!player.isCreative()) {
+                    if (MobUtil.playerValidity(player, false)) {
                         if (this.getPlayer() != player) {
                             return livingEntity;
                         }
@@ -124,7 +126,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                             return livingEntity;
                         }
                     } else {
-                        if (!(livingEntity instanceof FlyingPhaseEntity) && !(livingEntity instanceof VexEntity)) {
+                        if (livingEntity.isOnGround()) {
                             return livingEntity;
                         }
                     }
@@ -225,7 +227,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                 float f = (float) MathHelper.atan2(entity.getZ() - this.getBlockPos().getZ(), entity.getX() - this.getBlockPos().getX());
                 if (entity instanceof PlayerEntity) {
                     if (this.getPlayer() != entity) {
-                        if (!((PlayerEntity) entity).isCreative()) {
+                        if (MobUtil.playerValidity((PlayerEntity) entity, false)) {
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
                     }
@@ -246,7 +248,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
                     } else {
-                        if (!(entity instanceof FlyingPhaseEntity) || !(entity instanceof VexEntity)) {
+                        if (entity.isOnGround()) {
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
                     }

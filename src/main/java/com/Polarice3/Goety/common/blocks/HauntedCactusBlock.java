@@ -1,9 +1,10 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
+import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -19,7 +20,6 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -61,19 +61,20 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
         if (pLevel.isEmptyBlock(blockpos)) {
             int i;
             for(i = 1; pLevel.getBlockState(pPos.below(i)).is(this); ++i) {
-                if (i < 6) {
-                    int j = pState.getValue(AGE);
-                    if(net.minecraftforge.common.ForgeHooks.onCropsGrowPre(pLevel, blockpos, pState, true)) {
-                        if (j == 15) {
-                            pLevel.setBlockAndUpdate(blockpos, this.defaultBlockState());
-                            BlockState blockstate = pState.setValue(AGE, 0);
-                            pLevel.setBlock(pPos, blockstate, 4);
-                            blockstate.neighborChanged(pLevel, blockpos, this, pPos, false);
-                        } else {
-                            pLevel.setBlock(pPos, pState.setValue(AGE, j + 1), 4);
-                        }
-                        net.minecraftforge.common.ForgeHooks.onCropsGrowPost(pLevel, pPos, pState);
+            }
+
+            if (i < 6) {
+                int j = pState.getValue(AGE);
+                if(net.minecraftforge.common.ForgeHooks.onCropsGrowPre(pLevel, blockpos, pState, true)) {
+                    if (j == 15) {
+                        pLevel.setBlockAndUpdate(blockpos, this.defaultBlockState());
+                        BlockState blockstate = pState.setValue(AGE, 0);
+                        pLevel.setBlock(pPos, blockstate, 4);
+                        blockstate.neighborChanged(pLevel, blockpos, this, pPos, false);
+                    } else {
+                        pLevel.setBlock(pPos, pState.setValue(AGE, j + 1), 4);
                     }
+                    net.minecraftforge.common.ForgeHooks.onCropsGrowPost(pLevel, pPos, pState);
                 }
             }
         }
@@ -117,18 +118,18 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
             LivingEntity livingEntity = (LivingEntity) pEntity;
             if (pEntity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) livingEntity;
-                if (!player.isCreative() && !LichdomHelper.isLich(player)) {
-                    player.hurt(DamageSource.CACTUS, 1.0F);
-                    player.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
+                if (MobUtil.playerValidity(player, true)) {
+                    player.hurt(ModDamageSource.DESICCATE, 1.0F);
+                    player.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 600));
                 }
             } else {
                 if (livingEntity.getMobType() != CreatureAttribute.UNDEAD && !(pEntity instanceof IDeadMob)){
-                    livingEntity.hurt(DamageSource.CACTUS, 1.0F);
-                    livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
+                    livingEntity.hurt(ModDamageSource.DESICCATE, 1.0F);
+                    livingEntity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 600));
                 }
             }
         } else {
-            pEntity.hurt(DamageSource.CACTUS, 1.0F);
+            pEntity.hurt(ModDamageSource.DESICCATE, 1.0F);
         }
     }
 

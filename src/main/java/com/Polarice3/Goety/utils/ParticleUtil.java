@@ -2,16 +2,37 @@ package com.Polarice3.Goety.utils;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EmitterParticle;
+import net.minecraft.entity.Entity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class ParticleUtil {
     public ParticleUtil(IParticleData pParticleData, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed){
         Minecraft MINECRAFT = Minecraft.getInstance();
         if (MINECRAFT.level != null){
             MINECRAFT.level.addParticle(pParticleData, true, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
+        }
+    }
+
+    public ParticleUtil(World world, IParticleData pParticleData, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed){
+        if (world != null){
+            world.addAlwaysVisibleParticle(pParticleData, true, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
+        }
+    }
+
+    public ParticleUtil(Entity pEntity, IParticleData pParticleData){
+        Minecraft MINECRAFT = Minecraft.getInstance();
+        if (MINECRAFT.level != null){
+            if (MINECRAFT.level.isClientSide) {
+                if (pEntity != null) {
+                    new EmitterParticle(MINECRAFT.level, pEntity, pParticleData);
+                }
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.potions.DesiccateEffect;
 import com.Polarice3.Goety.common.potions.CosmicEffect;
 import com.Polarice3.Goety.common.potions.IllagueEffect;
 import com.Polarice3.Goety.common.potions.ModEffect;
@@ -29,8 +30,6 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 10044730));
     public static final RegistryObject<Effect> GOLDTOUCHED = EFFECTS.register("goldtouched",
             () -> new ModEffect(EffectType.HARMFUL, 4866583));
-    public static final RegistryObject<Effect> DEATHPROTECT = EFFECTS.register("deathprotect",
-            () -> new ModEffect(EffectType.BENEFICIAL, 0));
     public static final RegistryObject<Effect> CURSED = EFFECTS.register("cursed",
             () -> new ModEffect(EffectType.HARMFUL, 197379));
     public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
@@ -43,4 +42,6 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 2236962));
     public static final RegistryObject<Effect> SOUL_SHIELD = EFFECTS.register("soul_shield",
             () -> new ModEffect(EffectType.BENEFICIAL, 0));
+    public static final RegistryObject<Effect> DESICCATE = EFFECTS.register("desiccate",
+            DesiccateEffect::new);
 }

@@ -52,6 +52,18 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> DUNE_SPIDER_SPAWN_EGG = ITEMS.register("dune_spider_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DUNE_SPIDER, 0x525144, 0x6d6d5a, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> FALLEN_SPAWN_EGG = ITEMS.register("fallen_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.FALLEN, 0x9b8a7d, 0x422230, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> DESICCATED_SPAWN_EGG = ITEMS.register("desiccated_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.DESICCATED, 0x652f76, 0x3e2625, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> MARCIRE_SPAWN_EGG = ITEMS.register("marcire_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.MARCIRE, 0x652f76, 0x786659, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> LOCUST_SPAWN_EGG = ITEMS.register("locust_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.LOCUST, 0x563c5a, 0x300e28, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> VIZIER_SPAWN_EGG = ITEMS.register("vizier_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.VIZIER, 0x1e1c1a, 0x440a67, new Item.Properties().tab(Goety.TAB)));
 

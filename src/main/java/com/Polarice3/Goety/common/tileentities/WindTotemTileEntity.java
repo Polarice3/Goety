@@ -1,8 +1,12 @@
 package com.Polarice3.Goety.common.tileentities;
 
+import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.MobUtil;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -30,14 +34,16 @@ public class WindTotemTileEntity extends TotemTileEntity {
         int k = this.worldPosition.getZ();
         assert this.level != null;
         for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))){
-            if (!livingEntity.hasEffect(Effects.SLOW_FALLING)) {
-                if (livingEntity instanceof PlayerEntity) {
-                    PlayerEntity player = (PlayerEntity) livingEntity;
-                    if (!player.isCreative()) {
+            if (livingEntity.isOnGround()) {
+                if (!livingEntity.hasEffect(Effects.SLOW_FALLING)) {
+                    if (livingEntity instanceof PlayerEntity) {
+                        PlayerEntity player = (PlayerEntity) livingEntity;
+                        if (!player.isCreative()) {
+                            return livingEntity;
+                        }
+                    } else {
                         return livingEntity;
                     }
-                } else {
-                    return livingEntity;
                 }
             }
         }
@@ -52,16 +58,18 @@ public class WindTotemTileEntity extends TotemTileEntity {
         this.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH);
         assert this.getLevel() != null;
         for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
-            if (!entity.hasEffect(Effects.SLOW_FALLING)) {
-                if (entity instanceof PlayerEntity) {
-                    PlayerEntity player = (PlayerEntity) entity;
-                    if (!player.isCreative()) {
-                        player.addEffect(new EffectInstance(ModEffects.LAUNCH.get(), 2, 0, false, false));
-                        player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 100));
+            if (entity.isOnGround()) {
+                if (!entity.hasEffect(Effects.SLOW_FALLING)) {
+                    if (entity instanceof PlayerEntity) {
+                        PlayerEntity player = (PlayerEntity) entity;
+                        if (MobUtil.playerValidity(player, false)) {
+                            player.addEffect(new EffectInstance(ModEffects.LAUNCH.get(), 2, 0, false, false));
+                            player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 100));
+                        }
+                    } else {
+                        this.launch(entity);
+                        entity.addEffect(new EffectInstance(Effects.SLOW_FALLING, 100));
                     }
-                } else {
-                    this.launch(entity);
-                    entity.addEffect(new EffectInstance(Effects.SLOW_FALLING, 100));
                 }
             }
         }

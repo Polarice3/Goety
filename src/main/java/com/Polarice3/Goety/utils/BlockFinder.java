@@ -2,9 +2,7 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.WebBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +13,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.PlantType;
 
 public class BlockFinder {
 
@@ -24,26 +26,13 @@ public class BlockFinder {
     }
 
     public static boolean NotDeadSandImmune(BlockState state){
-        return state.canOcclude() && state.is(ModTags.Blocks.DEAD_SAND_SPREADABLE)
-                && state.getMaterial() != Material.AIR && state.getMaterial() != Material.LAVA && !state.hasTileEntity();
+        return state.is(ModTags.Blocks.DEAD_SAND_SPREADABLE)
+                && state.getMaterial() != Material.AIR && state.getMaterial() != Material.LAVA
+                && !state.hasTileEntity();
     }
 
-    public static void DeadSandReplace(BlockPos pPos, World pLevel){
-        BlockState blockstate = pLevel.getBlockState(pPos);
-        if (BlockFinder.NotDeadSandImmune(blockstate)) {
-            if (blockstate.getMaterial() == Material.STONE) {
-                pLevel.destroyBlock(pPos, false);
-                pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-            } else if (blockstate.is(BlockTags.LOGS)) {
-                pLevel.destroyBlock(pPos, false);
-                pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockstate.getValue(RotatedPillarBlock.AXIS)));
-            } else if (blockstate.is(BlockTags.ICE)) {
-                pLevel.destroyBlock(pPos, false);
-            } else {
-                pLevel.destroyBlock(pPos, false);
-                pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SAND.get().defaultBlockState());
-            }
-        }
+    public static boolean LivingBlocks(BlockState state){
+        return state.getBlock() instanceof HugeMushroomBlock || state.getBlock() instanceof StemGrownBlock || state.is(ModTags.Blocks.DEAD_BLOCK_SPREADABLE);
     }
 
     public static void DeadSandReplaceLagFree(BlockPos pPos, World pLevel){
@@ -57,11 +46,32 @@ public class BlockFinder {
                 pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockstate.getValue(RotatedPillarBlock.AXIS)));
             } else if (blockstate.is(BlockTags.ICE)) {
                 pLevel.removeBlock(pPos, false);
+            } else if (blockstate.getBlock() instanceof BushBlock && !LivingBlocks(blockstate)) {
+                pLevel.removeBlock(pPos, false);
+                if (validPlants(pPos, pLevel)){
+                    pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
+                }
             } else {
                 pLevel.removeBlock(pPos, false);
                 pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SAND.get().defaultBlockState());
             }
         }
+        if (LivingBlocks(blockstate)){
+            pLevel.removeBlock(pPos, false);
+            pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
+        }
+    }
+
+    public static boolean validPlants(BlockPos pPos, IBlockReader pLevel){
+        BlockState blockstate = pLevel.getBlockState(pPos);
+        if (blockstate.getBlock() instanceof IPlantable){
+            IPlantable plantable = (IPlantable) blockstate.getBlock();
+            PlantType type = plantable.getPlantType(pLevel, pPos);
+            return !type.equals(PlantType.BEACH) && !type.equals(PlantType.WATER) && !type.equals(PlantType.NETHER)
+                    && !(blockstate.getBlock() instanceof TallGrassBlock)
+                    && !(blockstate.getBlock() instanceof ILiquidContainer);
+        }
+        return false;
     }
 
     public static void WebMovement(LivingEntity livingEntity){
@@ -146,6 +156,14 @@ public class BlockFinder {
             return blockpos$mutable;
         } else {
             return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()), 0);
+        }
+    }
+
+    public static boolean isWet(World pLevel, BlockPos pPos){
+        if (pLevel.getBiome(pPos).getPrecipitation() != Biome.RainType.NONE){
+            return pLevel.isRaining() && pLevel.canSeeSky(pPos);
+        } else {
+            return false;
         }
     }
 

@@ -50,13 +50,17 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_SANDSTONE_CHISELED = BLOCKS.register("dead_sandstone_chiseled", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE_CUT = BLOCKS.register("dead_sandstone_cut", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE_SMOOTH = BLOCKS.register("dead_sandstone_smooth", DeadSandStoneBlock::new);
+    public static final RegistryObject<Block> DEAD_BLOCK = BLOCKS.register("dead_block", DeadBlock::new);
     public static final RegistryObject<Block> TEMP_WEB = BLOCKS.register("temp_web", TempWebBlock::new);
     public static final RegistryObject<Block> DARK_CLOUD = BLOCKS.register("dark_cloud", DarkCloudBlock::new);
     public static final RegistryObject<Block> ARCA_BLOCK = BLOCKS.register("arca", ArcaBlock::new);
     public static final RegistryObject<Block> SOUL_LIGHT_BLOCK = BLOCKS.register("soul_light", SoulLightBlock::new);
+    public static final RegistryObject<Block> GLOW_LIGHT_BLOCK = BLOCKS.register("glow_light", GlowLightBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
+    public static final RegistryObject<Block> HAUNTED_BUSH = BLOCKS.register("haunted_bush", HauntedBushBlock::new);
+    public static final RegistryObject<Block> IRON_FINGER = BLOCKS.register("iron_finger", IronFingerBlock::new);
 
     //Tree
     public static final RegistryObject<Block> HAUNTED_PLANKS = BLOCKS.register("haunted_planks",
@@ -241,14 +245,22 @@ public class ModBlocks {
             () -> new BlockItemBase(DEAD_SANDSTONE_SMOOTH_STAIRS_BLOCK.get()));
     public static final RegistryObject<Item> DEAD_SANDSTONE_WALL_ITEM = BLOCK_ITEMS.register("dead_sandstone_wall",
             () -> new BlockItemBase(DEAD_SANDSTONE_WALL_BLOCK.get()));
+    public static final RegistryObject<Item> DEAD_BLOCK_ITEM = BLOCK_ITEMS.register("dead_block",
+            () -> new BlockItemBase(DEAD_BLOCK.get()));
     public static final RegistryObject<Item> HAUNTED_CACTUS_ITEM = BLOCK_ITEMS.register("haunted_cactus",
             () -> new BlockItemBase(HAUNTED_CACTUS.get()));
+    public static final RegistryObject<Item> HAUNTED_BUSH_ITEM = BLOCK_ITEMS.register("haunted_bush",
+            () -> new BlockItemBase(HAUNTED_BUSH.get()));
+    public static final RegistryObject<Item> IRON_FINGER_ITEM = BLOCK_ITEMS.register("iron_finger",
+            () -> new BlockItemBase(IRON_FINGER.get()));
     public static final RegistryObject<Item> DARK_CLOUD_ITEM = BLOCK_ITEMS.register("dark_cloud",
             () -> new BlockItemBase(DARK_CLOUD.get()));
     public static final RegistryObject<Item> ARCA_ITEM = BLOCK_ITEMS.register("arca",
             () -> new BlockItemBase(ARCA_BLOCK.get()));
     public static final RegistryObject<Item> SOUL_LIGHT_ITEM = BLOCK_ITEMS.register("soul_light",
             () -> new BlockItemBase(SOUL_LIGHT_BLOCK.get()));
+    public static final RegistryObject<Item> GLOW_LIGHT_ITEM = BLOCK_ITEMS.register("glow_light",
+            () -> new BlockItemBase(GLOW_LIGHT_BLOCK.get()));
     public static final RegistryObject<Item> GRAVE_BRICK_WALL_ITEM = BLOCK_ITEMS.register("grave_bricks_wall",
             () -> new BlockItem(GRAVE_BRICK_WALL_BLOCK.get(), new Item.Properties()));
     //TreeItems

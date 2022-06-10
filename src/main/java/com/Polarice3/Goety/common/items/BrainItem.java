@@ -31,7 +31,7 @@ public class BrainItem extends Item {
         super.finishUsingItem(stack, worldIn, entityLiving);
         if (entityLiving instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) entityLiving;
-            player.giveExperiencePoints(10);
+            player.giveExperiencePoints(20);
         }
         return stack;
     }

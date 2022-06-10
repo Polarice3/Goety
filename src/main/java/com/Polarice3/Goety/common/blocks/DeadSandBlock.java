@@ -1,16 +1,18 @@
 package com.Polarice3.Goety.common.blocks;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.block.SoundType;
+import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.utils.BlockFinder;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolType;
 
 import java.util.Random;
@@ -49,5 +51,18 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
 
     public int getDustColor(BlockState pState, IBlockReader pLevel, BlockPos pPos) {
         return 5064781;
+    }
+
+    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, net.minecraftforge.common.IPlantable plantable) {
+        BlockState plant = plantable.getPlant(world, pos.relative(facing));
+        PlantType type = plantable.getPlantType(world, pos.relative(facing));
+        if ((plant.getBlock() instanceof BushBlock && !(plant.getBlock() instanceof CropsBlock)
+                && !type.equals(PlantType.BEACH) && !type.equals(PlantType.WATER) && !type.equals(PlantType.NETHER)
+                && !(plant.getBlock() instanceof TallGrassBlock)
+                && !(plant.getBlock() instanceof ILiquidContainer))
+                || plant.getBlock().is(ModBlocks.HAUNTED_CACTUS.get())) {
+            return state.is(this);
+        }
+        return false;
     }
 }

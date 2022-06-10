@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.utils.EffectsUtil;
 import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,12 +36,7 @@ public class MutatedFoodItem extends Item {
                 EffectInstance effectinstance = new EffectInstance(Effects.HUNGER, 600, 0);
                 entityLiving.addEffect(effectinstance);
             } else {
-                int amp = effectinstance1.getAmplifier();
-                int i = amp + 1;
-                i = MathHelper.clamp(i, 0, 5);
-                entityLiving.removeEffectNoUpdate(Effects.HUNGER);
-                EffectInstance effectinstance = new EffectInstance(Effects.HUNGER, 600, i);
-                entityLiving.addEffect(effectinstance);
+                EffectsUtil.amplifyEffect(entityLiving, Effects.HUNGER, 600);
             }
         }
         PlayerEntity playerentity = (PlayerEntity) entityLiving;

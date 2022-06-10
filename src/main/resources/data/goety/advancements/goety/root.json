@@ -18,10 +18,5 @@
     "tick": {
       "trigger": "minecraft:tick"
     }
-  },
-  "rewards": {
-    "loot": [
-      "goety:advancements/starter_book"
-    ]
   }
 }

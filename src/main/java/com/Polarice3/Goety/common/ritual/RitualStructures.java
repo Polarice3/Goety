@@ -150,7 +150,7 @@ public class RitualStructures {
     }
 
     public static boolean checkMagicRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 32 && pTileEntity.second.size() >= 1 && pTileEntity.third.size() >= 3;
+        return pTileEntity.first.size() >= 16 && pTileEntity.second.size() >= 1 && pTileEntity.third.size() >= 3;
     }
 
     public static void findSabbathStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {

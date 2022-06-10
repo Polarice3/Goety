@@ -17,6 +17,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -108,6 +109,10 @@ public class CrimsonSpiderEntity extends AbstractCultistEntity {
             return event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW;
         }
         return super.canBeAffected(pPotioneffect);
+    }
+
+    protected ResourceLocation getDefaultLootTable() {
+        return EntityType.SPIDER.getDefaultLootTable();
     }
 
     public boolean isClimbing() {

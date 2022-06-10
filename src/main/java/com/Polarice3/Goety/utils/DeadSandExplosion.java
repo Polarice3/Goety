@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.entities.hostile.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
@@ -10,16 +10,14 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.ProtectionEnchantment;
-import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -117,8 +115,9 @@ public class DeadSandExplosion {
                         for(float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
                             BlockState blockstate = this.level.getBlockState(blockpos);
+                            FluidState fluidstate = this.level.getFluidState(blockpos);
 
-                            if (BlockFinder.NotDeadSandImmune(blockstate)) {
+                            if (BlockFinder.NotDeadSandImmune(blockstate) && fluidstate.isEmpty()) {
                                 set.add(blockpos);
                             }
 
@@ -156,7 +155,7 @@ public class DeadSandExplosion {
                     d9 = d9 / d13;
                     double d14 = (double)getSeenPercent(vector3d, entity);
                     double d10 = (1.0D - d12) * d14;
-                    entity.hurt(DamageSource.DRY_OUT, (float)((int)((d10 * d10 + d10) / 2.0D * 4.0D * (double)f2 + 1.0D)));
+                    entity.hurt(ModDamageSource.DESICCATE, (float)((int)((d10 * d10 + d10) / 2.0D * 5.0D * (double)f2 + 1.0D)));
                     double d11 = d10;
                     if (entity instanceof LivingEntity) {
                         d11 = ProtectionEnchantment.getExplosionKnockbackAfterDampener((LivingEntity)entity, d10);
@@ -165,15 +164,10 @@ public class DeadSandExplosion {
                     entity.setDeltaMovement(entity.getDeltaMovement().add(d5 * d11, d7 * d11, d9 * d11));
                     if (entity instanceof LivingEntity) {
                         LivingEntity livingEntity = (LivingEntity) entity;
-                        if (livingEntity.getMobType() != CreatureAttribute.UNDEAD && !(livingEntity instanceof IDeadMob)){
-                            if (livingEntity instanceof PlayerEntity){
-                                PlayerEntity player = (PlayerEntity) livingEntity;
-                                if (!player.isCreative() && !LichdomHelper.isLich(player)){
-                                    livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 300));
-                                }
-                            } else {
-                                livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 300));
-                            }
+                        if (livingEntity.hasEffect(ModEffects.DESICCATE.get())){
+                            EffectsUtil.amplifyEffect(livingEntity, ModEffects.DESICCATE.get(), 1200);
+                        } else {
+                            livingEntity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
                         }
                     }
                 }
@@ -183,7 +177,7 @@ public class DeadSandExplosion {
     }
 
     public void finalizeExplosion(boolean pSpawnParticles) {
-        new SoundUtil(position, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
+        new SoundUtil(position, ModSounds.CORRUPT_EXPLOSION.get(), SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
 
         boolean flag = this.blockInteraction != DeadSandExplosion.Mode.NONE;
 
@@ -198,6 +192,8 @@ public class DeadSandExplosion {
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
             Collections.shuffle(this.toBlow, this.level.random);
+            BlockPos pos = new BlockPos(this.position);
+            FluidState fluidstate = this.level.getFluidState(pos);
 
             for (BlockPos blockpos : this.toBlow) {
                 BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
@@ -205,6 +201,17 @@ public class DeadSandExplosion {
 
             for (Pair<ItemStack, BlockPos> pair : objectarraylist) {
                 Block.popResource(this.level, pair.getSecond(), pair.getFirst());
+            }
+
+            if (!fluidstate.isEmpty()){
+                AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, pos.getX(), pos.getY(), pos.getZ());
+                areaeffectcloudentity.setRadius(2.5F);
+                areaeffectcloudentity.setRadiusOnUse(-0.5F);
+                areaeffectcloudentity.setWaitTime(10);
+                areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
+                areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
+                areaeffectcloudentity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
+                this.level.addFreshEntity(areaeffectcloudentity);
             }
         }
 

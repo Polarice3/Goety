@@ -1,13 +1,20 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -86,7 +93,7 @@ public class OwnedEntity extends CreatureEntity {
     public LivingEntity getTrueOwner() {
         try {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
         } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }
@@ -164,6 +171,75 @@ public class OwnedEntity extends CreatureEntity {
             }
 
             super.start();
+        }
+    }
+
+    public static class LesserFollowOwnerGoal extends Goal {
+        private final OwnedEntity ownedEntity;
+        private LivingEntity owner;
+        private final IWorldReader level;
+        private final double followSpeed;
+        private final PathNavigator navigation;
+        private int timeToRecalcPath;
+        private final float maxDist;
+        private final float minDist;
+        private float oldWaterCost;
+
+        public LesserFollowOwnerGoal(OwnedEntity ownedEntity, double speed, float minDist, float maxDist) {
+            this.ownedEntity = ownedEntity;
+            this.level = ownedEntity.level;
+            this.followSpeed = speed;
+            this.navigation = ownedEntity.getNavigation();
+            this.minDist = minDist;
+            this.maxDist = maxDist;
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            if (!(ownedEntity.getNavigation() instanceof GroundPathNavigator) && !(ownedEntity.getNavigation() instanceof FlyingPathNavigator)) {
+                throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
+            }
+        }
+
+        public boolean canUse() {
+            LivingEntity livingentity = this.ownedEntity.getTrueOwner();
+            if (livingentity == null) {
+                return false;
+            } else if (livingentity.isSpectator()) {
+                return false;
+            } else if (this.ownedEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
+                return false;
+            } else {
+                this.owner = livingentity;
+                return true;
+            }
+        }
+
+        public boolean canContinueToUse() {
+            if (this.navigation.isDone()) {
+                return false;
+            } else {
+                return !(this.ownedEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));
+            }
+        }
+
+        public void start() {
+            this.timeToRecalcPath = 0;
+            this.oldWaterCost = this.ownedEntity.getPathfindingMalus(PathNodeType.WATER);
+            this.ownedEntity.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        }
+
+        public void stop() {
+            this.owner = null;
+            this.navigation.stop();
+            this.ownedEntity.setPathfindingMalus(PathNodeType.WATER, this.oldWaterCost);
+        }
+
+        public void tick() {
+            this.ownedEntity.getLookControl().setLookAt(this.owner, 10.0F, (float)this.ownedEntity.getMaxHeadXRot());
+            if (--this.timeToRecalcPath <= 0) {
+                this.timeToRecalcPath = 10;
+                if (!this.ownedEntity.isLeashed() && !this.ownedEntity.isPassenger()) {
+                    this.navigation.moveTo(this.owner, this.followSpeed);
+                }
+            }
         }
     }
 }

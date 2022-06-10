@@ -11,6 +11,7 @@ import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.*;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
+import com.Polarice3.Goety.common.entities.hostile.dead.*;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
@@ -140,6 +141,7 @@ public class Goety {
         CuriosCompat.setup(event);
 
         event.enqueueWork(() -> {
+            ModEntityType.EntitySpawnPlacementRegistry();
             ModStructures.setupStructures();
             WoodType.register(ModWoodType.HAUNTED);
             ConfiguredStructures.registerConfiguredStructures();
@@ -169,6 +171,10 @@ public class Goety {
         event.put(ModEntityType.SHADE.get(), ShadeEntity.setCustomAttributes().build());
         event.put(ModEntityType.BOOMER.get(), BoomerEntity.setCustomAttributes().build());
         event.put(ModEntityType.DUNE_SPIDER.get(), DuneSpiderEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FALLEN.get(), FallenEntity.setCustomAttributes().build());
+        event.put(ModEntityType.DESICCATED.get(), DesiccatedEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MARCIRE.get(), MarcireEntity.setCustomAttributes().build());
+        event.put(ModEntityType.LOCUST.get(), LocustEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepEntity.setCustomAttributes().build());
@@ -188,7 +194,7 @@ public class Goety {
         event.put(ModEntityType.VIZIER.get(), VizierEntity.setCustomAttributes().build());
         event.put(ModEntityType.IRK.get(), IrkEntity.setCustomAttributes().build());
         event.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());
-        event.put(ModEntityType.NETHERNAL.get(), NethernalEntity.setCustomAttributes().build());
+        event.put(ModEntityType.NETHERNAL.get(), SentinelEntity.setCustomAttributes().build());
         event.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
     }
 

@@ -2,16 +2,19 @@ package com.Polarice3.Goety.common.blocks;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.BlockFinder;
+import com.Polarice3.Goety.utils.EffectsUtil;
+import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.google.common.collect.Lists;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
@@ -20,6 +23,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.eventbus.api.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +35,45 @@ import static net.minecraft.block.Block.dropResources;
 
 public interface IDeadBlock {
 
+    int SAND_LIMIT = 256;
+    int SAND_RANGE = 8;
+
     default void spreadSand(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (MainConfig.DeadSandSpread.get()) {
-            BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
-            BlockFinder.DeadSandReplace(blockpos, pLevel);
+            int pos1 = pRandom.nextInt(3) - 1;
+            int pos2 = pRandom.nextInt(3) - 1;
+            int pos3 = pRandom.nextInt(3) - 1;
+            if (pos1 == 0 && pos2 == 0 && pos3 == 0){
+                pos2 = 1;
+            }
+            BlockPos blockpos = pPos.offset(pos1, pos2, pos3);
+
+            if (!BlockFinder.isWet(pLevel, pPos)){
+                if (getTotalDeadSands(pLevel, pPos).size() < SAND_LIMIT) {
+                    BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
+                } else {
+                    if (pRandom.nextFloat() < 0.5F) {
+                        BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
+                    }
+                }
+                for (int l1 = 0; l1 <= 1; ++l1){
+                    BlockPos blockpos2 = pPos.offset(0, l1, 0);
+                    BlockState blockState2 = pLevel.getBlockState(blockpos2);
+                    if (blockState2.getBlock() instanceof BushBlock && BlockFinder.validPlants(blockpos2, pLevel)) {
+                        pLevel.removeBlock(blockpos2, false);
+                        pLevel.setBlockAndUpdate(blockpos2, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
+                    }
+                    if (BlockFinder.LivingBlocks(blockState2)){
+                        pLevel.removeBlock(blockpos2, false);
+                        pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
+                    }
+                }
+            }
 
             dryUpWater(pLevel, pPos);
-            dryUpAnimals(pLevel, pPos);
+            desiccateMobs(pLevel, pPos);
             growHauntedCactus(pLevel, pPos, pRandom);
+            growIronFingers(pLevel, pPos);
             blockSky(pLevel, pPos);
 
             for (int l1 = -4; l1 <= 0; ++l1) {
@@ -55,7 +91,7 @@ public interface IDeadBlock {
                 }
             }
 
-            for (int k1 = -16; k1 <= 16; ++k1) {
+            for (int k1 = 0; k1 <= 16; ++k1) {
                 BlockPos blockpos1 = pPos.offset(0, k1, 0);
                 BlockState blockState1 = pLevel.getBlockState(blockpos1);
 
@@ -65,6 +101,27 @@ public interface IDeadBlock {
                         pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState1.getValue(RotatedPillarBlock.AXIS)));
                     }
                 }
+                if (blockState1.is(Blocks.CACTUS) || blockState1.getBlock() instanceof CactusBlock){
+                    pLevel.destroyBlock(blockpos1, false);
+                    pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_CACTUS.get().defaultBlockState());
+                }
+            }
+        }
+    }
+
+    default void spreadDeadBlocks(ServerWorld pLevel, BlockPos pPos, Random pRandom){
+        if (MainConfig.DeadSandSpread.get()) {
+            int pos1 = pRandom.nextInt(3) - 1;
+            int pos2 = pRandom.nextInt(3) - 1;
+            int pos3 = pRandom.nextInt(3) - 1;
+            if (pos1 == 0 && pos2 == 0 && pos3 == 0){
+                pos2 = 1;
+            }
+            BlockPos blockpos = pPos.offset(pos1, pos2, pos3);
+            BlockState blockState = pLevel.getBlockState(blockpos);
+            if (BlockFinder.LivingBlocks(blockState)) {
+                pLevel.removeBlock(blockpos, false);
+                pLevel.setBlockAndUpdate(blockpos, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
             }
         }
     }
@@ -118,18 +175,92 @@ public interface IDeadBlock {
         return result;
     }
 
+    default List<Block> getTotalDeadSands(World world, BlockPos currentTile) {
+        List<Block> result = new ArrayList<>();
+        int radius = SAND_RANGE;
+        Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
+                currentTile.offset(-radius, -radius, -radius),
+                currentTile.offset(radius, radius, radius));
+        for (BlockPos blockToCheck : blocksToCheck) {
+            BlockState blockState = world.getBlockState(blockToCheck);
+            if (blockState.getBlock().is(ModTags.Blocks.DEAD_SANDS)){
+                result.add(blockState.getBlock());
+            }
+        }
+        return result;
+    }
+
+    default void growIronFingers(ServerWorld pLevel, BlockPos pPos){
+        if (MainConfig.DeadSandSpread.get()) {
+            if (!pLevel.isDay() || !pLevel.isRaining()) {
+                BlockPos blockpos = pPos.above();
+                BlockPos west = blockpos.west();
+                BlockPos east = blockpos.east();
+                BlockPos north = blockpos.north();
+                BlockPos south = blockpos.south();
+                if (pLevel.isEmptyBlock(blockpos) && pLevel.isEmptyBlock(west) && pLevel.isEmptyBlock(east)
+                        && pLevel.isEmptyBlock(north) && pLevel.isEmptyBlock(south) && !pLevel.isEmptyBlock(pPos.below())) {
+                    if (getSurroundingCactus(pLevel, pPos).size() >= 4 && getTotalFingers(pLevel, pPos).isEmpty()) {
+                        pLevel.setBlockAndUpdate(blockpos, ModBlocks.IRON_FINGER.get().defaultBlockState());
+                    }
+                }
+            }
+        }
+    }
+
+    default List<Block> getTotalFingers(World world, BlockPos currentTile) {
+        List<Block> result = new ArrayList<>();
+        int radius = 8;
+        Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
+                currentTile.offset(-radius, -radius, -radius),
+                currentTile.offset(radius, radius, radius));
+        for (BlockPos blockToCheck : blocksToCheck) {
+            BlockState blockState = world.getBlockState(blockToCheck);
+            if (blockState.getBlock() == ModBlocks.IRON_FINGER.get()){
+                result.add(blockState.getBlock());
+            }
+        }
+        return result;
+    }
+
     default void spreadSandOnly(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             BlockState blockState = pLevel.getBlockState(blockpos);
-            if (BlockFinder.NotDeadSandImmune(blockState)
-                    && blockState.getMaterial() != Material.STONE
-                    && !blockState.is(BlockTags.LOGS)
-                    && !blockState.is(BlockTags.ICE)) {
-                pLevel.destroyBlock(blockpos, false);
-                pLevel.playSound(null, blockpos, SoundEvents.SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                pLevel.setBlockAndUpdate(blockpos, ModBlocks.DEAD_SAND.get().defaultBlockState());
+            if (!BlockFinder.isWet(pLevel, pPos)) {
+                if (getTotalDeadSands(pLevel, pPos).size() < SAND_LIMIT) {
+                    sandSpread(pLevel, blockState, blockpos);
+                } else {
+                    if (pRandom.nextFloat() < 0.5F) {
+                        sandSpread(pLevel, blockState, blockpos);
+                    }
+                }
             }
+            for (int l1 = 0; l1 <= 1; ++l1){
+                BlockPos blockpos2 = pPos.offset(0, l1, 0);
+                BlockState blockState2 = pLevel.getBlockState(blockpos2);
+                if (blockState2.getBlock() instanceof BushBlock && BlockFinder.validPlants(blockpos2, pLevel)) {
+                    pLevel.removeBlock(blockpos2, false);
+                    pLevel.setBlockAndUpdate(blockpos2, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
+                }
+                if (BlockFinder.LivingBlocks(blockState2)){
+                    pLevel.removeBlock(blockpos2, false);
+                    pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
+                }
+            }
+        }
+    }
+
+    default void sandSpread(ServerWorld pLevel, BlockState blockState, BlockPos blockPos){
+        if (BlockFinder.NotDeadSandImmune(blockState)
+                && blockState.getMaterial() != Material.STONE
+                && !blockState.is(BlockTags.LOGS)
+                && !blockState.is(BlockTags.ICE)
+                && !(blockState.getBlock() instanceof BushBlock)
+                && !BlockFinder.LivingBlocks(blockState)) {
+            pLevel.destroyBlock(blockPos, false);
+            pLevel.playSound(null, blockPos, SoundEvents.SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            pLevel.setBlockAndUpdate(blockPos, ModBlocks.DEAD_SAND.get().defaultBlockState());
         }
     }
 
@@ -151,7 +282,7 @@ public interface IDeadBlock {
 
     default void dryUpWater(World pLevel, BlockPos pPos) {
         if (MainConfig.DeadSandDryWater.get()) {
-            if (pLevel.isDay() && !pLevel.isRaining() && !pLevel.isThundering()) {
+            if (!BlockFinder.isWet(pLevel, pPos)) {
                 Queue<Tuple<BlockPos, Integer>> queue = Lists.newLinkedList();
                 queue.add(new Tuple<>(pPos, 0));
                 int i = 0;
@@ -190,7 +321,7 @@ public interface IDeadBlock {
                         }
                     }
 
-                    if (i > 32) {
+                    if (i > 64) {
                         break;
                     }
                 }
@@ -199,8 +330,8 @@ public interface IDeadBlock {
         }
     }
 
-    default void dryUpAnimals(ServerWorld pLevel, BlockPos pPos){
-        if (MainConfig.DeadSandDryAnimals.get()) {
+    default void desiccateMobs(ServerWorld pLevel, BlockPos pPos){
+        if (MainConfig.DeadSandDesiccate.get()) {
             List<Block> result = new ArrayList<>();
             List<Block> result2 = new ArrayList<>();
             Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
@@ -216,16 +347,31 @@ public interface IDeadBlock {
                 }
             }
             if (result.size() > 32 && result2.isEmpty()) {
-                if (pLevel.isDay() && !pLevel.isRaining() && !pLevel.isThundering()) {
+                if (!BlockFinder.isWet(pLevel, pPos)) {
                     for (LivingEntity livingEntity : pLevel.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(pPos.above()))) {
-                        if (livingEntity instanceof AnimalEntity) {
-                            livingEntity.hurt(DamageSource.DRY_OUT, 1.0F);
-                            livingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 1200));
-                            livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
+                        if (!RobeArmorFinder.FindNecroBootsofWander(livingEntity)){
+                            desiccate(livingEntity);
                         }
                     }
                 }
             }
+        }
+    }
+
+    default void desiccate(LivingEntity livingEntity){
+        int random = livingEntity.getRandom().nextInt(8);
+        PotionEvent.PotionApplicableEvent event = new PotionEvent.PotionApplicableEvent(livingEntity, new EffectInstance(ModEffects.DESICCATE.get()));
+        if (event.getResult() == Event.Result.ALLOW){
+            livingEntity.hurt(ModDamageSource.DESICCATE, 1.0F);
+        }
+        if (livingEntity.hasEffect(ModEffects.DESICCATE.get())){
+            if (random == 0){
+                EffectsUtil.amplifyEffect(livingEntity, ModEffects.DESICCATE.get(), 1200);
+            } else {
+                EffectsUtil.resetDuration(livingEntity, ModEffects.DESICCATE.get(), 1200);
+            }
+        } else {
+            livingEntity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
         }
     }
 

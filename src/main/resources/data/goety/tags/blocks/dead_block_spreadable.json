@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:coral_blocks",
+    "minecraft:pumpkin",
+    "minecraft:melon",
+    "minecraft:hay_block",
+    "minecraft:dried_kelp_block"
+  ]
+}

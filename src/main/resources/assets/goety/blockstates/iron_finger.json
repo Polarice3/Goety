@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "thickness=base": {
+      "model": "goety:block/iron_finger_base"
+    },
+    "thickness=frustum": {
+      "model": "goety:block/iron_finger_frustum"
+    },
+    "thickness=middle": {
+      "model": "goety:block/iron_finger_middle"
+    },
+    "thickness=tip": {
+      "model": "goety:block/iron_finger_tip"
+    }
+  }
+}

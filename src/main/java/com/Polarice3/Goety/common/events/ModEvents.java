@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
@@ -10,11 +11,14 @@ import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
-import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
-import com.Polarice3.Goety.common.entities.hostile.DuneSpiderEntity;
+import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
+import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
@@ -29,10 +33,12 @@ import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEProvider;
 import com.Polarice3.Goety.common.spider.SpiderLevelsProvider;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
+import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -45,6 +51,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -52,7 +59,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -77,10 +83,12 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,6 +136,12 @@ public class ModEvents {
             }
 
         }
+        if (event.getWorld() instanceof ClientWorld){
+            if (entity instanceof LocustEntity){
+                Minecraft minecraft = Minecraft.getInstance();
+                minecraft.getSoundManager().queueTickingSound(new LocustSound((LocustEntity) entity));
+            }
+        }
         if (entity instanceof StormEntity){
             if (!entity.level.isClientSide){
                 ServerWorld serverWorld = (ServerWorld) entity.level;
@@ -151,34 +165,53 @@ public class ModEvents {
                                     int pillager = world.random.nextInt((int) 12 / badOmen);
                                     if (pillager == 0) {
                                         if (raider.getType() == EntityType.PILLAGER) {
-                                            ConquillagerEntity conquillager = ModEntityType.CONQUILLAGER.get().create(world);
-                                            assert conquillager != null;
-                                            conquillager.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                            conquillager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                            serverWorld.addFreshEntity(conquillager);
+                                            HuntingIllagerEntity illager;
+                                            if (world.random.nextBoolean()){
+                                                illager = ModEntityType.CONQUILLAGER.get().create(world);
+                                            } else {
+                                                illager = raider.convertTo(ModEntityType.CONQUILLAGER.get(), false);
+                                            }
+                                            assert illager != null;
+                                            if (world.random.nextInt(4) == 0){
+                                                illager.setRider(true);
+                                            }
+                                            illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                            illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                            serverWorld.addFreshEntity(illager);
                                         }
                                         if (raider.getType() == EntityType.EVOKER) {
-                                            EnviokerEntity envioker = ModEntityType.ENVIOKER.get().create(world);
-                                            assert envioker != null;
-                                            envioker.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                            envioker.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                            serverWorld.addFreshEntity(envioker);
+                                            EnviokerEntity illager = ModEntityType.ENVIOKER.get().create(world);
+                                            assert illager != null;
+                                            illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                            illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                            serverWorld.addFreshEntity(illager);
                                         }
                                     }
                                     int vindicator = world.random.nextInt((int) 12 / badOmen);
                                     if (vindicator == 0) {
                                         if (raid.getGroupsSpawned() > 3) {
                                             if (raider.getType() == EntityType.VINDICATOR) {
-                                                InquillagerEntity inquillager = ModEntityType.INQUILLAGER.get().create(world);
-                                                assert inquillager != null;
-                                                inquillager.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                                inquillager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                                serverWorld.addFreshEntity(inquillager);
+                                                HuntingIllagerEntity illager;
+                                                if (world.random.nextBoolean()){
+                                                    illager = ModEntityType.INQUILLAGER.get().create(world);
+                                                } else {
+                                                    illager = raider.convertTo(ModEntityType.INQUILLAGER.get(), false);
+                                                }
+                                                assert illager != null;
+                                                illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                                if (world.random.nextInt(4) == 0){
+                                                    illager.setRider(true);
+                                                }
+                                                illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                                serverWorld.addFreshEntity(illager);
                                             }
                                         }
                                         if (raider.getType() == EntityType.RAVAGER) {
                                             EnviokerEntity envioker = ModEntityType.ENVIOKER.get().create(world);
                                             assert envioker != null;
+                                            if (world.random.nextInt(4) == 0){
+                                                envioker.setRider(true);
+                                            }
                                             envioker.moveTo(raider.getX(), raider.getY(), raider.getZ());
                                             envioker.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
                                             serverWorld.addFreshEntity(envioker);
@@ -241,7 +274,7 @@ public class ModEvents {
             Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
             if (biome != null) {
                 if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
-                    event.getSpawns().getSpawner(EntityClassification.MISC).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
+                    event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
                 }
             }
         }
@@ -263,21 +296,21 @@ public class ModEvents {
     }
 
     private static final Map<ServerWorld, IllagerSpawner> ILLAGER_SPAWNER_MAP = new HashMap<>();
-    private static final Map<ServerWorld, IllagueEvent> ILLAGUE_EVENT_MAP = new HashMap<>();
+    private static final Map<ServerWorld, EffectsEvent> EFFECTS_EVENT_MAP = new HashMap<>();
 
     @SubscribeEvent
-    public static void worldLoad(WorldEvent.Load evt) {
-        if (!evt.getWorld().isClientSide() && evt.getWorld() instanceof ServerWorld) {
-            ILLAGER_SPAWNER_MAP.put((ServerWorld) evt.getWorld(), new IllagerSpawner());
-            ILLAGUE_EVENT_MAP.put((ServerWorld) evt.getWorld(), new IllagueEvent());
+    public static void worldLoad(WorldEvent.Load event) {
+        if (!event.getWorld().isClientSide() && event.getWorld() instanceof ServerWorld) {
+            ILLAGER_SPAWNER_MAP.put((ServerWorld) event.getWorld(), new IllagerSpawner());
+            EFFECTS_EVENT_MAP.put((ServerWorld) event.getWorld(), new EffectsEvent());
         }
     }
 
     @SubscribeEvent
-    public static void worldUnload(WorldEvent.Unload evt) {
-        if (!evt.getWorld().isClientSide() && evt.getWorld() instanceof ServerWorld) {
-            ILLAGER_SPAWNER_MAP.remove(evt.getWorld());
-            ILLAGUE_EVENT_MAP.remove(evt.getWorld());
+    public static void worldUnload(WorldEvent.Unload event) {
+        if (!event.getWorld().isClientSide() && event.getWorld() instanceof ServerWorld) {
+            ILLAGER_SPAWNER_MAP.remove(event.getWorld());
+            EFFECTS_EVENT_MAP.remove(event.getWorld());
         }
     }
 
@@ -285,36 +318,67 @@ public class ModEvents {
     public static void onServerTick(TickEvent.WorldTickEvent tick){
         if(!tick.world.isClientSide && tick.world instanceof ServerWorld){
             ServerWorld serverWorld = (ServerWorld)tick.world;
-            IllagueEvent spawner = ILLAGUE_EVENT_MAP.get(serverWorld);
-            IllagerSpawner spawner2 = ILLAGER_SPAWNER_MAP.get(serverWorld);
-            if (spawner != null){
-                spawner.tick(serverWorld);
+            IllagerSpawner illagerSpawner = ILLAGER_SPAWNER_MAP.get(serverWorld);
+            EffectsEvent effectsEvent = EFFECTS_EVENT_MAP.get(serverWorld);
+            if (illagerSpawner != null){
+                illagerSpawner.tick(serverWorld);
             }
-            if (spawner2 != null){
-                spawner2.tick(serverWorld);
+            if (effectsEvent != null){
+                effectsEvent.tick(serverWorld);
             }
-
         }
 
     }
 
     @SubscribeEvent
     public static void onPlayerFirstEntersWorld(PlayerEvent.PlayerLoggedInEvent event){
-        if (MainConfig.StarterTotem.get() && !event.getPlayer().level.isClientSide) {
-            CompoundNBT playerData = event.getPlayer().getPersistentData();
-            CompoundNBT data;
+        CompoundNBT playerData = event.getPlayer().getPersistentData();
+        CompoundNBT data;
 
-            if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                data = new CompoundNBT();
-            } else {
-                data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+        if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
+            data = new CompoundNBT();
+        } else {
+            data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+        }
+        if (!event.getPlayer().level.isClientSide) {
+            if (MainConfig.StarterTotem.get()) {
+                if (!data.getBoolean("goety:gotTotem")) {
+                    event.getPlayer().addItem(new ItemStack(ModItems.GOLDTOTEM.get()));
+                    data.putBoolean("goety:gotTotem", true);
+                    playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+                }
             }
+            if (PatchouliLoaded.PATCHOULI.isLoaded()){
+                if (MainConfig.StarterBook.get()){
+                    if (!data.getBoolean("goety:starterBook")) {
+                        ItemStack book = PatchouliAPI.get().getBookStack(Goety.location("black_book"));
+                        event.getPlayer().addItem(book);
+                        data.putBoolean("goety:starterBook", true);
+                        playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+                    }
+                }
+            }
+        }
 
-            if (!data.getBoolean("goety:gotTotem")) {
-                event.getPlayer().addItem(new ItemStack(ModItems.GOLDTOTEM.get()));
-                data.putBoolean("goety:gotTotem", true);
-                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+    }
+
+    @SubscribeEvent
+    public static void SpecialSpawnEvents(LivingSpawnEvent.CheckSpawn event){
+        if (event.getEntityLiving() instanceof AbstractCultistEntity){
+            SpawnReason spawnReason = event.getSpawnReason();
+            if (PatrollerEntity.checkPatrollingMonsterSpawnRules(ModEntityType.FANATIC.get(), event.getWorld(), spawnReason, event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
+                event.setResult(Event.Result.ALLOW);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void ZombieEvents(ZombieEvent.SummonAidEvent event){
+        if (event.getSummoner() instanceof FallenEntity){
+            event.setCustomSummonedAid(ModEntityType.FALLEN.get().create(event.getWorld()));
+        }
+        if (event.getSummoner() instanceof HuskarlEntity){
+            event.setCustomSummonedAid(ModEntityType.HUSKARL.get().create(event.getWorld()));
         }
     }
 
@@ -331,16 +395,6 @@ public class ModEvents {
             if (livingEntity.hasEffect(ModEffects.APOSTLE_CURSE.get())){
                 if (livingEntity.hasEffect(Effects.FIRE_RESISTANCE)){
                     livingEntity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
-                }
-            }
-            if (MainConfig.DeadSandSpread.get()) {
-                if (livingEntity instanceof CreeperEntity) {
-                    BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
-                    if (blockState.getBlock() instanceof IDeadBlock) {
-                        if (livingEntity.tickCount % 20 == 0) {
-                            livingEntity.hurt(DamageSource.DRY_OUT, 5);
-                        }
-                    }
                 }
             }
             if (livingEntity instanceof PlayerEntity){
@@ -648,11 +702,14 @@ public class ModEvents {
         }
         if (attacker instanceof LivingEntity){
             LivingEntity livingEntity = (LivingEntity) attacker;
-            if (victim.hurt(ModDamageSource.fireBreath(livingEntity), event.getAmount())) {
-                float f1 = (float) livingEntity.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                if (f1 > 0.0F) {
-                    (victim).knockback(f1 * 0.5F, (double) MathHelper.sin(victim.yRot * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(victim.yRot * ((float) Math.PI / 180F))));
-                    victim.setDeltaMovement(victim.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+            if (event.getSource() instanceof ModDamageSource) {
+                ModDamageSource modDamageSource = (ModDamageSource) event.getSource();
+                if (modDamageSource.isBreath()) {
+                    float f1 = (float) livingEntity.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+                    if (f1 > 0.0F) {
+                        (victim).knockback(f1 * 0.5F, (double) MathHelper.sin(victim.yRot * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(victim.yRot * ((float) Math.PI / 180F))));
+                        victim.setDeltaMovement(victim.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+                    }
                 }
             }
         }
@@ -710,33 +767,6 @@ public class ModEvents {
                     int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModEffects.GOLDTOUCHED.get())).getAmplifier() + 1;
                     for (int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
                         killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
-                    }
-                }
-            }
-        }
-        if (MainConfig.DeadSandSpread.get()) {
-            if (killed instanceof CreeperEntity) {
-                if (event.getSource() == DamageSource.DRY_OUT) {
-                    BlockState blockState = killed.level.getBlockState(killed.blockPosition().below());
-                    if (blockState.getBlock() instanceof IDeadBlock) {
-                        BoomerEntity boomer = ((CreeperEntity) killed).convertTo(ModEntityType.BOOMER.get(), false);
-                        if (boomer != null) {
-                            boomer.finalizeSpawn((IServerWorld) boomer.level, boomer.level.getCurrentDifficultyAt(boomer.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
-                            net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, boomer);
-                            new SoundUtil(boomer.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        }
-                    }
-                }
-            }
-            if (killed instanceof SpiderEntity){
-                if (event.getSource() == DamageSource.CACTUS){
-                    if (((SpiderEntity) killed).hasEffect(ModEffects.CURSED.get())){
-                        DuneSpiderEntity duneSpiderEntity = ((SpiderEntity) killed).convertTo(ModEntityType.DUNE_SPIDER.get(), false);
-                        if (duneSpiderEntity != null) {
-                            duneSpiderEntity.finalizeSpawn((IServerWorld) duneSpiderEntity.level, duneSpiderEntity.level.getCurrentDifficultyAt(duneSpiderEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
-                            net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, duneSpiderEntity);
-                            new SoundUtil(duneSpiderEntity.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        }
                     }
                 }
             }
@@ -819,14 +849,16 @@ public class ModEvents {
             if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
                 if (killed instanceof LivingEntity){
                     LivingEntity killed1 = (LivingEntity) killed;
-                    if (killed1.getMobType() != CreatureAttribute.UNDEAD) {
-                        if (killed1 instanceof AbstractVillagerEntity || killed1 instanceof SpellcastingIllagerEntity || killed1 instanceof ChannellerEntity) {
-                            if (r1 == 0) {
-                                killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
-                            }
-                        } else if (killed1 instanceof PatrollerEntity) {
-                            if (r2 == 0) {
-                                killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                    if (player.getMainHandItem().getItem() instanceof AxeItem && event.getSource().getDirectEntity() == player) {
+                        if (killed1.getMobType() != CreatureAttribute.UNDEAD) {
+                            if (killed1 instanceof AbstractVillagerEntity || killed1 instanceof SpellcastingIllagerEntity || killed1 instanceof ChannellerEntity) {
+                                if (r1 == 0) {
+                                    killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                                }
+                            } else if (killed1 instanceof PatrollerEntity) {
+                                if (r2 == 0) {
+                                    killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                                }
                             }
                         }
                     }

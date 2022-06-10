@@ -80,5 +80,13 @@
       }
     ],
     "subtitle": "subtitle.goety.roar_spell"
+  },
+  "corrupt_explosion": {
+    "sounds": [
+      {
+        "name": "goety:random/explosion"
+      }
+    ],
+    "subtitle": "subtitle.goety.corrupt_explosion"
   }
 }

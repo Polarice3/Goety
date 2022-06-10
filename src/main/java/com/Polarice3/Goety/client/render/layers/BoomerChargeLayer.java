@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.render.layers;
 
 import com.Polarice3.Goety.client.model.BoomerModel;
-import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.BoomerEntity;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.EnergyLayer;
 import net.minecraft.client.renderer.entity.model.EntityModel;

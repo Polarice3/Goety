@@ -1,0 +1,20 @@
+{
+  "ambientocclusion": true,
+  "textures": {
+    "particle": "goety:blocks/iron_finger",
+    "side": "goety:blocks/iron_finger_base"
+  },
+  "elements": [
+    {   "from": [ 2, 0, 2 ],
+      "to": [ 14, 16, 14 ],
+      "faces": {
+        "down":  { "uv": [ 2, 2, 14, 14 ], "texture": "particle", "cullface": "down" },
+        "up":    { "uv": [ 2, 2, 14, 14 ], "texture": "particle", "cullface": "up" },
+        "north": { "uv": [ 2, 0, 14, 16 ], "texture": "side" },
+        "south": { "uv": [ 2, 0, 14, 16 ], "texture": "side" },
+        "west":  { "uv": [ 2, 0, 14, 16 ], "texture": "side" },
+        "east":  { "uv": [ 2, 0, 14, 16 ], "texture": "side" }
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@ package com.Polarice3.Goety.client.render;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.BoomerModel;
 import com.Polarice3.Goety.client.render.layers.BoomerChargeLayer;
-import com.Polarice3.Goety.common.entities.hostile.BoomerEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.BoomerEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class BoomerRenderer extends MobRenderer<BoomerEntity, BoomerModel<BoomerEntity>> {
-    private static final ResourceLocation TEXTURES = Goety.location("textures/entity/boomer.png");
+    private static final ResourceLocation TEXTURES = Goety.location("textures/entity/dead/boomer.png");
 
     public BoomerRenderer(EntityRendererManager p_i46186_1_) {
         super(p_i46186_1_, new BoomerModel<>(), 0.5F);
@@ -34,9 +34,6 @@ public class BoomerRenderer extends MobRenderer<BoomerEntity, BoomerModel<Boomer
         return (int)(f * 10.0F) % 2 == 0 ? 0.0F : MathHelper.clamp(f, 0.5F, 1.0F);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     public ResourceLocation getTextureLocation(BoomerEntity pEntity) {
         return TEXTURES;
     }

@@ -1,8 +1,12 @@
 package com.Polarice3.Goety.common.tileentities;
 
+import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -35,11 +39,13 @@ public class FangTotemTileEntity extends TotemTileEntity {
         for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))){
             if (livingEntity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) livingEntity;
-                if (!player.isCreative()) {
+                if (MobUtil.playerValidity(player, false)) {
                     return livingEntity;
                 }
             } else {
-                return livingEntity;
+                if (livingEntity.isOnGround()) {
+                    return livingEntity;
+                }
             }
         }
         return null;
@@ -54,11 +60,13 @@ public class FangTotemTileEntity extends TotemTileEntity {
         for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
             float f = (float) MathHelper.atan2(entity.getZ() - this.getBlockPos().getZ(), entity.getX() - this.getBlockPos().getX());
             if (entity instanceof PlayerEntity) {
-                if (!((PlayerEntity) entity).isCreative()) {
+                if (MobUtil.playerValidity((PlayerEntity) entity, false)) {
                     this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f, 1);
                 }
             } else {
-                this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f, 1);
+                if (entity.isOnGround()) {
+                    this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f, 1);
+                }
             }
         }
     }

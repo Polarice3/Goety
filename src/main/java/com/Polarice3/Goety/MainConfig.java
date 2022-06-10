@@ -13,6 +13,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxArcaSouls;
+
     public static final ForgeConfigSpec.ConfigValue<Integer> VexCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarCost;
@@ -35,6 +36,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> GlowLightCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -134,11 +136,14 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSky;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSkyNoOcclude;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryWater;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryAnimals;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDesiccate;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandMobs;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ArcaUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> StarterBook;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullZombie;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullSkeleton;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulSkullMinionWander;
@@ -171,7 +176,7 @@ public class MainConfig {
 
     static {
         BUILDER.push("General");
-        MaxSouls = BUILDER.comment("Totem Maximum Soul Count, Default: 10000")
+        MaxSouls = BUILDER.comment("Totem Maximum Soul Count and Threshold to save the Player, Default: 10000")
                 .defineInRange("maxSouls", 10000, 10, Integer.MAX_VALUE);
         MaxArcaSouls = BUILDER.comment("Arca Maximum Soul Count, Default: 100000")
                 .defineInRange("maxArcaSouls", 100000, 10, Integer.MAX_VALUE);
@@ -179,10 +184,14 @@ public class MainConfig {
                 .define("soulRepair", true);
         TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy, Default: true")
                 .define("totemUndying", true);
+        ArcaUndying = BUILDER.comment("Arca will save the Player if past Totem Maximum Soul Count, Default: true")
+                .define("arcaUndying", true);
         MaxEnchant = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")
                 .defineInRange("maxEnchant", 5, 1, 10);
         StarterTotem = BUILDER.comment("Gives Players a Totem of Souls when first entering World, Default: false")
                 .define("starterTotem", false);
+        StarterBook = BUILDER.comment("Gives Players the Black Book when first entering World and Patchouli is loaded, Default: false")
+                .define("starterBook", false);
         CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 1")
                 .defineInRange("craftSouls", 1, 0, Integer.MAX_VALUE);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
@@ -191,14 +200,16 @@ public class MainConfig {
         BUILDER.push("Blocks");
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
                 .define("deadSandSpread", true);
-        DeadSandDarkSky = BUILDER.comment("Dead Sand will produce a Dark Cloud at the height of the world if surrounded by other Dead Blocks, Default: true")
-                .define("deadSandDarkSky", true);
+        DeadSandDarkSky = BUILDER.comment("Dead Sand will produce a Dark Cloud at the height of the world if surrounded by other Dead Blocks, Default: false")
+                .define("deadSandDarkSky", false);
         DeadSandDarkSkyNoOcclude = BUILDER.comment("Dark Cloud will be produced if the Dead Sand cannot see the sky, Default: true")
                 .define("deadSandDarkSkyNoOcclude", true);
         DeadSandDryWater = BUILDER.comment("Dead Sand will dry up surrounding Waters, Default: true")
                 .define("deadSandDryWater", true);
-        DeadSandDryAnimals = BUILDER.comment("Dead Sand will dry up animals, slowly killing them, Default: true")
-                .define("deadSandDryAnimals", true);
+        DeadSandDesiccate = BUILDER.comment("Dead Sands will desiccate mobs, slowly killing them, Default: true")
+                .define("deadSandDesiccate", true);
+        DeadSandMobs = BUILDER.comment("Allows special mobs to spawn/converted when there's Dead Sand around, Default: true")
+                .define("deadSandMobs", true);
         SoulKilnCost = BUILDER.comment("The amount of Soul Energy used up to smelt items per second, Default: 1")
                 .defineInRange("soulKilnFuel", 1, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -209,8 +220,8 @@ public class MainConfig {
                 .defineInRange("anthropodSouls", 5, 0, Integer.MAX_VALUE);
         IllagerSouls = BUILDER.comment("Illagers, Witches, Cultists Killed, Default: 25")
                 .defineInRange("illagerSouls", 25, 0, Integer.MAX_VALUE);
-        VillagerSouls = BUILDER.comment("Villagers Killed, Default: 50")
-                .defineInRange("villagerSouls", 50, 0, Integer.MAX_VALUE);
+        VillagerSouls = BUILDER.comment("Villagers Killed, Default: 100")
+                .defineInRange("villagerSouls", 100, 0, Integer.MAX_VALUE);
         PiglinSouls = BUILDER.comment("Non-Undead Piglin Killed, Default: 10")
                 .defineInRange("piglinSouls", 10, 0, Integer.MAX_VALUE);
         EnderDragonSouls = BUILDER.comment("Ender Dragon Killed, Default: 1000")
@@ -265,8 +276,10 @@ public class MainConfig {
                 .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         FireBreathCost = BUILDER.comment("Fire Breath Spell Cost per second, Default: 2")
                 .defineInRange("fireBreathCost", 2, 0, Integer.MAX_VALUE);
-        SoulLightCost = BUILDER.comment("Soul Light Spell Cost per second, Default: 2")
+        SoulLightCost = BUILDER.comment("Soul Light Spell Cost, Default: 2")
                 .defineInRange("soulLightCost", 2, 0, Integer.MAX_VALUE);
+        GlowLightCost = BUILDER.comment("Glow Light Spell Cost, Default: 4")
+                .defineInRange("glowLightCost", 4, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")

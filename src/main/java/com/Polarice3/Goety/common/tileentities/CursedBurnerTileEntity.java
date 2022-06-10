@@ -72,6 +72,9 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                     this.cookingProgress[i]++;
                     this.makeWorkParticles();
                 }
+                if (this.cookingProgress[i] % 20 == 0){
+                    this.level.playSound(null, this.getBlockPos(), SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                }
                 if (this.cookingProgress[i] >= this.cookingTime[i]) {
                     this.items.set(i, ItemStack.EMPTY);
                     BlockPos blockpos = this.getBlockPos();
@@ -93,7 +96,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                 this.cookingProgress[i] = 0;
                 this.items.set(i, pStack.split(1));
                 assert this.level != null;
-                this.level.playSound(null, this.getBlockPos(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.level.playSound(null, this.getBlockPos(), SoundEvents.ARMOR_EQUIP_GENERIC, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 this.markUpdated();
                 return true;
             }

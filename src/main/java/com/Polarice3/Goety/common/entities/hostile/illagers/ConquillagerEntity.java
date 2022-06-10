@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.Lists;
@@ -65,7 +66,7 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
     public void tick() {
         super.tick();
         for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D), field_213690_b)) {
-            if (!(entity instanceof PatrollerEntity)) {
+            if (!(entity instanceof PatrollerEntity) && !(entity instanceof IDeadMob)) {
                 if (entity instanceof PlayerEntity){
                     if (!((PlayerEntity) entity).isCreative()){
                         entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 6000, 0, false, false));

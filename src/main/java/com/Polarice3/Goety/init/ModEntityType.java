@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.*;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
+import com.Polarice3.Goety.common.entities.hostile.dead.*;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
@@ -16,8 +17,12 @@ import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.*;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.PatrollerEntity;
+import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -64,12 +69,6 @@ public class ModEntityType {
                     .updateInterval(20)
                     .build(new ResourceLocation(Goety.MOD_ID, "pitchfork").toString()));
 
-    public static final RegistryObject<EntityType<NetherBallEntity>> NETHERBALL = ENTITY_TYPES.register("scorchball",
-            () -> EntityType.Builder.<NetherBallEntity>of(NetherBallEntity::new, EntityClassification.MISC)
-                    .sized(1.0f,1.0f)
-                    .clientTrackingRange(4)
-                    .build(new ResourceLocation(Goety.MOD_ID, "scorchball").toString()));
-
     public static final RegistryObject<EntityType<SoulSkullEntity>> SOULSKULL = ENTITY_TYPES.register("soulskull",
             () -> EntityType.Builder.<SoulSkullEntity>of(SoulSkullEntity::new, EntityClassification.MISC)
                     .sized(0.3125F, 0.3125F)
@@ -77,12 +76,26 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
+    public static final RegistryObject<EntityType<CorruptSkullEntity>> DESICCATEDSKULL = ENTITY_TYPES.register("corruptskull",
+            () -> EntityType.Builder.<CorruptSkullEntity>of(CorruptSkullEntity::new, EntityClassification.MISC)
+                    .sized(0.3125F, 0.3125F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "corruptskull").toString()));
+
     public static final RegistryObject<EntityType<SoulLightEntity>> SOUL_LIGHT = ENTITY_TYPES.register("soul_light",
             () -> EntityType.Builder.<SoulLightEntity>of(SoulLightEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)
                     .clientTrackingRange(4)
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soul_light").toString()));
+
+    public static final RegistryObject<EntityType<GlowLightEntity>> GLOW_LIGHT = ENTITY_TYPES.register("glow_light",
+            () -> EntityType.Builder.<GlowLightEntity>of(GlowLightEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "glow_light").toString()));
 
     public static final RegistryObject<EntityType<SoulBulletEntity>> SOUL_BULLET = ENTITY_TYPES.register("soul_bullet",
             () -> EntityType.Builder.<SoulBulletEntity>of(SoulBulletEntity::new, EntityClassification.MISC)
@@ -259,6 +272,30 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "dune_spider").toString()));
 
+    public static final RegistryObject<EntityType<FallenEntity>> FALLEN = ENTITY_TYPES.register("fallen",
+            () -> EntityType.Builder.of(FallenEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fallen").toString()));
+
+    public static final RegistryObject<EntityType<DesiccatedEntity>> DESICCATED = ENTITY_TYPES.register("desiccated",
+            () -> EntityType.Builder.of(DesiccatedEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "desiccated").toString()));
+
+    public static final RegistryObject<EntityType<MarcireEntity>> MARCIRE = ENTITY_TYPES.register("marcire",
+            () -> EntityType.Builder.of(MarcireEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "marcire").toString()));
+
+    public static final RegistryObject<EntityType<LocustEntity>> LOCUST = ENTITY_TYPES.register("locust",
+            () -> EntityType.Builder.of(LocustEntity::new, EntityClassification.MONSTER)
+                    .sized(0.7F, 0.6F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "locust").toString()));
+
     public static final RegistryObject<EntityType<MutatedCowEntity>> MUTATED_COW = ENTITY_TYPES.register("mutatedcow",
             () -> EntityType.Builder.of(MutatedCowEntity::new, EntityClassification.MONSTER)
                     .sized(0.9F, 1.95F)
@@ -287,7 +324,7 @@ public class ModEntityType {
                     .build(new ResourceLocation(Goety.MOD_ID, "mutatedrabbit").toString()));
 
     public static final RegistryObject<EntityType<SacredFishEntity>> SACRED_FISH = ENTITY_TYPES.register("sacredfish",
-            () -> EntityType.Builder.of(SacredFishEntity::new, EntityClassification.MISC)
+            () -> EntityType.Builder.of(SacredFishEntity::new, EntityClassification.WATER_AMBIENT)
                     .sized(0.7F, 0.4F)
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "sacredfish").toString()));
@@ -368,8 +405,8 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "scorch").toString()));
 
-    public static final RegistryObject<EntityType<NethernalEntity>> NETHERNAL = ENTITY_TYPES.register("nethernal",
-            () -> EntityType.Builder.of(NethernalEntity::new, EntityClassification.MONSTER)
+    public static final RegistryObject<EntityType<SentinelEntity>> NETHERNAL = ENTITY_TYPES.register("nethernal",
+            () -> EntityType.Builder.of(SentinelEntity::new, EntityClassification.MONSTER)
                     .fireImmune()
                     .sized(1.4F, 2.7F)
                     .clientTrackingRange(10)
@@ -420,5 +457,13 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "summon_apostle").toString()));
+
+    public static void EntitySpawnPlacementRegistry() {
+        EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.FANATIC.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.ZEALOT.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.DISCIPLE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.THUG.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+    }
 
 }

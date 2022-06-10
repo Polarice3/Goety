@@ -40,10 +40,11 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_FIREBALL.get(), SoulFireballRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHERBALL.get(), NetherBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOULSKULL.get(), SoulSkullRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DESICCATEDSKULL.get(), CorruptSkullRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_BULLET.get(), SoulBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_LIGHT.get(), SoulBulletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.GLOW_LIGHT.get(), SoulBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_BALL.get(), PoisonBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FANG.get(), FangRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHGALE.get(), WitchGaleRenderer::new);
@@ -67,6 +68,10 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SHADE.get(), ShadeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BOOMER.get(), BoomerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DUNE_SPIDER.get(), DuneSpiderRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FALLEN.get(), FallenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DESICCATED.get(), DesiccatedRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MARCIRE.get(), MarcireRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LOCUST.get(), LocustRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_COW.get(), MutatedCowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_CHICKEN.get(), MutatedChickenRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MUTATED_SHEEP.get(), MutatedSheepRenderer::new);
@@ -86,7 +91,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.VIZIER.get(), VizierRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.IRK.get(), IrkRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCORCH.get(), ScorchRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHERNAL.get(), NethernalRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHERNAL.get(), SentinelRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PENANCE.get(), PenanceRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_BOAT.get(), ModBoatRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LIGHTNINGTRAP.get(), TrapRenderer::new);
@@ -99,6 +104,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.WIND_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_FANG_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_LIGHT.get(), ModTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GLOW_LIGHT.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_KILN.get(), CursedKilnTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
@@ -112,8 +118,11 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_BARS_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.DARK_CLOUD.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.SOUL_LIGHT_BLOCK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.DEAD_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.TEMP_WEB.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_CACTUS.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_BUSH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.IRON_FINGER.get(), RenderType.cutout());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
         ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);
@@ -135,8 +144,10 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.TOTEM_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.GLOW_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
         particles.register(ModParticleTypes.SOUL_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);
+        particles.register(ModParticleTypes.GLOW_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
     }
