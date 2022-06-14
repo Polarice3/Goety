@@ -178,7 +178,7 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(ModItems.ANIMALISCORE.get()));
             index++;
-        } else if (recipe.getCraftType().contains("necroturgy")){
+        } else if (recipe.getCraftType().contains("necroturgy") || recipe.getCraftType().contains("lich")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.ZOMBIE_HEAD));
             index++;

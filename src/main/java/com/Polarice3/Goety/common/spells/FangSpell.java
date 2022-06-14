@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
+import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,8 +37,12 @@ public class FangSpell extends Spells{
         double d0 = Math.min(vector3d.y, entityLiving.getY());
         double d1 = Math.max(vector3d.y, entityLiving.getY()) + 1.0D;
         float f = (float) MathHelper.atan2(vector3d.z - entityLiving.getZ(), vector3d.x - entityLiving.getX());
+        int range = 16;
+        if (WandUtil.enchantedFocus(playerEntity)){
+            range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
+        }
         if (!playerEntity.isCrouching()) {
-            for (int l = 0; l < 16; ++l) {
+            for (int l = 0; l < range; ++l) {
                 double d2 = 1.25D * (double) (l + 1);
                 this.spawnFangs(entityLiving, entityLiving.getX() + (double) MathHelper.cos(f) * d2, entityLiving.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, l);
             }
@@ -62,8 +68,12 @@ public class FangSpell extends Spells{
         double d0 = Math.min(vector3d.y, entityLiving.getY());
         double d1 = Math.max(vector3d.y, entityLiving.getY()) + 1.0D;
         float f = (float) MathHelper.atan2(vector3d.z - entityLiving.getZ(), vector3d.x - entityLiving.getX());
+        int range = 16;
+        if (WandUtil.enchantedFocus(playerEntity)){
+            range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
+        }
         if (!playerEntity.isCrouching()) {
-            for(int l = 0; l < 16; ++l) {
+            for(int l = 0; l < range; ++l) {
                 double d2 = 1.25D * (double)(l + 1);
                 float fleft = f + 0.4F;
                 float fright = f - 0.4F;
@@ -136,7 +146,16 @@ public class FangSpell extends Spells{
         } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
 
         if (flag) {
-            livingEntity.level.addFreshEntity(new FangEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, pWarmUp, livingEntity));
+            FangEntity fangEntity = new FangEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, pWarmUp, livingEntity);
+            if (livingEntity instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) livingEntity;
+                if (WandUtil.enchantedFocus(player)){
+                    if (WandUtil.getLevels(ModEnchantments.ABSORB.get(), player) != 0){
+                        fangEntity.setAbsorbing(true);
+                    }
+                }
+            }
+            livingEntity.level.addFreshEntity(fangEntity);
         }
 
     }

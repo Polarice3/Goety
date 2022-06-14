@@ -1,7 +1,10 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +30,44 @@ public class MagicFocusItem extends Item{
                 .stacksTo(1)
         );
         this.soulcost = soulcost;
+    }
+
+    public boolean isEnchantable(ItemStack pStack) {
+        return pStack.getCount() == 1;
+    }
+
+    public int getEnchantmentValue() {
+        return 1;
+    }
+
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
+    {
+        if (stack.getItem() == ModItems.SPIDERLINGFOCUS.get()
+            || stack.getItem() == ModItems.CREEPERLINGFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get();
+        }
+        if (stack.getItem() == ModItems.BITINGFOCUS.get()) {
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.RANGE.get()
+                    || enchantment == ModEnchantments.ABSORB.get();
+        }
+        if (stack.getItem() == ModItems.FIREBALLFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.BURNING.get();
+        }
+        if (stack.getItem() == ModItems.FIREBREATHFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.BURNING.get()
+                    || enchantment == ModEnchantments.RANGE.get();
+        }
+        if (stack.getItem() == ModItems.LAVABALLFOCUS.get()
+            || stack.getItem() == ModItems.ROARINGFOCUS.get()
+            || stack.getItem() == ModItems.SOULSKULLFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.RADIUS.get()
+                    || enchantment == ModEnchantments.BURNING.get();
+        }
+        return false;
     }
 
     @Override

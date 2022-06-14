@@ -29,19 +29,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class CorruptSkullEntity extends DamagingProjectileEntity {
-    private static final DataParameter<Boolean> DATA_DANGEROUS = EntityDataManager.defineId(CorruptSkullEntity.class, DataSerializers.BOOLEAN);
+public class DesiccatedSkullEntity extends DamagingProjectileEntity {
+    private static final DataParameter<Boolean> DATA_DANGEROUS = EntityDataManager.defineId(DesiccatedSkullEntity.class, DataSerializers.BOOLEAN);
 
-    public CorruptSkullEntity(EntityType<? extends CorruptSkullEntity> p_i50147_1_, World p_i50147_2_) {
+    public DesiccatedSkullEntity(EntityType<? extends DesiccatedSkullEntity> p_i50147_1_, World p_i50147_2_) {
         super(p_i50147_1_, p_i50147_2_);
     }
 
-    public CorruptSkullEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_, double p_i1794_7_) {
+    public DesiccatedSkullEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_, double p_i1794_7_) {
         super(ModEntityType.DESICCATEDSKULL.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public CorruptSkullEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_, double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
+    public DesiccatedSkullEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_, double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
         super(ModEntityType.DESICCATEDSKULL.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_, p_i1795_12_, p_i1795_1_);
     }
 

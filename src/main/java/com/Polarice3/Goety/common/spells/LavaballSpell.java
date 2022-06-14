@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.projectiles.LavaballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
@@ -31,7 +32,7 @@ public class LavaballSpell extends Spells{
     @Override
     public void WandResult(World worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
-        FireballEntity fireballEntity = new FireballEntity(worldIn,
+        LavaballEntity fireballEntity = new LavaballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,
                 entityLiving.getEyeY() - 0.2,
                 entityLiving.getZ() + vector3d.z / 2,
@@ -39,6 +40,9 @@ public class LavaballSpell extends Spells{
                 vector3d.y,
                 vector3d.z);
         fireballEntity.setOwner(entityLiving);
+        if (entityLiving.isCrouching()){
+            fireballEntity.setDangerous(false);
+        }
         worldIn.addFreshEntity(fireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
@@ -47,7 +51,7 @@ public class LavaballSpell extends Spells{
     @Override
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
-        FireballEntity fireballEntity = new FireballEntity(worldIn,
+        LavaballEntity fireballEntity = new LavaballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,
                 entityLiving.getEyeY() - 0.2,
                 entityLiving.getZ() + vector3d.z / 2,
@@ -55,6 +59,9 @@ public class LavaballSpell extends Spells{
                 vector3d.y,
                 vector3d.z);
         fireballEntity.setOwner(entityLiving);
+        if (entityLiving.isCrouching()){
+            fireballEntity.setDangerous(false);
+        }
         worldIn.addFreshEntity(fireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);

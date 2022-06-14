@@ -71,7 +71,7 @@ public class VexSpell extends SummonSpells {
                 vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 vexentity.setBoundOrigin(blockpos);
                 if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
-                    vexentity.setLimitedLife(40 * (60 + entityLiving.level.random.nextInt(180)));
+                    vexentity.setLimitedLife(20 * (30 + entityLiving.level.random.nextInt(90)));
                 } else {
                     vexentity.setLimitedLife(1);
                     vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));

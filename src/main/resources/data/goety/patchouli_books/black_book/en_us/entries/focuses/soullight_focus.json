@@ -5,11 +5,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "You are able to make a magical light source by shooting a bolt of Soul Energy on a Block. Unfortunately, the light isn't as strong as a Torch, but it does drive Piglins away. It also illuminates a creature if it's hit by it."
+      "text": "You are able to make a magical light source by shooting a bolt of Soul Energy on a Block. At first, the light isn't as strong as a Torch, but it does drive Piglins away, but with some glowstone and netherrack, your light shines brighter. It also illuminates a creature if it's hit by it."
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "goety:soullightfocus"
+      "recipe": "goety:soullightfocus",
+      "recipe2": "goety:glowlightfocus"
     }
   ]
 }

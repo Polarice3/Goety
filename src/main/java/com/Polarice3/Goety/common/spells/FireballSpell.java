@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.projectiles.ModFireballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
@@ -27,7 +28,7 @@ public class FireballSpell extends InstantCastSpells{
     @Override
     public void WandResult(World worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
-        SmallFireballEntity smallFireballEntity = new SmallFireballEntity(worldIn,
+        ModFireballEntity smallFireballEntity = new ModFireballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,
                 entityLiving.getEyeY() - 0.2,
                 entityLiving.getZ() + vector3d.z / 2,
@@ -44,7 +45,7 @@ public class FireballSpell extends InstantCastSpells{
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         for(int i = 0; i < 3; ++i) {
-            SmallFireballEntity smallFireballEntity = new SmallFireballEntity(worldIn,
+            ModFireballEntity smallFireballEntity = new ModFireballEntity(worldIn,
                     entityLiving.getX() + vector3d.x / 2,
                     entityLiving.getEyeY() - 0.2,
                     entityLiving.getZ() + vector3d.z / 2,

@@ -1,0 +1,19 @@
+{
+  "parent": "goety:goety/root",
+  "criteria": {
+    "forbidden_scroll": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "goety:forbidden_scroll"
+        }
+      }
+    }
+  },
+  "requirement": [
+    "forbidden_scroll"
+  ],
+  "rewards": {
+    "experience": 50
+  }
+}

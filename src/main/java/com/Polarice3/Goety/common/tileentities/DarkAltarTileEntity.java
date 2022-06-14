@@ -9,6 +9,7 @@ import com.Polarice3.Goety.common.ritual.Ritual;
 import com.Polarice3.Goety.common.ritual.RitualStructures;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.ConstantPaths;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
@@ -206,7 +207,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
                     }
 
-                    if (recipe.getCraftType().contains("necroturgy")){
+                    if (recipe.getCraftType().contains("necroturgy") || recipe.getCraftType().contains("lich")){
                         RitualStructures.findNecroStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkNecroRequirements(this)) {
                             ++this.structureTime;
@@ -351,7 +352,16 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                             if (ritualRecipe.getCraftType().contains("adept_nether") || ritualRecipe.getCraftType().contains("sabbath") || ritualRecipe.getCraftType().contains("expert_nether")){
                                 CompoundNBT playerData = player.getPersistentData();
                                 CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-                                if (data.getBoolean("goety:readNetherBook")){
+                                if (data.getBoolean(ConstantPaths.readNetherBook())){
+                                    this.startRitual(player, activationItem, ritualRecipe);
+                                } else {
+                                    player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.fail"), true);
+                                    return false;
+                                }
+                            } else if (ritualRecipe.getCraftType().contains("lich")){
+                                CompoundNBT playerData = player.getPersistentData();
+                                CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+                                if (data.getBoolean(ConstantPaths.readScroll())){
                                     this.startRitual(player, activationItem, ritualRecipe);
                                 } else {
                                     player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.fail"), true);

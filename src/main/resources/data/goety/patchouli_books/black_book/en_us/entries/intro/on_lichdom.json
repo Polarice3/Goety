@@ -20,6 +20,10 @@
     {
       "type": "patchouli:text",
       "text": "For some reason, Potions of Harming and Healing still work the same to you even in Undeath. Perhaps it is the power of Soul Energy that causes the potions to react the same way, as Ghasts, who are found in Soul Sand Valleys, and Vexes, made using Soul Energy, have the same properties."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Arca resurrections are initiated no matter the amount of Soul Energy is within it. However, should the number of Soul Energy be less that the usual number needed to revive you, you will be inflicted with a terrible Soul Hunger. The hunger will cause you to be weaker and slower, until your Soul Energy has reached the proper amount."
     }
   ]
 }

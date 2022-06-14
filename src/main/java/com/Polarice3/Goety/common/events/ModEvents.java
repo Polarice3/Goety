@@ -32,7 +32,6 @@ import com.Polarice3.Goety.common.lichdom.LichProvider;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEProvider;
 import com.Polarice3.Goety.common.spider.SpiderLevelsProvider;
-import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
@@ -58,7 +57,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -90,10 +88,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.PatchouliAPI;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -222,6 +217,15 @@ public class ModEvents {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingSpawnEvents(LivingSpawnEvent.CheckSpawn event){
+        if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
+            if (event.getSpawnReason() == SpawnReason.STRUCTURE){
+                event.getEntityLiving().addTag("structure");
             }
         }
     }
@@ -445,62 +449,6 @@ public class ModEvents {
         if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != ItemStack.EMPTY){
             FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
         }
-        ISoulEnergy soulEnergy = SEHelper.getCapability(player);
-        if (!soulEnergy.getSEActive() && soulEnergy.getSoulEnergy() > 0) {
-            if (!world.isClientSide()){
-                player.addEffect(new EffectInstance(Effects.WEAKNESS, 60));
-                player.addEffect(new EffectInstance(Effects.HUNGER, 60));
-                player.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60));
-                if (player.tickCount % 5 == 0) {
-                    SEHelper.decreaseSESouls(player, 1);
-                    SEHelper.sendSEUpdatePacket(player);
-                }
-            }
-        }
-        if (soulEnergy.getArcaBlock() != null){
-            if (soulEnergy.getArcaBlockDimension() == world.dimension()) {
-                if (!world.isClientSide()){
-                    BlockPos blockPos = soulEnergy.getArcaBlock();
-                    TileEntity tileEntity = world.getBlockEntity(blockPos);
-                    if (tileEntity instanceof ArcaTileEntity) {
-                        ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
-                        if (arcaTile.getPlayer() == player) {
-                            Random pRand = world.random;
-                            if (pRand.nextInt(12) == 0) {
-                                for (int i = 0; i < 3; ++i) {
-                                    int j = pRand.nextInt(2) * 2 - 1;
-                                    int k = pRand.nextInt(2) * 2 - 1;
-                                    double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
-                                    double d1 = (float) blockPos.getY() + pRand.nextFloat();
-                                    double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
-                                    double d3 = pRand.nextFloat() * (float) j;
-                                    double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
-                                    double d5 = pRand.nextFloat() * (float) k;
-                                    new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
-                                }
-                            }
-                            if (!soulEnergy.getSEActive()) {
-                                soulEnergy.setSEActive(true);
-                                SEHelper.sendSEUpdatePacket(player);
-                            }
-                        } else {
-                            if (soulEnergy.getSEActive()) {
-                                soulEnergy.setSEActive(false);
-                                SEHelper.sendSEUpdatePacket(player);
-                            }
-                        }
-                    } else {
-                        if (soulEnergy.getSEActive()) {
-                            soulEnergy.setSEActive(false);
-                            SEHelper.sendSEUpdatePacket(player);
-                        }
-                    }
-                }
-            } else if (soulEnergy.getArcaBlockDimension() == null){
-                soulEnergy.setArcaBlockDimension(world.dimension());
-                SEHelper.sendSEUpdatePacket(player);
-            }
-        }
         if (MainConfig.VillagerHate.get()) {
             if (RobeArmorFinder.FindAnySet(player)) {
                 for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
@@ -695,7 +643,7 @@ public class ModEvents {
             FangEntity fangEntity = (FangEntity) attacker;
             if (fangEntity.getOwner() instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) fangEntity.getOwner();
-                if (CuriosFinder.findAmulet(player).getItem() == ModItems.VAMPIRIC_AMULET.get()) {
+                if (fangEntity.isAbsorbing()) {
                     player.heal(event.getAmount());
                 }
             }
@@ -776,6 +724,20 @@ public class ModEvents {
                 if (RobeArmorFinder.FindArachnoSet((LivingEntity) killer)) {
                     if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                         killed.spawnAtLocation(new ItemStack(ModItems.DEADBAT.get()));
+                    }
+                }
+            }
+        }
+        if (killed instanceof MonsterEntity){
+            if (killer instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) killer;
+                if (killed instanceof SpellcastingIllagerEntity || killed instanceof WitchEntity) {
+                    if (killed.getTags().contains("structure")) {
+                        float chance = 0.025F;
+                        chance += (float) EnchantmentHelper.getMobLooting(player) / 100;
+                        if (world.random.nextFloat() <= chance) {
+                            killed.spawnAtLocation(new ItemStack(ModItems.FORBIDDEN_FRAGMENT.get()));
+                        }
                     }
                 }
             }

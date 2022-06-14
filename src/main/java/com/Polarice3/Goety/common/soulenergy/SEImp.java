@@ -62,7 +62,7 @@ public class SEImp implements ISoulEnergy{
 
     @Override
     public boolean decreaseSE(int decrease) {
-        if (this.soulEnergy == 0) {
+        if (this.soulEnergy <= 0) {
             return false;
         }
         this.soulEnergy = Math.max(this.soulEnergy - decrease, 0);

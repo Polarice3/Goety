@@ -2,12 +2,12 @@
   "name": "Ascension to Undeath",
   "icon": "goety:undeath_potion",
   "category": "goety:crafts",
-  "advancement": "goety:goety/kill_a_apostle",
+  "advancement": "goety:goety/read_forbidden_scroll",
   "secret": true,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The ultimate art of Necroturgy, to cast away mortality and walk as the king of the dead."
+      "text": "You have successfully recreated the scroll and finally unravelled its secret. The ultimate art of Necroturgy, to cast away mortality and walk as the king of the dead."
     },
     {
       "type": "patchouli:text",

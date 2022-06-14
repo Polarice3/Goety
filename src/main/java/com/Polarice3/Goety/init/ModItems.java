@@ -43,6 +43,7 @@ public class ModItems {
     public static final RegistryObject<ModBoatItem> HAUNTED_BOAT = ITEMS.register("haunted_boat", () -> new ModBoatItem(ModBoatEntity.Type.HAUNTED, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_TRANSPORTATION)));
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
+    public static final RegistryObject<Item> FORBIDDEN_SCROLL = ITEMS.register("forbidden_scroll", ForbiddenScrollItem::new);
 
     //Food
     public static final RegistryObject<SacredFishItem> SACRED_FISH = ITEMS.register("sacred_fish", SacredFishItem::new);
@@ -69,13 +70,13 @@ public class ModItems {
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
     public static final RegistryObject<Item> DRIED_REMNANT = ITEMS.register("dried_remnant", ItemBase::new);
+    public static final RegistryObject<Item> FORBIDDEN_FRAGMENT = ITEMS.register("forbidden_fragment", ItemBase::new);
+    public static final RegistryObject<Item> FORBIDDEN_PIECE = ITEMS.register("forbidden_piece", ItemBase::new);
 
     //Curios
     public static final RegistryObject<GoldTotemItem> GOLDTOTEM = ITEMS.register("goldtotem", GoldTotemItem::new);
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", AmuletItem::new);
-    public static final RegistryObject<Item> VAMPIRIC_AMULET = ITEMS.register("vampiric_amulet", AmuletItem::new);
-    public static final RegistryObject<Item> SKULL_AMULET = ITEMS.register("skull_amulet", AmuletItem::new);
     public static final RegistryObject<Item> RING_OF_WANT = ITEMS.register("ring_of_want", RingItem::new);
 
     //Focuses

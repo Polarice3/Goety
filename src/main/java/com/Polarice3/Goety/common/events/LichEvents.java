@@ -6,6 +6,7 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ICultistMinion;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -121,8 +122,16 @@ public class LichEvents {
             if (player.hasEffect(Effects.SATURATION)){
                 player.removeEffectNoUpdate(Effects.SATURATION);
             }
+            if (player.hasEffect(ModEffects.DESICCATE.get())){
+                player.removeEffectNoUpdate(ModEffects.DESICCATE.get());
+            }
             ItemStack goldtotem = GoldTotemFinder.FindTotem(player);
             if (SEHelper.getSEActive(player)){
+                if (player.hasEffect(ModEffects.SOUL_HUNGER.get())){
+                    if (SEHelper.getSESouls(player) > MainConfig.MaxSouls.get()){
+                        player.removeEffectNoUpdate(ModEffects.SOUL_HUNGER.get());
+                    }
+                }
                 if (!player.isOnFire()) {
                     if (player.getHealth() < player.getMaxHealth()) {
                         if (player.tickCount % 20 == 0 && SEHelper.getSESouls(player) > MainConfig.LichHealCost.get()) {
@@ -201,6 +210,9 @@ public class LichEvents {
                     event.setResult(Event.Result.DENY);
                 }
                 if (event.getPotionEffect().getEffect() == Effects.SATURATION){
+                    event.setResult(Event.Result.DENY);
+                }
+                if (event.getPotionEffect().getEffect() == ModEffects.DESICCATE.get()){
                     event.setResult(Event.Result.DENY);
                 }
             }

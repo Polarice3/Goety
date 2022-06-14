@@ -69,7 +69,6 @@ public class FriendlyVexEntity extends MinionEntity {
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
-
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("BoundX")) {

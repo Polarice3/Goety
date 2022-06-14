@@ -88,7 +88,6 @@ public abstract class LightProjectileEntity extends ArrowEntity {
     }
 
     protected void onHitEntity(EntityRayTraceResult pResult) {
-        super.onHitEntity(pResult);
         if (!this.level.isClientSide) {
             Entity target = pResult.getEntity();
             Entity owner = this.getOwner();
@@ -96,14 +95,14 @@ public abstract class LightProjectileEntity extends ArrowEntity {
                 if (target instanceof LivingEntity){
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (livingTarget.isAlive()){
-                        livingTarget.addEffect(new EffectInstance(Effects.GLOWING, 400));
+                        livingTarget.addEffect(new EffectInstance(Effects.GLOWING, 200));
                     }
                 }
             } else {
                 if (target instanceof LivingEntity){
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (livingTarget.isAlive()){
-                        livingTarget.addEffect(new EffectInstance(Effects.GLOWING, 400));
+                        livingTarget.addEffect(new EffectInstance(Effects.GLOWING, 200));
                     }
                 }
             }

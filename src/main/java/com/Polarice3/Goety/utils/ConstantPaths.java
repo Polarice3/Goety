@@ -17,4 +17,12 @@ public class ConstantPaths {
         return Goety.location("dark_manor");
     }
 
+    public static String readNetherBook(){
+        return "goety:readNetherBook";
+    }
+
+    public static String readScroll(){
+        return "goety:readScroll";
+    }
+
 }

@@ -104,7 +104,11 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> PlayerSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> DefaultSouls;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> MaxEnchant;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxSoulEaterLevel;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxWantingLevel;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxPotencyLevel;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxRadiusLevel;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxRangeLevel;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnFreq;
@@ -186,8 +190,6 @@ public class MainConfig {
                 .define("totemUndying", true);
         ArcaUndying = BUILDER.comment("Arca will save the Player if past Totem Maximum Soul Count, Default: true")
                 .define("arcaUndying", true);
-        MaxEnchant = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")
-                .defineInRange("maxEnchant", 5, 1, 10);
         StarterTotem = BUILDER.comment("Gives Players a Totem of Souls when first entering World, Default: false")
                 .define("starterTotem", false);
         StarterBook = BUILDER.comment("Gives Players the Black Book when first entering World and Patchouli is loaded, Default: false")
@@ -472,6 +474,18 @@ public class MainConfig {
                 .defineInRange("darkArmoredRobeRepairSouls", 10, 1, Integer.MAX_VALUE);
         WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 10")
                 .defineInRange("wanderBootsRepairSouls", 10, 1, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Enchantments");
+        MaxSoulEaterLevel = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")
+                .defineInRange("maxSoulEaterLevel", 5, 1, 10);
+        MaxWantingLevel = BUILDER.comment("Wanting Maximum Enchantment Level, Default: 3")
+                .defineInRange("maxWantingLevel", 3, 1, 10);
+        MaxPotencyLevel = BUILDER.comment("Potency Maximum Enchantment Level, Default: 5")
+                .defineInRange("maxPotencyLevel", 5, 1, 10);
+        MaxRadiusLevel = BUILDER.comment("Radius Maximum Enchantment Level, Default: 2")
+                .defineInRange("maxRadiusLevel", 2, 1, 10);
+        MaxRangeLevel = BUILDER.comment("Range Maximum Enchantment Level, Default: 10")
+                .defineInRange("maxRangeLevel", 10, 1, 10);
         BUILDER.pop();
         BUILDER.push("Villagers");
         VillagerHate = BUILDER.comment("Wearing a Dark Helm and Robe, along with variants, causes Villagers around the Player to have a negative Reputation unless said Player has 100 or more reputation among them, Default: false")

@@ -6,17 +6,21 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.BoomerEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.MarcireEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
@@ -86,6 +90,11 @@ public class DeadMobEvents {
             }
         }
         if (livingEntity instanceof IDeadMob){
+            if (world.isRaining() && world.canSeeSky(livingEntity.blockPosition())){
+                if (livingEntity.tickCount % 20 == 0){
+                    livingEntity.hurt(DamageSource.DROWN, 2.0F);
+                }
+            }
             if (livingEntity.isInWater()){
                 if (livingEntity.tickCount % 20 == 0){
                     livingEntity.hurt(DamageSource.DROWN, 2.0F);
@@ -182,6 +191,13 @@ public class DeadMobEvents {
                 LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), deadMob);
                 LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
                 loottable.getRandomItems(ctx).forEach(deadMob::spawnAtLocation);
+                if (deadMob instanceof MarcireEntity){
+                    float chance = 0.025F;
+                    chance += (float) EnchantmentHelper.getMobLooting(killer)/100;
+                    if (deadMob.getRandom().nextFloat() < chance){
+                        deadMob.spawnAtLocation(new ItemStack(ModItems.FORBIDDEN_FRAGMENT.get()));
+                    }
+                }
             }
             if (deadMob.isInWater() && !(deadMob instanceof BoomerEntity)){
                 AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(world, deadMob.getX(), deadMob.getY(), deadMob.getZ());

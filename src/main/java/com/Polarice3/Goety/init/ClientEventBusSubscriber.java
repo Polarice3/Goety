@@ -11,13 +11,16 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
+import com.Polarice3.Goety.common.entities.projectiles.ModFireballEntity;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.Atlases;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,10 +37,13 @@ public class ClientEventBusSubscriber {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event){
+        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.TANK.get(), TankRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FRIENDTANK.get(), FriendTankRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHBOMB.get(), WitchBombRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_FIREBALL.get(), SoulFireballRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_FIREBALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LAVABALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 3.0F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOULSKULL.get(), SoulSkullRenderer::new);

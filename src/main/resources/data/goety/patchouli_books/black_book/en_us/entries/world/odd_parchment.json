@@ -1,0 +1,22 @@
+{
+  "name": "Odd Parchment",
+  "icon": "goety:forbidden_fragment",
+  "category": "goety:world",
+  "advancement": "goety:goety/gain_fragment",
+  "secret": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You beheld a small fragment of what appears to be a large parchment. The fragment gives off an ominous aura, and you feel tempted to find these fragments and remake the parchment. What secrets do these parts hold?"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "It appears that these fragments can be found in the hands of dark magicians that have secluded themselves to study and hone their magics. Perhaps one can find more of these fragments within the halls of dark mansions, or in isolated huts, at the hands of dark forces."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:forbidden_fragment",
+      "recipe2": "goety:forbidden_scroll"
+    }
+  ]
+}

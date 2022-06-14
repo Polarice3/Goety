@@ -1,10 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.potions.DesiccateEffect;
-import com.Polarice3.Goety.common.potions.CosmicEffect;
-import com.Polarice3.Goety.common.potions.IllagueEffect;
-import com.Polarice3.Goety.common.potions.ModEffect;
+import com.Polarice3.Goety.common.potions.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.fml.RegistryObject;
@@ -44,4 +41,6 @@ public class ModEffects {
             () -> new ModEffect(EffectType.BENEFICIAL, 0));
     public static final RegistryObject<Effect> DESICCATE = EFFECTS.register("desiccate",
             DesiccateEffect::new);
+    public static final RegistryObject<Effect> SOUL_HUNGER = EFFECTS.register("soul_hunger",
+            SoulHungerEffect::new);
 }

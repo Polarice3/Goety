@@ -77,15 +77,15 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             boolean flag;
             boolean flag2;
             float enchantment = 0;
+            int flaming = 0;
             if (owner instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity)owner;
                 World worldIn = livingentity.level;
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
-                    if (CuriosFinder.findAmulet(player).getItem() == ModItems.SKULL_AMULET.get()){
-                        if (CuriosFinder.findAmulet(player).isEnchanted()){
-                            enchantment = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, CuriosFinder.findAmulet(player));
-                        }
+                    if (WandUtil.enchantedFocus(player)){
+                        enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                        flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                     }
                 }
                 flag = target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
@@ -93,14 +93,14 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                 if (flag) {
                     if (target.isAlive()) {
                         this.doEnchantDamageEffects(livingentity, target);
-                        if (this.isUpgraded()) {
-                            target.setSecondsOnFire(30);
+                        if (flaming != 0) {
+                            target.setSecondsOnFire(5 + flaming);
                         }
                     } else {
                         if (this.isUpgraded()){
                             livingentity.heal(5.0F);
                         } else {
-                            livingentity.heal(2.0F);
+                            livingentity.heal(1.0F);
                         }
                         if (MainConfig.SoulSkullZombie.get()) {
                             if (target instanceof ZombieEntity) {
@@ -161,15 +161,13 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             boolean loot = false;
             if (owner instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) owner;
-                if (CuriosFinder.findAmulet(player).getItem() == ModItems.SKULL_AMULET.get()){
-                    if (CuriosFinder.findAmulet(player).isEnchanted()){
-                        enchantment = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, CuriosFinder.findAmulet(player))/2.5F;
-                        if (this.isUpgraded()){
-                            enchantment = enchantment + 0.75F;
-                        }
-                        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, CuriosFinder.findAmulet(player)) > 0){
-                            flaming = true;
-                        }
+                if (WandUtil.enchantedFocus(player)){
+                    enchantment = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player)/2.5F;
+                    if (this.isUpgraded()){
+                        enchantment = enchantment + 0.75F;
+                    }
+                    if (WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0){
+                        flaming = true;
                     }
                 }
                 if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()){

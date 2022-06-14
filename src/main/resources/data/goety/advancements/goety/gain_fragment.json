@@ -1,0 +1,31 @@
+{
+  "parent": "goety:goety/root",
+  "criteria": {
+    "forbidden_piece": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:forbidden_piece"
+          }
+        ]
+      }
+    },
+    "forbidden_fragment": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:forbidden_fragment"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "forbidden_piece",
+      "forbidden_fragment"
+    ]
+  ]
+}

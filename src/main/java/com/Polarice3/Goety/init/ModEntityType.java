@@ -55,6 +55,18 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulfireball").toString()));
 
+    public static final RegistryObject<EntityType<ModFireballEntity>> MOD_FIREBALL = ENTITY_TYPES.register("fireball",
+            () -> EntityType.Builder.<ModFireballEntity>of(ModFireballEntity::new, EntityClassification.MISC)
+                    .sized(0.3125F, 0.3125F)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fireball").toString()));
+
+    public static final RegistryObject<EntityType<LavaballEntity>> LAVABALL = ENTITY_TYPES.register("lavaball",
+            () -> EntityType.Builder.<LavaballEntity>of(LavaballEntity::new, EntityClassification.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fireball").toString()));
+
     public static final RegistryObject<EntityType<WarpedSpearEntity>> WARPED_SPEAR = ENTITY_TYPES.register("warped_spear",
             () -> EntityType.Builder.<WarpedSpearEntity>of(WarpedSpearEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.5F)
@@ -76,8 +88,8 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
-    public static final RegistryObject<EntityType<CorruptSkullEntity>> DESICCATEDSKULL = ENTITY_TYPES.register("corruptskull",
-            () -> EntityType.Builder.<CorruptSkullEntity>of(CorruptSkullEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<DesiccatedSkullEntity>> DESICCATEDSKULL = ENTITY_TYPES.register("corruptskull",
+            () -> EntityType.Builder.<DesiccatedSkullEntity>of(DesiccatedSkullEntity::new, EntityClassification.MISC)
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
                     .updateInterval(1)

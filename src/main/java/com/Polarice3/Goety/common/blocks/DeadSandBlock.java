@@ -4,11 +4,16 @@ import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.utils.BlockFinder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
@@ -18,6 +23,8 @@ import net.minecraftforge.common.ToolType;
 import java.util.Random;
 
 public class DeadSandBlock extends FallingBlock implements IDeadBlock {
+    public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
+
     public DeadSandBlock() {
         super(Properties.of(Material.SAND)
                 .strength(0.5F)
@@ -26,6 +33,13 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
                 .harvestTool(ToolType.SHOVEL)
                 .randomTicks()
         );
+        this.registerDefaultState(this.stateDefinition.any().setValue(ENABLED, Boolean.TRUE));
+    }
+
+    public void tick(BlockState pState, ServerWorld pLevel, BlockPos pPos, Random pRand) {
+        if (!pState.getValue(ENABLED)){
+            super.tick(pState, pLevel, pPos, pRand);
+        }
     }
 
     public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
@@ -64,5 +78,13 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
             return state.is(this);
         }
         return false;
+    }
+
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(ENABLED);
+    }
+
+    public BlockState getStateForPlacement(BlockItemUseContext pContext) {
+        return this.defaultBlockState().setValue(ENABLED, Boolean.FALSE);
     }
 }

@@ -248,6 +248,10 @@ public class CreeperlingMinionEntity extends SummonedEntity implements IChargeab
         this.entityData.set(DATA_SWELL_DIR, pState);
     }
 
+    public void setExplosionRadius(double explosionRadius){
+        this.explosionRadius = explosionRadius;
+    }
+
     public void thunderHit(ServerWorld pLevel, LightningBoltEntity pLightning) {
         super.thunderHit(pLevel, pLightning);
         this.entityData.set(DATA_IS_POWERED, true);

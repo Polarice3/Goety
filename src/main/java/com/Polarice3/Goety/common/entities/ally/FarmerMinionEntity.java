@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.entities.ai.FarmingGoal;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -22,6 +23,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.HopperTileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -64,6 +66,25 @@ public class FarmerMinionEntity extends SummonedEntity {
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.ARMOR, 2.0D);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.level.getBlockEntity(this.blockPosition().below()) instanceof HopperTileEntity){
+            HopperTileEntity tileEntity = (HopperTileEntity) this.level.getBlockEntity(this.blockPosition().below());
+            if (tileEntity != null) {
+                if (!this.inventory.isEmpty()) {
+                    Inventory inventory = this.inventory;
+                    for (int i = 0; i < inventory.getContainerSize(); ++i) {
+                        ItemStack itemstack = inventory.getItem(i);
+                        if (!(itemstack.getItem() instanceof IPlantable)) {
+                            tileEntity.setItem(0, itemstack);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {

@@ -1,0 +1,39 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "minecraft:paper"
+  },
+  "craftType": "necroturgy",
+  "soulCost": 5,
+  "duration": 30,
+  "ingredients": [
+    {
+      "item": "goety:brain"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "goety:brain"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "goety:brain"
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    {
+      "item": "goety:brain"
+    },
+    {
+      "tag": "forge:dusts/glowstone"
+    }
+  ],
+  "result": {
+    "item": "goety:forbidden_piece"
+  }
+}

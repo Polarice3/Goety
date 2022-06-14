@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
-import com.Polarice3.Goety.common.entities.projectiles.CorruptSkullEntity;
+import com.Polarice3.Goety.common.entities.projectiles.DesiccatedSkullEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
@@ -136,7 +136,7 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
         double d1 = pTarget.getX() - this.getX();
         double d2 = pTarget.getY(0.5D) - this.getY(0.5D);
         double d3 = pTarget.getZ() - this.getZ();
-        CorruptSkullEntity corruptSkull = new CorruptSkullEntity(this.level, this, d1, d2, d3);
+        DesiccatedSkullEntity corruptSkull = new DesiccatedSkullEntity(this.level, this, d1, d2, d3);
         corruptSkull.setPos(corruptSkull.getX(), this.getY(0.75F), corruptSkull.getZ());
         corruptSkull.setDangerous(this.random.nextFloat() < 0.05F);
         this.level.addFreshEntity(corruptSkull);

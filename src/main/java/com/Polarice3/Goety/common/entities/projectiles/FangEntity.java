@@ -1,8 +1,10 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.CuriosFinder;
+import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -11,6 +13,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
@@ -22,6 +27,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class FangEntity extends Entity {
+    private static final DataParameter<Boolean> ABSORBING = EntityDataManager.defineId(FangEntity.class, DataSerializers.BOOLEAN);
     private int warmupDelayTicks;
     private boolean sentSpikeEvent;
     private int lifeTicks = 22;
@@ -42,6 +48,15 @@ public class FangEntity extends Entity {
     }
 
     protected void defineSynchedData() {
+        this.entityData.define(ABSORBING, false);
+    }
+
+    public boolean isAbsorbing() {
+        return this.entityData.get(ABSORBING);
+    }
+
+    public void setAbsorbing(boolean absorbing) {
+        this.entityData.set(ABSORBING, absorbing);
     }
 
     public void setOwner(@Nullable LivingEntity p_190549_1_) {
@@ -128,10 +143,8 @@ public class FangEntity extends Entity {
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
                     float enchantment = 0;
-                    if (CuriosFinder.findAmulet(player).getItem() == ModItems.EMERALD_AMULET.get()) {
-                        if (CuriosFinder.findAmulet(player).isEnchanted()){
-                            enchantment = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SHARPNESS, CuriosFinder.findAmulet(player));
-                        }
+                    if (WandUtil.enchantedFocus(player)) {
+                        enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                     }
                     target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
                 } else {

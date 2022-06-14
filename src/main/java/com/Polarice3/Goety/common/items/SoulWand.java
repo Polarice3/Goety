@@ -13,6 +13,8 @@ import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -37,6 +39,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.Polarice3.Goety.common.items.MagicFocusItem.FOCUS;
@@ -373,6 +376,11 @@ public class SoulWand extends Item{
     public static ItemStack getFocus(ItemStack itemstack) {
         SoulUsingItemHandler handler = SoulUsingItemHandler.get(itemstack);
         return handler.getSlot();
+    }
+
+    public static Map<Enchantment, Integer> getFocusEnchantments(ItemStack itemStack){
+        SoulUsingItemHandler handler = SoulUsingItemHandler.get(itemStack);
+        return EnchantmentHelper.getEnchantments(handler.getSlot());
     }
 
     public void MagicResults(ItemStack stack, World worldIn, LivingEntity entityLiving) {

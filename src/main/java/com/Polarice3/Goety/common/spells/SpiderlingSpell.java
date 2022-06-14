@@ -1,10 +1,14 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -33,9 +37,18 @@ public class SpiderlingSpell extends ChargingSpells{
         summonedentity.setUpgraded(this.ArachnoPower(entityLiving));
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
         summonedentity.setLimitedLife(180);
+        if (entityLiving instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entityLiving;
+            if (WandUtil.enchantedFocus(player)){
+                int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                if (enchantment != 0){
+                    summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, enchantment - 1, false, false));
+                }
+            }
+            this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
+        }
         worldIn.addFreshEntity(summonedentity);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
@@ -46,10 +59,19 @@ public class SpiderlingSpell extends ChargingSpells{
             summonedentity.setUpgraded(this.ArachnoPower(entityLiving));
             summonedentity.moveTo(blockpos, 0.0F, 0.0F);
             summonedentity.setLimitedLife(360);
+            if (entityLiving instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) entityLiving;
+                if (WandUtil.enchantedFocus(player)){
+                    int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                    if (enchantment != 0){
+                        summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, enchantment - 1, false, false));
+                    }
+                }
+                this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
+            }
             worldIn.addFreshEntity(summonedentity);
         }
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 

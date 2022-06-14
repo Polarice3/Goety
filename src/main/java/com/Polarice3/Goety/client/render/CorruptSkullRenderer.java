@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.entities.projectiles.CorruptSkullEntity;
+import com.Polarice3.Goety.common.entities.projectiles.DesiccatedSkullEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public class CorruptSkullRenderer extends EntityRenderer<CorruptSkullEntity> {
+public class CorruptSkullRenderer extends EntityRenderer<DesiccatedSkullEntity> {
     private static final ResourceLocation WITHER_INVULNERABLE_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/corruptskull_destroy.png");
     private static final ResourceLocation WITHER_LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/corruptskull.png");
     private final GenericHeadModel model = new GenericHeadModel();
@@ -22,11 +22,11 @@ public class CorruptSkullRenderer extends EntityRenderer<CorruptSkullEntity> {
         super(p_i46129_1_);
     }
 
-    protected int getBlockLightLevel(CorruptSkullEntity pEntity, BlockPos pPos) {
+    protected int getBlockLightLevel(DesiccatedSkullEntity pEntity, BlockPos pPos) {
         return 15;
     }
 
-    public void render(CorruptSkullEntity pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
+    public void render(DesiccatedSkullEntity pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         float f = MathHelper.rotlerp(pEntity.yRotO, pEntity.yRot, pPartialTicks);
@@ -38,7 +38,7 @@ public class CorruptSkullRenderer extends EntityRenderer<CorruptSkullEntity> {
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
-    public ResourceLocation getTextureLocation(CorruptSkullEntity pEntity) {
+    public ResourceLocation getTextureLocation(DesiccatedSkullEntity pEntity) {
         return pEntity.isDangerous() ? WITHER_INVULNERABLE_LOCATION : WITHER_LOCATION;
     }
 }

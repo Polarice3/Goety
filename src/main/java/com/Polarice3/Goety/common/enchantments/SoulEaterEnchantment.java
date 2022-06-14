@@ -19,6 +19,6 @@ public class SoulEaterEnchantment extends Enchantment {
     }
 
     public int getMaxLevel() {
-        return MainConfig.MaxEnchant.get();
+        return MainConfig.MaxSoulEaterLevel.get();
     }
 }
