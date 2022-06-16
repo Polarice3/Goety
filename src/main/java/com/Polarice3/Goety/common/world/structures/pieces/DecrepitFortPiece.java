@@ -1,6 +1,9 @@
 package com.Polarice3.Goety.common.world.structures.pieces;
 
+import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.ConstantPaths;
+import com.Polarice3.Goety.utils.ModLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -64,6 +67,9 @@ public class DecrepitFortPiece extends ModStructurePiece{
                 if (tileentity instanceof MobSpawnerTileEntity) {
                     ((MobSpawnerTileEntity)tileentity).getSpawner().setEntityId(this.randomEntityId(pRandom));
                 }
+            }
+            if (function.startsWith("pithos")){
+                BlockFinder.createPithos(pLevel, pSbb, pRandom, pPos, ModLootTables.DECREPIT_TOMB, ModBlocks.PITHOS_BLOCK.get().defaultBlockState());
             }
         }
     }

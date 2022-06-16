@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.utils.ConstantPaths;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -12,12 +11,8 @@ import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class NetherBookItem extends Item {
     public NetherBookItem(){

@@ -35,7 +35,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
-import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.Map;
 import java.util.Random;

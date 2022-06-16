@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.entities.hostile.dead;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EffectsUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;

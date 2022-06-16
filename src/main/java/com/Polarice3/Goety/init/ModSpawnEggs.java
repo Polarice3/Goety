@@ -79,8 +79,11 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> SCORCH_SPAWN_EGG = ITEMS.register("scorch_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.SCORCH, 0x3b1414, 0xf48522, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> SKULL_LORD_SPAWN_EGG = ITEMS.register("skull_lord_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.SKULL_LORD, 0xd3d3d3, 0x74f1f5, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> NETHERNAL_SPAWN_EGG = ITEMS.register("nethernal_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.NETHERNAL, 0x100606, 0xfaeb72, new Item.Properties().tab(Goety.TAB)));
+            () -> new ModSpawnEggItem(ModEntityType.SENTINEL, 0x100606, 0xfaeb72, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = ITEMS.register("zombie_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.ZOMBIE_MINION, 0x192927, 0x737885, new Item.Properties().tab(Goety.TAB)));

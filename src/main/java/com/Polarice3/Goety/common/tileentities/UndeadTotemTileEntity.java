@@ -11,10 +11,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class UndeadTotemTileEntity extends TotemTileEntity {
 

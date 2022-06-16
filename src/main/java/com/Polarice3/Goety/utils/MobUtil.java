@@ -13,13 +13,8 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.LightType;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Random;
 
 public class MobUtil {
     public static void deadSandConvert(Entity entity, boolean natural){
@@ -36,7 +31,7 @@ public class MobUtil {
                 corrupt = monster.convertTo(ModEntityType.FALLEN.get(), true);
             }
             if (monster instanceof AbstractSkeletonEntity && !(monster instanceof WitherSkeletonEntity)) {
-                if (monster.level.random.nextFloat() < 0.01F){
+                if (monster.level.random.nextFloat() < 0.1F){
                     corrupt = monster.convertTo(ModEntityType.MARCIRE.get(), false);
                 } else {
                     corrupt = monster.convertTo(ModEntityType.DESICCATED.get(), true);

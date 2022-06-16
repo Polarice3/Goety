@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.block.*;
@@ -7,17 +8,24 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockFinder {
 
@@ -162,6 +170,20 @@ public class BlockFinder {
     public static boolean isWet(World pLevel, BlockPos pPos){
         if (pLevel.getBiome(pPos).getPrecipitation() != Biome.RainType.NONE){
             return pLevel.isRaining() && pLevel.canSeeSky(pPos);
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean createPithos(IServerWorld pLevel, MutableBoundingBox pBounds, Random pRandom, BlockPos pPos, ResourceLocation pResourceLocation, @Nullable BlockState pState) {
+        if (pBounds.isInside(pPos) && !pLevel.getBlockState(pPos).is(ModBlocks.PITHOS_BLOCK.get())) {
+            pLevel.setBlock(pPos, pState != null ? pState: ModBlocks.PITHOS_BLOCK.get().defaultBlockState(), 2);
+            TileEntity tileentity = pLevel.getBlockEntity(pPos);
+            if (tileentity instanceof PithosTileEntity) {
+                ((PithosTileEntity)tileentity).setLootTable(pResourceLocation, pRandom.nextLong());
+            }
+
+            return true;
         } else {
             return false;
         }

@@ -2,10 +2,7 @@ package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.WandUtil;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

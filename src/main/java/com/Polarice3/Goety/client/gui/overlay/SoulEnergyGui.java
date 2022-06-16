@@ -60,12 +60,15 @@ public class SoulEnergyGui extends AbstractGui {
         int i = (this.screenWidth/2) + 100;
         int energylength = 117;
         energylength = (int)((energylength) * (SoulEnergy / (double)SoulEnergyTotal));
+        int maxenergy = (int)(117 * (MainConfig.MaxSouls.get() / (double)SoulEnergyTotal));
 
         int height = this.screenHeight - 5;
 
         if (SEHelper.getSEActive(player)){
             Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder2.png"));
             blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
+            Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy_revive.png"));
+            blit(ms,i + 9, height - 7, 0, 0, maxenergy,5, 117, 5);
         } else {
             Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder.png"));
             blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);

@@ -4,14 +4,11 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.ModFireballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class FireballSpell extends InstantCastSpells{
 

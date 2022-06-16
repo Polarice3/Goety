@@ -1,10 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.DeadSandExplosion;
-import com.Polarice3.Goety.utils.EffectsUtil;
 import com.Polarice3.Goety.utils.ExplosionUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -31,7 +29,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
 
 @OnlyIn(
         value = Dist.CLIENT,

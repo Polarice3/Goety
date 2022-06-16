@@ -194,7 +194,9 @@ public class Goety {
         event.put(ModEntityType.VIZIER.get(), VizierEntity.setCustomAttributes().build());
         event.put(ModEntityType.IRK.get(), IrkEntity.setCustomAttributes().build());
         event.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());
-        event.put(ModEntityType.NETHERNAL.get(), SentinelEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SKULL_LORD.get(), SkullLordEntity.setCustomAttributes().build());
+        event.put(ModEntityType.BONE_LORD.get(), BoneLordEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SENTINEL.get(), SentinelEntity.setCustomAttributes().build());
         event.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
     }
 

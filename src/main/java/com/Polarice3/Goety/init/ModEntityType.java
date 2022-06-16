@@ -417,12 +417,25 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "scorch").toString()));
 
-    public static final RegistryObject<EntityType<SentinelEntity>> NETHERNAL = ENTITY_TYPES.register("nethernal",
+    public static final RegistryObject<EntityType<SkullLordEntity>> SKULL_LORD = ENTITY_TYPES.register("skull_lord",
+            () -> EntityType.Builder.of(SkullLordEntity::new, EntityClassification.MONSTER)
+                    .fireImmune()
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "skull_lord").toString()));
+
+    public static final RegistryObject<EntityType<BoneLordEntity>> BONE_LORD = ENTITY_TYPES.register("bone_lord",
+            () -> EntityType.Builder.of(BoneLordEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "bone_lord").toString()));
+
+    public static final RegistryObject<EntityType<SentinelEntity>> SENTINEL = ENTITY_TYPES.register("sentinel",
             () -> EntityType.Builder.of(SentinelEntity::new, EntityClassification.MONSTER)
                     .fireImmune()
                     .sized(1.4F, 2.7F)
                     .clientTrackingRange(10)
-                    .build(new ResourceLocation(Goety.MOD_ID, "netheruin").toString()));
+                    .build(new ResourceLocation(Goety.MOD_ID, "sentinel").toString()));
 
     public static final RegistryObject<EntityType<PenanceEntity>> PENANCE = ENTITY_TYPES.register("penance",
             () -> EntityType.Builder.of(PenanceEntity::new, EntityClassification.MONSTER)

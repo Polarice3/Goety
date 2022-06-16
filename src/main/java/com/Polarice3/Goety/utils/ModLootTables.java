@@ -13,6 +13,7 @@ public class ModLootTables {
     public static final ResourceLocation EMPTY = new ResourceLocation("empty");
     public static final ResourceLocation SALVAGED_FORT_TREASURE = register("chests/salvaged_fort_treasure");
     public static final ResourceLocation SALVAGED_FORT_ARCHERY = register("chests/salvaged_fort_archery");
+    public static final ResourceLocation DECREPIT_TOMB = register("chests/decrepit_tomb");
     public static final ResourceLocation DEAD_MOBS = register("entities/dead_mobs");
 
     private static ResourceLocation register(String pId) {

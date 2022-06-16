@@ -238,7 +238,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         }
 
         protected int getCastingInterval() {
-            return MainConfig.ZombieCooldown.get();
+            return 250;
         }
 
         public void castSpell() {
@@ -279,7 +279,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
         }
 
         protected int getCastingInterval() {
-            return MainConfig.SkeletonCooldown.get();
+            return 250;
         }
 
         public void castSpell() {

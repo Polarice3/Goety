@@ -4,11 +4,12 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
+import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
+import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.ZombieEntity;
@@ -90,6 +91,11 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                 }
                 flag = target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
                 flag2 = RobeArmorFinder.FindNecroSet(livingentity);
+                if (livingentity instanceof SkullLordEntity){
+                    if (target instanceof BoneLordEntity){
+                        flag = false;
+                    }
+                }
                 if (flag) {
                     if (target.isAlive()) {
                         this.doEnchantDamageEffects(livingentity, target);

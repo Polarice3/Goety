@@ -2,17 +2,16 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
-import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.utils.WandUtil;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -44,17 +43,17 @@ public class FangSpell extends Spells{
         if (!playerEntity.isCrouching()) {
             for (int l = 0; l < range; ++l) {
                 double d2 = 1.25D * (double) (l + 1);
-                this.spawnFangs(entityLiving, entityLiving.getX() + (double) MathHelper.cos(f) * d2, entityLiving.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, l);
+                WandUtil.spawnFangs(entityLiving, entityLiving.getX() + (double) MathHelper.cos(f) * d2, entityLiving.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, l);
             }
         } else {
             for(int i = 0; i < 5; ++i) {
                 float f1 = f + (float)i * (float)Math.PI * 0.4F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f1) * 1.5D, entityLiving.getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f1) * 1.5D, entityLiving.getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
             }
 
             for(int k = 0; k < 8; ++k) {
                 float f2 = f + (float)k * (float)Math.PI * 2.0F / 8.0F + 1.2566371F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 2.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 2.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
             }
         }
         this.IncreaseInfamy(MainConfig.FangInfamyChance.get(), (PlayerEntity) entityLiving);
@@ -77,29 +76,29 @@ public class FangSpell extends Spells{
                 double d2 = 1.25D * (double)(l + 1);
                 float fleft = f + 0.4F;
                 float fright = f - 0.4F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f) * d2, entityLiving.getZ() + (double)MathHelper.sin(f) * d2, d0, d1, f, l);
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(fleft) * d2, entityLiving.getZ() + (double)MathHelper.sin(fleft) * d2, d0, d1, fleft, l);
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(fright) * d2, entityLiving.getZ() + (double)MathHelper.sin(fright) * d2, d0, d1, fright, l);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f) * d2, entityLiving.getZ() + (double)MathHelper.sin(f) * d2, d0, d1, f, l);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(fleft) * d2, entityLiving.getZ() + (double)MathHelper.sin(fleft) * d2, d0, d1, fleft, l);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(fright) * d2, entityLiving.getZ() + (double)MathHelper.sin(fright) * d2, d0, d1, fright, l);
             }
         } else {
             for(int i = 0; i < 5; ++i) {
                 float f1 = f + (float)i * (float)Math.PI * 0.4F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f1) * 1.5D, entityLiving.getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f1) * 1.5D, entityLiving.getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
             }
 
             for(int k = 0; k < 8; ++k) {
                 float f2 = f + (float)k * (float)Math.PI * 2.0F / 8.0F + 1.2566371F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 2.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 2.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
             }
 
             for(int k = 0; k < 11; ++k) {
                 float f2 = f + (float)k * (float)Math.PI * 4.0F / 16.0F + 2.5133462F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 3.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 3.5D, d0, d1, f2, 6);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 3.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 3.5D, d0, d1, f2, 6);
             }
 
             for(int k = 0; k < 14; ++k) {
                 float f2 = f + (float)k * (float)Math.PI * 8.0F / 32.0F + 5.0266924F;
-                this.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 4.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 4.5D, d0, d1, f2, 9);
+                WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 4.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 4.5D, d0, d1, f2, 9);
             }
         }
         this.IncreaseInfamy(MainConfig.FangInfamyChance.get(), (PlayerEntity) entityLiving);
@@ -121,42 +120,4 @@ public class FangSpell extends Spells{
         return worldIn.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
     }
 
-    private void spawnFangs(LivingEntity livingEntity, double pPosX, double pPosZ, double PPPosY, double pOPosY, float pYRot, int pWarmUp) {
-        BlockPos blockpos = new BlockPos(pPosX, pOPosY, pPosZ);
-        boolean flag = false;
-        double d0 = 0.0D;
-
-        do {
-            BlockPos blockpos1 = blockpos.below();
-            BlockState blockstate = livingEntity.level.getBlockState(blockpos1);
-            if (blockstate.isFaceSturdy(livingEntity.level, blockpos1, Direction.UP)) {
-                if (!livingEntity.level.isEmptyBlock(blockpos)) {
-                    BlockState blockstate1 = livingEntity.level.getBlockState(blockpos);
-                    VoxelShape voxelshape = blockstate1.getCollisionShape(livingEntity.level, blockpos);
-                    if (!voxelshape.isEmpty()) {
-                        d0 = voxelshape.max(Direction.Axis.Y);
-                    }
-                }
-
-                flag = true;
-                break;
-            }
-
-            blockpos = blockpos.below();
-        } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
-
-        if (flag) {
-            FangEntity fangEntity = new FangEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, pWarmUp, livingEntity);
-            if (livingEntity instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) livingEntity;
-                if (WandUtil.enchantedFocus(player)){
-                    if (WandUtil.getLevels(ModEnchantments.ABSORB.get(), player) != 0){
-                        fangEntity.setAbsorbing(true);
-                    }
-                }
-            }
-            livingEntity.level.addFreshEntity(fangEntity);
-        }
-
-    }
 }

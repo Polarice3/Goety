@@ -4,7 +4,6 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.events.IllagerSpawner;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.utils.InfamyHelper;
-import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

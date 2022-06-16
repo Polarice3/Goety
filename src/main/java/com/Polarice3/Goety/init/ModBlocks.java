@@ -6,7 +6,10 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.SignItem;
+import net.minecraft.item.TallBlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -56,6 +59,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> ARCA_BLOCK = BLOCKS.register("arca", ArcaBlock::new);
     public static final RegistryObject<Block> SOUL_LIGHT_BLOCK = BLOCKS.register("soul_light", SoulLightBlock::new);
     public static final RegistryObject<Block> GLOW_LIGHT_BLOCK = BLOCKS.register("glow_light", GlowLightBlock::new);
+    public static final RegistryObject<Block> PITHOS_BLOCK = BLOCKS.register("pithos", PithosBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -263,6 +267,8 @@ public class ModBlocks {
             () -> new BlockItemBase(GLOW_LIGHT_BLOCK.get()));
     public static final RegistryObject<Item> GRAVE_BRICK_WALL_ITEM = BLOCK_ITEMS.register("grave_bricks_wall",
             () -> new BlockItem(GRAVE_BRICK_WALL_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> PITHOS_ITEM = BLOCK_ITEMS.register("pithos",
+            () -> new BlockItemBase(PITHOS_BLOCK.get()));
     //TreeItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
             () -> new BlockItemBase(HAUNTED_PLANKS.get()));

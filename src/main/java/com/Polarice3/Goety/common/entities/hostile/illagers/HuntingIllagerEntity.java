@@ -3,10 +3,6 @@ package com.Polarice3.Goety.common.entities.hostile.illagers;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.StealTotemGoal;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.google.common.collect.Maps;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -29,11 +25,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.raid.Raid;
 
-import java.util.Map;
 import java.util.function.Predicate;
 
 public abstract class HuntingIllagerEntity extends SpellcastingIllagerEntity {

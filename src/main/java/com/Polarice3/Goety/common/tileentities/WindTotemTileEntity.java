@@ -1,12 +1,9 @@
 package com.Polarice3.Goety.common.tileentities;
 
-import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
-import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;

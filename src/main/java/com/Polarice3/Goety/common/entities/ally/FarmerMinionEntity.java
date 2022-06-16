@@ -5,7 +5,6 @@ import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.entities.ai.FarmingGoal;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;

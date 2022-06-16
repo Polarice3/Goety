@@ -113,7 +113,7 @@ public class IrkEntity extends MonsterEntity implements FlyingPhaseEntity {
             this.setLimitedLife(compound.getInt("LifeTicks"));
         }
 
-        compound.getInt("shootTime");
+        this.shootTime = compound.getInt("shootTime");
 
     }
 

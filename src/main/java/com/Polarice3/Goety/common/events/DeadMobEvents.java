@@ -50,13 +50,10 @@ public class DeadMobEvents {
         if (MainConfig.DeadSandMobs.get()) {
             if (event.getEntityLiving() instanceof MonsterEntity) {
                 MonsterEntity monster = (MonsterEntity) event.getEntityLiving();
-                if (event.getSpawnReason() == SpawnReason.NATURAL || event.getSpawnReason() == SpawnReason.CHUNK_GENERATION) {
-                    if (event.getWorld().getBlockState(monster.blockPosition().below()).is(ModTags.Blocks.DEAD_SANDS)) {
+                if (event.getWorld().getBlockState(monster.blockPosition().below()).is(ModTags.Blocks.DEAD_SANDS)) {
+                    if (event.getSpawnReason() == SpawnReason.NATURAL || event.getSpawnReason() == SpawnReason.CHUNK_GENERATION) {
                         MobUtil.deadSandConvert(monster, true);
-                    }
-                }
-                if (event.getSpawnReason() == SpawnReason.SPAWNER) {
-                    if (event.getWorld().getBlockState(monster.blockPosition().below()).is(ModTags.Blocks.DEAD_SANDS)) {
+                    } else {
                         if (event.getWorld().getRandom().nextFloat() < 0.55F) {
                             MobUtil.deadSandConvert(monster, true);
                         }
@@ -90,7 +87,7 @@ public class DeadMobEvents {
             }
         }
         if (livingEntity instanceof IDeadMob){
-            if (world.isRaining() && world.canSeeSky(livingEntity.blockPosition())){
+            if (BlockFinder.isWet(world, livingEntity.blockPosition())){
                 if (livingEntity.tickCount % 20 == 0){
                     livingEntity.hurt(DamageSource.DROWN, 2.0F);
                 }
