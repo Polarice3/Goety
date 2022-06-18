@@ -13,7 +13,7 @@
     {
       "rolls": {
         "min": 2.0,
-        "max": 3.0,
+        "max": 6.0,
         "type": "minecraft:uniform"
       },
       "entries": [
@@ -30,7 +30,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 2.0,
-                "max": 4.0,
+                "max": 6.0,
                 "type": "minecraft:uniform"
               }
             }
@@ -80,7 +80,7 @@
               }
             }
           ],
-          "name": "minecraft:redstone"
+          "name": "minecraft:lapis_lazuli"
         },
         {
           "type": "minecraft:item",
@@ -95,7 +95,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "min": 2.0,
-                "max": 4.0,
+                "max": 6.0,
                 "type": "minecraft:uniform"
               }
             }

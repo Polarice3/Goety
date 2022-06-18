@@ -185,7 +185,16 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                     }
                 }
             }
-            Explosion.Mode explodeMode = this.isDangerous() ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
+            Explosion.Mode explodeMode = Explosion.Mode.NONE;
+            if (this.isDangerous()){
+                if (this.getOwner() instanceof PlayerEntity){
+                    explodeMode = Explosion.Mode.DESTROY;
+                } else {
+                    if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner())){
+                        explodeMode = Explosion.Mode.DESTROY;
+                    }
+                }
+            }
             LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
             ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, explodeMode, lootMode);
             this.remove();

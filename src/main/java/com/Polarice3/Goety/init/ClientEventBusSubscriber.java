@@ -109,6 +109,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADOTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STORMUTIL.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SUMMON_APOSTLE.get(), TrapRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LASER.get(), TrapRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FANG_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MUTATE_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.WIND_TOTEM.get(), ModTileEntityRenderer::new);

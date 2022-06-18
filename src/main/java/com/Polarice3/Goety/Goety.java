@@ -17,6 +17,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
+import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyImp;
 import com.Polarice3.Goety.common.infamy.InfamyStore;
@@ -198,6 +199,7 @@ public class Goety {
         event.put(ModEntityType.BONE_LORD.get(), BoneLordEntity.setCustomAttributes().build());
         event.put(ModEntityType.SENTINEL.get(), SentinelEntity.setCustomAttributes().build());
         event.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
+        event.put(ModEntityType.LASER.get(), LaserEntity.setCustomAttributes().build());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

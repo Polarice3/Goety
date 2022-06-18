@@ -1,8 +1,12 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -13,24 +17,28 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
+import java.util.*;
 
 public class BoneLordEntity extends AbstractSkeletonEntity {
-    private SkullLordEntity skullLord;
+    private static final DataParameter<Optional<UUID>> SKULL_LORD = EntityDataManager.defineId(BoneLordEntity.class, DataSerializers.OPTIONAL_UUID);
 
     public BoneLordEntity(EntityType<? extends AbstractSkeletonEntity> p_i48555_1_, World p_i48555_2_) {
         super(p_i48555_1_, p_i48555_2_);
@@ -46,6 +54,7 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.0D)
                 .add(Attributes.ARMOR, 2.0D);
     }
 
@@ -58,6 +67,33 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
         this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
     }
 
+    protected void populateDefaultEquipmentEnchantments(DifficultyInstance pDifficulty) {
+        if (pDifficulty.getDifficulty() != Difficulty.PEACEFUL && pDifficulty.getDifficulty() != Difficulty.EASY) {
+            for (EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+                if (equipmentslottype.getType() == EquipmentSlotType.Group.ARMOR) {
+                    ItemStack itemstack = this.getItemBySlot(equipmentslottype);
+                    if (!itemstack.isEmpty()) {
+                        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(itemstack);
+                        switch (pDifficulty.getDifficulty()) {
+                            case NORMAL:
+                                map.putIfAbsent(Enchantments.ALL_DAMAGE_PROTECTION, 2);
+                            case HARD:
+                                map.putIfAbsent(Enchantments.ALL_DAMAGE_PROTECTION, 3);
+                        }
+                        EnchantmentHelper.setEnchantments(map, itemstack);
+                        this.setItemSlot(equipmentslottype, itemstack);
+                    }
+                }
+            }
+            if (pDifficulty.getDifficulty() == Difficulty.HARD){
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.MAINHAND);
+                if (!itemstack.isEmpty()){
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, EnchantmentHelper.enchantItem(this.random, this.getMainHandItem(), 30, false));
+                }
+            }
+        }
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -67,10 +103,18 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
             }
         } else {
             if (this.getSkullLord().isHalfHealth()){
-                this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 20, 1));
+                this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 20, 1, false, false));
+                Objects.requireNonNull(this.getAttribute(Attributes.KNOCKBACK_RESISTANCE)).setBaseValue(1.0D);
+            } else {
+                if (this.getAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE) > 0.0D) {
+                    Objects.requireNonNull(this.getAttribute(Attributes.KNOCKBACK_RESISTANCE)).setBaseValue(0.0D);
+                }
             }
             if (this.isInWall()){
                 this.moveTo(this.getSkullLord().position());
+            }
+            if (this.getSkullLord().getTarget() != null){
+                this.setTarget(this.getSkullLord().getTarget());
             }
         }
     }
@@ -80,7 +124,7 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if (pSource.getEntity() instanceof SkullLordEntity && pSource.getDirectEntity() instanceof SoulSkullEntity){
+        if (pSource.getEntity() == this.getSkullLord() && pSource.getDirectEntity() instanceof SoulSkullEntity){
             return false;
         } else {
             return super.hurt(pSource, pAmount);
@@ -136,25 +180,73 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
         return SoundEvents.SKELETON_STEP;
     }
 
-    public SkullLordEntity getSkullLord() {
-        return skullLord;
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SKULL_LORD, Optional.empty());
     }
 
-    public void setSkullLord(SkullLordEntity skullLord) {
-        this.skullLord = skullLord;
+    public void readAdditionalSaveData(CompoundNBT pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        UUID uuid;
+        if (pCompound.hasUUID("skullLord")) {
+            uuid = pCompound.getUUID("skullLord");
+        } else {
+            String s = pCompound.getString("skullLord");
+            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
+        }
+
+        if (uuid != null) {
+            try {
+                this.setSkullLordUUID(uuid);
+            } catch (Throwable ignored) {
+            }
+        }
+    }
+
+    public void addAdditionalSaveData(CompoundNBT pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        if (this.getSkullLordUUID() != null) {
+            pCompound.putUUID("skullLord", this.getSkullLordUUID());
+        }
+    }
+
+    @Nullable
+    public SkullLordEntity getSkullLord() {
+        try {
+            UUID uuid = this.getSkullLordUUID();
+            if (uuid != null){
+                if (EntityFinder.getLivingEntityByUuiD(uuid) instanceof SkullLordEntity){
+                    return (SkullLordEntity) EntityFinder.getLivingEntityByUuiD(uuid);
+                }
+            }
+            return null;
+        } catch (IllegalArgumentException illegalargumentexception) {
+            return null;
+        }
+    }
+
+    @Nullable
+    public UUID getSkullLordUUID() {
+        return this.entityData.get(SKULL_LORD).orElse(null);
+    }
+
+    public void setSkullLordUUID(UUID uuid){
+        this.entityData.set(SKULL_LORD, Optional.ofNullable(uuid));
+    }
+
+    public void setSkullLord(SkullLordEntity skullLord){
+        this.setSkullLordUUID(skullLord.getUUID());
     }
 
     public static class FollowHeadGoal extends Goal {
         private final BoneLordEntity boneLord;
         private LivingEntity owner;
-        private final IWorldReader level;
         private final PathNavigator navigation;
         private int timeToRecalcPath;
         private float oldWaterCost;
 
         public FollowHeadGoal(BoneLordEntity boneLord) {
             this.boneLord = boneLord;
-            this.level = boneLord.level;
             this.navigation = boneLord.getNavigation();
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         }
@@ -162,8 +254,6 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
         public boolean canUse() {
             LivingEntity livingentity = this.boneLord.getSkullLord();
             if (livingentity == null) {
-                return false;
-            } else if (livingentity.isSpectator()) {
                 return false;
             } else if (this.boneLord.distanceToSqr(livingentity) < (double)(100)) {
                 return false;

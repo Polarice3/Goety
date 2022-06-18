@@ -47,14 +47,12 @@ public class DesiccatedSkullEntity extends DamagingProjectileEntity {
 
     public void tick() {
         super.tick();
-        if (this.getOwner() instanceof IDeadMob) {
-            int age = this.isDangerous() ? 100 : 40;
-            if (this.tickCount % age == 0) {
-                if (!this.level.isClientSide) {
-                    DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
-                    ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? 1.75F : 1.0F, explosion$mode);
-                    this.remove();
-                }
+        int age = this.isDangerous() ? 100 : 40;
+        if (this.tickCount % age == 0) {
+            if (!this.level.isClientSide) {
+                DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
+                ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? 1.75F : 1.0F, explosion$mode);
+                this.remove();
             }
         }
         Vector3d vector3d = this.getDeltaMovement();

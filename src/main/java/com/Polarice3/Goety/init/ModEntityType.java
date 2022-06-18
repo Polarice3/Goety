@@ -419,7 +419,6 @@ public class ModEntityType {
 
     public static final RegistryObject<EntityType<SkullLordEntity>> SKULL_LORD = ENTITY_TYPES.register("skull_lord",
             () -> EntityType.Builder.of(SkullLordEntity::new, EntityClassification.MONSTER)
-                    .fireImmune()
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "skull_lord").toString()));
@@ -482,6 +481,13 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "summon_apostle").toString()));
+
+    public static final RegistryObject<EntityType<LaserEntity>> LASER = ENTITY_TYPES.register("laser",
+            () -> EntityType.Builder.of(LaserEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "laser").toString()));
 
     public static void EntitySpawnPlacementRegistry() {
         EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);

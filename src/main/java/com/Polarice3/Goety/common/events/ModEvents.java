@@ -688,18 +688,19 @@ public class ModEvents {
         LivingEntity entity = event.getEntityLiving();
         if (event.getLookingEntity() instanceof LivingEntity){
             LivingEntity looker = (LivingEntity) event.getLookingEntity();
+            boolean mob = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F;
             if (RobeArmorFinder.FindNecroHelm(entity)){
-                if (looker.getMobType() == CreatureAttribute.UNDEAD){
+                if (mob){
                     event.modifyVisibility(0.5);
                 }
             }
             if (RobeArmorFinder.FindNecroArmor(entity)){
-                if (looker.getMobType() == CreatureAttribute.UNDEAD){
+                if (mob){
                     event.modifyVisibility(0.3);
                 }
             }
             if (RobeArmorFinder.FindNecroBootsofWander(entity)){
-                if (looker.getMobType() == CreatureAttribute.UNDEAD){
+                if (mob){
                     event.modifyVisibility(0.2);
                 }
             }
