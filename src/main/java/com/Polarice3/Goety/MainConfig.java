@@ -444,7 +444,7 @@ public class MainConfig {
                 .define("minionMasterImmune", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
                 .define("undeadMinionHeal", true);
-        TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Arachnea Robes, Default: true")
+        TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Fel Helm, Default: true")
                 .define("loyalSpiderHeal", true);
         RoyalSpiderMinions = BUILDER.comment("Whether Spiders will follow Royal Spiders around, Default: true")
                 .define("royalSpiderMinions", true);
@@ -496,7 +496,7 @@ public class MainConfig {
         BUILDER.push("Spoilers");
         LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 1")
                 .defineInRange("lichHealCost", 1, 0, Integer.MAX_VALUE);
-        LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Arachnea Helm will no longer give Blindness during day, Default: true")
+        LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Fel Helm will no longer give Blindness during day, Default: true")
                 .define("lichNightVision", true);
         LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")
                 .define("lichUndeadFriendly", true);

@@ -8,6 +8,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -17,8 +19,8 @@ public class CultistRobeArmor extends ArmorItem {
         super(materialIn, slot, builderIn);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
-    @Override
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         ApostleRobeModel model = new ApostleRobeModel(1.0F);
         model.hat.visible = armorSlot == EquipmentSlotType.HEAD;
@@ -35,8 +37,8 @@ public class CultistRobeArmor extends ArmorItem {
         return (A) model;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
-    @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         return "goety:textures/models/armor/cultistrobearmor.png";
     }

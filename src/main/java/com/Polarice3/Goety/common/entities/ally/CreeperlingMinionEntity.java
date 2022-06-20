@@ -36,6 +36,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.EnumSet;
 
+@OnlyIn(
+        value = Dist.CLIENT,
+        _interface = IChargeableMob.class
+)
 public class CreeperlingMinionEntity extends SummonedEntity implements IChargeableMob {
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(CreeperlingMinionEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> DATA_SWELL_DIR = EntityDataManager.defineId(CreeperlingMinionEntity.class, DataSerializers.INT);

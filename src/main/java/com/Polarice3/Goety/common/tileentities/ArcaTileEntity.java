@@ -17,6 +17,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -108,6 +110,7 @@ public class ArcaTileEntity extends TileEntity implements ITickableTileEntity {
         return (PlayerEntity) this.getTrueOwner();
     }
 
+    @OnlyIn(Dist.CLIENT)
     public void makeWorkParticles() {
         if (SEHelper.getSESouls(getPlayer()) <= 0){
             return;

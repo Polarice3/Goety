@@ -26,14 +26,11 @@ public class SoulLightTileEntity extends TileEntity implements ITickableTileEnti
 
     public void tick(){
         ++this.tickCount;
-        if (this.getLevel() instanceof ClientWorld) {
-            ClientWorld clientWorld = (ClientWorld) this.getLevel();
-            if (this.tickCount % 8 == 0) {
-                double d0 = (double) this.worldPosition.getX() + 0.5D;
-                double d1 = (double) this.worldPosition.getY() + 0.5D;
-                double d2 = (double) this.worldPosition.getZ() + 0.5D;
-                new ParticleUtil(clientWorld, ModParticleTypes.SOUL_LIGHT_EFFECT.get(), d0, d1, d2, 0, 0, 0);
-            }
+        if (this.tickCount % 8 == 0) {
+            double d0 = (double) this.worldPosition.getX() + 0.5D;
+            double d1 = (double) this.worldPosition.getY() + 0.5D;
+            double d2 = (double) this.worldPosition.getZ() + 0.5D;
+            new ParticleUtil(this.getLevel(), ModParticleTypes.SOUL_LIGHT_EFFECT.get(), d0, d1, d2, 0, 0, 0);
         }
     }
 

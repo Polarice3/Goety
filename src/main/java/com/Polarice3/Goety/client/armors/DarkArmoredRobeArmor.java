@@ -15,6 +15,8 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -57,8 +59,8 @@ public class DarkArmoredRobeArmor extends ArmorItem {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
-    @Override
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         RobeModel model = new RobeModel(1.0F);
         model.hat.visible = armorSlot == EquipmentSlotType.HEAD;
@@ -84,8 +86,8 @@ public class DarkArmoredRobeArmor extends ArmorItem {
         return armorItem.getMaterial();
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
-    @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         if (stack.getItem() instanceof ArmorItem){
             ArmorItem armorItem = (ArmorItem) stack.getItem();
@@ -93,8 +95,8 @@ public class DarkArmoredRobeArmor extends ArmorItem {
                 return "goety:textures/models/armor/darkarmoredrobearmor.png";
             } else if (getArmorMaterial(armorItem) == ModArmorMaterial.ARMOREDNECROTURGE){
                 return "goety:textures/models/armor/necroarmoredrobearmor.png";
-            } else if (getArmorMaterial(armorItem) == ModArmorMaterial.ARMOREDARACHNOTURGE){
-                return "goety:textures/models/armor/arachnoarmoredrobearmor.png";
+            } else if (getArmorMaterial(armorItem) == ModArmorMaterial.ARMOREDFELTURGE){
+                return "goety:textures/models/armor/felarmoredrobearmor.png";
             } else {
                 return "goety:textures/models/armor/darkarmoredrobearmor.png";
             }

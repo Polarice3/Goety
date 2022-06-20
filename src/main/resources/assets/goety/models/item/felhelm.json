@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "goety:items/arachnoarmoredrobe"
+    "layer0": "goety:items/felhelm"
   }
 }

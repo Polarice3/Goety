@@ -38,7 +38,7 @@ public class CreeperlingSpell extends ChargingSpells{
         summonedentity.setOwnerId(entityLiving.getUUID());
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
         summonedentity.setLimitedLife(180);
-        if (RobeArmorFinder.FindArachnoSet(entityLiving)) {
+        if (RobeArmorFinder.FindFelSet(entityLiving)) {
             Collection<EffectInstance> collection = entityLiving.getActiveEffects();
             if (!collection.isEmpty()) {
                 for (EffectInstance effectinstance : collection) {
@@ -70,7 +70,7 @@ public class CreeperlingSpell extends ChargingSpells{
             summonedentity.setUpgraded();
             summonedentity.moveTo(blockpos, 0.0F, 0.0F);
             summonedentity.setLimitedLife(360);
-            if (RobeArmorFinder.FindArachnoSet(entityLiving)) {
+            if (RobeArmorFinder.FindFelSet(entityLiving)) {
                 Collection<EffectInstance> collection = entityLiving.getActiveEffects();
                 if (!collection.isEmpty()) {
                     for (EffectInstance effectinstance : collection) {

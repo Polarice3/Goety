@@ -30,7 +30,7 @@ public class TempWebBlock extends ContainerBlock implements net.minecraftforge.c
     public void entityInside(BlockState pState, World pLevel, BlockPos pPos, Entity pEntity) {
         if (pEntity instanceof LivingEntity){
             LivingEntity livingEntity = (LivingEntity) pEntity;
-            if (RobeArmorFinder.FindArachnoArmor(livingEntity)){
+            if (RobeArmorFinder.FindFelArmor(livingEntity)){
                 pEntity.makeStuckInBlock(pState, new Vector3d(1.5D, 1.05D, 1.5D));
             } else {
                 pEntity.makeStuckInBlock(pState, new Vector3d(0.25D, (double)0.05F, 0.25D));

@@ -1,8 +1,10 @@
 package com.Polarice3.Goety;
 
+import com.Polarice3.Goety.client.ClientProxy;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.CommonProxy;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.*;
@@ -58,6 +60,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -85,13 +88,7 @@ import static org.apache.http.params.CoreProtocolPNames.PROTOCOL_VERSION;
 public class Goety {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "goety";
-
-    public static SimpleChannel channel = NetworkRegistry.ChannelBuilder
-            .named(location("general"))
-            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-            .networkProtocolVersion(() -> PROTOCOL_VERSION)
-            .simpleChannel();
+    public static final ModProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static ResourceLocation location(String path) {
         return new ResourceLocation(MOD_ID, path);

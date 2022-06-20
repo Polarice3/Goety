@@ -45,6 +45,19 @@ public class EntityFinder {
         return Optional.empty();
     }
 
+    public static PlayerEntity getServerPlayersByUuiD(UUID uuid) {
+        return getServerPlayersByUuiD(ServerLifecycleHooks.getCurrentServer(), uuid);
+    }
+
+    public static PlayerEntity getServerPlayersByUuiD(MinecraftServer server, UUID uuid){
+        if (uuid != null && server != null) {
+            for (ServerWorld world : server.getAllLevels()) {
+                return world.getPlayerByUUID(uuid);
+            }
+        }
+        return null;
+    }
+
     public static LivingEntity getLivingEntityByUuiD(UUID uuid) {
         return getLivingEntityByUuiD(ServerLifecycleHooks.getCurrentServer(), uuid);
     }

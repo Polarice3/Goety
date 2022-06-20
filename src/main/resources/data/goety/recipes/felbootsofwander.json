@@ -9,19 +9,22 @@
   "duration": 10,
   "ingredients": [
     {
-      "tag": "forge:string"
+      "tag": "forge:slimeballs"
     },
     {
-      "tag": "forge:string"
+      "tag": "forge:slimeballs"
     },
     {
-      "item": "minecraft:sugar"
+      "tag": "forge:slimeballs"
+    },
+    {
+      "tag": "forge:slimeballs"
     },
     {
       "tag": "forge:gems/lapis"
     }
   ],
   "result": {
-    "item": "goety:arachnobootsofwander"
+    "item": "goety:felbootsofwander"
   }
 }

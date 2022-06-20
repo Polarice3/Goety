@@ -17,6 +17,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -70,15 +72,14 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
     @Override
     public void tick() {
         assert this.level != null;
+        int i = this.worldPosition.getX();
+        int j = this.worldPosition.getY();
+        int k = this.worldPosition.getZ();
+        int j1 = this.levels;
         if (!this.level.isClientSide()) {
-            int i = this.worldPosition.getX();
-            int j = this.worldPosition.getY();
-            int k = this.worldPosition.getZ();
-            int j1 = this.levels;
             this.checkBeaconLevel(i, j, k);
             if (j1 >= 3) {
                 this.updateClientTarget();
-                this.SpawnParticles();
                 long t = this.level.getGameTime();
                 if (t % 40L == 0L && this.target != null){
                     this.activated = 20;
@@ -92,6 +93,11 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
                 }
             } else {
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
+            }
+        }
+        if (this.level.isClientSide()){
+            if (j1 >= 3) {
+                this.SpawnParticles();
             }
         }
     }
@@ -129,6 +135,7 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
         return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void SpawnParticles(){
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();

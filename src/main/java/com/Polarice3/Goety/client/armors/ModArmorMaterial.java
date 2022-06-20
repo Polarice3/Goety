@@ -18,7 +18,7 @@ public enum ModArmorMaterial implements IArmorMaterial {
             SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
     NECROTURGE(Goety.MOD_ID + ":necroturge", 5, new int[] {1, 2, 2, 1}, 25,
             SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
-    ARACHNOTURGE(Goety.MOD_ID + ":arachnoturge", 5, new int[] {1, 2, 2, 1}, 25,
+    FELTURGE(Goety.MOD_ID + ":felturge", 5, new int[] {1, 2, 2, 1}, 25,
             SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
     DARKARMOREDMAGE(Goety.MOD_ID + ":darkarmoredmage", 15, new int[]{2, 5, 6, 2}, 25,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.CURSED_INGOT.get());
@@ -26,7 +26,7 @@ public enum ModArmorMaterial implements IArmorMaterial {
     ARMOREDNECROTURGE(Goety.MOD_ID + ":armorednecroturge", 15, new int[]{2, 5, 6, 2}, 25,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.CURSED_INGOT.get());
     }),
-    ARMOREDARACHNOTURGE(Goety.MOD_ID + ":armoredarachnoturge", 15, new int[]{2, 5, 6, 2}, 25,
+    ARMOREDFELTURGE(Goety.MOD_ID + ":armoredfelturge", 15, new int[]{2, 5, 6, 2}, 25,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.CURSED_INGOT.get());
     });
 

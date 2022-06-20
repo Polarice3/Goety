@@ -12,7 +12,7 @@ public abstract class ChargingSpells extends Spells{
     }
 
     public boolean ArachnoPower(LivingEntity entityLiving){
-        return RobeArmorFinder.FindArachnoArmor(entityLiving);
+        return RobeArmorFinder.FindFelArmor(entityLiving);
     }
 
 

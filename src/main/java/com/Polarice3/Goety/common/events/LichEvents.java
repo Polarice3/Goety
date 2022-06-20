@@ -177,19 +177,6 @@ public class LichEvents {
     }
 
     @SubscribeEvent
-    public static void renderHUD(final RenderGameOverlayEvent.Pre event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.FOOD) {
-            return;
-        }
-
-        final PlayerEntity player = Minecraft.getInstance().player;
-
-        if (player != null && LichdomHelper.isLich(player)) {
-            event.setCanceled(true);
-        }
-    }
-
-    @SubscribeEvent
     public static void SpecialPotionEffects(PotionEvent.PotionApplicableEvent event){
         if (event.getEntityLiving() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();

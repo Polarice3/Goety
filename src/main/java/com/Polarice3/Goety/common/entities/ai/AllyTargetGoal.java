@@ -20,7 +20,7 @@ public class AllyTargetGoal<T extends LivingEntity> extends NearestAttackableTar
         super(ownedEntity, pClass, 5, false, false, (entity) ->
                 entity instanceof IMob
                         && !(entity instanceof CreeperEntity && ownedEntity.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
-                        && !(entity instanceof SpiderEntity && ownedEntity.getTrueOwner() != null && RobeArmorFinder.FindArachnoHelm(ownedEntity.getTrueOwner()))
+                        && !(entity instanceof SpiderEntity && ownedEntity.getTrueOwner() != null && RobeArmorFinder.FindFelHelm(ownedEntity.getTrueOwner()))
                         && !(entity.getMobType() == CreatureAttribute.UNDEAD && ownedEntity.getTrueOwner() != null && ownedEntity.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) ownedEntity.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
                         && !(entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() == ownedEntity.getTrueOwner()));
     }
@@ -29,7 +29,7 @@ public class AllyTargetGoal<T extends LivingEntity> extends NearestAttackableTar
         super(loyalSpiderEntity, pClass, 5, false, false, (entity) ->
                 entity instanceof IMob
                         && !(entity instanceof CreeperEntity && loyalSpiderEntity.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
-                        && !(entity instanceof SpiderEntity && loyalSpiderEntity.getTrueOwner() != null && RobeArmorFinder.FindArachnoHelm(loyalSpiderEntity.getTrueOwner()))
+                        && !(entity instanceof SpiderEntity && loyalSpiderEntity.getTrueOwner() != null && RobeArmorFinder.FindFelHelm(loyalSpiderEntity.getTrueOwner()))
                         && !(entity.getMobType() == CreatureAttribute.UNDEAD && loyalSpiderEntity.getTrueOwner() != null && loyalSpiderEntity.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) loyalSpiderEntity.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
                         && !(entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() == loyalSpiderEntity.getTrueOwner()));
     }

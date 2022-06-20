@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.common.lichdom;
 
-import net.minecraft.client.Minecraft;
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -40,9 +40,7 @@ public class LichUpdatePacket {
         ctx.get().enqueueWork(() -> {
             assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
 
-            World world = Minecraft.getInstance().level;
-            assert world != null;
-            PlayerEntity player = world.getPlayerByUUID(packet.PlayerUUID);
+            PlayerEntity player = Goety.PROXY.getPlayer();
             if (player != null) {
                 player.getCapability(LichProvider.CAPABILITY).ifPresent((lichdom) -> {
                     LichProvider.CAPABILITY.getStorage().readNBT(LichProvider.CAPABILITY, lichdom, null, packet.tag);

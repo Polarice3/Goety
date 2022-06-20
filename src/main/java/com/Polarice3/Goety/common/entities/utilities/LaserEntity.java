@@ -148,7 +148,7 @@ public class LaserEntity extends MobEntity {
                     for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2.0F))) {
                         if (livingEntity != this.getSkullLord() && livingEntity != this) {
                             if (this.getBoundingBox().intersects(livingEntity.getBoundingBox())) {
-                                this.getTarget().hurt(DamageSource.indirectMagic(this, this.getSkullLord()), (float) this.getSkullLord().getAttributeBaseValue(Attributes.ATTACK_DAMAGE)/2);
+                                this.getTarget().hurt(DamageSource.indirectMagic(this, this.getSkullLord()), (float) this.getSkullLord().getAttributeBaseValue(Attributes.ATTACK_DAMAGE));
                                 this.getTarget().addEffect(new EffectInstance(ModEffects.CURSED.get(), 100));
                             }
                         }

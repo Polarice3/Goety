@@ -36,4 +36,7 @@ public class ModParticleTypes {
 
     public static final RegistryObject<BasicParticleType> DEAD_SAND_EXPLOSION_EMITTER = PARTICLE_TYPES.register("deadsandsplosion_emitter",
             () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> LASER_GATHER = PARTICLE_TYPES.register("laser",
+            () -> new BasicParticleType(true));
 }

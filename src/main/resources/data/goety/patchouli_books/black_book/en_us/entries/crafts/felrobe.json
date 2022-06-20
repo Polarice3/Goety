@@ -1,0 +1,36 @@
+{
+  "name": "Fel Robes",
+  "icon": "goety:felhelm",
+  "category": "goety:crafts",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The wild holds many creatures that are not from the grave. With this set of Robes, you can commune and perhaps control these beasts instead of hiding from them."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:felhelm"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Spiders, you love Spiders as well as any other creepy crawlies like Silverfishes, hence why you've crafted yourself a specialize Helm to convey your love for them. Anthropods will see your love for them and will love you back, so long as you don't hurt them! The Fel Helm will allows you to see better in the Dark, but will Blind you in Daylight."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:felrobe"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "With Shrubbery and an Explosive personality, this Robe will calm any Creepers around you, making them uninterested in trying to talk to you and exploding in the process."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:felbootsofwander"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Slimes are bouncy, you want to be bouncy too. With these boots, you won't be splattered on the ground after falling but you will bounce off it as if the ground was made of Slime. The Slimes sees your bouncy-ness and will have no quarrel with you."
+    }
+  ]
+}

@@ -29,7 +29,6 @@ public class ModNetwork {
         INSTANCE.registerMessage(nextID(), SEUpdatePacket.class, SEUpdatePacket::encode, SEUpdatePacket::decode, SEUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), SpiderLevelsUpdatePacket.class, SpiderLevelsUpdatePacket::encode, SpiderLevelsUpdatePacket::decode, SpiderLevelsUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), EntityUpdatePacket.class, EntityUpdatePacket::encode, EntityUpdatePacket::decode, EntityUpdatePacket::consume);
-        INSTANCE.registerMessage(nextID(), TileEntityUpdatePacket.class, TileEntityUpdatePacket::encode, TileEntityUpdatePacket::decode, TileEntityUpdatePacket::consume);
     }
 
     public static <MSG> void sendTo(PlayerEntity player, MSG msg) {

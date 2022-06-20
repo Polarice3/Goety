@@ -5,12 +5,14 @@ import com.Polarice3.Goety.client.gui.screen.inventory.FocusBagScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.SoulItemScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.WandandBagScreen;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
+import com.Polarice3.Goety.client.particles.GatheringParticle;
 import com.Polarice3.Goety.client.particles.GlowingParticle;
 import com.Polarice3.Goety.client.particles.HugeDSEParticle;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
+import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -25,6 +27,8 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -141,6 +145,11 @@ public class ClientEventBusSubscriber {
         event.enqueueWork(() -> {
             Atlases.addWoodType(ModWoodType.HAUNTED);
         });
+
+        ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("souls"),
+                (stack, world, living) -> ((float) GoldTotemItem.currentSouls(stack)) / GoldTotemItem.MAXSOULS);
+        ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("activated"),
+                (stack, world, living) -> GoldTotemItem.isActivated(stack) ? 1.0F : 0.0F);
     }
 
     @SubscribeEvent
@@ -161,6 +170,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.GLOW_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
+        particles.register(ModParticleTypes.LASER_GATHER.get(), GatheringParticle.Factory::new);
     }
 
 }

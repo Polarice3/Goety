@@ -108,7 +108,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             }
         }
         if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
-            if (RobeArmorFinder.FindArachnoBootsofWander(this.getTrueOwner())) {
+            if (RobeArmorFinder.FindFelBootsofWander(this.getTrueOwner())) {
                 if (this.tickCount % 40 == 0) {
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 200, 0, false, false));
                 }
@@ -124,7 +124,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         }
         if (MainConfig.TamedSpiderHeal.get() && this.getHealth() < this.getMaxHealth()){
             if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
-                if (RobeArmorFinder.FindArachnoSet(this.getTrueOwner())) {
+                if (RobeArmorFinder.FindFelHelm(this.getTrueOwner())) {
                     PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
                     ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
                     int SoulCost = MainConfig.TamedSpiderHealCost.get();
@@ -427,7 +427,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
     }
 
     public double getCustomJump() {
-        return RobeArmorFinder.FindArachnoBootsofWander(this.getTrueOwner()) ? 1.0D : 0.7D;
+        return RobeArmorFinder.FindFelBootsofWander(this.getTrueOwner()) ? 1.0D : 0.7D;
     }
 
     public boolean isJumping() {

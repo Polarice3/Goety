@@ -42,10 +42,6 @@ public class GoldTotemItem extends Item {
 
     public GoldTotemItem() {
         super(new Properties().tab(Goety.TAB).stacksTo(1).rarity(Rarity.RARE));
-        ItemModelsProperties.register(this, new ResourceLocation("souls"),
-                (stack, world, living) -> ((float) currentSouls(stack)) / MAXSOULS);
-        ItemModelsProperties.register(this, new ResourceLocation("activated"),
-                (stack, world, living) -> isActivated(stack) ? 1.0F : 0.0F);
     }
 
     @Override

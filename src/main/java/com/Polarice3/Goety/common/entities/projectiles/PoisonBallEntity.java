@@ -60,7 +60,7 @@ public class PoisonBallEntity extends ThrowableEntity {
                         } else {
                             livingTarget.addEffect(new EffectInstance(Effects.POISON, 900));
                         }
-                        if (RobeArmorFinder.FindArachnoSet(LivingOwner)){
+                        if (RobeArmorFinder.FindFelSet(LivingOwner)){
                             livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1800));
                         }
                     }

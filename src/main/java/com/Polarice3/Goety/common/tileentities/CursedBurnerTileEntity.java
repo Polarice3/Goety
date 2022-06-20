@@ -22,6 +22,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -150,6 +152,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void makeParticles() {
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();
@@ -177,6 +180,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void makeWorkParticles() {
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();

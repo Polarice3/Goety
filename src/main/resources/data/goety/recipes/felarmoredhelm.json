@@ -2,7 +2,7 @@
   "type": "goety:ritual",
   "ritual_type": "goety:craft",
   "activation_item": {
-    "item": "goety:arachnohelm"
+    "item": "goety:felhelm"
   },
   "craftType": "forge",
   "soulCost": 1,
@@ -22,6 +22,6 @@
     }
   ],
   "result": {
-    "item": "goety:arachnoarmoredhelm"
+    "item": "goety:felarmoredhelm"
   }
 }

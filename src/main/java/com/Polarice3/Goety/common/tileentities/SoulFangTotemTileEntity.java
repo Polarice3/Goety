@@ -27,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -136,11 +138,11 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
     @Override
     public void tick() {
         assert this.level != null;
+        int i = this.worldPosition.getX();
+        int j = this.worldPosition.getY();
+        int k = this.worldPosition.getZ();
+        int j1 = this.levels;
         if (!this.level.isClientSide()) {
-            int i = this.worldPosition.getX();
-            int j = this.worldPosition.getY();
-            int k = this.worldPosition.getZ();
-            int j1 = this.levels;
             this.checkBeaconLevel(i, j, k);
             if (j1 >= 3) {
                 this.updateClientTarget();
@@ -158,6 +160,11 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                 }
             } else {
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
+            }
+        }
+        if (this.level.isClientSide()){
+            if (j1 >= 3) {
+                this.SpawnParticles();
             }
         }
     }
@@ -189,6 +196,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         super.setRemoved();
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void SpawnParticles(){
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();

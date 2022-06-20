@@ -6,7 +6,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class SoundUtil {
     public SoundUtil(BlockPos pPos, SoundEvent pSound, SoundCategory pCategory, float pVolume, float pPitch) {
         Minecraft MINECRAFT = Minecraft.getInstance();

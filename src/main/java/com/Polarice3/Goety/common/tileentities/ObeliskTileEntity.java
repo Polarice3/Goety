@@ -18,6 +18,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -48,7 +50,6 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
             int i = this.worldPosition.getX();
             int j = this.worldPosition.getY();
             int k = this.worldPosition.getZ();
-            this.SpawnParticles();
             List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(8.0D, 8.0D, 8.0D));
             if (list.size() < 8){
                 if (this.spawnDelay > 0) {
@@ -77,8 +78,12 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ObeliskBlock.POWERED, false), 3);
             }
         }
+        if (this.level.isClientSide()){
+            this.SpawnParticles();
+        }
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void SpawnParticles(){
         BlockPos blockpos = this.getBlockPos();
         Minecraft MINECRAFT = Minecraft.getInstance();

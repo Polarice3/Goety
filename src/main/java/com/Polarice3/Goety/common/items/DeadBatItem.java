@@ -44,7 +44,7 @@ public class DeadBatItem extends Item {
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand){
         World world = player.getEntity().level;
         int random = world.random.nextInt(3);
-        if (RobeArmorFinder.FindArachnoSet(player)) {
+        if (RobeArmorFinder.FindFelSet(player)) {
             if (target instanceof SpiderEntity) {
                 if (!world.isClientSide && target.isAlive()) {
                     if (random == 0){

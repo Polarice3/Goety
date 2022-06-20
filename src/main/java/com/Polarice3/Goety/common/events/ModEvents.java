@@ -8,7 +8,6 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
-import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
@@ -132,12 +131,6 @@ public class ModEvents {
                 }
             }
 
-        }
-        if (event.getWorld() instanceof ClientWorld){
-            if (entity instanceof LocustEntity){
-                Minecraft minecraft = Minecraft.getInstance();
-                minecraft.getSoundManager().queueTickingSound(new LocustSound((LocustEntity) entity));
-            }
         }
         if (entity instanceof StormEntity){
             if (!entity.level.isClientSide){
@@ -282,21 +275,6 @@ public class ModEvents {
                 if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
                     event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
                 }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void renderSoulEnergyHUD(final RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
-
-        final PlayerEntity player = Minecraft.getInstance().player;
-
-        if (player != null) {
-            if (SEHelper.getSEActive(player)){
-                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
-            } else if (!GoldTotemFinder.FindTotem(player).isEmpty()) {
-                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
             }
         }
     }
@@ -514,7 +492,7 @@ public class ModEvents {
                 }
             }
         }
-        if (RobeArmorFinder.FindArachnoHelm(player)) {
+        if (RobeArmorFinder.FindFelHelm(player)) {
             boolean blind = false;
             if (!world.isClientSide && world.isDay()) {
                 float f = player.getBrightness();
@@ -546,11 +524,8 @@ public class ModEvents {
                 }
             }
         }
-        if (RobeArmorFinder.FindArachnoArmor(player)){
+        if (RobeArmorFinder.FindFelArmor(player)){
             BlockFinder.WebMovement(player);
-        }
-        if (RobeArmorFinder.FindArachnoBootsofWander(player)){
-            BlockFinder.ClimbAnyWall(player);
         }
         IInfamy infamy = InfamyHelper.getCapability(player);
         int i = infamy.getInfamy();
@@ -572,8 +547,25 @@ public class ModEvents {
     public static void OnLivingFall(LivingFallEvent event){
         if (event.getEntity() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntity();
-            if (RobeArmorFinder.FindBootsofWander(player)){
+            if (RobeArmorFinder.FindNecroBootsofWander(player) || RobeArmorFinder.FindBootsofWander(player)){
                 event.setDistance(event.getDistance()/2);
+            }
+            if (RobeArmorFinder.FindFelBootsofWander(player)){
+                Vector3d vector3d = player.getDeltaMovement();
+                event.setDamageMultiplier(0);
+                if (!player.isCrouching()) {
+                    if (event.getDistance() >= 1.27F) {
+                        double jump = MathHelper.sqrt(event.getDistance())/2;
+                        player.setDeltaMovement(vector3d.x, jump, vector3d.z);
+                        player.hurtMarked = true;
+                        player.playSound(SoundEvents.SLIME_BLOCK_FALL, 0.5F, 1.0F);
+                        if (!player.level.isClientSide()) {
+                            player.hasImpulse = true;
+                            event.setCanceled(true);
+                            player.setOnGround(false);
+                        }
+                    }
+                }
             }
         }
 
@@ -597,18 +589,40 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void TargetSelection(LivingSetAttackTargetEvent event){
-        if (event.getEntityLiving() instanceof SpiderEntity){
-            if (event.getTarget() != null) {
-                if (RobeArmorFinder.FindArachnoHelm(event.getTarget())) {
-                    ((SpiderEntity) event.getEntityLiving()).setTarget(null);
+        LivingEntity livingEntity = event.getEntityLiving();
+        LivingEntity target = event.getTarget();
+        if (livingEntity instanceof MobEntity){
+            if (livingEntity.getMobType() == CreatureAttribute.UNDEAD || livingEntity instanceof CreeperEntity){
+                if (target != null){
+                    if (target instanceof ApostleEntity){
+                        ((MobEntity) livingEntity).setTarget(null);
+                    }
                 }
             }
-        }
-        if (event.getEntityLiving() instanceof MonsterEntity){
-            if (event.getEntityLiving().getMobType() == CreatureAttribute.UNDEAD || event.getEntityLiving() instanceof CreeperEntity){
-                if (event.getTarget() != null){
-                    if (event.getTarget() instanceof ApostleEntity){
-                        ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+            if (livingEntity.getMobType() == CreatureAttribute.ARTHROPOD){
+                if (target != null){
+                    if (RobeArmorFinder.FindFelHelm(target)){
+                        if (livingEntity.getLastHurtByMob() != target){
+                            ((MobEntity) livingEntity).setTarget(null);
+                        }
+                    }
+                }
+            }
+            if (livingEntity instanceof CreeperEntity){
+                if (target != null){
+                    if (RobeArmorFinder.FindFelArmor(target)){
+                        if (livingEntity.getLastHurtByMob() != target){
+                            ((MobEntity) livingEntity).setTarget(null);
+                        }
+                    }
+                }
+            }
+            if (livingEntity instanceof SlimeEntity){
+                if (target != null){
+                    if (RobeArmorFinder.FindFelBootsofWander(target)){
+                        if (livingEntity.getLastHurtByMob() != target){
+                            ((MobEntity) livingEntity).setTarget(null);
+                        }
                     }
                 }
             }
@@ -625,19 +639,21 @@ public class ModEvents {
             int i = effectInstance.getAmplifier() + 1;
             event.setAmount(event.getAmount() * (1.0F + i));
         }
-        if (RobeArmorFinder.FindArachnoArmor(victim)){
-            if (attacker != null) {
-                BlockPos blockpos = victim.blockPosition();
-                SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), victim.level);
-                summonedentity.setOwnerId(victim.getUUID());
-                summonedentity.moveTo(blockpos, 0.0F, 0.0F);
-                summonedentity.setLimitedLife(180);
-                victim.level.addFreshEntity(summonedentity);
-            }
+        if (RobeArmorFinder.FindFelArmor(victim)){
             if (attacker instanceof CreeperlingMinionEntity){
                 CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) attacker;
                 if (creeperlingMinion.getTrueOwner() == victim){
                     event.setAmount(0);
+                }
+            }
+            if (event.getSource().isExplosion()){
+                event.setAmount(event.getAmount()/2);
+            }
+        }
+        if (RobeArmorFinder.FindFelBootsofWander(victim)){
+            if (attacker instanceof SlimeEntity){
+                if (((SlimeEntity) attacker).getTarget() != victim){
+                    event.setCanceled(true);
                 }
             }
         }
@@ -688,19 +704,19 @@ public class ModEvents {
         LivingEntity entity = event.getEntityLiving();
         if (event.getLookingEntity() instanceof LivingEntity){
             LivingEntity looker = (LivingEntity) event.getLookingEntity();
-            boolean mob = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F;
+            boolean undead = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F;
             if (RobeArmorFinder.FindNecroHelm(entity)){
-                if (mob){
+                if (undead){
                     event.modifyVisibility(0.5);
                 }
             }
             if (RobeArmorFinder.FindNecroArmor(entity)){
-                if (mob){
+                if (undead){
                     event.modifyVisibility(0.3);
                 }
             }
             if (RobeArmorFinder.FindNecroBootsofWander(entity)){
-                if (mob){
+                if (undead){
                     event.modifyVisibility(0.2);
                 }
             }
@@ -724,7 +740,7 @@ public class ModEvents {
         }
         if (killed instanceof BatEntity){
             if (killer instanceof LivingEntity) {
-                if (RobeArmorFinder.FindArachnoSet((LivingEntity) killer)) {
+                if (RobeArmorFinder.FindFelHelm((LivingEntity) killer)) {
                     if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                         killed.spawnAtLocation(new ItemStack(ModItems.DEADBAT.get()));
                     }

@@ -2,32 +2,29 @@
   "type": "goety:ritual",
   "ritual_type": "goety:craft",
   "activation_item": {
-    "item": "goety:darkhelm"
+    "item": "goety:darkrobe"
   },
   "craftType": "animalis",
   "soulCost": 1,
   "duration": 10,
   "ingredients": [
     {
-      "item": "minecraft:spider_eye"
+      "tag": "minecraft:leaves"
     },
     {
-      "item": "minecraft:spider_eye"
-    },
-    {
-      "item": "minecraft:spider_eye"
-    },
-    {
-      "item": "minecraft:spider_eye"
+      "tag": "minecraft:leaves"
     },
     {
       "tag": "forge:gems/lapis"
     },
     {
-      "item": "minecraft:rotten_flesh"
+      "tag": "forge:gems/lapis"
+    },
+    {
+      "item": "minecraft:tnt"
     }
   ],
   "result": {
-    "item": "goety:arachnohelm"
+    "item": "goety:felrobe"
   }
 }

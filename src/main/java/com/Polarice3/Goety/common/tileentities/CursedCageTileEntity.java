@@ -15,6 +15,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.Polarice3.Goety.common.items.GoldTotemItem.SOULSAMOUNT;
 
@@ -123,6 +125,7 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
         return this.spinning;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public void makeWorkParticles() {
         if (this.getSouls() <= 0){
             return;

@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.common.infamy;
 
-import net.minecraft.client.Minecraft;
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -40,9 +40,7 @@ public class InfamyUpdatePacket {
         ctx.get().enqueueWork(() -> {
             assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
 
-            World world = Minecraft.getInstance().level;
-            assert world != null;
-            PlayerEntity player = world.getPlayerByUUID(packet.PlayerUUID);
+            PlayerEntity player = Goety.PROXY.getPlayer();
             if (player != null) {
                 player.getCapability(InfamyProvider.CAPABILITY).ifPresent((infamy) -> {
                     InfamyProvider.CAPABILITY.getStorage().readNBT(InfamyProvider.CAPABILITY, infamy, null, packet.tag);

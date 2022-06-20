@@ -35,8 +35,6 @@ public class EntityUpdatePacket {
         ctx.get().enqueueWork(() -> {
             assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
 
-            World world = Minecraft.getInstance().level;
-            assert world != null;
             Entity entity = EntityFinder.getEntityByUuiDGlobal(packet.LivingEntityUUID).get();
             if (entity instanceof LivingEntity){
                 LivingEntity livingEntity = (LivingEntity) entity;

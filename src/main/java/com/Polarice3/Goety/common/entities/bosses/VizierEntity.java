@@ -44,6 +44,10 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
+@OnlyIn(
+        value = Dist.CLIENT,
+        _interface = IChargeableMob.class
+)
 public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob, FlyingPhaseEntity {
     private static final Predicate<Entity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof VizierEntity);

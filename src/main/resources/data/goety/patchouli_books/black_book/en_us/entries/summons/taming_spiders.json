@@ -6,7 +6,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "goety:deadbat",
-      "text": "If you were to slay a Bat while wearing both the Helm and Robe, you obtain it's webbed carcass. If you were to feed a Spider with these carcasses, while still wearing the two of course, you would be able to tame one!"
+      "text": "If you were to slay a Bat while wearing the Fel Helm, you obtain it's webbed carcass. If you were to feed a Spider with these carcasses, while still wearing the two of course, you would be able to tame one!"
     },
     {
       "type": "patchouli:text",
@@ -28,7 +28,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Wearing both Helm and Robe also allows your Spider(s) to heal using the Soul Energy from your Totem. If you have multiple Loyal Spiders, feeding them a Carrion Bat will cause them to breed and make a new Loyal Spider. However, when breeding, one of the Spiders will attack on another, dealing a large amount of damage and giving Weakness Effect. Throw a Slowness Potion at them to stop their cannibalism."
+      "text": "Wearing the Fel Helm also allows your Spider(s) to heal using the Soul Energy from your Totem. If you have multiple Loyal Spiders, feeding them a Carrion Bat will cause them to breed and make a new Loyal Spider. However, when breeding, one of the Spiders will attack on another, dealing a large amount of damage and giving Weakness Effect. Throw a Slowness Potion at them to stop their cannibalism."
     }
   ]
 }

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
@@ -165,6 +166,15 @@ public class SkullLordEntity extends MonsterEntity{
         if (this.getLaser() != null){
             this.lookControl.setLookAt(this.getLaser(), 90.0F, 90.0F);
         }
+        if (this.getPithos() != null){
+            BlockPos blockPos = this.getPithos().getBlockPos();
+            if (this.distanceToSqr(blockPos.getX(), blockPos.getY(), blockPos.getZ()) > 1024){
+                this.moveTo(blockPos, 0, 0);
+                if (this.getBoneLord() != null){
+                    this.getBoneLord().moveTo(blockPos, 0, 0);
+                }
+            }
+        }
         if (this.getTarget() != null) {
             Vector3d vector3d1 = this.getTarget().getEyePosition(1.0F);
             if (this.isOnGround() || this.getTarget().getY() > this.getY()) {
@@ -197,9 +207,7 @@ public class SkullLordEntity extends MonsterEntity{
                         }
                     }
                     if (this.laserTime >= 30){
-                        for (int k = 0; k < 2; ++k) {
-                            new ParticleUtil(ParticleTypes.PORTAL, d0 + this.random.nextGaussian() * (double)0.3F, d1 + this.random.nextGaussian() * (double)0.3F, d2 + this.random.nextGaussian() * (double)0.3F, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
-                        }
+                        new ParticleUtil(ModParticleTypes.LASER_GATHER.get(), this, this.level);
                     }
                     if (this.laserTime >= 60) {
                         LaserEntity laserEntity = ModEntityType.LASER.get().create(this.level);
@@ -296,6 +304,11 @@ public class SkullLordEntity extends MonsterEntity{
             if (this.getBoneLord() == null){
                 --this.boneLordRegen;
                 this.setisInvulnerable(false);
+                for (BoneLordEntity boneLordEntity : this.level.getEntitiesOfClass(BoneLordEntity.class, this.getBoundingBox().inflate(32))){
+                    if (boneLordEntity.getSkullLord() == this){
+                        this.setBoneLord(boneLordEntity);
+                    }
+                }
                 if (this.boneLordRegen <= 0 && !this.isLasering()){
                     BoneLordEntity boneLord = ModEntityType.BONE_LORD.get().create(this.level);
                     if (boneLord != null){
