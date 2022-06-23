@@ -26,7 +26,7 @@ public abstract class SpewingSpell extends ChargingSpells{
         double hitDist = 0;
 
         for (Entity entity : entities) {
-            if (entity.isPickable()) {
+            if (entity.isPickable() && livingEntity.canSee(entity)) {
                 float borderSize = entity.getPickRadius();
                 AxisAlignedBB collisionBB = entity.getBoundingBox().inflate(borderSize, borderSize, borderSize);
                 Optional<Vector3d> interceptPos = collisionBB.clip(srcVec, destVec);

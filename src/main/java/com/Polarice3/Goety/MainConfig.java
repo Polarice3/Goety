@@ -116,7 +116,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamyMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WanderBootsRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> WandVexLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> StaffVexLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieLimit;
@@ -290,8 +289,8 @@ public class MainConfig {
                 .defineInRange("fangTime", 40, 0, 72000);
         RoarDuration = BUILDER.comment("Time to cast Roaring Spell, Default: 40")
                 .defineInRange("roarTime", 40, 0, 72000);
-        ZombieDuration = BUILDER.comment("Time to cast Necroturgy Spell, Default: 60")
-                .defineInRange("zombieTime", 60, 0, 72000);
+        ZombieDuration = BUILDER.comment("Time to cast Rotting Spell, Default: 20")
+                .defineInRange("zombieTime", 20, 0, 72000);
         SkeletonDuration = BUILDER.comment("Time to cast Osseous Spell, Default: 60")
                 .defineInRange("skeletonTime", 60, 0, 72000);
         WitchGaleDuration = BUILDER.comment("Time to cast Witch's Gale Spell, Default: 20")
@@ -320,8 +319,8 @@ public class MainConfig {
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
                 .defineInRange("vexCooldown", 340, 0, 72000);
-        ZombieCooldown = BUILDER.comment("Necroturgy Spell Cooldown, Default: 250")
-                .defineInRange("zombieCooldown", 250, 0, 72000);
+        ZombieCooldown = BUILDER.comment("Rotting Spell Cooldown, Default: 250")
+                .defineInRange("zombieCooldown", 0, 0, 72000);
         SkeletonCooldown = BUILDER.comment("Osseous Spell Cooldown, Default: 280")
                 .defineInRange("skeletonCooldown", 280, 0, 72000);
         BUILDER.pop();
@@ -472,8 +471,6 @@ public class MainConfig {
         BUILDER.push("Robe Repairs");
         DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 10")
                 .defineInRange("darkArmoredRobeRepairSouls", 10, 1, Integer.MAX_VALUE);
-        WanderBootsRepairAmount = BUILDER.comment("Amount of Souls needed to repair Wander Boots per second, Default: 10")
-                .defineInRange("wanderBootsRepairSouls", 10, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Enchantments");
         MaxSoulEaterLevel = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")

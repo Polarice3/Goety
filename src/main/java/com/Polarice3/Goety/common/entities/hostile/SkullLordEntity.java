@@ -56,12 +56,14 @@ public class SkullLordEntity extends MonsterEntity{
     private int laserTime = 0;
     public float explosionRadius = 1.5F;
     public int boneLordRegen;
+    private int hitTimes;
 
     public SkullLordEntity(EntityType<? extends SkullLordEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
         this.navigation = this.createNavigation(p_i50190_2_);
         this.shootTime = 0;
         this.moveControl = new EntityHelper.MoveHelperController(this);
+        this.hitTimes = 0;
         this.xpReward = 10;
     }
 
@@ -108,7 +110,8 @@ public class SkullLordEntity extends MonsterEntity{
             if (this.isCharging()){
                 this.chargeTime = this.chargeTime + 100;
             }
-            if (pAmount >= 20){
+            ++this.hitTimes;
+            if (this.hitTimes > 3 || pAmount >= 20){
                 return super.hurt(pSource, pAmount/2);
             } else {
                 return super.hurt(pSource, pAmount);
@@ -328,6 +331,7 @@ public class SkullLordEntity extends MonsterEntity{
                     }
                 }
                 this.setisInvulnerable(true);
+                this.hitTimes = 0;
                 this.boneLordRegen = delay * 2;
             }
             if (this.isCharging()){
@@ -646,6 +650,7 @@ public class SkullLordEntity extends MonsterEntity{
             }
         }
         this.shootTime = pCompound.getInt("shootTime");
+        this.hitTimes = pCompound.getInt("hitTimes");
         this.boneLordRegen = pCompound.getInt("boneLordRegen");
         this.spawnDelay = pCompound.getInt("spawnDelay");
         this.spawnNumber = pCompound.getInt("spawnNumber");
@@ -665,6 +670,7 @@ public class SkullLordEntity extends MonsterEntity{
             pCompound.putUUID("laser", this.getLaserUUID());
         }
         pCompound.putInt("shootTime", this.shootTime);
+        pCompound.putInt("hitTimes", this.hitTimes);
         pCompound.putInt("boneLordRegen", this.boneLordRegen);
         pCompound.putInt("spawnDelay", this.spawnDelay);
         pCompound.putInt("spawnNumber", this.spawnNumber);

@@ -9,6 +9,9 @@
   "duration": 30,
   "ingredients": [
     {
+      "tag": "forge:ingots/gold"
+    },
+    {
       "item": "goety:cursed_ingot"
     },
     {

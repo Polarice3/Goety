@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.infamy;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;

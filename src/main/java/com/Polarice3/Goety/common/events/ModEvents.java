@@ -2,8 +2,6 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.client.audio.LocustSound;
-import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
@@ -14,7 +12,6 @@ import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
-import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity;
@@ -35,8 +32,6 @@ import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -71,7 +66,6 @@ import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -446,9 +440,6 @@ public class ModEvents {
                 player.setDeltaMovement(player.getDeltaMovement().x * 1.0175, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.0175);
             }
         }
-        if (player.hasEffect(ModEffects.LAUNCH.get())){
-            player.setDeltaMovement(player.getDeltaMovement().add(0, 0.75, 0));
-        }
         if (RobeArmorFinder.FindNecroSet(player)) {
             BlockState blockState = player.level.getBlockState(player.blockPosition().below());
             if (!LichdomHelper.isLich(player)) {
@@ -604,6 +595,8 @@ public class ModEvents {
                     if (RobeArmorFinder.FindFelHelm(target)){
                         if (livingEntity.getLastHurtByMob() != target){
                             ((MobEntity) livingEntity).setTarget(null);
+                        } else {
+                            livingEntity.setLastHurtByMob(target);
                         }
                     }
                 }
@@ -613,6 +606,8 @@ public class ModEvents {
                     if (RobeArmorFinder.FindFelArmor(target)){
                         if (livingEntity.getLastHurtByMob() != target){
                             ((MobEntity) livingEntity).setTarget(null);
+                        } else {
+                            livingEntity.setLastHurtByMob(target);
                         }
                     }
                 }
@@ -622,6 +617,8 @@ public class ModEvents {
                     if (RobeArmorFinder.FindFelBootsofWander(target)){
                         if (livingEntity.getLastHurtByMob() != target){
                             ((MobEntity) livingEntity).setTarget(null);
+                        } else {
+                            livingEntity.setLastHurtByMob(target);
                         }
                     }
                 }
@@ -647,14 +644,7 @@ public class ModEvents {
                 }
             }
             if (event.getSource().isExplosion()){
-                event.setAmount(event.getAmount()/2);
-            }
-        }
-        if (RobeArmorFinder.FindFelBootsofWander(victim)){
-            if (attacker instanceof SlimeEntity){
-                if (((SlimeEntity) attacker).getTarget() != victim){
-                    event.setCanceled(true);
-                }
+                event.setAmount((float) (event.getAmount()/1.5));
             }
         }
         if (attacker instanceof FangEntity){
@@ -676,6 +666,19 @@ public class ModEvents {
                         (victim).knockback(f1 * 0.5F, (double) MathHelper.sin(victim.yRot * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(victim.yRot * ((float) Math.PI / 180F))));
                         victim.setDeltaMovement(victim.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                     }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void AttackEvent(LivingAttackEvent event){
+        LivingEntity victim = event.getEntityLiving();
+        Entity attacker = event.getSource().getEntity();
+        if (RobeArmorFinder.FindFelBootsofWander(victim)){
+            if (attacker instanceof SlimeEntity){
+                if (((SlimeEntity) attacker).getTarget() != victim){
+                    event.setCanceled(true);
                 }
             }
         }

@@ -44,7 +44,7 @@ public class FireBreathSpell extends SpewingSpell{
         Entity target = getTarget(entityLiving, range + 15, 1.0F);
         if (target != null) {
             if (!target.fireImmune()){
-                target.setSecondsOnFire(30 * burning);
+                target.setSecondsOnFire(5 * burning);
                 target.hurt(ModDamageSource.fireBreath(entityLiving), 2.0F + enchantment);
             }
         }
@@ -76,7 +76,7 @@ public class FireBreathSpell extends SpewingSpell{
                         burning += EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BURNING.get(), WandUtil.findFocus(player));
                     }
                 }
-                target.setSecondsOnFire(60 * burning);
+                target.setSecondsOnFire(8 * burning);
                 target.hurt(ModDamageSource.fireBreath(entityLiving), 4.0F + enchantment);
             }
         }

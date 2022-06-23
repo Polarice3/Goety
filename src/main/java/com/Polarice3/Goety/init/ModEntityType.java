@@ -65,7 +65,7 @@ public class ModEntityType {
             () -> EntityType.Builder.<LavaballEntity>of(LavaballEntity::new, EntityClassification.MISC)
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(4)
-                    .build(new ResourceLocation(Goety.MOD_ID, "fireball").toString()));
+                    .build(new ResourceLocation(Goety.MOD_ID, "lavaball").toString()));
 
     public static final RegistryObject<EntityType<WarpedSpearEntity>> WARPED_SPEAR = ENTITY_TYPES.register("warped_spear",
             () -> EntityType.Builder.<WarpedSpearEntity>of(WarpedSpearEntity::new, EntityClassification.MISC)

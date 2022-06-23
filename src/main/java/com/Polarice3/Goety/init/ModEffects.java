@@ -31,8 +31,6 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 197379));
     public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
             () -> new ModEffect(EffectType.HARMFUL, 4866583));
-    public static final RegistryObject<Effect> LAUNCH = EFFECTS.register("launch",
-            () -> new ModEffect(EffectType.NEUTRAL, 0));
     public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
             () -> new ModEffect(EffectType.NEUTRAL, 4393481));
     public static final RegistryObject<Effect> APOSTLE_CURSE = EFFECTS.register("apostle_curse",

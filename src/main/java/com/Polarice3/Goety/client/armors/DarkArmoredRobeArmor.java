@@ -3,11 +3,17 @@ package com.Polarice3.Goety.client.armors;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.model.RobeModel;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.SEHelper;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
@@ -19,12 +25,24 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class DarkArmoredRobeArmor extends ArmorItem {
+    private static final UUID BOOTS_UUID = UUID.fromString("f46dd333-63a3-4c3b-a5d3-065de1e226cd");
+    private static final AttributeModifier BOOTS_SPEED_MODIFIER = new AttributeModifier(BOOTS_UUID, "Wander Boots Speed bonus", 0.15D, AttributeModifier.Operation.MULTIPLY_TOTAL);
     private static final String COOL = "Cool";
+    private final Multimap<Attribute, AttributeModifier> bootsModifier;
 
     public DarkArmoredRobeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
         super(materialIn, slot, builderIn);
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        builder.put(Attributes.ARMOR, new AttributeModifier(BOOTS_UUID, "Armor modifier", (double) this.getDefense(), AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(BOOTS_UUID, "Armor toughness", (double) this.getToughness(), AttributeModifier.Operation.ADDITION));
+        if (this.knockbackResistance > 0) {
+            builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(BOOTS_UUID, "Armor knockback resistance", (double)this.knockbackResistance, AttributeModifier.Operation.ADDITION));
+        }
+        builder.put(Attributes.MOVEMENT_SPEED, BOOTS_SPEED_MODIFIER);
+        this.bootsModifier = builder.build();
     }
 
     @Override
@@ -59,6 +77,11 @@ public class DarkArmoredRobeArmor extends ArmorItem {
         }
     }
 
+    @Override
+    public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
+        return stack.getItem() == ModItems.DARKARMOREDLEGGINGS.get();
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
@@ -70,8 +93,8 @@ public class DarkArmoredRobeArmor extends ArmorItem {
         model.Pants.visible = armorSlot == EquipmentSlotType.LEGS;
         model.RightLeg.visible = armorSlot == EquipmentSlotType.LEGS;
         model.LeftLeg.visible = armorSlot == EquipmentSlotType.LEGS;
-        model.RightFeet.visible = false;
-        model.LeftFeet.visible = false;
+        model.RightFeet.visible = armorSlot == EquipmentSlotType.FEET;
+        model.LeftFeet.visible = armorSlot == EquipmentSlotType.FEET;
 
         model.young = _default.young;
         model.crouching = _default.crouching;
@@ -84,6 +107,10 @@ public class DarkArmoredRobeArmor extends ArmorItem {
 
     public IArmorMaterial getArmorMaterial(ArmorItem armorItem){
         return armorItem.getMaterial();
+    }
+
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType pEquipmentSlot) {
+        return pEquipmentSlot == EquipmentSlotType.FEET ? bootsModifier : super.getDefaultAttributeModifiers(pEquipmentSlot);
     }
 
     @OnlyIn(Dist.CLIENT)

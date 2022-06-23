@@ -241,6 +241,7 @@ public class RitualRecipe extends ShapelessRecipe {
         @Override
         public void toNetwork(PacketBuffer buffer, RitualRecipe recipe) {
             serializer.toNetwork(buffer, recipe);
+            buffer.writeUtf(recipe.craftType);
 
             buffer.writeResourceLocation(recipe.ritualType);
 

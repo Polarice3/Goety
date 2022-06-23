@@ -86,6 +86,7 @@ public class LavaballEntity extends AbstractFireballEntity {
     }
 
     protected void defineSynchedData() {
+        super.defineSynchedData();
         this.entityData.define(DATA_DANGEROUS, true);
         this.entityData.define(DATA_UPGRADED, false);
     }
