@@ -120,21 +120,21 @@ public class ModItems {
     public static final RegistryObject<Item> DARKLEGGINGS = ITEMS.register("darkleggings", () ->
             new DarkRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> DARKBOOTSOFWANDER = ITEMS.register("darkbootsofwander", () ->
-            new DarkArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
+            new WanderBootsArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<Item> NECROHELM = ITEMS.register("necrohelm", () ->
             new DarkRobeArmor(ModArmorMaterial.NECROTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> NECROROBE = ITEMS.register("necrorobe", () ->
             new DarkRobeArmor(ModArmorMaterial.NECROTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> NECROBOOTSOFWANDER = ITEMS.register("necrobootsofwander", () ->
-            new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
+            new WanderBootsArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<Item> FELHELM = ITEMS.register("felhelm", () ->
             new DarkRobeArmor(ModArmorMaterial.FELTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> FELROBE = ITEMS.register("felrobe", () ->
             new DarkRobeArmor(ModArmorMaterial.FELTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> FELBOOTSOFWANDER = ITEMS.register("felbootsofwander", () ->
-            new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
+            new WanderBootsArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<Item> FELARMOREDHELM = ITEMS.register("felarmoredhelm", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));

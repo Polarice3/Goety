@@ -25,7 +25,7 @@ public class ModEnchantments {
             () -> new LootingEnchantment(Enchantment.Rarity.RARE, RINGS, EquipmentSlotType.MAINHAND));
 
     public static final RegistryObject<Enchantment> POTENCY = ENCHANTMENTS.register("potency",
-            () -> new PotencyEnchantment(Enchantment.Rarity.COMMON, EquipmentSlotType.MAINHAND));
+            () -> new PotencyEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.MAINHAND));
 
     public static final RegistryObject<Enchantment> RADIUS = ENCHANTMENTS.register("radius",
             () -> new RadiusEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.MAINHAND));
@@ -38,5 +38,8 @@ public class ModEnchantments {
 
     public static final RegistryObject<Enchantment> ABSORB = ENCHANTMENTS.register("absorb",
             () -> new AbsorbEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlotType.MAINHAND));
+
+    public static final RegistryObject<Enchantment> DURATION = ENCHANTMENTS.register("duration",
+            () -> new DurationEnchantment(Enchantment.Rarity.COMMON, EquipmentSlotType.MAINHAND));
 
 }

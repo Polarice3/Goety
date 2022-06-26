@@ -682,6 +682,13 @@ public class ModEvents {
                 }
             }
         }
+        if (MainConfig.MinionsMasterImmune.get()){
+            if (attacker instanceof OwnedEntity){
+                if (((OwnedEntity) attacker).getTrueOwner() == victim){
+                    event.setCanceled(true);
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -830,17 +837,18 @@ public class ModEvents {
             PlayerEntity player = (PlayerEntity) killer;
             int r1 = world.random.nextInt(4);
             int r2 = world.random.nextInt(16);
+            int looting = MathHelper.clamp(EnchantmentHelper.getMobLooting(player), 0, 3);
             if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
                 if (killed instanceof LivingEntity){
                     LivingEntity killed1 = (LivingEntity) killed;
                     if (player.getMainHandItem().getItem() instanceof AxeItem && event.getSource().getDirectEntity() == player) {
                         if (killed1.getMobType() != CreatureAttribute.UNDEAD) {
-                            if (killed1 instanceof AbstractVillagerEntity || killed1 instanceof SpellcastingIllagerEntity || killed1 instanceof ChannellerEntity) {
-                                if (r1 == 0) {
+                            if (killed1 instanceof AbstractVillagerEntity || killed1 instanceof SpellcastingIllagerEntity || killed1 instanceof ChannellerEntity || killed1 instanceof PlayerEntity) {
+                                if (r1 - looting == 0) {
                                     killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                                 }
                             } else if (killed1 instanceof PatrollerEntity) {
-                                if (r2 == 0) {
+                                if (r2 - looting == 0) {
                                     killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                                 }
                             }

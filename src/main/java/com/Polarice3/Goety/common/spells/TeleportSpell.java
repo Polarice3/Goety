@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +34,11 @@ public class TeleportSpell extends InstantCastSpells{
     @Override
     public void WandResult(World worldIn, LivingEntity entityLiving) {
         PlayerEntity player = (PlayerEntity) entityLiving;
-        RayTraceResult trace = player.pick(32, 0, true);
+        int enchantment = 0;
+        if (WandUtil.enchantedFocus(player)){
+            enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
+        }
+        RayTraceResult trace = player.pick(32 + enchantment, 0, true);
         BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) trace;
         Direction face = blockRayTraceResult.getDirection();
         BlockPos newPos = blockRayTraceResult.getBlockPos().relative(face);
@@ -45,7 +51,11 @@ public class TeleportSpell extends InstantCastSpells{
     @Override
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
         PlayerEntity player = (PlayerEntity) entityLiving;
-        RayTraceResult trace = player.pick(64, 0, true);
+        int enchantment = 0;
+        if (WandUtil.enchantedFocus(player)){
+            enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
+        }
+        RayTraceResult trace = player.pick(64 + enchantment, 0, true);
         BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) trace;
         Direction face = blockRayTraceResult.getDirection();
         BlockPos newPos = blockRayTraceResult.getBlockPos().relative(face);

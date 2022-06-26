@@ -1,0 +1,15 @@
+{
+  "name": "Dark Pressure Plate",
+  "icon": "goety:dark_pressure_plate",
+  "category": "goety:crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "By combining Haunted Pressure Plates with a brain of an intelligent lifeform, you are able to create Pressure Plate that only respond to Adventurers and Builders like you."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:dark_pressure_plate"
+    }
+  ]
+}

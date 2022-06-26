@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "###",
+    "#b#",
+    "###"
+  ],
+  "key":
+  {
+    "#":
+    {
+      "item": "goety:haunted_pressure_plate"
+    },
+    "b":
+    {
+      "item": "goety:brain"
+    }
+  },
+  "result":
+  {
+    "item": "goety:dark_pressure_plate",
+    "count": 8
+  }
+}

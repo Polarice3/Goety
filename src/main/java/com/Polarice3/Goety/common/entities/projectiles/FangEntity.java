@@ -139,10 +139,15 @@ public class FangEntity extends Entity {
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
                     float enchantment = 0;
+                    int burning = 0;
                     if (WandUtil.enchantedFocus(player)) {
                         enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                        burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                     }
                     target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
+                    if (burning > 0){
+                        target.setSecondsOnFire(5 * burning);
+                    }
                 } else {
                     target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
                 }

@@ -37,7 +37,6 @@ public class CreeperlingSpell extends ChargingSpells{
         CreeperlingMinionEntity summonedentity = new CreeperlingMinionEntity(ModEntityType.CREEPERLING_MINION.get(), worldIn);
         summonedentity.setOwnerId(entityLiving.getUUID());
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
-        summonedentity.setLimitedLife(180);
         if (RobeArmorFinder.FindFelSet(entityLiving)) {
             Collection<EffectInstance> collection = entityLiving.getActiveEffects();
             if (!collection.isEmpty()) {
@@ -52,9 +51,11 @@ public class CreeperlingSpell extends ChargingSpells{
             PlayerEntity player = (PlayerEntity) entityLiving;
             if (WandUtil.enchantedFocus(player)){
                 int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 if (enchantment != 0){
                     summonedentity.setExplosionRadius(MainConfig.CreeperlingExplosionRadius.get() + (enchantment/2.5));
                 }
+                summonedentity.setLimitedLife(180 * duration);
             }
             this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
         }
@@ -69,7 +70,6 @@ public class CreeperlingSpell extends ChargingSpells{
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.setUpgraded();
             summonedentity.moveTo(blockpos, 0.0F, 0.0F);
-            summonedentity.setLimitedLife(360);
             if (RobeArmorFinder.FindFelSet(entityLiving)) {
                 Collection<EffectInstance> collection = entityLiving.getActiveEffects();
                 if (!collection.isEmpty()) {
@@ -84,9 +84,11 @@ public class CreeperlingSpell extends ChargingSpells{
                 PlayerEntity player = (PlayerEntity) entityLiving;
                 if (WandUtil.enchantedFocus(player)){
                     int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                    int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                     if (enchantment != 0){
                         summonedentity.setExplosionRadius(MainConfig.CreeperlingExplosionRadius.get() + (enchantment/2.5));
                     }
+                    summonedentity.setLimitedLife(180 * duration);
                 }
                 this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
             }

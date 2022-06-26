@@ -51,9 +51,11 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
             SkeletonMinionEntity.this.setAggressive(true);
         }
     };
+    private int arrowPower;
 
     public SkeletonMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
+        this.arrowPower = 0;
         this.reassessWeaponGoal();
     }
 
@@ -120,7 +122,13 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
 
     public void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
+        this.arrowPower = pCompound.getInt("arrowPower");
         this.reassessWeaponGoal();
+    }
+
+    public void addAdditionalSaveData(CompoundNBT pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putInt("arrowPower", this.arrowPower);
     }
 
     public void setItemSlot(EquipmentSlotType pSlot, ItemStack pStack) {
@@ -176,6 +184,14 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
         return potioneffectIn.getEffect() != ModEffects.HOSTED.get();
     }
 
+    public int getArrowPower() {
+        return arrowPower;
+    }
+
+    public void setArrowPower(int arrowPower) {
+        this.arrowPower = arrowPower;
+    }
+
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.reassessWeaponGoal();
@@ -197,6 +213,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
         ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
         AbstractArrowEntity abstractarrowentity = this.getMobArrow(itemstack, distanceFactor);
         abstractarrowentity = ((BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() + this.getArrowPower());
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = target.getZ() - this.getZ();

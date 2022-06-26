@@ -5,10 +5,7 @@ import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.EntityFinder;
-import com.Polarice3.Goety.utils.EntityHelper;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -62,7 +59,7 @@ public class SkullLordEntity extends MonsterEntity{
         super(p_i50190_1_, p_i50190_2_);
         this.navigation = this.createNavigation(p_i50190_2_);
         this.shootTime = 0;
-        this.moveControl = new EntityHelper.MoveHelperController(this);
+        this.moveControl = new MobUtil.MoveHelperController(this);
         this.hitTimes = 0;
         this.xpReward = 10;
     }

@@ -110,7 +110,6 @@ public class SoulEnergyEvent {
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
-        LivingEntity slayer = (LivingEntity) killer;
         Entity killed = event.getEntity();
 
         if (killer instanceof PlayerEntity && killed instanceof MobEntity){
@@ -126,17 +125,20 @@ public class SoulEnergyEvent {
         }
 
         if (killer instanceof OwnedEntity){
-            LivingEntity owner = ((OwnedEntity) killer).getTrueOwner();
+            OwnedEntity slayer = (OwnedEntity) killer;
+            LivingEntity owner = slayer.getTrueOwner();
             if (owner != null){
                 if (owner instanceof PlayerEntity) {
                     if (RobeArmorFinder.FindArmor(owner)) {
                         PlayerEntity playerEntity = (PlayerEntity) owner;
-                        LivingEntity victim = (LivingEntity) killed;
-                        if (!(playerEntity instanceof FakePlayer)) {
-                            if (SEHelper.getSEActive(playerEntity)){
-                                SEHelper.handleKill(slayer, victim);
-                            } else {
-                                GoldTotemItem.handleKill(slayer, victim);
+                        if (killed instanceof LivingEntity) {
+                            LivingEntity victim = (LivingEntity) killed;
+                            if (!(playerEntity instanceof FakePlayer)) {
+                                if (SEHelper.getSEActive(playerEntity)) {
+                                    SEHelper.handleKill(slayer, victim);
+                                } else {
+                                    GoldTotemItem.handleKill(slayer, victim);
+                                }
                             }
                         }
                     }

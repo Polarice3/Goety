@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.client.armors.DarkArmoredRobeArmor;
+import com.Polarice3.Goety.client.armors.WanderBootsArmor;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -62,7 +63,7 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindBootsofWander(LivingEntity livingEntity){
-        return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() instanceof DarkArmoredRobeArmor;
+        return livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() instanceof WanderBootsArmor;
     }
 
     public static boolean FindNecroBootsofWander(LivingEntity livingEntity){

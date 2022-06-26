@@ -2,7 +2,7 @@
   "name": "Focus Enchantments",
   "icon": "minecraft:enchanting_table",
   "category": "goety:focuses",
-  "sortnum": 1,
+  "sortnum": 0,
   "pages": [
     {
       "type": "patchouli:text",
@@ -13,6 +13,12 @@
       "item": "minecraft:enchanted_book",
       "title": "Potency",
       "text": "Potency increases the damage of your spells. The most common of enchantments."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "minecraft:enchanted_book",
+      "title": "Duration",
+      "text": "Your spells and your summons lasts longer."
     },
     {
       "type": "patchouli:spotlight",

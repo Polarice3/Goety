@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
-import com.Polarice3.Goety.utils.EntityHelper;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -30,7 +29,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class TormentorEntity extends AbstractIllagerEntity implements FlyingPhaseEntity {
+public class TormentorEntity extends AbstractIllagerEntity {
     protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(TormentorEntity.class, DataSerializers.BYTE);
     private MobEntity owner;
     @Nullable
@@ -40,7 +39,7 @@ public class TormentorEntity extends AbstractIllagerEntity implements FlyingPhas
 
     public TormentorEntity(EntityType<? extends AbstractIllagerEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
-        this.moveControl = new EntityHelper.MoveHelperController(this);
+        this.moveControl = new MobUtil.MoveHelperController(this);
         this.xpReward = 6;
     }
 

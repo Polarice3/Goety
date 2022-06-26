@@ -109,6 +109,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxPotencyLevel;
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxRadiusLevel;
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxRangeLevel;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MaxDurationLevel;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnFreq;
@@ -439,7 +440,7 @@ public class MainConfig {
                 .define("vexTeleport", true);
         MinionsAttackCreepers = BUILDER.comment("Whether Minions can attack Creepers if Mob Griefing Rule is False, Default: true")
                 .define("minionAttackCreepers", true);
-        MinionsMasterImmune = BUILDER.comment("Whether Minions are immune to attacks made by other minions that are summoned by the same caster, Default: true")
+        MinionsMasterImmune = BUILDER.comment("Whether Minions or their owner are immune to attacks made by other minions that are summoned by the same owner, Default: true")
                 .define("minionMasterImmune", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
                 .define("undeadMinionHeal", true);
@@ -483,6 +484,8 @@ public class MainConfig {
                 .defineInRange("maxRadiusLevel", 2, 1, 10);
         MaxRangeLevel = BUILDER.comment("Range Maximum Enchantment Level, Default: 10")
                 .defineInRange("maxRangeLevel", 10, 1, 10);
+        MaxDurationLevel = BUILDER.comment("Duration Maximum Enchantment Level, Default: 3")
+                .defineInRange("maxDurationLevel", 3, 1, 10);
         BUILDER.pop();
         BUILDER.push("Villagers");
         VillagerHate = BUILDER.comment("Wearing a Dark Helm and Robe, along with variants, causes Villagers around the Player to have a negative Reputation unless said Player has 100 or more reputation among them, Default: false")

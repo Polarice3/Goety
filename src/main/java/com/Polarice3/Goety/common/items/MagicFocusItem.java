@@ -42,13 +42,33 @@ public class MagicFocusItem extends Item{
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
     {
+        if (stack.getItem() == ModItems.TELEPORTFOCUS.get()){
+            return enchantment == ModEnchantments.RANGE.get();
+        }
+        if (stack.getItem() == ModItems.SOULSHIELDFOCUS.get()){
+            return enchantment == ModEnchantments.DURATION.get();
+        }
+        if (stack.getItem() == ModItems.DRAGONFIREBALLFOCUS.get()){
+            return enchantment == ModEnchantments.RADIUS.get()
+                    || enchantment == ModEnchantments.DURATION.get();
+        }
         if (stack.getItem() == ModItems.SPIDERLINGFOCUS.get()
-            || stack.getItem() == ModItems.CREEPERLINGFOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get();
+                || stack.getItem() == ModItems.CREEPERLINGFOCUS.get()
+                || stack.getItem() == ModItems.VEXINGFOCUS.get()
+                || stack.getItem() == ModItems.ROTTINGFOCUS.get()
+                || stack.getItem() == ModItems.OSSEOUSFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.DURATION.get();
         }
         if (stack.getItem() == ModItems.BITINGFOCUS.get()) {
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.RANGE.get()
+                    || enchantment == ModEnchantments.BURNING.get()
+                    || enchantment == ModEnchantments.ABSORB.get();
+        }
+        if (stack.getItem() == ModItems.FEASTFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.BURNING.get()
                     || enchantment == ModEnchantments.ABSORB.get();
         }
         if (stack.getItem() == ModItems.FIREBALLFOCUS.get()){

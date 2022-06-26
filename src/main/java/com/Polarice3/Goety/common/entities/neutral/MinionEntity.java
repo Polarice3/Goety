@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.utils.EntityHelper;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.network.datasync.DataParameter;
@@ -11,13 +11,13 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-public class MinionEntity extends OwnedEntity implements FlyingPhaseEntity {
+public class MinionEntity extends OwnedEntity {
     protected static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.defineId(MinionEntity.class, DataSerializers.BYTE);
 
     public MinionEntity(EntityType<? extends MinionEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
         this.navigation = this.createNavigation(p_i50190_2_);
-        this.moveControl = new EntityHelper.MoveHelperController(this);
+        this.moveControl = new MobUtil.MoveHelperController(this);
     }
 
     public void move(MoverType typeIn, Vector3d pos) {

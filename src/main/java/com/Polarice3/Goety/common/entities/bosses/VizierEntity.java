@@ -2,10 +2,9 @@ package com.Polarice3.Goety.common.entities.bosses;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
-import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.EntityHelper;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -48,7 +47,7 @@ import java.util.function.Predicate;
         value = Dist.CLIENT,
         _interface = IChargeableMob.class
 )
-public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob, FlyingPhaseEntity {
+public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob {
     private static final Predicate<Entity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof VizierEntity);
     };
@@ -60,7 +59,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     public VizierEntity(EntityType<? extends VizierEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveControl = new EntityHelper.MoveHelperController(this);
+        this.moveControl = new MobUtil.MoveHelperController(this);
         this.xpReward = 50;
         this.finishcasting = 0;
     }

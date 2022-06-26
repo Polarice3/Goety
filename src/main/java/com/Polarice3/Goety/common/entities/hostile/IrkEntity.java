@@ -1,9 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.neutral.FlyingPhaseEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
-import com.Polarice3.Goety.utils.EntityHelper;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
@@ -33,7 +32,7 @@ import net.minecraft.world.gen.Heightmap;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class IrkEntity extends MonsterEntity implements FlyingPhaseEntity {
+public class IrkEntity extends MonsterEntity {
     protected static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.defineId(IrkEntity.class, DataSerializers.BYTE);
     public MobEntity owner;
     private boolean limitedLifespan;
@@ -45,7 +44,7 @@ public class IrkEntity extends MonsterEntity implements FlyingPhaseEntity {
         this.xpReward = 3;
         this.shootTime = 0;
         this.navigation = this.createNavigation(p_i50190_2_);
-        this.moveControl = new EntityHelper.MoveHelperController(this);
+        this.moveControl = new MobUtil.MoveHelperController(this);
     }
 
     public void move(MoverType typeIn, Vector3d pos) {

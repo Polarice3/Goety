@@ -38,7 +38,7 @@ public class PoisonBallSpell extends InstantCastSpells{
             PoisonBallEntity smallFireballEntity = new PoisonBallEntity(ModEntityType.POISON_BALL.get(), entityLiving, worldIn);
             smallFireballEntity.setOwner(entityLiving);
             smallFireballEntity.setUpgraded(true);
-            smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
+            smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F - (float) i/10, 1.0F - (float) i/10);
             worldIn.addFreshEntity(smallFireballEntity);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);

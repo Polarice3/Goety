@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.projectiles.ModDragonFireballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DragonFireballEntity;
@@ -26,7 +27,7 @@ public class DragonFireballSpell extends Spells{
 
     public void WandResult(World worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
-        DragonFireballEntity dragonFireball = new DragonFireballEntity(worldIn,
+        ModDragonFireballEntity dragonFireball = new ModDragonFireballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,
                 entityLiving.getEyeY() - 0.2,
                 entityLiving.getZ() + vector3d.z / 2,
@@ -41,7 +42,7 @@ public class DragonFireballSpell extends Spells{
 
     public void StaffResult(World worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
-        DragonFireballEntity dragonFireball = new DragonFireballEntity(worldIn,
+        ModDragonFireballEntity dragonFireball = new ModDragonFireballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,
                 entityLiving.getEyeY() - 0.2,
                 entityLiving.getZ() + vector3d.z / 2,

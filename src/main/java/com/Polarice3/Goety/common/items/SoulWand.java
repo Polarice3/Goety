@@ -51,10 +51,8 @@ public class SoulWand extends Item{
     private static final String SOULCOST = "Soul Cost";
     private static final String DURATION = "Duration";
     private static final String COOLDOWN = "Cooldown";
-    private static final String CASTSOUND = "Cast Sound";
     private static final String SPELL = "Spell";
     private static final String COOL = "Cool";
-    private static final String FOCUSBAG = "Focus Bag";
 
     public SoulWand() {
         super(new Properties().tab(Goety.TAB).stacksTo(1).setNoRepair().rarity(Rarity.RARE));
@@ -97,7 +95,7 @@ public class SoulWand extends Item{
         return RobeArmorFinder.FindHelm(entityLiving);
     }
 
-    public int SoulUse(LivingEntity entityLiving, ItemStack stack){
+    public int SoulCalculation(LivingEntity entityLiving, ItemStack stack){
         if (SoulCostUp(entityLiving)){
             int amp = Objects.requireNonNull(entityLiving.getEffect(ModEffects.SUMMONDOWN.get())).getAmplifier() + 2;
             return SoulCost(stack) * amp;
@@ -105,6 +103,14 @@ public class SoulWand extends Item{
             return SoulCost(stack)/2;
         } else {
             return SoulCost(stack);
+        }
+    }
+
+    public int SoulUse(LivingEntity entityLiving, ItemStack stack){
+        if (getFocus(stack).isEnchanted()){
+            return SoulCalculation(entityLiving, stack) * 2;
+        } else {
+            return SoulCalculation(entityLiving, stack);
         }
     }
 

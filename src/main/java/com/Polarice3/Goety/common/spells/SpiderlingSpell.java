@@ -36,14 +36,15 @@ public class SpiderlingSpell extends ChargingSpells{
         summonedentity.setOwnerId(entityLiving.getUUID());
         summonedentity.setUpgraded(this.ArachnoPower(entityLiving));
         summonedentity.moveTo(blockpos, 0.0F, 0.0F);
-        summonedentity.setLimitedLife(180);
         if (entityLiving instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) entityLiving;
             if (WandUtil.enchantedFocus(player)){
                 int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 if (enchantment != 0){
                     summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, enchantment - 1, false, false));
                 }
+                summonedentity.setLimitedLife(180 * duration);
             }
             this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
         }
@@ -58,14 +59,15 @@ public class SpiderlingSpell extends ChargingSpells{
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.setUpgraded(this.ArachnoPower(entityLiving));
             summonedentity.moveTo(blockpos, 0.0F, 0.0F);
-            summonedentity.setLimitedLife(360);
             if (entityLiving instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) entityLiving;
                 if (WandUtil.enchantedFocus(player)){
                     int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                    int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                     if (enchantment != 0){
                         summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, enchantment - 1, false, false));
                     }
+                    summonedentity.setLimitedLife(180 * duration);
                 }
                 this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
             }
