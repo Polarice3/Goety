@@ -4,12 +4,15 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.utils.*;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -36,6 +39,11 @@ public class UndeathPotionItem extends Item {
                 ServerWorld serverWorld = (ServerWorld) pLevel;
                 if (serverWorld.getMoonBrightness() > 0.9F && RobeArmorFinder.FindAnySet(pEntityLiving)){
                     if (!isLich && soulEnergy.getSEActive() && soulEnergy.getArcaBlock() != null) {
+                        if (pEntityLiving instanceof ServerPlayerEntity) {
+                            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)pEntityLiving;
+                            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayerentity, pStack);
+                            serverplayerentity.awardStat(Stats.ITEM_USED.get(this));
+                        }
                         lichdom.setLichdom(true);
                         LichdomHelper.sendLichUpdatePacket(player);
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.success"), true);

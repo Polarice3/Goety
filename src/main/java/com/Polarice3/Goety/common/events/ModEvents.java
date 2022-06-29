@@ -211,47 +211,35 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingSpawnEvents(LivingSpawnEvent.CheckSpawn event){
-        if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
-            if (event.getSpawnReason() == SpawnReason.STRUCTURE){
-                event.getEntityLiving().addTag("structure");
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        if (event.isWasDeath()) {
-            PlayerEntity player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
 
-            IInfamy capability = event.getOriginal().getCapability(InfamyProvider.CAPABILITY).resolve().get();
+        IInfamy capability = event.getOriginal().getCapability(InfamyProvider.CAPABILITY).resolve().get();
 
-            player.getCapability(InfamyProvider.CAPABILITY)
-                    .ifPresent(infamy ->
-                            infamy.setInfamy(capability.getInfamy() > 0 ? capability.getInfamy() - MainConfig.DeathLoseInfamy.get() : 0));
+        player.getCapability(InfamyProvider.CAPABILITY)
+                .ifPresent(infamy ->
+                        infamy.setInfamy(capability.getInfamy() > 0 ? capability.getInfamy() - MainConfig.DeathLoseInfamy.get() : 0));
 
-            ILichdom capability2 = event.getOriginal().getCapability(LichProvider.CAPABILITY).resolve().get();
+        ILichdom capability2 = event.getOriginal().getCapability(LichProvider.CAPABILITY).resolve().get();
 
-            player.getCapability(LichProvider.CAPABILITY)
-                    .ifPresent(lichdom ->
-                            lichdom.setLichdom(capability2.getLichdom()));
+        player.getCapability(LichProvider.CAPABILITY)
+                .ifPresent(lichdom ->
+                        lichdom.setLichdom(capability2.getLichdom()));
 
-            ISoulEnergy capability3 = event.getOriginal().getCapability(SEProvider.CAPABILITY).resolve().get();
-            
-            player.getCapability(SEProvider.CAPABILITY)
-                    .ifPresent(soulEnergy ->
-                            soulEnergy.setSEActive(capability3.getSEActive()));
-            player.getCapability(SEProvider.CAPABILITY)
-                    .ifPresent(soulEnergy ->
-                            soulEnergy.setSoulEnergy(capability3.getSoulEnergy()));
-            player.getCapability(SEProvider.CAPABILITY)
-                    .ifPresent(soulEnergy ->
-                            soulEnergy.setArcaBlock(capability3.getArcaBlock()));
-            player.getCapability(SEProvider.CAPABILITY)
-                    .ifPresent(soulEnergy ->
-                            soulEnergy.setArcaBlockDimension(capability3.getArcaBlockDimension()));
+        ISoulEnergy capability3 = event.getOriginal().getCapability(SEProvider.CAPABILITY).resolve().get();
 
-        }
+        player.getCapability(SEProvider.CAPABILITY)
+                .ifPresent(soulEnergy ->
+                        soulEnergy.setSEActive(capability3.getSEActive()));
+        player.getCapability(SEProvider.CAPABILITY)
+                .ifPresent(soulEnergy ->
+                        soulEnergy.setSoulEnergy(capability3.getSoulEnergy()));
+        player.getCapability(SEProvider.CAPABILITY)
+                .ifPresent(soulEnergy ->
+                        soulEnergy.setArcaBlock(capability3.getArcaBlock()));
+        player.getCapability(SEProvider.CAPABILITY)
+                .ifPresent(soulEnergy ->
+                        soulEnergy.setArcaBlockDimension(capability3.getArcaBlockDimension()));
     }
 
     @SubscribeEvent
@@ -346,6 +334,11 @@ public class ModEvents {
             SpawnReason spawnReason = event.getSpawnReason();
             if (PatrollerEntity.checkPatrollingMonsterSpawnRules(ModEntityType.FANATIC.get(), event.getWorld(), spawnReason, event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
                 event.setResult(Event.Result.ALLOW);
+            }
+        }
+        if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
+            if (event.getSpawnReason() == SpawnReason.STRUCTURE){
+                event.getEntityLiving().addTag("structure");
             }
         }
     }
@@ -583,42 +576,42 @@ public class ModEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         LivingEntity target = event.getTarget();
         if (livingEntity instanceof MobEntity){
-            if (livingEntity.getMobType() == CreatureAttribute.UNDEAD || livingEntity instanceof CreeperEntity){
-                if (target != null){
+            MobEntity mob = (MobEntity) livingEntity;
+            if (target != null){
+                if (target instanceof PlayerEntity){
+                    if (mob.getLastHurtByMob() instanceof OwnedEntity){
+                        mob.setTarget(mob.getLastHurtByMob());
+                    }
+                }
+                if (mob.getMobType() == CreatureAttribute.UNDEAD || mob instanceof CreeperEntity){
                     if (target instanceof ApostleEntity){
-                        ((MobEntity) livingEntity).setTarget(null);
+                        mob.setTarget(null);
                     }
                 }
-            }
-            if (livingEntity.getMobType() == CreatureAttribute.ARTHROPOD){
-                if (target != null){
+                if (mob.getMobType() == CreatureAttribute.ARTHROPOD){
                     if (RobeArmorFinder.FindFelHelm(target)){
-                        if (livingEntity.getLastHurtByMob() != target){
-                            ((MobEntity) livingEntity).setTarget(null);
+                        if (mob.getLastHurtByMob() != target){
+                            mob.setTarget(null);
                         } else {
-                            livingEntity.setLastHurtByMob(target);
+                            mob.setLastHurtByMob(target);
                         }
                     }
                 }
-            }
-            if (livingEntity instanceof CreeperEntity){
-                if (target != null){
+                if (mob instanceof CreeperEntity){
                     if (RobeArmorFinder.FindFelArmor(target)){
-                        if (livingEntity.getLastHurtByMob() != target){
-                            ((MobEntity) livingEntity).setTarget(null);
+                        if (mob.getLastHurtByMob() != target){
+                            mob.setTarget(null);
                         } else {
-                            livingEntity.setLastHurtByMob(target);
+                            mob.setLastHurtByMob(target);
                         }
                     }
                 }
-            }
-            if (livingEntity instanceof SlimeEntity){
-                if (target != null){
+                if (mob instanceof SlimeEntity){
                     if (RobeArmorFinder.FindFelBootsofWander(target)){
-                        if (livingEntity.getLastHurtByMob() != target){
-                            ((MobEntity) livingEntity).setTarget(null);
+                        if (mob.getLastHurtByMob() != target){
+                            mob.setTarget(null);
                         } else {
-                            livingEntity.setLastHurtByMob(target);
+                            mob.setLastHurtByMob(target);
                         }
                     }
                 }

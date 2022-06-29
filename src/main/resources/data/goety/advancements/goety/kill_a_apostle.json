@@ -1,4 +1,19 @@
 {
+  "display": {
+    "icon": {
+      "item": "goety:apostle_blood_bottle"
+    },
+    "title": {
+      "translate": "advancements.goety.kill_apostle.title"
+    },
+    "description": {
+      "translate": "advancements.goety.kill_apostle.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
   "parent": "goety:goety/root",
   "criteria": {
     "requirement": {

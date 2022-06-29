@@ -324,7 +324,7 @@ public class EnviokerEntity extends HuntingIllagerEntity {
                 return false;
             } else {
                 int i = EnviokerEntity.this.level.getNearbyEntities(TormentorEntity.class, this.vexCountTargeting, EnviokerEntity.this, EnviokerEntity.this.getBoundingBox().inflate(16.0D)).size();
-                return EnviokerEntity.this.random.nextInt(8) + 1 > i && EnviokerEntity.this.isMagic();
+                return i < 3 && EnviokerEntity.this.isMagic();
             }
         }
 

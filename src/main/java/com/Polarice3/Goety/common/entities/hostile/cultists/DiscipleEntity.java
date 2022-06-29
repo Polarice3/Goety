@@ -184,7 +184,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         public boolean canUse() {
-            return super.canUse();
+            return super.canUse() && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
         }
 
         protected int getCastingTime() {
@@ -230,7 +230,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         public boolean canUse() {
-            return super.canUse();
+            return super.canUse() && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
         }
 
         protected int getCastingTime() {
@@ -271,7 +271,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
         @Override
         public boolean canUse() {
-            return super.canUse();
+            return super.canUse() && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
         }
 
         protected int getCastingTime() {

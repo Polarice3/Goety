@@ -1,5 +1,20 @@
 {
-  "parent": "goety:goety/kill_a_envioker",
+  "display": {
+    "icon": {
+      "item": "goety:nether_book"
+    },
+    "title": {
+      "translate": "advancements.goety.kill_cultists.title"
+    },
+    "description": {
+      "translate": "advancements.goety.kill_cultists.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "parent": "goety:goety/kill_a_cultist",
   "criteria": {
     "fanatic": {
       "trigger": "minecraft:player_killed_entity",

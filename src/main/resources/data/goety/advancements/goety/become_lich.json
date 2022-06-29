@@ -1,4 +1,19 @@
 {
+  "display": {
+    "icon": {
+      "item": "goety:undeath_potion"
+    },
+    "title": {
+      "translate": "advancements.goety.become_lich.title"
+    },
+    "description": {
+      "translate": "advancements.goety.become_lich.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
   "parent": "goety:goety/root",
   "criteria": {
     "undeath": {

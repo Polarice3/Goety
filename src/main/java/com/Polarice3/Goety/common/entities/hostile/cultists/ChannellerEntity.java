@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -171,8 +173,8 @@ public class ChannellerEntity extends AbstractCultistEntity {
                         if (this.getHealth() < this.getMaxHealth()) {
                             ++this.healTick;
                             if (this.healTick >= 10) {
-                                this.getAllyTarget().hurt(DamageSource.STARVE, 1.0F);
-                                this.heal(1.0F);
+                                this.getAllyTarget().hurt(DamageSource.STARVE, 2.0F);
+                                this.heal(2.0F);
                                 this.healTick = 0;
                             }
                         }
@@ -187,6 +189,29 @@ public class ChannellerEntity extends AbstractCultistEntity {
             }
         } else {
             this.prayingTick = 0;
+            if (this.tickCount % 100 == 0){
+                if (this.level instanceof ServerWorld) {
+                    ServerWorld serverWorld = (ServerWorld) this.level;
+                    MonsterEntity minion = null;
+                    switch (this.random.nextInt(3)) {
+                        case (0):
+                            minion = ModEntityType.ZOMBIE_VILLAGER_MINION.get().create(this.level);
+                            break;
+                        case (1):
+                            minion = ModEntityType.SKELETON_VILLAGER_MINION.get().create(this.level);
+                            break;
+                        case (2):
+                            minion = ModEntityType.ZPIGLIN_MINION.get().create(this.level);
+                            break;
+                    }
+                    if (minion != null) {
+                        minion.setPos(this.getX(), this.getY(), this.getZ());
+                        minion.spawnAnim();
+                        minion.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(this.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
+                        serverWorld.addFreshEntity(minion);
+                    }
+                }
+            }
         }
     }
 
