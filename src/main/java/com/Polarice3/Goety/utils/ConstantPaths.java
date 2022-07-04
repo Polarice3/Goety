@@ -25,4 +25,16 @@ public class ConstantPaths {
         return "goety:readScroll";
     }
 
+    public static String secretCultist(){
+        return "goety:cultist";
+    }
+
+    public static String revealedCultist(){
+        return "goety:revealed";
+    }
+
+    public static String structureMob(){
+        return "goety:structure";
+    }
+
 }

@@ -152,6 +152,7 @@ public class Goety {
         event.put(ModEntityType.THUG.get(), ThugEntity.setCustomAttributes().build());
         event.put(ModEntityType.CRIMSON_SPIDER.get(), CrimsonSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.DISCIPLE.get(), DiscipleEntity.setCustomAttributes().build());
+        event.put(ModEntityType.BELDAM.get(), BeldamEntity.setCustomAttributes().build());
         event.put(ModEntityType.APOSTLE.get(), ApostleEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ZombieVillagerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());

@@ -6,7 +6,6 @@ import com.Polarice3.Goety.utils.ModLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -63,7 +62,11 @@ public class SalvagedFortPiece extends ModStructurePiece {
                     cultist = ModEntityType.ZEALOT.get().create(pLevel.getLevel());
                     break;
                 case "jugger":
-                    cultist = ModEntityType.THUG.get().create(pLevel.getLevel());
+                    if (pRandom.nextFloat() <= 0.025F){
+                        cultist = ModEntityType.BELDAM.get().create(pLevel.getLevel());
+                    } else {
+                        cultist = ModEntityType.THUG.get().create(pLevel.getLevel());
+                    }
                     break;
                 case "disciple":
                     cultist = ModEntityType.DISCIPLE.get().create(pLevel.getLevel());
@@ -78,7 +81,7 @@ public class SalvagedFortPiece extends ModStructurePiece {
                             cultist = ModEntityType.ZEALOT.get().create(pLevel.getLevel());
                             break;
                         case 2:
-                            cultist = EntityType.WITCH.create(pLevel.getLevel());
+                            cultist = ModEntityType.BELDAM.get().create(pLevel.getLevel());
                             break;
                     }
                     break;

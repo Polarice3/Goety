@@ -195,6 +195,13 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "disciple").toString()));
 
+    public static final RegistryObject<EntityType<BeldamEntity>> BELDAM = ENTITY_TYPES.register("beldam",
+            () -> EntityType.Builder.of(BeldamEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "beldam").toString()));
+
     public static final RegistryObject<EntityType<ApostleEntity>> APOSTLE = ENTITY_TYPES.register("apostle",
             () -> EntityType.Builder.of(ApostleEntity::new, EntityClassification.MONSTER)
                     .canSpawnFarFromPlayer()

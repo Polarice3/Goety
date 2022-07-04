@@ -52,6 +52,11 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
+    public void aiStep() {
+        super.aiStep();
+        this.conversion();
+    }
+
     protected SoundEvent getAmbientSound() {
         return SoundEvents.EVOKER_AMBIENT;
     }

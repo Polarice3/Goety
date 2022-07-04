@@ -165,6 +165,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerRaid;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> CultistSpread;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
@@ -320,8 +321,8 @@ public class MainConfig {
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
                 .defineInRange("vexCooldown", 340, 0, 72000);
-        ZombieCooldown = BUILDER.comment("Rotting Spell Cooldown, Default: 250")
-                .defineInRange("zombieCooldown", 0, 0, 72000);
+        ZombieCooldown = BUILDER.comment("Rotting Spell Cooldown, Default: 120")
+                .defineInRange("zombieCooldown", 120, 0, 72000);
         SkeletonCooldown = BUILDER.comment("Osseous Spell Cooldown, Default: 280")
                 .defineInRange("skeletonCooldown", 280, 0, 72000);
         BUILDER.pop();
@@ -492,6 +493,8 @@ public class MainConfig {
                 .define("villagerHate", false);
         VillagerHateSpells = BUILDER.comment("Casting Spell in the presence of Villagers will cause the Player to lose a number of Reputation, set 0 to disable, Default: 0")
                 .defineInRange("villagerHateSpells", 0, 0, Integer.MAX_VALUE);
+        CultistSpread = BUILDER.comment("Whether Villagers are able to become secret Cultists, Default: true")
+                .define("cultistSpread", true);
         BUILDER.pop();
         BUILDER.push("Spoilers");
         LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 1")

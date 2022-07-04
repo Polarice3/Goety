@@ -104,8 +104,9 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
         if (this.level != null && !this.level.isClientSide) {
             this.goalSelector.removeGoal(this.meleeGoal);
             this.goalSelector.removeGoal(this.bowGoal);
-            ItemStack itemstack = this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem));
-            if (itemstack.getItem() == Items.BOW) {
+            ItemStack itemstack = this.getMainHandItem();
+            ItemStack itemstack2 = this.getOffhandItem();
+            if (itemstack.getItem() instanceof BowItem || itemstack2.getItem() instanceof BowItem) {
                 int i = 20;
                 if (!this.isUpgraded()) {
                     i = 40;
@@ -122,13 +123,15 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
 
     public void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
-        this.arrowPower = pCompound.getInt("arrowPower");
+        this.setArrowPower(pCompound.getInt("arrowPower"));
         this.reassessWeaponGoal();
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putInt("arrowPower", this.arrowPower);
+        if (pCompound.contains("arrowPower", 99)){
+            pCompound.putInt("arrowPower", this.arrowPower);
+        }
     }
 
     public void setItemSlot(EquipmentSlotType pSlot, ItemStack pStack) {
@@ -212,7 +215,9 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
         AbstractArrowEntity abstractarrowentity = this.getMobArrow(itemstack, distanceFactor);
-        abstractarrowentity = ((BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        if (this.getMainHandItem().getItem() instanceof BowItem) {
+            abstractarrowentity = ((BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        }
         abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() + this.getArrowPower());
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
@@ -257,7 +262,7 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
             ItemStack itemstack = pPlayer.getItemInHand(p_230254_2_);
             Item item = itemstack.getItem();
             ItemStack itemstack2 = this.getMainHandItem();
-            if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
+            if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner() && !pPlayer.isCrouching()) {
                 if (item == Items.BONE && this.getHealth() < this.getMaxHealth()) {
                     if (!pPlayer.abilities.instabuild) {
                         itemstack.shrink(1);

@@ -10,6 +10,7 @@ import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
@@ -82,6 +83,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -336,9 +338,19 @@ public class ModEvents {
                 event.setResult(Event.Result.ALLOW);
             }
         }
+        if (event.getEntityLiving() instanceof VillagerEntity){
+            VillagerEntity villager = (VillagerEntity) event.getEntityLiving();
+            if (MainConfig.CultistSpread.get()) {
+                if (!villager.isBaby() && event.getSpawnReason() == SpawnReason.STRUCTURE) {
+                    if (event.getWorld().getRandom().nextFloat() <= 0.05F) {
+                        villager.addTag(ConstantPaths.secretCultist());
+                    }
+                }
+            }
+        }
         if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
             if (event.getSpawnReason() == SpawnReason.STRUCTURE){
-                event.getEntityLiving().addTag("structure");
+                event.getEntityLiving().addTag(ConstantPaths.structureMob());
             }
         }
     }
@@ -374,6 +386,58 @@ public class ModEvents {
                     BootsUtil.enableStepHeight(player);
                 } else {
                     BootsUtil.disableStepHeight(player);
+                }
+            }
+            if (livingEntity instanceof WitchEntity){
+                WitchEntity witch = (WitchEntity) livingEntity;
+                List<AbstractCultistEntity> list = witch.level.getEntitiesOfClass(AbstractCultistEntity.class, witch.getBoundingBox().inflate(8.0D));
+                if (!witch.level.isClientSide) {
+                    ServerWorld serverWorld = (ServerWorld) witch.level;
+                    if (list.size() >= 5) {
+                        BeldamEntity beldam = witch.convertTo(ModEntityType.BELDAM.get(), true);
+                        if (beldam != null) {
+                            beldam.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(witch.blockPosition()), SpawnReason.CONVERSION, null, null);
+                            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(witch, beldam);
+                        }
+                    }
+                }
+            }
+            if (livingEntity instanceof VillagerEntity){
+                VillagerEntity villager = (VillagerEntity) livingEntity;
+                if (MainConfig.CultistSpread.get()) {
+                    if (villager.getTags().contains(ConstantPaths.secretCultist())) {
+                        if (villager.getVillagerData().getLevel() >= 3) {
+                            villager.removeTag(ConstantPaths.secretCultist());
+                        }
+                        int timer = 1200;
+                        if (!villager.level.isClientSide) {
+                            ServerWorld serverWorld = (ServerWorld) villager.level;
+                            Raid raid = serverWorld.getRaidAt(villager.blockPosition());
+                            if (raid != null && raid.isActive() && !raid.isOver()) {
+                                MobUtil.revealCultist(serverWorld, villager);
+                                timer = 400;
+                            }
+                        }
+                        if (villager.tickCount % timer == 0) {
+                            MobUtil.secretConversion(villager);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onConversion(LivingConversionEvent.Post event){
+        if (event.getEntityLiving() instanceof WitchEntity){
+            if (event.getOutcome() instanceof BeldamEntity){
+                if (event.getOutcome().level.isClientSide){
+                    for (int i = 0; i < 5; ++i) {
+                        double d0 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
+                        double d1 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
+                        double d2 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
+                        event.getOutcome().level.addParticle(ParticleTypes.HAPPY_VILLAGER, event.getOutcome().getRandomX(1.0D), event.getOutcome().getRandomY() + 1.0D, event.getOutcome().getRandomZ(1.0D), d0, d1, d2);
+                    }
                 }
             }
         }
@@ -582,6 +646,23 @@ public class ModEvents {
                     if (mob.getLastHurtByMob() instanceof OwnedEntity){
                         mob.setTarget(mob.getLastHurtByMob());
                     }
+                    if (RobeArmorFinder.FindNecroSet(target)){
+                        boolean undead = mob.getMobType() == CreatureAttribute.UNDEAD && mob.getMaxHealth() < 50.0F;
+                        if (undead){
+                            if (mob.getLastHurtByMob() != target){
+                                mob.setTarget(null);
+                            } else {
+                                mob.setLastHurtByMob(target);
+                            }
+                        }
+                    }
+                }
+                if (mob instanceof ZombieEntity) {
+                    if (target instanceof VillagerEntity) {
+                        if (target.getTags().contains(ConstantPaths.secretCultist())) {
+                            mob.setTarget(null);
+                        }
+                    }
                 }
                 if (mob.getMobType() == CreatureAttribute.UNDEAD || mob instanceof CreeperEntity){
                     if (target instanceof ApostleEntity){
@@ -650,6 +731,21 @@ public class ModEvents {
             }
         }
         if (attacker instanceof LivingEntity){
+            if (victim instanceof VillagerEntity){
+                VillagerEntity villager = (VillagerEntity) victim;
+                if (villager.getTags().contains(ConstantPaths.secretCultist()) && !villager.isBaby()){
+                    if (!villager.level.isClientSide){
+                        ServerWorld serverWorld = (ServerWorld) villager.level;
+                        if (MobUtil.getWitnesses(villager)) {
+                            if (villager.getRandom().nextFloat() <= 0.25F) {
+                                MobUtil.revealCultist(serverWorld, villager);
+                            }
+                        } else {
+                            MobUtil.revealCultist(serverWorld, villager);
+                        }
+                    }
+                }
+            }
             LivingEntity livingEntity = (LivingEntity) attacker;
             if (event.getSource() instanceof ModDamageSource) {
                 ModDamageSource modDamageSource = (ModDamageSource) event.getSource();
@@ -754,12 +850,24 @@ public class ModEvents {
             if (killer instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) killer;
                 if (killed instanceof SpellcastingIllagerEntity || killed instanceof WitchEntity) {
-                    if (killed.getTags().contains("structure")) {
+                    if (killed.getTags().contains(ConstantPaths.structureMob())) {
                         float chance = 0.025F;
                         chance += (float) EnchantmentHelper.getMobLooting(player) / 100;
                         if (world.random.nextFloat() <= chance) {
                             killed.spawnAtLocation(new ItemStack(ModItems.FORBIDDEN_FRAGMENT.get()));
                         }
+                    }
+                }
+                if (killed instanceof BeldamEntity){
+                    float chance = 0.025F;
+                    chance += (float) EnchantmentHelper.getMobLooting(player) / 100;
+                    if (world.random.nextFloat() <= chance) {
+                        killed.spawnAtLocation(new ItemStack(ModItems.FORBIDDEN_PIECE.get()));
+                    }
+                }
+                if (killed.getTags().contains(ConstantPaths.revealedCultist())){
+                    for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
+                        villager.getGossips().add(player.getUUID(), GossipType.MINOR_POSITIVE, 25);
                     }
                 }
             }

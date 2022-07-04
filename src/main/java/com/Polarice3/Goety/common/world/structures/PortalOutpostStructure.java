@@ -36,7 +36,8 @@ public class PortalOutpostStructure extends Structure<NoFeatureConfig> {
             new MobSpawnInfo.Spawners(ModEntityType.FANATIC.get(), 2, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.ZEALOT.get(), 2, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.DISCIPLE.get(), 1, 1, 1),
-            new MobSpawnInfo.Spawners(EntityType.WITCH, 1, 1, 1));
+            new MobSpawnInfo.Spawners(EntityType.WITCH, 1, 1, 1),
+            new MobSpawnInfo.Spawners(ModEntityType.BELDAM.get(), 1, 1, 1));
 
     public PortalOutpostStructure(Codec<NoFeatureConfig> codec) {
         super(codec);

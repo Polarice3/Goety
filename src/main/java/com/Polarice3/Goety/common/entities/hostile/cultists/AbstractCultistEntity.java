@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
@@ -33,6 +35,18 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+    }
+
+    public void conversion(){
+        if (MainConfig.CultistSpread.get()) {
+            int timer = 1200;
+            if (this.hasActiveRaid()) {
+                timer = 400;
+            }
+            if (this.tickCount % timer == 0) {
+                MobUtil.secretConversion(this);
+            }
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

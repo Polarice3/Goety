@@ -36,7 +36,6 @@ public class ChannellerEntity extends AbstractCultistEntity {
     };
     private static final DataParameter<Integer> TARGET_ALLY = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.INT);
     private int prayingTick;
-    private int healTick;
 
     public ChannellerEntity(EntityType<? extends ChannellerEntity> type, World worldIn) {
         super(type, worldIn);
@@ -53,20 +52,20 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 26.0D)
+                .add(Attributes.MAX_HEALTH, 32.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.35D);
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.VILLAGER_AMBIENT;
+        return SoundEvents.WANDERING_TRADER_NO;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.VILLAGER_HURT;
+        return SoundEvents.EVOKER_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.VILLAGER_DEATH;
+        return SoundEvents.EVOKER_DEATH;
     }
 
     protected void defineSynchedData() {
@@ -78,13 +77,11 @@ public class ChannellerEntity extends AbstractCultistEntity {
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.prayingTick = compound.getInt("prayingTick");
-        this.healTick = compound.getInt("healTick");
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("prayingTick", this.prayingTick);
-        compound.putInt("healTick", this.healTick);
     }
 
     private void setAllyTarget(int AllyTargetIn) {
@@ -146,6 +143,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public void aiStep() {
         super.aiStep();
+        this.conversion();
         List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
         if (!list.isEmpty() && !this.hasAllyTarget()) {
             MonsterEntity ally = list.get(this.random.nextInt(list.size()));
@@ -168,14 +166,11 @@ public class ChannellerEntity extends AbstractCultistEntity {
                         this.getAllyTarget().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
                         this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
                         this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
-                        this.getAllyTarget().addEffect(new EffectInstance(Effects.ABSORPTION, 60, 1));
                         this.getAllyTarget().setPersistenceRequired();
                         if (this.getHealth() < this.getMaxHealth()) {
-                            ++this.healTick;
-                            if (this.healTick >= 10) {
-                                this.getAllyTarget().hurt(DamageSource.STARVE, 2.0F);
-                                this.heal(2.0F);
-                                this.healTick = 0;
+                            if (this.tickCount % 10 == 0) {
+                                this.getAllyTarget().hurt(DamageSource.STARVE, 5.0F);
+                                this.heal(5.0F);
                             }
                         }
                     }
@@ -234,7 +229,7 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.VILLAGER_CELEBRATE;
+        return SoundEvents.WANDERING_TRADER_YES;
     }
 
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {

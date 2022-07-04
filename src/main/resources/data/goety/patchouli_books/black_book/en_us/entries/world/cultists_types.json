@@ -46,6 +46,14 @@
     },
     {
       "type": "patchouli:entity",
+      "entity": "goety:beldam"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Witches are usually on their own, but when one comes across a bunch of Nether Worshipping fanatics, they can't help but find themselves drawn towards them. It seems being in the Cult makes them more cooperative and more devious."
+    },
+    {
+      "type": "patchouli:entity",
       "entity": "goety:channeller"
     },
     {

@@ -72,6 +72,20 @@
         ]
       }
     },
+    "beldam": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:beldam"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
     "channeller": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
@@ -99,6 +113,9 @@
     ],
     [
       "disciple"
+    ],
+    [
+      "beldam"
     ],
     [
       "channeller"

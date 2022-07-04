@@ -10,6 +10,7 @@ import com.Polarice3.Goety.common.entities.utilities.FireTornadoTrapEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -431,6 +432,9 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     public void aiStep() {
+        if (this.tickCount % 100 == 0){
+            MobUtil.secretConversion(this);
+        }
         if (this.isSettingupSecond()){
             this.serverAiStep();
             if (this.tickCount % 10 == 0) {

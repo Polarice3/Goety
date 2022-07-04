@@ -136,6 +136,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     public void aiStep() {
         super.aiStep();
+        this.conversion();
         if (this.isFiring()) {
             ++this.f;
             if (this.f % 2 == 0 && this.f < 10) {

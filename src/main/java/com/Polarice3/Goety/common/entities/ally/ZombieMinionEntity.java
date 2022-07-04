@@ -186,7 +186,7 @@ public class ZombieMinionEntity extends SummonedEntity {
             ItemStack itemstack = pPlayer.getItemInHand(p_230254_2_);
             Item item = itemstack.getItem();
             ItemStack itemstack2 = this.getMainHandItem();
-            if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
+            if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner() && !pPlayer.isCrouching()) {
                 if (item == Items.ROTTEN_FLESH && this.getHealth() < this.getMaxHealth()) {
                     if (!pPlayer.abilities.instabuild) {
                         itemstack.shrink(1);

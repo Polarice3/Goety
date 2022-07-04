@@ -3,13 +3,16 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.MathHelper;
 
 public abstract class SummonSpells extends Spells{
     private final EntityPredicate summonCountTargeting = (new EntityPredicate()).range(64.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
+
     public abstract int SummonDownDuration();
 
     public boolean NecroPower(LivingEntity entityLiving){
@@ -35,16 +38,17 @@ public abstract class SummonSpells extends Spells{
         }
 
         i = MathHelper.clamp(i, 0, 4);
-        int s;
-        if (SummonMastery(entityLiving)){
-            int random = entityLiving.level.random.nextInt(2);
-            if (random == 0){
-                s = 0;
-            } else {
-                s = SummonDownDuration();
+        int s = SummonDownDuration();
+        if (entityLiving instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entityLiving;
+            if (WandUtil.enchantedFocus(player)){
+                s = (int) (SummonDownDuration() * 1.5);
             }
-        } else {
-            s = SummonDownDuration();
+        }
+        if (SummonMastery(entityLiving)){
+            if (entityLiving.level.random.nextBoolean()){
+                s = 0;
+            }
         }
         EffectInstance effectinstance = new EffectInstance(ModEffects.SUMMONDOWN.get(), s, i, false, false, true);
         entityLiving.addEffect(effectinstance);

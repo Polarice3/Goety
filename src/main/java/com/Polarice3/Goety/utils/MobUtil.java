@@ -1,22 +1,34 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import com.Polarice3.Goety.init.ModItems;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.village.GossipType;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -111,5 +123,100 @@ public class MobUtil {
 
     public static int getSummonLifespan(World world){
         return 20 * (30 + world.random.nextInt(90));
+    }
+
+    public static void secretConversion(LivingEntity livingEntity){
+        if (MainConfig.CultistSpread.get()) {
+            for (VillagerEntity villager : livingEntity.level.getEntitiesOfClass(VillagerEntity.class, livingEntity.getBoundingBox().inflate(4.0F))) {
+                if (!villager.getTags().contains(ConstantPaths.secretCultist())) {
+                    float chance = 0.05F;
+                    if (villager.isBaby()) {
+                        chance = 0.25F;
+                    }
+                    if (livingEntity.getType() == ModEntityType.CHANNELLER.get()) {
+                        chance += 0.2F;
+                    }
+                    if (livingEntity.getType() == ModEntityType.APOSTLE.get()) {
+                        chance += 0.5F;
+                    }
+                    if (livingEntity.getRandom().nextFloat() <= chance) {
+                        villager.addTag(ConstantPaths.secretCultist());
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean getWitnesses(LivingEntity livingEntity){
+        for (AbstractVillagerEntity villager : livingEntity.level.getEntitiesOfClass(AbstractVillagerEntity.class, livingEntity.getBoundingBox().inflate(16.0F))){
+            if (villager.getSensing().canSee(livingEntity)){
+                return true;
+            }
+        }
+        for (IronGolemEntity golemEntity : livingEntity.level.getEntitiesOfClass(IronGolemEntity.class, livingEntity.getBoundingBox().inflate(16.0F))){
+            if (golemEntity.getSensing().canSee(livingEntity)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void villagerReleasePoi(VillagerEntity villager){
+        villager.releasePoi(MemoryModuleType.HOME);
+        villager.releasePoi(MemoryModuleType.JOB_SITE);
+        villager.releasePoi(MemoryModuleType.POTENTIAL_JOB_SITE);
+        villager.releasePoi(MemoryModuleType.MEETING_POINT);
+    }
+
+    public static void revealCultist(ServerWorld pLevel, VillagerEntity villager){
+        if (MainConfig.CultistSpread.get()) {
+            if (pLevel.getDifficulty() != Difficulty.PEACEFUL) {
+                if (villager.getTags().contains(ConstantPaths.secretCultist()) && !villager.isBaby()) {
+                    VillagerProfession profession = villager.getVillagerData().getProfession();
+                    MonsterEntity cultist = ModEntityType.FANATIC.get().create(pLevel);
+                    if (profession == VillagerProfession.CLERIC || profession == VillagerProfession.LIBRARIAN) {
+                        if (pLevel.random.nextBoolean()) {
+                            cultist = ModEntityType.DISCIPLE.get().create(pLevel);
+                        } else {
+                            cultist = ModEntityType.BELDAM.get().create(pLevel);
+                        }
+                    }
+                    if (cultist != null) {
+                        cultist.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.yRot, villager.xRot);
+                        cultist.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(cultist.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                        cultist.setNoAi(villager.isNoAi());
+                        if (villager.hasCustomName()) {
+                            cultist.setCustomName(villager.getCustomName());
+                            cultist.setCustomNameVisible(villager.isCustomNameVisible());
+                        }
+                        if (profession == VillagerProfession.ARMORER) {
+                            cultist.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+                            cultist.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+                            cultist.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+                            cultist.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
+                        }
+                        if (profession == VillagerProfession.WEAPONSMITH) {
+                            cultist.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                        }
+                        if (profession == VillagerProfession.BUTCHER) {
+                            if (cultist instanceof FanaticEntity) {
+                                FanaticEntity fanatic = (FanaticEntity) cultist;
+                                fanatic.setOutfitType(0);
+                            }
+                            cultist.setItemSlot(EquipmentSlotType.CHEST, ItemStack.EMPTY);
+                            cultist.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
+                        }
+                        if (profession == VillagerProfession.SHEPHERD || profession == VillagerProfession.FARMER) {
+                            cultist.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.PITCHFORK.get()));
+                        }
+                        cultist.setPersistenceRequired();
+                        cultist.addTag(ConstantPaths.revealedCultist());
+                        pLevel.addFreshEntityWithPassengers(cultist);
+                        MobUtil.villagerReleasePoi(villager);
+                        villager.remove();
+                    }
+                }
+            }
+        }
     }
 }
