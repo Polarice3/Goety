@@ -1,0 +1,15 @@
+{
+  "name": "Ice Storm Focus",
+  "icon": "goety:icestormfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This focus allows you to shoot out a giant but slow cloud of ice and frost that slows and hurts mobs around it."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:icestormfocus"
+    }
+  ]
+}

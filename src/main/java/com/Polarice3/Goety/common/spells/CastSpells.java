@@ -55,6 +55,8 @@ public class CastSpells {
                 return new SoulLightSpell();
             case 22:
                 return new GlowLightSpell();
+            case 23:
+                return new IceStormSpell();
             default:
                 return null;
         }

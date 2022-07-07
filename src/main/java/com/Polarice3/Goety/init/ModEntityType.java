@@ -101,6 +101,13 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "corruptskull").toString()));
 
+    public static final RegistryObject<EntityType<IceStormEntity>> ICE_STORM = ENTITY_TYPES.register("ice_storm",
+            () -> EntityType.Builder.<IceStormEntity>of(IceStormEntity::new, EntityClassification.MISC)
+                    .sized(2.0F, 2.0F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "ice_storm").toString()));
+
     public static final RegistryObject<EntityType<SoulLightEntity>> SOUL_LIGHT = ENTITY_TYPES.register("soul_light",
             () -> EntityType.Builder.<SoulLightEntity>of(SoulLightEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)
@@ -478,6 +485,14 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
+
+    public static final RegistryObject<EntityType<BurningGroundEntity>> BURNING_GROUND = ENTITY_TYPES.register("burning_ground",
+            () -> EntityType.Builder.<BurningGroundEntity>of(BurningGroundEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(6.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "burning_ground").toString()));
 
     public static final RegistryObject<EntityType<StormEntity>> STORMUTIL = ENTITY_TYPES.register("stormutil",
             () -> EntityType.Builder.of(StormEntity::new, EntityClassification.MISC)

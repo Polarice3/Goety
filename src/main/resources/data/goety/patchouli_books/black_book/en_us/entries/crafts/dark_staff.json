@@ -1,6 +1,6 @@
 {
   "name": "Dark Staff",
-  "icon": "goety:dark_scroll",
+  "icon": "goety:soulstaff",
   "category": "goety:crafts",
   "advancement": "goety:goety/get_ruby",
   "pages": [

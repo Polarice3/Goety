@@ -325,6 +325,9 @@ public class SoulWand extends Item{
             } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("glowlight")) {
                 this.setSpellConditions(new GlowLightSpell(), itemStack);
                 this.setSpell(22, itemStack);
+            } else if (getFocus(itemStack).getTag().getString(FOCUS).contains("icestorm")) {
+                this.setSpellConditions(new IceStormSpell(), itemStack);
+                this.setSpell(23, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

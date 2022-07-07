@@ -60,6 +60,11 @@ public class MagicFocusItem extends Item{
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.DURATION.get();
         }
+        if (stack.getItem() == ModItems.ICESTORMFOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.DURATION.get()
+                    || enchantment == ModEnchantments.RANGE.get();
+        }
         if (stack.getItem() == ModItems.BITINGFOCUS.get()) {
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.RANGE.get()

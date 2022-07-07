@@ -20,6 +20,8 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class PoisonBallEntity extends ThrowableEntity {
@@ -40,6 +42,11 @@ public class PoisonBallEntity extends ThrowableEntity {
     @Override
     public void tick() {
         super.tick();
+        this.spawnParticles();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void spawnParticles(){
         for(int i = 0; i < 8; ++i) {
             new ParticleUtil(ParticleTypes.ITEM_SLIME, this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F, 0.0F);
         }

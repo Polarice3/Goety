@@ -37,6 +37,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> GlowLightCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IceStormCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -54,6 +55,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IceStormDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
@@ -76,6 +78,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -283,6 +286,8 @@ public class MainConfig {
                 .defineInRange("soulLightCost", 2, 0, Integer.MAX_VALUE);
         GlowLightCost = BUILDER.comment("Glow Light Spell Cost, Default: 4")
                 .defineInRange("glowLightCost", 4, 0, Integer.MAX_VALUE);
+        IceStormCost = BUILDER.comment("Ice Storm Spell Cost, Default: 16")
+                .defineInRange("iceStormCost", 16, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -317,6 +322,8 @@ public class MainConfig {
                 .defineInRange("illusionTime", 40, 0, 72000);
         SoulShieldDuration = BUILDER.comment("Time to cast Soul Shield Spell, Default: 20")
                 .defineInRange("soulShieldTime", 20, 0, 72000);
+        IceStormDuration = BUILDER.comment("Time to cast Ice Storm Spell, Default: 60")
+                .defineInRange("iceStormTime", 60, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
@@ -419,6 +426,8 @@ public class MainConfig {
                 .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         FireBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fire Breath Spell, Default: 0")
                 .defineInRange("fireBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
+        IceStormInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Storm Spell, Default: 8")
+                .defineInRange("iceStormInfamyChance", 8, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")

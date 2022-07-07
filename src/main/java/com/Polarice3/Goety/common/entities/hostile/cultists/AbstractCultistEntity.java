@@ -10,6 +10,7 @@ import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -47,6 +48,15 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
                 MobUtil.secretConversion(this);
             }
         }
+    }
+
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (this.isPassenger() && this.getVehicle() instanceof CrimsonSpiderEntity){
+            if (pSource == DamageSource.IN_WALL){
+                return false;
+            }
+        }
+        return super.hurt(pSource, pAmount);
     }
 
     @OnlyIn(Dist.CLIENT)

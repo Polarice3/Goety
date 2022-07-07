@@ -54,8 +54,8 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
     protected void registerGoals() {
         super.registerGoals();
         this.healRaidersGoal = new TargetExpiringGoal<>(this, AbstractRaiderEntity.class, true,
-                (raider) -> raider != null
-                        && raider.getHealth() < raider.getMaxHealth()
+                (raider) -> raider instanceof AbstractRaiderEntity
+                        && ((AbstractRaiderEntity) raider).getTarget() != null
                         && !(raider instanceof WitchEntity)
                         && !(raider instanceof BeldamEntity));
         this.attackPlayersGoal = new ToggleableNearestAttackableTargetGoal<>(this, PlayerEntity.class, 10, true, false, (Predicate<LivingEntity>)null);
@@ -146,7 +146,9 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
                 }
             } else {
                 Potion potion = null;
-                if (this.random.nextFloat() < 0.15F && this.isEyeInFluid(FluidTags.WATER) && !this.hasEffect(Effects.WATER_BREATHING)) {
+                if (this.getTarget() != null && !(this.getTarget() instanceof AbstractRaiderEntity) && !this.hasEffect(Effects.REGENERATION)){
+                    potion = Potions.REGENERATION;
+                } else if (this.random.nextFloat() < 0.15F && this.isEyeInFluid(FluidTags.WATER) && !this.hasEffect(Effects.WATER_BREATHING)) {
                     potion = Potions.WATER_BREATHING;
                 } else if (this.random.nextFloat() < 0.15F && (this.isOnFire() || this.getLastDamageSource() != null && this.getLastDamageSource().isFire()) && !this.hasEffect(Effects.FIRE_RESISTANCE)) {
                     potion = Potions.FIRE_RESISTANCE;
@@ -158,7 +160,7 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
 
                 if (potion != null) {
                     this.setItemSlot(EquipmentSlotType.MAINHAND, PotionUtils.setPotion(new ItemStack(Items.POTION), potion));
-                    this.usingTime = this.getMainHandItem().getUseDuration();
+                    this.usingTime = this.getMainHandItem().getUseDuration()/2;
                     this.setUsingItem(true);
                     if (!this.isSilent()) {
                         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_DRINK, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
@@ -225,15 +227,19 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
                         potion = Potions.STRENGTH;
                     } else if (!pTarget.hasEffect(Effects.MOVEMENT_SPEED)){
                         potion = Potions.SWIFTNESS;
-                    } else {
+                    } else if (!pTarget.hasEffect(Effects.REGENERATION)){
                         potion = Potions.REGENERATION;
+                    } else {
+                        potion = Potions.HEALING;
                     }
                 }
 
                 this.setTarget((LivingEntity)null);
+            } else if (pTarget.getMobType() == CreatureAttribute.UNDEAD){
+                potion = Potions.HEALING;
             } else if (f >= 8.0F && !pTarget.hasEffect(Effects.MOVEMENT_SLOWDOWN)) {
                 potion = Potions.SLOWNESS;
-            } else if (pTarget.getHealth() >= 8.0F && !pTarget.hasEffect(Effects.POISON)) {
+            } else if (pTarget.getHealth() >= 8.0F && !pTarget.hasEffect(Effects.POISON) && pTarget.getMobType() != CreatureAttribute.UNDEAD) {
                 potion = Potions.POISON;
             } else if (f <= 3.0F && !pTarget.hasEffect(Effects.WEAKNESS) && this.random.nextFloat() < 0.25F) {
                 potion = Potions.WEAKNESS;

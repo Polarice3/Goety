@@ -20,10 +20,10 @@ public class ModSpawnEggs {
             () -> new ModSpawnEggItem(ModEntityType.FANATIC, 0x5a0b0b, 0xc7b46b, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> ZEALOT_SPAWN_EGG = ITEMS.register("zealot_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.ZEALOT, 0x5a0b0b, 0x240505, new Item.Properties().tab(Goety.TAB)));
+            () -> new ModSpawnEggItem(ModEntityType.ZEALOT, 0x940f0f, 0x240505, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> THUG_SPAWN_EGG = ITEMS.register("thug_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.THUG, 0x5a0b0b, 0x241c1c, new Item.Properties().tab(Goety.TAB)));
+            () -> new ModSpawnEggItem(ModEntityType.THUG, 0x241c1c, 0x141010, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> CRIMSON_SPIDER_SPAWN_EGG = ITEMS.register("crimson_spider_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.CRIMSON_SPIDER, 0x9a0000, 0xe6c550, new Item.Properties().tab(Goety.TAB)));
@@ -32,7 +32,7 @@ public class ModSpawnEggs {
             () -> new ModSpawnEggItem(ModEntityType.DISCIPLE, 0x5a0b0b, 0x917186, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> BELDAM_SPAWN_EGG = ITEMS.register("beldam_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.BELDAM, 0x330707, 0x161616, new Item.Properties().tab(Goety.TAB)));
+            () -> new ModSpawnEggItem(ModEntityType.BELDAM, 0x340000, 0x161616, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> APOSTLE_SPAWN_EGG = ITEMS.register("apostle_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.APOSTLE, 0x080808, 0xf5da2a, new Item.Properties().tab(Goety.TAB)));
@@ -41,7 +41,7 @@ public class ModSpawnEggs {
             () -> new ModSpawnEggItem(ModEntityType.ENVIOKER, 0x1e1c1a, 0xca272a, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> INQUILLAGER_SPAWN_EGG = ITEMS.register("inquillager_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.INQUILLAGER, 0x5c121b, 0x5c121b, new Item.Properties().tab(Goety.TAB)));
+            () -> new ModSpawnEggItem(ModEntityType.INQUILLAGER, 0xbca341, 0x5c121b, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> CONQUILLAGER_SPAWN_EGG = ITEMS.register("conquillager_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.CONQUILLAGER, 0xd3d3d3, 0x0f0f0f, new Item.Properties().tab(Goety.TAB)));

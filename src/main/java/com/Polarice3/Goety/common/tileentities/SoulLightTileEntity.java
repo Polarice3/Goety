@@ -9,6 +9,8 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -26,10 +28,7 @@ public class SoulLightTileEntity extends TileEntity implements ITickableTileEnti
     public void tick(){
         ++this.tickCount;
         if (this.tickCount % 8 == 0) {
-            double d0 = (double) this.worldPosition.getX() + 0.5D;
-            double d1 = (double) this.worldPosition.getY() + 0.5D;
-            double d2 = (double) this.worldPosition.getZ() + 0.5D;
-            new ParticleUtil(this.getLevel(), ModParticleTypes.SOUL_LIGHT_EFFECT.get(), d0, d1, d2, 0, 0, 0);
+            this.spawnParticles();
         }
     }
 
@@ -39,6 +38,14 @@ public class SoulLightTileEntity extends TileEntity implements ITickableTileEnti
 
     public World getLevel() {
         return SoulLightTileEntity.this.level;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void spawnParticles(){
+        double d0 = (double) this.worldPosition.getX() + 0.5D;
+        double d1 = (double) this.worldPosition.getY() + 0.5D;
+        double d2 = (double) this.worldPosition.getZ() + 0.5D;
+        new ParticleUtil(this.getLevel(), ModParticleTypes.SOUL_LIGHT_EFFECT.get(), d0, d1, d2, 0, 0, 0);
     }
 
     @Nullable

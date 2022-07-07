@@ -21,6 +21,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
+import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -435,6 +436,16 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (this.tickCount % 100 == 0){
             MobUtil.secretConversion(this);
         }
+        if (!this.level.isClientSide){
+            ServerWorld serverWorld = (ServerWorld) this.level;
+            for (WitchEntity witch : this.level.getEntitiesOfClass(WitchEntity.class, this.getBoundingBox().inflate(8.0D))){
+                BeldamEntity beldam = witch.convertTo(ModEntityType.BELDAM.get(), true);
+                if (beldam != null) {
+                    beldam.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(witch.blockPosition()), SpawnReason.CONVERSION, null, null);
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(witch, beldam);
+                }
+            }
+        }
         if (this.isSettingupSecond()){
             this.serverAiStep();
             if (this.tickCount % 10 == 0) {
@@ -445,27 +456,13 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                     this.barrier(entity, this);
                 }
             }
-            Vector3d vector3d = this.getBoundingBox().getCenter();
-            for(int i = 0; i < 40; ++i) {
-                double d0 = this.random.nextGaussian() * 0.2D;
-                double d1 = this.random.nextGaussian() * 0.2D;
-                double d2 = this.random.nextGaussian() * 0.2D;
-                new ParticleUtil(ParticleTypes.LARGE_SMOKE, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
-                new ParticleUtil(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, 0, 0, 0);
-            }
+            this.settingUpParticles();
             if (this.getHealth() >= this.getMaxHealth()){
                 if (!this.level.isClientSide){
                     ServerWorld serverWorld = (ServerWorld) ApostleEntity.this.level;
                     serverWorld.setWeatherParameters(0, 6000, true, true);
                 }
-                for(int k = 0; k < 200; ++k) {
-                    float f2 = random.nextFloat() * 4.0F;
-                    float f1 = random.nextFloat() * ((float)Math.PI * 2F);
-                    double d1 = MathHelper.cos(f1) * f2;
-                    double d2 = 0.01D + random.nextDouble() * 0.5D;
-                    double d3 = MathHelper.sin(f1) * f2;
-                    new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
-                }
+                this.finishSettingUpParticles();
                 this.setSettingupSecond(false);
                 this.setSecondPhase(true);
                 this.teleport();
@@ -549,7 +546,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
         if (this.isFiring()) {
             ++this.f;
-            new ParticleUtil(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             if (this.f % 2 == 0 && this.f < 10) {
                 for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(12.0D), field_213690_b)) {
                     if (!(entity instanceof AbstractCultistEntity)) {
@@ -557,14 +553,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                         this.launch(entity, this);
                     }
                 }
+                this.roarParticles();
                 this.playSound(ModSounds.ROAR_SPELL.get(), 1.0F, 1.0F);
-                Vector3d vector3d = this.getBoundingBox().getCenter();
-                for(int i = 0; i < 40; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.2D;
-                    double d1 = this.random.nextGaussian() * 0.2D;
-                    double d2 = this.random.nextGaussian() * 0.2D;
-                    new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
-                }
             }
             if (this.f >= 10){
                 this.teleport();
@@ -579,6 +569,42 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             if (livingEntity != null){
                 livingEntity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 100));
             }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void settingUpParticles(){
+        Vector3d vector3d = this.getBoundingBox().getCenter();
+        for(int i = 0; i < 40; ++i) {
+            double d0 = this.random.nextGaussian() * 0.2D;
+            double d1 = this.random.nextGaussian() * 0.2D;
+            double d2 = this.random.nextGaussian() * 0.2D;
+            new ParticleUtil(ParticleTypes.LARGE_SMOKE, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+            new ParticleUtil(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, 0, 0, 0);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void finishSettingUpParticles(){
+        for(int k = 0; k < 200; ++k) {
+            float f2 = random.nextFloat() * 4.0F;
+            float f1 = random.nextFloat() * ((float)Math.PI * 2F);
+            double d1 = MathHelper.cos(f1) * f2;
+            double d2 = 0.01D + random.nextDouble() * 0.5D;
+            double d3 = MathHelper.sin(f1) * f2;
+            new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void roarParticles(){
+        new ParticleUtil(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+        Vector3d vector3d = this.getBoundingBox().getCenter();
+        for(int i = 0; i < 40; ++i) {
+            double d0 = this.random.nextGaussian() * 0.2D;
+            double d1 = this.random.nextGaussian() * 0.2D;
+            double d2 = this.random.nextGaussian() * 0.2D;
+            new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
         }
     }
 
