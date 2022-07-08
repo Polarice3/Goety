@@ -145,6 +145,25 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                 double d0 = (double)this.worldPosition.getX() + this.level.random.nextDouble();
                 double d1 = (double)this.worldPosition.getY() + this.level.random.nextDouble();
                 double d2 = (double)this.worldPosition.getZ() + this.level.random.nextDouble();
+                if (this.level.isClientSide){
+                    if (recipe != null) {
+                        if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
+                            for (int p = 0; p < 4; ++p) {
+                                new ParticleUtil(ParticleTypes.FLAME, d0, d1, d2, 0.0F, 0.0F, 0.0F);
+                            }
+                        }
+                        this.cursedCageTile.makeWorkParticles();
+                        for (int p = 0; p < 4; ++p) {
+                            new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                        }
+                    } else {
+                        if (this.level.getGameTime() % 20 == 0) {
+                            for (int p = 0; p < 4; ++p) {
+                                new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                            }
+                        }
+                    }
+                }
                 if (!this.level.isClientSide && recipe != null) {
                     this.restoreCastingPlayer();
 
@@ -165,21 +184,13 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     }
 
                     if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
-                        for (int p = 0; p < 4; ++p) {
-                            new ParticleUtil(ParticleTypes.FLAME, d0, d1, d2, 0.0F, 0.0F, 0.0F);
-                        }
                         return;
-                    }
-
-                    for (int p = 0; p < 4; ++p) {
-                        new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
                     }
 
                     if (this.level.getGameTime() % 20 == 0){
                         this.cursedCageTile.decreaseSouls(recipe.getSoulCost());
                         this.currentTime++;
                     }
-                    this.cursedCageTile.makeWorkParticles();
 
                     recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
                             this.currentTime);
@@ -195,11 +206,13 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         this.stopRitual(true);
                     }
 
+                    int totalSTime = 60;
+
                     if (recipe.getCraftType().contains("animalis")){
                         RitualStructures.findAnimaStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkAnimaRequirements(this)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -211,7 +224,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         RitualStructures.findNecroStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkNecroRequirements(this)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -223,7 +236,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         RitualStructures.findMinorNetherStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkMinorNetherRequirements(this)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -235,7 +248,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         RitualStructures.findForgeStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkForgeRequirements(this)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -247,7 +260,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         RitualStructures.findMagicStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkMagicRequirements(this)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -259,7 +272,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         RitualStructures.findSabbathStructure(this, this.worldPosition, this.level);
                         if (!RitualStructures.checkSabbathRequirements(this)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -270,7 +283,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     if (recipe.getCraftType().contains("adept_nether")){
                         if (!this.level.dimensionType().ultraWarm()) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -283,7 +296,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                             RitualStructures.findExpertNetherStructure(this, this.worldPosition, this.level);
                             if (!RitualStructures.checkExpertNetherRequirements(this)) {
                                 ++this.structureTime;
-                                if (this.structureTime >= 60){
+                                if (this.structureTime >= totalSTime){
                                     this.stopRitual(false);
                                 }
                             } else {
@@ -297,7 +310,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                     if (recipe.getCraftType().contains("air")){
                         if (!(this.getBlockPos().getY() >= 128)) {
                             ++this.structureTime;
-                            if (this.structureTime >= 60){
+                            if (this.structureTime >= totalSTime){
                                 this.stopRitual(false);
                             }
                         } else {
@@ -305,12 +318,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
                     }
 
-                } else {
-                    if (this.level.getGameTime() % 20 == 0) {
-                        for (int p = 0; p < 4; ++p) {
-                            new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
-                        }
-                    }
                 }
             } else {
                 this.stopRitual(false);

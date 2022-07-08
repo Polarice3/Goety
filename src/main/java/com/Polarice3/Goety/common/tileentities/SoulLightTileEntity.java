@@ -27,8 +27,13 @@ public class SoulLightTileEntity extends TileEntity implements ITickableTileEnti
 
     public void tick(){
         ++this.tickCount;
-        if (this.tickCount % 8 == 0) {
-            this.spawnParticles();
+        if (this.tickCount >= 1200){
+            this.tickCount = 0;
+        }
+        if (this.level.isClientSide) {
+            if (this.tickCount % 8 == 0) {
+                this.spawnParticles();
+            }
         }
     }
 

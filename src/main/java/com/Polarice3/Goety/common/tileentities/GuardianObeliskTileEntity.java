@@ -49,7 +49,6 @@ public class GuardianObeliskTileEntity extends TileEntity implements ITickableTi
             int i = this.worldPosition.getX();
             int j = this.worldPosition.getY();
             int k = this.worldPosition.getZ();
-            this.SpawnParticles();
             for (Entity entity: this.level.getEntitiesOfClass(Entity.class, (new AxisAlignedBB(i, j, k, i, j + 1, k)).inflate(32.0D))){
                 if (entity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) entity;
@@ -59,13 +58,15 @@ public class GuardianObeliskTileEntity extends TileEntity implements ITickableTi
                 }
                 if (entity instanceof TNTEntity){
                     entity.spawnAtLocation(new ItemStack(Items.GUNPOWDER, 5));
-                    new SoundUtil(entity.blockPosition(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     entity.remove();
                 }
                 if (entity instanceof CreeperEntity){
                     entity.remove();
                 }
             }
+        }
+        if (this.level.isClientSide){
+            this.SpawnParticles();
         }
     }
 

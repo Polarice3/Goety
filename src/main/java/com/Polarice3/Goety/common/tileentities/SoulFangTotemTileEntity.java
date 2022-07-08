@@ -146,7 +146,6 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             this.checkBeaconLevel(i, j, k);
             if (j1 >= 3) {
                 this.updateClientTarget();
-                this.SpawnParticles();
                 long t = this.level.getGameTime();
                 if (t % 40L == 0L && this.target != null){
                     this.activated = 20;
