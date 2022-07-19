@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class ChannellerEntity extends AbstractCultistEntity {
+public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
     private static final DataParameter<Boolean> IS_PRAYING = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.BOOLEAN);
     private static final Predicate<LivingEntity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof ChannellerEntity);
@@ -143,7 +143,6 @@ public class ChannellerEntity extends AbstractCultistEntity {
 
     public void aiStep() {
         super.aiStep();
-        this.conversion();
         List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
         if (!list.isEmpty() && !this.hasAllyTarget()) {
             MonsterEntity ally = list.get(this.random.nextInt(list.size()));

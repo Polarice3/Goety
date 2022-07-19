@@ -15,6 +15,8 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.PolarBearEntity;
+import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -58,7 +60,7 @@ public class MobUtil {
                 corrupt.finalizeSpawn((IServerWorld) corrupt.level, corrupt.level.getCurrentDifficultyAt(corrupt.blockPosition()), SpawnReason.CONVERSION, null, null);
                 if (!natural){
                     net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, corrupt);
-                    new SoundUtil(corrupt.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                    new SoundUtil(corrupt, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
                 }
             }
         }
@@ -218,5 +220,9 @@ public class MobUtil {
                 }
             }
         }
+    }
+
+    public static boolean notImmuneToFrost(LivingEntity livingEntity){
+        return !(livingEntity instanceof SnowGolemEntity) && !(livingEntity instanceof StrayEntity) && !(livingEntity instanceof PolarBearEntity);
     }
 }

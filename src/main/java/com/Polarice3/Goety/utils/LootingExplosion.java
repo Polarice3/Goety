@@ -40,7 +40,6 @@ import java.util.Set;
 public class LootingExplosion extends Explosion {
     public LootingExplosion.Mode lootMode;
 
-    @OnlyIn(Dist.CLIENT)
     public LootingExplosion(World pLevel, @Nullable Entity pSource, double pToBlowX, double pToBlowY, double pToBlowZ, float pRadius, boolean pFire, Explosion.Mode pBlockInteraction, LootingExplosion.Mode pLootMode) {
         super(pLevel, pSource, null, null, pToBlowX, pToBlowY, pToBlowZ, pRadius, pFire, pBlockInteraction);
         this.lootMode = pLootMode;
@@ -143,22 +142,18 @@ public class LootingExplosion extends Explosion {
     }
 
     public void finalizeExplosion(boolean pSpawnParticles) {
-        new SoundUtil(getPosition(), SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
 
         boolean flag = this.blockInteraction != Explosion.Mode.NONE;
-        if (pSpawnParticles) {
-            if (!(this.radius < 2.0F) && flag) {
-                new ParticleUtil(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-            } else {
-                new ParticleUtil(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-            }
+
+        if (this.level.isClientSide()) {
+            this.soundAndParticles(pSpawnParticles, flag);
         }
 
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
             Collections.shuffle(this.toBlow, this.level.random);
 
-            for(BlockPos blockpos : this.toBlow) {
+            for (BlockPos blockpos : this.toBlow) {
                 BlockState blockstate = this.level.getBlockState(blockpos);
                 Block block = blockstate.getBlock();
                 if (!blockstate.isAir(this.level, blockpos)) {
@@ -166,7 +161,7 @@ public class LootingExplosion extends Explosion {
                     this.level.getProfiler().push("explosion_blocks");
                     if (blockstate.canDropFromExplosion(this.level, blockpos, this) && this.level instanceof ServerWorld) {
                         TileEntity tileentity = blockstate.hasTileEntity() ? this.level.getBlockEntity(blockpos) : null;
-                        LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)this.level)).withRandom(this.level.random).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(blockpos)).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withOptionalParameter(LootParameters.BLOCK_ENTITY, tileentity).withOptionalParameter(LootParameters.THIS_ENTITY, this.source);
+                        LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld) this.level)).withRandom(this.level.random).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(blockpos)).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withOptionalParameter(LootParameters.BLOCK_ENTITY, tileentity).withOptionalParameter(LootParameters.THIS_ENTITY, this.source);
                         if (this.blockInteraction == Explosion.Mode.DESTROY) {
                             lootcontext$builder.withParameter(LootParameters.EXPLOSION_RADIUS, this.radius);
                         }
@@ -181,19 +176,30 @@ public class LootingExplosion extends Explosion {
                 }
             }
 
-            for(Pair<ItemStack, BlockPos> pair : objectarraylist) {
+            for (Pair<ItemStack, BlockPos> pair : objectarraylist) {
                 Block.popResource(this.level, pair.getSecond(), pair.getFirst());
             }
         }
 
         if (this.fire) {
-            for(BlockPos blockpos2 : this.toBlow) {
+            for (BlockPos blockpos2 : this.toBlow) {
                 if (this.random.nextInt(3) == 0 && this.level.getBlockState(blockpos2).isAir() && this.level.getBlockState(blockpos2.below()).isSolidRender(this.level, blockpos2.below())) {
                     this.level.setBlockAndUpdate(blockpos2, AbstractFireBlock.getState(this.level, blockpos2));
                 }
             }
         }
+    }
 
+    @OnlyIn(Dist.CLIENT)
+    private void soundAndParticles(boolean pSpawnParticles, boolean flag){
+        this.level.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+        if (pSpawnParticles) {
+            if (!(this.radius < 2.0F) && flag) {
+                this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
+            } else {
+                this.level.addParticle(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
+            }
+        }
     }
 
     private static void addBlockDrops(ObjectArrayList<Pair<ItemStack, BlockPos>> pDropPositionArray, ItemStack pStack, BlockPos pPos) {

@@ -93,7 +93,7 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + 1.0D + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (this.activated != 0) {
+            if (MINECRAFT.level.getBlockState(blockpos).getValue(ObeliskBlock.POWERED)) {
                 for (int p = 0; p < 4; ++p) {
                     MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.7, 0.7, 0.7);
                     MINECRAFT.level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);

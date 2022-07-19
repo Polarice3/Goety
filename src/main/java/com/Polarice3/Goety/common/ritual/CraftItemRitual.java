@@ -27,7 +27,7 @@ public class CraftItemRitual extends Ritual{
             double d0 = (double)darkAltarPos.getX() + world.random.nextDouble();
             double d1 = (double)darkAltarPos.getY() + world.random.nextDouble();
             double d2 = (double)darkAltarPos.getZ() + world.random.nextDouble();
-            new ParticleUtil(ParticleTypes.POOF, d0, d1, d2, 0, 0, 0);
+            world.addParticle(ParticleTypes.POOF, d0, d1, d2, 0, 0, 0);
         }
 
         ItemStack result = this.recipe.getResultItem().copy();

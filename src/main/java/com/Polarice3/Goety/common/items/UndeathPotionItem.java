@@ -49,18 +49,10 @@ public class UndeathPotionItem extends Item {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.success"), true);
                         player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 1));
                         player.addEffect(new EffectInstance(Effects.CONFUSION, 20, 1));
-                        new SoundUtil(player.blockPosition(), SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
-                        new SoundUtil(player.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 1.0F, 0.5F);
-                        for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
-                            double d = pLevel.random.nextGaussian() * 0.2D;
-                            new ParticleUtil(ParticleTypes.LARGE_SMOKE, player.getX(), player.getEyeY(), player.getZ(), d, d, d);
-                        }
+                        new SoundUtil(player, SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                        new SoundUtil(player, SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 1.0F, 0.5F);
                         player.hurt(DamageSource.WITHER, 50.0F);
                     } else {
-                        for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
-                            double d = pLevel.random.nextGaussian() * 0.2D;
-                            new ParticleUtil(ParticleTypes.WITCH, player.getX(), player.getEyeY(), player.getZ(), d, d, d);
-                        }
                         player.heal(20.0F);
                     }
                 } else {
@@ -68,10 +60,6 @@ public class UndeathPotionItem extends Item {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.fail"), true);
                         player.hurt(DamageSource.MAGIC, 50.0F);
                     } else {
-                        for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
-                            double d = pLevel.random.nextGaussian() * 0.2D;
-                            new ParticleUtil(ParticleTypes.WITCH, player.getX(), player.getEyeY(), player.getZ(), d, d, d);
-                        }
                         player.heal(20.0F);
                     }
                 }
@@ -111,9 +99,11 @@ public class UndeathPotionItem extends Item {
     }
 
     public ActionResult<ItemStack> use(World pLevel, PlayerEntity pPlayer, Hand pHand) {
-        for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
-            double d = pLevel.random.nextGaussian() * 0.2D;
-            new ParticleUtil(ParticleTypes.SMOKE, pPlayer.getX(), pPlayer.getEyeY(), pPlayer.getZ(), d, d, d);
+        if (pLevel.isClientSide) {
+            for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
+                double d = pLevel.random.nextGaussian() * 0.2D;
+                new ParticleUtil(ParticleTypes.SMOKE, pPlayer.getX(), pPlayer.getEyeY(), pPlayer.getZ(), d, d, d);
+            }
         }
         return DrinkHelper.useDrink(pLevel, pPlayer, pHand);
     }

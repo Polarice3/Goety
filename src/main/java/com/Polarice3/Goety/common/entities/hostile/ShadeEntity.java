@@ -106,7 +106,7 @@ public class ShadeEntity extends MonsterEntity {
                     huskarlEntity.setShade(true);
                     huskarlEntity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(livingEntity.blockPosition()), SpawnReason.CONVERSION, null, null);
                     serverWorld.addFreshEntity(huskarlEntity);
-                    new SoundUtil(huskarlEntity.position(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                    new SoundUtil(huskarlEntity, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
                     this.remove();
                 }
             }

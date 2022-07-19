@@ -45,6 +45,11 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
         if (flag1) {
             if (flag) {
                 this.makeParticles();
+                for (ItemStack item : this.items) {
+                    if (!item.isEmpty()) {
+                        this.makeWorkParticles();
+                    }
+                }
             }
 
         } else {
@@ -72,7 +77,6 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
                         .map((recipes) -> recipes.assemble(iinventory)).orElse(itemstack);
                 if (itemstack != itemstack1){
                     this.cookingProgress[i]++;
-                    this.makeWorkParticles();
                 }
                 if (this.cookingProgress[i] % 20 == 0){
                     this.level.playSound(null, this.getBlockPos(), SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F);

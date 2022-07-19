@@ -297,7 +297,7 @@ public class EnviokerEntity extends HuntingIllagerEntity {
                     soulSkullEntity.setPos(soulSkullEntity.getX(), EnviokerEntity.this.getY(0.5), soulSkullEntity.getZ());
                     EnviokerEntity.this.level.addFreshEntity(soulSkullEntity);
                     if (!EnviokerEntity.this.isSilent()) {
-                        new SoundUtil(EnviokerEntity.this.blockPosition(), SoundEvents.SNOWBALL_THROW, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                        new SoundUtil(EnviokerEntity.this, SoundEvents.SNOWBALL_THROW, SoundCategory.HOSTILE, 1.0F, 1.0F);
                     }
                 }
             }

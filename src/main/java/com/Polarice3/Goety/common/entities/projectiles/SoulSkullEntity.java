@@ -46,7 +46,6 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
         super(ModEntityType.SOULSKULL.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public SoulSkullEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_, double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
         super(ModEntityType.SOULSKULL.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_, p_i1795_12_, p_i1795_1_);
     }
@@ -121,7 +120,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
                                         net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) target, summonedentity);
-                                        new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        new SoundUtil(target, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                                         for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
                                             new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
                                         }
@@ -142,7 +141,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
                                         net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) target, summonedentity);
-                                        new SoundUtil(target.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        new SoundUtil(target, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                                         for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
                                             new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
                                         }
@@ -160,45 +159,43 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
 
     protected void onHit(RayTraceResult pResult) {
         super.onHit(pResult);
-        if (!this.level.isClientSide) {
-            Entity owner = this.getOwner();
-            float enchantment = 0;
-            boolean flaming = false;
-            boolean loot = false;
-            if (owner instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) owner;
-                if (WandUtil.enchantedFocus(player)){
-                    enchantment = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player)/2.5F;
-                    if (this.isUpgraded()){
-                        enchantment = enchantment + 0.75F;
-                    }
-                    if (WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0){
-                        flaming = true;
-                    }
+        Entity owner = this.getOwner();
+        float enchantment = 0;
+        boolean flaming = false;
+        boolean loot = false;
+        if (owner instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) owner;
+            if (WandUtil.enchantedFocus(player)){
+                enchantment = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player)/2.5F;
+                if (this.isUpgraded()){
+                    enchantment = enchantment + 0.75F;
                 }
-                if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()){
-                    if (CuriosFinder.findRing(player).isEnchanted()){
-                        float wanting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
-                        if (wanting >= 3){
-                            loot = true;
-                        }
+                if (WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0){
+                    flaming = true;
+                }
+            }
+            if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()){
+                if (CuriosFinder.findRing(player).isEnchanted()){
+                    float wanting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                    if (wanting >= 3){
+                        loot = true;
                     }
                 }
             }
-            Explosion.Mode explodeMode = Explosion.Mode.NONE;
-            if (this.isDangerous()){
-                if (this.getOwner() instanceof PlayerEntity){
-                    explodeMode = Explosion.Mode.DESTROY;
-                } else {
-                    if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner())){
-                        explodeMode = Explosion.Mode.DESTROY;
-                    }
-                }
-            }
-            LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
-            ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, explodeMode, lootMode);
-            this.remove();
         }
+        Explosion.Mode explodeMode = Explosion.Mode.NONE;
+        if (this.isDangerous()){
+            if (this.getOwner() instanceof PlayerEntity){
+                explodeMode = Explosion.Mode.DESTROY;
+            } else {
+                if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner())){
+                    explodeMode = Explosion.Mode.DESTROY;
+                }
+            }
+        }
+        LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
+        ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, explodeMode, lootMode);
+        this.remove();
 
     }
 

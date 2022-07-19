@@ -142,8 +142,8 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         int j = this.worldPosition.getY();
         int k = this.worldPosition.getZ();
         int j1 = this.levels;
+        this.checkBeaconLevel(i, j, k);
         if (!this.level.isClientSide()) {
-            this.checkBeaconLevel(i, j, k);
             if (j1 >= 3) {
                 this.updateClientTarget();
                 long t = this.level.getGameTime();
@@ -205,7 +205,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (this.activated != 0) {
+            if (MINECRAFT.level.getBlockState(blockpos).getValue(TotemHeadBlock.POWERED)) {
                 for (int p = 0; p < 4; ++p) {
                     MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.7, 0.7, 0.7);
                     MINECRAFT.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);

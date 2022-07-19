@@ -60,16 +60,16 @@ public class SummonApostleTrapEntity extends Entity {
                 new ParticleUtil(ParticleTypes.SMOKE, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D);
             }
             if (this.tickCount == 150) {
-                new SoundUtil(this.blockPosition(), SoundEvents.AMBIENT_NETHER_WASTES_MOOD, SoundCategory.AMBIENT, 1.0F, 1.0F);
+                new SoundUtil(this, SoundEvents.AMBIENT_NETHER_WASTES_MOOD, SoundCategory.AMBIENT, 1.0F, 1.0F);
                 for (PlayerEntity player: serverWorld.getEntitiesOfClass(PlayerEntity.class, this.getBoundingBox().inflate(32))){
                     player.displayClientMessage(new TranslationTextComponent("info.goety.apostle.summon"), true);
                 }
             }
             if (this.tickCount == 300) {
-                new SoundUtil(this.blockPosition(), ModSounds.APOSTLE_AMBIENT.get(), SoundCategory.HOSTILE, 1.0F, 1.0F);
+                new SoundUtil(this, ModSounds.APOSTLE_AMBIENT.get(), SoundCategory.HOSTILE, 1.0F, 1.0F);
             }
             if (this.tickCount == 450){
-                new SoundUtil(this.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundCategory.AMBIENT, 1.0F, 1.0F);
+                new SoundUtil(this, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundCategory.AMBIENT, 1.0F, 1.0F);
                 for(int k = 0; k < 200; ++k) {
                     float f2 = random.nextFloat() * 4.0F;
                     float f1 = random.nextFloat() * ((float)Math.PI * 2F);

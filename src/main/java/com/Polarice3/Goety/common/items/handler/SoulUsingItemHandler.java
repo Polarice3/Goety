@@ -51,8 +51,6 @@ public class SoulUsingItemHandler extends ItemStackHandler {
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = super.serializeNBT();
-        ListNBT nbtTagList = new ListNBT();
-        nbt.put("Items", nbtTagList);
         nbt.putInt("slot", slot);
         return nbt;
     }

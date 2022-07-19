@@ -22,8 +22,7 @@ public class PedestalTileEntity extends RitualTileEntity {
                 }
 
                 @Override
-                protected void onContentsChanged(
-                        int slot) {
+                protected void onContentsChanged(int slot) {
                     assert PedestalTileEntity.this.level != null;
                     if (!PedestalTileEntity.this.level.isClientSide) {
                         PedestalTileEntity.this.lastChangeTime = PedestalTileEntity.this.level

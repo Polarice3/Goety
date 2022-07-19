@@ -136,10 +136,6 @@ public class DeadMobEvents {
             if (ModDamageSource.desiccateAttacks(event.getSource())) {
                 if (victim instanceof IDeadMob) {
                     event.setCanceled(true);
-                } else {
-                    new SoundUtil(victim.blockPosition(), SoundEvents.STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    IParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-                    new ParticleUtil(victim, particleData);
                 }
             }
         }

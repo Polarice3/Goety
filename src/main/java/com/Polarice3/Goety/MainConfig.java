@@ -35,6 +35,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> GlowLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormCost;
@@ -78,6 +79,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
@@ -134,6 +136,17 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
     public static final ForgeConfigSpec.ConfigValue<Integer> LichHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulKilnCost;
+
+    public static final ForgeConfigSpec.ConfigValue<Integer> DarkManorSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DarkManorSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PortalOutpostSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PortalOutpostSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CursedGraveyardSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CursedGraveyardSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SalvagedFortSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SalvagedFortSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DecrepitFortSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DecrepitFortSeperation;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
@@ -282,6 +295,8 @@ public class MainConfig {
                 .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         FireBreathCost = BUILDER.comment("Fire Breath Spell Cost per second, Default: 2")
                 .defineInRange("fireBreathCost", 2, 0, Integer.MAX_VALUE);
+        FrostBreathCost = BUILDER.comment("Frost Breath Spell Cost per second, Default: 2")
+                .defineInRange("frostBreathCost", 2, 0, Integer.MAX_VALUE);
         SoulLightCost = BUILDER.comment("Soul Light Spell Cost, Default: 2")
                 .defineInRange("soulLightCost", 2, 0, Integer.MAX_VALUE);
         GlowLightCost = BUILDER.comment("Glow Light Spell Cost, Default: 4")
@@ -426,20 +441,42 @@ public class MainConfig {
                 .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         FireBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fire Breath Spell, Default: 0")
                 .defineInRange("fireBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
+        FrostBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Frost Breath Spell, Default: 0")
+                .defineInRange("frostBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
         IceStormInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Storm Spell, Default: 8")
                 .defineInRange("iceStormInfamyChance", 8, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")
                 .define("darkManorGen", true);
+        DarkManorSpacing = BUILDER.comment("Spacing for Dark Manors, Default: 60")
+                .defineInRange("darkManorSpacing", 60, 0, Integer.MAX_VALUE);
+        DarkManorSeperation = BUILDER.comment("Separation for Dark Manors, Default: 20")
+                .defineInRange("darkManorSeparation", 20, 0, Integer.MAX_VALUE);
         PortalOutpostGen = BUILDER.comment("Portal Outpost Generates in the World, Default: true")
                 .define("portalOutpostGen", true);
+        PortalOutpostSpacing = BUILDER.comment("Spacing for Portal Outposts, Default: 40")
+                .defineInRange("portalOutpostSpacing", 40, 0, Integer.MAX_VALUE);
+        PortalOutpostSeperation = BUILDER.comment("Separation for Portal Outposts, Default: 20")
+                .defineInRange("portalOutpostSeparation", 20, 0, Integer.MAX_VALUE);
         CursedGraveyardGen = BUILDER.comment("Cursed Graveyard Generates in the World, Default: true")
                 .define("cursedGraveyardGen", true);
+        CursedGraveyardSpacing = BUILDER.comment("Spacing for Cursed Graveyards, Default: 32")
+                .defineInRange("cursedGraveyardSpacing", 32, 0, Integer.MAX_VALUE);
+        CursedGraveyardSeperation = BUILDER.comment("Separation for Cursed Graveyards, Default: 5")
+                .defineInRange("cursedGraveyardSeparation", 5, 0, Integer.MAX_VALUE);
         SalvagedFortGen = BUILDER.comment("Salvaged Fort Generates in the World, Default: true")
                 .define("salvagedFortGen", true);
+        SalvagedFortSpacing = BUILDER.comment("Spacing for Salvaged Forts, Default: 32")
+                .defineInRange("salvagedFortSpacing", 32, 0, Integer.MAX_VALUE);
+        SalvagedFortSeperation = BUILDER.comment("Separation for Salvaged Forts, Default: 8")
+                .defineInRange("salvagedFortSeparation", 8, 0, Integer.MAX_VALUE);
         DecrepitFortGen = BUILDER.comment("Decrepit Fort Generates in the World, Default: true")
                 .define("decrepitFortGen", true);
+        DecrepitFortSpacing = BUILDER.comment("Spacing for Decrepit Forts, Default: 32")
+                .defineInRange("decrepitFortSpacing", 32, 0, Integer.MAX_VALUE);
+        DecrepitFortSeperation = BUILDER.comment("Separation for Decrepit Forts, Default: 8")
+                .defineInRange("decrepitFortSeparation", 8, 0, Integer.MAX_VALUE);
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
                 .define("totemGen", true);
         BUILDER.pop();

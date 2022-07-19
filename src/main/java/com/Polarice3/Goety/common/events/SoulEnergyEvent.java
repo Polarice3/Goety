@@ -4,12 +4,13 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.network.ModNetwork;
+import com.Polarice3.Goety.common.network.packets.client.CTotemDeathPacket;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -28,6 +29,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.Random;
 
@@ -56,20 +58,6 @@ public class SoulEnergyEvent {
                     if (tileEntity instanceof ArcaTileEntity) {
                         ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
                         if (arcaTile.getPlayer() == player) {
-                            Random pRand = world.random;
-                            if (pRand.nextInt(12) == 0) {
-                                for (int i = 0; i < 3; ++i) {
-                                    int j = pRand.nextInt(2) * 2 - 1;
-                                    int k = pRand.nextInt(2) * 2 - 1;
-                                    double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
-                                    double d1 = (float) blockPos.getY() + pRand.nextFloat();
-                                    double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
-                                    double d3 = pRand.nextFloat() * (float) j;
-                                    double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
-                                    double d5 = pRand.nextFloat() * (float) k;
-                                    new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
-                                }
-                            }
                             if (!soulEnergy.getSEActive()) {
                                 soulEnergy.setSEActive(true);
                                 SEHelper.sendSEUpdatePacket(player);
@@ -84,6 +72,29 @@ public class SoulEnergyEvent {
                         if (soulEnergy.getSEActive()) {
                             soulEnergy.setSEActive(false);
                             SEHelper.sendSEUpdatePacket(player);
+                        }
+                    }
+                }
+                if (world.isClientSide()){
+                    BlockPos blockPos = soulEnergy.getArcaBlock();
+                    TileEntity tileEntity = world.getBlockEntity(blockPos);
+                    if (tileEntity instanceof ArcaTileEntity) {
+                        ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
+                        if (arcaTile.getPlayer() == player) {
+                            Random pRand = world.random;
+                            if (pRand.nextInt(12) == 0) {
+                                for (int i = 0; i < 3; ++i) {
+                                    int j = pRand.nextInt(2) * 2 - 1;
+                                    int k = pRand.nextInt(2) * 2 - 1;
+                                    double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
+                                    double d1 = (float) blockPos.getY() + pRand.nextFloat();
+                                    double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
+                                    double d3 = pRand.nextFloat() * (float) j;
+                                    double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
+                                    double d5 = pRand.nextFloat() * (float) k;
+                                    new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
+                                }
+                            }
                         }
                     }
                 }
@@ -148,7 +159,6 @@ public class SoulEnergyEvent {
 
         if (event.getEntityLiving() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            Minecraft minecraft = Minecraft.getInstance();
             ISoulEnergy soulEnergy = SEHelper.getCapability(player);
             if (soulEnergy.getSEActive()){
                 if (soulEnergy.getArcaBlock() != null) {
@@ -175,7 +185,7 @@ public class SoulEnergyEvent {
                             } else {
                                 player.addEffect(new EffectInstance(ModEffects.SOUL_HUNGER.get(), 12000, 4, false, false));
                             }
-                            new SoundUtil(player.blockPosition(), SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            new SoundUtil(player, SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
                             SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
                             SEHelper.sendSEUpdatePacket(player);
                             event.setCanceled(true);
@@ -198,7 +208,7 @@ public class SoulEnergyEvent {
                             player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
                             player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
                             player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                            new SoundUtil(player.blockPosition(), SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            new SoundUtil(player, SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
                             SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
                             SEHelper.sendSEUpdatePacket(player);
                             event.setCanceled(true);
@@ -211,9 +221,7 @@ public class SoulEnergyEvent {
                 player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
                 player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
                 player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                new ParticleUtil(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY(), player.getZ(), 0.0F, 0.0F, 0.0F);
-                new SoundUtil(player.blockPosition(), SoundEvents.TOTEM_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                minecraft.gameRenderer.displayItemActivation(GoldTotemFinder.FindTotem(player));
+                ModNetwork.sendTo(player, new CTotemDeathPacket(player.getUUID()));
                 GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
                 event.setCanceled(true);
             }

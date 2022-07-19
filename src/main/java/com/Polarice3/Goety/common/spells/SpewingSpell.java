@@ -1,11 +1,12 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +52,11 @@ public abstract class SpewingSpell extends ChargingSpells{
 
     public abstract IParticleData getParticle();
 
+    public abstract void showWandBreath(LivingEntity entityLiving);
+
+    public abstract void showStaffBreath(LivingEntity entityLiving);
+
+    @OnlyIn(Dist.CLIENT)
     public void breathAttack(LivingEntity entityLiving, double pVelocity, double pSpread){
         Vector3d look = entityLiving.getLookAngle();
 
@@ -74,7 +80,7 @@ public abstract class SpewingSpell extends ChargingSpells{
             dy *= velocity;
             dz *= velocity;
 
-            new ParticleUtil(getParticle(), px, py, pz, dx, dy, dz);
+            entityLiving.level.addAlwaysVisibleParticle(getParticle(), px, py, pz, dx, dy, dz);
         }
     }
 }

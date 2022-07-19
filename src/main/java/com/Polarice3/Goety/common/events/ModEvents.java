@@ -49,6 +49,9 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -66,7 +69,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -243,13 +245,6 @@ public class ModEvents {
                         soulEnergy.setArcaBlockDimension(capability3.getArcaBlockDimension()));
     }
 
-    @SubscribeEvent
-    public static void KeyInputs(InputEvent.KeyInputEvent event){
-        KeyPressed.setWand(ModKeybindings.keyBindings[0].isDown());
-        KeyPressed.setWandandbag(ModKeybindings.keyBindings[1].isDown());
-        KeyPressed.setBag(ModKeybindings.keyBindings[2].isDown());
-    }
-
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void spawnEntities(BiomeLoadingEvent event){
         if (event.getName() != null) {
@@ -398,23 +393,6 @@ public class ModEvents {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         PlayerEntity player = event.player;
         World world = player.level;
-        if (KeyPressed.openWandandBag()){
-            if (player.getMainHandItem().getItem() instanceof SoulWand){
-                SoulWand.BagOnMainKeyPressed(player.getMainHandItem(), player);
-            } else if (player.getOffhandItem().getItem() instanceof SoulWand){
-                SoulWand.BagOnOffKeyPressed(player.getOffhandItem(), player);
-            }
-        }
-        if (KeyPressed.openWand()){
-            if (player.getMainHandItem().getItem() instanceof SoulWand){
-                SoulWand.onMainKeyPressed(player.getMainHandItem(), player);
-            } else if (player.getOffhandItem().getItem() instanceof SoulWand){
-                SoulWand.onOffKeyPressed(player.getOffhandItem(), player);
-            }
-        }
-        if (KeyPressed.openBag() && FocusBagFinder.findBag(player) != ItemStack.EMPTY){
-            FocusBagItem.onKeyPressed(FocusBagFinder.findBag(player), player);
-        }
         if (MainConfig.VillagerHate.get()) {
             if (RobeArmorFinder.FindAnySet(player)) {
                 for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
@@ -772,11 +750,11 @@ public class ModEvents {
                     }
                 }
                 if (killed instanceof BeldamEntity){
-                    float chance = 0.025F;
-                    chance += (float) EnchantmentHelper.getMobLooting(player) / 100;
-                    if (world.random.nextFloat() <= chance) {
-                        killed.spawnAtLocation(new ItemStack(ModItems.FORBIDDEN_PIECE.get()));
-                    }
+                    BeldamEntity beldam = (BeldamEntity) killed;
+                    LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.CULTISTS);
+                    LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), beldam);
+                    LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                    loottable.getRandomItems(ctx).forEach(beldam::spawnAtLocation);
                 }
             }
         }

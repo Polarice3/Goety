@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.world.structures.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -32,32 +33,32 @@ public class ModStructures {
     public static void setupStructures() {
         setupMapSpacingAndLand(
                 DARK_MANOR.get(),
-                new StructureSeparationSettings(60,
-                        20,
+                new StructureSeparationSettings(MainConfig.DarkManorSpacing.get(),
+                        MainConfig.DarkManorSeperation.get(),
                         1543212345),
                 true);
         setupMapSpacingAndLand(
                 PORTAL_OUTPOST.get(),
-                new StructureSeparationSettings(40,
-                        20,
+                new StructureSeparationSettings(MainConfig.PortalOutpostSpacing.get(),
+                        MainConfig.PortalOutpostSeperation.get(),
                         1654323456),
                 true);
         setupMapSpacingAndLand(
                 CURSED_GRAVEYARD.get(),
-                new StructureSeparationSettings(32,
-                        5,
+                new StructureSeparationSettings(MainConfig.CursedGraveyardSpacing.get(),
+                        MainConfig.CursedGraveyardSeperation.get(),
                         1765434567),
                 true);
         setupMapSpacingAndLand(
                 SALVAGED_FORT.get(),
-                new StructureSeparationSettings(32,
-                        8,
+                new StructureSeparationSettings(MainConfig.SalvagedFortSpacing.get(),
+                        MainConfig.SalvagedFortSeperation.get(),
                         1876545678),
                 true);
         setupMapSpacingAndLand(
                 DECREPIT_FORT.get(),
-                new StructureSeparationSettings(32,
-                        8,
+                new StructureSeparationSettings(MainConfig.DecrepitFortSpacing.get(),
+                        MainConfig.DecrepitFortSeperation.get(),
                         1987656789),
                 true);
 

@@ -21,6 +21,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -177,16 +179,11 @@ public class DeadSandExplosion {
     }
 
     public void finalizeExplosion(boolean pSpawnParticles) {
-        new SoundUtil(position, ModSounds.CORRUPT_EXPLOSION.get(), SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
 
         boolean flag = this.blockInteraction != DeadSandExplosion.Mode.NONE;
 
-        if (pSpawnParticles) {
-            if (!(this.radius < 2.0F)) {
-                new ParticleUtil(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-            } else {
-                new ParticleUtil(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-            }
+        if (this.level.isClientSide) {
+            this.soundAndParticles(pSpawnParticles);
         }
 
         if (flag) {
@@ -203,19 +200,31 @@ public class DeadSandExplosion {
                 Block.popResource(this.level, pair.getSecond(), pair.getFirst());
             }
 
-            if (!fluidstate.isEmpty()){
+            if (!fluidstate.isEmpty()) {
                 AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, pos.getX(), pos.getY(), pos.getZ());
                 areaeffectcloudentity.setRadius(2.5F);
                 areaeffectcloudentity.setRadiusOnUse(-0.5F);
                 areaeffectcloudentity.setWaitTime(10);
                 areaeffectcloudentity.setDuration(areaeffectcloudentity.getDuration() / 2);
-                areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
+                areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
                 areaeffectcloudentity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
                 this.level.addFreshEntity(areaeffectcloudentity);
             }
         }
-
     }
+
+    @OnlyIn(Dist.CLIENT)
+    public void soundAndParticles(boolean pSpawnParticles){
+        this.level.playLocalSound(position.x, position.y, position.z, ModSounds.CORRUPT_EXPLOSION.get(), SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
+        if (pSpawnParticles) {
+            if (!(this.radius < 2.0F)) {
+                this.level.addParticle(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
+            } else {
+                this.level.addParticle(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
+            }
+        }
+    }
+
     @Nullable
     public LivingEntity getSourceMob() {
         if (this.source == null) {

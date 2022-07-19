@@ -258,6 +258,9 @@ public class LichEvents {
                 if (event.getSource().isMagic()){
                     event.setAmount(event.getAmount() * 0.15F);
                 }
+                if (ModDamageSource.frostAttacks(event.getSource())){
+                    event.setAmount(event.getAmount()/2);
+                }
                 if (MainConfig.LichUndeadFriends.get()) {
                     if (RobeArmorFinder.FindNecroSet(player) && event.getSource().getEntity() != null) {
                         if (event.getSource().getEntity() instanceof LivingEntity) {

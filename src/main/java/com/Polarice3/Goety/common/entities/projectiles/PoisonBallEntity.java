@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -42,7 +41,9 @@ public class PoisonBallEntity extends ThrowableEntity {
     @Override
     public void tick() {
         super.tick();
-        this.spawnParticles();
+        if (this.level.isClientSide) {
+            this.spawnParticles();
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -84,14 +85,14 @@ public class PoisonBallEntity extends ThrowableEntity {
                     }
                 }
             }
-            new SoundUtil(pResult.getLocation(), SoundEvents.SLIME_ATTACK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            this.level.playLocalSound(pResult.getLocation().x, pResult.getLocation().y, pResult.getLocation().z, SoundEvents.SLIME_ATTACK, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
         }
     }
 
     protected void onHit(RayTraceResult pResult) {
         super.onHit(pResult);
         if (!this.level.isClientSide) {
-            new SoundUtil(pResult.getLocation(), SoundEvents.SLIME_ATTACK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            this.level.playLocalSound(pResult.getLocation().x, pResult.getLocation().y, pResult.getLocation().z, SoundEvents.SLIME_ATTACK, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
             this.level.broadcastEntityEvent(this, (byte)3);
             this.remove();
         }

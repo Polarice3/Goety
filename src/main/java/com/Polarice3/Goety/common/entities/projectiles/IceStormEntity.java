@@ -3,11 +3,16 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.monster.StrayEntity;
+import net.minecraft.entity.passive.PolarBearEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -48,7 +53,6 @@ public class IceStormEntity extends DamagingProjectileEntity {
         super(ModEntityType.ICE_STORM.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public IceStormEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_, double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
         super(ModEntityType.ICE_STORM.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_, p_i1795_12_, p_i1795_1_);
     }
@@ -85,7 +89,9 @@ public class IceStormEntity extends DamagingProjectileEntity {
 
     public void tick() {
         super.tick();
-        this.spawnParticles();
+        if (this.level.isClientSide){
+            this.spawnParticles();
+        }
         if (this.lifespan < getTotallife()){
             ++this.lifespan;
         } else {
@@ -93,22 +99,24 @@ public class IceStormEntity extends DamagingProjectileEntity {
         }
         for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(AreaofEffect()))) {
             if (livingEntity != this.getTrueOwner() && livingEntity != this.getOwner()) {
-                int duration = 1;
-                if (this.getTrueOwner() != null){
-                    float enchantment = 0;
-                    if (this.getTrueOwner() instanceof PlayerEntity){
-                        PlayerEntity player = (PlayerEntity) this.getTrueOwner();
-                        if (WandUtil.enchantedFocus(player)) {
-                            enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
-                            duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
+                if (MobUtil.notImmuneToFrost(livingEntity)) {
+                    int duration = 1;
+                    if (this.getTrueOwner() != null) {
+                        float enchantment = 0;
+                        if (this.getTrueOwner() instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) this.getTrueOwner();
+                            if (WandUtil.enchantedFocus(player)) {
+                                enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                                duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
+                            }
                         }
+                        livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getTrueOwner()), livingEntity instanceof BlazeEntity ? 2.0F : 1.0F + enchantment);
+                    } else {
+                        livingEntity.hurt(ModDamageSource.FROST, livingEntity instanceof BlazeEntity ? 2.0F : 1.0F);
                     }
-                    livingEntity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 2.0F + enchantment);
-                } else {
-                    livingEntity.hurt(DamageSource.MAGIC, 2.0F);
-                }
-                if (!this.level.isClientSide) {
-                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration, this.isUpgraded() ? 1 : 0));
+                    if (!this.level.isClientSide) {
+                        livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration, this.isUpgraded() ? 1 : 0));
+                    }
                 }
             }
         }
@@ -116,13 +124,11 @@ public class IceStormEntity extends DamagingProjectileEntity {
 
     @OnlyIn(Dist.CLIENT)
     public void spawnParticles(){
-        if (this.level.isClientSide) {
-            Vector3d vector3d = this.getDeltaMovement();
-            double d0 = this.getX() + vector3d.x;
-            double d1 = this.getY() + vector3d.y;
-            double d2 = this.getZ() + vector3d.z;
-            this.level.addParticle(ParticleTypes.POOF, d0 + level.random.nextDouble(), d1 + 0.5D, d2 + level.random.nextDouble(), 0.0D, 0.0D, 0.0D);
-        }
+        Vector3d vector3d = this.getDeltaMovement();
+        double d0 = this.getX() + vector3d.x;
+        double d1 = this.getY() + vector3d.y;
+        double d2 = this.getZ() + vector3d.z;
+        this.level.addParticle(ParticleTypes.POOF, d0 + level.random.nextDouble(), d1 + 0.5D, d2 + level.random.nextDouble(), 0.0D, 0.0D, 0.0D);
     }
 
     public double AreaofEffect(){

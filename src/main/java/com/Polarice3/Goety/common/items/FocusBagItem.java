@@ -63,22 +63,19 @@ public class FocusBagItem extends Item implements ICurioItem {
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        assert nbt != null;
-        stack.setTag(nbt.getCompound("tag"));
-        FocusBagItemHandler.get(stack).deserializeNBT(nbt.getCompound("cap"));
+        if (nbt != null) {
+            if (nbt.contains("tag")) {
+                stack.setTag(nbt.getCompound("tag"));
+            }
+            if (nbt.contains("cap")) {
+                FocusBagItemHandler.get(stack).deserializeNBT(nbt.getCompound("cap"));
+            }
+        }
     }
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && slotChanged;
-    }
-
-    public static void onKeyPressed(ItemStack stack, PlayerEntity playerEntity){
-        if (!playerEntity.level.isClientSide) {
-            SimpleNamedContainerProvider provider = new SimpleNamedContainerProvider(
-                    (id, inventory, player) -> new FocusBagContainer(id, inventory, FocusBagItemHandler.get(stack), stack), stack.getDisplayName());
-            NetworkHooks.openGui((ServerPlayerEntity) playerEntity, provider, (buffer) -> {});
-        }
     }
 
     @Override

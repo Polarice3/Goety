@@ -201,7 +201,7 @@ public class SkullLordEntity extends MonsterEntity{
                         this.moveControl.setWantedPosition(nx, vector3d1.y, nz, 1.0F);
                     }
                     if (this.laserTime == 30) {
-                        new SoundUtil(this.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundCategory.HOSTILE, 2.0F, 2.0F);
+                        new SoundUtil(this, SoundEvents.BEACON_ACTIVATE, SoundCategory.HOSTILE, 2.0F, 2.0F);
                         if (this.level.getDifficulty() == Difficulty.HARD){
                             this.spawnMobs();
                         }
@@ -212,7 +212,7 @@ public class SkullLordEntity extends MonsterEntity{
                     if (this.laserTime >= 60) {
                         LaserEntity laserEntity = ModEntityType.LASER.get().create(this.level);
                         if (laserEntity != null) {
-                            new SoundUtil(this.blockPosition(), SoundEvents.END_PORTAL_SPAWN, SoundCategory.HOSTILE, 3.0F, 1.0F);
+                            new SoundUtil(this, SoundEvents.END_PORTAL_SPAWN, SoundCategory.HOSTILE, 3.0F, 1.0F);
                             this.setLaserTime(false);
                             laserEntity.setSkullLord(this);
                             laserEntity.setDuration(200);

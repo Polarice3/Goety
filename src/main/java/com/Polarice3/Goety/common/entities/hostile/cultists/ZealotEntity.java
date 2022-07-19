@@ -31,7 +31,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser, IRangedAttackMob {
+public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser, IRangedAttackMob, ICultist {
     private static final DataParameter<Boolean> DATA_CHARGING_STATE = EntityDataManager.defineId(ZealotEntity.class, DataSerializers.BOOLEAN);
 
     public ZealotEntity(EntityType<? extends ZealotEntity> type, World worldIn) {
@@ -50,11 +50,6 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
-    }
-
-    public void aiStep() {
-        super.aiStep();
-        this.conversion();
     }
 
     protected SoundEvent getAmbientSound() {

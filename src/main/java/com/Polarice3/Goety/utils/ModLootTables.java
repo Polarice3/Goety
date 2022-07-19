@@ -15,6 +15,7 @@ public class ModLootTables {
     public static final ResourceLocation SALVAGED_FORT_ARCHERY = register("chests/salvaged_fort_archery");
     public static final ResourceLocation DECREPIT_TOMB = register("chests/decrepit_tomb");
     public static final ResourceLocation DEAD_MOBS = register("entities/dead_mobs");
+    public static final ResourceLocation CULTISTS = register("entities/cultist_extra");
 
     private static ResourceLocation register(String pId) {
         return register(Goety.location(pId));

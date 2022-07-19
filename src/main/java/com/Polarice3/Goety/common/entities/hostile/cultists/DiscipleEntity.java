@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class DiscipleEntity extends SpellcastingCultistEntity {
+public class DiscipleEntity extends SpellcastingCultistEntity implements ICultist{
     private int f;
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
     private boolean roarparticles;
@@ -136,7 +136,6 @@ public class DiscipleEntity extends SpellcastingCultistEntity {
 
     public void aiStep() {
         super.aiStep();
-        this.conversion();
         if (this.isFiring()) {
             ++this.f;
             if (this.f % 2 == 0 && this.f < 10) {

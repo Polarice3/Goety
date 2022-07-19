@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "csc",
+    "ses",
+    "csc"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "s":
+    {
+      "item": "minecraft:blue_ice"
+    },
+    "c":
+    {
+      "item": "minecraft:snow_block"
+    }
+  },
+  "result":
+  {
+    "item": "goety:frostbreathfocus",
+    "count": 1
+  }
+}

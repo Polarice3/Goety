@@ -33,7 +33,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class FanaticEntity extends AbstractCultistEntity implements IRangedAttackMob{
+public class FanaticEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultist{
     private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(FanaticEntity.class, DataSerializers.INT);
     public static final Map<Integer, ResourceLocation> TEXTURE_BY_TYPE = Util.make(Maps.newHashMap(), (map) -> {
         map.put(0, Goety.location("textures/entity/cultist/fanatic/fanatic_0.png"));
@@ -63,11 +63,6 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
-    }
-
-    public void aiStep() {
-        super.aiStep();
-        this.conversion();
     }
 
     protected void defineSynchedData() {
