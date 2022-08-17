@@ -123,27 +123,26 @@ public class SoulEnergyEvent {
         Entity killer = event.getSource().getEntity();
         Entity killed = event.getEntity();
 
-        if (killer instanceof PlayerEntity && killed instanceof MobEntity){
-            PlayerEntity player = (PlayerEntity) killer;
+        if (killed instanceof LivingEntity){
             LivingEntity victim = (LivingEntity) killed;
-            if (!(player instanceof FakePlayer)){
-                if (SEHelper.getSEActive(player)){
-                    SEHelper.handleKill(player, victim);
-                } else {
-                    GoldTotemItem.handleKill(player, victim);
+            if (killer instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) killer;
+                if (!(player instanceof FakePlayer)){
+                    if (SEHelper.getSEActive(player)){
+                        SEHelper.handleKill(player, victim);
+                    } else {
+                        GoldTotemItem.handleKill(player, victim);
+                    }
                 }
             }
-        }
 
-        if (killer instanceof OwnedEntity){
-            OwnedEntity slayer = (OwnedEntity) killer;
-            LivingEntity owner = slayer.getTrueOwner();
-            if (owner != null){
-                if (owner instanceof PlayerEntity) {
-                    if (RobeArmorFinder.FindArmor(owner)) {
-                        PlayerEntity playerEntity = (PlayerEntity) owner;
-                        if (killed instanceof LivingEntity) {
-                            LivingEntity victim = (LivingEntity) killed;
+            if (killer instanceof OwnedEntity){
+                OwnedEntity slayer = (OwnedEntity) killer;
+                LivingEntity owner = slayer.getTrueOwner();
+                if (owner != null){
+                    if (owner instanceof PlayerEntity) {
+                        if (RobeArmorFinder.FindArmor(owner)) {
+                            PlayerEntity playerEntity = (PlayerEntity) owner;
                             if (!(playerEntity instanceof FakePlayer)) {
                                 if (SEHelper.getSEActive(playerEntity)) {
                                     SEHelper.handleKill(slayer, victim);
@@ -157,8 +156,8 @@ public class SoulEnergyEvent {
             }
         }
 
-        if (event.getEntityLiving() instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+        if (killed instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) killed;
             ISoulEnergy soulEnergy = SEHelper.getCapability(player);
             if (soulEnergy.getSEActive()){
                 if (soulEnergy.getArcaBlock() != null) {

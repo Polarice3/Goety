@@ -56,6 +56,7 @@ public class VexSpell extends SummonSpells {
                     enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                     duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 }
+                this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
             }
             for (int i1 = 0; i1 < 3; ++i1) {
                 BlockPos blockpos = entityLiving.blockPosition();
@@ -80,7 +81,6 @@ public class VexSpell extends SummonSpells {
                 worldIn.addFreshEntity(vexentity);
             }
             worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
             this.SummonDown(entityLiving);
         }
     }
@@ -95,6 +95,7 @@ public class VexSpell extends SummonSpells {
                     enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                     duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 }
+                this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
             }
             for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
                 BlockPos blockpos = entityLiving.blockPosition();
@@ -119,7 +120,6 @@ public class VexSpell extends SummonSpells {
                 worldIn.addFreshEntity(vexentity);
             }
             this.SummonDown(entityLiving);
-            this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
             worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         }
     }

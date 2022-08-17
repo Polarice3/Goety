@@ -243,6 +243,13 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "zpiglinbruteminion").toString()));
 
+    public static final RegistryObject<EntityType<HogLordEntity>> HOGLORD = ENTITY_TYPES.register("hoglord",
+            () -> EntityType.Builder.of(HogLordEntity::new, EntityClassification.MONSTER)
+                    .sized(2.0947266F, 2.1F)
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "hoglord").toString()));
+
     public static final RegistryObject<EntityType<IllusionCloneEntity>> ILLUSION_CLONE = ENTITY_TYPES.register("illusion_clone",
             () -> EntityType.Builder.of(IllusionCloneEntity::new, EntityClassification.MISC)
                     .sized(0.6F, 1.95F)

@@ -63,7 +63,7 @@ public class LightningTrapEntity extends Entity {
 
     public void tick() {
         super.tick();
-        float f = 3.0F;
+        float f = 1.5F;
         float f5 = (float)Math.PI * f * f;
         for(int k1 = 0; (float)k1 < f5; ++k1) {
             float f6 = this.random.nextFloat() * ((float)Math.PI * 2F);

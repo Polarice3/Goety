@@ -72,7 +72,7 @@ public class ParticleUtil {
         }
     }
 
-    public ParticleUtil(IParticleData pParticleData, LivingEntity livingEntity, World world){
+    public ParticleUtil(IParticleData pParticleData, Entity livingEntity, World world){
         Minecraft MINECRAFT = Minecraft.getInstance();
         List<BlockPos> positions = Lists.newArrayList();
         if (MINECRAFT.level != null) {

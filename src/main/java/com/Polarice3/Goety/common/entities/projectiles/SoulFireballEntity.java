@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ICultistMinion;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -62,6 +64,14 @@ public class SoulFireballEntity extends DamagingProjectileEntity {
         if (!this.level.isClientSide) {
             this.level.explode(null, this.getX(), this.getY(), this.getZ(), 3.0F, Explosion.Mode.NONE);
             this.remove();
+        }
+    }
+
+    protected boolean canHitEntity(Entity pEntity) {
+        if (!(pEntity instanceof ICultistMinion) && this.getOwner() instanceof AbstractCultistEntity){
+            return super.canHitEntity(pEntity);
+        } else {
+            return false;
         }
     }
 

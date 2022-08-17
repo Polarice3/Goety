@@ -75,6 +75,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonVillagerMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZPIGLIN_MINION.get(), ZPiglinRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ZPiglinRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HOGLORD.get(), HogLordRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ENVIOKER.get(), EnviokerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.INQUILLAGER.get(), InquillagerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CONQUILLAGER.get(), ConquillagerRenderer::new);
@@ -175,6 +176,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
         particles.register(ModParticleTypes.LASER_GATHER.get(), GatheringParticle.Factory::new);
+        particles.register(ModParticleTypes.TORNADO_GATHER.get(), GatheringParticle.Factory::new);
     }
 
 }

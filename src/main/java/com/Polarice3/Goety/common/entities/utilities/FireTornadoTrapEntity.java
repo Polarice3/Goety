@@ -71,7 +71,7 @@ public class FireTornadoTrapEntity extends Entity {
             float f7 = MathHelper.sqrt(this.random.nextFloat()) * f;
             float f8 = MathHelper.cos(f6) * f7;
             float f9 = MathHelper.sin(f6) * f7;
-            new ParticleUtil(ParticleTypes.CLOUD, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D);
+            new ParticleUtil(ParticleTypes.SMOKE, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D);
         }
         if (this.tickCount >= this.getDuration()) {
             if (this.owner != null) {

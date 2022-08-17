@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -139,7 +140,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         if (this.isFiring()) {
             ++this.f;
             if (this.f % 2 == 0 && this.f < 10) {
-                for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D), field_213690_b)) {
+                for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0D), field_213690_b)) {
                     if (!(entity instanceof AbstractCultistEntity)) {
                         entity.hurt(DamageSource.mobAttack(this), 2.0F);
                         this.launch(entity, this);
@@ -164,7 +165,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         double d0 = p_213688_1_.getX() - livingEntity.getX();
         double d1 = p_213688_1_.getZ() - livingEntity.getZ();
         double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        p_213688_1_.push(d0 / d2 * 4.0D, 0.2D, d1 / d2 * 4.0D);
+        MobUtil.push(p_213688_1_, d0 / d2 * 4.0D, 0.2D, d1 / d2 * 4.0D);
     }
 
     class CastingSpellGoal extends SpellcastingCultistEntity.CastingASpellGoal {
@@ -328,7 +329,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         }
 
         protected int getCastingTime() {
-            return MainConfig.RoarDuration.get();
+            return 200;
         }
 
         protected int getCastingInterval() {

@@ -24,9 +24,12 @@ import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.GossipType;
@@ -224,5 +227,24 @@ public class MobUtil {
 
     public static boolean notImmuneToFrost(LivingEntity livingEntity){
         return !(livingEntity instanceof SnowGolemEntity) && !(livingEntity instanceof StrayEntity) && !(livingEntity instanceof PolarBearEntity);
+    }
+
+    public static void push(Entity pEntity, double pX, double pY, double pZ) {
+        if (pEntity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) pEntity;
+            if (MobUtil.playerValidity(player, false)) {
+                player.hurtMarked = true;
+                if (!player.level.isClientSide){
+                    player.setOnGround(false);
+                }
+            }
+        }
+        pEntity.setDeltaMovement(pEntity.getDeltaMovement().add(pX, pY, pZ));
+        pEntity.hasImpulse = true;
+    }
+
+    public static boolean isInRain(Entity pEntity){
+        BlockPos blockpos = pEntity.blockPosition();
+        return pEntity.level.isRainingAt(blockpos) || pEntity.level.isRainingAt(new BlockPos((double)blockpos.getX(), pEntity.getBoundingBox().maxY, (double)blockpos.getZ()));
     }
 }

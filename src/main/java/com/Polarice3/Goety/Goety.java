@@ -158,6 +158,7 @@ public class Goety {
         event.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZPIGLIN_MINION.get(), ZPiglinMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ZPiglinMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.HOGLORD.get(), HogLordEntity.setCustomAttributes().build());
         event.put(ModEntityType.ENVIOKER.get(), EnviokerEntity.setCustomAttributes().build());
         event.put(ModEntityType.INQUILLAGER.get(), InquillagerEntity.setCustomAttributes().build());
         event.put(ModEntityType.CONQUILLAGER.get(), ConquillagerEntity.setCustomAttributes().build());

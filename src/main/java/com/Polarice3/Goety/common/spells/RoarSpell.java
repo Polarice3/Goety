@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
@@ -45,7 +46,7 @@ public class RoarSpell extends Spells {
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
         }
-        for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(8.0D + radius), field_213690_b)) {
+        for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(4.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
                 entity.hurt(DamageSource.mobAttack(entityLiving), 3.0F + enchantment);
                 if (flaming){
@@ -87,7 +88,7 @@ public class RoarSpell extends Spells {
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
         }
-        for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(12.0D + radius), field_213690_b)) {
+        for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(8.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
                 entity.hurt(DamageSource.mobAttack(entityLiving), 6.0F + enchantment);
                 if (flaming){
@@ -118,17 +119,10 @@ public class RoarSpell extends Spells {
         this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
-    private void superlaunch(Entity p_213688_1_, LivingEntity livingEntity) {
-        double d0 = p_213688_1_.getX() - livingEntity.getX();
-        double d1 = p_213688_1_.getZ() - livingEntity.getZ();
-        double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        p_213688_1_.push(d0 / d2 * 8.0D, 0.2D, d1 / d2 * 8.0D);
-    }
-
     private void launch(Entity p_213688_1_, LivingEntity livingEntity) {
         double d0 = p_213688_1_.getX() - livingEntity.getX();
         double d1 = p_213688_1_.getZ() - livingEntity.getZ();
         double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        p_213688_1_.push(d0 / d2 * 4.0D, 0.2D, d1 / d2 * 4.0D);
+        MobUtil.push(p_213688_1_, d0 / d2 * 4.0D, 0.2D, d1 / d2 * 4.0D);
     }
 }
