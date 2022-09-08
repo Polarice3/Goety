@@ -147,6 +147,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SalvagedFortSeperation;
     public static final ForgeConfigSpec.ConfigValue<Integer> DecrepitFortSpacing;
     public static final ForgeConfigSpec.ConfigValue<Integer> DecrepitFortSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSeperation;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
@@ -189,6 +191,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> CursedGraveyardGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SalvagedFortGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DecrepitFortGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> RuinedRitualGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
@@ -477,6 +480,12 @@ public class MainConfig {
                 .defineInRange("decrepitFortSpacing", 32, 0, Integer.MAX_VALUE);
         DecrepitFortSeperation = BUILDER.comment("Separation for Decrepit Forts, Default: 8")
                 .defineInRange("decrepitFortSeparation", 8, 0, Integer.MAX_VALUE);
+        RuinedRitualGen = BUILDER.comment("Ruined Ritual Generates in the World, Default: true")
+                .define("ruinedRitualGen", true);
+        RuinedRitualSpacing = BUILDER.comment("Spacing for Ruined Rituals, Default: 45")
+                .defineInRange("ruinedRitualSpacing", 45, 0, Integer.MAX_VALUE);
+        RuinedRitualSeperation = BUILDER.comment("Separation for Ruined Rituals, Default: 10")
+                .defineInRange("ruinedRitualSeparation", 10, 0, Integer.MAX_VALUE);
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
                 .define("totemGen", true);
         BUILDER.pop();

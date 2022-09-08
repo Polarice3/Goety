@@ -1,0 +1,33 @@
+{
+  "parent": "goety:goety/root",
+  "criteria": {
+    "ruined_ritual": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "ruined_ritual"
+        }
+      }
+    },
+    "kill_a_cultist": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "#goety:cultists"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ruined_ritual",
+      "kill_a_cultist"
+    ]
+  ]
+}

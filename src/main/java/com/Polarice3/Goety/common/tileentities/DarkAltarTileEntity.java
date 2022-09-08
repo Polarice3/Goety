@@ -11,7 +11,6 @@ import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
 import com.Polarice3.Goety.utils.EntityFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.items.IItemHandler;
@@ -145,179 +145,179 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                 double d0 = (double)this.worldPosition.getX() + this.level.random.nextDouble();
                 double d1 = (double)this.worldPosition.getY() + this.level.random.nextDouble();
                 double d2 = (double)this.worldPosition.getZ() + this.level.random.nextDouble();
-                if (this.level.isClientSide){
+                if (!this.level.isClientSide) {
+                    ServerWorld serverWorld = (ServerWorld) this.level;
                     if (recipe != null) {
+                        this.cursedCageTile.generateParticles();
+
+                        this.restoreCastingPlayer();
+
                         if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
                             for (int p = 0; p < 4; ++p) {
-                                new ParticleUtil(ParticleTypes.FLAME, d0, d1, d2, 0.0F, 0.0F, 0.0F);
+                                serverWorld.sendParticles(ParticleTypes.FLAME, d0, d1, d2, 1, 0.0F, 0.0F, 0.0F, 0.0F);
                             }
                         }
-                        this.cursedCageTile.makeWorkParticles();
                         for (int p = 0; p < 4; ++p) {
-                            new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                            serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 1);
                         }
-                    } else {
-                        if (this.level.getGameTime() % 20 == 0) {
-                            for (int p = 0; p < 4; ++p) {
-                                new ParticleUtil(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+
+                        if (this.remainingAdditionalIngredients == null) {
+                            this.restoreRemainingAdditionalIngredients();
+                            if (this.remainingAdditionalIngredients == null) {
+                                Goety.LOGGER
+                                        .warn("Could not restore remainingAdditionalIngredients during tick - world seems to be null. Will attempt again next tick.");
+                                return;
                             }
                         }
-                    }
-                }
-                if (!this.level.isClientSide && recipe != null) {
-                    this.restoreCastingPlayer();
 
-                    if (this.remainingAdditionalIngredients == null) {
-                        this.restoreRemainingAdditionalIngredients();
-                        if (this.remainingAdditionalIngredients == null) {
-                            Goety.LOGGER
-                                    .warn("Could not restore remainingAdditionalIngredients during tick - world seems to be null. Will attempt again next tick.");
+                        IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
+                        if (!recipe.getRitual().isValid(this.level, this.worldPosition, this, this.castingPlayer,
+                                handler.getStackInSlot(0), this.remainingAdditionalIngredients)) {
+                            this.stopRitual(false);
                             return;
                         }
-                    }
 
-                    IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
-                    if (!recipe.getRitual().isValid(this.level, this.worldPosition, this, this.castingPlayer,
-                            handler.getStackInSlot(0), this.remainingAdditionalIngredients)) {
-                        this.stopRitual(false);
-                        return;
-                    }
-
-                    if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
-                        return;
-                    }
-
-                    if (this.level.getGameTime() % 20 == 0){
-                        this.cursedCageTile.decreaseSouls(recipe.getSoulCost());
-                        this.currentTime++;
-                    }
-
-                    recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
-                            this.currentTime);
-
-                    if (!recipe.getRitual()
-                            .consumeAdditionalIngredients(this.level, this.worldPosition, this.remainingAdditionalIngredients,
-                                    this.currentTime, this.consumedIngredients)) {
-                        this.stopRitual(false);
-                        return;
-                    }
-
-                    if (recipe.getDuration() >= 0 && this.currentTime >= recipe.getDuration()) {
-                        this.stopRitual(true);
-                    }
-
-                    int totalSTime = 60;
-
-                    if (recipe.getCraftType().contains("animalis")){
-                        RitualStructures.findAnimaStructure(this, this.worldPosition, this.level);
-                        if (!RitualStructures.checkAnimaRequirements(this)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
+                        if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
+                            return;
                         }
-                    }
 
-                    if (recipe.getCraftType().contains("necroturgy") || recipe.getCraftType().contains("lich")){
-                        RitualStructures.findNecroStructure(this, this.worldPosition, this.level);
-                        if (!RitualStructures.checkNecroRequirements(this)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
+                        if (this.level.getGameTime() % 20 == 0) {
+                            this.cursedCageTile.decreaseSouls(recipe.getSoulCost());
+                            this.currentTime++;
                         }
-                    }
 
-                    if (recipe.getCraftType().contains("minor_nether")){
-                        RitualStructures.findMinorNetherStructure(this, this.worldPosition, this.level);
-                        if (!RitualStructures.checkMinorNetherRequirements(this)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
+                        recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
+                                this.currentTime);
+
+                        if (!recipe.getRitual()
+                                .consumeAdditionalIngredients(this.level, this.worldPosition, this.remainingAdditionalIngredients,
+                                        this.currentTime, this.consumedIngredients)) {
+                            this.stopRitual(false);
+                            return;
                         }
-                    }
 
-                    if (recipe.getCraftType().contains("forge")){
-                        RitualStructures.findForgeStructure(this, this.worldPosition, this.level);
-                        if (!RitualStructures.checkForgeRequirements(this)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
+                        if (recipe.getDuration() >= 0 && this.currentTime >= recipe.getDuration()) {
+                            this.stopRitual(true);
                         }
-                    }
 
-                    if (recipe.getCraftType().contains("magic")){
-                        RitualStructures.findMagicStructure(this, this.worldPosition, this.level);
-                        if (!RitualStructures.checkMagicRequirements(this)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
-                        }
-                    }
+                        int totalSTime = 60;
 
-                    if (recipe.getCraftType().contains("sabbath")){
-                        RitualStructures.findSabbathStructure(this, this.worldPosition, this.level);
-                        if (!RitualStructures.checkSabbathRequirements(this)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
-                        }
-                    }
-
-                    if (recipe.getCraftType().contains("adept_nether")){
-                        if (!this.level.dimensionType().ultraWarm()) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
-                            }
-                        } else {
-                            this.structureTime = 0;
-                        }
-                    }
-
-                    if (recipe.getCraftType().contains("expert_nether")){
-                        if (!this.level.dimensionType().ultraWarm()) {
-                            RitualStructures.findExpertNetherStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkExpertNetherRequirements(this)) {
+                        if (recipe.getCraftType().contains("animalis")) {
+                            RitualStructures.findAnimaStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkAnimaRequirements(this)) {
                                 ++this.structureTime;
-                                if (this.structureTime >= totalSTime){
+                                if (this.structureTime >= totalSTime) {
                                     this.stopRitual(false);
                                 }
                             } else {
                                 this.structureTime = 0;
                             }
-                        } else {
-                            this.structureTime = 0;
                         }
-                    }
 
-                    if (recipe.getCraftType().contains("air")){
-                        if (!(this.getBlockPos().getY() >= 128)) {
-                            ++this.structureTime;
-                            if (this.structureTime >= totalSTime){
-                                this.stopRitual(false);
+                        if (recipe.getCraftType().contains("necroturgy") || recipe.getCraftType().contains("lich")) {
+                            RitualStructures.findNecroStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkNecroRequirements(this)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
                             }
-                        } else {
-                            this.structureTime = 0;
+                        }
+
+                        if (recipe.getCraftType().contains("minor_nether")) {
+                            RitualStructures.findMinorNetherStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkMinorNetherRequirements(this)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+
+                        if (recipe.getCraftType().contains("forge")) {
+                            RitualStructures.findForgeStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkForgeRequirements(this)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+
+                        if (recipe.getCraftType().contains("magic")) {
+                            RitualStructures.findMagicStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkMagicRequirements(this)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+
+                        if (recipe.getCraftType().contains("sabbath")) {
+                            RitualStructures.findSabbathStructure(this, this.worldPosition, this.level);
+                            if (!RitualStructures.checkSabbathRequirements(this)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+
+                        if (recipe.getCraftType().contains("adept_nether")) {
+                            if (!this.level.dimensionType().ultraWarm()) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+
+                        if (recipe.getCraftType().contains("expert_nether")) {
+                            if (!this.level.dimensionType().ultraWarm()) {
+                                RitualStructures.findExpertNetherStructure(this, this.worldPosition, this.level);
+                                if (!RitualStructures.checkExpertNetherRequirements(this)) {
+                                    ++this.structureTime;
+                                    if (this.structureTime >= totalSTime) {
+                                        this.stopRitual(false);
+                                    }
+                                } else {
+                                    this.structureTime = 0;
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+
+                        if (recipe.getCraftType().contains("air")) {
+                            if (!(this.getBlockPos().getY() >= 128)) {
+                                ++this.structureTime;
+                                if (this.structureTime >= totalSTime) {
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.structureTime = 0;
+                            }
+                        }
+                    } else {
+                        if (this.level.getGameTime() % 20 == 0) {
+                            for (int p = 0; p < 4; ++p) {
+                                serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 1);
+                            }
                         }
                     }
-
                 }
             } else {
                 this.stopRitual(false);

@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.hostile.ParasiteEntity;
-import com.Polarice3.Goety.common.entities.hostile.TankEntity;
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -29,7 +28,7 @@ public class HostedEvent {
             if (host instanceof AbstractSkeletonEntity || host instanceof ParasiteEntity
                     || host instanceof VexEntity || host instanceof MinionEntity
                     || host instanceof BlazeEntity || host instanceof MagmaCubeEntity
-                    || host instanceof GuardianEntity || host instanceof IronGolemEntity || host instanceof TankEntity
+                    || host instanceof GuardianEntity || host instanceof IronGolemEntity
                     || host instanceof SilverfishEntity || host instanceof EndermiteEntity || host instanceof WitherEntity){
                 host.removeEffect(ModEffects.HOSTED.get());
             } else if (host instanceof EndermanEntity){

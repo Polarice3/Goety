@@ -49,7 +49,8 @@ public class SalvagedFortStructure extends ModStructureTemplate {
                 return false;
             }
         }
-        return MainConfig.SalvagedFortGen.get() && topBlock.getFluidState().isEmpty() && !isNearVillage(chunkGenerator, seed, chunkrandom, chunkX, chunkZ) && !isNearFort(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
+        BlockState bottomBlock = columnOfBlocks.getBlockState(centerOfChunk.below(landHeight));
+        return MainConfig.SalvagedFortGen.get() && topBlock.getFluidState().isEmpty() && bottomBlock.getFluidState().isEmpty() && !isNearVillage(chunkGenerator, seed, chunkrandom, chunkX, chunkZ) && !isNearFort(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
     }
 
     private boolean isNearVillage(ChunkGenerator chunkGenerator, long l, SharedSeedRandom sharedSeedRandom, int i1, int i2) {

@@ -13,9 +13,15 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.*;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -28,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ThugEntity extends AbstractCultistEntity {
+    protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(ThugEntity.class, DataSerializers.BYTE);
     private int attackTick;
 
     public ThugEntity(EntityType<? extends AbstractCultistEntity> type, World worldIn) {
@@ -50,6 +57,11 @@ public class ThugEntity extends AbstractCultistEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.6D);
     }
 
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_FLAGS_ID, (byte)0);
+    }
+
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("AttackTick", this.attackTick);
@@ -58,6 +70,22 @@ public class ThugEntity extends AbstractCultistEntity {
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.attackTick = compound.getInt("AttackTick");
+    }
+
+    private boolean getThugFlag(int mask) {
+        int i = this.entityData.get(DATA_FLAGS_ID);
+        return (i & mask) != 0;
+    }
+
+    private void setThugFlag(int mask, boolean value) {
+        int i = this.entityData.get(DATA_FLAGS_ID);
+        if (value) {
+            i = i | mask;
+        } else {
+            i = i & ~mask;
+        }
+
+        this.entityData.set(DATA_FLAGS_ID, (byte)(i & 255));
     }
 
     protected SoundEvent getAmbientSound() {
@@ -88,6 +116,29 @@ public class ThugEntity extends AbstractCultistEntity {
     public void aiStep() {
         super.aiStep();
         if (this.isAlive()) {
+            if (this.level.isClientSide){
+                if (this.isRaging()){
+                    if (this.tickCount % 20 == 0) {
+                        this.addParticlesAroundSelf(ParticleTypes.ANGRY_VILLAGER);
+                    }
+                }
+            }
+            if (this.getHealth() < this.getMaxHealth() / 1.5) {
+                if (this.isAggressive()) {
+                    this.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 20, 1));
+                    this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 20, 1));
+                    if (this.tickCount % 20 == 0){
+                        this.hurt(DamageSource.GENERIC, 1.0F);
+                    }
+                    this.setIsRaging(true);
+                } else {
+                    if (this.tickCount % 20 == 0) {
+                        this.heal(1.0F);
+                    }
+                    this.setIsRaging(false);
+                }
+
+            }
             if (this.attackTick > 0) {
                 --this.attackTick;
             }
@@ -120,6 +171,25 @@ public class ThugEntity extends AbstractCultistEntity {
                 }
             }
         }
+    }
+
+    public boolean isRaging() {
+        return this.getThugFlag(1);
+    }
+
+    public void setIsRaging(boolean charging) {
+        this.setThugFlag(1, charging);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void addParticlesAroundSelf(IParticleData pParticleData) {
+        for(int i = 0; i < 5; ++i) {
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
+            this.level.addParticle(pParticleData, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+        }
+
     }
 
     private float getAttackDamage() {

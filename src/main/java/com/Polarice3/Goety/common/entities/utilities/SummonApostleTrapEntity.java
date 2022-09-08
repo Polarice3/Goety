@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.entities.utilities;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.Entity;
@@ -57,7 +56,7 @@ public class SummonApostleTrapEntity extends Entity {
                 float f7 = MathHelper.sqrt(this.random.nextFloat()) * f;
                 float f8 = MathHelper.cos(f6) * f7;
                 float f9 = MathHelper.sin(f6) * f7;
-                new ParticleUtil(ParticleTypes.SMOKE, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D);
+                serverWorld.sendParticles(ParticleTypes.SMOKE, this.getX() + (double)f8, this.getY(), this.getZ() + (double)f9, 1, (0.5D - this.random.nextDouble()) * 0.15D, (double)0.01F, (0.5D - this.random.nextDouble()) * 0.15D, (0.5D - this.random.nextDouble()) * 0.15D);
             }
             if (this.tickCount == 150) {
                 new SoundUtil(this, SoundEvents.AMBIENT_NETHER_WASTES_MOOD, SoundCategory.AMBIENT, 1.0F, 1.0F);
@@ -76,7 +75,7 @@ public class SummonApostleTrapEntity extends Entity {
                     double d1 = MathHelper.cos(f1) * f2;
                     double d2 = 0.01D + random.nextDouble() * 0.5D;
                     double d3 = MathHelper.sin(f1) * f2;
-                    new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
+                    serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
                 }
                 ApostleEntity apostleEntity = new ApostleEntity(ModEntityType.APOSTLE.get(), this.level);
                 apostleEntity.setPos(this.getX(), this.getY(), this.getZ());

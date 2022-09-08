@@ -15,6 +15,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -140,6 +141,27 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
             for (int p = 0; p < 4; ++p) {
                 new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);
                 new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
+            }
+            this.spinning = 20;
+        }
+    }
+
+    public void generateParticles() {
+        if (this.getSouls() <= 0){
+            return;
+        }
+        BlockPos blockpos = this.getBlockPos();
+
+        if (this.level != null) {
+            if (!this.level.isClientSide) {
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                double d0 = (double) blockpos.getX() + this.level.random.nextDouble();
+                double d1 = (double) blockpos.getY() + this.level.random.nextDouble();
+                double d2 = (double) blockpos.getZ() + this.level.random.nextDouble();
+                for (int p = 0; p < 4; ++p) {
+                    serverWorld.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 1, 0, 0, 0, 0);
+                    serverWorld.sendParticles(ParticleTypes.SMOKE, d0, d1, d2, 1, 0.0D, 5.0E-4D, 0.0D, 5.0E-4D);
+                }
             }
             this.spinning = 20;
         }

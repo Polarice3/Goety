@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "goety:block/false_portal_ns"
+    },
+    "axis=z": {
+      "model": "goety:block/false_portal_ew"
+    }
+  }
+}

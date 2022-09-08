@@ -9,10 +9,7 @@ import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.ICultistMinion;
+import com.Polarice3.Goety.common.entities.hostile.cultists.*;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
@@ -23,15 +20,16 @@ import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
-import com.Polarice3.Goety.common.items.FocusBagItem;
-import com.Polarice3.Goety.common.items.SoulWand;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.lichdom.LichProvider;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEProvider;
 import com.Polarice3.Goety.common.spider.SpiderLevelsProvider;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
-import com.Polarice3.Goety.init.*;
+import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -827,45 +825,57 @@ public class ModEvents {
             int looting = MathHelper.clamp(EnchantmentHelper.getMobLooting(player), 0, 3);
             if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
                 if (killed instanceof LivingEntity){
-                    LivingEntity killed1 = (LivingEntity) killed;
+                    LivingEntity livingEntity = (LivingEntity) killed;
                     if (player.getMainHandItem().getItem() instanceof AxeItem && event.getSource().getDirectEntity() == player) {
-                        if (killed1.getMobType() != CreatureAttribute.UNDEAD) {
-                            if (killed1 instanceof AbstractVillagerEntity || killed1 instanceof SpellcastingIllagerEntity || killed1 instanceof ChannellerEntity || killed1 instanceof PlayerEntity) {
+                        if (livingEntity.getMobType() != CreatureAttribute.UNDEAD) {
+                            if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof SpellcastingIllagerEntity || livingEntity instanceof ChannellerEntity || livingEntity instanceof PlayerEntity) {
                                 if (r1 - looting == 0) {
-                                    killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                                    livingEntity.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                                 }
-                            } else if (killed1 instanceof PatrollerEntity) {
+                            } else if (livingEntity instanceof PatrollerEntity) {
                                 if (r2 - looting == 0) {
-                                    killed1.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
+                                    livingEntity.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                                 }
                             }
                         }
+                    }
+                    if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity || livingEntity instanceof WitchEntity || livingEntity instanceof ICultist){
+                        LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.TALL_SKULL);
+                        LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
+                        LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                        loottable.getRandomItems(ctx).forEach(livingEntity::spawnAtLocation);
                     }
                     Entity entity = event.getSource().getDirectEntity();
                     if (entity instanceof FangEntity){
                         if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
                             if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player)) >= 3) {
                                 if (r1 == 0) {
-                                    if (killed1.getType() == EntityType.SKELETON) {
-                                        killed1.spawnAtLocation(new ItemStack(Items.SKELETON_SKULL));
+                                    if (livingEntity.getType() == EntityType.SKELETON) {
+                                        livingEntity.spawnAtLocation(new ItemStack(Items.SKELETON_SKULL));
                                     }
-                                    if (killed1.getType() == EntityType.ZOMBIE) {
-                                        killed1.spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
+                                    if (livingEntity.getType() == EntityType.ZOMBIE) {
+                                        livingEntity.spawnAtLocation(new ItemStack(Items.ZOMBIE_HEAD));
                                     }
-                                    if (killed1.getType() == EntityType.CREEPER) {
-                                        killed1.spawnAtLocation(new ItemStack(Items.CREEPER_HEAD));
+                                    if (livingEntity.getType() == EntityType.CREEPER) {
+                                        livingEntity.spawnAtLocation(new ItemStack(Items.CREEPER_HEAD));
                                     }
-                                    if (killed1.getType() == EntityType.WITHER_SKELETON) {
-                                        killed1.spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
+                                    if (livingEntity.getType() == EntityType.WITHER_SKELETON) {
+                                        livingEntity.spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
+                                    }
+                                    if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity){
+                                        livingEntity.spawnAtLocation(new ItemStack(ModBlocks.TALL_SKULL_ITEM.get()));
+                                    }
+                                    if (livingEntity instanceof WitchEntity || livingEntity instanceof ICultist){
+                                        livingEntity.spawnAtLocation(new ItemStack(ModBlocks.TALL_SKULL_ITEM.get()));
                                     }
                                 }
-                                if (killed1 instanceof PlayerEntity) {
-                                    PlayerEntity player1 = (PlayerEntity) killed1;
+                                if (livingEntity instanceof PlayerEntity) {
+                                    PlayerEntity player1 = (PlayerEntity) livingEntity;
                                     CompoundNBT tag = new CompoundNBT();
                                     tag.putString("SkullOwner", player1.getDisplayName().getString());
                                     ItemStack head = new ItemStack(Items.PLAYER_HEAD);
                                     head.setTag(tag);
-                                    killed1.spawnAtLocation(head);
+                                    livingEntity.spawnAtLocation(head);
                                 }
                             }
                         }

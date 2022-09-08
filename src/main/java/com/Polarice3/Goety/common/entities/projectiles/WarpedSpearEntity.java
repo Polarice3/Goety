@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -38,7 +37,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
     private static final Predicate<Entity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof WarpedSpearEntity);
     };
-    private static final DataParameter<Boolean> field_226571_aq_ = EntityDataManager.defineId(WarpedSpearEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> ID_FOIL = EntityDataManager.defineId(WarpedSpearEntity.class, DataSerializers.BOOLEAN);
     private ItemStack thrownStack = new ItemStack(ModItems.WARPED_SPEAR.get());
     private boolean dealtDamage;
     public int returningTicks;
@@ -50,7 +49,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
     public WarpedSpearEntity(World worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
         super(ModEntityType.WARPED_SPEAR.get(), thrower, worldIn);
         this.thrownStack = thrownStackIn.copy();
-        this.entityData.set(field_226571_aq_, thrownStackIn.hasFoil());
+        this.entityData.set(ID_FOIL, thrownStackIn.hasFoil());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -60,7 +59,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(field_226571_aq_, false);
+        this.entityData.define(ID_FOIL, false);
     }
 
     public void tick() {
@@ -113,7 +112,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
 
     @OnlyIn(Dist.CLIENT)
     public boolean func_226572_w_() {
-        return this.entityData.get(field_226571_aq_);
+        return this.entityData.get(ID_FOIL);
     }
 
     @Nullable
@@ -152,17 +151,20 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
 
         this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01D, -0.1D, -0.01D));
         float f1 = 1.0F;
+
         if (this.level instanceof ServerWorld) {
-            this.shockwave();
+            this.shockwave((ServerWorld) this.level);
         }
 
         this.playSound(soundevent, f1, 1.0F);
     }
 
-    private void shockwave() {
+    private void shockwave(ServerWorld serverWorld) {
         for(Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0D), field_213690_b)) {
-            entity.hurt(DamageSource.trident(this, entity), 6.0F);
-            this.launch(entity);
+            if (this.getOwner() != null && entity != this.getOwner()) {
+                entity.hurt(DamageSource.trident(this, entity), 6.0F);
+                this.launch(entity);
+            }
         }
         this.playSound(SoundEvents.DRAGON_FIREBALL_EXPLODE, 1.0F, 1.0F);
 
@@ -172,7 +174,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
             double d1 = MathHelper.cos(f1) * f2;
             double d2 = 0.01D + random.nextDouble() * 0.5D;
             double d3 = MathHelper.sin(f1) * f2;
-            new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
+            serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.25);
         }
 
     }

@@ -64,7 +64,8 @@ public class PortalOutpostStructure extends Structure<NoFeatureConfig> {
         int landHeight = chunkGenerator.getFirstOccupiedHeight(centerOfChunk.getX(), centerOfChunk.getZ(), Heightmap.Type.WORLD_SURFACE_WG);
         IBlockReader columnOfBlocks = chunkGenerator.getBaseColumn(centerOfChunk.getX(), centerOfChunk.getZ());
         BlockState topBlock = columnOfBlocks.getBlockState(centerOfChunk.above(landHeight));
-        return MainConfig.PortalOutpostGen.get() && topBlock.getFluidState().isEmpty() && isNearPortal(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
+        BlockState bottomBlock = columnOfBlocks.getBlockState(centerOfChunk.below(landHeight));
+        return MainConfig.PortalOutpostGen.get() && topBlock.getFluidState().isEmpty() && bottomBlock.getFluidState().isEmpty() && isNearPortal(chunkGenerator, seed, chunkrandom, chunkX, chunkZ);
     }
 
     private boolean isNearPortal(ChunkGenerator p_242782_1_, long p_242782_2_, SharedSeedRandom p_242782_4_, int p_242782_5_, int p_242782_6_) {

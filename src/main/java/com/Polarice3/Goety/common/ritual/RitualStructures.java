@@ -191,7 +191,7 @@ public class RitualStructures {
                     BlockPos blockpos1 = pPos.offset(i, j, k);
                     assert pLevel != null;
                     BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == Blocks.CHISELED_NETHER_BRICKS) {
+                    if (blockstate.getBlock() == Blocks.WITHER_SKELETON_SKULL || blockstate.getBlock() == Blocks.WITHER_SKELETON_WALL_SKULL) {
                         pTileEntity.first.add(blockpos1);
                     }
                     if (blockstate.getBlock() == Blocks.NETHER_BRICKS || blockstate.getBlock() == Blocks.RED_NETHER_BRICKS) {
@@ -206,6 +206,6 @@ public class RitualStructures {
     }
 
     public static boolean checkExpertNetherRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 32 && pTileEntity.third.size() >= 8;
+        return pTileEntity.first.size() >= 4 && pTileEntity.second.size() >= 32 && pTileEntity.third.size() >= 8;
     }
 }

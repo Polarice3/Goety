@@ -34,7 +34,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Strong, brutish Cultists that are akin to Iron Golems and Ravagers, only weaker than either of them. They're either a result of magical experiments or simply big meaty Villagers radicalized with the Cult."
+      "text": "Strong, brutish Cultists that are akin to Iron Golems and Ravagers, only weaker than either of them. However, should they take enough damage, they will enter into some sort of unholy rage that boosts their attack and speed while causing them to periodically take damage. They're either a result of magical experiments or simply big meaty Villagers radicalized with the Cult."
     },
     {
       "type": "patchouli:entity",
@@ -50,7 +50,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Witches are usually on their own, but when one comes across a bunch of Nether Worshipping fanatics, they can't help but find themselves drawn towards them. It seems being in the Cult makes them more cooperative and more devious. When killed by a living being, these Witches would leave a Curse upon their killer."
+      "text": "Witches are usually on their own, but when one comes across a bunch of Nether Worshipping fanatics, they can't help but find themselves drawn towards them. It seems being in the Cult makes them more cooperative and more devious. When killed by a living being, these Witches would leave a Curse upon their killer. Occasionally they will throw a special concoction that burns the ground."
     },
     {
       "type": "patchouli:entity",

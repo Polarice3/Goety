@@ -3,7 +3,6 @@ package com.Polarice3.Goety.init;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
-import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.*;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
@@ -31,23 +30,17 @@ public class ModEntityType {
 
     public static DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, Goety.MOD_ID);
 
-    public static final RegistryObject<EntityType<TankEntity>> TANK = ENTITY_TYPES.register("tank",
-            () -> EntityType.Builder.of(TankEntity::new, EntityClassification.MONSTER)
-                    .fireImmune()
-                    .sized(2.0f, 2.5f)
-                    .build(new ResourceLocation(Goety.MOD_ID, "tank").toString()));
-
-    public static final RegistryObject<EntityType<FriendlyTankEntity>> FRIENDTANK = ENTITY_TYPES.register("friendtank",
-            () -> EntityType.Builder.of(FriendlyTankEntity::new, EntityClassification.MONSTER)
-                    .fireImmune()
-                    .sized(2.0f, 2.5f)
-                    .build(new ResourceLocation(Goety.MOD_ID, "friendtank").toString()));
-
     public static final RegistryObject<EntityType<WitchBombEntity>> WITCHBOMB = ENTITY_TYPES.register("witchbomb",
             () -> EntityType.Builder.<WitchBombEntity>of(WitchBombEntity::new, EntityClassification.MISC)
                     .sized(0.25f,0.25f)
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchbomb").toString()));
+
+    public static final RegistryObject<EntityType<BurningPotionEntity>> BURNING_POTION = ENTITY_TYPES.register("burning_potion",
+            () -> EntityType.Builder.<BurningPotionEntity>of(BurningPotionEntity::new, EntityClassification.MISC)
+                    .sized(0.25f,0.25f)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "burning_potion").toString()));
 
     public static final RegistryObject<EntityType<SoulFireballEntity>> SOUL_FIREBALL = ENTITY_TYPES.register("soulfireball",
             () -> EntityType.Builder.<SoulFireballEntity>of(SoulFireballEntity::new, EntityClassification.MISC)
@@ -463,12 +456,6 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "sentinel").toString()));
 
-    public static final RegistryObject<EntityType<PenanceEntity>> PENANCE = ENTITY_TYPES.register("penance",
-            () -> EntityType.Builder.of(PenanceEntity::new, EntityClassification.MONSTER)
-                    .sized(0.6F, 1.95F)
-                    .clientTrackingRange(8)
-                    .build(new ResourceLocation(Goety.MOD_ID, "penance").toString()));
-
     public static final RegistryObject<EntityType<LightningTrapEntity>> LIGHTNINGTRAP = ENTITY_TYPES.register("lightningtrap",
             () -> EntityType.Builder.<LightningTrapEntity>of(LightningTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
@@ -500,6 +487,14 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "burning_ground").toString()));
+
+    public static final RegistryObject<EntityType<PoisonGroundEntity>> POISON_GROUND = ENTITY_TYPES.register("poison_ground",
+            () -> EntityType.Builder.<PoisonGroundEntity>of(PoisonGroundEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(6.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "poison_ground").toString()));
 
     public static final RegistryObject<EntityType<StormEntity>> STORMUTIL = ENTITY_TYPES.register("stormutil",
             () -> EntityType.Builder.of(StormEntity::new, EntityClassification.MISC)

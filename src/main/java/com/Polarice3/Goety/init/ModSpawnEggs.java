@@ -10,9 +10,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModSpawnEggs {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Goety.MOD_ID);
 
-    public static final RegistryObject<ModSpawnEggItem> TANK_SPAWN_EGG = ITEMS.register("tank_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.TANK, 0x777777, 0x3c3b3b, new Item.Properties().tab(Goety.TAB)));
-
     public static final RegistryObject<ModSpawnEggItem> CHANNELLER_SPAWN_EGG = ITEMS.register("channeller_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.CHANNELLER, 0x120e0e, 0x5a0b0b, new Item.Properties().tab(Goety.TAB)));
 
@@ -88,7 +85,7 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> SKULL_LORD_SPAWN_EGG = ITEMS.register("skull_lord_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.SKULL_LORD, 0xd3d3d3, 0x74f1f5, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<ModSpawnEggItem> NETHERNAL_SPAWN_EGG = ITEMS.register("nethernal_spawn_egg",
+    public static final RegistryObject<ModSpawnEggItem> SENTINEL_SPAWN_EGG = ITEMS.register("sentinel_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.SENTINEL, 0x100606, 0xfaeb72, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = ITEMS.register("zombie_minion_spawn_egg",
@@ -111,8 +108,4 @@ public class ModSpawnEggs {
 
     public static final RegistryObject<ModSpawnEggItem> SHADE_SPAWN_EGG = ITEMS.register("shade_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.SHADE, 0x002e2e, 0xc5d6d5, new Item.Properties().tab(Goety.TAB)));
-
-    public static final RegistryObject<ModSpawnEggItem> PENANCE_SPAWN_EGG = ITEMS.register("penance_spawn_egg",
-            () -> new ModSpawnEggItem(ModEntityType.PENANCE, 0x2c2c2c, 8032420, new Item.Properties().tab(Goety.TAB)));
-
 }

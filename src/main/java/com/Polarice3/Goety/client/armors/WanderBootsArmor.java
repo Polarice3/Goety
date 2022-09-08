@@ -3,7 +3,6 @@ package com.Polarice3.Goety.client.armors;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.model.RobeModel;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;

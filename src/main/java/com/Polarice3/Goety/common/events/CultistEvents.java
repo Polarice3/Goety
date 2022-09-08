@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -15,6 +16,9 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
@@ -67,11 +71,26 @@ public class CultistEvents {
                         if (villager.getVillagerData().getLevel() >= 3) {
                             villager.removeTag(ConstantPaths.secretCultist());
                         }
+                        if (!MobUtil.getWitnesses(villager)){
+                            if (villager.tickCount % 1000 == 0 && villager.level.random.nextFloat() <= 0.25){
+                                float pitch = villager.isBaby() ? (villager.level.random.nextFloat() - villager.level.random.nextFloat()) * 0.2F + 1.5F : (villager.level.random.nextFloat() - villager.level.random.nextFloat()) * 0.2F + 1.0F;
+                                villager.playSound(SoundEvents.EVOKER_AMBIENT, 1.0F, pitch);
+                            }
+                        }
                         if (!villager.level.isClientSide) {
                             ServerWorld serverWorld = (ServerWorld) villager.level;
                             Raid raid = serverWorld.getRaidAt(villager.blockPosition());
                             if (raid != null && raid.isActive() && !raid.isOver()) {
                                 MobUtil.revealCultist(serverWorld, villager);
+                            }
+                            PlayerEntity player = serverWorld.getNearestPlayer(villager, 16.0F);
+                            if (player != null) {
+                                if (!player.canSee(villager) && !player.hasEffect(ModEffects.CURSED.get())) {
+                                    if (villager.tickCount % 1000 == 0 && serverWorld.random.nextFloat() <= 0.25) {
+                                        serverWorld.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.HOSTILE, 1.0F, 0.5F, false);
+                                        player.addEffect(new EffectInstance(ModEffects.CURSED.get(), 12000));
+                                    }
+                                }
                             }
                         }
                         if (villager.tickCount % 1200 == 0) {

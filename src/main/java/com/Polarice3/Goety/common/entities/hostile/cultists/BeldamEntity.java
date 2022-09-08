@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.projectiles.BurningPotionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.LichdomHelper;
@@ -8,7 +9,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.ToggleableNearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -239,45 +243,56 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
             double d1 = pTarget.getEyeY() - (double)1.1F - this.getY();
             double d2 = pTarget.getZ() + vector3d.z - this.getZ();
             float f = MathHelper.sqrt(d0 * d0 + d2 * d2);
-            Potion potion = Potions.HARMING;
-            if (pTarget instanceof AbstractRaiderEntity) {
-                if (pTarget.isOnFire()){
-                    potion = Potions.FIRE_RESISTANCE;
-                } else if (pTarget.getHealth() <= pTarget.getMaxHealth()/2) {
-                    potion = Potions.HEALING;
-                } else {
-                    if (!(pTarget.getMainHandItem().getItem() instanceof ShootableItem) && !pTarget.hasEffect(Effects.DAMAGE_BOOST)){
-                        potion = Potions.STRENGTH;
-                    } else if (!pTarget.hasEffect(Effects.MOVEMENT_SPEED)){
-                        potion = Potions.SWIFTNESS;
-                    } else if (!pTarget.hasEffect(Effects.REGENERATION)){
-                        potion = Potions.REGENERATION;
-                    } else {
-                        potion = Potions.HEALING;
-                    }
+            if (!(pTarget instanceof AbstractRaiderEntity) && !pTarget.isOnFire() && !pTarget.fireImmune() && this.random.nextFloat() <= 0.05F){
+                BurningPotionEntity potionentity = new BurningPotionEntity(this.level, this);
+                potionentity.xRot -= -20.0F;
+                potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
+                if (!this.isSilent()) {
+                    this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_THROW, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
                 }
 
-                this.setTarget((LivingEntity)null);
-            } else if (pTarget.getMobType() == CreatureAttribute.UNDEAD){
-                potion = Potions.HEALING;
-            } else if (f >= 8.0F && !pTarget.hasEffect(Effects.MOVEMENT_SLOWDOWN)) {
-                potion = Potions.SLOWNESS;
-            } else if (pTarget.getHealth() >= 8.0F && !pTarget.hasEffect(Effects.POISON) && pTarget.getMobType() != CreatureAttribute.UNDEAD
-            && !(pTarget instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) pTarget))) {
-                potion = Potions.POISON;
-            } else if (f <= 3.0F && !pTarget.hasEffect(Effects.WEAKNESS) && this.random.nextFloat() < 0.25F) {
-                potion = Potions.WEAKNESS;
-            }
+                this.level.addFreshEntity(potionentity);
+            } else {
+                Potion potion = Potions.HARMING;
+                if (pTarget instanceof AbstractRaiderEntity) {
+                    if (pTarget.isOnFire()){
+                        potion = Potions.FIRE_RESISTANCE;
+                    } else if (pTarget.getHealth() <= pTarget.getMaxHealth()/2) {
+                        potion = Potions.HEALING;
+                    } else {
+                        if (!(pTarget.getMainHandItem().getItem() instanceof ShootableItem) && !pTarget.hasEffect(Effects.DAMAGE_BOOST)){
+                            potion = Potions.STRENGTH;
+                        } else if (!pTarget.hasEffect(Effects.MOVEMENT_SPEED)){
+                            potion = Potions.SWIFTNESS;
+                        } else if (!pTarget.hasEffect(Effects.REGENERATION)){
+                            potion = Potions.REGENERATION;
+                        } else {
+                            potion = Potions.HEALING;
+                        }
+                    }
 
-            PotionEntity potionentity = new PotionEntity(this.level, this);
-            potionentity.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), potion));
-            potionentity.xRot -= -20.0F;
-            potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
-            if (!this.isSilent()) {
-                this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_THROW, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
-            }
+                    this.setTarget((LivingEntity)null);
+                } else if (pTarget.getMobType() == CreatureAttribute.UNDEAD){
+                    potion = Potions.HEALING;
+                } else if (f >= 8.0F && !pTarget.hasEffect(Effects.MOVEMENT_SLOWDOWN)) {
+                    potion = Potions.SLOWNESS;
+                } else if (pTarget.getHealth() >= 8.0F && !pTarget.hasEffect(Effects.POISON) && pTarget.getMobType() != CreatureAttribute.UNDEAD
+                        && !(pTarget instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) pTarget))) {
+                    potion = Potions.POISON;
+                } else if (f <= 3.0F && !pTarget.hasEffect(Effects.WEAKNESS) && this.random.nextFloat() < 0.25F) {
+                    potion = Potions.WEAKNESS;
+                }
 
-            this.level.addFreshEntity(potionentity);
+                PotionEntity potionentity = new PotionEntity(this.level, this);
+                potionentity.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), potion));
+                potionentity.xRot -= -20.0F;
+                potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
+                if (!this.isSilent()) {
+                    this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_THROW, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+                }
+
+                this.level.addFreshEntity(potionentity);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.world.features.RuinedRitualFeature;
 import com.Polarice3.Goety.common.world.structures.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -25,6 +26,7 @@ public class ModStructures {
     public static final RegistryObject<Structure<NoFeatureConfig>> CURSED_GRAVEYARD = STRUCTURES.register("cursed_graveyard", () -> (new CursedGraveyardStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", SalvagedFortStructure::new);
     public static final RegistryObject<Structure<NoFeatureConfig>> DECREPIT_FORT = STRUCTURES.register("decrepit_fort", DecrepitFortStructure::new);
+    public static final RegistryObject<Structure<RuinedRitualFeature>> RUINED_RITUAL = STRUCTURES.register("ruined_ritual",() -> (new RuinedRitualStructure(RuinedRitualFeature.CODEC)));
 
     public static void init(){
         STRUCTURES.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -60,6 +62,12 @@ public class ModStructures {
                 new StructureSeparationSettings(MainConfig.DecrepitFortSpacing.get(),
                         MainConfig.DecrepitFortSeperation.get(),
                         1987656789),
+                true);
+        setupMapSpacingAndLand(
+                RUINED_RITUAL.get(),
+                new StructureSeparationSettings(MainConfig.RuinedRitualSpacing.get(),
+                        MainConfig.RuinedRitualSeperation.get(),
+                        1432101234),
                 true);
 
     }

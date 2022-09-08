@@ -6,10 +6,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.SignItem;
-import net.minecraft.item.TallBlockItem;
+import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -28,7 +25,6 @@ public class ModBlocks {
     }
 
     //Blocks
-    public static final RegistryObject<Block> BLAZE_CORE_BLOCK = BLOCKS.register("blazecoreblock", TankCoreBlock::new);
     public static final RegistryObject<Block> CURSED_METAL_BLOCK = BLOCKS.register("cursed_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_BLOCK = BLOCKS.register("cursed_stone", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_BRICK_BLOCK = BLOCKS.register("cursed_stone_bricks", CursedStoneBlock::new);
@@ -60,6 +56,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> SOUL_LIGHT_BLOCK = BLOCKS.register("soul_light", SoulLightBlock::new);
     public static final RegistryObject<Block> GLOW_LIGHT_BLOCK = BLOCKS.register("glow_light", GlowLightBlock::new);
     public static final RegistryObject<Block> PITHOS_BLOCK = BLOCKS.register("pithos", PithosBlock::new);
+    public static final RegistryObject<Block> TALL_SKULL_BLOCK = BLOCKS.register("tall_skull", TallSkullBlock::new);
+    public static final RegistryObject<Block> WALL_TALL_SKULL_BLOCK = BLOCKS.register("wall_tall_skull", WallTallSkullBlock::new);
+    public static final RegistryObject<Block> FALSE_PORTAL = BLOCKS.register("false_portal", FalsePortalBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -166,8 +165,6 @@ public class ModBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()));
     //Block Items
-    public static final RegistryObject<Item> BLAZE_CORE_ITEM = BLOCK_ITEMS.register("blazecoreblock",
-            () -> new BlockItemBase(BLAZE_CORE_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_METAL_BLOCK_ITEM = BLOCK_ITEMS.register("cursed_block",
             () -> new BlockItemBase(CURSED_METAL_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_STONE_ITEM = BLOCK_ITEMS.register("cursed_stone",
@@ -301,7 +298,8 @@ public class ModBlocks {
             () -> new BlockItemBase(DARK_PRESSURE_PLATE.get()));
     public static final RegistryObject<Item> HAUNTED_SIGN_ITEM = BLOCK_ITEMS.register("haunted_sign",
             () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()));
-
+    public static final RegistryObject<Item> TALL_SKULL_ITEM = BLOCK_ITEMS.register("tall_skull",
+            () -> new WallOrFloorItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON)));
 
     public static Boolean never(BlockState p_235427_0_, IBlockReader p_235427_1_, BlockPos p_235427_2_, EntityType<?> p_235427_3_) {
         return false;

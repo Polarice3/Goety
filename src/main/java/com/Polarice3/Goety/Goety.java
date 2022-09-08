@@ -9,7 +9,6 @@ import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
-import com.Polarice3.Goety.common.entities.bosses.PenanceEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.*;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
@@ -37,9 +36,11 @@ import com.Polarice3.Goety.common.spider.SpiderLevelsStore;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.CuriosCompat;
+import com.Polarice3.Goety.data.ModBlockStateProvider;
 import com.Polarice3.Goety.init.*;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.WoodType;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -67,6 +68,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -105,6 +107,7 @@ public class Goety {
         eventBus.addListener(this::setup);
         eventBus.addListener(this::setupEntityAttributeCreation);
         eventBus.addListener(this::enqueueIMC);
+        eventBus.addListener(this::gatherData);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
@@ -144,8 +147,6 @@ public class Goety {
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
-        event.put(ModEntityType.TANK.get(), AbstractTankEntity.setCustomAttributes().build());
-        event.put(ModEntityType.FRIENDTANK.get(), AbstractTankEntity.setCustomAttributes().build());
         event.put(ModEntityType.CHANNELLER.get(), ChannellerEntity.setCustomAttributes().build());
         event.put(ModEntityType.FANATIC.get(), FanaticEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZEALOT.get(), ZealotEntity.setCustomAttributes().build());
@@ -193,7 +194,6 @@ public class Goety {
         event.put(ModEntityType.SKULL_LORD.get(), SkullLordEntity.setCustomAttributes().build());
         event.put(ModEntityType.BONE_LORD.get(), BoneLordEntity.setCustomAttributes().build());
         event.put(ModEntityType.SENTINEL.get(), SentinelEntity.setCustomAttributes().build());
-        event.put(ModEntityType.PENANCE.get(), PenanceEntity.setCustomAttributes().build());
         event.put(ModEntityType.LASER.get(), LaserEntity.setCustomAttributes().build());
     }
 
@@ -202,6 +202,15 @@ public class Goety {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.CHARM.getMessageBuilder().build());
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().build());
+    }
+
+    public void gatherData(final GatherDataEvent event){
+        DataGenerator gen = event.getGenerator();
+
+        if (event.includeServer())
+        {
+            gen.addProvider(new ModBlockStateProvider());
+        }
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {
@@ -237,6 +246,17 @@ public class Goety {
                     || event.getCategory() == Biome.Category.TAIGA
                     || event.getCategory() == Biome.Category.PLAINS) {
                 event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DECREPIT_FORT);
+            }
+        }
+        if (MainConfig.RuinedRitualGen.get()){
+            if (event.getCategory() == Biome.Category.PLAINS
+                    || event.getCategory() == Biome.Category.FOREST
+                    || event.getCategory() == Biome.Category.TAIGA
+                    || event.getCategory() == Biome.Category.SAVANNA){
+                event.getGeneration().getStructures().add(() -> ConfiguredStructures.RUINED_RITUAL_STANDARD);
+            }
+            if (event.getCategory() == Biome.Category.JUNGLE){
+                event.getGeneration().getStructures().add(() -> ConfiguredStructures.RUINED_RITUAL_JUNGLE);
             }
         }
         if (MainConfig.PortalOutpostGen.get()) {
@@ -283,6 +303,7 @@ public class Goety {
             tempMap.putIfAbsent(ModStructures.CURSED_GRAVEYARD.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.CURSED_GRAVEYARD.get()));
             tempMap.putIfAbsent(ModStructures.SALVAGED_FORT.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.SALVAGED_FORT.get()));
             tempMap.putIfAbsent(ModStructures.DECREPIT_FORT.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.DECREPIT_FORT.get()));
+            tempMap.putIfAbsent(ModStructures.RUINED_RITUAL.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.RUINED_RITUAL.get()));
 
             serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
         }

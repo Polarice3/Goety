@@ -42,4 +42,10 @@ public class ModParticleTypes {
 
     public static final RegistryObject<BasicParticleType> TORNADO_GATHER = PARTICLE_TYPES.register("tornado",
             () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> POISON = PARTICLE_TYPES.register("poison",
+            () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> BURNING = PARTICLE_TYPES.register("burning",
+            () -> new BasicParticleType(true));
 }

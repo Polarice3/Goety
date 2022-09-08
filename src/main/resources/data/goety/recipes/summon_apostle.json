@@ -16,10 +16,10 @@
       "tag": "forge:storage_blocks/gold"
     },
     {
-      "tag": "forge:storage_blocks/gold"
+      "tag": "forge:ender_pearls"
     },
     {
-      "tag": "forge:ingots/netherite"
+      "tag": "goety:summon_apostle_part"
     }
   ],
   "result": {

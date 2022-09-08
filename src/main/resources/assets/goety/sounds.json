@@ -81,6 +81,14 @@
     ],
     "subtitle": "subtitle.goety.roar_spell"
   },
+  "fire_breath": {
+    "sounds": [
+      {
+        "name": "goety:spell/fire_breath"
+      }
+    ],
+    "subtitle": "subtitle.goety.fire_breath"
+  },
   "corrupt_explosion": {
     "sounds": [
       {

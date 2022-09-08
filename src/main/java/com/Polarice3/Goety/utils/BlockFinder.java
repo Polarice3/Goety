@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -170,6 +171,20 @@ public class BlockFinder {
     public static boolean isWet(World pLevel, BlockPos pPos){
         if (pLevel.getBiome(pPos).getPrecipitation() != Biome.RainType.NONE){
             return pLevel.isRaining() && pLevel.canSeeSky(pPos);
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean createBarrel(IServerWorld pLevel, MutableBoundingBox pBounds, Random pRandom, BlockPos pPos, ResourceLocation pResourceLocation, @Nullable BlockState pState) {
+        if (pBounds.isInside(pPos) && !pLevel.getBlockState(pPos).is(Blocks.BARREL)) {
+            pLevel.setBlock(pPos, pState != null ? pState: Blocks.BARREL.defaultBlockState(), 2);
+            TileEntity tileentity = pLevel.getBlockEntity(pPos);
+            if (tileentity instanceof BarrelTileEntity) {
+                ((BarrelTileEntity)tileentity).setLootTable(pResourceLocation, pRandom.nextLong());
+            }
+
+            return true;
         } else {
             return false;
         }

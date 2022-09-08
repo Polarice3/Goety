@@ -228,9 +228,6 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         if (entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
             return true;
         }
-        if (entityIn instanceof FriendlyTankEntity && ((FriendlyTankEntity) entityIn).getOwner() == this.getTrueOwner()){
-            return true;
-        }
         return super.isAlliedTo(entityIn);
     }
 

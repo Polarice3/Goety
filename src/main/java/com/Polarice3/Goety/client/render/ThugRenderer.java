@@ -9,12 +9,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class ThugRenderer extends MobRenderer<ThugEntity, ThugModel> {
     private static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/thug.png");
+    private static final ResourceLocation TEXTURE_ANGRY = Goety.location("textures/entity/cultist/thug_angry.png");
 
     public ThugRenderer(EntityRendererManager p_i46133_1_) {
         super(p_i46133_1_, new ThugModel(), 0.7F);
     }
 
     public ResourceLocation getTextureLocation(ThugEntity pEntity) {
-        return TEXTURE;
+        return pEntity.isRaging() ? TEXTURE_ANGRY : TEXTURE;
     }
 }

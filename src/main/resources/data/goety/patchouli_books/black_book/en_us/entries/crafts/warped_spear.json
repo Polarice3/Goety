@@ -1,0 +1,16 @@
+{
+  "name": "Warped Spear",
+  "icon": "goety:warped_spear",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/gain_burning_tusk",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Hoglord's tusk seems to be made out of the same material as Blaze Rods, yet is too dense and strong to be turned into powder. Gaining the knowledge from the ancients, you've discovered a way to construct a powerful spear from it, one that will always return to your hand and cause a burst of flames to erupt when hitting a target."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:warped_spear"
+    }
+  ]
+}

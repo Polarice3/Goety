@@ -33,7 +33,7 @@ public class ParasiteEntity extends MonsterEntity {
             && !(enemy instanceof VexEntity) && !(enemy instanceof MinionEntity)
             && !(enemy instanceof GhastEntity) && !(enemy instanceof BlazeEntity) && !(enemy instanceof SlimeEntity)
             && !(enemy instanceof MutatedEntity)
-            && !(enemy instanceof GuardianEntity) && !(enemy instanceof IronGolemEntity) && !(enemy instanceof TankEntity)
+            && !(enemy instanceof GuardianEntity) && !(enemy instanceof IronGolemEntity)
             && !(enemy instanceof SilverfishEntity) && !(enemy instanceof EndermiteEntity)
             && !(enemy instanceof WitherEntity) && !(enemy instanceof EnderDragonEntity);
     private static final Predicate<LivingEntity> HOSTED = (p_213797_0_) ->

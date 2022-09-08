@@ -1,0 +1,21 @@
+{
+  "name": "Ruined Rituals",
+  "icon": "minecraft:crying_obsidian",
+  "category": "goety:world",
+  "advancement": "goety:goety/ruined_ritual",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Cultists of the Nether seemed to have set up some sort of ritual. Judging from the area, it appears they are trying to transform the land around into parts of the Nether. The odd portal in the middle seems off, it does not appear that any can enter the Nether through it, yet seems very connected to the hellish realm."
+    },
+    {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/ruined_ritual.png"],
+      "border": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The ritual area has attracted Endermen and the Portal itself seems to be pulling various creatures of the Nether towards the Overworld. You ponder what will happen if you were to throw an Ender Pearl through the odd Portal..."
+    }
+  ]
+}

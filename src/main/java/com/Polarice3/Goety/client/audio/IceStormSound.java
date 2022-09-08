@@ -2,10 +2,8 @@ package com.Polarice3.Goety.client.audio;
 
 import com.Polarice3.Goety.common.entities.projectiles.IceStormEntity;
 import net.minecraft.client.audio.TickableSound;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
 
 public class IceStormSound extends TickableSound {
     protected final IceStormEntity iceStorm;

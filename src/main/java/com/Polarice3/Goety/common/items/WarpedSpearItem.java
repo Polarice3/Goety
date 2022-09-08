@@ -5,7 +5,7 @@ import com.Polarice3.Goety.common.entities.projectiles.WarpedSpearEntity;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.IVanishable;
+import net.minecraft.enchantment.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -103,5 +103,12 @@ public class WarpedSpearItem extends Item implements IVanishable {
 
     public int getEnchantmentValue() {
         return 1;
+    }
+
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return (enchantment.category == EnchantmentType.BREAKABLE)
+                || enchantment instanceof DamageEnchantment
+                || enchantment instanceof KnockbackEnchantment
+                || enchantment == Enchantments.MOB_LOOTING;
     }
 }
