@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 
@@ -32,7 +32,7 @@ public class TeleportSpell extends InstantCastSpells{
     }
 
     @Override
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         PlayerEntity player = (PlayerEntity) entityLiving;
         int enchantment = 0;
         if (WandUtil.enchantedFocus(player)){
@@ -43,13 +43,13 @@ public class TeleportSpell extends InstantCastSpells{
         Direction face = blockRayTraceResult.getDirection();
         BlockPos newPos = blockRayTraceResult.getBlockPos().relative(face);
         enderTeleportEvent(entityLiving, worldIn, newPos);
-        new ParticleUtil(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian());
+        worldIn.sendParticles(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), 0, worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian(), 0.5F);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.TeleportInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         PlayerEntity player = (PlayerEntity) entityLiving;
         int enchantment = 0;
         if (WandUtil.enchantedFocus(player)){
@@ -60,7 +60,7 @@ public class TeleportSpell extends InstantCastSpells{
         Direction face = blockRayTraceResult.getDirection();
         BlockPos newPos = blockRayTraceResult.getBlockPos().relative(face);
         enderTeleportEvent(entityLiving, worldIn, newPos);
-        new ParticleUtil(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian());
+        worldIn.sendParticles(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), 0, worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian(), 0.5F);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.TeleportInfamyChance.get(), (PlayerEntity) entityLiving);
     }

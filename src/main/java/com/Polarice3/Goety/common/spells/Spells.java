@@ -6,7 +6,7 @@ import com.Polarice3.Goety.utils.InfamyHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public abstract class Spells {
 
@@ -19,9 +19,9 @@ public abstract class Spells {
 
     public abstract SoundEvent CastingSound();
 
-    public abstract void WandResult(World worldIn, LivingEntity entityLiving);
+    public abstract void WandResult(ServerWorld worldIn, LivingEntity entityLiving);
 
-    public abstract void StaffResult(World worldIn, LivingEntity entityLiving);
+    public abstract void StaffResult(ServerWorld worldIn, LivingEntity entityLiving);
 
     public void IncreaseInfamy(int random, PlayerEntity player){
         if (MainConfig.InfamySpell.get()){

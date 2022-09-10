@@ -100,11 +100,13 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             }
         }
         if (this.isSitting()) {
-            if (this.tickCount % 40 == 0) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                new ParticleUtil(ParticleTypes.NOTE, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+            if (this.level.isClientSide) {
+                if (this.tickCount % 40 == 0) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    new ParticleUtil(ParticleTypes.NOTE, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+                }
             }
         }
         if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
@@ -150,8 +152,10 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                         if (this.tickCount % 20 == 0) {
                             this.heal(1.0F);
                             Vector3d vector3d = this.getDeltaMovement();
-                            new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
                             GoldTotemItem.decreaseSouls(foundStack, SoulCost);
+                            if (this.level.isClientSide){
+                                new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            }
                         }
                     }
                 }
@@ -443,6 +447,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
     public void levelBonus() {
         ISpiderLevels spiderLevels = SpiderLevelsHelper.getCapability(this);
         if (!this.level.isClientSide()) {
+            ServerWorld serverWorld = (ServerWorld) this.level;
             if (spiderLevels.getSpiderLevel() < 10) {
                 spiderLevels.increaseSpiderLevel(1);
                 SpiderLevelsHelper.sendSpiderLevelsUpdatePacket(this.getPlayer(), this);
@@ -453,7 +458,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
                     double d0 = this.random.nextGaussian() * 0.02D;
                     double d1 = this.random.nextGaussian() * 0.02D;
                     double d2 = this.random.nextGaussian() * 0.02D;
-                    new ParticleUtil(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+                    serverWorld.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
                 }
                 if (spiderLevels.getSpiderLevel() % 20 == 0) {
                     this.ArmorBonus();
@@ -607,11 +612,13 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
         if (RawFoodFinder.findRawFood(item)){
             this.heal(1.0F);
             this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
-            for(int i = 0; i < 5; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                new ParticleUtil(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+            if (this.level.isClientSide) {
+                for (int i = 0; i < 5; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    new ParticleUtil(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+                }
             }
             if (this.isBaby()) {
                 this.usePlayerItem(pPlayer, itemstack);
@@ -627,11 +634,13 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
             this.heal(10.0F);
             this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
             this.levelBonus();
-            for(int i = 0; i < 5; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                new ParticleUtil(ParticleTypes.HEART, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+            if (this.level.isClientSide) {
+                for (int i = 0; i < 5; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    new ParticleUtil(ParticleTypes.HEART, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
+                }
             }
             if (!pPlayer.abilities.instabuild) {
                 itemstack.shrink(1);

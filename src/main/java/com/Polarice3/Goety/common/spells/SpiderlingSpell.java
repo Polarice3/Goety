@@ -13,7 +13,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class SpiderlingSpell extends ChargingSpells{
 
@@ -30,7 +30,7 @@ public class SpiderlingSpell extends ChargingSpells{
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         BlockPos blockpos = entityLiving.blockPosition();
         SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), worldIn);
         summonedentity.setOwnerId(entityLiving.getUUID());
@@ -52,7 +52,7 @@ public class SpiderlingSpell extends ChargingSpells{
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         BlockPos blockpos = entityLiving.blockPosition();
         for(int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
             SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), worldIn);

@@ -14,6 +14,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class FangSpell extends Spells{
 
@@ -29,7 +30,7 @@ public class FangSpell extends Spells{
         return SoundEvents.EVOKER_PREPARE_ATTACK;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving){
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
         RayTraceResult rayTraceResult = rayTrace(worldIn, playerEntity, RayTraceContext.FluidMode.NONE);
         Vector3d vector3d = rayTraceResult.getLocation();
@@ -60,7 +61,7 @@ public class FangSpell extends Spells{
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving){
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving){
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
         RayTraceResult rayTraceResult = rayTrace(worldIn, playerEntity, RayTraceContext.FluidMode.NONE);
         Vector3d vector3d = rayTraceResult.getLocation();

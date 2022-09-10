@@ -33,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
@@ -116,18 +117,28 @@ public class SummonedEntity extends OwnedEntity {
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
-                                        new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                        if (this.level.isClientSide) {
+                                            new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                        }
                                         SEHelper.decreaseSESouls(owner, SoulCost);
                                         if (!this.level.isClientSide){
+                                            ServerWorld serverWorld = (ServerWorld) this.level;
                                             SEHelper.sendSEUpdatePacket(owner);
+                                            serverWorld.sendParticles(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
                                         }
                                     }
                                 } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > MainConfig.UndeadMinionHealCost.get()) {
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
-                                        new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                        if (this.level.isClientSide) {
+                                            new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                                        }
                                         GoldTotemItem.decreaseSouls(foundStack, SoulCost);
+                                        if (!this.level.isClientSide){
+                                            ServerWorld serverWorld = (ServerWorld) this.level;
+                                            serverWorld.sendParticles(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
+                                        }
                                     }
                                 }
                             }

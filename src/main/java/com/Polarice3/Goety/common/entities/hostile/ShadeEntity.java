@@ -115,8 +115,10 @@ public class ShadeEntity extends MonsterEntity {
 
     public void die(DamageSource cause) {
         super.die(cause);
-        for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+        if (this.level.isClientSide) {
+            for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
+                new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+            }
         }
     }
 

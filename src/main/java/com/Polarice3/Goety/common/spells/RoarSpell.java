@@ -4,7 +4,6 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -15,7 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.function.Predicate;
 
@@ -34,7 +33,7 @@ public class RoarSpell extends Spells {
         return SoundEvents.ILLUSIONER_PREPARE_BLINDNESS;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         float radius = 0;
         float enchantment = 0;
         boolean flaming = false;
@@ -45,6 +44,7 @@ public class RoarSpell extends Spells {
                 radius = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player);
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
+            this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), player);
         }
         for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(4.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
@@ -64,19 +64,18 @@ public class RoarSpell extends Spells {
             double d1 = worldIn.random.nextGaussian() * 0.2D;
             double d2 = worldIn.random.nextGaussian() * 0.2D;
             if (flaming){
-                new ParticleUtil(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                worldIn.sendParticles(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
             } else {
-                new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                worldIn.sendParticles(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
             }
         }
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), ModSounds.ROAR_SPELL.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         float radius = 0;
         float enchantment = 0;
         boolean flaming = false;
@@ -87,6 +86,7 @@ public class RoarSpell extends Spells {
                 radius = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player);
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
+            this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), player);
         }
         for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(8.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
@@ -106,17 +106,16 @@ public class RoarSpell extends Spells {
             double d1 = worldIn.random.nextGaussian() * 0.2D;
             double d2 = worldIn.random.nextGaussian() * 0.2D;
             if (flaming){
-                new ParticleUtil(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                worldIn.sendParticles(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
             } else {
-                new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                worldIn.sendParticles(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
             }
         }
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), ModSounds.ROAR_SPELL.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             double d = worldIn.random.nextGaussian() * 0.2D;
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), d, d, d);
+            worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, d, d, d, 0.5F);
         }
-        this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     private void launch(Entity p_213688_1_, LivingEntity livingEntity) {

@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class PoisonBallSpell extends InstantCastSpells{
 
@@ -23,7 +23,7 @@ public class PoisonBallSpell extends InstantCastSpells{
     }
 
     @Override
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         PoisonBallEntity smallFireballEntity = new PoisonBallEntity(ModEntityType.POISON_BALL.get(), entityLiving, worldIn);
         smallFireballEntity.setOwner(entityLiving);
         smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
@@ -33,7 +33,7 @@ public class PoisonBallSpell extends InstantCastSpells{
     }
 
     @Override
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         for(int i = 0; i < 3; ++i) {
             PoisonBallEntity smallFireballEntity = new PoisonBallEntity(ModEntityType.POISON_BALL.get(), entityLiving, worldIn);
             smallFireballEntity.setOwner(entityLiving);

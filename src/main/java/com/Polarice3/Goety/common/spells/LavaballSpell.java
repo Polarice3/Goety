@@ -8,7 +8,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class LavaballSpell extends Spells{
 
@@ -27,7 +27,7 @@ public class LavaballSpell extends Spells{
     }
 
     @Override
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         LavaballEntity fireballEntity = new LavaballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,
@@ -46,7 +46,7 @@ public class LavaballSpell extends Spells{
     }
 
     @Override
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         LavaballEntity fireballEntity = new LavaballEntity(worldIn,
                 entityLiving.getX() + vector3d.x / 2,

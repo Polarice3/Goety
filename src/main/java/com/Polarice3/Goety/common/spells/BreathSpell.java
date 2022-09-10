@@ -1,13 +1,12 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class BreathSpell extends ChargingSpells{
 
@@ -24,22 +23,22 @@ public class BreathSpell extends ChargingSpells{
         return SoundEvents.CONDUIT_ACTIVATE;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         if (entityLiving.getAirSupply() < entityLiving.getMaxAirSupply()) {
             entityLiving.setAirSupply(increaseAirSupply(entityLiving.getAirSupply(), entityLiving));
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
-            new ParticleUtil(ParticleTypes.BUBBLE_COLUMN_UP, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            worldIn.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
         this.IncreaseInfamy(MainConfig.BreathingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         if (entityLiving.getAirSupply() < entityLiving.getMaxAirSupply()) {
             entityLiving.setAirSupply(increaseAirSuperSupply(entityLiving.getAirSupply(), entityLiving));
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
-            new ParticleUtil(ParticleTypes.BUBBLE_COLUMN_UP, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            worldIn.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
         this.IncreaseInfamy(MainConfig.BreathingInfamyChance.get(), (PlayerEntity) entityLiving);
     }

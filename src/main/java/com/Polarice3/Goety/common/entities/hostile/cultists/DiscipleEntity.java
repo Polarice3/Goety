@@ -147,11 +147,13 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                     }
                 }
                 Vector3d vector3d = this.getBoundingBox().getCenter();
-                for(int i = 0; i < 40; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.2D;
-                    double d1 = this.random.nextGaussian() * 0.2D;
-                    double d2 = this.random.nextGaussian() * 0.2D;
-                    new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                if (this.level.isClientSide) {
+                    for (int i = 0; i < 40; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.2D;
+                        double d1 = this.random.nextGaussian() * 0.2D;
+                        double d2 = this.random.nextGaussian() * 0.2D;
+                        new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                    }
                 }
             }
             if (this.f >= 10){

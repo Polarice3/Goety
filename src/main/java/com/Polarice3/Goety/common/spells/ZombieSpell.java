@@ -22,7 +22,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 public class ZombieSpell extends SummonSpells{
@@ -43,7 +42,7 @@ public class ZombieSpell extends SummonSpells{
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         if (!worldIn.isClientSide()) {
             int enchantment = 0;
             int duration = 1;
@@ -56,8 +55,7 @@ public class ZombieSpell extends SummonSpells{
                 this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
             }
             if (entityLiving.isCrouching()) {
-                ServerWorld serverWorld = (ServerWorld) worldIn;
-                for (Entity entity : serverWorld.getAllEntities()) {
+                for (Entity entity : worldIn.getAllEntities()) {
                     if (entity instanceof ZombieMinionEntity) {
                         if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving) {
                             entity.moveTo(entityLiving.position());
@@ -83,14 +81,14 @@ public class ZombieSpell extends SummonSpells{
                 worldIn.addFreshEntity(summonedentity);
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                    worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                 }
                 this.SummonDown(entityLiving);
             }
         }
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         if (!worldIn.isClientSide()) {
             int enchantment = 0;
             int duration = 1;
@@ -103,8 +101,7 @@ public class ZombieSpell extends SummonSpells{
                 this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
             }
             if (entityLiving.isCrouching()) {
-                ServerWorld serverWorld = (ServerWorld) worldIn;
-                for (Entity entity : serverWorld.getAllEntities()) {
+                for (Entity entity : worldIn.getAllEntities()) {
                     if (entity instanceof ZombieMinionEntity) {
                         if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving) {
                             entity.moveTo(entityLiving.position());
@@ -130,7 +127,7 @@ public class ZombieSpell extends SummonSpells{
                     }
                     worldIn.addFreshEntity(summonedentity);
                     for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                        new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                        worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                     }
                 }
                 this.SummonDown(entityLiving);

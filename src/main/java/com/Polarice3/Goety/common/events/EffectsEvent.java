@@ -4,7 +4,10 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.DeadSandExplosion;
+import com.Polarice3.Goety.utils.EffectsUtil;
+import com.Polarice3.Goety.utils.ExplosionUtil;
+import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.PatrollerEntity;
@@ -51,7 +54,7 @@ public class EffectsEvent {
         }
         if (infected.tickCount % 20 == 0){
             for(int i = 0; i < 8; ++i) {
-                new ParticleUtil(ModParticleTypes.PLAGUE_EFFECT.get(), infected.getRandomX(0.5D), infected.getRandomY(), infected.getRandomZ(0.5D), 0.0D, 0.5D, 0.0D);
+                level.sendParticles(ModParticleTypes.PLAGUE_EFFECT.get(), infected.getRandomX(0.5D), infected.getRandomY(), infected.getRandomZ(0.5D), 1, 0.0D, 0.5D, 0.0D, 0);
             }
         }
         int i1 = MathHelper.clamp(a * 50, 0, 250);

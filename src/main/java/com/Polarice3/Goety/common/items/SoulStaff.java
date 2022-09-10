@@ -20,6 +20,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class SoulStaff extends SoulWand{
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
@@ -41,6 +42,7 @@ public class SoulStaff extends SoulWand{
         foundStack = GoldTotemFinder.FindTotem(playerEntity);
         ISoulEnergy soulEnergy = SEHelper.getCapability(playerEntity);
         if (!worldIn.isClientSide) {
+            ServerWorld serverWorld = (ServerWorld) worldIn;
             if (this.getSpell(stack) != null) {
                 if (SEHelper.getSEActive(playerEntity)) {
                     if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)) {
@@ -65,7 +67,7 @@ public class SoulStaff extends SoulWand{
                             }
                         }
                         assert stack.getTag() != null;
-                        this.getSpell(stack).StaffResult(worldIn, entityLiving);
+                        this.getSpell(stack).StaffResult(serverWorld, entityLiving);
                     } else {
                         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                     }
@@ -89,7 +91,7 @@ public class SoulStaff extends SoulWand{
                         }
                     }
                     assert stack.getTag() != null;
-                    this.getSpell(stack).StaffResult(worldIn, entityLiving);
+                    this.getSpell(stack).StaffResult(serverWorld, entityLiving);
                 } else {
                     worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 }

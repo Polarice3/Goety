@@ -4,7 +4,6 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.IllusionCloneEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +16,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.ArrayList;
@@ -36,11 +34,10 @@ public class IllusionSpell extends Spells{
         return SoundEvents.ILLUSIONER_PREPARE_MIRROR;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         List<IllusionCloneEntity> number = new ArrayList<>();
         if (!worldIn.isClientSide) {
-            ServerWorld serverWorld = (ServerWorld) worldIn;
-            for (Entity entity : serverWorld.getAllEntities()) {
+            for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof IllusionCloneEntity) {
                     if (((IllusionCloneEntity) entity).getTrueOwner() == entityLiving) {
                         number.add((IllusionCloneEntity) entity);
@@ -60,21 +57,20 @@ public class IllusionSpell extends Spells{
             summonedentity.setPersistenceRequired();
             worldIn.addFreshEntity(summonedentity);
             for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.CLOUD, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                worldIn.sendParticles(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
             }
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-            new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            worldIn.sendParticles(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
         }
         this.IncreaseInfamy(MainConfig.IllusionInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         List<IllusionCloneEntity> number = new ArrayList<>();
         if (!worldIn.isClientSide) {
-            ServerWorld serverWorld = (ServerWorld) worldIn;
-            for (Entity entity : serverWorld.getAllEntities()) {
+            for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof IllusionCloneEntity) {
                     if (((IllusionCloneEntity) entity).getTrueOwner() == entityLiving) {
                         number.add((IllusionCloneEntity) entity);
@@ -94,12 +90,12 @@ public class IllusionSpell extends Spells{
                 summonedentity.setUpgraded(true);
                 worldIn.addFreshEntity(summonedentity);
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    new ParticleUtil(ParticleTypes.CLOUD, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                    worldIn.sendParticles(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
                 }
             }
             worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+                worldIn.sendParticles(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
             }
             this.IncreaseInfamy(MainConfig.IllusionInfamyChance.get(), (PlayerEntity) entityLiving);
         }

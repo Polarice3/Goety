@@ -6,7 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class GlowLightSpell extends InstantCastSpells{
 
@@ -21,7 +21,7 @@ public class GlowLightSpell extends InstantCastSpells{
     }
 
     @Override
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         GlowLightEntity soulLightEntity = new GlowLightEntity(worldIn, entityLiving);
         soulLightEntity.setOwner(entityLiving);
         soulLightEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
@@ -30,7 +30,7 @@ public class GlowLightSpell extends InstantCastSpells{
     }
 
     @Override
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         GlowLightEntity soulLightEntity = new GlowLightEntity(worldIn, entityLiving);
         soulLightEntity.setOwner(entityLiving);
         soulLightEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);

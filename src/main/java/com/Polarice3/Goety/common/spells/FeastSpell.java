@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +9,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class FeastSpell extends ChargingSpells {
 
@@ -27,7 +26,7 @@ public class FeastSpell extends ChargingSpells {
         return SoundEvents.EVOKER_PREPARE_ATTACK;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving){
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         int i = (int) entityLiving.getX();
         int j = (int) entityLiving.getY();
         int k = (int) entityLiving.getZ();
@@ -38,12 +37,12 @@ public class FeastSpell extends ChargingSpells {
             }
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
         this.IncreaseInfamy(MainConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving){
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving){
         int i = (int) entityLiving.getX();
         int j = (int) entityLiving.getY();
         int k = (int) entityLiving.getZ();
@@ -62,7 +61,7 @@ public class FeastSpell extends ChargingSpells {
             }
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
-            new ParticleUtil(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0.0F, 0.0F, 0.0F);
+            worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
         this.IncreaseInfamy(MainConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }

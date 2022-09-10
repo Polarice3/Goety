@@ -45,7 +45,9 @@ public class DarkScrollItem extends Item {
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.startUsingItem(handIn);
-        new ParticleUtil(ParticleTypes.ANGRY_VILLAGER, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 0.0F, 0.0F, 0.0F);
+        if (worldIn.isClientSide) {
+            new ParticleUtil(ParticleTypes.ANGRY_VILLAGER, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 0.0F, 0.0F, 0.0F);
+        }
         return ActionResult.consume(itemstack);
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class IceStormSpell extends Spells{
 
@@ -26,7 +26,7 @@ public class IceStormSpell extends Spells{
         return SoundEvents.EVOKER_PREPARE_ATTACK;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         int enchantment = 1;
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         IceStormEntity iceStormEntity = new IceStormEntity(worldIn,
@@ -50,7 +50,7 @@ public class IceStormSpell extends Spells{
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.PLAYERS, 1.0F, 1.0F);
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         int enchantment = 1;
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         IceStormEntity iceStormEntity = new IceStormEntity(worldIn,

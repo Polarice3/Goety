@@ -135,7 +135,9 @@ public class LichEvents {
                         if (player.tickCount % 20 == 0 && SEHelper.getSESouls(player) > MainConfig.LichHealCost.get()) {
                             player.heal(1.0F);
                             Vector3d vector3d = player.getDeltaMovement();
-                            new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            if (player.level.isClientSide){
+                                new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            }
                             SEHelper.decreaseSESouls(player, MainConfig.LichHealCost.get());
                             SEHelper.sendSEUpdatePacket(player);
                         }
@@ -147,7 +149,9 @@ public class LichEvents {
                         if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
                             player.heal(1.0F);
                             Vector3d vector3d = player.getDeltaMovement();
-                            new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            if (player.level.isClientSide){
+                                new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            }
                             GoldTotemItem.decreaseSouls(goldtotem, MainConfig.LichHealCost.get());
                         }
                     }

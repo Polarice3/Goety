@@ -28,6 +28,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -386,6 +387,7 @@ public class SoulWand extends Item{
         foundStack = GoldTotemFinder.FindTotem(playerEntity);
         ISoulEnergy soulEnergy = SEHelper.getCapability(playerEntity);
         if (!worldIn.isClientSide) {
+            ServerWorld serverWorld = (ServerWorld) worldIn;
             if (this.getSpell(stack) != null) {
                 if (SEHelper.getSEActive(playerEntity)) {
                     if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)) {
@@ -410,7 +412,7 @@ public class SoulWand extends Item{
                             }
                         }
                         assert stack.getTag() != null;
-                        this.getSpell(stack).WandResult(worldIn, entityLiving);
+                        this.getSpell(stack).WandResult(serverWorld, entityLiving);
                     } else {
                         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                     }
@@ -434,7 +436,7 @@ public class SoulWand extends Item{
                         }
                     }
                     assert stack.getTag() != null;
-                    this.getSpell(stack).WandResult(worldIn, entityLiving);
+                    this.getSpell(stack).WandResult(serverWorld, entityLiving);
                 } else {
                     worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 }

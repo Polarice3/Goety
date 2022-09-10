@@ -129,6 +129,26 @@ public class ArcaTileEntity extends TileEntity implements ITickableTileEntity {
         }
     }
 
+    public void generateParticles() {
+        if (SEHelper.getSESouls(getPlayer()) <= 0){
+            return;
+        }
+        BlockPos blockpos = this.getBlockPos();
+
+        if (this.level != null) {
+            if (!this.level.isClientSide) {
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                double d0 = (double) blockpos.getX() + this.level.random.nextDouble();
+                double d1 = (double) blockpos.getY() + this.level.random.nextDouble();
+                double d2 = (double) blockpos.getZ() + this.level.random.nextDouble();
+                for (int p = 0; p < 4; ++p) {
+                    serverWorld.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 1, 0, 0, 0, 0);
+                    serverWorld.sendParticles(ParticleTypes.SMOKE, d0, d1, d2, 1, 0.0D, 5.0E-4D, 0.0D, 5.0E-4D);
+                }
+            }
+        }
+    }
+
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt){
         CompoundNBT tag = pkt.getTag();

@@ -16,7 +16,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class FrostBreathSpell extends SpewingSpell{
 
@@ -31,7 +31,7 @@ public class FrostBreathSpell extends SpewingSpell{
     }
 
     @Override
-    public void WandResult(World worldIn, LivingEntity entityLiving) {
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         float enchantment = 0;
         int duration = 1;
         int range = 0;
@@ -60,7 +60,7 @@ public class FrostBreathSpell extends SpewingSpell{
     }
 
     @Override
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         float enchantment = 0;
         int duration = 1;
         int range = 0;

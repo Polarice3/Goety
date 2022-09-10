@@ -23,7 +23,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public class VexSpell extends SummonSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
-    public void WandResult(World worldIn, LivingEntity entityLiving){
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         if (!worldIn.isClientSide()) {
             int enchantment = 0;
             int duration = 1;
@@ -85,7 +85,7 @@ public class VexSpell extends SummonSpells {
         }
     }
 
-    public void StaffResult(World worldIn, LivingEntity entityLiving) {
+    public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         if (!worldIn.isClientSide()) {
             int enchantment = 0;
             int duration = 1;

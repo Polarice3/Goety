@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
@@ -63,7 +62,7 @@ public class NetherBookRawItem extends Item {
                         }
                         for(int i = 0; i < serverWorld.random.nextInt(35) + 10; ++i) {
                             double d = serverWorld.random.nextGaussian() * 0.2D;
-                            new ParticleUtil(ParticleTypes.SMOKE, witchentity.getX(), witchentity.getEyeY(), witchentity.getZ(), d, d, d);
+                            serverWorld.sendParticles(ParticleTypes.SMOKE, witchentity.getX(), witchentity.getEyeY(), witchentity.getZ(), 0, d, d, d, 0.5F);
                         }
 
                         witchentity.setPersistenceRequired();

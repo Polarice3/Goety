@@ -113,7 +113,7 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
                         if (Soulcount > 0) {
                             SEHelper.decreaseSESouls(arcaTileEntity.getPlayer(), souls);
                             SEHelper.sendSEUpdatePacket(arcaTileEntity.getPlayer());
-                            arcaTileEntity.makeWorkParticles();
+                            arcaTileEntity.generateParticles();
                         }
                     }
                 }

@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.Maps;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -33,6 +32,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.raid.Raid;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -232,11 +232,14 @@ public class InquillagerEntity extends HuntingIllagerEntity {
 
         protected void performSpellCasting() {
             InquillagerEntity.this.heal(InquillagerEntity.this.getMaxHealth());
-            for(int i = 0; i < 5; ++i) {
-                double d0 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
-                double d1 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
-                double d2 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
-                new ParticleUtil(ModParticleTypes.HEAL_EFFECT.get(), InquillagerEntity.this.getRandomX(1.0D), InquillagerEntity.this.getRandomY() + 1.0D, InquillagerEntity.this.getRandomZ(1.0D), d0, d1, d2);
+            if (!InquillagerEntity.this.level.isClientSide) {
+                ServerWorld serverWorld = (ServerWorld) InquillagerEntity.this.level;
+                for (int i = 0; i < 5; ++i) {
+                    double d0 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
+                    double d1 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
+                    double d2 = InquillagerEntity.this.random.nextGaussian() * 0.02D;
+                    serverWorld.sendParticles(ModParticleTypes.HEAL_EFFECT.get(), InquillagerEntity.this.getRandomX(1.0D), InquillagerEntity.this.getRandomY() + 1.0D, InquillagerEntity.this.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
+                }
             }
             InquillagerEntity.this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 2.0F);
         }
