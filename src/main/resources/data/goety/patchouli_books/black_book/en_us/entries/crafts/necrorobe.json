@@ -9,6 +9,11 @@
       "text": "The power of commanding Zombies and Skeletons sounds wonderful, but with the use of Necro Robes, your Necroturgic abilities enhance even further."
     },
     {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/necro_robes.png"],
+      "border": true
+    },
+    {
       "type": "goety:ritual",
       "recipe": "goety:necrohelm"
     },

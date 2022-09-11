@@ -34,7 +34,7 @@ public class SacredFishEntity extends AbstractFishEntity {
 
     @Override
     protected ItemStack getBucketItemStack() {
-        return null;
+        return new ItemStack(ModItems.SACRED_FISH_BUCKET.get());
     }
 
     protected SoundEvent getAmbientSound() {

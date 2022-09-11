@@ -56,7 +56,7 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
             if (this.distanceToSqr(livingEntity) < 27){
                 if (LocustLimit(this) < 3){
                     if (this.tickCount % 20 == 0){
-                        new SoundUtil(this, SoundEvents.BEEHIVE_EXIT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                        this.playSound(SoundEvents.BEEHIVE_EXIT, 1.0F, 1.0F);
                         LocustEntity locustEntity = new LocustEntity(ModEntityType.LOCUST.get(), this.level);
                         locustEntity.setPos(this.getX(), this.getY(), this.getZ());
                         locustEntity.setOwnerId(this.getUUID());

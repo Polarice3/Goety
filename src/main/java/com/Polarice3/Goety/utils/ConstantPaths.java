@@ -41,4 +41,9 @@ public class ConstantPaths {
         return "goety:structure";
     }
 
+    public static String skullLordMinion(){
+        return "goety:sl_minion";
+    }
+
+
 }

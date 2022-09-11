@@ -7,11 +7,10 @@ import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.items.*;
 import com.Polarice3.Goety.common.items.curios.AmuletItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
+import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Rarity;
-import net.minecraft.item.SimpleFoiledItem;
+import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -45,6 +44,7 @@ public class ModItems {
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
     public static final RegistryObject<Item> FORBIDDEN_SCROLL = ITEMS.register("forbidden_scroll", ForbiddenScrollItem::new);
+    public static final RegistryObject<Item> SACRED_FISH_BUCKET = ITEMS.register("sacred_fish_bucket", () -> new FishBucketItem(ModEntityType.SACRED_FISH,() -> Fluids.WATER, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_MISC)));
 
     //Food
     public static final RegistryObject<SacredFishItem> SACRED_FISH = ITEMS.register("sacred_fish", SacredFishItem::new);

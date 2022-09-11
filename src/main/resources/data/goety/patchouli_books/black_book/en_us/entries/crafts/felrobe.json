@@ -9,6 +9,11 @@
       "text": "The wild holds many creatures that are not from the grave. With this set of Robes, you can commune and perhaps control these beasts instead of hiding from them."
     },
     {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/fel_robes.png"],
+      "border": true
+    },
+    {
       "type": "goety:ritual",
       "recipe": "goety:felhelm"
     },
@@ -22,7 +27,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "With Shrubbery and an Explosive personality, this Robe will calm any Creepers around you, making them uninterested in trying to talk to you and exploding in the process."
+      "text": "With Shrubbery and an Explosive personality, this Robe will calm any Creepers around you, making them uninterested in trying to talk to you and exploding in the process. While the robes makes you more resistant to Explosions, the aforementioned shrubbery makes you more vulnerable to flames."
     },
     {
       "type": "goety:ritual",

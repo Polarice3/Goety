@@ -8,7 +8,9 @@ import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
+import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
+import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
@@ -17,9 +19,11 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
+import com.Polarice3.Goety.common.entities.projectiles.WarpedSpearEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
+import com.Polarice3.Goety.common.items.WarpedSpearItem;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.lichdom.LichProvider;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
@@ -365,9 +369,14 @@ public class ModEvents {
             if (livingEntity instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) livingEntity;
                 if (RobeArmorFinder.FindBootsofWander(player)){
-                    BootsUtil.enableStepHeight(player);
+                    PlayerUtil.enableStepHeight(player);
                 } else {
-                    BootsUtil.disableStepHeight(player);
+                    PlayerUtil.disableStepHeight(player);
+                }
+                if (player.getMainHandItem().getItem() instanceof WarpedSpearItem && player.getOffhandItem().isEmpty()){
+                    PlayerUtil.enableSpearReach(player);
+                } else {
+                    PlayerUtil.disableSpearReach(player);
                 }
             }
         }
@@ -568,6 +577,11 @@ public class ModEvents {
                         }
                     }
                 }
+                if (mob.getTags().contains(ConstantPaths.skullLordMinion())){
+                    if (target instanceof SkullLordEntity || target instanceof BoneLordEntity){
+                        mob.setTarget(null);
+                    }
+                }
                 if (mob.getMobType() == CreatureAttribute.UNDEAD || mob instanceof CreeperEntity){
                     if (target instanceof ApostleEntity){
                         mob.setTarget(null);
@@ -623,6 +637,9 @@ public class ModEvents {
             }
             if (event.getSource().isExplosion()){
                 event.setAmount((float) (event.getAmount()/1.5));
+            }
+            if (event.getSource().isFire()){
+                event.setAmount((float) (event.getAmount() * 1.5));
             }
         }
         if (attacker instanceof FangEntity){

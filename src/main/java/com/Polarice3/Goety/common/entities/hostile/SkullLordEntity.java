@@ -5,10 +5,7 @@ import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.EntityFinder;
-import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -204,18 +201,24 @@ public class SkullLordEntity extends MonsterEntity{
                         this.moveControl.setWantedPosition(nx, vector3d1.y, nz, 1.0F);
                     }
                     if (this.laserTime == 30) {
-                        new SoundUtil(this, SoundEvents.BEACON_ACTIVATE, SoundCategory.HOSTILE, 2.0F, 2.0F);
+                        this.playSound(SoundEvents.BEACON_ACTIVATE, 2.0F, 1.0F);
                         if (this.level.getDifficulty() == Difficulty.HARD){
                             this.spawnMobs();
                         }
                     }
                     if (this.laserTime >= 30){
-                        new ParticleUtil(ModParticleTypes.LASER_GATHER.get(), this, this.level);
+                        if (this.level.isClientSide){
+                            new ParticleUtil(ModParticleTypes.LASER_GATHER.get(), this, this.level);
+                        }
+                        if (!this.level.isClientSide) {
+                            ServerWorld serverWorld = (ServerWorld) this.level;
+                            new ServerParticleUtil(ModParticleTypes.LASER_GATHER.get(), this, serverWorld);
+                        }
                     }
                     if (this.laserTime >= 60) {
                         LaserEntity laserEntity = ModEntityType.LASER.get().create(this.level);
                         if (laserEntity != null) {
-                            new SoundUtil(this, SoundEvents.END_PORTAL_SPAWN, SoundCategory.HOSTILE, 3.0F, 1.0F);
+                            this.playSound(SoundEvents.END_PORTAL_SPAWN, 3.0F, 1.0F);
                             this.setLaserTime(false);
                             laserEntity.setSkullLord(this);
                             laserEntity.setDuration(200);
@@ -305,7 +308,9 @@ public class SkullLordEntity extends MonsterEntity{
                 }
             }
             if (this.getBoneLord() == null){
-                --this.boneLordRegen;
+                if (!this.isLaserTime()){
+                    --this.boneLordRegen;
+                }
                 this.setisInvulnerable(false);
                 for (BoneLordEntity boneLordEntity : this.level.getEntitiesOfClass(BoneLordEntity.class, this.getBoundingBox().inflate(32))){
                     if (boneLordEntity.getSkullLord() == this){
@@ -383,6 +388,7 @@ public class SkullLordEntity extends MonsterEntity{
                 } else {
                     monster.moveTo(d3, d4, d5);
                 }
+                monster.addTag(ConstantPaths.skullLordMinion());
                 monster.finalizeSpawn((IServerWorld) this.level, this.level.getCurrentDifficultyAt(monster.blockPosition()), SpawnReason.SPAWNER, (ILivingEntityData) null, (CompoundNBT) null);
                 monster.spawnAnim();
                 ((IServerWorld) this.level).addFreshEntityWithPassengers(monster);
