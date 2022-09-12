@@ -96,6 +96,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_MINION.get(), SkeletonMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FARMER_MINION.get(), FarmerMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionRenderer::new);

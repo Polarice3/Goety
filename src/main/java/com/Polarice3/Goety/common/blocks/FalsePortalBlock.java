@@ -69,43 +69,32 @@ public class FalsePortalBlock extends Block {
             float random = pRandom.nextFloat();
 
             if (random < 0.01F){
-                if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.GHAST)) {
-                    Entity entity = EntityType.GHAST.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
+                Entity entity = EntityType.GHAST.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
+                if (entity != null) {
+                    entity.setPortalCooldown();
+                }
+            } else if (random < 0.25F){
+                if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.ENDERMAN)) {
+                    Entity entity = EntityType.ENDERMAN.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
                     if (entity != null) {
                         entity.setPortalCooldown();
                     }
                 }
-            } else if (random > 0.01F && random < 0.25F){
-                if (pRandom.nextBoolean()) {
-                    if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.ZOMBIFIED_PIGLIN)) {
-                        Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
-                        if (entity != null) {
-                            entity.setPortalCooldown();
-                        }
-                    }
-                } else {
-                    if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.MAGMA_CUBE)) {
-                        Entity entity = EntityType.MAGMA_CUBE.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
-                        if (entity != null) {
-                            entity.setPortalCooldown();
-                        }
-                    }
-                }
-            } else if (random >= 0.25F && random < 0.5F){
+            } else if (random < 0.5F){
                 if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.ZOMBIFIED_PIGLIN)) {
                     Entity entity = EntityType.ZOMBIFIED_PIGLIN.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
                     if (entity != null) {
                         entity.setPortalCooldown();
                     }
                 }
-            } else if (random >= 0.5F && random < 0.75F){
+            } else if (random < 0.75F){
                 if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.SKELETON)) {
                     Entity entity = EntityType.SKELETON.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
                     if (entity != null) {
                         entity.setPortalCooldown();
                     }
                 }
-            } else if (random >= 0.75F) {
+            } else {
                 if (pLevel.getBlockState(spawnPos).isValidSpawn(pLevel, spawnPos, EntityType.MAGMA_CUBE)) {
                     Entity entity = EntityType.MAGMA_CUBE.spawn(pLevel, (CompoundNBT) null, (ITextComponent) null, (PlayerEntity) null, spawnPos.above(), SpawnReason.STRUCTURE, false, false);
                     if (entity != null) {

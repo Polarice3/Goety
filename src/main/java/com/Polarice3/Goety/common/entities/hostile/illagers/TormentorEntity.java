@@ -75,6 +75,13 @@ public class TormentorEntity extends AbstractIllagerEntity {
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 1.0F);
         }
+        if (this.hasActiveRaid()){
+            if (this.getOwner() == null || this.getOwner().isDeadOrDying()){
+                if (this.tickCount % 20 == 0) {
+                    this.hurt(DamageSource.STARVE, 5.0F);
+                }
+            }
+        }
         if (!this.isCharging()){
             this.addEffect(new EffectInstance(Effects.INVISIBILITY, 20, 0, false, false));
         } else {

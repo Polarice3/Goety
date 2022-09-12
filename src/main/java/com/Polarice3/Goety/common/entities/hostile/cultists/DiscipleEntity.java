@@ -27,6 +27,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -147,12 +148,13 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                     }
                 }
                 Vector3d vector3d = this.getBoundingBox().getCenter();
-                if (this.level.isClientSide) {
+                if (!this.level.isClientSide){
+                    ServerWorld serverWorld = (ServerWorld) this.level;
                     for (int i = 0; i < 40; ++i) {
                         double d0 = this.random.nextGaussian() * 0.2D;
                         double d1 = this.random.nextGaussian() * 0.2D;
                         double d2 = this.random.nextGaussian() * 0.2D;
-                        new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+                        serverWorld.sendParticles(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
                     }
                 }
             }

@@ -97,6 +97,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> SKELETON_MINION_SPAWN_EGG = ITEMS.register("skeleton_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.SKELETON_MINION, 0x1f1f1f, 0x6e6473, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> UNDEAD_WOLF_SPAWN_EGG = ITEMS.register("undead_wolf_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.UNDEAD_WOLF_MINION, 0xbdbdbd, 0x832527, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> SPIDERLING_MINION_SPAWN_EGG = ITEMS.register("spiderling_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.SPIDERLING_MINION, 0xc18a34, 0x3c0202, new Item.Properties().tab(Goety.TAB)));
 

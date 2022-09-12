@@ -68,7 +68,7 @@ public class CultistEvents {
                 VillagerEntity villager = (VillagerEntity) livingEntity;
                 if (MainConfig.CultistSpread.get()) {
                     if (villager.getTags().contains(ConstantPaths.secretCultist())) {
-                        if (villager.getVillagerData().getLevel() >= 3) {
+                        if (villager.getVillagerData().getLevel() >= 2) {
                             villager.removeTag(ConstantPaths.secretCultist());
                         }
                         if (!MobUtil.getWitnesses(villager)){

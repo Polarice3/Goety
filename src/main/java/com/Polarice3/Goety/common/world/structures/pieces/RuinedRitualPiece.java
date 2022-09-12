@@ -87,10 +87,10 @@ public class RuinedRitualPiece extends TemplateStructurePiece {
             list.add(getBlockReplaceRule(Blocks.NETHERRACK, 0.07F, Blocks.MAGMA_BLOCK));
         }
 
-        PlacementSettings placementsettings = (new PlacementSettings()).setRotation(this.rotation).setMirror(this.mirror).setRotationPivot(p_237014_2_).addProcessor(blockignorestructureprocessor).addProcessor(new RuleStructureProcessor(list)).addProcessor(new BlockRuinessProcessor(this.properties.mossiness)).addProcessor(new LavaSubmergingProcessor());
+        PlacementSettings placementsettings = (new PlacementSettings().setIgnoreEntities(true)).setRotation(this.rotation).setMirror(this.mirror).setRotationPivot(p_237014_2_).addProcessor(blockignorestructureprocessor).addProcessor(new RuleStructureProcessor(list)).addProcessor(new BlockRuinessProcessor(this.properties.mossiness)).addProcessor(new LavaSubmergingProcessor());
 
         if (this.properties.overgrown){
-            placementsettings = (new PlacementSettings()).setRotation(this.rotation).setMirror(this.mirror).setRotationPivot(p_237014_2_).addProcessor(blockignorestructureprocessor).addProcessor(new RuleStructureProcessor(list)).addProcessor(new BlockMossRuinProcessor(this.properties.mossiness)).addProcessor(new LavaSubmergingProcessor());
+            placementsettings = (new PlacementSettings().setIgnoreEntities(true)).setRotation(this.rotation).setMirror(this.mirror).setRotationPivot(p_237014_2_).addProcessor(blockignorestructureprocessor).addProcessor(new RuleStructureProcessor(list)).addProcessor(new BlockMossRuinProcessor(this.properties.mossiness)).addProcessor(new LavaSubmergingProcessor());
         }
 
         this.setup(p_237014_1_, this.templatePosition, placementsettings);
@@ -101,11 +101,12 @@ public class RuinedRitualPiece extends TemplateStructurePiece {
     }
 
     public boolean postProcess(ISeedReader pLevel, StructureManager pStructureManager, ChunkGenerator pChunkGenerator, Random pRandom, MutableBoundingBox pBox, ChunkPos pChunkPos, BlockPos pPos) {
-        if (!pBox.isInside(this.templatePosition)) {
+        if (!pBox.isInside(this.templatePosition)){
             return true;
         } else {
             pBox.expand(this.template.getBoundingBox(this.placeSettings, this.templatePosition));
-            pBox.move(0, -1, 0);
+            BlockPos original = this.templatePosition;
+            this.templatePosition = original.above(-1);
             boolean flag = super.postProcess(pLevel, pStructureManager, pChunkGenerator, pRandom, pBox, pChunkPos, pPos);
             this.spreadNetherrack(pRandom, pLevel);
             this.addNetherrackDripColumnsBelowPortal(pRandom, pLevel);

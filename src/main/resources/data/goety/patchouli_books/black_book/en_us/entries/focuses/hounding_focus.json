@@ -1,0 +1,15 @@
+{
+  "name": "Hounding Focus",
+  "icon": "goety:houndingfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A starting Necroturgic Spell that summon and command an Undead Wolf, one of the weakest undead creature a Necroturge can call forth."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:houndingfocus"
+    }
+  ]
+}

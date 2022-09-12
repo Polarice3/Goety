@@ -56,7 +56,8 @@ public class MagicFocusItem extends Item{
                 || stack.getItem() == ModItems.CREEPERLINGFOCUS.get()
                 || stack.getItem() == ModItems.VEXINGFOCUS.get()
                 || stack.getItem() == ModItems.ROTTINGFOCUS.get()
-                || stack.getItem() == ModItems.OSSEOUSFOCUS.get()){
+                || stack.getItem() == ModItems.OSSEOUSFOCUS.get()
+                || stack.getItem() == ModItems.HOUNDINGFOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.DURATION.get();
         }

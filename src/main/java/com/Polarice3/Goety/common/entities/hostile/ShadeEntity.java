@@ -99,15 +99,17 @@ public class ShadeEntity extends MonsterEntity {
             if (livingEntity instanceof ZombieEntity) {
                 if (this.getBoundingBox().inflate(1.2F).intersects(livingEntity.getBoundingBox())) {
                     HuskarlEntity huskarlEntity = ((ZombieEntity) livingEntity).convertTo(ModEntityType.HUSKARL.get(), false);
-                    huskarlEntity.setPos(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
-                    if (this.hasCustomName()){
-                        huskarlEntity.setCustomName(this.getCustomName());
+                    if (huskarlEntity != null) {
+                        huskarlEntity.setPos(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ());
+                        if (this.hasCustomName()) {
+                            huskarlEntity.setCustomName(this.getCustomName());
+                        }
+                        huskarlEntity.setShade(true);
+                        huskarlEntity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(livingEntity.blockPosition()), SpawnReason.CONVERSION, null, null);
+                        serverWorld.addFreshEntity(huskarlEntity);
+                        this.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
+                        this.remove();
                     }
-                    huskarlEntity.setShade(true);
-                    huskarlEntity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(livingEntity.blockPosition()), SpawnReason.CONVERSION, null, null);
-                    serverWorld.addFreshEntity(huskarlEntity);
-                    new SoundUtil(huskarlEntity, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
-                    this.remove();
                 }
             }
         }
@@ -118,6 +120,12 @@ public class ShadeEntity extends MonsterEntity {
         if (this.level.isClientSide) {
             for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
                 new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+            }
+        }
+        if (!this.level.isClientSide){
+            ServerWorld serverWorld = (ServerWorld) this.level;
+            for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
+                serverWorld.sendParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
             }
         }
     }

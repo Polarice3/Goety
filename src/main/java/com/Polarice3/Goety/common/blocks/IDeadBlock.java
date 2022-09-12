@@ -59,16 +59,20 @@ public interface IDeadBlock {
                         BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
                     }
                 }
-                for (int l1 = 0; l1 <= 1; ++l1){
-                    BlockPos blockpos2 = pPos.offset(0, l1, 0);
-                    BlockState blockState2 = pLevel.getBlockState(blockpos2);
-                    if (blockState2.getBlock() instanceof BushBlock && BlockFinder.validPlants(blockpos2, pLevel)) {
-                        pLevel.removeBlock(blockpos2, false);
-                        pLevel.setBlockAndUpdate(blockpos2, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
-                    }
-                    if (BlockFinder.LivingBlocks(blockState2)){
-                        pLevel.removeBlock(blockpos2, false);
-                        pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
+                for (int j1 = -2; j1 < 2; ++j1) {
+                    for (int k1 = 0; k1 <= 1; ++k1) {
+                        for (int l1 = -2; l1 < 2; ++l1) {
+                            BlockPos blockpos2 = pPos.offset(j1, k1, l1);
+                            BlockState blockState2 = pLevel.getBlockState(blockpos2);
+                            if (blockState2.getBlock() instanceof BushBlock && BlockFinder.validPlants(blockpos2, pLevel)) {
+                                pLevel.removeBlock(blockpos2, false);
+                                pLevel.setBlockAndUpdate(blockpos2, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
+                            }
+                            if (BlockFinder.LivingBlocks(blockState2)) {
+                                pLevel.removeBlock(blockpos2, false);
+                                pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
+                            }
+                        }
                     }
                 }
             }

@@ -300,6 +300,9 @@ public class SoulWand extends Item{
             } else if (spell.contains("frostbreath")) {
                 this.setSpellConditions(new FrostBreathSpell(), itemStack);
                 this.setSpell(24, itemStack);
+            } else if (spell.contains("hounding")) {
+                this.setSpellConditions(new UndeadWolfSpell(), itemStack);
+                this.setSpell(25, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

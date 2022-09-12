@@ -184,6 +184,7 @@ public class Goety {
         event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.FARMER_MINION.get(), FarmerMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfEntity.setCustomAttributes().build());
         event.put(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneEntity.setCustomAttributes().build());
         event.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());

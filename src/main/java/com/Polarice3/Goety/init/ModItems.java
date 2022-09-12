@@ -107,6 +107,7 @@ public class ModItems {
     public static final RegistryObject<Item> SOULLIGHTFOCUS = ITEMS.register("soullightfocus", () -> new MagicFocusItem(MainConfig.SoulLightCost.get()));
     public static final RegistryObject<Item> GLOWLIGHTFOCUS = ITEMS.register("glowlightfocus", () -> new MagicFocusItem(MainConfig.GlowLightCost.get()));
     public static final RegistryObject<Item> ICESTORMFOCUS = ITEMS.register("icestormfocus", () -> new MagicFocusItem(MainConfig.IceStormCost.get()));
+    public static final RegistryObject<Item> HOUNDINGFOCUS = ITEMS.register("houndingfocus", () -> new MagicFocusItem(MainConfig.UndeadWolfCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

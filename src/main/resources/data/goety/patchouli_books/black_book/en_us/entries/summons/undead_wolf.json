@@ -1,0 +1,19 @@
+{
+  "name": "Undead Wolf",
+  "icon": "goety:undead_wolf_spawn_egg",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Despite being undead, these wolves still hunger for bones and will chase and scare off Skeletons. When they managed to kill a Skeleton, they would heal 1 Heart of damage."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:undead_wolf"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Should one be clad in Necro Robes, the Wolf can be ordered to sit like a regular tamed wolf. They can also be healed using a Rotten Flesh or Bone. An undead pet for a master of undeath."
+    }
+  ]
+}

@@ -106,9 +106,9 @@ public class WarpedSpearItem extends Item implements IVanishable {
     }
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return (enchantment.category == EnchantmentType.BREAKABLE)
-                || enchantment instanceof DamageEnchantment
-                || enchantment instanceof KnockbackEnchantment
-                || enchantment == Enchantments.MOB_LOOTING;
+        return (enchantment.category == EnchantmentType.BREAKABLE
+                || enchantment.category == EnchantmentType.WEAPON)
+                && !(enchantment instanceof FireAspectEnchantment)
+                && !(enchantment instanceof SweepingEnchantment);
     }
 }

@@ -7,7 +7,6 @@ import com.Polarice3.Goety.utils.ConstantPaths;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -16,7 +15,6 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
@@ -34,8 +32,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class RuinedRitualStructure extends Structure<RuinedRitualFeature>{
-    private static final List<MobSpawnInfo.Spawners> ENEMIES = ImmutableList.of(
-            new MobSpawnInfo.Spawners(EntityType.ENDERMAN, 2, 1, 1));
 
     public RuinedRitualStructure(Codec<RuinedRitualFeature> p_i231984_1_) {
         super(p_i231984_1_);
@@ -46,13 +42,13 @@ public class RuinedRitualStructure extends Structure<RuinedRitualFeature>{
     }
 
     @Override
-    public GenerationStage.Decoration step() {
-        return GenerationStage.Decoration.SURFACE_STRUCTURES;
+    public String getFeatureName() {
+        return this.getRegistryName().toString();
     }
 
     @Override
-    public List<MobSpawnInfo.Spawners> getDefaultSpawnList() {
-        return ENEMIES;
+    public GenerationStage.Decoration step() {
+        return GenerationStage.Decoration.SURFACE_STRUCTURES;
     }
 
     @Override
@@ -152,28 +148,28 @@ public class RuinedRitualStructure extends Structure<RuinedRitualFeature>{
             super(p_i231985_1_, p_i231985_2_, p_i231985_3_, p_i231985_4_, p_i231985_5_, p_i231985_6_);
         }
 
-        public void generatePieces(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int p_230364_4_, int p_230364_5_, Biome p_230364_6_, RuinedRitualFeature p_230364_7_) {
+        public void generatePieces(DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biome, RuinedRitualFeature config) {
             RuinedRitualPiece.Serializer RuinedRitualPiece$serializer = new RuinedRitualPiece.Serializer();
-            if (p_230364_7_.locationType == Location.JUNGLE) {
+            if (config.locationType == Location.JUNGLE) {
                 RuinedRitualPiece$serializer.mossiness = 0.8F;
                 RuinedRitualPiece$serializer.overgrown = true;
                 RuinedRitualPiece$serializer.vines = true;
             }
 
-            Template template = p_230364_3_.getOrCreate(ConstantPaths.getRuinedRitual());
+            Template template = templateManagerIn.getOrCreate(ConstantPaths.getRuinedRitual());
             Rotation rotation = Util.getRandom(Rotation.values(), this.random);
             Mirror mirror = this.random.nextFloat() < 0.5F ? Mirror.NONE : Mirror.FRONT_BACK;
             BlockPos blockpos = new BlockPos(template.getSize().getX() / 2, 0, template.getSize().getZ() / 2);
-            BlockPos blockpos1 = (new ChunkPos(p_230364_4_, p_230364_5_)).getWorldPosition();
+            BlockPos blockpos1 = (new ChunkPos(chunkX, chunkZ)).getWorldPosition();
             MutableBoundingBox mutableboundingbox = template.getBoundingBox(blockpos1, rotation, blockpos, mirror);
             Vector3i vector3i = mutableboundingbox.getCenter();
             int i = vector3i.getX();
             int j = vector3i.getZ();
-            int k = p_230364_2_.getBaseHeight(i, j, RuinedRitualPiece.getHeightMapType()) - 1;
-            int l = RuinedRitualStructure.findSuitableY(p_230364_2_, k, mutableboundingbox);
+            int k = chunkGenerator.getBaseHeight(i, j, RuinedRitualPiece.getHeightMapType()) - 1;
+            int l = RuinedRitualStructure.findSuitableY(chunkGenerator, k, mutableboundingbox);
             BlockPos blockpos2 = new BlockPos(blockpos1.getX(), l, blockpos1.getZ());
-            if (p_230364_7_.locationType == Location.STANDARD) {
-                RuinedRitualPiece$serializer.cold = RuinedRitualStructure.isCold(blockpos2, p_230364_6_);
+            if (config.locationType == Location.STANDARD) {
+                RuinedRitualPiece$serializer.cold = RuinedRitualStructure.isCold(blockpos2, biome);
             }
 
             this.pieces.add(new RuinedRitualPiece(blockpos2, RuinedRitualPiece$serializer, ConstantPaths.getRuinedRitual(), template, rotation, mirror, blockpos));

@@ -6,6 +6,7 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
+import com.Polarice3.Goety.common.entities.ally.UndeadWolfEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
@@ -39,6 +40,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -130,6 +132,10 @@ public class ModEvents {
                 }
             }
 
+        }
+        if (entity instanceof AbstractSkeletonEntity){
+            AbstractSkeletonEntity skeletonEntity = (AbstractSkeletonEntity) entity;
+            skeletonEntity.goalSelector.addGoal(4, new AvoidEntityGoal<>(skeletonEntity, UndeadWolfEntity.class, 6.0F, 1.0D, 1.2D));
         }
         if (entity instanceof StormEntity){
             if (!entity.level.isClientSide){

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "sfs",
+    "fef",
+    "sfs"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "f":
+    {
+      "tag": "forge:bones"
+    },
+    "s":
+    {
+      "item": "minecraft:rotten_flesh"
+    }
+  },
+  "result":
+  {
+    "item": "goety:houndingfocus",
+    "count": 1
+  }
+}

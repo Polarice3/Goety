@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolType;
 
@@ -39,6 +41,7 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
         if (pRand.nextInt(16) == 0) {
             BlockPos blockpos = pPos.below();

@@ -13,7 +13,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "You can right click a Zombie Servant can accept any Armor but only Swords/Axes."
+      "text": "Zombie Servants can accept any Armor but only accept Swords or Axes."
     }
   ]
 }

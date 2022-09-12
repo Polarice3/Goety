@@ -593,7 +593,10 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                         this.launch(entity, this);
                     }
                 }
-                this.roarParticles();
+                if (!this.level.isClientSide){
+                    this.serverRoarParticles();
+                }
+
             }
             if (this.f >= 10){
                 this.teleport();
@@ -635,15 +638,15 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void roarParticles(){
-        new ParticleUtil(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+    private void serverRoarParticles(){
+        ServerWorld serverWorld = (ServerWorld) this.level;
+        serverWorld.sendParticles(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
         Vector3d vector3d = this.getBoundingBox().getCenter();
         for(int i = 0; i < 40; ++i) {
             double d0 = this.random.nextGaussian() * 0.2D;
             double d1 = this.random.nextGaussian() * 0.2D;
             double d2 = this.random.nextGaussian() * 0.2D;
-            new ParticleUtil(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
+            serverWorld.sendParticles(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
         }
     }
 

@@ -399,6 +399,12 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "farmer_minion").toString()));
 
+    public static final RegistryObject<EntityType<UndeadWolfEntity>> UNDEAD_WOLF_MINION = ENTITY_TYPES.register("undead_wolf",
+            () -> EntityType.Builder.of(UndeadWolfEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 0.85F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "undead_wolf").toString()));
+
     public static final RegistryObject<EntityType<SpiderlingMinionEntity>> SPIDERLING_MINION = ENTITY_TYPES.register("spiderling_minion",
             () -> EntityType.Builder.of(SpiderlingMinionEntity::new, EntityClassification.MONSTER)
                     .sized(0.4F, 0.2F)

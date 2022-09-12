@@ -21,6 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -184,6 +185,18 @@ public class DeadSandExplosion {
 
         if (this.level.isClientSide) {
             this.soundAndParticles(pSpawnParticles);
+        }
+
+        if (!this.level.isClientSide){
+            ServerWorld serverWorld = (ServerWorld) this.level;
+            serverWorld.playSound(null, position.x, position.y, position.z, ModSounds.CORRUPT_EXPLOSION.get(), SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
+            if (pSpawnParticles) {
+                if (!(this.radius < 2.0F)) {
+                    serverWorld.sendParticles(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), this.x, this.y, this.z, 0, 1.0D, 0.0D, 0.0D, 0.0F);
+                } else {
+                    serverWorld.sendParticles(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), this.x, this.y, this.z, 0, 1.0D, 0.0D, 0.0D, 0.0F);
+                }
+            }
         }
 
         if (flag) {

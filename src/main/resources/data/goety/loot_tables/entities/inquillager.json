@@ -56,6 +56,11 @@
           ],
           "name": "minecraft:gold_ingot"
         }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:killed_by_player"
+        }
       ]
     }
   ]

@@ -19,6 +19,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterCost;
@@ -45,6 +46,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterDuration;
@@ -63,6 +65,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterInfamyChance;
@@ -99,6 +102,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> VexCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonCooldown;
+    public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCooldown;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> AnthropodSouls;
@@ -126,6 +130,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> StaffVexLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonLimit;
+    public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadMinionHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
@@ -260,10 +265,12 @@ public class MainConfig {
                 .defineInRange("fangCost", 8, 0, Integer.MAX_VALUE);
         RoarCost = BUILDER.comment("Roaring Spell Cost, Default: 10")
                 .defineInRange("biteCost", 10, 0, Integer.MAX_VALUE);
-        ZombieCost = BUILDER.comment("Necroturgy Spell Cost, Default: 5")
+        ZombieCost = BUILDER.comment("Rotting Spell Cost, Default: 5")
                 .defineInRange("zombieCost", 5, 0, Integer.MAX_VALUE);
         SkeletonCost = BUILDER.comment("Osseous Spell Cost, Default: 8")
                 .defineInRange("skeletonCost", 8, 0, Integer.MAX_VALUE);
+        UndeadWolfCost = BUILDER.comment("Hounding Spell Cost, Default: 2")
+                .defineInRange("undeadWolfCost", 2, 0, Integer.MAX_VALUE);
         WitchGaleCost = BUILDER.comment("Witch's Gale Spell Cost, Default: 15")
                 .defineInRange("crippleCost", 15, 0, Integer.MAX_VALUE);
         SpiderlingCost = BUILDER.comment("Spiderling Spell Cost per second, Default: 2")
@@ -318,6 +325,8 @@ public class MainConfig {
                 .defineInRange("zombieTime", 20, 0, 72000);
         SkeletonDuration = BUILDER.comment("Time to cast Osseous Spell, Default: 60")
                 .defineInRange("skeletonTime", 60, 0, 72000);
+        UndeadWolfDuration = BUILDER.comment("Time to cast Hounding Spell, Default: 20")
+                .defineInRange("undeadWolfTime", 20, 0, 72000);
         WitchGaleDuration = BUILDER.comment("Time to cast Witch's Gale Spell, Default: 20")
                 .defineInRange("crippleTime", 20, 0, 72000);
         SpiderlingDuration = BUILDER.comment("Time to cast Spiderling Spell per second, Default: 10")
@@ -350,6 +359,8 @@ public class MainConfig {
                 .defineInRange("zombieCooldown", 120, 0, 72000);
         SkeletonCooldown = BUILDER.comment("Osseous Spell Cooldown, Default: 280")
                 .defineInRange("skeletonCooldown", 280, 0, 72000);
+        UndeadWolfCooldown = BUILDER.comment("Hounding Spell Cooldown, Default: 30")
+                .defineInRange("undeadWolfCooldown", 30, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Mobs");
         MRabbitMax = BUILDER.comment("Maximum amount of Mutant Rabbits can spawn, Default: 16")
@@ -408,10 +419,12 @@ public class MainConfig {
                 .defineInRange("fangInfamyChance", 4, 0, Integer.MAX_VALUE);
         RoarInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Roaring Spell, Default: 4")
                 .defineInRange("roarInfamyChance", 4, 0, Integer.MAX_VALUE);
-        ZombieInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Necroturgy Spell, Default: 16")
+        ZombieInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Rotting Spell, Default: 16")
                 .defineInRange("zombieInfamyChance", 16, 0, Integer.MAX_VALUE);
         SkeletonInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Osseous Spell, Default: 16")
                 .defineInRange("skeletonInfamyChance", 16, 0, Integer.MAX_VALUE);
+        UndeadWolfInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Hounding Spell, Default: 32")
+                .defineInRange("undeadWolfInfamyChance", 32, 0, Integer.MAX_VALUE);
         WitchGaleInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Witch's Gale Spell, Default: 16")
                 .defineInRange("crippleInfamyChance", 16, 0, Integer.MAX_VALUE);
         SpiderlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spiderling Spell per second, Default: 128")
@@ -516,6 +529,8 @@ public class MainConfig {
                 .defineInRange("zombieLimit", 32, 1, Integer.MAX_VALUE);
         SkeletonLimit = BUILDER.comment("Number of Skeleton Servants that can exist around the player without instantly dying, Default: 32")
                 .defineInRange("skeletonLimit", 32, 1, Integer.MAX_VALUE);
+        UndeadWolfLimit = BUILDER.comment("Number of Zombie Wolf that can exist around the player without instantly dying, Default: 32")
+                .defineInRange("zombieWolfLimit", 32, 1, Integer.MAX_VALUE);
         CreeperlingExplosionRadius = BUILDER.comment("The radius of a Creeperling's Explosion when not powered, Default: 1.25")
                 .defineInRange("creeperlingExplosionRadius", 1.25, 0.0, Double.MAX_VALUE);
         SoulSkullZombie = BUILDER.comment("Zombies killed by Soul Skull converts into a Servant, Default: true")
