@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -49,7 +48,7 @@ public class PoisonBallEntity extends ThrowableEntity {
     @OnlyIn(Dist.CLIENT)
     public void spawnParticles(){
         for(int i = 0; i < 8; ++i) {
-            new ParticleUtil(ParticleTypes.ITEM_SLIME, this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+            this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F, 0.0F);
         }
     }
 

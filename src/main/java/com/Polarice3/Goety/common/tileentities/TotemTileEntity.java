@@ -4,7 +4,6 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
 import com.Polarice3.Goety.init.ModBlocks;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -17,8 +16,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -79,6 +77,7 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
         this.checkBeaconLevel(i, j, k);
         if (!this.level.isClientSide()) {
             if (j1 >= 3) {
+                this.serverParticles();
                 this.updateClientTarget();
                 long t = this.level.getGameTime();
                 if (t % 40L == 0L && this.target != null){
@@ -93,11 +92,6 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
                 }
             } else {
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
-            }
-        }
-        if (this.level.isClientSide()){
-            if (j1 >= 3) {
-                this.SpawnParticles();
             }
         }
     }
@@ -135,25 +129,23 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
         return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void SpawnParticles(){
+    private void serverParticles(){
+        ServerWorld serverWorld = (ServerWorld) this.level;
         BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
-
-        if (MINECRAFT.level != null) {
-            long t = MINECRAFT.level.getGameTime();
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (MINECRAFT.level.getBlockState(blockpos).getValue(TotemHeadBlock.POWERED)) {
+        if (serverWorld != null) {
+            long t = serverWorld.getGameTime();
+            double d0 = (double)blockpos.getX() + serverWorld.random.nextDouble();
+            double d1 = (double)blockpos.getY() + serverWorld.random.nextDouble();
+            double d2 = (double)blockpos.getZ() + serverWorld.random.nextDouble();
+            if (serverWorld.getBlockState(blockpos).getValue(TotemHeadBlock.POWERED)) {
                 for (int p = 0; p < 4; ++p) {
-                    MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.7, 0.7, 0.7);
-                    MINECRAFT.level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);
+                    serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.7, 0.7, 0.7, 0.5F);
+                    serverWorld.sendParticles(ParticleTypes.FLAME, d0, d1, d2, 1, 0, 0, 0, 0);
                 }
             } else {
                 if (t % 40L == 0L) {
                     for (int p = 0; p < 4; ++p) {
-                        MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                        serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 0.5F);
                     }
                 }
             }

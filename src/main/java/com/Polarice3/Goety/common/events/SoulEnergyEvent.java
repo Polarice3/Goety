@@ -51,11 +51,26 @@ public class SoulEnergyEvent {
         if (soulEnergy.getArcaBlock() != null){
             if (soulEnergy.getArcaBlockDimension() == world.dimension()) {
                 if (!world.isClientSide()){
+                    ServerWorld serverWorld = (ServerWorld) world;
                     BlockPos blockPos = soulEnergy.getArcaBlock();
                     TileEntity tileEntity = world.getBlockEntity(blockPos);
                     if (tileEntity instanceof ArcaTileEntity) {
                         ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
                         if (arcaTile.getPlayer() == player) {
+                            Random pRand = world.random;
+                            if (pRand.nextInt(12) == 0) {
+                                for (int i = 0; i < 3; ++i) {
+                                    int j = pRand.nextInt(2) * 2 - 1;
+                                    int k = pRand.nextInt(2) * 2 - 1;
+                                    double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
+                                    double d1 = (float) blockPos.getY() + pRand.nextFloat();
+                                    double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
+                                    double d3 = pRand.nextFloat() * (float) j;
+                                    double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
+                                    double d5 = pRand.nextFloat() * (float) k;
+                                    serverWorld.sendParticles(ParticleTypes.ENCHANT, d0, d1, d2, 0, d3, d4, d5, 1.0F);
+                                }
+                            }
                             if (!soulEnergy.getSEActive()) {
                                 soulEnergy.setSEActive(true);
                                 SEHelper.sendSEUpdatePacket(player);
@@ -73,29 +88,6 @@ public class SoulEnergyEvent {
                         }
                     }
                 }
-                if (world.isClientSide()){
-                    BlockPos blockPos = soulEnergy.getArcaBlock();
-                    TileEntity tileEntity = world.getBlockEntity(blockPos);
-                    if (tileEntity instanceof ArcaTileEntity) {
-                        ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
-                        if (arcaTile.getPlayer() == player) {
-                            Random pRand = world.random;
-                            if (pRand.nextInt(12) == 0) {
-                                for (int i = 0; i < 3; ++i) {
-                                    int j = pRand.nextInt(2) * 2 - 1;
-                                    int k = pRand.nextInt(2) * 2 - 1;
-                                    double d0 = (double) blockPos.getX() + 0.5D + 0.25D * (double) j;
-                                    double d1 = (float) blockPos.getY() + pRand.nextFloat();
-                                    double d2 = (double) blockPos.getZ() + 0.5D + 0.25D * (double) k;
-                                    double d3 = pRand.nextFloat() * (float) j;
-                                    double d4 = ((double) pRand.nextFloat() - 0.5D) * 0.125D;
-                                    double d5 = pRand.nextFloat() * (float) k;
-                                    new ParticleUtil(ParticleTypes.ENCHANT, d0, d1, d2, d3, d4, d5);
-                                }
-                            }
-                        }
-                    }
-                }
             } else if (soulEnergy.getArcaBlockDimension() == null){
                 soulEnergy.setArcaBlockDimension(world.dimension());
                 SEHelper.sendSEUpdatePacket(player);
@@ -107,11 +99,7 @@ public class SoulEnergyEvent {
         }
         if (CuriosFinder.findAmulet(player).getItem() == ModItems.EMERALD_AMULET.get()){
             if (player.tickCount % 100 == 0){
-                if (soulEnergy.getSEActive()){
-                    soulEnergy.increaseSE(1);
-                } else if (!GoldTotemFinder.FindTotem(player).isEmpty()){
-                    GoldTotemItem.increaseSouls(GoldTotemFinder.FindTotem(player), 1);
-                }
+                SEHelper.increaseSouls(player, 1);
             }
         }
     }
@@ -126,11 +114,7 @@ public class SoulEnergyEvent {
             if (killer instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) killer;
                 if (!(player instanceof FakePlayer)){
-                    if (SEHelper.getSEActive(player)){
-                        SEHelper.handleKill(player, victim);
-                    } else {
-                        GoldTotemItem.handleKill(player, victim);
-                    }
+                    SEHelper.handleKill(player, victim);
                 }
             }
 
@@ -142,11 +126,7 @@ public class SoulEnergyEvent {
                         if (RobeArmorFinder.FindArmor(owner)) {
                             PlayerEntity playerEntity = (PlayerEntity) owner;
                             if (!(playerEntity instanceof FakePlayer)) {
-                                if (SEHelper.getSEActive(playerEntity)) {
-                                    SEHelper.handleKill(slayer, victim);
-                                } else {
-                                    GoldTotemItem.handleKill(slayer, victim);
-                                }
+                                SEHelper.handleKill(playerEntity, victim);
                             }
                         }
                     }
@@ -205,7 +185,7 @@ public class SoulEnergyEvent {
                             player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
                             player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
                             player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                            new SoundUtil(player, SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                            player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 1.0F);
                             SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
                             SEHelper.sendSEUpdatePacket(player);
                             event.setCanceled(true);

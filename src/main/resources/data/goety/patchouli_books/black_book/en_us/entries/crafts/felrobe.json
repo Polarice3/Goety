@@ -35,7 +35,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Slimes are bouncy, you want to be bouncy too. With these boots, you won't be splattered on the ground after falling but you will bounce off it as if the ground was made of Slime. The Slimes sees your bouncy-ness and will have no quarrel with you."
+      "text": "Slimes are bouncy, you want to be bouncy too. With these boots, you won't be splattered on the ground after falling but you will bounce off it as if the ground was made of Slime. Unfortunately, this will use up some durability on your boots, with the amount depending on how high you fell from. The Slimes sees your bouncy-ness and will have no quarrel with you."
     }
   ]
 }

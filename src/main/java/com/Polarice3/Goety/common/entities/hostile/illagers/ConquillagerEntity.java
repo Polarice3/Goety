@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.entities.hostile.illagers;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
@@ -82,7 +81,7 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
         if (this.level.isClientSide) {
             if (this.tickCount % 20 == 0){
                 for(int i = 0; i < 8; ++i) {
-                    new ParticleUtil(ModParticleTypes.PLAGUE_EFFECT.get(), this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.5D, 0.0D);
+                    this.level.addParticle(ModParticleTypes.PLAGUE_EFFECT.get(), this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.5D, 0.0D);
                 }
             }
         }

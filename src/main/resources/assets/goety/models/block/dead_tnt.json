@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "goety:blocks/dead_tnt_top",
+    "bottom": "goety:blocks/dead_tnt_bottom",
+    "side": "goety:blocks/dead_tnt_side"
+  }
+}

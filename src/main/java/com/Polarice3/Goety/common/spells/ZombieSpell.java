@@ -6,7 +6,6 @@ import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ILivingEntityData;

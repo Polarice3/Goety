@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.blocks.DeadTNTBlock;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Lists;
@@ -9,6 +11,7 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.TNTBlock;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
@@ -124,6 +127,14 @@ public class DeadSandExplosion {
                                 set.add(blockpos);
                             }
 
+                            if (blockstate.getBlock().is(ModBlocks.DEAD_TNT.get())){
+                                set.add(blockpos);
+                            }
+
+                            if (blockstate.getBlock() instanceof TNTBlock){
+                                set.add(blockpos);
+                            }
+
                             d4 += d0 * (double)0.3F;
                             d6 += d1 * (double)0.3F;
                             d8 += d2 * (double)0.3F;
@@ -207,6 +218,14 @@ public class DeadSandExplosion {
 
             for (BlockPos blockpos : this.toBlow) {
                 BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
+
+                BlockState blockstate = this.level.getBlockState(blockpos);
+                if (blockstate.getBlock().is(ModBlocks.DEAD_TNT.get())){
+                    DeadTNTBlock.wasDeadExploded(this.level, blockpos, this);
+                }
+                if (blockstate.getBlock() instanceof TNTBlock){
+                    DeadTNTBlock.wasDeadExploded(this.level, blockpos, this);
+                }
             }
 
             for (Pair<ItemStack, BlockPos> pair : objectarraylist) {

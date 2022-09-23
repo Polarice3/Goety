@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
-import com.Polarice3.Goety.utils.ParticleUtil;
+import com.Polarice3.Goety.utils.ServerParticleUtil;
 import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -57,17 +57,17 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
                 this.remove();
             }
         }
-        if (this.level.isClientSide){
+        if (!this.level.isClientSide){
             if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
                 for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                    new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+                    ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
                 }
             }
             if (this.getTrueOwner() != null){
                 if (this.getTrueOwner().hurtTime == this.getTrueOwner().hurtDuration - 1){
                     new SoundUtil(this.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                     for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                        new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+                        ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
                     }
                 }
             }
@@ -115,12 +115,12 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
 
     public void die(DamageSource cause) {
         this.remove();
-        if (this.level.isClientSide) {
-            new SoundUtil(this.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        if (!this.level.isClientSide) {
             for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
+                ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
             }
         }
+        this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {

@@ -94,6 +94,14 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "corruptskull").toString()));
 
+    public static final RegistryObject<EntityType<DeadTNTEntity>> DEAD_TNT = ENTITY_TYPES.register("dead_tnt",
+            () -> EntityType.Builder.<DeadTNTEntity>of(DeadTNTEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.98F, 0.98F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "dead_tnt").toString()));
+
     public static final RegistryObject<EntityType<IceStormEntity>> ICE_STORM = ENTITY_TYPES.register("ice_storm",
             () -> EntityType.Builder.<IceStormEntity>of(IceStormEntity::new, EntityClassification.MISC)
                     .sized(2.0F, 2.0F)

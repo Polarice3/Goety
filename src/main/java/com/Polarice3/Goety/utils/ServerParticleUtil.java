@@ -5,12 +5,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
 public class ServerParticleUtil {
-    public ServerParticleUtil(IParticleData pParticleData, Entity livingEntity, ServerWorld serverWorld){
+    public static void smokeParticles(IParticleData pParticleData, double x, double y, double z, World world){
+        ServerWorld serverWorld = (ServerWorld) world;
+        serverWorld.sendParticles(pParticleData, x, y, z, 1, 0, 0, 0, 0);
+    }
+
+    public static void addParticles(IParticleData pParticleData, double x, double y, double z, double pXOffset, double pYOffset, double pZOffset, World world){
+        ServerWorld serverWorld = (ServerWorld) world;
+        serverWorld.sendParticles(pParticleData, x, y, z, 0, pXOffset, pYOffset, pZOffset, 0.5F);
+    }
+
+    public static void gatheringParticles(IParticleData pParticleData, Entity livingEntity, ServerWorld serverWorld){
         List<BlockPos> positions = Lists.newArrayList();
         if (serverWorld != null) {
             for(int j1 = -2; j1 <= 2; ++j1) {

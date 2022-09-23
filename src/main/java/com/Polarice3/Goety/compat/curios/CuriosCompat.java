@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.compat;
+package com.Polarice3.Goety.compat.curios;
 
 import com.Polarice3.Goety.Goety;
 import com.google.common.collect.ImmutableMap;

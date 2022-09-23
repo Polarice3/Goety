@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -16,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class DarkScrollItem extends Item {
     public DarkScrollItem() {
@@ -45,8 +45,9 @@ public class DarkScrollItem extends Item {
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.startUsingItem(handIn);
-        if (worldIn.isClientSide) {
-            new ParticleUtil(ParticleTypes.ANGRY_VILLAGER, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 0.0F, 0.0F, 0.0F);
+        if (!worldIn.isClientSide){
+            ServerWorld serverWorld = (ServerWorld) worldIn;
+            serverWorld.sendParticles(ParticleTypes.ANGRY_VILLAGER, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
         return ActionResult.consume(itemstack);
     }

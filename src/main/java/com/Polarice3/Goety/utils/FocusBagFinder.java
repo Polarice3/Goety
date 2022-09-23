@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.utils;
 
-import com.Polarice3.Goety.compat.CuriosLoaded;
+import com.Polarice3.Goety.compat.curios.CuriosLoaded;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

@@ -2,7 +2,7 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.common.items.curios.AmuletItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
-import com.Polarice3.Goety.compat.CuriosLoaded;
+import com.Polarice3.Goety.compat.curios.CuriosLoaded;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.ImmutableTriple;

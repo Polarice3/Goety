@@ -9,7 +9,6 @@ import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,8 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -145,6 +143,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         this.checkBeaconLevel(i, j, k);
         if (!this.level.isClientSide()) {
             if (j1 >= 3) {
+                this.serverParticles();
                 this.updateClientTarget();
                 long t = this.level.getGameTime();
                 if (t % 40L == 0L && this.target != null){
@@ -159,11 +158,6 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                 }
             } else {
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
-            }
-        }
-        if (this.level.isClientSide()){
-            if (j1 >= 3) {
-                this.SpawnParticles();
             }
         }
     }
@@ -195,25 +189,23 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         super.setRemoved();
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void SpawnParticles(){
+    private void serverParticles(){
+        ServerWorld serverWorld = (ServerWorld) this.level;
         BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
-
-        if (MINECRAFT.level != null) {
-            long t = MINECRAFT.level.getGameTime();
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (MINECRAFT.level.getBlockState(blockpos).getValue(TotemHeadBlock.POWERED)) {
+        if (serverWorld != null) {
+            long t = serverWorld.getGameTime();
+            double d0 = (double)blockpos.getX() + serverWorld.random.nextDouble();
+            double d1 = (double)blockpos.getY() + serverWorld.random.nextDouble();
+            double d2 = (double)blockpos.getZ() + serverWorld.random.nextDouble();
+            if (serverWorld.getBlockState(blockpos).getValue(TotemHeadBlock.POWERED)) {
                 for (int p = 0; p < 4; ++p) {
-                    MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.7, 0.7, 0.7);
-                    MINECRAFT.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);
+                    serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.7, 0.7, 0.7, 0.5F);
+                    serverWorld.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 1, 0, 0, 0, 0);
                 }
             } else {
                 if (t % 40L == 0L) {
                     for (int p = 0; p < 4; ++p) {
-                        MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                        serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 0.5F);
                     }
                 }
             }
@@ -261,8 +253,8 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         }
     }
 
-    private void spawnFangs(double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, float p_190876_9_) {
-        BlockPos blockpos = new BlockPos(p_190876_1_, p_190876_7_, p_190876_3_);
+    private void spawnFangs(double pPosX, double pPosZ, double PPPosY, double pOPosY, float pYRot) {
+        BlockPos blockpos = new BlockPos(pPosX, pOPosY, pPosZ);
         boolean flag = false;
         double d0 = 0.0D;
 
@@ -284,10 +276,10 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             }
 
             blockpos = blockpos.below();
-        } while(blockpos.getY() >= MathHelper.floor(p_190876_5_) - 1);
+        } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
 
         if (flag) {
-            this.getLevel().addFreshEntity(new FangEntity(this.getLevel(), p_190876_1_, (double)blockpos.getY() + d0, p_190876_3_, p_190876_9_, 1, this.getTrueOwner()));
+            this.getLevel().addFreshEntity(new FangEntity(this.getLevel(), pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, 1, this.getTrueOwner()));
         }
 
     }

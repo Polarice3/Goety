@@ -8,7 +8,10 @@ import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SEHelper;
+import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -218,7 +221,7 @@ public class SoulWand extends Item{
     public void useParticles(World worldIn, PlayerEntity playerIn){
         for (int i = 0; i < playerIn.level.random.nextInt(35) + 10; ++i) {
             double d = worldIn.random.nextGaussian() * 0.2D;
-            new ParticleUtil(ParticleTypes.ENTITY_EFFECT, playerIn.getX(), playerIn.getEyeY(), playerIn.getZ(), d, d, d);
+            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, playerIn.getX(), playerIn.getEyeY(), playerIn.getZ(), d, d, d);
         }
     }
 
@@ -303,6 +306,9 @@ public class SoulWand extends Item{
             } else if (spell.contains("hounding")) {
                 this.setSpellConditions(new UndeadWolfSpell(), itemStack);
                 this.setSpell(25, itemStack);
+            } else if (spell.contains("launch")) {
+                this.setSpellConditions(new LaunchSpell(), itemStack);
+                this.setSpell(26, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);
@@ -472,7 +478,7 @@ public class SoulWand extends Item{
     public void failParticles(World worldIn, LivingEntity entityLiving){
         for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             double d = worldIn.random.nextGaussian() * 0.2D;
-            new ParticleUtil(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), d, d, d);
+            worldIn.addParticle(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), d, d, d);
         }
     }
 

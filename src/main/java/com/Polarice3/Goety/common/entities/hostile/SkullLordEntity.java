@@ -26,7 +26,10 @@ import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -212,7 +215,7 @@ public class SkullLordEntity extends MonsterEntity{
                         }
                         if (!this.level.isClientSide) {
                             ServerWorld serverWorld = (ServerWorld) this.level;
-                            new ServerParticleUtil(ModParticleTypes.LASER_GATHER.get(), this, serverWorld);
+                            ServerParticleUtil.gatheringParticles(ModParticleTypes.LASER_GATHER.get(), this, serverWorld);
                         }
                     }
                     if (this.laserTime >= 60) {

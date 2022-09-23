@@ -2,10 +2,10 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.ObeliskBlock;
+import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModTileEntityType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -18,8 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.List;
 
@@ -47,6 +46,7 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
     public void tick() {
         assert this.level != null;
         if (!this.level.isClientSide()) {
+            this.serverParticles();
             int i = this.worldPosition.getX();
             int j = this.worldPosition.getY();
             int k = this.worldPosition.getZ();
@@ -78,30 +78,25 @@ public class ObeliskTileEntity extends TileEntity implements ITickableTileEntity
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ObeliskBlock.POWERED, false), 3);
             }
         }
-        if (this.level.isClientSide()){
-            this.SpawnParticles();
-        }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void SpawnParticles(){
+    private void serverParticles(){
+        ServerWorld serverWorld = (ServerWorld) this.level;
         BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
-
-        if (MINECRAFT.level != null) {
-            long t = MINECRAFT.level.getGameTime();
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + 1.0D + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (MINECRAFT.level.getBlockState(blockpos).getValue(ObeliskBlock.POWERED)) {
+        if (serverWorld != null) {
+            long t = serverWorld.getGameTime();
+            double d0 = (double)blockpos.getX() + serverWorld.random.nextDouble();
+            double d1 = (double)blockpos.getY() + serverWorld.random.nextDouble();
+            double d2 = (double)blockpos.getZ() + serverWorld.random.nextDouble();
+            if (serverWorld.getBlockState(blockpos).getValue(TotemHeadBlock.POWERED)) {
                 for (int p = 0; p < 4; ++p) {
-                    MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.7, 0.7, 0.7);
-                    MINECRAFT.level.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0, 0, 0);
+                    serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.7, 0.7, 0.7, 0.5F);
+                    serverWorld.sendParticles(ParticleTypes.FLAME, d0, d1, d2, 1, 0, 0, 0, 0);
                 }
             } else {
                 if (t % 40L == 0L) {
                     for (int p = 0; p < 4; ++p) {
-                        MINECRAFT.level.addParticle(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                        serverWorld.sendParticles(ModParticleTypes.TOTEM_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 0.5F);
                     }
                 }
             }

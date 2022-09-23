@@ -1,25 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "cpc",
-    " c ",
-    " c "
-  ],
-  "key":
-  {
-    "p":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:philosophers_stone"
+  },
+  "craftType": "expert_nether",
+  "soulCost": 5,
+  "duration": 30,
+  "ingredients": [
     {
-      "item": "goety:philosophersstone"
+      "item": "minecraft:netherite_shovel"
     },
-    "c":
+    {
+      "item": "minecraft:netherite_pickaxe"
+    },
     {
       "item": "goety:cursed_ingot"
+    },
+    {
+      "item": "goety:cursed_ingot"
+    },
+    {
+      "tag": "forge:gems/lapis"
+    },
+    {
+      "tag": "forge:gems/lapis"
     }
-  },
-  "result":
-  {
-    "item": "goety:philosophers_mace",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:philosophers_mace"
   }
 }

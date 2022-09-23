@@ -61,6 +61,8 @@ public class CastSpells {
                 return new FrostBreathSpell();
             case 25:
                 return new UndeadWolfSpell();
+            case 26:
+                return new LaunchSpell();
             default:
                 return null;
         }

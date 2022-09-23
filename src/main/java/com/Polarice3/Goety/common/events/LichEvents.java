@@ -29,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -135,8 +136,9 @@ public class LichEvents {
                         if (player.tickCount % 20 == 0 && SEHelper.getSESouls(player) > MainConfig.LichHealCost.get()) {
                             player.heal(1.0F);
                             Vector3d vector3d = player.getDeltaMovement();
-                            if (player.level.isClientSide){
-                                new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            if (!player.level.isClientSide){
+                                ServerWorld serverWorld = (ServerWorld) player.level;
+                                serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
                             }
                             SEHelper.decreaseSESouls(player, MainConfig.LichHealCost.get());
                             SEHelper.sendSEUpdatePacket(player);
@@ -149,8 +151,9 @@ public class LichEvents {
                         if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
                             player.heal(1.0F);
                             Vector3d vector3d = player.getDeltaMovement();
-                            if (player.level.isClientSide){
-                                new ParticleUtil(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
+                            if (!player.level.isClientSide){
+                                ServerWorld serverWorld = (ServerWorld) player.level;
+                                serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
                             }
                             GoldTotemItem.decreaseSouls(goldtotem, MainConfig.LichHealCost.get());
                         }

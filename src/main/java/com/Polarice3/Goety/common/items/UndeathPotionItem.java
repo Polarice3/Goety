@@ -3,7 +3,9 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.lichdom.ILichdom;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,8 +51,8 @@ public class UndeathPotionItem extends Item {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.lichdom.success"), true);
                         player.addEffect(new EffectInstance(Effects.BLINDNESS, 20, 1));
                         player.addEffect(new EffectInstance(Effects.CONFUSION, 20, 1));
-                        new SoundUtil(player, SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 0.5F);
-                        new SoundUtil(player, SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 1.0F, 0.5F);
+                        player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 0.5F);
+                        player.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 0.5F);
                         player.hurt(DamageSource.WITHER, 50.0F);
                     } else {
                         player.heal(20.0F);
@@ -99,10 +101,11 @@ public class UndeathPotionItem extends Item {
     }
 
     public ActionResult<ItemStack> use(World pLevel, PlayerEntity pPlayer, Hand pHand) {
-        if (pLevel.isClientSide) {
+        if (!pLevel.isClientSide){
+            ServerWorld serverWorld = (ServerWorld) pLevel;
             for (int i = 0; i < pLevel.random.nextInt(35) + 10; ++i) {
                 double d = pLevel.random.nextGaussian() * 0.2D;
-                new ParticleUtil(ParticleTypes.SMOKE, pPlayer.getX(), pPlayer.getEyeY(), pPlayer.getZ(), d, d, d);
+                serverWorld.sendParticles(ParticleTypes.SMOKE, pPlayer.getX(), pPlayer.getEyeY(), pPlayer.getZ(), 0, d, d, d, 0.5F);
             }
         }
         return DrinkHelper.useDrink(pLevel, pPlayer, pHand);

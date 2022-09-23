@@ -7,7 +7,6 @@ import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.items.*;
 import com.Polarice3.Goety.common.items.curios.AmuletItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
-import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -25,10 +24,9 @@ public class ModItems {
 
     //Items
     public static final RegistryObject<Item> BLAZE_CORE = ITEMS.register("blazecore", BlazeCoreItem::new);
-    public static final RegistryObject<Item> BROKEN_BLAZE_CORE = ITEMS.register("brokenblazecore", BlazeCoreItem::new);
     public static final RegistryObject<Item> ROCKETBOOSTER = ITEMS.register("rocketbooster", RocketBoosterItem::new);
     public static final RegistryObject<Item> DARK_SCROLL = ITEMS.register("dark_scroll", DarkScrollItem::new);
-    public static final RegistryObject<PhilosophersStoneItem> PHILOSOPHERSSTONE = ITEMS.register("philosophersstone", PhilosophersStoneItem::new);
+    public static final RegistryObject<PhilosophersStoneItem> PHILOSOPHERSSTONE = ITEMS.register("philosophers_stone", PhilosophersStoneItem::new);
     public static final RegistryObject<WitchBombItem> WITCHBOMB = ITEMS.register("witchbomb", WitchBombItem::new);
     public static final RegistryObject<BurningPotionItem> BURNING_POTION = ITEMS.register("burning_potion", BurningPotionItem::new);
     public static final RegistryObject<Item> NETHER_BOOK = ITEMS.register("nether_book", NetherBookRawItem::new);
@@ -61,7 +59,7 @@ public class ModItems {
 
     //Basic
     public static final RegistryObject<Item> SOULRUBY = ITEMS.register("soulruby", ItemBase::new);
-    public static final RegistryObject<Item> RIFTSHARD = ITEMS.register("riftshard", ItemBase::new);
+    public static final RegistryObject<Item> BROKEN_BLAZE_CORE = ITEMS.register("brokenblazecore", ItemBase::new);
     public static final RegistryObject<Item> SPENTTOTEM = ITEMS.register("spenttotem", ItemBase::new);
     public static final RegistryObject<Item> CURSED_INGOT = ITEMS.register("cursed_ingot", ItemBase::new);
     public static final RegistryObject<Item> SAVAGETOOTH = ITEMS.register("savagetooth", ItemBase::new);
@@ -108,6 +106,7 @@ public class ModItems {
     public static final RegistryObject<Item> GLOWLIGHTFOCUS = ITEMS.register("glowlightfocus", () -> new MagicFocusItem(MainConfig.GlowLightCost.get()));
     public static final RegistryObject<Item> ICESTORMFOCUS = ITEMS.register("icestormfocus", () -> new MagicFocusItem(MainConfig.IceStormCost.get()));
     public static final RegistryObject<Item> HOUNDINGFOCUS = ITEMS.register("houndingfocus", () -> new MagicFocusItem(MainConfig.UndeadWolfCost.get()));
+    public static final RegistryObject<Item> LAUNCHFOCUS = ITEMS.register("launchfocus", () -> new MagicFocusItem(MainConfig.LaunchCost.get()));
 
     //Tools
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

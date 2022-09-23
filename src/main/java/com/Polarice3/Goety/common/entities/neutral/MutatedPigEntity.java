@@ -62,10 +62,12 @@ public class MutatedPigEntity extends MutatedEntity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        int random = this.level.random.nextInt(16);
-        if (pSource.getEntity() != null && pSource.getEntity() instanceof LivingEntity) {
-            if (random == 0) {
-                ((LivingEntity) pSource.getEntity()).addEffect(new EffectInstance(Effects.LEVITATION, 200));
+        if (!this.level.isClientSide) {
+            int random = this.level.random.nextInt(16);
+            if (pSource.getEntity() != null && pSource.getEntity() instanceof LivingEntity) {
+                if (random == 0) {
+                    ((LivingEntity) pSource.getEntity()).addEffect(new EffectInstance(Effects.LEVITATION, 200));
+                }
             }
         }
         return super.hurt(pSource, pAmount);

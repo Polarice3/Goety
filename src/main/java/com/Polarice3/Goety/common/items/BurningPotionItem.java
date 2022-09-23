@@ -25,7 +25,7 @@ public class BurningPotionItem extends Item {
         if (!worldIn.isClientSide) {
             BurningPotionEntity snowballentity = new BurningPotionEntity(worldIn, playerIn);
             snowballentity.setItem(itemstack);
-            snowballentity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, 0.0F, 1.5F, 1.0F);
+            snowballentity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.5F, 1.0F);
             worldIn.addFreshEntity(snowballentity);
         }
 

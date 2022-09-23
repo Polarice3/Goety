@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTileEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.monster.CreeperEntity;
@@ -78,7 +77,7 @@ public class GuardianObeliskTileEntity extends TileEntity implements ITickableTi
             double d2 = (double)blockpos.getZ() + this.level.random.nextDouble();
             if (t % 40L == 0L) {
                 for (int p = 0; p < 4; ++p) {
-                    new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0, 5.0E-4D, 0.0);
+                    this.level.addParticle(ParticleTypes.SMOKE, d0, d1, d2, 0.0, 5.0E-4D, 0.0);
                 }
             }
         }

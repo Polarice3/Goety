@@ -12,7 +12,6 @@ import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -200,13 +199,19 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public void die(DamageSource cause) {
         if (!this.level.isClientSide){
-            if (this.level.getLevelData().isThundering()){
-                ServerWorld serverWorld = (ServerWorld) this.level;
+            ServerWorld serverWorld = (ServerWorld) this.level;
+            if (serverWorld.getLevelData().isThundering()){
                 serverWorld.setWeatherParameters(6000, 0, false, false);
             }
-        }
-        if (this.level.isClientSide){
-            this.deathParticles();
+            for(int k = 0; k < 200; ++k) {
+                float f2 = random.nextFloat() * 4.0F;
+                float f1 = random.nextFloat() * ((float)Math.PI * 2F);
+                double d1 = MathHelper.cos(f1) * f2;
+                double d2 = 0.01D + random.nextDouble() * 0.5D;
+                double d3 = MathHelper.sin(f1) * f2;
+                serverWorld.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
+                serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
+            }
         }
         for (FireRainTrapEntity fireRainTrap: this.level.getEntitiesOfClass(FireRainTrapEntity.class, this.getBoundingBox().inflate(64))){
             fireRainTrap.remove();
@@ -472,15 +477,32 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                     this.barrier(entity, this);
                 }
             }
-            this.settingUpParticles();
+            if (!this.level.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                Vector3d vector3d = this.getBoundingBox().getCenter();
+                for(int i = 0; i < 40; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.2D;
+                    double d1 = this.random.nextGaussian() * 0.2D;
+                    double d2 = this.random.nextGaussian() * 0.2D;
+                    serverWorld.sendParticles(ParticleTypes.LARGE_SMOKE, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
+                    serverWorld.sendParticles(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, 1, 0, 0, 0, 0);
+                }
+            }
             if (this.getHealth() >= this.getMaxHealth()){
                 if (!this.level.isClientSide){
                     ServerWorld serverWorld = (ServerWorld) ApostleEntity.this.level;
                     if (!serverWorld.isThundering()) {
                         serverWorld.setWeatherParameters(0, 6000, true, true);
                     }
+                    for(int k = 0; k < 200; ++k) {
+                        float f2 = random.nextFloat() * 4.0F;
+                        float f1 = random.nextFloat() * ((float)Math.PI * 2F);
+                        double d1 = MathHelper.cos(f1) * f2;
+                        double d2 = 0.01D + random.nextDouble() * 0.5D;
+                        double d3 = MathHelper.sin(f1) * f2;
+                        serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
+                    }
                 }
-                this.finishSettingUpParticles();
                 this.setSettingupSecond(false);
                 this.setSecondPhase(true);
                 this.teleport();
@@ -614,30 +636,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void settingUpParticles(){
-        Vector3d vector3d = this.getBoundingBox().getCenter();
-        for(int i = 0; i < 40; ++i) {
-            double d0 = this.random.nextGaussian() * 0.2D;
-            double d1 = this.random.nextGaussian() * 0.2D;
-            double d2 = this.random.nextGaussian() * 0.2D;
-            new ParticleUtil(ParticleTypes.LARGE_SMOKE, vector3d.x, vector3d.y, vector3d.z, d0, d1, d2);
-            new ParticleUtil(ParticleTypes.FLAME, vector3d.x, vector3d.y, vector3d.z, 0, 0, 0);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void finishSettingUpParticles(){
-        for(int k = 0; k < 200; ++k) {
-            float f2 = random.nextFloat() * 4.0F;
-            float f1 = random.nextFloat() * ((float)Math.PI * 2F);
-            double d1 = MathHelper.cos(f1) * f2;
-            double d2 = 0.01D + random.nextDouble() * 0.5D;
-            double d3 = MathHelper.sin(f1) * f2;
-            new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
-        }
-    }
-
     private void serverRoarParticles(){
         ServerWorld serverWorld = (ServerWorld) this.level;
         serverWorld.sendParticles(ParticleTypes.FLASH, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
@@ -647,19 +645,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             double d1 = this.random.nextGaussian() * 0.2D;
             double d2 = this.random.nextGaussian() * 0.2D;
             serverWorld.sendParticles(ParticleTypes.POOF, vector3d.x, vector3d.y, vector3d.z, 0, d0, d1, d2, 0.5F);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void deathParticles(){
-        for(int k = 0; k < 200; ++k) {
-            float f2 = random.nextFloat() * 4.0F;
-            float f1 = random.nextFloat() * ((float)Math.PI * 2F);
-            double d1 = MathHelper.cos(f1) * f2;
-            double d2 = 0.01D + random.nextDouble() * 0.5D;
-            double d3 = MathHelper.sin(f1) * f2;
-            new ParticleUtil(ParticleTypes.LARGE_SMOKE, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
-            new ParticleUtil(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, d1, d2, d3);
         }
     }
 

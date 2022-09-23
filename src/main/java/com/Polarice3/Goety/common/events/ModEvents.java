@@ -20,7 +20,6 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
-import com.Polarice3.Goety.common.entities.projectiles.WarpedSpearEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.common.infamy.InfamyProvider;
@@ -50,6 +49,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -526,7 +526,6 @@ public class ModEvents {
             }
             if (RobeArmorFinder.FindFelBootsofWander(player)){
                 Vector3d vector3d = player.getDeltaMovement();
-                event.setDamageMultiplier(0);
                 if (!player.isCrouching()) {
                     if (event.getDistance() >= 1.27F) {
                         double jump = MathHelper.sqrt(event.getDistance())/2;
@@ -538,6 +537,15 @@ public class ModEvents {
                             event.setCanceled(true);
                             player.setOnGround(false);
                         }
+                    }
+                }
+
+                if (event.getDamageMultiplier() != 0){
+                    event.setDamageMultiplier(0);
+                    if (event.getDistance() >= 2.0F) {
+                        player.getItemBySlot(EquipmentSlotType.FEET).hurtAndBreak((int) (event.getDistance()/2), player, (p_233653_0_) -> {
+                            p_233653_0_.broadcastBreakEvent(EquipmentSlotType.FEET);
+                        });
                     }
                 }
             }
@@ -780,64 +788,27 @@ public class ModEvents {
             }
         }
         if (killed instanceof AbstractIllagerEntity){
-            if (killer instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) killer;
-                if (!GoldTotemFinder.FindTotem(player).isEmpty() || RobeArmorFinder.FindArmor(player)){
-                    if (killed instanceof PillagerEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.PillagerInfamy.get());
-                    } else
-                    if (killed instanceof VindicatorEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.VindicatorInfamy.get());
-                    } else
-                    if (killed instanceof EvokerEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.EvokerInfamy.get());
-                    } else
-                    if (killed instanceof IllusionerEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.IllusionerInfamy.get());
-                    } else
-                    if (killed instanceof EnviokerEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.EnviokerInfamy.get());
-                    } else
-                    if (killed instanceof InquillagerEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.InquillagerInfamy.get());
-                    } else
-                    if (killed instanceof ConquillagerEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.ConquillagerInfamy.get());
-                    } else
-                    if (killed instanceof VizierEntity){
-                        InfamyHelper.increaseInfamy(player, MainConfig.VizierInfamy.get());
-                    } else {
-                        InfamyHelper.increaseInfamy(player, MainConfig.OtherInfamy.get());
-                    }
-                    InfamyHelper.sendInfamyUpdatePacket(player);
-                }
-            }
-            if (killer instanceof OwnedEntity) {
-                OwnedEntity summonedEntity = (OwnedEntity) killer;
-                if (summonedEntity.getTrueOwner() != null) {
-                    if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
-                        PlayerEntity player = (PlayerEntity) summonedEntity.getTrueOwner();
-                        if (killed instanceof PillagerEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.PillagerInfamy.get());
-                        } else if (killed instanceof VindicatorEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.VindicatorInfamy.get());
-                        } else if (killed instanceof EvokerEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.EvokerInfamy.get());
-                        } else if (killed instanceof IllusionerEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.IllusionerInfamy.get());
-                        } else if (killed instanceof EnviokerEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.EnviokerInfamy.get());
-                        } else if (killed instanceof InquillagerEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.InquillagerInfamy.get());
-                        } else if (killed instanceof ConquillagerEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.ConquillagerInfamy.get());
-                        } else if (killed instanceof VizierEntity) {
-                            InfamyHelper.increaseInfamy(player, MainConfig.VizierInfamy.get());
-                        } else {
-                            InfamyHelper.increaseInfamy(player, MainConfig.OtherInfamy.get());
-                        }
-                        InfamyHelper.sendInfamyUpdatePacket(player);
-                    }
+            if (killer instanceof PlayerEntity || killer instanceof OwnedEntity) {
+                if (killed instanceof PillagerEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.PillagerInfamy.get());
+                } else if (killed instanceof VindicatorEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.VindicatorInfamy.get());
+                } else if (killed instanceof EvokerEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.EvokerInfamy.get());
+                } else if (killed instanceof IllusionerEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.IllusionerInfamy.get());
+                } else if (killed instanceof EnviokerEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.EnviokerInfamy.get());
+                } else if (killed instanceof InquillagerEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.InquillagerInfamy.get());
+                } else if (killed instanceof ConquillagerEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.ConquillagerInfamy.get());
+                } else if (killed instanceof VizierEntity) {
+                    InfamyHelper.addInfamy(killer, MainConfig.VizierInfamy.get());
+                } else if (((AbstractIllagerEntity) killed).getMaxHealth() >= 50.0F) {
+                    InfamyHelper.addInfamy(killer, MainConfig.PowerfulInfamy.get());
+                } else {
+                    InfamyHelper.addInfamy(killer, MainConfig.OtherInfamy.get());
                 }
             }
         }
@@ -996,8 +967,11 @@ public class ModEvents {
         if (event.getPotionEffect().getEffect() == ModEffects.COSMIC.get()){
             World world = event.getEntityLiving().level;
             LivingEntity entity = event.getEntityLiving();
-            for(int i = 0; i < world.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.DRAGON_BREATH, entity.getX(), entity.getEyeY(), entity.getZ(), 0.0F, 0.0F, 0.0F);
+            if (!world.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) world;
+                for (int i = 0; i < world.random.nextInt(35) + 10; ++i) {
+                    serverWorld.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getRandomX(0.5D), entity.getEyeY(), entity.getRandomZ(0.5D), 0, 0.7F, 0.7F, 0.7F, 0.5F);
+                }
             }
             if (entity instanceof CowEntity){
                 MutatedCowEntity mutatedCowEntity = new MutatedCowEntity(ModEntityType.MUTATED_COW.get(), world);

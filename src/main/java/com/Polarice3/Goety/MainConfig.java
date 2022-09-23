@@ -40,6 +40,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> GlowLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LaunchCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -84,6 +85,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LaunchInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -94,6 +96,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> ConquillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VizierInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> ScryingInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PowerfulInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> OtherInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> DeathLoseInfamy;
 
@@ -313,6 +316,8 @@ public class MainConfig {
                 .defineInRange("glowLightCost", 4, 0, Integer.MAX_VALUE);
         IceStormCost = BUILDER.comment("Ice Storm Spell Cost, Default: 16")
                 .defineInRange("iceStormCost", 16, 0, Integer.MAX_VALUE);
+        LaunchCost = BUILDER.comment("Launch Spell Cost, Default: 4")
+                .defineInRange("launchCost", 4, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -409,6 +414,8 @@ public class MainConfig {
                 .defineInRange("vizierInfamyGain", 25, 0, Integer.MAX_VALUE);
         ScryingInfamy = BUILDER.comment("How much Infamy the Player gains scrying on a Cat with an Empty Map offhand in a Village, Default: 10")
                 .defineInRange("scryingInfamyGain", 10, 0, Integer.MAX_VALUE);
+        PowerfulInfamy = BUILDER.comment("How much Infamy the Player gains killing a Powerful Modded Illagers, Default: 5")
+                .defineInRange("powerfulInfamyGain", 5, 0, Integer.MAX_VALUE);
         OtherInfamy = BUILDER.comment("How much Infamy the Player gains killing other types of Illagers, Default: 1")
                 .defineInRange("otherInfamyGain", 1, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -461,6 +468,8 @@ public class MainConfig {
                 .defineInRange("frostBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
         IceStormInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Storm Spell, Default: 8")
                 .defineInRange("iceStormInfamyChance", 8, 0, Integer.MAX_VALUE);
+        LaunchInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Launch Spell, Default: 0")
+                .defineInRange("iceStormInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")

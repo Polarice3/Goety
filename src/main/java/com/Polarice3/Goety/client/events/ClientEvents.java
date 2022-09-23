@@ -59,8 +59,10 @@ public class ClientEvents {
         PlayerEntity player = event.getPlayer();
         if (player.hasEffect(ModEffects.NOMINE.get())){
             if (BlockFinder.NoBreak(event.getState()) && !(event.getState().getBlock() == ModBlocks.GUARDIAN_OBELISK.get())){
-                new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                new ParticleUtil(ParticleTypes.HAPPY_VILLAGER, event.getPos(), event.getState());
+                if (player.level.isClientSide) {
+                    new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    new ParticleUtil(ParticleTypes.HAPPY_VILLAGER, event.getPos(), event.getState());
+                }
             }
         }
     }
@@ -129,9 +131,11 @@ public class ClientEvents {
         if (victim != null) {
             if (ModDamageSource.desiccateAttacks(event.getSource())) {
                 if (!(victim instanceof IDeadMob)) {
-                    new SoundUtil(victim.blockPosition(), SoundEvents.STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    IParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-                    new ParticleUtil(victim, particleData);
+                    if (victim.level.isClientSide) {
+                        new SoundUtil(victim.blockPosition(), SoundEvents.STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        IParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+                        new ParticleUtil(victim, particleData);
+                    }
                 }
             }
         }

@@ -7,7 +7,6 @@ import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
@@ -117,9 +116,6 @@ public class SummonedEntity extends OwnedEntity {
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
-                                        if (this.level.isClientSide) {
-                                            new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                                        }
                                         SEHelper.decreaseSESouls(owner, SoulCost);
                                         if (!this.level.isClientSide){
                                             ServerWorld serverWorld = (ServerWorld) this.level;
@@ -131,9 +127,6 @@ public class SummonedEntity extends OwnedEntity {
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
-                                        if (this.level.isClientSide) {
-                                            new ParticleUtil(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D);
-                                        }
                                         GoldTotemItem.decreaseSouls(foundStack, SoulCost);
                                         if (!this.level.isClientSide){
                                             ServerWorld serverWorld = (ServerWorld) this.level;

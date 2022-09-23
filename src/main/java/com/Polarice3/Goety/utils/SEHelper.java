@@ -4,13 +4,16 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.soulenergy.SEImp;
 import com.Polarice3.Goety.common.soulenergy.SEProvider;
 import com.Polarice3.Goety.common.soulenergy.SEUpdatePacket;
+import com.Polarice3.Goety.compat.minecolonies.MinecoloniesLoaded;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -65,27 +68,40 @@ public class SEHelper {
             }
         }
         if (player != null) {
-            if (getSEActive(player)) {
-                if (!(victim instanceof OwnedEntity)) {
-                    if (victim.getMobType() == CreatureAttribute.UNDEAD) {
-                        increaseSESouls(player, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
-                    } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
-                        increaseSESouls(player, MainConfig.AnthropodSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof AbstractRaiderEntity) {
-                        increaseSESouls(player, MainConfig.IllagerSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
-                        increaseSESouls(player, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
-                        increaseSESouls(player, MainConfig.PiglinSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof EnderDragonEntity) {
-                        increaseSESouls(player, MainConfig.EnderDragonSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof PlayerEntity) {
-                        increaseSESouls(player, MainConfig.PlayerSouls.get() * SoulMultiply(killer));
-                    } else {
-                        increaseSESouls(player, MainConfig.DefaultSouls.get() * SoulMultiply(killer));
-                    }
-                    SEHelper.sendSEUpdatePacket(player);
+            if (!(victim instanceof OwnedEntity)) {
+                if (victim.getMobType() == CreatureAttribute.UNDEAD) {
+                    increaseSouls(player, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
+                } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
+                    increaseSouls(player, MainConfig.AnthropodSouls.get() * SoulMultiply(killer));
+                } else if (victim instanceof AbstractRaiderEntity) {
+                    increaseSouls(player, MainConfig.IllagerSouls.get() * SoulMultiply(killer));
+                } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
+                    increaseSouls(player, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
+                } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
+                    increaseSouls(player, MainConfig.PiglinSouls.get() * SoulMultiply(killer));
+                } else if (victim instanceof EnderDragonEntity) {
+                    increaseSouls(player, MainConfig.EnderDragonSouls.get() * SoulMultiply(killer));
+                } else if (victim instanceof PlayerEntity) {
+                    increaseSouls(player, MainConfig.PlayerSouls.get() * SoulMultiply(killer));
+                } else if (MinecoloniesLoaded.MINECOLONIES.isLoaded()
+                        && victim.getType().getDescriptionId().contains("minecolonies")
+                        && victim.getType().getCategory() != EntityClassification.MISC){
+                    increaseSouls(player, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
+                } else {
+                    increaseSouls(player, MainConfig.DefaultSouls.get() * SoulMultiply(killer));
                 }
+            }
+        }
+    }
+
+    public static void increaseSouls(PlayerEntity player, int souls){
+        if (getSEActive(player)) {
+            increaseSESouls(player, souls);
+            SEHelper.sendSEUpdatePacket(player);
+        } else {
+            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
+            if (foundStack != null){
+                GoldTotemItem.increaseSouls(foundStack, souls);
             }
         }
     }

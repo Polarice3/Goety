@@ -35,7 +35,7 @@ import com.Polarice3.Goety.common.spider.SpiderLevelsImp;
 import com.Polarice3.Goety.common.spider.SpiderLevelsStore;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
-import com.Polarice3.Goety.compat.CuriosCompat;
+import com.Polarice3.Goety.compat.curios.CuriosCompat;
 import com.Polarice3.Goety.data.ModBlockStateProvider;
 import com.Polarice3.Goety.init.*;
 import com.mojang.serialization.Codec;

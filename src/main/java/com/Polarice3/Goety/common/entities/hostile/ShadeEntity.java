@@ -1,8 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -17,7 +15,10 @@ import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -117,11 +118,6 @@ public class ShadeEntity extends MonsterEntity {
 
     public void die(DamageSource cause) {
         super.die(cause);
-        if (this.level.isClientSide) {
-            for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                new ParticleUtil(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), 0.0F, 0.0F, 0.0F);
-            }
-        }
         if (!this.level.isClientSide){
             ServerWorld serverWorld = (ServerWorld) this.level;
             for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {

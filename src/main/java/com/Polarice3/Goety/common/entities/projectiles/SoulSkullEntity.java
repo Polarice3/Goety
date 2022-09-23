@@ -22,7 +22,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -30,6 +29,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class SoulSkullEntity extends DamagingProjectileEntity {
@@ -70,6 +70,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
     protected void onHitEntity(EntityRayTraceResult pResult) {
         super.onHitEntity(pResult);
         if (!this.level.isClientSide) {
+            ServerWorld serverWorld = (ServerWorld) this.level;
             Entity target = pResult.getEntity();
             Entity owner = this.getOwner();
             boolean flag;
@@ -118,9 +119,9 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
                                         net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) target, summonedentity);
-                                        new SoundUtil(target, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        summonedentity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
                                         for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
-                                            new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                                            serverWorld.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                                         }
                                     }
                                 }
@@ -139,9 +140,9 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                                         summonedentity.setLimitedLife(20 * (30 + worldIn.random.nextInt(90)));
                                         summonedentity.setUpgraded(false);
                                         net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) target, summonedentity);
-                                        new SoundUtil(target, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                                        summonedentity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
                                         for (int i = 0; i < summonedentity.level.random.nextInt(35) + 10; ++i) {
-                                            new ParticleUtil(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 0.0F, 0.0F, 0.0F);
+                                            serverWorld.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                                         }
                                     }
                                 }

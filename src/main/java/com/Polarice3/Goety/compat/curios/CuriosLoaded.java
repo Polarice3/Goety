@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.compat;
+package com.Polarice3.Goety.compat.curios;
 
 import net.minecraftforge.fml.ModList;
 

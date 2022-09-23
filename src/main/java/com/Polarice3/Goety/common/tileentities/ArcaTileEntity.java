@@ -1,10 +1,8 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.init.ModTileEntityType;
-import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,8 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -108,25 +104,6 @@ public class ArcaTileEntity extends TileEntity implements ITickableTileEntity {
 
     public PlayerEntity getPlayer(){
         return (PlayerEntity) this.getTrueOwner();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void makeWorkParticles() {
-        if (SEHelper.getSESouls(getPlayer()) <= 0){
-            return;
-        }
-        BlockPos blockpos = this.getBlockPos();
-        Minecraft MINECRAFT = Minecraft.getInstance();
-
-        if (MINECRAFT.level != null) {
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            for (int p = 0; p < 4; ++p) {
-                new ParticleUtil(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 0, 0, 0);
-                new ParticleUtil(ParticleTypes.SMOKE, d0, d1, d2, 0.0D, 5.0E-4D, 0.0D);
-            }
-        }
     }
 
     public void generateParticles() {

@@ -7,6 +7,7 @@ import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.*;
 import net.minecraft.entity.Entity;
@@ -29,10 +30,10 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
     private static final String COOL = "Cool";
 
     public PhilosophersMaceItem() {
-        super(new Properties().durability(128).tab(Goety.TAB));
+        super(new Properties().durability(128).tab(Goety.TAB).fireResistant());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 8.0D, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-2.4F, AttributeModifier.Operation.ADDITION));
         this.maceAttributes = builder.build();
     }
 
@@ -107,7 +108,7 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
 
     public boolean isCorrectToolForDrops(BlockState pBlock) {
         Material material = pBlock.getMaterial();
-        return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
+        return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL || pBlock.is(Blocks.SNOW) || pBlock.is(Blocks.SNOW_BLOCK);
     }
 
     public float getDestroySpeed(ItemStack pStack, BlockState pState) {
@@ -120,7 +121,7 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
     {
-        return enchantment.category == EnchantmentType.DIGGER || enchantment.category == EnchantmentType.WEAPON || enchantment.category == EnchantmentType.BREAKABLE;
+        return (enchantment.category == EnchantmentType.DIGGER || enchantment.category == EnchantmentType.WEAPON || enchantment.category == EnchantmentType.BREAKABLE) && !(enchantment instanceof SweepingEnchantment);
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {

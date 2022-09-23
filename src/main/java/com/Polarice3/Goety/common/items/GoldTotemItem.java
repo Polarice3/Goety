@@ -3,23 +3,12 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.CursedCageBlock;
-import com.Polarice3.Goety.common.enchantments.ModEnchantments;
-import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
-import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
-import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -117,52 +106,6 @@ public class GoldTotemItem extends Item {
             return itemStack.getTag().getInt(SOULSAMOUNT);
         } else {
             return 0;
-        }
-    }
-
-    public static void handleKill(LivingEntity killer, LivingEntity victim) {
-        PlayerEntity player = null;
-        if (killer instanceof PlayerEntity){
-            player = (PlayerEntity) killer;
-        } else if (killer instanceof OwnedEntity){
-            OwnedEntity summonedEntity = (OwnedEntity) killer;
-            if (summonedEntity.getTrueOwner() instanceof PlayerEntity){
-                player = (PlayerEntity) summonedEntity.getTrueOwner();
-            }
-        }
-        if (player != null) {
-            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
-            if (!foundStack.isEmpty()) {
-                if (!(victim instanceof OwnedEntity)) {
-                    if (victim.getMobType() == CreatureAttribute.UNDEAD) {
-                        increaseSouls(foundStack, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
-                    } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
-                        increaseSouls(foundStack, MainConfig.AnthropodSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof AbstractRaiderEntity) {
-                        increaseSouls(foundStack, MainConfig.IllagerSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
-                        increaseSouls(foundStack, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
-                        increaseSouls(foundStack, MainConfig.PiglinSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof EnderDragonEntity) {
-                        increaseSouls(foundStack, MainConfig.EnderDragonSouls.get() * SoulMultiply(killer));
-                    } else if (victim instanceof PlayerEntity) {
-                        increaseSouls(foundStack, MainConfig.PlayerSouls.get() * SoulMultiply(killer));
-                    } else {
-                        increaseSouls(foundStack, MainConfig.DefaultSouls.get() * SoulMultiply(killer));
-                    }
-                }
-            }
-        }
-    }
-
-    public static int SoulMultiply(LivingEntity livingEntity){
-        ItemStack weapon= livingEntity.getMainHandItem();
-        int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOULEATER.get(), weapon);
-        if (i > 0){
-            return i + 1;
-        } else {
-            return 1;
         }
     }
 

@@ -59,6 +59,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> TALL_SKULL_BLOCK = BLOCKS.register("tall_skull", TallSkullBlock::new);
     public static final RegistryObject<Block> WALL_TALL_SKULL_BLOCK = BLOCKS.register("wall_tall_skull", WallTallSkullBlock::new);
     public static final RegistryObject<Block> FALSE_PORTAL = BLOCKS.register("false_portal", FalsePortalBlock::new);
+    public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -267,6 +268,8 @@ public class ModBlocks {
             () -> new BlockItem(GRAVE_BRICK_WALL_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> PITHOS_ITEM = BLOCK_ITEMS.register("pithos",
             () -> new BlockItemBase(PITHOS_BLOCK.get()));
+    public static final RegistryObject<Item> DEAD_TNT_ITEM = BLOCK_ITEMS.register("dead_tnt",
+            () -> new BlockItemBase(DEAD_TNT.get()));
     //TreeItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
             () -> new BlockItemBase(HAUNTED_PLANKS.get()));
