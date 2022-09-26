@@ -37,7 +37,7 @@ public class ArcaTileEntityRenderer extends TileEntityRenderer<ArcaTileEntity> {
         float f2 = MathHelper.sin(f * 0.1F) / 2.0F + 0.5F;
         f2 = f2 * f2 + f2;
         pMatrixStack.pushPose();
-        pMatrixStack.translate(0.5D, 0.3F + f2 * 0.1F, 0.5D);
+        pMatrixStack.translate(0.5D, 0.4F + f2 * 0.1F, 0.5D);
         Vector3f vector3f = new Vector3f(0.5F, 1.0F, 0.5F);
         vector3f.normalize();
         pMatrixStack.mulPose(new Quaternion(vector3f, f1, true));
@@ -45,7 +45,7 @@ public class ArcaTileEntityRenderer extends TileEntityRenderer<ArcaTileEntity> {
         this.cage.render(pMatrixStack, ivertexbuilder, pCombinedLight, pCombinedOverlay);
         pMatrixStack.popPose();
         pMatrixStack.pushPose();
-        pMatrixStack.translate(0.5D, 0.3F + f2 * 0.1F, 0.5D);
+        pMatrixStack.translate(0.5D, 0.4F + f2 * 0.1F, 0.5D);
         pMatrixStack.scale(0.5F, 0.5F, 0.5F);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(3 * f));
         IVertexBuilder ivertexbuilder2 = pBuffer.getBuffer(CORE_RENDER);

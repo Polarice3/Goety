@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTags;
@@ -48,10 +49,8 @@ public class BlockFinder {
         BlockState blockstate = pLevel.getBlockState(pPos);
         if (BlockFinder.NotDeadSandImmune(blockstate)) {
             if (blockstate.getMaterial() == Material.STONE) {
-                pLevel.removeBlock(pPos, false);
                 pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
             } else if (blockstate.is(BlockTags.LOGS)) {
-                pLevel.removeBlock(pPos, false);
                 pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockstate.getValue(RotatedPillarBlock.AXIS)));
             } else if (blockstate.is(BlockTags.ICE)) {
                 pLevel.removeBlock(pPos, false);
@@ -61,7 +60,6 @@ public class BlockFinder {
                     pLevel.setBlockAndUpdate(pPos, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
                 }
             } else {
-                pLevel.removeBlock(pPos, false);
                 pLevel.setBlockAndUpdate(pPos, ModBlocks.DEAD_SAND.get().defaultBlockState());
             }
         }
@@ -174,6 +172,19 @@ public class BlockFinder {
         } else {
             return false;
         }
+    }
+
+    public static boolean isDeadBlock(World pLevel, BlockPos pPos){
+        BlockState blockState = pLevel.getBlockState(pPos.below());
+        if (blockState.getFluidState().isEmpty()) {
+            for (int j1 = 0; j1 < 4; ++j1) {
+                BlockState blockState2 = pLevel.getBlockState(pPos.below(j1));
+                if (blockState2.getBlock() instanceof IDeadBlock) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean createBarrel(IServerWorld pLevel, MutableBoundingBox pBounds, Random pRandom, BlockPos pPos, ResourceLocation pResourceLocation, @Nullable BlockState pState) {

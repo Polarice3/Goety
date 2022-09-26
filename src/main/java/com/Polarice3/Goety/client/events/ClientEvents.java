@@ -3,6 +3,7 @@ package com.Polarice3.Goety.client.events;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.audio.IceStormSound;
 import com.Polarice3.Goety.client.audio.LocustSound;
+import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
@@ -90,8 +91,21 @@ public class ClientEvents {
 
         final PlayerEntity player = Minecraft.getInstance().player;
 
-        if (player != null && LichdomHelper.isLich(player)) {
-            event.setCanceled(true);
+        if (player != null) {
+            if (LichdomHelper.isLich(player)){
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderDeadHearts(RenderGameOverlayEvent.Post event){
+        Minecraft minecraft = Minecraft.getInstance();
+        PlayerEntity player = minecraft.player;
+
+        if (event.getType() == RenderGameOverlayEvent.ElementType.HEALTH
+                && player.hasEffect(ModEffects.DESICCATE.get())) {
+            new DeadHeartsGui(minecraft, player).drawHearts(event.getMatrixStack());
         }
     }
 
@@ -129,9 +143,9 @@ public class ClientEvents {
     public static void HurtEvents(LivingHurtEvent event){
         LivingEntity victim = event.getEntityLiving();
         if (victim != null) {
-            if (ModDamageSource.desiccateAttacks(event.getSource())) {
-                if (!(victim instanceof IDeadMob)) {
-                    if (victim.level.isClientSide) {
+            if (victim.level.isClientSide) {
+                if (ModDamageSource.desiccateAttacks(event.getSource())) {
+                    if (!(victim instanceof IDeadMob)) {
                         new SoundUtil(victim.blockPosition(), SoundEvents.STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
                         IParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
                         new ParticleUtil(victim, particleData);

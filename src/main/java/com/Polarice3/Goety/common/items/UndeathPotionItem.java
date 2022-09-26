@@ -25,6 +25,7 @@ public class UndeathPotionItem extends Item {
         super(new Item.Properties()
                 .tab(Goety.TAB)
                 .rarity(Rarity.EPIC)
+                .craftRemainder(Items.GLASS_BOTTLE)
                 .setNoRepair()
                 .stacksTo(1)
         );
@@ -65,23 +66,12 @@ public class UndeathPotionItem extends Item {
                         player.heal(20.0F);
                     }
                 }
-                return new ItemStack(Items.GLASS_BOTTLE);
-            }
-        }
-
-        if (pStack.isEmpty()) {
-            return new ItemStack(Items.GLASS_BOTTLE);
-        } else {
-            if (pEntityLiving instanceof PlayerEntity && !((PlayerEntity)pEntityLiving).abilities.instabuild) {
-                ItemStack itemstack = new ItemStack(Items.GLASS_BOTTLE);
-                PlayerEntity playerentity = (PlayerEntity)pEntityLiving;
-                if (!playerentity.inventory.add(itemstack)) {
-                    playerentity.drop(itemstack, false);
+                if(!player.abilities.instabuild) {
+                    pStack.shrink(1);
                 }
             }
-
-            return pStack;
         }
+        return pStack.isEmpty() ? new ItemStack(Items.GLASS_BOTTLE) : pStack;
     }
 
     public int getUseDuration(ItemStack pStack) {

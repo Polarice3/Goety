@@ -6,7 +6,12 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.MathHelper;
 
 public class EffectsUtil {
-    public static void amplifyEffect(LivingEntity infected, Effect effect, int duration){
+
+    public static void amplifyEffect (LivingEntity infected, Effect effect, int duration){
+        amplifyEffect(infected, effect, duration, false, true);
+    }
+
+    public static void amplifyEffect(LivingEntity infected, Effect effect, int duration, boolean pAmbient, boolean pVisible){
         EffectInstance effectinstance1 = infected.getEffect(effect);
         int i = 1;
         if (effectinstance1 != null) {
@@ -17,18 +22,22 @@ public class EffectsUtil {
         }
 
         i = MathHelper.clamp(i, 0, 4);
-        EffectInstance effectinstance = new EffectInstance(effect, duration, i);
+        EffectInstance effectinstance = new EffectInstance(effect, duration, i, pAmbient, pVisible);
         infected.addEffect(effectinstance);
     }
 
     public static void resetDuration(LivingEntity infected, Effect effect, int duration){
+        resetDuration(infected, effect, duration, false, true);
+    }
+
+    public static void resetDuration(LivingEntity infected, Effect effect, int duration, boolean pAmbient, boolean pVisible){
         EffectInstance effectinstance1 = infected.getEffect(effect);
         int a = 0;
         if (effectinstance1 != null) {
             a = effectinstance1.getAmplifier();
             infected.removeEffectNoUpdate(effect);
         }
-        EffectInstance effectinstance = new EffectInstance(effect, duration, a);
+        EffectInstance effectinstance = new EffectInstance(effect, duration, a, pAmbient, pVisible);
         infected.addEffect(effectinstance);
     }
 
@@ -42,6 +51,39 @@ public class EffectsUtil {
             infected.removeEffectNoUpdate(effect);
         }
         EffectInstance effectinstance = new EffectInstance(effect, i, a);
+        infected.addEffect(effectinstance);
+    }
+
+    public static void deamplifyEffect(LivingEntity infected, Effect effect, int duration){
+        deamplifyEffect(infected, effect, duration, false, true);
+    }
+
+    public static void deamplifyEffect(LivingEntity infected, Effect effect, int duration, boolean pAmbient, boolean pVisible){
+        EffectInstance effectinstance1 = infected.getEffect(effect);
+        int i = 0;
+        if (effectinstance1 != null) {
+            int amp = effectinstance1.getAmplifier();
+            i = amp - 1;
+            infected.removeEffectNoUpdate(effect);
+        }
+
+        i = MathHelper.clamp(i, 0, 4);
+        EffectInstance effectinstance = new EffectInstance(effect, duration, i, pAmbient, pVisible);
+        infected.addEffect(effectinstance);
+    }
+
+    public static void halveDuration(LivingEntity infected, Effect effect, int duration){
+        halveDuration(infected, effect, duration, false, true);
+    }
+
+    public static void halveDuration(LivingEntity infected, Effect effect, int duration, boolean pAmbient, boolean pVisible){
+        EffectInstance effectinstance1 = infected.getEffect(effect);
+        int a = 0;
+        if (effectinstance1 != null) {
+            a = effectinstance1.getAmplifier();
+            infected.removeEffectNoUpdate(effect);
+        }
+        EffectInstance effectinstance = new EffectInstance(effect, duration/2, a, pAmbient, pVisible);
         infected.addEffect(effectinstance);
     }
 }

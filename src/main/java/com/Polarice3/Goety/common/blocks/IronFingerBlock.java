@@ -84,7 +84,7 @@ public class IronFingerBlock extends Block implements IPlantable {
         }
         if (isTip(pState)){
             if (pLevel.isThundering()){
-                if (pRandom.nextFloat() < 0.001F){
+                if (pRandom.nextFloat() < 0.1F){
                     LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(pLevel);
                     if (lightningboltentity != null){
                         lightningboltentity.setPos(pPos.getX(), pPos.getY(), pPos.getZ());

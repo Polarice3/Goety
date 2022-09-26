@@ -1,26 +1,17 @@
 package com.Polarice3.Goety.common.items;
 
-import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.ItemHelper;
+import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class UncookedMutatedItem extends Item {
+public class UncookedMutatedItem extends FakeFoodItem {
     public UncookedMutatedItem() {
-        super(new Properties()
-                .tab(Goety.TAB)
-                .durability(8)
-        );
+        super(4, 0.8F);
     }
 
     public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
@@ -43,25 +34,17 @@ public class UncookedMutatedItem extends Item {
                 entityLiving.addEffect(effectinstance2);
             }
         }
-        PlayerEntity playerentity = (PlayerEntity) entityLiving;
-        playerentity.getFoodData().eat(4, 0.8F);
-        ItemHelper.hurtAndRemove(stack, 1, playerentity);
-        return stack;
+        if (stack.isEnchanted()){
+            if (worldIn.random.nextFloat() <= 0.5F){
+                EffectInstance effectinstance2 = entityLiving.getEffect(ModEffects.COSMIC.get());
+                if (effectinstance2 == null) {
+                    EffectInstance effectinstance = new EffectInstance(ModEffects.COSMIC.get(), 3000, 0, false, false);
+                    entityLiving.addEffect(effectinstance);
+                } else {
+                    EffectsUtil.amplifyEffect(entityLiving, ModEffects.COSMIC.get(), 3000, false, false);
+                }
+            }
+        }
+        return super.finishUsingItem(stack, worldIn, entityLiving);
     }
-
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        playerIn.startUsingItem(handIn);
-        ItemStack itemstack = playerIn.getItemInHand(handIn);
-        return ActionResult.consume(itemstack);
-    }
-
-
-    public int getUseDuration(ItemStack stack) {
-        return 32;
-    }
-
-    public UseAction getUseAnimation(ItemStack stack) {
-        return UseAction.EAT;
-    }
-
 }

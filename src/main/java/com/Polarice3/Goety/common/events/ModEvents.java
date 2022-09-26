@@ -78,6 +78,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -362,8 +363,7 @@ public class ModEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         if (livingEntity != null){
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD){
-                BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
-                if (blockState.getBlock() instanceof IDeadBlock){
+                if (BlockFinder.isDeadBlock(livingEntity.level, livingEntity.blockPosition())){
                     livingEntity.clearFire();
                 }
             }
@@ -943,6 +943,24 @@ public class ModEvents {
                     }
                     if (player != null) {
                         event.setLootingLevel(event.getLootingLevel() + looting);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void SleepEvents(PlayerWakeUpEvent event){
+        PlayerEntity player = event.getPlayer();
+        if (player.isSleepingLongEnough()) {
+            if (player.hasEffect(ModEffects.ILLAGUE.get())) {
+                int duration = Objects.requireNonNull(player.getEffect(ModEffects.ILLAGUE.get())).getDuration();
+                int amp = Objects.requireNonNull(player.getEffect(ModEffects.ILLAGUE.get())).getAmplifier();
+                if (duration > 0){
+                    if (amp <= 0) {
+                        EffectsUtil.halveDuration(player, ModEffects.ILLAGUE.get(), duration, false, false);
+                    } else {
+                        EffectsUtil.deamplifyEffect(player, ModEffects.ILLAGUE.get(), duration, false, false);
                     }
                 }
             }

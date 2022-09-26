@@ -18,7 +18,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -140,55 +139,61 @@ public class SoulEnergyEvent {
             if (soulEnergy.getSEActive()){
                 if (soulEnergy.getArcaBlock() != null) {
                     if (MainConfig.ArcaUndying.get()) {
-                        if (LichdomHelper.isLich(player)){
-                            if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
-                                BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                            } else {
-                                if (soulEnergy.getArcaBlockDimension() != null) {
-                                    if (!player.level.isClientSide) {
-                                        ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
-                                        player.changeDimension(serverWorld);
-                                        BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                        player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                        if (!player.level.isClientSide) {
+                            if (LichdomHelper.isLich(player)) {
+                                if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
+                                    BlockPos blockPos = SEHelper.getArcaBlock(player);
+                                    player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                                } else {
+                                    if (soulEnergy.getArcaBlockDimension() != null) {
+                                        if (player.getServer() != null) {
+                                            ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
+                                            if (serverWorld != null) {
+                                                player.changeDimension(serverWorld);
+                                                BlockPos blockPos = SEHelper.getArcaBlock(player);
+                                                player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            player.setHealth(1.0F);
-                            player.removeAllEffects();
-                            if (soulEnergy.getSoulEnergy() > MainConfig.MaxSouls.get()){
+                                player.setHealth(1.0F);
+                                player.removeAllEffects();
+                                if (soulEnergy.getSoulEnergy() > MainConfig.MaxSouls.get()) {
+                                    player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
+                                    player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                                } else {
+                                    player.addEffect(new EffectInstance(ModEffects.SOUL_HUNGER.get(), 12000, 4, false, false));
+                                }
+                                player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 1.0F);
+                                SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
+                                SEHelper.sendSEUpdatePacket(player);
+                                event.setCanceled(true);
+                            } else if (soulEnergy.getSoulEnergy() > MainConfig.MaxSouls.get()) {
+                                if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
+                                    BlockPos blockPos = SEHelper.getArcaBlock(player);
+                                    player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                                } else {
+                                    if (soulEnergy.getArcaBlockDimension() != null) {
+                                        if (player.getServer() != null) {
+                                            ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
+                                            if (serverWorld != null) {
+                                                player.changeDimension(serverWorld);
+                                                BlockPos blockPos = SEHelper.getArcaBlock(player);
+                                                player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                                            }
+                                        }
+                                    }
+                                }
+                                player.setHealth(1.0F);
+                                player.removeAllEffects();
+                                player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
                                 player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
                                 player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                            } else {
-                                player.addEffect(new EffectInstance(ModEffects.SOUL_HUNGER.get(), 12000, 4, false, false));
+                                player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 1.0F);
+                                SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
+                                SEHelper.sendSEUpdatePacket(player);
+                                event.setCanceled(true);
                             }
-                            new SoundUtil(player, SoundEvents.WITHER_DEATH, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                            SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
-                            SEHelper.sendSEUpdatePacket(player);
-                            event.setCanceled(true);
-                        } else if (soulEnergy.getSoulEnergy() > MainConfig.MaxSouls.get()) {
-                            if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
-                                BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                            } else {
-                                if (soulEnergy.getArcaBlockDimension() != null) {
-                                    if (!player.level.isClientSide) {
-                                        ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
-                                        player.changeDimension(serverWorld);
-                                        BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                        player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                                    }
-                                }
-                            }
-                            player.setHealth(1.0F);
-                            player.removeAllEffects();
-                            player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
-                            player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
-                            player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                            player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 1.0F);
-                            SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
-                            SEHelper.sendSEUpdatePacket(player);
-                            event.setCanceled(true);
                         }
                     }
                 }

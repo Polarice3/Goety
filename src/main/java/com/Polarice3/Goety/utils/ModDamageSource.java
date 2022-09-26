@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 public class ModDamageSource extends DamageSource {
     public static final DamageSource DESICCATE = (new ModDamageSource("desiccate")).setDesiccate().bypassArmor().setMagic();
-    public static final DamageSource FROST = (new ModDamageSource("frost")).setIsFrost();
+    public static final DamageSource FROST = (new ModDamageSource("frost")).setIsFrost().setMagic();
     private boolean isBreath;
     private boolean isDesiccate;
     private boolean isFrost;
@@ -34,11 +34,11 @@ public class ModDamageSource extends DamageSource {
     }
 
     public static DamageSource directFrost(LivingEntity pMob) {
-        return new ModEntityDamageSource("directFrost", pMob).setIsFrost();
+        return new ModEntityDamageSource("directFrost", pMob).setIsFrost().setMagic();
     }
 
     public static DamageSource indirectFrost(Entity pSource, @Nullable Entity pIndirectEntity) {
-        return (new ModIndirectEntityDamageSource("indirectFrost", pSource, pIndirectEntity)).setIsFrost();
+        return (new ModIndirectEntityDamageSource("indirectFrost", pSource, pIndirectEntity)).setIsFrost().setMagic();
     }
 
     public boolean isBreath() {

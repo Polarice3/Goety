@@ -41,6 +41,22 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
         }
     }
 
+    public void neighborChanged(BlockState pState, World pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
+        BlockState ground = pLevel.getBlockState(pPos.below());
+        if (ground.isAir()){
+            for(Direction direction : Direction.values()) {
+                BlockPos blockpos1 = pPos.relative(direction);
+                BlockState blockstate = pLevel.getBlockState(blockpos1);
+                if (blockstate.getBlock() instanceof DeadSandBlock){
+                    if (!blockstate.getValue(ENABLED)){
+                        pLevel.setBlock(pPos, ModBlocks.DEAD_SAND.get().defaultBlockState().setValue(ENABLED, false), 3);
+                    }
+                }
+            }
+        }
+        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
         if (pRand.nextInt(16) == 0) {

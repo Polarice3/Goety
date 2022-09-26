@@ -72,6 +72,9 @@ public interface IDeadBlock {
                                 pLevel.removeBlock(blockpos2, false);
                                 pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
                             }
+                            if (blockState2.getBlock() instanceof TallGrassBlock){
+                                pLevel.removeBlock(blockpos2, false);
+                            }
                         }
                     }
                 }

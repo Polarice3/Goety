@@ -64,8 +64,7 @@ public class DeadMobEvents {
         List<BlockState> result = new ArrayList<>();
         if (MainConfig.DeadSandMobs.get()) {
             if (livingEntity instanceof CreeperEntity) {
-                BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
-                if (blockState.getBlock() instanceof IDeadBlock) {
+                if (BlockFinder.isDeadBlock(world, livingEntity.blockPosition())) {
                     if (livingEntity.tickCount % 20 == 0) {
                         livingEntity.hurt(ModDamageSource.DESICCATE, livingEntity.getMaxHealth()/4);
                     }
@@ -81,7 +80,7 @@ public class DeadMobEvents {
             }
         }
         if (livingEntity instanceof IDeadMob){
-            if (BlockFinder.isWet(world, livingEntity.blockPosition())){
+            if (BlockFinder.isWet(world, livingEntity.blockPosition()) && !BlockFinder.isDeadBlock(world, livingEntity.blockPosition())){
                 if (livingEntity.tickCount % 20 == 0){
                     livingEntity.hurt(DamageSource.DROWN, 2.0F);
                 }
