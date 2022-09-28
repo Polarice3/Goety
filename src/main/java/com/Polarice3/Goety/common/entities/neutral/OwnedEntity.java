@@ -24,10 +24,19 @@ import java.util.UUID;
 
 public class OwnedEntity extends CreatureEntity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
-    public LivingEntity owner;
 
     protected OwnedEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    public void tick(){
+        super.tick();
+        if (this.getTarget() instanceof OwnedEntity){
+            OwnedEntity ownedEntity = (OwnedEntity) this.getTarget();
+            if (ownedEntity.getTrueOwner() == this.getTrueOwner()){
+                this.setTarget(null);
+            }
+        }
     }
 
     public Team getTeam() {
@@ -108,8 +117,8 @@ public class OwnedEntity extends CreatureEntity {
         this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
     }
 
-    public void setOwner(LivingEntity ownerIn) {
-        this.owner = ownerIn;
+    public void setTrueOwner(LivingEntity livingEntity){
+        this.setOwnerId(livingEntity.getUUID());
     }
 
     public class OwnerHurtTargetGoal extends TargetGoal {

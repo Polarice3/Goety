@@ -201,9 +201,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else if (entityIn instanceof AbstractPiglinEntity){
             return this.isAlliedTo(entityIn);
-        }  else {
-            return false;
-        }
+        } else return entityIn instanceof ICultistMinion;
     }
 
     @OnlyIn(Dist.CLIENT)

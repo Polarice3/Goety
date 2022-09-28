@@ -48,11 +48,13 @@ public class DesiccatedSkullEntity extends DamagingProjectileEntity {
     public void tick() {
         super.tick();
         int age = this.isDangerous() ? 100 : 40;
-        if (this.tickCount % age == 0) {
-            if (!this.level.isClientSide) {
-                DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
-                ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? 1.75F : 1.0F, explosion$mode);
-                this.remove();
+        if (this.getOwner() instanceof IDeadMob) {
+            if (this.tickCount % age == 0) {
+                if (!this.level.isClientSide) {
+                    DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
+                    ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? 1.75F : 1.0F, explosion$mode);
+                    this.remove();
+                }
             }
         }
         Vector3d vector3d = this.getDeltaMovement();
@@ -76,11 +78,10 @@ public class DesiccatedSkullEntity extends DamagingProjectileEntity {
         if (!this.level.isClientSide) {
             Entity entity = pResult.getEntity();
             Entity entity1 = this.getOwner();
-            boolean flag;
             if (!(entity instanceof IDeadMob)) {
                 if (entity1 instanceof LivingEntity) {
                     LivingEntity livingentity = (LivingEntity) entity1;
-                    flag = entity.hurt(ModDamageSource.indirectDesiccate(this, livingentity), 6.0F);
+                    boolean flag = entity.hurt(ModDamageSource.indirectDesiccate(this, livingentity), 6.0F);
                     if (flag) {
                         if (entity.isAlive()) {
                             this.doEnchantDamageEffects(livingentity, entity);
@@ -89,18 +90,7 @@ public class DesiccatedSkullEntity extends DamagingProjectileEntity {
                         }
                     }
                 } else {
-                    flag = entity.hurt(ModDamageSource.DESICCATE, 5.0F);
-                }
-
-                if (flag && entity instanceof LivingEntity) {
-                    int i;
-                    if (this.level.getDifficulty() != Difficulty.HARD) {
-                        i = 10;
-                    } else {
-                        i = 40;
-                    }
-
-                    ((LivingEntity) entity).addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 80 * i, 1));
+                    entity.hurt(ModDamageSource.DESICCATE, 5.0F);
                 }
             } else {
                 if (entity instanceof LivingEntity){

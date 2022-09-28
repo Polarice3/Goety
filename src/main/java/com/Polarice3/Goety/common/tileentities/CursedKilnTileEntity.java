@@ -49,10 +49,10 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
         if (flag1) {
             if (flag) {
                 this.makeParticles();
-            }
-            if (!this.items.get(0).isEmpty()){
-                this.makeWorkParticles();
-                this.cursedCageTile.makeWorkParticles();
+                if (!this.items.get(0).isEmpty()){
+                    this.makeWorkParticles();
+                    this.cursedCageTile.makeWorkParticles();
+                }
             }
         } else {
             if (flag) {

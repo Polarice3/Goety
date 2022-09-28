@@ -14,7 +14,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Simply right-click the Transfer Gem on the Arca and it will save the Arca's coordinates. Then, put the Transfer Gem within the Cursed Cage and it will siphon Soul Energy from the Arca when it's being used."
+      "text": "Simply right-click the Transfer Gem on the Arca and it will bound to it and it's owner. Then, put the Transfer Gem within the Cursed Cage and it will siphon Soul Energy from the Arca when it's being used."
     }
   ]
 }

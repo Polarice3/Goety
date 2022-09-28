@@ -21,6 +21,20 @@ public class ServerParticleUtil {
         serverWorld.sendParticles(pParticleData, x, y, z, 0, pXOffset, pYOffset, pZOffset, 0.5F);
     }
 
+    public static void emitterParticles(ServerWorld serverWorld, Entity entity, IParticleData particleData){
+        for(int i = 0; i < 16; ++i) {
+            double d0 = (double)(serverWorld.random.nextFloat() * 2.0F - 1.0F);
+            double d1 = (double)(serverWorld.random.nextFloat() * 2.0F - 1.0F);
+            double d2 = (double)(serverWorld.random.nextFloat() * 2.0F - 1.0F);
+            if (!(d0 * d0 + d1 * d1 + d2 * d2 > 1.0D)) {
+                double d3 = entity.getX(d0 / 4.0D);
+                double d4 = entity.getY(0.5D + d1 / 4.0D);
+                double d5 = entity.getZ(d2 / 4.0D);
+                serverWorld.sendParticles(particleData, d3, d4, d5, 0, d0, d1 + 0.2D, d2, 0.5F);
+            }
+        }
+    }
+
     public static void gatheringParticles(IParticleData pParticleData, Entity livingEntity, ServerWorld serverWorld){
         List<BlockPos> positions = Lists.newArrayList();
         if (serverWorld != null) {

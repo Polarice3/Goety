@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.init.ModEffects;
@@ -64,23 +63,12 @@ public class SkeletonMinionEntity extends SummonedEntity implements IRangedAttac
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 2.0F);
         }
-        if (this.getTrueOwner() != null) {
-            if (MainConfig.SkeletonLimit.get() < SkeletonLimit(this.getTrueOwner())) {
-                if (this.tickCount % 20 == 0) {
-                    this.hurt(DamageSource.STARVE, 5.0F);
-                }
-            }
-        }
         super.tick();
     }
 
     @Override
     protected boolean isSunSensitive() {
         return true;
-    }
-
-    public int SkeletonLimit(LivingEntity entityLiving){
-        return entityLiving.level.getNearbyEntities(SkeletonMinionEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
     }
 
     protected void registerGoals() {

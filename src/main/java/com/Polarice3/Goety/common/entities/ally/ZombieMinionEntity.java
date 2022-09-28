@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -45,23 +44,12 @@ public class ZombieMinionEntity extends SummonedEntity {
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 2.0F);
         }
-        if (this.getTrueOwner() != null) {
-            if (MainConfig.ZombieLimit.get() < ZombieLimit(this.getTrueOwner())) {
-                if (this.tickCount % 20 == 0) {
-                    this.hurt(DamageSource.STARVE, 5.0F);
-                }
-            }
-        }
         super.tick();
     }
 
     @Override
     protected boolean isSunSensitive() {
         return true;
-    }
-
-    public int ZombieLimit(LivingEntity entityLiving){
-        return entityLiving.level.getNearbyEntities(ZombieMinionEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
     }
 
     protected void registerGoals() {
@@ -157,8 +145,8 @@ public class ZombieMinionEntity extends SummonedEntity {
 
     public void killed(ServerWorld world, LivingEntity killedEntity) {
         super.killed(world, killedEntity);
-        int random = this.level.random.nextInt(2);
-        if (this.isUpgraded() && killedEntity instanceof ZombieEntity && random == 1 && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(killedEntity, ModEntityType.ZOMBIE_MINION.get(), (timer) -> {})) {
+        float random = this.level.random.nextFloat();
+        if (this.isUpgraded() && killedEntity instanceof ZombieEntity && random <= 0.5F && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(killedEntity, ModEntityType.ZOMBIE_MINION.get(), (timer) -> {})) {
             ZombieEntity zombieEntity = (ZombieEntity)killedEntity;
             ZombieMinionEntity zombieMinionEntity = zombieEntity.convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
             zombieMinionEntity.finalizeSpawn(world, level.getCurrentDifficultyAt(zombieMinionEntity.blockPosition()), SpawnReason.CONVERSION, null, (CompoundNBT)null);

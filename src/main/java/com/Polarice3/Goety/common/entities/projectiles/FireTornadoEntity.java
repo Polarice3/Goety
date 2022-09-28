@@ -85,7 +85,7 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
             this.remove();
         }
         for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(AreaofEffect()))) {
-            if (!(entity instanceof ApostleEntity)) {
+            if (!(entity instanceof ApostleEntity) && !entity.isAlliedTo(this.getTrueOwner())) {
                 entity.setSecondsOnFire(30);
                 entity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 1200));
                 if (entity.hasEffect(Effects.FIRE_RESISTANCE)){

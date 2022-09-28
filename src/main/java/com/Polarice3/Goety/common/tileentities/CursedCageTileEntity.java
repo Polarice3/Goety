@@ -6,18 +6,25 @@ import com.Polarice3.Goety.utils.ParticleUtil;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IClearable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.logging.log4j.LogManager;
+
+import java.util.UUID;
 
 import static com.Polarice3.Goety.common.items.GoldTotemItem.SOULSAMOUNT;
 
@@ -61,32 +68,24 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
     }
 
     public int getSouls(){
-        if (this.item.getItem() == ModItems.SOUL_TRANSFER.get()){
-            int x = this.item.getTag().getInt("X");
-            int y = this.item.getTag().getInt("Y");
-            int z = this.item.getTag().getInt("Z");
-            TileEntity tileEntity = level.getBlockEntity(new BlockPos(x, y, z));
-            if (tileEntity instanceof ArcaTileEntity){
-                ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
-                if (arcaTileEntity.getPlayer() != null) {
-                    if (SEHelper.getSEActive(arcaTileEntity.getPlayer())) {
-                        return SEHelper.getSESouls(arcaTileEntity.getPlayer());
-                    } else {
-                        return 0;
+        if (this.level != null) {
+            if (this.item.getItem() == ModItems.SOUL_TRANSFER.get() && this.item.getTag() != null) {
+                if (this.item.getTag().contains("owner")) {
+                    UUID owner = this.item.getTag().getUUID("owner");
+                    PlayerEntity player = this.level.getPlayerByUUID(owner);
+                    if (player != null) {
+                        if (SEHelper.getSEActive(player)) {
+                            return SEHelper.getSESouls(player);
+                        }
                     }
-                } else {
-                    return 0;
                 }
-            } else {
-                return 0;
+            }
+            if (this.item.getItem() == ModItems.GOLDTOTEM.get()) {
+                assert this.item.getTag() != null;
+                return this.item.getTag().getInt(SOULSAMOUNT);
             }
         }
-        if (this.item.getItem() == ModItems.GOLDTOTEM.get()) {
-            assert this.item.getTag() != null;
-            return this.item.getTag().getInt(SOULSAMOUNT);
-        } else {
-            return 0;
-        }
+        return 0;
     }
 
     public void decreaseSouls(int souls) {
@@ -100,20 +99,22 @@ public class CursedCageTileEntity extends TileEntity implements IClearable, ITic
                 }
             }
         }
-        if (this.item.getItem() == ModItems.SOUL_TRANSFER.get()) {
-            int x = this.item.getTag().getInt("X");
-            int y = this.item.getTag().getInt("Y");
-            int z = this.item.getTag().getInt("Z");
-            TileEntity tileEntity = level.getBlockEntity(new BlockPos(x, y, z));
-            if (tileEntity instanceof ArcaTileEntity){
-                ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
-                if (arcaTileEntity.getPlayer() != null) {
-                    if (SEHelper.getSEActive(arcaTileEntity.getPlayer())) {
-                        int Soulcount = SEHelper.getSESouls(arcaTileEntity.getPlayer());
-                        if (Soulcount > 0) {
-                            SEHelper.decreaseSESouls(arcaTileEntity.getPlayer(), souls);
-                            SEHelper.sendSEUpdatePacket(arcaTileEntity.getPlayer());
-                            arcaTileEntity.generateParticles();
+        if (this.level != null) {
+            if (this.item.getItem() == ModItems.SOUL_TRANSFER.get() && this.item.getTag() != null) {
+                if (this.item.getTag().contains("owner")) {
+                    UUID owner = this.item.getTag().getUUID("owner");
+                    PlayerEntity player = this.level.getPlayerByUUID(owner);
+                    if (player != null) {
+                        if (SEHelper.getSEActive(player)) {
+                            int Soulcount = SEHelper.getSESouls(player);
+                            if (Soulcount > 0) {
+                                SEHelper.decreaseSESouls(player, souls);
+                                SEHelper.sendSEUpdatePacket(player);
+                                ArcaTileEntity arcaTile = (ArcaTileEntity) this.level.getBlockEntity(SEHelper.getArcaBlock(player));
+                                if (arcaTile != null) {
+                                    arcaTile.generateParticles();
+                                }
+                            }
                         }
                     }
                 }

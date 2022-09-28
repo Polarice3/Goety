@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class ApostleRenderer extends AbstractCultistRenderer<ApostleEntity>{
     protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/apostle.png");
+    protected static final ResourceLocation TEXTURE2 = Goety.location("textures/entity/cultist/apostle_second.png");
 
     public ApostleRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new ApostleModel<>(0.0F, 0.0F), 0.5F);
@@ -20,6 +21,6 @@ public class ApostleRenderer extends AbstractCultistRenderer<ApostleEntity>{
 
     @Override
     public ResourceLocation getTextureLocation(ApostleEntity entity) {
-        return TEXTURE;
+        return entity.isSecondPhase() ? TEXTURE2 : TEXTURE;
     }
 }

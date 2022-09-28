@@ -18,11 +18,11 @@ public class ModEffects {
         EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
-    public static final RegistryObject<Effect> COSMIC = EFFECTS.register("cosmic",
-            CosmicEffect::new);
     public static final RegistryObject<Effect> ILLAGUE = EFFECTS.register("illague",
             IllagueEffect::new);
 
+    public static final RegistryObject<Effect> COSMIC = EFFECTS.register("cosmic",
+            () -> new ModEffect(EffectType.NEUTRAL, 9044223));
     public static final RegistryObject<Effect> SUMMONDOWN = EFFECTS.register("summondown",
             () -> new ModEffect(EffectType.HARMFUL, 0));
     public static final RegistryObject<Effect> HOSTED = EFFECTS.register("hosted",

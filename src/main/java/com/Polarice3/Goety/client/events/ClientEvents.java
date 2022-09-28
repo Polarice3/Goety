@@ -138,20 +138,4 @@ public class ClientEvents {
             ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CBagKeyPacket());
         }
     }
-
-    @SubscribeEvent
-    public static void HurtEvents(LivingHurtEvent event){
-        LivingEntity victim = event.getEntityLiving();
-        if (victim != null) {
-            if (victim.level.isClientSide) {
-                if (ModDamageSource.desiccateAttacks(event.getSource())) {
-                    if (!(victim instanceof IDeadMob)) {
-                        new SoundUtil(victim.blockPosition(), SoundEvents.STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                        IParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
-                        new ParticleUtil(victim, particleData);
-                    }
-                }
-            }
-        }
-    }
 }

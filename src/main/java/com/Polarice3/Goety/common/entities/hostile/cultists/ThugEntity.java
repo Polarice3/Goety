@@ -118,7 +118,7 @@ public class ThugEntity extends AbstractCultistEntity {
         if (this.isAlive()) {
             if (this.level.isClientSide){
                 if (this.isRaging()){
-                    if (this.tickCount % 20 == 0) {
+                    if (this.tickCount % 10 == 0) {
                         this.addParticlesAroundSelf(ParticleTypes.ANGRY_VILLAGER);
                     }
                 }

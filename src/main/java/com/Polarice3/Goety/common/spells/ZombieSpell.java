@@ -20,7 +20,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IServerWorld;
 import net.minecraft.world.server.ServerWorld;
 
 public class ZombieSpell extends SummonSpells{
@@ -69,13 +68,13 @@ public class ZombieSpell extends SummonSpells{
                 ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
                 if (enchantment > 0){
                     int boost = MathHelper.clamp(enchantment - 1, 0, 10);
-                    summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
+                    summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost, false, false));
                 }
                 worldIn.addFreshEntity(summonedentity);
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
@@ -116,13 +115,13 @@ public class ZombieSpell extends SummonSpells{
                     ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());
                     summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                    summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                    summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                     summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                     summonedentity.setPersistenceRequired();
                     summonedentity.setUpgraded(this.NecroPower(entityLiving));
                     if (enchantment > 0){
                         int boost = MathHelper.clamp(enchantment - 1, 0, 10);
-                        summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
+                        summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost, false, false));
                     }
                     worldIn.addFreshEntity(summonedentity);
                     for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

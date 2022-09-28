@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
@@ -48,13 +47,6 @@ public class UndeadWolfEntity extends SummonedEntity{
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 2.0F);
         }
-        if (this.getTrueOwner() != null) {
-            if (MainConfig.UndeadWolfLimit.get() < ZombieLimit(this.getTrueOwner())) {
-                if (this.tickCount % 20 == 0) {
-                    this.hurt(DamageSource.STARVE, 5.0F);
-                }
-            }
-        }
         if (this.isAlive()) {
             this.interestedAngleO = this.interestedAngle;
             if (this.isInterested()) {
@@ -69,10 +61,6 @@ public class UndeadWolfEntity extends SummonedEntity{
     @Override
     protected boolean isSunSensitive() {
         return true;
-    }
-
-    public int ZombieLimit(LivingEntity entityLiving){
-        return entityLiving.level.getNearbyEntities(UndeadWolfEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
     }
 
     protected void defineSynchedData() {

@@ -17,7 +17,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.IServerWorld;
 import net.minecraft.world.server.ServerWorld;
 
 public class SkeletonSpell extends SummonSpells{
@@ -66,7 +65,7 @@ public class SkeletonSpell extends SummonSpells{
                 SkeletonMinionEntity summonedentity = new SkeletonMinionEntity(ModEntityType.SKELETON_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
@@ -114,7 +113,7 @@ public class SkeletonSpell extends SummonSpells{
                     summonedentity.setPersistenceRequired();
                     summonedentity.setUpgraded(this.NecroPower(entityLiving));
                     summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                    summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                    summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                     summonedentity.setArrowPower(enchantment);
                     worldIn.addFreshEntity(summonedentity);
                     for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

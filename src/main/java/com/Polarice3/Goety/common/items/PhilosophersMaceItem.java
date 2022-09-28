@@ -97,10 +97,17 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
     }
 
     public boolean mineBlock(ItemStack pStack, World pLevel, BlockState pState, BlockPos pPos, LivingEntity pEntityLiving) {
+        int i = pState.getHarvestLevel();
         if (!pLevel.isClientSide && pState.getDestroySpeed(pLevel, pPos) != 0.0F) {
-            pStack.hurtAndBreak(1, pEntityLiving, (p_220038_0_) -> {
-                p_220038_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
-            });
+            if (i > 4){
+                pStack.hurtAndBreak(pLevel.random.nextInt(i) + 1, pEntityLiving, (p_220038_0_) -> {
+                    p_220038_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                });
+            } else {
+                pStack.hurtAndBreak(1, pEntityLiving, (p_220038_0_) -> {
+                    p_220038_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+                });
+            }
         }
 
         return true;
@@ -121,7 +128,11 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
     {
-        return (enchantment.category == EnchantmentType.DIGGER || enchantment.category == EnchantmentType.WEAPON || enchantment.category == EnchantmentType.BREAKABLE) && !(enchantment instanceof SweepingEnchantment);
+        return (enchantment.category == EnchantmentType.DIGGER
+                || enchantment.category == EnchantmentType.WEAPON
+                || enchantment.category == EnchantmentType.BREAKABLE
+                || enchantment == Enchantments.MOB_LOOTING) 
+                && !(enchantment instanceof SweepingEnchantment);
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {

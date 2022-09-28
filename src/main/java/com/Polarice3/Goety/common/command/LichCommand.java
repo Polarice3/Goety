@@ -9,6 +9,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Collection;
@@ -50,6 +51,9 @@ public class LichCommand {
             boolean isLich = lichdom.getLichdom();
             if (isLich) {
                 lichdom.setLichdom(false);
+                if (player.hasEffect(Effects.NIGHT_VISION)){
+                    player.removeEffect(Effects.NIGHT_VISION);
+                }
                 LichdomHelper.sendLichUpdatePacket(player);
                 pSource.sendSuccess(new TranslationTextComponent("commands.lich.delich.success", player.getDisplayName()), false);
             } else {

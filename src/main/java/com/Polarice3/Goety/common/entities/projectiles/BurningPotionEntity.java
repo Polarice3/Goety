@@ -60,7 +60,7 @@ public class BurningPotionEntity extends ProjectileItemEntity {
                     }
                 }
 
-                this.level.levelEvent(2007, this.blockPosition(), this.isSilent() ? -1 : 1);
+                this.level.levelEvent(2007, this.blockPosition(), 16760890);
                 this.level.addFreshEntity(burningGroundEntity);
                 this.remove();
             }

@@ -40,7 +40,6 @@ import java.util.function.Predicate;
 
 public class SummonedEntity extends OwnedEntity {
     private static final DataParameter<Boolean> WANDERING = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BOOLEAN);
-    public final EntityPredicate summonCountTargeting = (new EntityPredicate()).range(64.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
     public boolean limitedLifespan;
     public int limitedLifeTicks;
     public boolean upgraded;
@@ -50,7 +49,7 @@ public class SummonedEntity extends OwnedEntity {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F));
         this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -87,10 +86,8 @@ public class SummonedEntity extends OwnedEntity {
     public void tick(){
         super.tick();
         if (this.getTrueOwner() != null){
-            if (RobeArmorFinder.FindNecroHelm(this.getTrueOwner())){
-                if (this.getMobType() == CreatureAttribute.UNDEAD){
-                    this.limitedLifespan = false;
-                }
+            if (RobeArmorFinder.FindNecroHelm(this.getTrueOwner()) && this.getMobType() == CreatureAttribute.UNDEAD){
+                this.limitedLifespan = false;
             } else if (this.limitedLifeTicks > 0){
                 this.limitedLifespan = true;
             }
@@ -157,12 +154,6 @@ public class SummonedEntity extends OwnedEntity {
 
             if (flag) {
                 this.setSecondsOnFire(8);
-            }
-        }
-        if (this.getTarget() instanceof SummonedEntity){
-            SummonedEntity summonedEntity = (SummonedEntity) this.getTarget();
-            if (summonedEntity.getTrueOwner() == this.getTrueOwner()){
-                this.setTarget(null);
             }
         }
     }
@@ -252,16 +243,14 @@ public class SummonedEntity extends OwnedEntity {
         private final float maxDist;
         private final float minDist;
         private float oldWaterCost;
-        private final boolean teleportToLeaves;
 
-        public FollowOwnerGoal(SummonedEntity summonedEntity, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
+        public FollowOwnerGoal(SummonedEntity summonedEntity, double speed, float minDist, float maxDist) {
             this.summonedEntity = summonedEntity;
             this.level = summonedEntity.level;
             this.followSpeed = speed;
             this.navigation = summonedEntity.getNavigation();
             this.minDist = minDist;
             this.maxDist = maxDist;
-            this.teleportToLeaves = teleportToLeaves;
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
             if (!(summonedEntity.getNavigation() instanceof GroundPathNavigator) && !(summonedEntity.getNavigation() instanceof FlyingPathNavigator)) {
                 throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
@@ -356,7 +345,7 @@ public class SummonedEntity extends OwnedEntity {
                 return false;
             } else {
                 BlockState blockstate = this.level.getBlockState(pos.below());
-                if (!this.teleportToLeaves && blockstate.getBlock() instanceof LeavesBlock) {
+                if (blockstate.getBlock() instanceof LeavesBlock) {
                     return false;
                 } else {
                     BlockPos blockpos = pos.subtract(this.summonedEntity.blockPosition());

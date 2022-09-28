@@ -7,10 +7,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.enchantment.IVanishable;
+import net.minecraft.enchantment.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -120,9 +117,12 @@ public class PitchforkItem extends Item implements IVanishable {
         return true;
     }
 
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-    {
-        return enchantment.category == EnchantmentType.WEAPON || enchantment.category == EnchantmentType.BREAKABLE || enchantment == Enchantments.LOYALTY;
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return (enchantment.category == EnchantmentType.BREAKABLE
+                || enchantment.category == EnchantmentType.WEAPON
+                || enchantment == Enchantments.MOB_LOOTING
+                || enchantment == Enchantments.LOYALTY)
+                && !(enchantment instanceof SweepingEnchantment);
     }
 
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot) {

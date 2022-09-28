@@ -4,9 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
-import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
-import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
-import com.Polarice3.Goety.common.entities.ally.UndeadWolfEntity;
+import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
@@ -60,6 +58,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -167,20 +166,22 @@ public class ModEvents {
                                             } else {
                                                 illager = raider.convertTo(ModEntityType.CONQUILLAGER.get(), false);
                                             }
-                                            assert illager != null;
-                                            if (world.random.nextInt(4) == 0){
-                                                illager.setRider(true);
+                                            if (illager != null) {
+                                                if (world.random.nextInt(4) == 0) {
+                                                    illager.setRider(true);
+                                                }
+                                                illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                                illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                                serverWorld.addFreshEntity(illager);
                                             }
-                                            illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                            illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                            serverWorld.addFreshEntity(illager);
                                         }
                                         if (raider.getType() == EntityType.EVOKER) {
                                             EnviokerEntity illager = ModEntityType.ENVIOKER.get().create(world);
-                                            assert illager != null;
-                                            illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                            illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                            serverWorld.addFreshEntity(illager);
+                                            if (illager != null) {
+                                                illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                                illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                                serverWorld.addFreshEntity(illager);
+                                            }
                                         }
                                     }
                                     int vindicator = world.random.nextInt((int) 12 / badOmen);
@@ -193,24 +194,26 @@ public class ModEvents {
                                                 } else {
                                                     illager = raider.convertTo(ModEntityType.INQUILLAGER.get(), false);
                                                 }
-                                                assert illager != null;
-                                                illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                                if (world.random.nextInt(4) == 0){
-                                                    illager.setRider(true);
+                                                if (illager != null) {
+                                                    illager.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                                    if (world.random.nextInt(4) == 0) {
+                                                        illager.setRider(true);
+                                                    }
+                                                    illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                                    serverWorld.addFreshEntity(illager);
                                                 }
-                                                illager.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                                serverWorld.addFreshEntity(illager);
                                             }
                                         }
                                         if (raider.getType() == EntityType.RAVAGER) {
                                             EnviokerEntity envioker = ModEntityType.ENVIOKER.get().create(world);
-                                            assert envioker != null;
-                                            if (world.random.nextInt(4) == 0){
-                                                envioker.setRider(true);
+                                            if (envioker != null) {
+                                                if (world.random.nextInt(4) == 0) {
+                                                    envioker.setRider(true);
+                                                }
+                                                envioker.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                                envioker.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                                serverWorld.addFreshEntity(envioker);
                                             }
-                                            envioker.moveTo(raider.getX(), raider.getY(), raider.getZ());
-                                            envioker.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
-                                            serverWorld.addFreshEntity(envioker);
                                         }
                                     }
                                 }
@@ -406,6 +409,37 @@ public class ModEvents {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         PlayerEntity player = event.player;
         World world = player.level;
+        int zombies = 0;
+        int skeletons = 0;
+        int wolves = 0;
+        for (SummonedEntity summonedEntity : world.getEntitiesOfClass(SummonedEntity.class, player.getBoundingBox().inflate(32.0D))){
+            if (summonedEntity.getTrueOwner() == player){
+                if (summonedEntity instanceof ZombieMinionEntity){
+                    ++zombies;
+                    if (MainConfig.ZombieLimit.get() < zombies){
+                        if (summonedEntity.tickCount % 20 == 0){
+                            summonedEntity.hurt(DamageSource.STARVE, 5.0F);
+                        }
+                    }
+                }
+                if (summonedEntity instanceof SkeletonMinionEntity){
+                    ++skeletons;
+                    if (MainConfig.SkeletonLimit.get() < skeletons){
+                        if (summonedEntity.tickCount % 20 == 0){
+                            summonedEntity.hurt(DamageSource.STARVE, 5.0F);
+                        }
+                    }
+                }
+                if (summonedEntity instanceof UndeadWolfEntity){
+                    ++wolves;
+                    if (MainConfig.UndeadWolfLimit.get() < wolves){
+                        if (summonedEntity.tickCount % 20 == 0){
+                            summonedEntity.hurt(DamageSource.STARVE, 5.0F);
+                        }
+                    }
+                }
+            }
+        }
         if (MainConfig.VillagerHate.get()) {
             if (RobeArmorFinder.FindAnySet(player)) {
                 for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
@@ -428,20 +462,19 @@ public class ModEvents {
             if (!LichdomHelper.isLich(player)) {
                 if (!(blockState.getBlock() instanceof IDeadBlock)) {
                     if (!world.isClientSide) {
+                        boolean flag = false;
                         if (world.isDay() && !world.isRaining() && !world.isThundering()){
                             BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
                             if (world.canSeeSky(blockpos)) {
                                 player.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
                                 player.addEffect(new EffectInstance(Effects.HUNGER, 20, 1));
                             } else {
-                                if (player.tickCount % 50 == 0){
-                                    if (player.getHealth() < player.getMaxHealth()) {
-                                        player.heal(1.0F);
-                                    }
-                                }
-                                player.addEffect(new EffectInstance(Effects.REGENERATION, 20, 0, false, false));
+                                flag = true;
                             }
                         } else {
+                            flag = true;
+                        }
+                        if (flag){
                             if (player.tickCount % 50 == 0){
                                 if (player.getHealth() < player.getMaxHealth()) {
                                     player.heal(1.0F);
@@ -704,7 +737,7 @@ public class ModEvents {
     public static void DamageEvent(LivingDamageEvent event){
         LivingEntity entity = event.getEntityLiving();
         if (entity.hasEffect(ModEffects.SOUL_SHIELD.get())){
-            if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
+            if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity && !(event.getSource().getEntity() instanceof ApostleEntity)){
                 event.setCanceled(true);
             }
         }
@@ -976,6 +1009,15 @@ public class ModEvents {
                     InfamyHelper.increaseInfamy(player, 100);
                     InfamyHelper.sendInfamyUpdatePacket(player);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void PotionApplicableEvents(PotionEvent.PotionApplicableEvent event){
+        if (event.getPotionEffect().getEffect() == ModEffects.GOLDTOUCHED.get()){
+            if (event.getEntityLiving() instanceof ICultistMinion){
+                event.setResult(Event.Result.DENY);
             }
         }
     }

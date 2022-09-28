@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.entities.hostile.dead.BoomerEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.MarcireEntity;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
@@ -23,11 +24,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -129,6 +136,13 @@ public class DeadMobEvents {
             if (ModDamageSource.desiccateAttacks(event.getSource())) {
                 if (victim instanceof IDeadMob) {
                     event.setCanceled(true);
+                } else {
+                    victim.playSound(SoundEvents.STONE_BREAK, 1.5F, 1.0F);
+                    if (!victim.level.isClientSide) {
+                        ServerWorld serverWorld = (ServerWorld) victim.level;
+                        IParticleData particleData = new BlockParticleData(ParticleTypes.BLOCK, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+                        ServerParticleUtil.emitterParticles(serverWorld, victim, particleData);
+                    }
                 }
             }
         }

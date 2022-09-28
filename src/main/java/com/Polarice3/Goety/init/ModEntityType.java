@@ -494,6 +494,14 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
 
+    public static final RegistryObject<EntityType<FireBlastTrapEntity>> FIREBLASTTRAP = ENTITY_TYPES.register("fireblasttrap",
+            () -> EntityType.Builder.<FireBlastTrapEntity>of(FireBlastTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(1.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fireblasttrap").toString()));
+
     public static final RegistryObject<EntityType<BurningGroundEntity>> BURNING_GROUND = ENTITY_TYPES.register("burning_ground",
             () -> EntityType.Builder.<BurningGroundEntity>of(BurningGroundEntity::new, EntityClassification.MISC)
                     .fireImmune()

@@ -63,7 +63,7 @@ public class VexSpell extends SummonSpells {
                 FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
                 vexentity.setOwnerId(entityLiving.getUUID());
                 vexentity.moveTo(blockpos, 0.0F, 0.0F);
-                vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 vexentity.setBoundOrigin(blockpos);
                 if (MainConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
                     vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
@@ -102,7 +102,7 @@ public class VexSpell extends SummonSpells {
                 FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
                 vexentity.setOwnerId(entityLiving.getUUID());
                 vexentity.moveTo(blockpos, 0.0F, 0.0F);
-                vexentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 vexentity.setBoundOrigin(blockpos);
                 if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
                     vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
