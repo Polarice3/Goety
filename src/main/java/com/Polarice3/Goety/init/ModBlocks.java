@@ -2,6 +2,7 @@ package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.blocks.*;
+import com.Polarice3.Goety.common.items.SoulFangTotemItem;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -213,7 +214,7 @@ public class ModBlocks {
     public static final RegistryObject<Item> WIND_TOTEM_ITEM = BLOCK_ITEMS.register("wind_totem",
             () -> new BlockItemBase(WIND_TOTEM.get()));
     public static final RegistryObject<Item> SOUL_FANG_TOTEM_ITEM = BLOCK_ITEMS.register("soul_fang_totem",
-            () -> new BlockItemBase(SOUL_FANG_TOTEM.get()));
+            () -> new SoulFangTotemItem(SOUL_FANG_TOTEM.get()));
     public static final RegistryObject<Item> OBELISK_ITEM = BLOCK_ITEMS.register("obelisk",
             () -> new BlockItemBase(OBELISK.get()));
     public static final RegistryObject<Item> GUARDIAN_OBELISK_ITEM = BLOCK_ITEMS.register("guardian_obelisk",

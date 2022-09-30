@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.command;
 
-import com.Polarice3.Goety.common.lichdom.ILichdom;
+import com.Polarice3.Goety.common.capabilities.lichdom.ILichdom;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

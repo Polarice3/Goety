@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.spider;
+package com.Polarice3.Goety.common.capabilities.soulenergy;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -11,12 +11,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SpiderLevelsProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
+public class SEProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
+    @CapabilityInject(ISoulEnergy.class)
+    public static Capability<ISoulEnergy> CAPABILITY = null;
 
-    @CapabilityInject(ISpiderLevels.class)
-    public static Capability<ISpiderLevels> CAPABILITY = null;
-
-    ISpiderLevels instance = new SpiderLevelsImp();
+    ISoulEnergy instance = new SEImp();
 
     @Nonnull
     @Override
@@ -33,5 +32,4 @@ public class SpiderLevelsProvider implements ICapabilityProvider, ICapabilitySer
     public void deserializeNBT(CompoundNBT nbt) {
         CAPABILITY.getStorage().readNBT(CAPABILITY, instance, null, nbt);
     }
-
 }

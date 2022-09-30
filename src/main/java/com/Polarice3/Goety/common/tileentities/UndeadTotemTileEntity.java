@@ -31,7 +31,7 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
         int j = this.worldPosition.getY();
         int k = this.worldPosition.getZ();
         assert this.level != null;
-        for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
+        for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))) {
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD && livingEntity.getActiveEffects().isEmpty()) {
                 return livingEntity;
             }
@@ -45,7 +45,7 @@ public class UndeadTotemTileEntity extends TotemTileEntity {
         int j = this.worldPosition.getY();
         int k = this.worldPosition.getZ();
         this.playSound(SoundEvents.ILLUSIONER_PREPARE_MIRROR);
-        for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
+        for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))) {
             if (entity.getMobType() == CreatureAttribute.UNDEAD && entity.getActiveEffects().isEmpty()){
                 entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 900, 1));
                 entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 900));

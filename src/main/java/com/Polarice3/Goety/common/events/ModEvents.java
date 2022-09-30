@@ -3,6 +3,13 @@ package com.Polarice3.Goety.common.events;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
+import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
+import com.Polarice3.Goety.common.capabilities.infamy.InfamyProvider;
+import com.Polarice3.Goety.common.capabilities.lichdom.ILichdom;
+import com.Polarice3.Goety.common.capabilities.lichdom.LichProvider;
+import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.common.capabilities.soulenergy.SEProvider;
+import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsProvider;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
@@ -19,14 +26,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
-import com.Polarice3.Goety.common.infamy.IInfamy;
-import com.Polarice3.Goety.common.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.items.WarpedSpearItem;
-import com.Polarice3.Goety.common.lichdom.ILichdom;
-import com.Polarice3.Goety.common.lichdom.LichProvider;
-import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
-import com.Polarice3.Goety.common.soulenergy.SEProvider;
-import com.Polarice3.Goety.common.spider.SpiderLevelsProvider;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -365,6 +365,31 @@ public class ModEvents {
     public static void LivingEffects(LivingEvent.LivingUpdateEvent event){
         LivingEntity livingEntity = event.getEntityLiving();
         if (livingEntity != null){
+            if (livingEntity instanceof MobEntity){
+                MobEntity mob = (MobEntity) livingEntity;
+                if (mob instanceof ICultistMinion) {
+                    for (OwnedEntity ownedEntity : mob.level.getEntitiesOfClass(OwnedEntity.class, mob.getBoundingBox().inflate(32))) {
+                        if (ownedEntity.getTrueOwner() != null) {
+                            if (mob.getTarget() == ownedEntity.getTrueOwner()) {
+                                mob.setTarget(ownedEntity);
+                            }
+                        }
+                    }
+                }
+                if (mob instanceof OwnedEntity){
+                    OwnedEntity ownedEntity = (OwnedEntity) mob;
+                    if (ownedEntity.getTrueOwner() != null) {
+                        for (MobEntity targets : mob.level.getEntitiesOfClass(MobEntity.class, mob.getBoundingBox().inflate(32))) {
+                            if (targets instanceof ICultistMinion && targets.getTarget() == ownedEntity.getTrueOwner()) {
+                                mob.setTarget(targets);
+                            }
+                            if (targets instanceof OwnedEntity && ((OwnedEntity) targets).getTrueOwner() != ownedEntity.getTrueOwner() && targets.getTarget() == ownedEntity.getTrueOwner()){
+                                mob.setTarget(targets);
+                            }
+                        }
+                    }
+                }
+            }
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD){
                 if (BlockFinder.isDeadBlock(livingEntity.level, livingEntity.blockPosition())){
                     livingEntity.clearFire();
@@ -629,7 +654,7 @@ public class ModEvents {
                         mob.setTarget(null);
                     }
                 }
-                if (mob.getMobType() == CreatureAttribute.UNDEAD || mob instanceof CreeperEntity){
+                if ((mob.getMobType() == CreatureAttribute.UNDEAD && !(mob instanceof SummonedEntity)) || mob instanceof CreeperEntity){
                     if (target instanceof ApostleEntity){
                         mob.setTarget(null);
                     }

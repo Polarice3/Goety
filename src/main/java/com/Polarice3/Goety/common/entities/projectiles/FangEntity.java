@@ -24,10 +24,13 @@ import java.util.UUID;
 
 public class FangEntity extends Entity {
     private static final DataParameter<Boolean> ABSORBING = EntityDataManager.defineId(FangEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> TOTEM = EntityDataManager.defineId(FangEntity.class, DataSerializers.BOOLEAN);
     private int warmupDelayTicks;
     private boolean sentSpikeEvent;
     private int lifeTicks = 22;
     private boolean clientSideAttackStarted;
+    private int damage = 0;
+    private int burning = 0;
     private LivingEntity owner;
     private UUID ownerUUID;
 
@@ -43,8 +46,20 @@ public class FangEntity extends Entity {
         this.setPos(pPosX, pPosY, pPosZ);
     }
 
+    public FangEntity(World world, double pPosX, double pPosY, double pPosZ, float pYRot, int pWarmUp, int damage, int burning, LivingEntity owner) {
+        this(ModEntityType.FANG.get(), world);
+        this.warmupDelayTicks = pWarmUp;
+        this.setOwner(owner);
+        this.yRot = pYRot * (180F / (float)Math.PI);
+        this.damage = damage;
+        this.burning = burning;
+        this.setTotemSpawned(true);
+        this.setPos(pPosX, pPosY, pPosZ);
+    }
+
     protected void defineSynchedData() {
         this.entityData.define(ABSORBING, false);
+        this.entityData.define(TOTEM, false);
     }
 
     public boolean isAbsorbing() {
@@ -53,6 +68,14 @@ public class FangEntity extends Entity {
 
     public void setAbsorbing(boolean absorbing) {
         this.entityData.set(ABSORBING, absorbing);
+    }
+
+    public boolean isTotemSpawned() {
+        return this.entityData.get(ABSORBING);
+    }
+
+    public void setTotemSpawned(boolean totemSpawned) {
+        this.entityData.set(ABSORBING, totemSpawned);
     }
 
     public void setOwner(@Nullable LivingEntity p_190549_1_) {
@@ -74,6 +97,12 @@ public class FangEntity extends Entity {
 
     protected void readAdditionalSaveData(CompoundNBT pCompound) {
         this.warmupDelayTicks = pCompound.getInt("Warmup");
+        if (pCompound.contains("Damage")){
+            this.damage = pCompound.getInt("Damage");
+        }
+        if (pCompound.contains("Burning")){
+            this.burning = pCompound.getInt("Burning");
+        }
         if (pCompound.hasUUID("Owner")) {
             this.ownerUUID = pCompound.getUUID("Owner");
         }
@@ -82,6 +111,10 @@ public class FangEntity extends Entity {
 
     protected void addAdditionalSaveData(CompoundNBT pCompound) {
         pCompound.putInt("Warmup", this.warmupDelayTicks);
+        if (this.isTotemSpawned()){
+            pCompound.putInt("Damage", this.damage);
+            pCompound.putInt("Burning", this.burning);
+        }
         if (this.ownerUUID != null) {
             pCompound.putUUID("Owner", this.ownerUUID);
         }
@@ -138,21 +171,27 @@ public class FangEntity extends Entity {
                 }
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
-                    float enchantment = 0;
-                    int burning = 0;
-                    if (WandUtil.enchantedFocus(player)) {
-                        enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
-                        burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
-                    }
-                    target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
-                    if (burning > 0){
-                        target.setSecondsOnFire(5 * burning);
+                    if (this.isTotemSpawned()){
+                        target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + damage);
+                        if (burning > 0){
+                            target.setSecondsOnFire(5 * burning);
+                        }
+                    } else {
+                        float enchantment = 0;
+                        int burning = 0;
+                        if (WandUtil.enchantedFocus(player)) {
+                            enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                            burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
+                        }
+                        target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
+                        if (burning > 0){
+                            target.setSecondsOnFire(5 * burning);
+                        }
                     }
                 } else {
                     target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
                 }
             }
-
         }
     }
 

@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.infamy;
+package com.Polarice3.Goety.common.capabilities.infamy;
 
 public interface IInfamy {
     int getInfamy();

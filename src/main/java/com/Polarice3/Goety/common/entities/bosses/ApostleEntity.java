@@ -498,7 +498,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (this.isSettingupSecond()){
             this.serverAiStep();
             if (this.tickCount % 20 == 0) {
-                this.heal(5.0F);
+                this.heal(10.0F);
             }
             for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0D), ALIVE)) {
                 if (!entity.isAlliedTo(this)) {
@@ -646,12 +646,16 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                     LightningTrapEntity lightningTrap = new LightningTrapEntity(ModEntityType.LIGHTNINGTRAP.get(), this.level);
                     lightningTrap.moveTo(blockpos$mutable.getX(), blockpos$mutable.getY() + 1, blockpos$mutable.getZ());
                     lightningTrap.setOwner(this);
-                    lightningTrap.setDuration(100);
+                    lightningTrap.setDuration(30);
                     this.level.addFreshEntity(lightningTrap);
                 }
             }
             if (target.distanceToSqr(this) > 576 && !target.isFallFlying()){
                 this.teleportTowards(target);
+            }
+            if (target instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) target;
+                player.abilities.flying &= player.isCreative();
             }
         }
         if (this.isFiring()) {
@@ -1247,7 +1251,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
         @Override
         public void tick() {
-            ApostleEntity.this.teleport();
             ApostleEntity.this.setSettingupSecond(true);
         }
     }

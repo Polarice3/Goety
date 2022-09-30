@@ -19,7 +19,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The totem head works the same way other totem heads do. Placing three blocks of Cursed Totem Poles below it will activate it. Unlike Hungry Totems, these Totems will not attack the one who placed it down, nor any creature allied with them."
+      "text": "The totem head works the same way other totem heads do. Placing three or more blocks of Cursed Totem Poles below it will activate it. Unlike Hungry Totems, these Totems will not attack the one who placed it down, nor any creature allied with them. The Totem Head can also be enchanted to make its fangs stronger or have a larger range."
     }
   ]
 }

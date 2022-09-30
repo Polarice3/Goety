@@ -2,11 +2,11 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CTotemDeathPacket;
-import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
@@ -141,21 +141,7 @@ public class SoulEnergyEvent {
                     if (MainConfig.ArcaUndying.get()) {
                         if (!player.level.isClientSide) {
                             if (LichdomHelper.isLich(player)) {
-                                if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
-                                    BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                    player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                                } else {
-                                    if (soulEnergy.getArcaBlockDimension() != null) {
-                                        if (player.getServer() != null) {
-                                            ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
-                                            if (serverWorld != null) {
-                                                player.changeDimension(serverWorld);
-                                                BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                                player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                                            }
-                                        }
-                                    }
-                                }
+                                SEHelper.teleportDeathArca(player);
                                 player.setHealth(1.0F);
                                 player.removeAllEffects();
                                 if (soulEnergy.getSoulEnergy() > MainConfig.MaxSouls.get()) {
@@ -169,21 +155,7 @@ public class SoulEnergyEvent {
                                 SEHelper.sendSEUpdatePacket(player);
                                 event.setCanceled(true);
                             } else if (soulEnergy.getSoulEnergy() > MainConfig.MaxSouls.get()) {
-                                if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
-                                    BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                    player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                                } else {
-                                    if (soulEnergy.getArcaBlockDimension() != null) {
-                                        if (player.getServer() != null) {
-                                            ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
-                                            if (serverWorld != null) {
-                                                player.changeDimension(serverWorld);
-                                                BlockPos blockPos = SEHelper.getArcaBlock(player);
-                                                player.teleportTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-                                            }
-                                        }
-                                    }
-                                }
+                                SEHelper.teleportDeathArca(player);
                                 player.setHealth(1.0F);
                                 player.removeAllEffects();
                                 player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));

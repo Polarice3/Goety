@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.spider;
+package com.Polarice3.Goety.common.capabilities.spider;
 
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.Entity;

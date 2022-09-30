@@ -292,10 +292,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         return SoundEvents.EVOKER_CELEBRATE;
     }
 
-    public boolean isNonBoss() {
-        return false;
-    }
-
     @Override
     public boolean isPowered() {
         return this.isSpellcasting();

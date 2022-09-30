@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
+import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsImp;
+import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsProvider;
+import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsUpdatePacket;
 import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.spider.ISpiderLevels;
-import com.Polarice3.Goety.common.spider.SpiderLevelsImp;
-import com.Polarice3.Goety.common.spider.SpiderLevelsProvider;
-import com.Polarice3.Goety.common.spider.SpiderLevelsUpdatePacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 

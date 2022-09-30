@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.lichdom;
+package com.Polarice3.Goety.common.capabilities.lichdom;
 
 public interface ILichdom {
     boolean getLichdom();

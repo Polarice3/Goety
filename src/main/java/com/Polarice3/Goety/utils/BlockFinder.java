@@ -3,11 +3,14 @@ package com.Polarice3.Goety.utils;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -117,7 +120,7 @@ public class BlockFinder {
         }
     }
 
-    public static boolean noWall(LivingEntity livingEntity){
+    public static boolean hasChunksAt(LivingEntity livingEntity){
         World world = livingEntity.level;
         BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
         return world.hasChunksAt(blockpos$mutable.getX() - 10, blockpos$mutable.getY() - 10, blockpos$mutable.getZ() - 10, blockpos$mutable.getX() + 10, blockpos$mutable.getY() + 10, blockpos$mutable.getZ() + 10);
@@ -148,9 +151,23 @@ public class BlockFinder {
         } while(blockpos.getY() >= MathHelper.floor(livingEntity.getY()) - 1);
 
         if (flag) {
-            return blockpos.getY() + d0;
+            if (!(blockpos.getY() + d0 > livingEntity.getY() + 5)) {
+                return blockpos.getY() + d0;
+            } else {
+                return livingEntity.getY();
+            }
         } else {
             return livingEntity.getY();
+        }
+    }
+
+    public static boolean isEmptyBlock(IBlockReader pLevel, BlockPos pPos, BlockState pBlockState, FluidState pFluidState, EntityType<?> pEntityType) {
+        if (pBlockState.isCollisionShapeFullBlock(pLevel, pPos)) {
+            return false;
+        } else if (!pFluidState.isEmpty()) {
+            return false;
+        } else {
+            return !pEntityType.isBlockDangerous(pBlockState);
         }
     }
 
@@ -159,7 +176,8 @@ public class BlockFinder {
         blockpos$mutable.setX(blockpos$mutable.getX() + world.random.nextInt(5) - world.random.nextInt(5));
         blockpos$mutable.setY((int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()));
         blockpos$mutable.setZ(blockpos$mutable.getZ() + world.random.nextInt(5) - world.random.nextInt(5));
-        if (noWall(livingEntity)){
+        if (hasChunksAt(livingEntity)
+                && isEmptyBlock(world, blockpos$mutable, world.getBlockState(blockpos$mutable), world.getFluidState(blockpos$mutable), ModEntityType.ZOMBIE_MINION.get())){
             return blockpos$mutable;
         } else {
             return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()), 0);

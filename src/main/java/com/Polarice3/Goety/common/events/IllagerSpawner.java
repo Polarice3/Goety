@@ -1,11 +1,11 @@
 package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
 import com.Polarice3.Goety.common.entities.ai.MoveTowardsTargetGoal;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
-import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.InfamyHelper;
 import com.google.common.collect.Maps;

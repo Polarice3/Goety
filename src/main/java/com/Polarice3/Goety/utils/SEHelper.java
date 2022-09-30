@@ -1,15 +1,16 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.common.capabilities.soulenergy.SEImp;
+import com.Polarice3.Goety.common.capabilities.soulenergy.SEProvider;
+import com.Polarice3.Goety.common.capabilities.soulenergy.SEUpdatePacket;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.events.ArcaTeleporter;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
-import com.Polarice3.Goety.common.soulenergy.SEImp;
-import com.Polarice3.Goety.common.soulenergy.SEProvider;
-import com.Polarice3.Goety.common.soulenergy.SEUpdatePacket;
 import com.Polarice3.Goety.compat.minecolonies.MinecoloniesLoaded;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
@@ -23,6 +24,8 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 
 public class SEHelper {
     public static ISoulEnergy getCapability(PlayerEntity player) {
@@ -113,6 +116,26 @@ public class SEHelper {
             return i + 1;
         } else {
             return 1;
+        }
+    }
+
+    public static void teleportDeathArca(PlayerEntity player){
+        ISoulEnergy soulEnergy = SEHelper.getCapability(player);
+        BlockPos blockPos = SEHelper.getArcaBlock(player);
+        BlockPos blockPos1 = new BlockPos(blockPos.getX() + 0.5F, blockPos.getY() + 0.5F, blockPos.getZ() + 0.5F);
+        Vector3d vector3d = new Vector3d(blockPos1.getX(), blockPos1.getY(), blockPos1.getZ());
+        if (soulEnergy.getArcaBlockDimension() == player.level.dimension()) {
+            player.teleportTo(blockPos1.getX(), blockPos1.getY(), blockPos1.getZ());
+        } else {
+            if (soulEnergy.getArcaBlockDimension() != null) {
+                if (player.getServer() != null) {
+                    ServerWorld serverWorld = player.getServer().getLevel(soulEnergy.getArcaBlockDimension());
+                    if (serverWorld != null) {
+                        player.changeDimension(serverWorld, new ArcaTeleporter(vector3d));
+                        player.teleportTo(blockPos1.getX(), blockPos1.getY(), blockPos1.getZ());
+                    }
+                }
+            }
         }
     }
 

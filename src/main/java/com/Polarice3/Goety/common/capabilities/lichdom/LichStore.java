@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.lichdom;
+package com.Polarice3.Goety.common.capabilities.lichdom;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;

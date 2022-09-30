@@ -2,17 +2,24 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -27,11 +34,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.UUID;
 
 public class SoulFangTotemTileEntity extends TileEntity implements ITickableTileEntity {
+    protected final Object2IntMap<Enchantment> enchantments = new Object2IntOpenHashMap<>();
+    public int range;
     public int activated;
     public int levels;
     @Nullable
@@ -50,6 +61,10 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
 
     public World getLevel() {
         return SoulFangTotemTileEntity.this.level;
+    }
+
+    public Object2IntMap<Enchantment> getEnchantments() {
+        return this.enchantments;
     }
 
     public void load(BlockState state, CompoundNBT nbt) {
@@ -72,6 +87,19 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             } catch (Throwable ignored) {
             }
         }
+        ListNBT enchants = nbt.getList("enchantments", Constants.NBT.TAG_COMPOUND);
+        Map<Enchantment, Integer> map = EnchantmentHelper.deserializeEnchantments(enchants);
+        if (nbt.getInt("potency") > 0) {
+            map.put(ModEnchantments.POTENCY.get(), nbt.getInt("potency"));
+        }
+        if (nbt.getInt("burning") > 0) {
+            map.put(ModEnchantments.BURNING.get(), nbt.getInt("burning"));
+        }
+        if (nbt.getInt("range") > 0) {
+            map.put(ModEnchantments.RANGE.get(), nbt.getInt("range"));
+        }
+        this.enchantments.clear();
+        this.enchantments.putAll(map);
 
     }
 
@@ -83,8 +111,15 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         if (this.getOwnerId() != null) {
             compound.putUUID("Owner", this.getOwnerId());
         }
+        ItemStack stack = new ItemStack(ModBlocks.SOUL_FANG_TOTEM_ITEM.get());
+        EnchantmentHelper.setEnchantments(this.enchantments, stack);
+        compound.put("enchantments", stack.getEnchantmentTags());
 
         return compound;
+    }
+
+    private double getRange(){
+        return 10.0D + this.enchantments.getOrDefault(ModEnchantments.RANGE.get(), 0);
     }
 
     private void updateClientTarget() {
@@ -98,7 +133,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             int j = this.worldPosition.getY();
             int k = this.worldPosition.getZ();
             assert this.level != null;
-            for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))){
+            for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))){
                 if (livingEntity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) livingEntity;
                     if (MobUtil.playerValidity(player, false)) {
@@ -219,7 +254,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             int k = this.worldPosition.getZ();
             this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK);
             assert this.getLevel() != null;
-            for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
+            for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))) {
                 float f = (float) MathHelper.atan2(entity.getZ() - this.getBlockPos().getZ(), entity.getX() - this.getBlockPos().getX());
                 if (entity instanceof PlayerEntity) {
                     if (this.getPlayer() != entity) {
@@ -279,7 +314,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
 
         if (flag) {
-            this.getLevel().addFreshEntity(new FangEntity(this.getLevel(), pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, 1, this.getTrueOwner()));
+            this.getLevel().addFreshEntity(new FangEntity(this.getLevel(), pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, 1, this.enchantments.getOrDefault(ModEnchantments.POTENCY.get(), 0), this.enchantments.getOrDefault(ModEnchantments.BURNING.get(), 0), this.getTrueOwner()));
         }
 
     }

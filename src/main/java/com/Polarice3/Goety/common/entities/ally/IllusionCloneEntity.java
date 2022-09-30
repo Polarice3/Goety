@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.utils.ServerParticleUtil;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -23,7 +22,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
@@ -65,7 +63,7 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
             }
             if (this.getTrueOwner() != null){
                 if (this.getTrueOwner().hurtTime == this.getTrueOwner().hurtDuration - 1){
-                    new SoundUtil(this.blockPosition(), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                    playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
                     for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
                         ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
                     }

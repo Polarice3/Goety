@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.infamy;
+package com.Polarice3.Goety.common.capabilities.infamy;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;

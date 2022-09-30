@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.soulenergy;
+package com.Polarice3.Goety.common.capabilities.infamy;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -11,11 +11,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SEProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
-    @CapabilityInject(ISoulEnergy.class)
-    public static Capability<ISoulEnergy> CAPABILITY = null;
+public class InfamyProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
 
-    ISoulEnergy instance = new SEImp();
+    @CapabilityInject(IInfamy.class)
+    public static Capability<IInfamy> CAPABILITY = null;
+
+    IInfamy instance = new InfamyImp();
 
     @Nonnull
     @Override
@@ -32,4 +33,5 @@ public class SEProvider implements ICapabilityProvider, ICapabilitySerializable<
     public void deserializeNBT(CompoundNBT nbt) {
         CAPABILITY.getStorage().readNBT(CAPABILITY, instance, null, nbt);
     }
+
 }

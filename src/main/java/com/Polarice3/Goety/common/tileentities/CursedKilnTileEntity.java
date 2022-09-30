@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.blocks.CursedBurnerBlock;
+import com.Polarice3.Goety.common.blocks.CursedKilnBlock;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ParticleUtil;
@@ -65,7 +65,7 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
                 }
             }
         }
-        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(CursedBurnerBlock.LIT, this.checkCage()), 3);
+        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(CursedKilnBlock.LIT, this.checkCage()), 3);
     }
 
     private void work() {
@@ -168,7 +168,7 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (this.getBlockState().getValue(CursedBurnerBlock.WATERLOGGED)){
+            if (this.getBlockState().getValue(CursedKilnBlock.WATERLOGGED)){
                 if (t % 20L == 0L) {
                     for (int p = 0; p < 4; ++p) {
                         new ParticleUtil(ParticleTypes.BUBBLE, d0, d1, d2, 0, 0, 0);
@@ -195,7 +195,7 @@ public class CursedKilnTileEntity extends TileEntity implements IClearable, ITic
             double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
             double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
             double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
-            if (this.getBlockState().getValue(CursedBurnerBlock.WATERLOGGED)){
+            if (this.getBlockState().getValue(CursedKilnBlock.WATERLOGGED)){
                 for (int p = 0; p < 4; ++p) {
                     new ParticleUtil(ParticleTypes.BUBBLE, d0, d1, d2, 0, 0, 0);
                     new ParticleUtil(ParticleTypes.BUBBLE_COLUMN_UP, d0, d1, d2, 0.0D, 0.04D, 0.0D);

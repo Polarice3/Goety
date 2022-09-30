@@ -29,7 +29,7 @@ public class WindTotemTileEntity extends TotemTileEntity {
         int j = this.worldPosition.getY();
         int k = this.worldPosition.getZ();
         assert this.level != null;
-        for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))){
+        for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))){
             if (livingEntity.isOnGround()) {
                 if (!livingEntity.hasEffect(Effects.SLOW_FALLING)) {
                     if (livingEntity instanceof PlayerEntity) {
@@ -53,7 +53,7 @@ public class WindTotemTileEntity extends TotemTileEntity {
         int k = this.worldPosition.getZ();
         this.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH);
         assert this.getLevel() != null;
-        for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(10.0D, 10.0D, 10.0D))) {
+        for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))) {
             if (entity.isOnGround()) {
                 if (!entity.hasEffect(Effects.SLOW_FALLING)) {
                     if (entity instanceof PlayerEntity) {

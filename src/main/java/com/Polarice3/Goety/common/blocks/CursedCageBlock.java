@@ -50,7 +50,7 @@ public class CursedCageBlock extends ContainerBlock implements IForgeBlock {
     }
 
     public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
-        if (pState.getValue(POWERED)) {
+        if (pState.getValue(POWERED) && pPlayer.getItemInHand(pHand).isEmpty()) {
             this.dropItem(pLevel, pPos);
             pState = pState.setValue(POWERED, Boolean.FALSE);
             pLevel.setBlock(pPos, pState, 2);

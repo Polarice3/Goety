@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.soulenergy.ISoulEnergy;
+import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.spells.BreathSpell;
 import com.Polarice3.Goety.common.spells.SpewingSpell;
 import com.Polarice3.Goety.utils.GoldTotemFinder;

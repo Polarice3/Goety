@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.command;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
 import com.Polarice3.Goety.common.events.IllagerSpawner;
-import com.Polarice3.Goety.common.infamy.IInfamy;
 import com.Polarice3.Goety.utils.InfamyHelper;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;

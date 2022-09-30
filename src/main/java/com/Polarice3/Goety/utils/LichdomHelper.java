@@ -1,9 +1,9 @@
 package com.Polarice3.Goety.utils;
 
-import com.Polarice3.Goety.common.lichdom.ILichdom;
-import com.Polarice3.Goety.common.lichdom.LichImp;
-import com.Polarice3.Goety.common.lichdom.LichProvider;
-import com.Polarice3.Goety.common.lichdom.LichUpdatePacket;
+import com.Polarice3.Goety.common.capabilities.lichdom.ILichdom;
+import com.Polarice3.Goety.common.capabilities.lichdom.LichImp;
+import com.Polarice3.Goety.common.capabilities.lichdom.LichProvider;
+import com.Polarice3.Goety.common.capabilities.lichdom.LichUpdatePacket;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import net.minecraft.entity.player.PlayerEntity;
 

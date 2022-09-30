@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.utilities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.entities.hostile.cultists.ICultistMinion;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.material.PushReaction;
@@ -11,7 +11,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SSpawnObjectPacket;
-import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
@@ -98,17 +97,19 @@ public class FireBlastTrapEntity extends Entity {
                 boolean flag = false;
                 for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(1))){
                     if (this.owner != null) {
-                        if (livingEntity != this.owner && !livingEntity.isAlliedTo(this.owner)) {
+                        if (livingEntity != this.owner && !livingEntity.isAlliedTo(this.owner) && !this.owner.isAlliedTo(livingEntity)) {
                             flag = true;
                         }
                     } else {
                         flag = true;
                     }
                     if (flag){
-                        MobUtil.push(livingEntity, 0, 1, 0);
-                        if (!livingEntity.fireImmune()) {
-                            livingEntity.setSecondsOnFire(8);
-                            livingEntity.hurt(DamageSource.IN_FIRE, 5);
+                        if(!(livingEntity instanceof ApostleEntity)) {
+                            MobUtil.push(livingEntity, 0, 1, 0);
+                            if (!livingEntity.fireImmune()) {
+                                livingEntity.setSecondsOnFire(8);
+                                livingEntity.hurt(DamageSource.IN_FIRE, 5);
+                            }
                         }
                     }
                 }

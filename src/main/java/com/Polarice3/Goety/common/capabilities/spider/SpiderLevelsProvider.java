@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.infamy;
+package com.Polarice3.Goety.common.capabilities.spider;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -11,12 +11,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class InfamyProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
+public class SpiderLevelsProvider implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT> {
 
-    @CapabilityInject(IInfamy.class)
-    public static Capability<IInfamy> CAPABILITY = null;
+    @CapabilityInject(ISpiderLevels.class)
+    public static Capability<ISpiderLevels> CAPABILITY = null;
 
-    IInfamy instance = new InfamyImp();
+    ISpiderLevels instance = new SpiderLevelsImp();
 
     @Nonnull
     @Override

@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.spider;
+package com.Polarice3.Goety.common.capabilities.spider;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;

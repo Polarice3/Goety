@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.infamy;
+package com.Polarice3.Goety.common.capabilities.infamy;
 
 import com.Polarice3.Goety.Goety;
 import net.minecraft.entity.player.PlayerEntity;

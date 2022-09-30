@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.spider;
+package com.Polarice3.Goety.common.capabilities.spider;
 
 public class SpiderLevelsImp implements ISpiderLevels {
 

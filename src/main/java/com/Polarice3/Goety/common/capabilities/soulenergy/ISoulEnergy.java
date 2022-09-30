@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.soulenergy;
+package com.Polarice3.Goety.common.capabilities.soulenergy;
 
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;

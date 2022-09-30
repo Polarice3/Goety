@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.soulenergy;
+package com.Polarice3.Goety.common.capabilities.soulenergy;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;

@@ -60,6 +60,10 @@ public abstract class TotemTileEntity extends TileEntity implements ITickableTil
         return compound;
     }
 
+    public double getRange(){
+        return 10.0D;
+    }
+
     private void updateClientTarget() {
         this.target = this.findExistingTarget();
     }
