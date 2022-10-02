@@ -633,7 +633,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             for (PlayerEntity player : this.level.getEntitiesOfClass(PlayerEntity.class, this.getBoundingBox().inflate(64), EntityPredicates.NO_CREATIVE_OR_SPECTATOR)){
                 this.setTarget(player);
             }
-            this.addEffect(new EffectInstance(Effects.GLOWING, 20));
         } else {
             if (MobUtil.isInRain(this) && MobUtil.isInRain(target)){
                 if (this.tickCount % 600 == 0){
@@ -650,7 +649,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                     this.level.addFreshEntity(lightningTrap);
                 }
             }
-            if (target.distanceToSqr(this) > 576 && !target.isFallFlying()){
+            if (target.distanceToSqr(this) > 576 && target.isOnGround()){
                 this.teleportTowards(target);
             }
             if (target instanceof PlayerEntity){

@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.utilities;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.material.PushReaction;
@@ -12,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SSpawnObjectPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
@@ -106,6 +108,9 @@ public class FireBlastTrapEntity extends Entity {
                     if (flag){
                         if(!(livingEntity instanceof ApostleEntity)) {
                             MobUtil.push(livingEntity, 0, 1, 0);
+                            if (this.owner instanceof ApostleEntity){
+                                livingEntity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 1200));
+                            }
                             if (!livingEntity.fireImmune()) {
                                 livingEntity.setSecondsOnFire(8);
                                 livingEntity.hurt(DamageSource.IN_FIRE, 5);

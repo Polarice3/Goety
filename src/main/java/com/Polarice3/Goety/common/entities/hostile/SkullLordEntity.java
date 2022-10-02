@@ -26,10 +26,7 @@ import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -239,7 +236,7 @@ public class SkullLordEntity extends MonsterEntity{
             boolean flag = false;
 
             if (this.tickCount % 20 == 0){
-                if (this.xOld == this.getX() && this.yOld == this.getY() && this.zOld == this.getZ()){
+                if ((this.xOld == this.getX() && this.yOld == this.getY() && this.zOld == this.getZ()) || this.isInWall()){
                     flag = true;
                     if (!this.isInvulnerable() && !this.isLasering() && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
                         this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, Explosion.Mode.DESTROY);
@@ -278,6 +275,9 @@ public class SkullLordEntity extends MonsterEntity{
                 }
             }
         } else {
+            for (PlayerEntity player : this.level.getEntitiesOfClass(PlayerEntity.class, this.getBoundingBox().inflate(4), EntityPredicates.NO_CREATIVE_OR_SPECTATOR)){
+                this.setTarget(player);
+            }
             if (this.getPithos() != null) {
                 if (this.getPithos() instanceof PithosTileEntity) {
                     PithosTileEntity pithosTile = (PithosTileEntity) this.getPithos();

@@ -12,12 +12,6 @@
       "tag": "forge:bones"
     },
     {
-      "item": "minecraft:rotten_flesh"
-    },
-    {
-      "item": "minecraft:netherrack"
-    },
-    {
       "tag": "minecraft:soul_fire_base_blocks"
     }
   ],

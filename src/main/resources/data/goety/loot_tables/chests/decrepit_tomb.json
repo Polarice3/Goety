@@ -105,27 +105,22 @@
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:iron_pickaxe"
+          "name": "minecraft:diamond_sword"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:iron_sword"
+          "name": "minecraft:diamond_chestplate"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:iron_chestplate"
+          "name": "minecraft:diamond_helmet"
         },
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:iron_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
-          "name": "minecraft:iron_leggings"
+          "name": "minecraft:diamond_leggings"
         },
         {
           "type": "minecraft:item",
