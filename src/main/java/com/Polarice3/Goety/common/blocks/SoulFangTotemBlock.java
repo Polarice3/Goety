@@ -8,6 +8,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -21,8 +22,9 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SoulFangTotemBlock extends ContainerBlock implements IForgeBlock {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -87,6 +89,11 @@ public class SoulFangTotemBlock extends ContainerBlock implements IForgeBlock {
                 soulFangTotemTile.getEnchantments().putAll(enchantments);
             }
         }
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        return Collections.emptyList();
     }
 
     public boolean isPathfindable(BlockState state, IBlockReader worldIn, BlockPos pos, PathType type) {

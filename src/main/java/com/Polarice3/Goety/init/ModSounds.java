@@ -22,6 +22,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> APOSTLE_DEATH = create("apostle_death");
     public static final RegistryObject<SoundEvent> ROAR_SPELL = create("roar_spell");
     public static final RegistryObject<SoundEvent> FIRE_BREATH = create("fire_breath");
+    public static final RegistryObject<SoundEvent> SONIC_CHARGE = create("sonic_charge");
+    public static final RegistryObject<SoundEvent> FIRE_TORNADO_AMBIENT = create("fire_tornado_ambient");
     public static final RegistryObject<SoundEvent> CORRUPT_EXPLOSION = create("corrupt_explosion");
 
     static RegistryObject<SoundEvent> create(String name) {

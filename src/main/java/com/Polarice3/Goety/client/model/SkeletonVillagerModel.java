@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.client.model;
 
-import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelHelper;
@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
-public class SkeletonVillagerModel <T extends AbstractCultistEntity> extends AbstractCultistModel<T>  {
+public class SkeletonVillagerModel <T extends OwnedEntity> extends VillagerMinionModel<T>  {
 
     public SkeletonVillagerModel(float modelSize, float p_i47227_2_) {
         super(modelSize, p_i47227_2_);
@@ -46,9 +46,6 @@ public class SkeletonVillagerModel <T extends AbstractCultistEntity> extends Abs
         super.prepareMobModel(pEntity, pLimbSwing, pLimbSwingAmount, pPartialTick);
     }
 
-    /**
-     * Sets this entity's model rotation angles
-     */
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         ItemStack itemstack = pEntity.getMainHandItem();
@@ -65,7 +62,15 @@ public class SkeletonVillagerModel <T extends AbstractCultistEntity> extends Abs
             this.leftArm.xRot -= f * 1.2F - f1 * 0.4F;
             ModelHelper.bobArms(this.rightArm, this.leftArm, pAgeInTicks);
         }
-
+        boolean flag2 = pEntity.getMainArm() == HandSide.RIGHT;
+        boolean flag3 = flag2 ? this.leftArmPose.isTwoHanded() : this.rightArmPose.isTwoHanded();
+        if (flag2 != flag3) {
+            this.posingLeftArm(pEntity);
+            this.posingRightArm(pEntity);
+        } else {
+            this.posingRightArm(pEntity);
+            this.posingLeftArm(pEntity);
+        }
     }
 
     public void translateToHand(HandSide pSide, MatrixStack pMatrixStack) {

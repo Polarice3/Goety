@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -8,7 +9,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -78,14 +78,14 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
                 float f1 = MathHelper.cos(f);
                 float f2 = MathHelper.sin(f);
                 if (this.getMainArm() == HandSide.RIGHT){
-                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double)f1 * 0.6D, this.getY() + 1.8D, this.getZ() + (double)f2 * 0.6D, d0, d1, d2);
+                    this.level.addParticle(ModParticleTypes.CULT_SPELL.get(), this.getX() + (double)f1 * 0.6D, this.getY() + 1.8D, this.getZ() + (double)f2 * 0.6D, d0, d1, d2);
                 } else {
-                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double)f1 * 0.6D, this.getY() + 1.8D, this.getZ() - (double)f2 * 0.6D, d0, d1, d2);
+                    this.level.addParticle(ModParticleTypes.CULT_SPELL.get(), this.getX() - (double)f1 * 0.6D, this.getY() + 1.8D, this.getZ() - (double)f2 * 0.6D, d0, d1, d2);
                 }
             } else {
                 for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
                     double d = this.level.random.nextGaussian() * 0.2D;
-                    this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX(), this.getEyeY(), this.getZ(), d0, d1, d2);
+                    this.level.addParticle(ModParticleTypes.CULT_SPELL.get(), this.getX(), this.getEyeY(), this.getZ(), d0, d1, d2);
                 }
             }
         }
@@ -127,9 +127,11 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
 
     public enum SpellType {
         NONE(0, 0.0D, 0.0D, 0.0D),
-        FIRE(1, 0.1D, 0.1D, 0.2D),
-        ZOMBIE(2, 0.7D, 0.7D, 0.8D),
-        ROAR(3, 0.3D, 0.3D, 0.8D);
+        FIRE(1, 1.0D, 0.6D, 0.0D),
+        ZOMBIE(2, 0.1D, 0.1D, 0.8D),
+        ROAR(3, 0.8D, 0.3D, 0.8D),
+        TORNADO(4, 1.0D, 0.1D, 0.1D),
+        SKELETON(5, 0.5D, 0.5D, 0.5D);
 
         private final int id;
         private final double[] particleSpeed;

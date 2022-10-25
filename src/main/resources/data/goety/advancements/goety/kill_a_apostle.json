@@ -14,17 +14,26 @@
     "announce_to_chat": true,
     "hidden": true
   },
-  "parent": "goety:goety/root",
+  "parent": "goety:goety/kill_a_cultist",
   "criteria": {
-    "requirement": {
-      "trigger": "minecraft:inventory_changed",
+    "kill_a_apostle": {
+      "trigger": "minecraft:player_killed_entity",
       "conditions": {
-        "items": [
+        "entity": [
           {
-            "item": "goety:apostle_blood_bottle"
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:apostle"
+            },
+            "entity": "this"
           }
         ]
       }
     }
-  }
+  },
+  "requirements": [
+    [
+      "kill_a_apostle"
+    ]
+  ]
 }

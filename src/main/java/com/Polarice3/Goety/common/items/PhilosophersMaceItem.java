@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -19,15 +19,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class PhilosophersMaceItem extends Item implements IVanishable {
     private final Multimap<Attribute, AttributeModifier> maceAttributes;
-    private static final String COOL = "Cool";
 
     public PhilosophersMaceItem() {
         super(new Properties().durability(128).tab(Goety.TAB).fireResistant());
@@ -39,28 +36,19 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (entityIn instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entityIn;
-            if (stack.getTag() == null) {
-                CompoundNBT compound = stack.getOrCreateTag();
-                compound.putInt(COOL, 0);
-            }
-            if (stack.isDamaged()) {
-                stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
-                ItemStack foundStack = GoldTotemFinder.FindTotem(player);
-                if (!SEHelper.getSEActive(player)) {
-                    if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 5) {
-                        if (stack.getTag().getInt(COOL) > 20) {
-                            stack.getTag().putInt(COOL, 0);
-                            stack.setDamageValue(stack.getDamageValue() - 1);
-                            GoldTotemItem.decreaseSouls(foundStack, 5);
+        if (MainConfig.SoulRepair.get()) {
+            if (entityIn instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) entityIn;
+                if (!(player.swinging && isSelected)) {
+                    if (stack.isDamaged()) {
+                        if (SEHelper.getSoulsContainer(player)){
+                            if (SEHelper.getSoulsAmount(player, MainConfig.ItemsRepairAmount.get())){
+                                if (player.tickCount % 20 == 0) {
+                                    stack.setDamageValue(stack.getDamageValue() - 1);
+                                    SEHelper.decreaseSouls(player, MainConfig.ItemsRepairAmount.get());
+                                }
+                            }
                         }
-                    }
-                } else if (SEHelper.getSESouls(player) > 5){
-                    if (stack.getTag().getInt(COOL) > 20) {
-                        stack.getTag().putInt(COOL, 0);
-                        stack.setDamageValue(stack.getDamageValue() - 1);
-                        GoldTotemItem.decreaseSouls(foundStack, 5);
                     }
                 }
             }
@@ -76,23 +64,8 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
         stack.hurtAndBreak(1, attacker, (entity) -> {
             entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
         });
-        int i1;
         int i2 = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MOB_LOOTING, stack);
-        i1 = MathHelper.clamp(i2, 1, 3);
-        if (target.hasEffect(ModEffects.GOLDTOUCHED.get())){
-            EffectInstance effectInstance = target.getEffect(ModEffects.GOLDTOUCHED.get());
-            int random = attacker.level.random.nextInt(6 / i1);
-            if (random == 0){
-                assert effectInstance != null;
-                int amp = effectInstance.getAmplifier();
-                int i = amp + 1;
-                i = MathHelper.clamp(i, 0, 5);
-                target.removeEffect(ModEffects.GOLDTOUCHED.get());
-                target.addEffect(new EffectInstance(ModEffects.GOLDTOUCHED.get(), 300, i));
-            }
-        } else {
-            target.addEffect(new EffectInstance(ModEffects.GOLDTOUCHED.get(), 300));
-        }
+        target.addEffect(new EffectInstance(ModEffects.GOLDTOUCHED.get(), 300, i2));
         return true;
     }
 

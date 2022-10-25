@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.client.armors;
 
-import com.Polarice3.Goety.client.model.ApostleRobeModel;
+import com.Polarice3.Goety.client.model.CultistRobeModel;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +22,7 @@ public class CultistArmoredRobeArmor extends ArmorItem {
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-        ApostleRobeModel model = new ApostleRobeModel(1.0F);
+        CultistRobeModel model = new CultistRobeModel(1.0F);
         model.hat.visible = armorSlot == EquipmentSlotType.HEAD;
         model.Body.visible = armorSlot == EquipmentSlotType.CHEST;
         model.RightArm.visible = armorSlot == EquipmentSlotType.CHEST;

@@ -1,14 +1,14 @@
 package com.Polarice3.Goety.client.model;
 
-import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.entity.MobEntity;
 
-public class SkullMobModel extends SegmentedModel<SkullLordEntity> {
+public class SkullMobModel <T extends MobEntity> extends SegmentedModel<T> {
     private final ModelRenderer head;
 
     public SkullMobModel(float scaleFactor) {
@@ -22,7 +22,7 @@ public class SkullMobModel extends SegmentedModel<SkullLordEntity> {
     }
 
     @Override
-    public void setupAnim(SkullLordEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+    public void setupAnim(MobEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
     }

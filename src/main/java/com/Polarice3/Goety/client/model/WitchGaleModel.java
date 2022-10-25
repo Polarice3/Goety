@@ -51,10 +51,10 @@ public class WitchGaleModel<T extends Entity> extends EntityModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
         base.yRot -= ageInTicks;
-        gust1.yRot -= base.yRot + ageInTicks * 0.3F;
-        gust2.yRot -= base.yRot + gust1.yRot + ageInTicks * 0.2F;
-        gust3.yRot -= base.yRot + gust1.yRot + gust2.yRot + ageInTicks * 0.34F;
-        wind.yRot += ageInTicks * 0.5F;
+        gust1.yRot -= ageInTicks * 1.25F;
+        gust2.yRot -= ageInTicks * 1.2F;
+        gust3.yRot -= ageInTicks * 1.27F;
+        wind.yRot += ageInTicks * 0.25F;
     }
 
     @Override

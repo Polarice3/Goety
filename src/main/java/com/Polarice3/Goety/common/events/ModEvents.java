@@ -17,7 +17,10 @@ import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
-import com.Polarice3.Goety.common.entities.hostile.cultists.*;
+import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
+import com.Polarice3.Goety.common.entities.hostile.cultists.ICultist;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
@@ -58,6 +61,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
@@ -65,6 +69,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.GossipType;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -75,11 +80,13 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -144,6 +151,14 @@ public class ModEvents {
             }
         }
         if (entity instanceof AbstractRaiderEntity){
+            if (entity instanceof AbstractIllagerEntity && ((AbstractIllagerEntity) entity).getMaxHealth() < 100.0F){
+                AbstractIllagerEntity illager = (AbstractIllagerEntity) entity;
+                illager.goalSelector.addGoal(4, new AvoidEntityGoal<>(illager, ApostleEntity.class, 32.0F, 1.0D, 1.25D));
+            }
+            if (entity instanceof RavagerEntity){
+                RavagerEntity ravagerEntity = (RavagerEntity) entity;
+                ravagerEntity.goalSelector.addGoal(4, new AvoidEntityGoal<>(ravagerEntity, ApostleEntity.class, 32.0F, 1.0D, 1.25D));
+            }
             if (MainConfig.IllagerRaid.get()) {
                 AbstractRaiderEntity raider = (AbstractRaiderEntity) entity;
                 World world = event.getWorld();
@@ -365,31 +380,6 @@ public class ModEvents {
     public static void LivingEffects(LivingEvent.LivingUpdateEvent event){
         LivingEntity livingEntity = event.getEntityLiving();
         if (livingEntity != null){
-            if (livingEntity instanceof MobEntity){
-                MobEntity mob = (MobEntity) livingEntity;
-                if (mob instanceof ICultistMinion) {
-                    for (OwnedEntity ownedEntity : mob.level.getEntitiesOfClass(OwnedEntity.class, mob.getBoundingBox().inflate(32))) {
-                        if (ownedEntity.getTrueOwner() != null) {
-                            if (mob.getTarget() == ownedEntity.getTrueOwner()) {
-                                mob.setTarget(ownedEntity);
-                            }
-                        }
-                    }
-                }
-                if (mob instanceof OwnedEntity){
-                    OwnedEntity ownedEntity = (OwnedEntity) mob;
-                    if (ownedEntity.getTrueOwner() != null) {
-                        for (MobEntity targets : mob.level.getEntitiesOfClass(MobEntity.class, mob.getBoundingBox().inflate(32))) {
-                            if (targets instanceof ICultistMinion && targets.getTarget() == ownedEntity.getTrueOwner()) {
-                                mob.setTarget(targets);
-                            }
-                            if (targets instanceof OwnedEntity && ((OwnedEntity) targets).getTrueOwner() != ownedEntity.getTrueOwner() && targets.getTarget() == ownedEntity.getTrueOwner()){
-                                mob.setTarget(targets);
-                            }
-                        }
-                    }
-                }
-            }
             if (livingEntity.getMobType() == CreatureAttribute.UNDEAD){
                 if (BlockFinder.isDeadBlock(livingEntity.level, livingEntity.blockPosition())){
                     livingEntity.clearFire();
@@ -421,6 +411,11 @@ public class ModEvents {
         PlayerEntity player = event.getPlayer();
         if (player.hasEffect(ModEffects.NOMINE.get())){
             if (BlockFinder.NoBreak(event.getState()) && !(event.getState().getBlock() == ModBlocks.GUARDIAN_OBELISK.get())){
+                if (!player.level.isClientSide) {
+                    ServerWorld serverWorld = (ServerWorld) player.level;
+                    ServerParticleUtil.blockBreakParticles(ParticleTypes.HAPPY_VILLAGER, event.getPos(), event.getState(), serverWorld);
+                }
+                player.playSound(SoundEvents.ELDER_GUARDIAN_CURSE, 1.0F, 1.0F);
                 event.setCanceled(true);
             }
         }
@@ -428,6 +423,22 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onPlacingBlock(BlockEvent.EntityPlaceEvent event){
+    }
+
+    @SubscribeEvent
+    public static void onConversion(LivingConversionEvent.Post event){
+        if (event.getOutcome() instanceof BeldamEntity){
+            if (!event.getOutcome().level.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) event.getOutcome().level;
+                for (int i = 0; i < 5; ++i) {
+                    double d0 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
+                    double d1 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
+                    double d2 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
+                    serverWorld.sendParticles(ParticleTypes.HAPPY_VILLAGER, event.getOutcome().getRandomX(1.0D), event.getOutcome().getRandomY() + 1.0D, event.getOutcome().getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
+                }
+            }
+            event.getOutcome().playSound(SoundEvents.WITCH_CELEBRATE, 1.0F, 1.0F);
+        }
     }
 
     @SubscribeEvent
@@ -480,6 +491,15 @@ public class ModEvents {
             FluidState fluidstate = player.level.getFluidState(player.blockPosition());
             if (player.isInWater() && player.isAffectedByFluids() && !player.canStandOnFluid(fluidstate.getType()) && !player.hasEffect(Effects.DOLPHINS_GRACE)){
                 player.setDeltaMovement(player.getDeltaMovement().x * 1.0175, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.0175);
+            }
+        }
+        if (RobeArmorFinder.FindNecroBootsofWander(player)){
+            BlockPos blockPos = new BlockPos(player.getX(), player.getBoundingBox().minY - 0.5000001D, player.getZ());
+            BlockState blockState = player.level.getBlockState(blockPos);
+            if (blockState.is(BlockTags.SOUL_SPEED_BLOCKS)) {
+                if (blockState.getBlock().getSpeedFactor() <= 0.4F && !EnchantmentHelper.hasSoulSpeed(player)) {
+                    player.setDeltaMovement(player.getDeltaMovement().x * 1.4, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.4);
+                }
             }
         }
         if (RobeArmorFinder.FindNecroSet(player)) {
@@ -638,8 +658,8 @@ public class ModEvents {
                     if (mob.getLastHurtByMob() instanceof OwnedEntity){
                         mob.setTarget(mob.getLastHurtByMob());
                     }
-                    if (RobeArmorFinder.FindNecroSet(target)){
-                        boolean undead = mob.getMobType() == CreatureAttribute.UNDEAD && mob.getMaxHealth() < 50.0F && !(mob instanceof ICultistMinion);
+                    if (RobeArmorFinder.FindNecroSet(target) && RobeArmorFinder.FindNecroBootsofWander(target)){
+                        boolean undead = mob.getMobType() == CreatureAttribute.UNDEAD && mob.getMaxHealth() < 50.0F && !(mob instanceof OwnedEntity) && !(mob instanceof BoneLordEntity);
                         if (undead){
                             if (mob.getLastHurtByMob() != target){
                                 mob.setTarget(null);
@@ -714,6 +734,18 @@ public class ModEvents {
                 event.setAmount((float) (event.getAmount() * 1.5));
             }
         }
+        if (victim.level.getDifficulty() == Difficulty.HARD){
+            if (victim.hasEffect(ModEffects.APOSTLE_CURSE.get())){
+                EffectInstance effectInstance = victim.getEffect(ModEffects.APOSTLE_CURSE.get());
+                int i = 2;
+                if (effectInstance != null) {
+                    i = effectInstance.getAmplifier() + 2;
+                }
+                if (event.getSource().isFire()){
+                    event.setAmount(event.getAmount() * i);
+                }
+            }
+        }
         if (attacker instanceof FangEntity){
             FangEntity fangEntity = (FangEntity) attacker;
             if (fangEntity.getOwner() instanceof PlayerEntity) {
@@ -756,6 +788,24 @@ public class ModEvents {
                 }
             }
         }
+        if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
+            AbstractArrowEntity arrowEntity = (AbstractArrowEntity) event.getSource().getDirectEntity();
+            if (arrowEntity.getTags().contains(ConstantPaths.rainArrow())){
+                if (arrowEntity.getOwner() != null) {
+                    if (victim instanceof OwnedEntity) {
+                        OwnedEntity ownedEntity = (OwnedEntity) victim;
+                        if (ownedEntity.getTrueOwner() != null) {
+                            if (ownedEntity.getTrueOwner() == arrowEntity.getOwner()) {
+                                event.setCanceled(true);
+                            }
+                        }
+                    }
+                    if (victim == arrowEntity.getOwner()){
+                        event.setCanceled(true);
+                    }
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -781,7 +831,7 @@ public class ModEvents {
         LivingEntity entity = event.getEntityLiving();
         if (event.getLookingEntity() instanceof LivingEntity){
             LivingEntity looker = (LivingEntity) event.getLookingEntity();
-            boolean undead = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F;
+            boolean undead = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F && !(looker instanceof OwnedEntity) && !(looker instanceof BoneLordEntity);
             if (RobeArmorFinder.FindNecroHelm(entity)){
                 if (undead){
                     event.modifyVisibility(0.5);
@@ -809,7 +859,7 @@ public class ModEvents {
             if (((CreatureEntity) killed).hasEffect(ModEffects.GOLDTOUCHED.get())){
                 if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                     int amp = Objects.requireNonNull(((CreatureEntity) killed).getEffect(ModEffects.GOLDTOUCHED.get())).getAmplifier() + 1;
-                    for (int i = 0; i < killed.level.random.nextInt(4) + amp * amp; ++i) {
+                    for (int i = 0; i < (killed.level.random.nextInt(3) + 1) * amp; ++i) {
                         killed.spawnAtLocation(new ItemStack(Items.GOLD_NUGGET));
                     }
                 }
@@ -848,7 +898,9 @@ public class ModEvents {
         if (killed instanceof AbstractIllagerEntity){
             if (killer instanceof PlayerEntity || killer instanceof OwnedEntity) {
                 if (killed instanceof PillagerEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.PillagerInfamy.get());
+                    if (killed.level.random.nextFloat() <= 0.25F || ((PillagerEntity) killed).isPatrolLeader()) {
+                        InfamyHelper.addInfamy(killer, MainConfig.PillagerInfamy.get());
+                    }
                 } else if (killed instanceof VindicatorEntity) {
                     InfamyHelper.addInfamy(killer, MainConfig.VindicatorInfamy.get());
                 } else if (killed instanceof EvokerEntity) {
@@ -881,23 +933,23 @@ public class ModEvents {
                     if (player.getMainHandItem().getItem() instanceof AxeItem && event.getSource().getDirectEntity() == player) {
                         if (livingEntity.getMobType() != CreatureAttribute.UNDEAD) {
                             if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof SpellcastingIllagerEntity || livingEntity instanceof ChannellerEntity || livingEntity instanceof PlayerEntity) {
-                                if (r1 - looting == 0) {
+                                if (r1 - looting <= 0) {
                                     livingEntity.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                                 }
                             } else if (livingEntity instanceof PatrollerEntity) {
-                                if (r2 - looting == 0) {
+                                if (r2 - looting <= 0) {
                                     livingEntity.spawnAtLocation(new ItemStack(ModItems.BRAIN.get()));
                                 }
                             }
                         }
                     }
+                    Entity entity = event.getSource().getDirectEntity();
                     if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity || livingEntity instanceof WitchEntity || livingEntity instanceof ICultist){
                         LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.TALL_SKULL);
                         LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
                         LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
                         loottable.getRandomItems(ctx).forEach(livingEntity::spawnAtLocation);
                     }
-                    Entity entity = event.getSource().getDirectEntity();
                     if (entity instanceof FangEntity){
                         if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
                             if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player)) >= 3) {
@@ -1026,6 +1078,25 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void ExplosionDetonateEvent(ExplosionEvent.Detonate event){
+        if (event.getExplosion().getSourceMob() instanceof ApostleEntity){
+            event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || (entity == event.getExplosion().getSourceMob()));
+        }
+        if (event.getExplosion().getSourceMob() instanceof CreeperlingMinionEntity){
+            CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getExplosion().getSourceMob();
+            event.getAffectedEntities().removeIf(entity -> entity instanceof LivingEntity && creeperlingMinion.getTrueOwner() == (LivingEntity) entity && RobeArmorFinder.FindFelArmor((LivingEntity) entity));
+        }
+    }
+
+    @SubscribeEvent
+    public static void ProjectileImpactEvent(ProjectileImpactEvent.Arrow event){
+        if (event.getArrow().getTags().contains(ConstantPaths.rainArrow())){
+            AbstractArrowEntity arrowEntity = event.getArrow();
+            arrowEntity.remove();
+        }
+    }
+
+    @SubscribeEvent
     public static void PotionAddedEvents(PotionEvent.PotionAddedEvent event){
         if (event.getPotionEffect().getEffect() == Effects.HERO_OF_THE_VILLAGE){
             if (event.getEntityLiving() instanceof PlayerEntity){
@@ -1034,15 +1105,6 @@ public class ModEvents {
                     InfamyHelper.increaseInfamy(player, 100);
                     InfamyHelper.sendInfamyUpdatePacket(player);
                 }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void PotionApplicableEvents(PotionEvent.PotionApplicableEvent event){
-        if (event.getPotionEffect().getEffect() == ModEffects.GOLDTOUCHED.get()){
-            if (event.getEntityLiving() instanceof ICultistMinion){
-                event.setResult(Event.Result.DENY);
             }
         }
     }

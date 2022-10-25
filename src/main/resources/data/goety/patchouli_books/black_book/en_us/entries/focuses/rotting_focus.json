@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The first step to Necroturgy is to summon and command a Zombie. With this focus, you are well on your way of becoming a true Necroturge."
+      "text": "The true first step to Necroturgy is to summon and command a Zombie. With this focus, you are well on your way of becoming a true Necroturge."
     },
     {
       "type": "goety:ritual",

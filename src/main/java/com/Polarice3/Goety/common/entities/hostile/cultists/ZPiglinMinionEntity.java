@@ -1,26 +1,24 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
-import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -30,19 +28,16 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.UUID;
 
-public class ZPiglinMinionEntity extends MonsterEntity implements ICultistMinion{
+public class ZPiglinMinionEntity extends OwnedEntity{
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 0.05D, AttributeModifier.Operation.ADDITION);
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(ZPiglinMinionEntity.class, DataSerializers.OPTIONAL_UUID);
     private int playFirstAngerSoundIn;
-    public LivingEntity owner;
     public boolean limitedLifespan;
     public int limitedLifeTicks;
 
-    public ZPiglinMinionEntity(EntityType<? extends MonsterEntity> type, World worldIn) {
+    public ZPiglinMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
         this.setPathfindingMalus(PathNodeType.LAVA, 8.0F);
     }
@@ -53,9 +48,7 @@ public class ZPiglinMinionEntity extends MonsterEntity implements ICultistMinion
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(AbstractCultistEntity.class));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombifiedPiglinEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
@@ -90,44 +83,11 @@ public class ZPiglinMinionEntity extends MonsterEntity implements ICultistMinion
         super.tick();
     }
 
-    public boolean isAlliedTo(Entity entityIn) {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (entityIn == livingentity) {
-                return true;
-            }
-
-            if (livingentity != null) {
-                return livingentity.isAlliedTo(entityIn);
-            }
-        }
-        return super.isAlliedTo(entityIn);
-    }
-
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
-    }
-
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-        UUID uuid;
-        if (compound.hasUUID("Owner")) {
-            uuid = compound.getUUID("Owner");
-        } else {
-            String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
-        }
-
-        if (uuid != null) {
-            try {
-                this.setOwnerId(uuid);
-            } catch (Throwable ignored) {
-            }
         }
 
     }
@@ -138,32 +98,7 @@ public class ZPiglinMinionEntity extends MonsterEntity implements ICultistMinion
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
-        if (this.getOwnerId() != null) {
-            compound.putUUID("Owner", this.getOwnerId());
-        }
 
-    }
-
-    public LivingEntity getTrueOwner() {
-        try {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public UUID getOwnerId() {
-        return this.entityData.get(OWNER_UNIQUE_ID).orElse((UUID)null);
-    }
-
-    public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
-    }
-
-    public void setOwner(LivingEntity ownerIn) {
-        this.owner = ownerIn;
     }
 
     public void setLimitedLife(int limitedLifeTicksIn) {

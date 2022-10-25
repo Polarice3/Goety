@@ -42,55 +42,57 @@ public class MagicFocusItem extends Item{
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
     {
-        if (stack.getItem() == ModItems.TELEPORTFOCUS.get()){
+        if (stack.getItem() == ModItems.TELEPORT_FOCUS.get()){
             return enchantment == ModEnchantments.RANGE.get();
         }
-        if (stack.getItem() == ModItems.SOULSHIELDFOCUS.get()){
+        if (stack.getItem() == ModItems.SOULSHIELD_FOCUS.get()){
             return enchantment == ModEnchantments.DURATION.get();
         }
-        if (stack.getItem() == ModItems.DRAGONFIREBALLFOCUS.get()){
+        if (stack.getItem() == ModItems.DRAGONFIREBALL_FOCUS.get()){
             return enchantment == ModEnchantments.RADIUS.get()
                     || enchantment == ModEnchantments.DURATION.get();
         }
-        if (stack.getItem() == ModItems.SPIDERLINGFOCUS.get()
-                || stack.getItem() == ModItems.CREEPERLINGFOCUS.get()
-                || stack.getItem() == ModItems.VEXINGFOCUS.get()
-                || stack.getItem() == ModItems.ROTTINGFOCUS.get()
-                || stack.getItem() == ModItems.OSSEOUSFOCUS.get()
-                || stack.getItem() == ModItems.HOUNDINGFOCUS.get()
-                || stack.getItem() == ModItems.LAUNCHFOCUS.get()){
+        if (stack.getItem() == ModItems.SPIDERLING_FOCUS.get()
+                || stack.getItem() == ModItems.CREEPERLING_FOCUS.get()
+                || stack.getItem() == ModItems.VEXING_FOCUS.get()
+                || stack.getItem() == ModItems.ROTTING_FOCUS.get()
+                || stack.getItem() == ModItems.OSSEOUS_FOCUS.get()
+                || stack.getItem() == ModItems.HOUNDING_FOCUS.get()
+                || stack.getItem() == ModItems.LAUNCH_FOCUS.get()
+                || stack.getItem() == ModItems.POISONBALL_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.DURATION.get();
         }
-        if (stack.getItem() == ModItems.ICESTORMFOCUS.get()
-                || stack.getItem() == ModItems.FROSTBREATHFOCUS.get()){
+        if (stack.getItem() == ModItems.ICESTORM_FOCUS.get()
+                || stack.getItem() == ModItems.FROSTBREATH_FOCUS.get()
+                || stack.getItem() == ModItems.WITCHGALE_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.DURATION.get()
                     || enchantment == ModEnchantments.RANGE.get();
         }
-        if (stack.getItem() == ModItems.BITINGFOCUS.get()) {
+        if (stack.getItem() == ModItems.BITING_FOCUS.get()) {
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.RANGE.get()
                     || enchantment == ModEnchantments.BURNING.get()
                     || enchantment == ModEnchantments.ABSORB.get();
         }
-        if (stack.getItem() == ModItems.FEASTFOCUS.get()){
+        if (stack.getItem() == ModItems.FEAST_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.BURNING.get()
                     || enchantment == ModEnchantments.ABSORB.get();
         }
-        if (stack.getItem() == ModItems.FIREBALLFOCUS.get()){
+        if (stack.getItem() == ModItems.FIREBALL_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.BURNING.get();
         }
-        if (stack.getItem() == ModItems.FIREBREATHFOCUS.get()){
+        if (stack.getItem() == ModItems.FIREBREATH_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.BURNING.get()
                     || enchantment == ModEnchantments.RANGE.get();
         }
-        if (stack.getItem() == ModItems.LAVABALLFOCUS.get()
-            || stack.getItem() == ModItems.ROARINGFOCUS.get()
-            || stack.getItem() == ModItems.SOULSKULLFOCUS.get()){
+        if (stack.getItem() == ModItems.LAVABALL_FOCUS.get()
+            || stack.getItem() == ModItems.ROARING_FOCUS.get()
+            || stack.getItem() == ModItems.SOULSKULL_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.RADIUS.get()
                     || enchantment == ModEnchantments.BURNING.get();

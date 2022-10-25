@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
@@ -9,7 +8,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -68,10 +66,6 @@ public class MinionEntity extends OwnedEntity {
 
     public void setIsCharging(boolean charging) {
         this.setVexFlag(1, charging);
-    }
-
-    public boolean canBeAffected(EffectInstance pPotioneffect) {
-        return pPotioneffect.getEffect() != ModEffects.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
     }
 
 }

@@ -178,6 +178,10 @@ public class IrkEntity extends MonsterEntity {
         this.owner = ownerIn;
     }
 
+    public MobEntity getOwner() {
+        return this.owner;
+    }
+
     public void setLimitedLife(int limitedLifeTicksIn) {
         this.limitedLifespan = true;
         this.limitedLifeTicks = limitedLifeTicksIn;
@@ -256,10 +260,13 @@ public class IrkEntity extends MonsterEntity {
             }
         }
 
+        public void stop() {
+            IrkEntity.this.setIsCharging(false);
+        }
+
         public void tick() {
             LivingEntity livingentity = IrkEntity.this.getTarget();
             if (livingentity != null) {
-                Vector3d vector3d = livingentity.getEyePosition(1.0F);
                 if (IrkEntity.this.shootTime == 10) {
                     double d1 = livingentity.getX() - IrkEntity.this.getX();
                     double d2 = livingentity.getY(0.5D) - IrkEntity.this.getY(0.5D);
@@ -273,13 +280,21 @@ public class IrkEntity extends MonsterEntity {
                 if (IrkEntity.this.shootTime == 0){
                     IrkEntity.this.shootTime = 20;
                 } else {
-                    int k = (4 + random.nextInt(4)) * (random.nextBoolean() ? -1 : 1);
-                    int l = (4 + random.nextInt(4)) * (random.nextBoolean() ? -1 : 1);
-                    if (IrkEntity.this.distanceTo(livingentity) > 8.0F) {
-                        IrkEntity.this.getMoveControl().setWantedPosition(vector3d.x + k, vector3d.y, vector3d.z + l, 1.0F);
-                    } else {
-                        IrkEntity.this.getMoveControl().setWantedPosition(IrkEntity.this.getX(), vector3d.y, IrkEntity.this.getZ(), 1.0F);
+                    Vector3d vector3d0 = livingentity.getEyePosition(1.0F);
+                    Vector3d vector3d = IrkEntity.this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D);
+                    double d0 = vector3d.y;
+                    if (IrkEntity.this.getY() < vector3d0.y) {
+                        d0 = Math.max(0.0D, d0);
+                        d0 = d0 + (0.3D - d0 * (double)0.6F);
                     }
+
+                    vector3d = new Vector3d(vector3d.x, d0, vector3d.z);
+                    Vector3d vector3d1 = new Vector3d(vector3d0.x - IrkEntity.this.getX(), 0.0D, vector3d0.z - IrkEntity.this.getZ());
+                    if (getHorizontalDistanceSqr(vector3d1) > 9.0D) {
+                        Vector3d vector3d2 = vector3d1.normalize();
+                        vector3d = vector3d.add(vector3d2.x * 0.3D - vector3d.x * 0.6D, 0.0D, vector3d2.z * 0.3D - vector3d.z * 0.6D);
+                    }
+                    IrkEntity.this.setDeltaMovement(vector3d);
                 }
                 double d2 = IrkEntity.this.getTarget().getX() - IrkEntity.this.getX();
                 double d1 = IrkEntity.this.getTarget().getZ() - IrkEntity.this.getZ();

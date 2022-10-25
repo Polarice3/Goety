@@ -63,6 +63,8 @@ public class CastSpells {
                 return new UndeadWolfSpell();
             case 26:
                 return new LaunchSpell();
+            case 27:
+                return new SonicBoomSpell();
             default:
                 return null;
         }

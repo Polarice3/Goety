@@ -24,6 +24,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
@@ -60,7 +61,21 @@ public class SEHelper {
         return getCapability(player).increaseSE(souls);
     }
 
-    public static void handleKill(LivingEntity killer, LivingEntity victim) {
+    public static boolean getSoulsContainer(PlayerEntity player){
+        if(SEHelper.getSEActive(player)){
+            return true;
+        } else return !GoldTotemFinder.FindTotem(player).isEmpty();
+    }
+
+    public static boolean getSoulsAmount(PlayerEntity player, int souls){
+        if (SEHelper.getSEActive(player) && SEHelper.getSESouls(player) > souls){
+            return true;
+        } else {
+            return !GoldTotemFinder.FindTotem(player).isEmpty() && GoldTotemItem.currentSouls(GoldTotemFinder.FindTotem(player)) > souls;
+        }
+    }
+
+    public static void rawHandleKill(LivingEntity killer, LivingEntity victim, int soulEater) {
         PlayerEntity player = null;
         if (killer instanceof PlayerEntity){
             player = (PlayerEntity) killer;
@@ -73,28 +88,32 @@ public class SEHelper {
         if (player != null) {
             if (!(victim instanceof OwnedEntity)) {
                 if (victim.getMobType() == CreatureAttribute.UNDEAD) {
-                    increaseSouls(player, MainConfig.UndeadSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.UndeadSouls.get() * soulEater);
                 } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
-                    increaseSouls(player, MainConfig.AnthropodSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.AnthropodSouls.get() * soulEater);
                 } else if (victim instanceof AbstractRaiderEntity) {
-                    increaseSouls(player, MainConfig.IllagerSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.IllagerSouls.get() * soulEater);
                 } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
-                    increaseSouls(player, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.VillagerSouls.get() * soulEater);
                 } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
-                    increaseSouls(player, MainConfig.PiglinSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.PiglinSouls.get() * soulEater);
                 } else if (victim instanceof EnderDragonEntity) {
-                    increaseSouls(player, MainConfig.EnderDragonSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.EnderDragonSouls.get() * soulEater);
                 } else if (victim instanceof PlayerEntity) {
-                    increaseSouls(player, MainConfig.PlayerSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.PlayerSouls.get() * soulEater);
                 } else if (MinecoloniesLoaded.MINECOLONIES.isLoaded()
                         && victim.getType().getDescriptionId().contains("minecolonies")
                         && victim.getType().getCategory() != EntityClassification.MISC){
-                    increaseSouls(player, MainConfig.VillagerSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.VillagerSouls.get() * soulEater);
                 } else {
-                    increaseSouls(player, MainConfig.DefaultSouls.get() * SoulMultiply(killer));
+                    increaseSouls(player, MainConfig.DefaultSouls.get() * soulEater);
                 }
             }
         }
+    }
+
+    public static void handleKill(LivingEntity killer, LivingEntity victim) {
+        SEHelper.rawHandleKill(killer, victim, SEHelper.SoulMultiply(killer));
     }
 
     public static void increaseSouls(PlayerEntity player, int souls){
@@ -109,14 +128,22 @@ public class SEHelper {
         }
     }
 
+    public static void decreaseSouls(PlayerEntity player, int souls){
+        if (getSEActive(player)) {
+            decreaseSESouls(player, souls);
+            SEHelper.sendSEUpdatePacket(player);
+        } else {
+            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
+            if (foundStack != null){
+                GoldTotemItem.decreaseSouls(foundStack, souls);
+            }
+        }
+    }
+
     public static int SoulMultiply(LivingEntity livingEntity){
         ItemStack weapon= livingEntity.getMainHandItem();
         int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOULEATER.get(), weapon);
-        if (i > 0){
-            return i + 1;
-        } else {
-            return 1;
-        }
+        return MathHelper.clamp(i + 1, 1, 10);
     }
 
     public static void teleportDeathArca(PlayerEntity player){

@@ -258,16 +258,20 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
                     if (pTarget.isOnFire()){
                         potion = Potions.FIRE_RESISTANCE;
                     } else if (pTarget.getHealth() <= pTarget.getMaxHealth()/2) {
-                        potion = Potions.HEALING;
+                        if (!pTarget.isInvertedHealAndHarm()){
+                            potion = Potions.HEALING;
+                        }
                     } else {
                         if (!(pTarget.getMainHandItem().getItem() instanceof ShootableItem) && !pTarget.hasEffect(Effects.DAMAGE_BOOST)){
                             potion = Potions.STRENGTH;
                         } else if (!pTarget.hasEffect(Effects.MOVEMENT_SPEED)){
                             potion = Potions.SWIFTNESS;
-                        } else if (!pTarget.hasEffect(Effects.REGENERATION)){
+                        } else if (!pTarget.hasEffect(Effects.REGENERATION) && !pTarget.isInvertedHealAndHarm()){
                             potion = Potions.REGENERATION;
                         } else {
-                            potion = Potions.HEALING;
+                            if (!pTarget.isInvertedHealAndHarm()) {
+                                potion = Potions.HEALING;
+                            }
                         }
                     }
 

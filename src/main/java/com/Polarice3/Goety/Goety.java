@@ -36,11 +36,13 @@ import com.Polarice3.Goety.common.potions.ModPotions;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.curios.CuriosCompat;
-import com.Polarice3.Goety.data.ModBlockStateProvider;
 import com.Polarice3.Goety.init.*;
 import com.mojang.serialization.Codec;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.WoodType;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.OptionalDispenseBehavior;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -68,7 +70,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -107,7 +108,6 @@ public class Goety {
         eventBus.addListener(this::setup);
         eventBus.addListener(this::setupEntityAttributeCreation);
         eventBus.addListener(this::enqueueIMC);
-        eventBus.addListener(this::gatherData);
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
@@ -140,6 +140,12 @@ public class Goety {
         event.enqueueWork(() -> {
             ModEntityType.EntitySpawnPlacementRegistry();
             ModStructures.setupStructures();
+            DispenserBlock.registerBehavior(ModBlocks.TALL_SKULL_ITEM.get(), new OptionalDispenseBehavior() {
+                protected ItemStack execute(IBlockSource source, ItemStack stack) {
+                    this.setSuccess(ArmorItem.dispenseArmor(source, stack));
+                    return stack;
+                }
+            });
             WoodType.register(ModWoodType.HAUNTED);
             ConfiguredStructures.registerConfiguredStructures();
         });
@@ -203,15 +209,6 @@ public class Goety {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.CHARM.getMessageBuilder().build());
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.NECKLACE.getMessageBuilder().build());
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().build());
-    }
-
-    public void gatherData(final GatherDataEvent event){
-        DataGenerator gen = event.getGenerator();
-
-        if (event.includeServer())
-        {
-            gen.addProvider(new ModBlockStateProvider());
-        }
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {
@@ -295,6 +292,10 @@ public class Goety {
 
             if (serverWorld.getChunkSource().getGenerator() instanceof FlatChunkGenerator &&
                     serverWorld.dimension().equals(World.OVERWORLD)) {
+                return;
+            }
+
+            if (!serverWorld.dimension().equals(World.OVERWORLD)){
                 return;
             }
 

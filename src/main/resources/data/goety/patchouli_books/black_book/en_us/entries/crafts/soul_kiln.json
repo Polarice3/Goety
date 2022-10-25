@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "There are times where you've grown tired of running out of coal or wished to used them for crafting torches, you've discovered a way to smelt ores and other items using Soul Energy."
+      "text": "There are times where you've grown tired of running out of coal or wished to used them for other purposes, you've discovered a way to smelt ores and other items using Soul Energy."
     },
     {
       "type": "goety:ritual",

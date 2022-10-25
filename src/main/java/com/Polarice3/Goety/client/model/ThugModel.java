@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 
 public class ThugModel extends SegmentedModel<ThugEntity>{
-	private final ModelRenderer Jugger;
+	private final ModelRenderer Thug;
 	private final ModelRenderer Body;
 	private final ModelRenderer BodyChest_r1;
 	private final ModelRenderer RLegParts;
@@ -31,13 +31,13 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 		texWidth = 64;
 		texHeight = 128;
 
-		Jugger = new ModelRenderer(this);
-		Jugger.setPos(0.0F, 24.0F, 0.0F);
+		Thug = new ModelRenderer(this);
+		Thug.setPos(0.0F, 24.0F, 0.0F);
 
 
 		Body = new ModelRenderer(this);
 		Body.setPos(0.0F, -22.1723F, 0.3765F);
-		Jugger.addChild(Body);
+		Thug.addChild(Body);
 		Body.texOffs(0, 39).addBox(-5.0F, -4.8277F, -1.3765F, 10.0F, 8.0F, 7.0F, 0.0F, false);
 		Body.texOffs(22, 55).addBox(-6.0F, 3.1723F, -2.3765F, 12.0F, 5.0F, 9.0F, 0.0F, false);
 
@@ -49,7 +49,7 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 
 		RLegParts = new ModelRenderer(this);
 		RLegParts.setPos(-4.0F, -14.0F, 0.0F);
-		Jugger.addChild(RLegParts);
+		Thug.addChild(RLegParts);
 
 
 		RThigh = new ModelRenderer(this);
@@ -64,7 +64,7 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 
 		LLegParts = new ModelRenderer(this);
 		LLegParts.setPos(4.0F, -14.0F, 0.0F);
-		Jugger.addChild(LLegParts);
+		Thug.addChild(LLegParts);
 
 
 		LThigh = new ModelRenderer(this);
@@ -79,7 +79,7 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 
 		RArmParts = new ModelRenderer(this);
 		RArmParts.setPos(-6.0F, -30.0F, 0.0F);
-		Jugger.addChild(RArmParts);
+		Thug.addChild(RArmParts);
 
 
 		RUpperArm = new ModelRenderer(this);
@@ -95,7 +95,7 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 
 		LArmParts = new ModelRenderer(this);
 		LArmParts.setPos(6.0F, -30.0F, 0.0F);
-		Jugger.addChild(LArmParts);
+		Thug.addChild(LArmParts);
 
 
 		LUpperArm = new ModelRenderer(this);
@@ -111,7 +111,7 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 
 		head = new ModelRenderer(this);
 		head.setPos(0.0F, -30.0F, -4.0F);
-		Jugger.addChild(head);
+		Thug.addChild(head);
 		head.texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 11.0F, 8.0F, 0.0F, false);
 		head.texOffs(32, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 12.0F, 8.0F, 0.5F, false);
 
@@ -123,7 +123,7 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 
 	@Override
 	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		Jugger.render(matrixStack, buffer, packedLight, packedOverlay);
+		Thug.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 
 	@Override
@@ -135,22 +135,29 @@ public class ThugModel extends SegmentedModel<ThugEntity>{
 	public void setupAnim(ThugEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
 		this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
-		this.RLegParts.xRot = MathHelper.cos(pLimbSwing * 0.6662F) * 1.4F * pLimbSwingAmount * 0.5F;
-		this.RLegParts.yRot = 0.0F;
-		this.RLegParts.zRot = 0.0F;
-		this.LLegParts.xRot = MathHelper.cos(pLimbSwing * 0.6662F + (float)Math.PI) * 1.4F * pLimbSwingAmount * 0.5F;
-		this.LLegParts.yRot = 0.0F;
-		this.LLegParts.zRot = 0.0F;
+		this.animateWalk(pLimbSwing, pLimbSwingAmount);
+	}
+
+	private void animateWalk(float pLimbSwing, float pLimbSwingAmount) {
+		float f = Math.min(0.5F, 3.0F * pLimbSwingAmount);
+		float f1 = pLimbSwing * 0.8662F;
+		float f2 = MathHelper.cos(f1);
+		this.LLegParts.xRot = 1.0F * f2 * f;
+		this.RLegParts.xRot = 1.0F * MathHelper.cos(f1 + (float)Math.PI) * f;
 	}
 
 	public void prepareMobModel(ThugEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick) {
 		int i = pEntity.getAttackTick();
+		float f = Math.min(0.5F, 3.0F * pLimbSwingAmount);
+		float f1 = pLimbSwing * 0.8662F;
+		float f2 = MathHelper.cos(f1);
+		float f3 = MathHelper.sin(f1);
 		if (i > 0) {
 			this.RArmParts.xRot = -2.0F + 1.5F * MathHelper.triangleWave((float)i - pPartialTick, 10.0F);
 			this.LArmParts.xRot = -2.0F + 1.5F * MathHelper.triangleWave((float)i - pPartialTick, 10.0F);
 		} else {
-			this.RArmParts.xRot = (-0.2F + 1.5F * MathHelper.triangleWave(pLimbSwing, 13.0F)) * pLimbSwingAmount;
-			this.LArmParts.xRot = (-0.2F - 1.5F * MathHelper.triangleWave(pLimbSwing, 13.0F)) * pLimbSwingAmount;
+			this.LArmParts.xRot = -(0.8F * f2 * f);
+			this.RArmParts.xRot = -(0.8F * f3 * f);
 		}
 
 	}

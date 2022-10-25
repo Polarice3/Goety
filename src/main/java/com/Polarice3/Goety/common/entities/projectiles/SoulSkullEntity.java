@@ -176,7 +176,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()){
                 if (CuriosFinder.findRing(player).isEnchanted()){
                     float wanting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
-                    if (wanting >= 3){
+                    if (wanting > 0){
                         loot = true;
                     }
                 }

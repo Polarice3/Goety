@@ -45,5 +45,9 @@ public class ConstantPaths {
         return "goety:sl_minion";
     }
 
+    public static String rainArrow(){
+        return "goety:rain_arrow";
+    }
+
 
 }

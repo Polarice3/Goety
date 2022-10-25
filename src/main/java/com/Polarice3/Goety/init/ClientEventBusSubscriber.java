@@ -1,14 +1,12 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.gui.screen.inventory.FocusBagScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.SoulItemScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.WandandBagScreen;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
-import com.Polarice3.Goety.client.particles.GatheringParticle;
-import com.Polarice3.Goety.client.particles.GlowingParticle;
-import com.Polarice3.Goety.client.particles.HugeDSEParticle;
-import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.client.particles.*;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
@@ -28,7 +26,9 @@ import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -43,7 +43,7 @@ public class ClientEventBusSubscriber {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHBOMB.get(), WitchBombRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_POTION.get(), BurningPotionRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_FIREBALL.get(), SoulFireballRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHER_METEOR.get(), NetherMeteorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_FIREBALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LAVABALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 3.0F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_DRAGON_FIREBALL.get(), ModDragonFireballRenderer::new);
@@ -54,10 +54,12 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEAD_TNT.get(), DeadTNTRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ICE_STORM.get(), IceStormRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_BULLET.get(), SoulBulletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIKE_GEYSER.get(), SpikeGeyserRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_LIGHT.get(), SoulBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.GLOW_LIGHT.get(), SoulBulletRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_BALL.get(), PoisonBallRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_BALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FANG.get(), FangRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIKE.get(), SpikeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHGALE.get(), WitchGaleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADO.get(), FireTornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CHANNELLER.get(), ChannellerRenderer::new);
@@ -111,6 +113,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_BOAT.get(), ModBoatRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LIGHTNINGTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRERAINTRAP.get(), TrapRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ARROWRAINTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADOTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIREBLASTTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_GROUND.get(), TrapRenderer::new);
@@ -148,6 +151,8 @@ public class ClientEventBusSubscriber {
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
         ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);
         ModKeybindings.init();
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.addListener(BossBarEvent::renderBossBar);
         event.enqueueWork(() -> {
             Atlases.addWoodType(ModWoodType.HAUNTED);
         });
@@ -177,9 +182,12 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION.get(), LargeExplosionParticle.Factory::new);
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
         particles.register(ModParticleTypes.LASER_GATHER.get(), GatheringParticle.Factory::new);
-        particles.register(ModParticleTypes.TORNADO_GATHER.get(), GatheringParticle.Factory::new);
+        particles.register(ModParticleTypes.SONIC_GATHER.get(), GatheringParticle.Factory::new);
         particles.register(ModParticleTypes.POISON.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.BURNING.get(), FlameParticle.Factory::new);
+        particles.register(ModParticleTypes.CULT_SPELL.get(), SpellParticle.MobFactory::new);
+        particles.register(ModParticleTypes.SONIC_BOOM.get(), SonicBoomParticle.Factory::new);
+        particles.register(ModParticleTypes.CONFUSED.get(), HeartParticle.Factory::new);
     }
 
 }

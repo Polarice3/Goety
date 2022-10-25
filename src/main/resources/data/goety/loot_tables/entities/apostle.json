@@ -2,17 +2,6 @@
   "pools": [
     {
       "name": "apostle",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "goety:apostle_blood_bottle",
-          "weight": 1
-        }
-      ]
-    },
-    {
-      "name": "apostle",
       "rolls": {
         "min": 1.0,
         "max": 3.0,

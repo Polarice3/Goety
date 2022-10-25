@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -39,6 +40,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -58,6 +60,7 @@ public class LocustEntity extends OwnedEntity implements IDeadMob, IFlyingAnimal
         super(p_i225714_1_, p_i225714_2_);
         this.moveControl = new FlyingMovementController(this, 20, true);
         this.lookControl = new LookController(this);
+        this.setHostile(true);
         this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
         this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
         this.setPathfindingMalus(PathNodeType.WATER_BORDER, 16.0F);
@@ -138,13 +141,15 @@ public class LocustEntity extends OwnedEntity implements IDeadMob, IFlyingAnimal
                 this.spawnFluidParticle(this.level, this.getX() - (double)0.3F, this.getX() + (double)0.3F, this.getZ() - (double)0.3F, this.getZ() + (double)0.3F, this.getY(0.5D), particleData);
             }
         }
-        if (this.random.nextInt(30) == 0) {
-            for(int i = 1; i <= 2; ++i) {
-                BlockPos blockpos = this.blockPosition().below(i);
-                BlockState blockstate = this.level.getBlockState(blockpos);
-                Block block = blockstate.getBlock();
-                if (block.is(ModTags.Blocks.DEAD_SAND_SPREADABLE)) {
-                    BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
+        if (MainConfig.DeadSandSpread.get() && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+            if (this.random.nextInt(30) == 0) {
+                for (int i = 1; i <= 2; ++i) {
+                    BlockPos blockpos = this.blockPosition().below(i);
+                    BlockState blockstate = this.level.getBlockState(blockpos);
+                    Block block = blockstate.getBlock();
+                    if (block.is(ModTags.Blocks.DEAD_SAND_SPREADABLE)) {
+                        BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
+                    }
                 }
             }
         }

@@ -43,77 +43,90 @@ public interface IDeadBlock {
 
     default void spreadSand(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (MainConfig.DeadSandSpread.get()) {
-            int pos1 = pRandom.nextInt(3) - 1;
-            int pos2 = pRandom.nextInt(3) - 1;
-            int pos3 = pRandom.nextInt(3) - 1;
-            if (pos1 == 0 && pos2 == 0 && pos3 == 0){
-                pos2 = 1;
-            }
-            BlockPos blockpos = pPos.offset(pos1, pos2, pos3);
-
-            if (!BlockFinder.isWet(pLevel, pPos)){
-                if (getTotalDeadSands(pLevel, pPos).size() < SAND_LIMIT) {
-                    BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
-                } else {
-                    if (pRandom.nextFloat() < 0.5F) {
-                        BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
-                    }
+            boolean flag = false;
+            for(Direction direction : Direction.values()) {
+                BlockPos blockpos1 = pPos.relative(direction);
+                BlockState blockstate = pLevel.getBlockState(blockpos1);
+                if (BlockFinder.ActivateDeadSand(blockstate)) {
+                    flag = true;
                 }
-                for (int j1 = -2; j1 < 2; ++j1) {
-                    for (int k1 = 0; k1 <= 1; ++k1) {
-                        for (int l1 = -2; l1 < 2; ++l1) {
-                            BlockPos blockpos2 = pPos.offset(j1, k1, l1);
-                            BlockState blockState2 = pLevel.getBlockState(blockpos2);
-                            if (blockState2.getBlock() instanceof BushBlock && BlockFinder.validPlants(blockpos2, pLevel)) {
-                                pLevel.removeBlock(blockpos2, false);
-                                pLevel.setBlockAndUpdate(blockpos2, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
-                            }
-                            if (BlockFinder.LivingBlocks(blockState2)) {
-                                pLevel.removeBlock(blockpos2, false);
-                                pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
-                            }
-                            if (blockState2.getBlock() instanceof TallGrassBlock){
-                                pLevel.removeBlock(blockpos2, false);
+            }
+            if (flag) {
+                int pos1 = pRandom.nextInt(3) - 1;
+                int pos2 = pRandom.nextInt(3) - 1;
+                int pos3 = pRandom.nextInt(3) - 1;
+                if (pos1 == 0 && pos2 == 0 && pos3 == 0) {
+                    pos2 = 1;
+                }
+                BlockPos blockpos = pPos.offset(pos1, pos2, pos3);
+
+                if (!BlockFinder.isWet(pLevel, pPos)) {
+                    if (getTotalDeadSands(pLevel, pPos).size() < SAND_LIMIT) {
+                        BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
+                    } else {
+                        if (pRandom.nextFloat() < 0.5F) {
+                            BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
+                        }
+                    }
+                    for (int j1 = -2; j1 < 2; ++j1) {
+                        for (int k1 = 0; k1 <= 1; ++k1) {
+                            for (int l1 = -2; l1 < 2; ++l1) {
+                                BlockPos blockpos2 = pPos.offset(j1, k1, l1);
+                                BlockState blockState2 = pLevel.getBlockState(blockpos2);
+                                if (blockState2.getBlock() instanceof BushBlock && BlockFinder.validPlants(blockpos2, pLevel)) {
+                                    pLevel.removeBlock(blockpos2, false);
+                                    pLevel.setBlockAndUpdate(blockpos2, ModBlocks.HAUNTED_BUSH.get().defaultBlockState());
+                                }
+                                if (BlockFinder.LivingBlocks(blockState2)) {
+                                    pLevel.removeBlock(blockpos2, false);
+                                    pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
+                                }
+                                if (blockState2.getBlock() instanceof TallGrassBlock) {
+                                    pLevel.removeBlock(blockpos2, false);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            dryUpWater(pLevel, pPos);
-            desiccateMobs(pLevel, pPos);
-            growHauntedCactus(pLevel, pPos, pRandom);
-            growIronFingers(pLevel, pPos);
-            blockSky(pLevel, pPos);
+                dryUpWater(pLevel, pPos);
+                desiccateMobs(pLevel, pPos);
+                growHauntedCactus(pLevel, pPos, pRandom);
+                growIronFingers(pLevel, pPos);
+                blockSky(pLevel, pPos);
 
-            for (int l1 = -4; l1 <= 0; ++l1) {
-                int random = pRandom.nextInt(2);
-                int l2 = random == 0 ? l1 : 0;
-                BlockPos blockpos1 = pPos.offset(0, l2, 0);
-                BlockState blockState1 = pLevel.getBlockState(blockpos1);
-                BlockState blockState2 = pLevel.getBlockState(pPos.below());
+                for (int l1 = -4; l1 <= 0; ++l1) {
+                    int random = pRandom.nextInt(2);
+                    int l2 = random == 0 ? l1 : 0;
+                    BlockPos blockpos1 = pPos.offset(0, l2, 0);
+                    BlockState blockState1 = pLevel.getBlockState(blockpos1);
+                    BlockState blockState2 = pLevel.getBlockState(pPos.below());
 
-                if (blockState1.getMaterial() == Material.STONE && BlockFinder.NotDeadSandImmune(blockState1)) {
-                    if (BlockFinder.NotDeadSandImmune(blockState2)) {
-                        pLevel.destroyBlock(blockpos1, false);
-                        pLevel.setBlockAndUpdate(blockpos1, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+                    if (blockState1.getMaterial() == Material.STONE && BlockFinder.NotDeadSandImmune(blockState1)) {
+                        if (BlockFinder.NotDeadSandImmune(blockState2)) {
+                            pLevel.destroyBlock(blockpos1, false);
+                            pLevel.setBlockAndUpdate(blockpos1, ModBlocks.DEAD_SANDSTONE.get().defaultBlockState());
+                        }
                     }
                 }
-            }
 
-            for (int k1 = 0; k1 <= 16; ++k1) {
-                BlockPos blockpos1 = pPos.offset(0, k1, 0);
-                BlockState blockState1 = pLevel.getBlockState(blockpos1);
+                for (int k1 = 0; k1 <= 16; ++k1) {
+                    BlockPos blockpos1 = pPos.offset(0, k1, 0);
+                    BlockState blockState1 = pLevel.getBlockState(blockpos1);
+                    BlockState blockState2 = pLevel.getBlockState(pPos.above());
 
-                if (BlockFinder.NotDeadSandImmune(blockState1)) {
-                    if (blockState1.is(BlockTags.LOGS) && blockState1.getBlock() != ModBlocks.HAUNTED_LOG.get()) {
-                        pLevel.destroyBlock(blockpos1, false);
-                        pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState1.getValue(RotatedPillarBlock.AXIS)));
+                    if (BlockFinder.ActivateDeadSand(blockState2)) {
+                        if (BlockFinder.NotDeadSandImmune(blockState1)) {
+                            if (blockState1.is(BlockTags.LOGS) && blockState1.getBlock() != ModBlocks.HAUNTED_LOG.get()) {
+                                pLevel.destroyBlock(blockpos1, false);
+                                pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState1.getValue(RotatedPillarBlock.AXIS)));
+                            }
+                        }
+                        if (blockState1.is(Blocks.CACTUS) || blockState1.getBlock() instanceof CactusBlock) {
+                            pLevel.removeBlock(blockpos1, false);
+                            pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_CACTUS.get().defaultBlockState());
+                        }
                     }
-                }
-                if (blockState1.is(Blocks.CACTUS) || blockState1.getBlock() instanceof CactusBlock){
-                    pLevel.destroyBlock(blockpos1, false);
-                    pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_CACTUS.get().defaultBlockState());
                 }
             }
         }

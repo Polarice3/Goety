@@ -20,25 +20,16 @@ public class FireTornadoRenderer extends EntityRenderer<FireTornadoEntity> {
         super(p_i46179_1_);
     }
 
-    protected float getBob(FireTornadoEntity pLivingBase, float pPartialTicks) {
-        return (float)pLivingBase.tickCount + pPartialTicks;
-    }
-
     public void render(FireTornadoEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        float f7 = this.getBob(entityIn, partialTicks);
         matrixStackIn.pushPose();
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(TEXTURES));
-        this.model.setupAnim(entityIn, 0.0F, 0.0F, f7, 0, 0);
+        this.model.setupAnim(entityIn, 0.0F, 0.0F, partialTicks/10, 0, 0);
         matrixStackIn.translate(0.0D, (double)(entityIn.getBbHeight() + 1.5F), 0.0D);
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        this.scale(entityIn, matrixStackIn);
+        matrixStackIn.scale(2.0F, 2.0F, 2.0F);
         this.model.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.15F);
         matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-    }
-
-    protected void scale(FireTornadoEntity entityIn, MatrixStack matrixStackIn) {
-        matrixStackIn.scale(2.0F, 2.0F, 2.0F);
     }
 
     @Override

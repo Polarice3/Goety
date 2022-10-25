@@ -3,6 +3,7 @@ package com.Polarice3.Goety.client.render;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.VizierModel;
 import com.Polarice3.Goety.client.render.layers.VizierAuraLayer;
+import com.Polarice3.Goety.client.render.layers.VizierCapeLayer;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -17,6 +18,7 @@ public class VizierRenderer extends MobRenderer<VizierEntity, VizierModel> {
     public VizierRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new VizierModel(0.0F, 0.0F), 1.0F);
         this.addLayer(new VizierAuraLayer(this));
+        this.addLayer(new VizierCapeLayer(this));
         this.addLayer(new HeldItemLayer<VizierEntity, VizierModel>(this) {
             public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, VizierEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
                 if (entitylivingbaseIn.isCharging()) {

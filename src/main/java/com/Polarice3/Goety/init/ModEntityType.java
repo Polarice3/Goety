@@ -42,11 +42,11 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "burning_potion").toString()));
 
-    public static final RegistryObject<EntityType<SoulFireballEntity>> SOUL_FIREBALL = ENTITY_TYPES.register("soulfireball",
-            () -> EntityType.Builder.<SoulFireballEntity>of(SoulFireballEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<NetherMeteorEntity>> NETHER_METEOR = ENTITY_TYPES.register("nether_meteor",
+            () -> EntityType.Builder.<NetherMeteorEntity>of(NetherMeteorEntity::new, EntityClassification.MISC)
                     .sized(1.0f,1.0f)
                     .clientTrackingRange(4)
-                    .build(new ResourceLocation(Goety.MOD_ID, "soulfireball").toString()));
+                    .build(new ResourceLocation(Goety.MOD_ID, "nether_meteor").toString()));
 
     public static final RegistryObject<EntityType<ModFireballEntity>> MOD_FIREBALL = ENTITY_TYPES.register("fireball",
             () -> EntityType.Builder.<ModFireballEntity>of(ModFireballEntity::new, EntityClassification.MISC)
@@ -130,6 +130,13 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soul_bullet").toString()));
 
+    public static final RegistryObject<EntityType<SpikeGeyserEntity>> SPIKE_GEYSER = ENTITY_TYPES.register("spike_geyser",
+            () -> EntityType.Builder.<SpikeGeyserEntity>of(SpikeGeyserEntity::new, EntityClassification.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "spike_geyser").toString()));
+
     public static final RegistryObject<EntityType<PoisonBallEntity>> POISON_BALL = ENTITY_TYPES.register("poison_ball",
             () -> EntityType.Builder.<PoisonBallEntity>of(PoisonBallEntity::new, EntityClassification.MISC)
                     .sized(0.25F, 0.25F)
@@ -144,16 +151,25 @@ public class ModEntityType {
                     .updateInterval(2)
                     .build(new ResourceLocation(Goety.MOD_ID, "fang").toString()));
 
+    public static final RegistryObject<EntityType<SpikeEntity>> SPIKE = ENTITY_TYPES.register("spike",
+            () -> EntityType.Builder.<SpikeEntity>of(SpikeEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.8F)
+                    .clientTrackingRange(6)
+                    .updateInterval(2)
+                    .build(new ResourceLocation(Goety.MOD_ID, "spike").toString()));
+
     public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
                     .sized(1.0f,1.0f)
                     .clientTrackingRange(4)
+                    .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchgale").toString()));
 
     public static final RegistryObject<EntityType<FireTornadoEntity>> FIRETORNADO = ENTITY_TYPES.register("fire_tornado",
             () -> EntityType.Builder.<FireTornadoEntity>of(FireTornadoEntity::new, EntityClassification.MISC)
-                    .sized(2.0f,3.0f)
+                    .sized(2.0F, 2.0F)
                     .clientTrackingRange(4)
+                    .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "fire_tornado").toString()));
 
     public static final RegistryObject<EntityType<ModBoatEntity>> MOD_BOAT = ENTITY_TYPES.register("boat",
@@ -473,7 +489,7 @@ public class ModEntityType {
     public static final RegistryObject<EntityType<LightningTrapEntity>> LIGHTNINGTRAP = ENTITY_TYPES.register("lightningtrap",
             () -> EntityType.Builder.<LightningTrapEntity>of(LightningTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
-                    .sized(2.0F, 0.5F)
+                    .sized(1.0F, 0.5F)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "lightningtrap").toString()));
@@ -485,6 +501,14 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
+
+    public static final RegistryObject<EntityType<ArrowRainTrapEntity>> ARROWRAINTRAP = ENTITY_TYPES.register("arrowraintrap",
+            () -> EntityType.Builder.<ArrowRainTrapEntity>of(ArrowRainTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "arrowraintrap").toString()));
 
     public static final RegistryObject<EntityType<FireTornadoTrapEntity>> FIRETORNADOTRAP = ENTITY_TYPES.register("firetornadotrap",
             () -> EntityType.Builder.<FireTornadoTrapEntity>of(FireTornadoTrapEntity::new, EntityClassification.MISC)

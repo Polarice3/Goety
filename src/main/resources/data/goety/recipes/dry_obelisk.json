@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " s ",
+    "sts",
+    "sss"
+  ],
+  "key":
+  {
+    "t":
+    {
+      "item": "goety:cursed_totem"
+    },
+    "s":
+    {
+      "item": "goety:dead_sandstone"
+    }
+  },
+  "result":
+  {
+    "item": "goety:dry_obelisk",
+    "count": 1
+  }
+}

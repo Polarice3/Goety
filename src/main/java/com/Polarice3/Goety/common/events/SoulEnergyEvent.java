@@ -4,9 +4,11 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.network.packets.client.CTotemDeathPacket;
+import com.Polarice3.Goety.common.network.packets.client.CSoulEnergyPacket;
+import com.Polarice3.Goety.common.network.packets.server.TotemDeathPacket;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
@@ -27,6 +29,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.Random;
 
@@ -39,7 +42,7 @@ public class SoulEnergyEvent {
         World world = player.level;
         ISoulEnergy soulEnergy = SEHelper.getCapability(player);
         if (!soulEnergy.getSEActive() && soulEnergy.getSoulEnergy() > 0) {
-            if (!world.isClientSide()){
+            if (!world.isClientSide){
                 player.addEffect(new EffectInstance(ModEffects.SOUL_HUNGER.get(), 60));
                 if (player.tickCount % 5 == 0) {
                     SEHelper.decreaseSESouls(player, 1);
@@ -49,7 +52,7 @@ public class SoulEnergyEvent {
         }
         if (soulEnergy.getArcaBlock() != null){
             if (soulEnergy.getArcaBlockDimension() == world.dimension()) {
-                if (!world.isClientSide()){
+                if (!world.isClientSide){
                     ServerWorld serverWorld = (ServerWorld) world;
                     BlockPos blockPos = soulEnergy.getArcaBlock();
                     TileEntity tileEntity = world.getBlockEntity(blockPos);
@@ -98,7 +101,12 @@ public class SoulEnergyEvent {
         }
         if (CuriosFinder.findAmulet(player).getItem() == ModItems.EMERALD_AMULET.get()){
             if (player.tickCount % 100 == 0){
-                SEHelper.increaseSouls(player, 1);
+                SEHelper.increaseSouls(player, MainConfig.EmeraldAmuletSouls.get());
+            }
+        }
+        if (RobeArmorFinder.FindNecroBootsofWander(player)){
+            if (player.canSpawnSoulSpeedParticle()){
+                ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CSoulEnergyPacket(MainConfig.NecroSoulSandSouls.get(), true));
             }
         }
     }
@@ -106,6 +114,7 @@ public class SoulEnergyEvent {
     @SubscribeEvent
     public static void onLivingDeathEvent(LivingDeathEvent event) {
         Entity killer = event.getSource().getEntity();
+        Entity projectile = event.getSource().getDirectEntity();
         Entity killed = event.getEntity();
 
         if (killed instanceof LivingEntity){
@@ -113,7 +122,12 @@ public class SoulEnergyEvent {
             if (killer instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) killer;
                 if (!(player instanceof FakePlayer)){
-                    SEHelper.handleKill(player, victim);
+                    if (projectile instanceof FangEntity && ((FangEntity) projectile).isTotemSpawned()){
+                        FangEntity fangEntity = (FangEntity) projectile;
+                        SEHelper.rawHandleKill(player, victim, fangEntity.getSoulEater());
+                    } else {
+                        SEHelper.handleKill(player, victim);
+                    }
                 }
             }
 
@@ -170,13 +184,15 @@ public class SoulEnergyEvent {
                     }
                 }
             } else if (GoldTotemItem.UndyingEffect(player)){
-                player.setHealth(1.0F);
-                player.removeAllEffects();
-                player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
-                player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
-                player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
-                ModNetwork.sendTo(player, new CTotemDeathPacket(player.getUUID()));
-                GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
+                if (!player.level.isClientSide) {
+                    player.setHealth(1.0F);
+                    player.removeAllEffects();
+                    player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
+                    player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
+                    player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                    ModNetwork.sendTo(player, new TotemDeathPacket(player.getUUID()));
+                    GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), 0);
+                }
                 event.setCanceled(true);
             }
         }

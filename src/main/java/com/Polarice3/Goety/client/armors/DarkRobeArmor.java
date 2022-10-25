@@ -2,8 +2,6 @@ package com.Polarice3.Goety.client.armors;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.model.RobeModel;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.Entity;
@@ -35,24 +33,15 @@ public class DarkRobeArmor extends ArmorItem {
                 CompoundNBT compound = stack.getOrCreateTag();
                 compound.putInt(COOL, 0);
             }
-            ItemStack foundStack = GoldTotemFinder.FindTotem(player);
             if (stack.isDamaged()){
-                if (SEHelper.getSEActive(player)){
-                    if (SEHelper.getSESouls(player) > 0){
+                if (SEHelper.getSoulsContainer(player)){
+                    if (SEHelper.getSoulsAmount(player, 0)){
                         stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
                         if (stack.getTag().getInt(COOL) > 20) {
                             stack.getTag().putInt(COOL, 0);
-                            SEHelper.decreaseSESouls(player, 1);
                             stack.setDamageValue(stack.getDamageValue() - 1);
-                            SEHelper.sendSEUpdatePacket(player);
+                            SEHelper.decreaseSouls(player, 1);
                         }
-                    }
-                } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
-                    stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
-                    if (stack.getTag().getInt(COOL) > 20) {
-                        stack.getTag().putInt(COOL, 0);
-                        GoldTotemItem.decreaseSouls(foundStack, 1);
-                        stack.setDamageValue(stack.getDamageValue() - 1);
                     }
                 }
             }

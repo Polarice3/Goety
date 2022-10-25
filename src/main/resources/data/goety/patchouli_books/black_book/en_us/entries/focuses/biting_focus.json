@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Summons a row of Magical Fangs in front of you that deals damage that ignores the targets' armor(Unless it's enchanted). When crouching, summons circles of Fangs around you."
+      "text": "Summons a row of magical Fangs in front of you that deals damage that ignores the targets' armor(Unless it's enchanted). When crouching, a circles of Fangs are summoned around you."
     },
     {
       "type": "patchouli:crafting",

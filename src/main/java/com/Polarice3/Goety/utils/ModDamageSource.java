@@ -41,6 +41,10 @@ public class ModDamageSource extends DamageSource {
         return (new ModIndirectEntityDamageSource("indirectFrost", pSource, pIndirectEntity)).setIsFrost().setMagic();
     }
 
+    public static DamageSource sonicBoom(Entity p_216877_) {
+        return (new ModEntityDamageSource("sonic_boom", p_216877_)).bypassArmor().bypassMagic().setMagic();
+    }
+
     public boolean isBreath() {
         return this.isBreath;
     }

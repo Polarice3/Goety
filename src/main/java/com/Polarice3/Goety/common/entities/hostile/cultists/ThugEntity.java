@@ -10,7 +10,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -46,7 +45,6 @@ public class ThugEntity extends AbstractCultistEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, true));
-        this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 0.9D, 32.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -116,6 +114,13 @@ public class ThugEntity extends AbstractCultistEntity {
     public void aiStep() {
         super.aiStep();
         if (this.isAlive()) {
+            if (this.isImmobile()) {
+                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.0D);
+            } else {
+                double d0 = this.getTarget() != null ? 0.3D : 0.23D;
+                double d1 = this.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue();
+                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(MathHelper.lerp(0.1D, d1, d0));
+            }
             if (this.level.isClientSide){
                 if (this.isRaging()){
                     if (this.tickCount % 10 == 0) {
@@ -124,7 +129,7 @@ public class ThugEntity extends AbstractCultistEntity {
                 }
             }
             if (this.getHealth() < this.getMaxHealth() / 1.5) {
-                if (this.isAggressive()) {
+                if (this.isAggressive() || this.getTarget() != null) {
                     this.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 20, 1));
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 20, 1));
                     if (this.tickCount % 20 == 0){
@@ -133,7 +138,7 @@ public class ThugEntity extends AbstractCultistEntity {
                     this.setIsRaging(true);
                 } else {
                     if (this.tickCount % 20 == 0) {
-                        this.heal(1.0F);
+                        this.heal(2.0F);
                     }
                     this.setIsRaging(false);
                 }

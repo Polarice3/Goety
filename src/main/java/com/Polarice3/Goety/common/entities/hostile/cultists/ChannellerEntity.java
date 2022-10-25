@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -186,7 +187,7 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
             if (this.tickCount % 100 == 0){
                 if (this.level instanceof ServerWorld) {
                     ServerWorld serverWorld = (ServerWorld) this.level;
-                    MonsterEntity minion = null;
+                    OwnedEntity minion = null;
                     switch (this.random.nextInt(3)) {
                         case (0):
                             minion = ModEntityType.ZOMBIE_VILLAGER_MINION.get().create(this.level);
@@ -199,6 +200,7 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                             break;
                     }
                     if (minion != null) {
+                        minion.setTrueOwner(this);
                         minion.setPos(this.getX(), this.getY(), this.getZ());
                         minion.spawnAnim();
                         minion.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(this.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);

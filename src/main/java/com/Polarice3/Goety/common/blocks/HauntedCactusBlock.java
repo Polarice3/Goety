@@ -5,10 +5,7 @@ import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -149,7 +146,7 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
     public boolean canSustainThis(BlockState state, IBlockReader world, BlockPos pos, Direction facing, net.minecraftforge.common.IPlantable plantable) {
         BlockState plant = plantable.getPlant(world, pos.relative(facing));
         if (plant.getBlock() == this.getBlock()){
-            return state.is(ModBlocks.HAUNTED_CACTUS.get()) || state.is(ModBlocks.DEAD_SAND.get());
+            return state.is(ModBlocks.HAUNTED_CACTUS.get()) || state.is(ModBlocks.DEAD_SAND.get()) || state.getBlock() instanceof SandBlock;
         } else {
             return false;
         }

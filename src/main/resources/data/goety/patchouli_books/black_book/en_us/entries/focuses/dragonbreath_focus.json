@@ -8,7 +8,7 @@
       "text": "Through this focus, you are able to shoot the Dragon's Acidic fireball towards your enemies. Be warn, the lingering acid does nothing but heal the Undead."
     },
     {
-      "type": "patchouli:crafting",
+      "type": "goety:ritual",
       "recipe": "goety:dragonballfocus"
     }
   ]

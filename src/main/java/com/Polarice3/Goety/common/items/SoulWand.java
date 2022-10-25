@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
+import com.Polarice3.Goety.common.entities.ally.UndeadWolfEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import com.Polarice3.Goety.common.spells.*;
@@ -11,7 +12,6 @@ import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SEHelper;
-import com.Polarice3.Goety.utils.SoundUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -131,15 +131,8 @@ public class SoulWand extends Item{
                 if (player.isCrouching()){
                     summonedEntity.kill();
                 } else {
-                    if (summonedEntity.getMobType() == CreatureAttribute.UNDEAD) {
-                        if (!summonedEntity.isWandering()) {
-                            summonedEntity.setWandering(true);
-                            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.wander", target.getDisplayName()), true);
-                        } else {
-                            summonedEntity.setWandering(false);
-                            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.follow", target.getDisplayName()), true);
-                        }
-                        new SoundUtil(target, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+                    if (summonedEntity.getMobType() == CreatureAttribute.UNDEAD && !(summonedEntity instanceof UndeadWolfEntity)) {
+                        summonedEntity.updateMoveMode(player);
                     }
                 }
                 return ActionResultType.SUCCESS;
@@ -309,6 +302,9 @@ public class SoulWand extends Item{
             } else if (spell.contains("launch")) {
                 this.setSpellConditions(new LaunchSpell(), itemStack);
                 this.setSpell(26, itemStack);
+            } else if (spell.contains("sonicboom")) {
+                this.setSpellConditions(new SonicBoomSpell(), itemStack);
+                this.setSpell(27, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);
@@ -398,20 +394,23 @@ public class SoulWand extends Item{
         if (!worldIn.isClientSide) {
             ServerWorld serverWorld = (ServerWorld) worldIn;
             if (this.getSpell(stack) != null) {
-                if (SEHelper.getSEActive(playerEntity)) {
+                if (playerEntity.isCreative()){
+                    assert stack.getTag() != null;
+                    if (stack.getItem() instanceof SoulStaff){
+                        this.getSpell(stack).StaffResult(serverWorld, entityLiving);
+                    } else {
+                        this.getSpell(stack).WandResult(serverWorld, entityLiving);
+                    }
+                } else if (SEHelper.getSEActive(playerEntity)) {
                     if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)) {
+                        boolean spent = true;
                         int random = worldIn.random.nextInt(4);
                         if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell) {
-                            if (random == 0) {
-                                soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
-                                SEHelper.sendSEUpdatePacket(playerEntity);
-                                if (MainConfig.VillagerHateSpells.get() > 0) {
-                                    for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))) {
-                                        villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
-                                    }
-                                }
+                            if (random != 0) {
+                                spent = false;
                             }
-                        } else {
+                        }
+                        if (spent){
                             soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
                             SEHelper.sendSEUpdatePacket(playerEntity);
                             if (MainConfig.VillagerHateSpells.get() > 0) {
@@ -421,22 +420,23 @@ public class SoulWand extends Item{
                             }
                         }
                         assert stack.getTag() != null;
-                        this.getSpell(stack).WandResult(serverWorld, entityLiving);
+                        if (stack.getItem() instanceof SoulStaff){
+                            this.getSpell(stack).StaffResult(serverWorld, entityLiving);
+                        } else {
+                            this.getSpell(stack).WandResult(serverWorld, entityLiving);
+                        }
                     } else {
                         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                     }
                 } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)) {
+                    boolean spent = true;
                     int random = worldIn.random.nextInt(4);
                     if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell) {
-                        if (random == 0) {
-                            GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
-                            if (MainConfig.VillagerHateSpells.get() > 0) {
-                                for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))) {
-                                    villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
-                                }
-                            }
+                        if (random != 0) {
+                            spent = false;
                         }
-                    } else {
+                    }
+                    if (spent){
                         GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
                         if (MainConfig.VillagerHateSpells.get() > 0) {
                             for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))) {
@@ -445,7 +445,11 @@ public class SoulWand extends Item{
                         }
                     }
                     assert stack.getTag() != null;
-                    this.getSpell(stack).WandResult(serverWorld, entityLiving);
+                    if (stack.getItem() instanceof SoulStaff){
+                        this.getSpell(stack).StaffResult(serverWorld, entityLiving);
+                    } else {
+                        this.getSpell(stack).WandResult(serverWorld, entityLiving);
+                    }
                 } else {
                     worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 }
@@ -455,7 +459,12 @@ public class SoulWand extends Item{
         }
         if (worldIn.isClientSide){
             if (this.getSpell(stack) != null) {
-                if (SEHelper.getSEActive(playerEntity)) {
+                if (playerEntity.isCreative()){
+                    if (this.getSpell(stack) instanceof SpewingSpell){
+                        SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
+                        spewingSpell.showWandBreath(entityLiving);
+                    }
+                } else if (SEHelper.getSEActive(playerEntity)) {
                     if (soulEnergy.getSoulEnergy() < SoulUse(entityLiving, stack)) {
                         this.failParticles(worldIn, entityLiving);
                     } else if (this.getSpell(stack) instanceof SpewingSpell){

@@ -15,66 +15,68 @@ import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class AbstractCultistModel<T extends AbstractCultistEntity> extends BipedModel<T> {
-    public final ModelRenderer clothes;
-    public final ModelRenderer arms;
-    public final ModelRenderer all;
+    public ModelRenderer clothes;
+    public ModelRenderer arms;
+    public ModelRenderer all;
 
-    public AbstractCultistModel(float modelSize, float p_i47227_2_) {
+    public AbstractCultistModel(float modelSize, float p_i47227_2_ ) {
+        this(modelSize, p_i47227_2_, 64, 64);
+    }
+
+    public AbstractCultistModel(float modelSize, float p_i47227_2_ , int p_i51059_2_, int p_i51059_3_) {
         super(modelSize);
-        texWidth = 64;
-        texHeight = 64;
 
-        this.all = new ModelRenderer(this);
+        this.all = new ModelRenderer(this).setTexSize(p_i51059_2_, p_i51059_3_);
         this.all.setPos(0.0F, 0.0F, 0.0F);
 
-        this.head = new ModelRenderer(this);
+        this.head = new ModelRenderer(this).setTexSize(p_i51059_2_, p_i51059_3_);
         this.head.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.head.texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, modelSize);
 
-        this.hat = new ModelRenderer(this, 32, 0);
+        this.hat = new ModelRenderer(this, 32, 0).setTexSize(p_i51059_2_, p_i51059_3_);
         this.hat.addBox(-4.0F, -10.0F, -4.0F, 8.0F, 12.0F, 8.0F, modelSize + 0.45F);
         this.hat.visible = true;
 
-        ModelRenderer modelrenderer = new ModelRenderer(this);
+        ModelRenderer modelrenderer = new ModelRenderer(this).setTexSize(p_i51059_2_, p_i51059_3_);
         modelrenderer.setPos(0.0F, p_i47227_2_ - 2.0F, 0.0F);
         modelrenderer.texOffs(24, 0).addBox(-1.0F, -1.0F, -6.0F, 2.0F, 4.0F, 2.0F, modelSize);
         this.head.addChild(modelrenderer);
         this.all.addChild(this.head);
 
-        this.body = new ModelRenderer(this);
+        this.body = new ModelRenderer(this).setTexSize(p_i51059_2_, p_i51059_3_);
         this.body.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.body.texOffs(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, modelSize);
-        this.clothes = new ModelRenderer(this);
+        this.clothes = new ModelRenderer(this).setTexSize(p_i51059_2_, p_i51059_3_);
         this.clothes.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.clothes.texOffs(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 18.0F, 6.0F, modelSize + 0.5F);
         this.all.addChild(this.body);
         this.all.addChild(this.clothes);
 
-        this.arms = new ModelRenderer(this);
+        this.arms = new ModelRenderer(this).setTexSize(p_i51059_2_, p_i51059_3_);
         this.arms.setPos(0.0F, 0.0F + p_i47227_2_ + 2.0F, 0.0F);
         this.arms.texOffs(44, 22).addBox(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, modelSize);
-        ModelRenderer modelrenderer1 = new ModelRenderer(this, 44, 22);
+        ModelRenderer modelrenderer1 = new ModelRenderer(this, 44, 22).setTexSize(p_i51059_2_, p_i51059_3_);
         modelrenderer1.mirror = true;
         modelrenderer1.addBox(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, modelSize);
         this.arms.addChild(modelrenderer1);
         this.arms.texOffs(40, 38).addBox(-4.0F, 2.0F, -2.0F, 8.0F, 4.0F, 4.0F, modelSize);
 
-        this.rightLeg = new ModelRenderer(this, 0, 22);
+        this.rightLeg = new ModelRenderer(this, 0, 22).setTexSize(p_i51059_2_, p_i51059_3_);
         this.rightLeg.setPos(-2.0F, 12.0F + p_i47227_2_, 0.0F);
         this.rightLeg.addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
         this.all.addChild(this.rightLeg);
 
-        this.leftLeg = new ModelRenderer(this, 0, 22);
+        this.leftLeg = new ModelRenderer(this, 0, 22).setTexSize(p_i51059_2_, p_i51059_3_);
         this.leftLeg.mirror = true;
         this.leftLeg.setPos(2.0F, 12.0F + p_i47227_2_, 0.0F);
         this.leftLeg.addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
         this.all.addChild(this.leftLeg);
 
-        this.rightArm = new ModelRenderer(this, 40, 46);
+        this.rightArm = new ModelRenderer(this, 40, 46).setTexSize(p_i51059_2_, p_i51059_3_);
         this.rightArm.addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
         this.rightArm.setPos(-5.0F, 2.0F + p_i47227_2_, 0.0F);
 
-        this.leftArm = new ModelRenderer(this, 40, 46);
+        this.leftArm = new ModelRenderer(this, 40, 46).setTexSize(p_i51059_2_, p_i51059_3_);
         this.leftArm.mirror = true;
         this.leftArm.addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, modelSize);
         this.leftArm.setPos(5.0F, 2.0F + p_i47227_2_, 0.0F);
@@ -133,9 +135,6 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                 if (!entityIn.getMainHandItem().isEmpty() && !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)) {
                     ModelHelper.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
                 }
-                break;
-            case ZOMBIE:
-                ModelHelper.animateZombieArms(this.rightArm, this.leftArm, this.isAggressive(entityIn), this.attackTime, ageInTicks);
                 break;
             case BOMB_AND_WEAPON:
                 if (!entityIn.getMainHandItem().isEmpty() && !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)) {

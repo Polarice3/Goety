@@ -76,8 +76,8 @@ public class EffectsEvent {
                 c = 1500;
                 break;
         }
-        int random = level.random.nextInt(300 - i1);
-        if (random == 0 && level.getDifficulty() != Difficulty.PEACEFUL) {
+        int k = 600 >> a;
+        if ((k <= 0 || d % k == 0) && level.getDifficulty() != Difficulty.PEACEFUL) {
             int r = level.random.nextInt(8);
             int r2 = level.random.nextInt(c - i3);
             int r3 = level.random.nextInt(i2);

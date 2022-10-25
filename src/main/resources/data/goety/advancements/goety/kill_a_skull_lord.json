@@ -30,5 +30,10 @@
         ]
       }
     }
-  }
+  },
+  "requirements": [
+    [
+      "kill_a_skull_lord"
+    ]
+  ]
 }

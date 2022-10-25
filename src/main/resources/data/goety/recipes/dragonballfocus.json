@@ -1,29 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "sfs",
-    "fef",
-    "sfs"
-  ],
-  "key":
-  {
-    "e":
-    {
-      "item": "goety:emptycore"
-    },
-    "f":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:lavaballfocus"
+  },
+  "craftType": "storm",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
     {
       "item": "minecraft:dragon_breath"
     },
-    "s":
     {
-      "item": "minecraft:fire_charge"
+      "item": "minecraft:dragon_breath"
+    },
+    {
+      "item": "minecraft:dragon_breath"
+    },
+    {
+      "item": "minecraft:dragon_breath"
     }
-  },
-  "result":
-  {
-    "item": "goety:dragonballfocus",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:dragonballfocus"
   }
 }

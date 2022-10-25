@@ -11,7 +11,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "To become a Lich, you must brew a special Necroturgic Potion, The Potion of Transformation. With the use of the Apostle's blood, several other ingredients and a sacrifice of a Villager, you will be able to cast a Necroturgic Ritual to brew such a foul potion."
+      "text": "To become a Lich, you must brew a special Necroturgic Potion, The Potion of Transformation. With the use of the Apostle's blood, several other ingredients and a sacrifice of a Villager, you will be able to cast a Necroturgic Ritual to brew such a foul potion. The Ritual requires a large amount of Soul Energy, far larger than what a Totem of Souls can usually carry."
     },
     {
       "type": "goety:ritual",

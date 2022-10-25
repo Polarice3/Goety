@@ -10,11 +10,11 @@ public class PotencyEnchantment extends FocusEnchantments {
     }
 
     public int getMinCost(int pEnchantmentLevel) {
-        return 1 + (pEnchantmentLevel - 1) * 10;
+        return 15 + (pEnchantmentLevel - 1) * 9;
     }
 
     public int getMaxCost(int pEnchantmentLevel) {
-        return this.getMinCost(pEnchantmentLevel) + 15;
+        return super.getMinCost(pEnchantmentLevel) + 50;
     }
 
     public int getMaxLevel() {

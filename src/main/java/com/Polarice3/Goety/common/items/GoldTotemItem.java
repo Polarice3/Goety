@@ -19,6 +19,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -35,6 +36,11 @@ public class GoldTotemItem extends Item {
         super(new Properties().tab(Goety.TAB).stacksTo(1).rarity(Rarity.RARE));
     }
 
+    public int getRGBDurabilityForDisplay(ItemStack stack)
+    {
+        return MathHelper.hsvToRgb(Math.max(0.0F, (float) (1.0F - getDurabilityForDisplay(stack))/2.0F), 1.0F, 1.0F);
+    }
+
     @Override
     public boolean hasContainerItem(ItemStack stack) {
         return true;
@@ -44,10 +50,13 @@ public class GoldTotemItem extends Item {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
-        assert container.getTag() != null;
-        if (container.getTag().getInt(SOULSAMOUNT) > MainConfig.CraftingSouls.get()) {
-            GoldTotemItem.decreaseSouls(container, MainConfig.CraftingSouls.get());
-            return container;
+        if (container.getTag() != null) {
+            if (container.getTag().getInt(SOULSAMOUNT) > MainConfig.CraftingSouls.get()) {
+                GoldTotemItem.decreaseSouls(container, MainConfig.CraftingSouls.get());
+                return container;
+            } else {
+                return new ItemStack(ModItems.SPENTTOTEM.get());
+            }
         } else {
             return new ItemStack(ModItems.SPENTTOTEM.get());
         }

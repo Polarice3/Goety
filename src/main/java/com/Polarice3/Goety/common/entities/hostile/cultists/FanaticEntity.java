@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -194,7 +195,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
-        if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
+        if (worldIn.getRandom().nextInt(100) == 0) {
             CrimsonSpiderEntity spider = new CrimsonSpiderEntity(ModEntityType.CRIMSON_SPIDER.get(), level);
             if (this.isPersistenceRequired()){
                 spider.setPersistenceRequired();
@@ -210,9 +211,6 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.random.nextInt(12);
-        int random2 = this.random.nextInt(6);
-        int random3 = this.random.nextInt(6);
-        int random4 = this.random.nextInt(3);
         int witchbomb;
         if (MainConfig.FanaticWitchBombChance.get() != 0){
             witchbomb = this.random.nextInt(MainConfig.FanaticWitchBombChance.get());
@@ -266,151 +264,27 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         } else {
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.PITCHFORK.get()));
         }
-        switch (random2){
-            case 0:
-            case 1:
-            case 2:
-                break;
-            case 3:
-                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-                switch (random3){
-                    case 0:
-                    case 1:
-                    case 2:
-                        break;
-                    case 3:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                        break;
-                    case 4:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                        break;
-                    case 5:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
+        boolean flag = true;
+
+        for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+            if (equipmentslottype.getType() == EquipmentSlotType.Group.ARMOR) {
+                ItemStack itemstack = this.getItemBySlot(equipmentslottype);
+                if (!flag && this.random.nextFloat() < 0.25F) {
+                    break;
                 }
-                break;
-            case 4:
-                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-                switch (random3){
-                    case 0:
-                    case 1:
-                    case 2:
-                        break;
-                    case 3:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                        break;
-                    case 4:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                        break;
-                    case 5:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
+
+                flag = false;
+                if (itemstack.isEmpty()) {
+                    int i = this.random.nextInt(8);
+                    if (i == 4){
+                        --i;
+                    }
+                    Item item = getEquipmentForSlot(equipmentslottype, i);
+                    if (item != null) {
+                        this.setItemSlot(equipmentslottype, new ItemStack(item));
+                    }
                 }
-                break;
-            case 5:
-                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-                switch (random3){
-                    case 0:
-                    case 1:
-                    case 2:
-                        break;
-                    case 3:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                        break;
-                    case 4:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                        break;
-                    case 5:
-                        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-                        switch (random4){
-                            case 0:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                                break;
-                            case 1:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-                                break;
-                            case 2:
-                                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                        }
-                }
+            }
         }
         if (witchbomb == 0) {
             this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.WITCHBOMB.get()));

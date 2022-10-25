@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_column",
   "textures": {
-    "end": "goety:blocks/cursed_stone",
+    "end": "goety:blocks/cursed_top",
     "side": "goety:blocks/soul_fang_totem"
   }
 }

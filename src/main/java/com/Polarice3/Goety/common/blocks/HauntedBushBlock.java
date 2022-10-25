@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.EffectsUtil;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -33,7 +34,9 @@ public class HauntedBushBlock extends BushBlock implements net.minecraftforge.co
     public void entityInside(BlockState pState, World pLevel, BlockPos pPos, Entity pEntity) {
         if (pEntity instanceof LivingEntity){
             LivingEntity livingEntity = (LivingEntity) pEntity;
-            corruption(livingEntity);
+            if (!RobeArmorFinder.FindNecroBootsofWander(livingEntity)){
+                corruption(livingEntity);
+            }
         }
     }
 

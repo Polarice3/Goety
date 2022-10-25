@@ -57,6 +57,14 @@ public class SoulBulletEntity extends DamagingProjectileEntity {
         this.remove();
     }
 
+    protected boolean canHitEntity(Entity pEntity) {
+        if (this.getOwner() != null && this.getOwner().isAlliedTo(pEntity)){
+            return false;
+        } else {
+            return super.canHitEntity(pEntity);
+        }
+    }
+
     public boolean isOnFire() {
         return false;
     }

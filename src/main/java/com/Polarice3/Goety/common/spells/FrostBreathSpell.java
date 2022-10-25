@@ -7,7 +7,6 @@ import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -51,7 +50,7 @@ public class FrostBreathSpell extends SpewingSpell{
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (MobUtil.notImmuneToFrost(livingTarget)) {
                         livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
-                        livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), livingTarget instanceof BlazeEntity ? 2.0F : 1.0F + enchantment);
+                        livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), MobUtil.extraFrostDamage(livingTarget) ? 2.0F : 1.0F + enchantment);
                     }
                 }
             }
@@ -80,7 +79,7 @@ public class FrostBreathSpell extends SpewingSpell{
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (MobUtil.notImmuneToFrost(livingTarget)) {
                         livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
-                        livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), livingTarget instanceof BlazeEntity ? 4.0F : 2.0F + enchantment);
+                        livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), MobUtil.extraFrostDamage(livingTarget) ? 4.0F : 2.0F + enchantment);
                     }
                 }
             }

@@ -1,0 +1,39 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:roaringfocus"
+  },
+  "craftType": "magic",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
+    {
+      "item": "goety:soulruby"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "item": "minecraft:note_block"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "tag": "minecraft:wool"
+    }
+  ],
+  "result": {
+    "item": "goety:sonicboomfocus"
+  }
+}

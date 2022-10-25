@@ -146,12 +146,9 @@ public abstract class Ritual {
                 ItemStack stack = handler.extractItem(0, 1, true);
                 if (ingredient.test(stack)) {
                     ItemStack extracted = handler.extractItem(0, 1, false);
+
                     consumedIngredients.add(extracted);
-                    ((ServerWorld) world)
-                            .sendParticles(ParticleTypes.LARGE_SMOKE, pedestal.getBlockPos().getX() + 0.5,
-                                    pedestal.getBlockPos().getY() + 1.5, pedestal.getBlockPos().getZ() + 0.5, 1,
-                                    0.0, 0.0, 0.0,
-                                    0.0);
+                    ((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, pedestal.getBlockPos().getX() + 0.5D, pedestal.getBlockPos().getY() + 1.5D, pedestal.getBlockPos().getZ() + 0.5D, 1, 0, 0, 0, 0);
 
                     world.playSound(null, pedestal.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundCategory.BLOCKS,
                             0.7f, 0.7f);

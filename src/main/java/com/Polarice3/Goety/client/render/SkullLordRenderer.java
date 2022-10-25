@@ -21,7 +21,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 
-public class SkullLordRenderer extends MobRenderer<SkullLordEntity, SkullMobModel> {
+public class SkullLordRenderer extends MobRenderer<SkullLordEntity, SkullMobModel<SkullLordEntity>> {
     public static final ResourceLocation CONNECTION = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord_connection.png");
     public static final ResourceLocation LASER_BEAM = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord_laser.png");
     private static final ResourceLocation LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord.png");
@@ -31,7 +31,7 @@ public class SkullLordRenderer extends MobRenderer<SkullLordEntity, SkullMobMode
     private static final RenderType LASER_RENDER_TYPE = RenderType.entityCutoutNoCull(LASER_BEAM);
 
     public SkullLordRenderer(EntityRendererManager p_i50961_1_) {
-        super(p_i50961_1_, new SkullMobModel(0.0F), 0.5F);
+        super(p_i50961_1_, new SkullMobModel<>(0.0F), 0.5F);
     }
 
     protected int getBlockLightLevel(SkullLordEntity pEntity, BlockPos pPos) {

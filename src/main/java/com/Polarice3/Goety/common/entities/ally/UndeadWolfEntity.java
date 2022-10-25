@@ -23,12 +23,15 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class UndeadWolfEntity extends SummonedEntity{
@@ -75,7 +78,7 @@ public class UndeadWolfEntity extends SummonedEntity{
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new WanderGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new BegGoal(this, 8.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
@@ -151,6 +154,16 @@ public class UndeadWolfEntity extends SummonedEntity{
         super.readAdditionalSaveData(pCompound);
         this.orderedToSit = pCompound.getBoolean("Sitting");
         this.setInSittingPose(this.orderedToSit);
+    }
+
+    @Nullable
+    public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
+        pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+        if (this.isUpgraded()){
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20.0D);
+            this.setHealth(20.0F);
+        }
+        return pSpawnData;
     }
 
     public boolean isInSittingPose() {
@@ -232,14 +245,16 @@ public class UndeadWolfEntity extends SummonedEntity{
         if (this.isUpgraded() && killedEntity instanceof WolfEntity && random == 1 && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(killedEntity, ModEntityType.UNDEAD_WOLF_MINION.get(), (timer) -> {})) {
             WolfEntity zombieEntity = (WolfEntity)killedEntity;
             UndeadWolfEntity zombieMinionEntity = zombieEntity.convertTo(ModEntityType.UNDEAD_WOLF_MINION.get(), false);
-            zombieMinionEntity.finalizeSpawn(world, level.getCurrentDifficultyAt(zombieMinionEntity.blockPosition()), SpawnReason.CONVERSION, null, (CompoundNBT)null);
-            if (this.getTrueOwner() != null){
-                zombieMinionEntity.setOwnerId(this.getTrueOwner().getUUID());
-            }
-            zombieMinionEntity.setLimitedLife(10 * (15 + this.level.random.nextInt(45)));
-            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(killedEntity, zombieMinionEntity);
-            if (!this.isSilent()) {
-                world.levelEvent((PlayerEntity)null, 1026, this.blockPosition(), 0);
+            if (zombieMinionEntity != null) {
+                zombieMinionEntity.finalizeSpawn(world, level.getCurrentDifficultyAt(zombieMinionEntity.blockPosition()), SpawnReason.CONVERSION, null, (CompoundNBT) null);
+                if (this.getTrueOwner() != null) {
+                    zombieMinionEntity.setOwnerId(this.getTrueOwner().getUUID());
+                }
+                zombieMinionEntity.setLimitedLife(10 * (15 + this.level.random.nextInt(45)));
+                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(killedEntity, zombieMinionEntity);
+                if (!this.isSilent()) {
+                    world.levelEvent((PlayerEntity) null, 1026, this.blockPosition(), 0);
+                }
             }
         }
         if (killedEntity instanceof AbstractSkeletonEntity){

@@ -11,6 +11,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
@@ -68,7 +69,7 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
-        if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
+        if (worldIn.getRandom().nextInt(100) == 0) {
             CrimsonSpiderEntity spider = new CrimsonSpiderEntity(ModEntityType.CRIMSON_SPIDER.get(), level);
             if (this.isPersistenceRequired()){
                 spider.setPersistenceRequired();
@@ -83,21 +84,32 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         int random = this.level.random.nextInt(2);
-        int random2 = this.level.random.nextInt(4);
         if (random == 1) {
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
         } else {
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.CROSSBOW));
         }
-        switch (random2){
-            case 0:
-            case 1:
-                break;
-            case 2:
-                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-                break;
-            case 3:
-                this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+        boolean flag = true;
+
+        for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+            if (equipmentslottype.getType() == EquipmentSlotType.Group.ARMOR && equipmentslottype != EquipmentSlotType.HEAD) {
+                ItemStack itemstack = this.getItemBySlot(equipmentslottype);
+                if (!flag && this.random.nextFloat() < 0.25F) {
+                    break;
+                }
+
+                flag = false;
+                if (itemstack.isEmpty()) {
+                    int i = this.random.nextInt(8);
+                    if (i == 4){
+                        --i;
+                    }
+                    Item item = getEquipmentForSlot(equipmentslottype, i);
+                    if (item != null) {
+                        this.setItemSlot(equipmentslottype, new ItemStack(item));
+                    }
+                }
+            }
         }
         this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTISTHELM.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);

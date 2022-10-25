@@ -44,6 +44,10 @@ public class BlockFinder {
                 && !state.hasTileEntity();
     }
 
+    public static boolean ActivateDeadSand(BlockState state){
+        return (state.is(ModTags.Blocks.DEAD_SAND_SPREADABLE) || state.getMaterial() == Material.AIR) && state.getMaterial() != Material.LAVA;
+    }
+
     public static boolean LivingBlocks(BlockState state){
         return state.getBlock() instanceof HugeMushroomBlock || state.getBlock() instanceof StemGrownBlock || state.is(ModTags.Blocks.DEAD_BLOCK_SPREADABLE);
     }

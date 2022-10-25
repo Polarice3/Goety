@@ -6,7 +6,7 @@ modId="goety" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Goety" #mandatory
 displayURL="https://github.com/Polarice3/Goety" #optional
-logoFile="examplemod.png" #optional
+logoFile="Goety.png" #optional
 credits="Tutorial/Help: Technovision, Cy4's Modding, TelepathicGrunt, diesieben07.
         Github Codes: Vazkii, williewillus, Hubry, TheIllusiveC4, CFGrafanaStats, Alex666, hollingsworth, baileyholl, Lothrazar, DenisMasterHerobrine, Ellpeck,
         owmii, elucent, WayofTime, stal111, The Grey Ghost, HellFirePvP, klikli-dev, Qelifern, vemerion, MrCrayfish, Ipsis, TeamTwilight, Yunus1903, Kaupenjoe."

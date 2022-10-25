@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm, IHasHead {
     private final ModelRenderer body;
+    private final ModelRenderer cape;
     private final ModelRenderer head;
     private final ModelRenderer nose;
     private final ModelRenderer Hat;
@@ -22,7 +23,6 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
     private final ModelRenderer leg0;
     private final ModelRenderer leg1;
     private final ModelRenderer rightArm;
-    private final ModelRenderer rightItem;
     private final ModelRenderer leftArm;
 
     public VizierModel(float scaleFactor, float p_i47227_2_) {
@@ -32,12 +32,17 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
         body = new ModelRenderer(this);
         body.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         body.texOffs(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, scaleFactor, false);
-        body.texOffs(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 18.0F, 6.0F, scaleFactor + 0.5F, false);
+        body.texOffs(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 20.0F, 6.0F, scaleFactor + 0.5F, false);
+
+        cape = new ModelRenderer(this);
+        cape.setPos(0.0F, 0.0F + p_i47227_2_, 3.5F);
+        cape.texOffs(44, 62).addBox(-4.0F, 0.0F, -0.5F, 8.0F, 20.0F, 1.0F, scaleFactor + 0.5F, false);
 
         head = new ModelRenderer(this);
         head.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         body.addChild(head);
         head.texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, scaleFactor, false);
+        head.texOffs(0, 80).addBox(-5.0F, -3.0F, -4.0F, 10.0F, 4.0F, 9.0F, scaleFactor, false);
 
         nose = new ModelRenderer(this);
         nose.setPos(0.0F, -2.0F + p_i47227_2_, 0.0F);
@@ -75,11 +80,6 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
         rightArm.setPos(-5.0F, 2.0F + p_i47227_2_, 0.0F);
         body.addChild(rightArm);
         rightArm.texOffs(40, 46).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, scaleFactor, false);
-
-        rightItem = new ModelRenderer(this);
-        rightItem.setPos(-0.5F, 6.0F + p_i47227_2_, 0.5F);
-        rightArm.addChild(rightItem);
-
 
         leftArm = new ModelRenderer(this);
         leftArm.setPos(5.0F, 2.0F + p_i47227_2_, 0.0F);
@@ -167,6 +167,10 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
     @Override
     public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
         body.render(matrixStack, buffer, packedLight, packedOverlay);
+    }
+
+    public void renderCape(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay) {
+        this.cape.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay);
     }
 
     public Iterable<ModelRenderer> parts() {

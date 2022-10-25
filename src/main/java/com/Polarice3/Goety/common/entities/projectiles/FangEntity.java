@@ -31,6 +31,7 @@ public class FangEntity extends Entity {
     private boolean clientSideAttackStarted;
     private int damage = 0;
     private int burning = 0;
+    private int soulEater = 0;
     private LivingEntity owner;
     private UUID ownerUUID;
 
@@ -46,13 +47,14 @@ public class FangEntity extends Entity {
         this.setPos(pPosX, pPosY, pPosZ);
     }
 
-    public FangEntity(World world, double pPosX, double pPosY, double pPosZ, float pYRot, int pWarmUp, int damage, int burning, LivingEntity owner) {
+    public FangEntity(World world, double pPosX, double pPosY, double pPosZ, float pYRot, int pWarmUp, int damage, int burning, int soulEater, LivingEntity owner) {
         this(ModEntityType.FANG.get(), world);
         this.warmupDelayTicks = pWarmUp;
         this.setOwner(owner);
         this.yRot = pYRot * (180F / (float)Math.PI);
         this.damage = damage;
         this.burning = burning;
+        this.soulEater = soulEater;
         this.setTotemSpawned(true);
         this.setPos(pPosX, pPosY, pPosZ);
     }
@@ -76,6 +78,10 @@ public class FangEntity extends Entity {
 
     public void setTotemSpawned(boolean totemSpawned) {
         this.entityData.set(ABSORBING, totemSpawned);
+    }
+
+    public int getSoulEater(){
+        return this.soulEater;
     }
 
     public void setOwner(@Nullable LivingEntity p_190549_1_) {
@@ -103,6 +109,9 @@ public class FangEntity extends Entity {
         if (pCompound.contains("Burning")){
             this.burning = pCompound.getInt("Burning");
         }
+        if (pCompound.contains("SoulEater")){
+            this.soulEater = pCompound.getInt("SoulEater");
+        }
         if (pCompound.hasUUID("Owner")) {
             this.ownerUUID = pCompound.getUUID("Owner");
         }
@@ -114,6 +123,7 @@ public class FangEntity extends Entity {
         if (this.isTotemSpawned()){
             pCompound.putInt("Damage", this.damage);
             pCompound.putInt("Burning", this.burning);
+            pCompound.putInt("SoulEater", this.soulEater);
         }
         if (this.ownerUUID != null) {
             pCompound.putUUID("Owner", this.ownerUUID);

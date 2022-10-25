@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=false": { "model": "goety:block/dry_obelisk" },
+    "powered=true": {"model": "goety:block/dry_obelisk_lit"}
+  }
+}

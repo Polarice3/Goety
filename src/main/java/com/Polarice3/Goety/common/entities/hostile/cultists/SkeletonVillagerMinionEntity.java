@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -15,10 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -27,16 +24,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Predicate;
 
-public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultistMinion {
-    private final RangedBowAttackGoal<SkeletonVillagerMinionEntity> bowGoal = new RangedBowAttackGoal<>(this, 1.0D, 20, 15.0F);
+public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRangedAttackMob {
+    private final CreatureBowAttackGoal<SkeletonVillagerMinionEntity> bowGoal = new CreatureBowAttackGoal<>(this, 1.0D, 20, 15.0F);
     private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
 
         public void stop() {
@@ -49,12 +42,10 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
             SkeletonVillagerMinionEntity.this.setAggressive(true);
         }
     };
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(SkeletonVillagerMinionEntity.class, DataSerializers.OPTIONAL_UUID);
-    public LivingEntity owner;
     public boolean limitedLifespan;
     public int limitedLifeTicks;
 
-    public SkeletonVillagerMinionEntity(EntityType<? extends AbstractCultistEntity> type, World worldIn) {
+    public SkeletonVillagerMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
         this.reassessWeaponGoal();
     }
@@ -64,9 +55,7 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(AbstractCultistEntity.class));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombieVillagerMinionEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(SkeletonVillagerMinionEntity.class));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -108,40 +97,8 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
 
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public AbstractCultistEntity.ArmPose getArmPose() {
-        if (this.getMainHandItem().getItem() == Items.BOW) {
-            if (this.isAggressive()){
-                return ArmPose.BOW_AND_ARROW;
-            } else {
-                return ArmPose.NEUTRAL;
-            }
-        } else {
-            return ArmPose.NEUTRAL;
-        }
-    }
-
-    public boolean isAlliedTo(Entity entityIn) {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (entityIn == livingentity) {
-                return true;
-            }
-
-            if (livingentity != null) {
-                return livingentity.isAlliedTo(entityIn);
-            }
-        }
-        return super.isAlliedTo(entityIn);
-    }
-
     public CreatureAttribute getMobType() {
         return CreatureAttribute.UNDEAD;
-    }
-
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -150,20 +107,6 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-        UUID uuid;
-        if (compound.hasUUID("Owner")) {
-            uuid = compound.getUUID("Owner");
-        } else {
-            String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
-        }
-
-        if (uuid != null) {
-            try {
-                this.setOwnerId(uuid);
-            } catch (Throwable ignored) {
-            }
         }
 
     }
@@ -174,32 +117,7 @@ public class SkeletonVillagerMinionEntity extends AbstractCultistEntity implemen
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
-        if (this.getOwnerId() != null) {
-            compound.putUUID("Owner", this.getOwnerId());
-        }
 
-    }
-
-    public LivingEntity getTrueOwner() {
-        try {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public UUID getOwnerId() {
-        return this.entityData.get(OWNER_UNIQUE_ID).orElse((UUID)null);
-    }
-
-    public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
-    }
-
-    public void setOwner(LivingEntity ownerIn) {
-        this.owner = ownerIn;
     }
 
     public void setLimitedLife(int limitedLifeTicksIn) {

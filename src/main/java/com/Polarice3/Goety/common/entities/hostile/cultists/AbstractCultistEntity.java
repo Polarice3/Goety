@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
@@ -99,21 +100,21 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
 
                 if (livingentity != null && this.level.getDifficulty() == Difficulty.HARD && this.random.nextFloat() < this.getReinforcementChance() && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
                     AbstractCultistEntity cultist = null;
-                    int random = this.random.nextInt(12);
+                    int random = this.random.nextInt(7);
                     switch (random){
-                        case 4:
+                        case 0:
                             cultist = ModEntityType.FANATIC.get().create(serverworld);
                             break;
-                        case 8:
+                        case 2:
                             cultist = ModEntityType.ZEALOT.get().create(serverworld);
                             break;
-                        case 9:
+                        case 4:
                             cultist = ModEntityType.DISCIPLE.get().create(serverworld);
                             break;
-                        case 10:
+                        case 5:
                             cultist = ModEntityType.BELDAM.get().create(serverworld);
                             break;
-                        case 11:
+                        case 6:
                             cultist = ModEntityType.THUG.get().create(serverworld);
                     }
                     if (cultist != null) {
@@ -201,14 +202,13 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else if (entityIn instanceof AbstractPiglinEntity){
             return this.isAlliedTo(entityIn);
-        } else return entityIn instanceof ICultistMinion;
+        } else return entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this;
     }
 
     @OnlyIn(Dist.CLIENT)
     public static enum ArmPose {
         CROSSED,
         ATTACKING,
-        ZOMBIE,
         SPELLCASTING,
         SPELL_AND_WEAPON,
         BOW_AND_ARROW,

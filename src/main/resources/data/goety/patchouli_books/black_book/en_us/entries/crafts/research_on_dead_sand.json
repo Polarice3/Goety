@@ -21,6 +21,15 @@
     {
       "type": "patchouli:text",
       "text": "Perhaps this Dead Sand can be used to build a new base of operation for yourself, or it can be used for destructive purposes. As for the original Sands, it seems the people of old managed to destroy them all. How, it doesn't specify... for some reason."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:dry_obelisk",
+      "text": "You've also discovered a way to speed up the conversion process. By placing this obelisk near Dead Sands, it will cause the sands to convert nearby blocks faster."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "However, the obelisk will stop working once enough Dead Sands are near it."
     }
   ]
 }

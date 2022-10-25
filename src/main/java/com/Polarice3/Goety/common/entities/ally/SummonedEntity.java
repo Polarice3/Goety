@@ -4,18 +4,15 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
-import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -31,8 +28,10 @@ import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -42,7 +41,7 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class SummonedEntity extends OwnedEntity {
-    private static final DataParameter<Boolean> WANDERING = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Byte> SUMMONED_FLAGS = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BYTE);
     public boolean limitedLifespan;
     public int limitedLifeTicks;
     public boolean upgraded;
@@ -88,6 +87,30 @@ public class SummonedEntity extends OwnedEntity {
 
     public void tick(){
         super.tick();
+        if (this.isStaying()){
+            boolean docile = this.getLastHurtByMob() == null || this.getLastHurtByMob().isDeadOrDying();
+            if (this.getTrueOwner() != null) {
+                if (this.getTrueOwner().getLastHurtByMob() != null && !this.getTrueOwner().getLastHurtByMob().isDeadOrDying()) {
+                    if (this.distanceTo(this.getTrueOwner()) <= 8.0F) {
+                        docile = false;
+                    }
+                }
+            }
+            if (docile){
+                this.setTarget(null);
+                if (this.navigation.getPath() != null) {
+                    this.navigation.stop();
+                }
+            }
+            if (this.isWandering()) {
+                this.setWandering(false);
+            }
+        }
+        if (this.isWandering()){
+            if (this.isStaying()) {
+                this.setStaying(false);
+            }
+        }
         if (this.getTrueOwner() != null){
             if (RobeArmorFinder.FindNecroHelm(this.getTrueOwner()) && this.getMobType() == CreatureAttribute.UNDEAD){
                 this.limitedLifespan = false;
@@ -171,34 +194,54 @@ public class SummonedEntity extends OwnedEntity {
                 SummonedEntity summoned = (SummonedEntity) source.getEntity();
                 if (summoned.getTrueOwner() == this.getTrueOwner()) {
                     return false;
-                } else {
-                    return super.hurt(source, amount);
                 }
-            } else {
-                return super.hurt(source, amount);
             }
-        } else {
-            return super.hurt(source, amount);
         }
-    }
-
-    public boolean isWandering() {
-        return this.entityData.get(WANDERING);
-    }
-
-    public void setWandering(boolean wandering) {
-        this.entityData.set(WANDERING, wandering);
+        return super.hurt(source, amount);
     }
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(WANDERING, false);
+        this.entityData.define(SUMMONED_FLAGS, (byte)0);
+    }
+
+    private boolean getFlag(int mask) {
+        int i = this.entityData.get(SUMMONED_FLAGS);
+        return (i & mask) != 0;
+    }
+
+    private void setFlags(int mask, boolean value) {
+        int i = this.entityData.get(SUMMONED_FLAGS);
+        if (value) {
+            i = i | mask;
+        } else {
+            i = i & ~mask;
+        }
+
+        this.entityData.set(SUMMONED_FLAGS, (byte)(i & 255));
+    }
+
+    public boolean isWandering() {
+        return this.getFlag(1);
+    }
+
+    public void setWandering(boolean wandering) {
+        this.setFlags(1, wandering);
+    }
+
+    public boolean isStaying(){
+        return this.getFlag(2);
+    }
+
+    public void setStaying(boolean staying){
+        this.setFlags(2, staying);
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.upgraded = compound.getBoolean("Upgraded");
-        this.entityData.set(WANDERING, compound.getBoolean("wandering"));
+        this.setWandering(compound.getBoolean("wandering"));
+        this.setStaying(compound.getBoolean("staying"));
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
@@ -210,13 +253,35 @@ public class SummonedEntity extends OwnedEntity {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Upgraded", this.upgraded);
 
-        if (this.entityData.get(WANDERING)) {
+        if (this.isWandering()) {
             compound.putBoolean("wandering", true);
+        }
+
+        if (this.isStaying()) {
+            compound.putBoolean("staying", true);
         }
 
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
+    }
+
+    public void updateMoveMode(PlayerEntity player){
+        if (!this.isWandering() && !this.isStaying()){
+            this.setWandering(true);
+            this.setStaying(false);
+            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.wander", this.getDisplayName()), true);
+        } else if (!this.isStaying()){
+            this.setWandering(false);
+            this.setStaying(true);
+            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.staying", this.getDisplayName()), true);
+        } else {
+            this.setWandering(false);
+            this.setStaying(false);
+            player.displayClientMessage(new TranslationTextComponent("info.goety.minion.follow", this.getDisplayName()), true);
+        }
+        this.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0f, 1.0f);
+
     }
 
     public boolean isUpgraded() {
@@ -230,10 +295,6 @@ public class SummonedEntity extends OwnedEntity {
     public void setLimitedLife(int limitedLifeTicksIn) {
         this.limitedLifespan = true;
         this.limitedLifeTicks = limitedLifeTicksIn;
-    }
-
-    public boolean canBeAffected(EffectInstance pPotioneffect) {
-        return pPotioneffect.getEffect() != ModEffects.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
     }
 
     public static class FollowOwnerGoal extends Goal {
@@ -268,7 +329,7 @@ public class SummonedEntity extends OwnedEntity {
                 return false;
             } else if (this.summonedEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
                 return false;
-            } else if (this.summonedEntity.isWandering()) {
+            } else if (this.summonedEntity.isWandering() || this.summonedEntity.isStaying()) {
                 return false;
             } else if (this.summonedEntity.isAggressive()) {
                 return false;
@@ -359,6 +420,25 @@ public class SummonedEntity extends OwnedEntity {
 
         private int getRandomNumber(int min, int max) {
             return this.summonedEntity.getRandom().nextInt(max - min + 1) + min;
+        }
+    }
+
+    class WanderGoal extends WaterAvoidingRandomWalkingGoal{
+
+        public WanderGoal(CreatureEntity p_i47301_1_, double p_i47301_2_) {
+            this(p_i47301_1_, p_i47301_2_, 0.001F);
+        }
+
+        public WanderGoal(CreatureEntity entity, double speedModifier, float probability) {
+            super(entity, speedModifier, probability);
+        }
+
+        public boolean canUse() {
+            if (super.canUse()){
+                return !SummonedEntity.this.isStaying();
+            } else {
+                return false;
+            }
         }
     }
 }

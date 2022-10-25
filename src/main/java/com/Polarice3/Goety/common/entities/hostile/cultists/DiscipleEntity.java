@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
@@ -13,8 +12,8 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -36,8 +35,10 @@ import java.util.function.Predicate;
 
 public class DiscipleEntity extends SpellcastingCultistEntity implements ICultist{
     private int f;
+    private int cooldown;
+    private int spellcycle;
     private final Predicate<Entity> field_213690_b = Entity::isAlive;
-    private boolean roarparticles;
+    private boolean roarParticles;
 
     public DiscipleEntity(EntityType<? extends SpellcastingCultistEntity> type, World worldIn) {
         super(type, worldIn);
@@ -74,11 +75,25 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         return SoundEvents.PILLAGER_DEATH;
     }
 
+    public void addAdditionalSaveData(CompoundNBT pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putInt("firing", this.f);
+        pCompound.putInt("cooldown", this.cooldown);
+        pCompound.putInt("spellcycle", this.spellcycle);
+    }
+
+    public void readAdditionalSaveData(CompoundNBT pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.f = pCompound.getInt("firing");
+        this.cooldown = pCompound.getInt("cooldown");
+        this.spellcycle = pCompound.getInt("spellcycle");
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
-        if ((double)worldIn.getRandom().nextFloat() < 0.05D) {
+        if (worldIn.getRandom().nextInt(100) == 0) {
             CrimsonSpiderEntity spider = new CrimsonSpiderEntity(ModEntityType.CRIMSON_SPIDER.get(), level);
             if (this.isPersistenceRequired()){
                 spider.setPersistenceRequired();
@@ -92,33 +107,42 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        int random = this.level.random.nextInt(3);
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NETHER_BOOK.get()));
         this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
         this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTISTHELM.get()));
         this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.CULTISTROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
         this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
-        switch (random){
-            case 0:
-                break;
-            case 1:
-                this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-                break;
-            case 2:
-                this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-                this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-                break;
+        boolean flag = true;
+
+        for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+            if (equipmentslottype.getType() == EquipmentSlotType.Group.ARMOR && equipmentslottype != EquipmentSlotType.HEAD && equipmentslottype != EquipmentSlotType.CHEST) {
+                ItemStack itemstack = this.getItemBySlot(equipmentslottype);
+                if (!flag && this.random.nextFloat() < 0.25F) {
+                    break;
+                }
+
+                flag = false;
+                if (itemstack.isEmpty()) {
+                    int i = this.random.nextInt(8);
+                    if (i == 4){
+                        --i;
+                    }
+                    Item item = getEquipmentForSlot(equipmentslottype, i);
+                    if (item != null) {
+                        this.setItemSlot(equipmentslottype, new ItemStack(item));
+                    }
+                }
+            }
         }
     }
 
     public boolean isFiring(){
-        return this.roarparticles;
+        return this.roarParticles;
     }
 
     public void setFiring(boolean firing){
-        this.roarparticles = firing;
+        this.roarParticles = firing;
     }
 
     @Override
@@ -162,6 +186,20 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                 this.f = 0;
             }
         }
+        if (this.cooldown < 50) {
+            ++this.cooldown;
+        } else {
+            this.spellcycle = 0;
+        }
+        if (this.spellcycle == 1){
+            if (this.tickCount % 20 == 0) {
+                if (this.level.random.nextBoolean()) {
+                    this.spellcycle = 2;
+                } else {
+                    this.spellcycle = 3;
+                }
+            }
+        }
     }
 
     private void launch(Entity p_213688_1_, LivingEntity livingEntity) {
@@ -188,7 +226,10 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
         @Override
         public boolean canUse() {
-            return super.canUse() && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
+            return super.canUse()
+                    && DiscipleEntity.this.spellcycle == 0
+                    && DiscipleEntity.this.getTarget() != null
+                    && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
         }
 
         protected int getCastingTime() {
@@ -215,6 +256,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                 if (!DiscipleEntity.this.isSilent()) {
                     DiscipleEntity.this.level.levelEvent(null, 1016, DiscipleEntity.this.blockPosition(), 0);
                 }
+                DiscipleEntity.this.cooldown = 0;
+                ++DiscipleEntity.this.spellcycle;
             }
         }
 
@@ -234,15 +277,19 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
         @Override
         public boolean canUse() {
-            return super.canUse() && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
+            return super.canUse()
+                    && DiscipleEntity.this.cooldown >= 45
+                    && DiscipleEntity.this.spellcycle == 2
+                    && DiscipleEntity.this.getTarget() != null
+                    && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
         }
 
         protected int getCastingTime() {
-            return MainConfig.ZombieDuration.get();
+            return 20;
         }
 
         protected int getCastingInterval() {
-            return 250;
+            return 0;
         }
 
         public void castSpell() {
@@ -256,6 +303,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                 summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setTarget(livingentity);
                 DiscipleEntity.this.level.addFreshEntity(summonedentity);
+                DiscipleEntity.this.cooldown = 0;
+                DiscipleEntity.this.spellcycle = 0;
             }
         }
 
@@ -275,15 +324,19 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
         @Override
         public boolean canUse() {
-            return super.canUse() && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
+            return super.canUse()
+                    && DiscipleEntity.this.cooldown >= 45
+                    && DiscipleEntity.this.spellcycle == 3
+                    && DiscipleEntity.this.getTarget() != null
+                    && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
         }
 
         protected int getCastingTime() {
-            return MainConfig.SkeletonDuration.get();
+            return 60;
         }
 
         protected int getCastingInterval() {
-            return 250;
+            return 0;
         }
 
         public void castSpell() {
@@ -297,6 +350,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                 summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setTarget(livingentity);
                 DiscipleEntity.this.level.addFreshEntity(summonedentity);
+                DiscipleEntity.this.cooldown = 0;
+                DiscipleEntity.this.spellcycle = 0;
             }
         }
 
@@ -306,7 +361,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
         @Override
         protected SpellcastingCultistEntity.SpellType getSpellType() {
-            return SpellType.ZOMBIE;
+            return SpellType.SKELETON;
         }
     }
 
@@ -341,6 +396,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
         public void castSpell() {
             DiscipleEntity.this.setFiring(true);
+            DiscipleEntity.this.cooldown = 0;
             DiscipleEntity.this.playSound(ModSounds.ROAR_SPELL.get(), 1.0F, 1.0F);
         }
 

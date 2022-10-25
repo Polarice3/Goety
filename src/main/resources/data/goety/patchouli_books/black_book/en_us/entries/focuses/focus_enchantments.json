@@ -12,7 +12,7 @@
       "type": "patchouli:spotlight",
       "item": "minecraft:enchanted_book",
       "title": "Potency",
-      "text": "Potency increases the damage of your spells. The most common of enchantments."
+      "text": "Potency increases the damage of your spells."
     },
     {
       "type": "patchouli:spotlight",
@@ -36,7 +36,7 @@
       "type": "patchouli:spotlight",
       "item": "minecraft:enchanted_book",
       "title": "Range",
-      "text": "Your spells goes further away. Can reach up to 10 Levels with 1 Block per level."
+      "text": "Your spells goes further away. Can reach up to 10 Levels with 1 Block per level. The most common of enchantments."
     },
     {
       "type": "patchouli:spotlight",

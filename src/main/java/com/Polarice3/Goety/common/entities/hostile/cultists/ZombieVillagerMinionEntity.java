@@ -1,13 +1,18 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
-import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -16,31 +21,36 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 
-public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements ICultistMinion{
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(ZombieVillagerMinionEntity.class, DataSerializers.OPTIONAL_UUID);
-    public LivingEntity owner;
+public class ZombieVillagerMinionEntity extends OwnedEntity{
+    private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(ZombieVillagerMinionEntity.class, DataSerializers.INT);
+    public static final Map<Integer, ResourceLocation> TEXTURE_BY_TYPE = Util.make(Maps.newHashMap(), (map) -> {
+        map.put(0, Goety.location("textures/entity/cultist/zombie/zombie_0.png"));
+        map.put(1, Goety.location("textures/entity/cultist/zombie/zombie_1.png"));
+        map.put(2, Goety.location("textures/entity/cultist/zombie/zombie_2.png"));
+        map.put(3, Goety.location("textures/entity/cultist/zombie/zombie_3.png"));
+        map.put(4, Goety.location("textures/entity/cultist/zombie/zombie_4.png"));
+        map.put(5, Goety.location("textures/entity/cultist/zombie/zombie_5.png"));
+    });
     public boolean limitedLifespan;
     public int limitedLifeTicks;
 
-    public ZombieVillagerMinionEntity(EntityType<? extends AbstractCultistEntity> type, World worldIn) {
+    public ZombieVillagerMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return TEXTURE_BY_TYPE.getOrDefault(this.getOutfitType(), TEXTURE_BY_TYPE.get(0));
     }
 
     protected void registerGoals() {
@@ -52,9 +62,7 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements
     protected void applyEntityAI() {
         this.goalSelector.addGoal(2, new CreatureZombieAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(AbstractCultistEntity.class));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(ZombieVillagerMinionEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
@@ -65,6 +73,27 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements
                 .add(Attributes.ARMOR, 2.0D);
     }
 
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_TYPE_ID, 1);
+    }
+
+    public int getOutfitType() {
+        return this.entityData.get(DATA_TYPE_ID);
+    }
+
+    public void setOutfitType(int pType) {
+        if (pType < 0 || pType >= this.OutfitTypeNumber() + 1) {
+            pType = this.random.nextInt(this.OutfitTypeNumber());
+        }
+
+        this.entityData.set(DATA_TYPE_ID, pType);
+    }
+
+    public int OutfitTypeNumber(){
+        return TEXTURE_BY_TYPE.size();
+    }
+
     public void tick(){
         if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
             this.limitedLifeTicks = 20;
@@ -73,50 +102,14 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements
         super.tick();
     }
 
-    public boolean isAlliedTo(Entity entityIn) {
-        if (this.getOwnerId() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (entityIn == livingentity) {
-                return true;
-            }
-
-            if (livingentity != null) {
-                return livingentity.isAlliedTo(entityIn);
-            }
-        }
-        return super.isAlliedTo(entityIn);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public ArmPose getArmPose() {
-        return ArmPose.ZOMBIE;
-    }
-
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
-    }
-
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
 
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
         }
-        UUID uuid;
-        if (compound.hasUUID("Owner")) {
-            uuid = compound.getUUID("Owner");
-        } else {
-            String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
-        }
 
-        if (uuid != null) {
-            try {
-                this.setOwnerId(uuid);
-            } catch (Throwable ignored) {
-            }
-        }
+        this.setOutfitType(compound.getInt("Outfit"));
 
     }
 
@@ -126,32 +119,9 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
-        if (this.getOwnerId() != null) {
-            compound.putUUID("Owner", this.getOwnerId());
-        }
 
-    }
+        compound.putInt("Outfit", this.getOutfitType());
 
-    public LivingEntity getTrueOwner() {
-        try {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            return null;
-        }
-    }
-
-    @Nullable
-    public UUID getOwnerId() {
-        return this.entityData.get(OWNER_UNIQUE_ID).orElse((UUID)null);
-    }
-
-    public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
-    }
-
-    public void setOwner(LivingEntity ownerIn) {
-        this.owner = ownerIn;
     }
 
     public void setLimitedLife(int limitedLifeTicksIn) {
@@ -219,6 +189,7 @@ public class ZombieVillagerMinionEntity extends AbstractCultistEntity implements
             this.setDropChance(equipmentslottype, 0.0F);
         }
         this.handleAttributes(f);
+        this.setOutfitType(this.random.nextInt(this.OutfitTypeNumber()));
         return spawnDataIn;
     }
 

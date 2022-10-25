@@ -41,6 +41,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> GlowLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LaunchCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangDuration;
@@ -60,6 +61,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomDuration;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
@@ -86,6 +88,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> LaunchInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -128,7 +131,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamyMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> WandVexLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> StaffVexLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieLimit;
@@ -138,6 +140,11 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamyThreshold;
+
+    public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
+    public static final ForgeConfigSpec.ConfigValue<Integer> EmeraldAmuletSouls;
+    public static final ForgeConfigSpec.ConfigValue<Integer> NecroSoulSandSouls;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ItemsRepairAmount;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
@@ -161,6 +168,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SpecialBossBar;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSky;
@@ -192,6 +200,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CultistSpread;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ApocalypseMode;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
@@ -212,7 +221,7 @@ public class MainConfig {
                 .defineInRange("maxSouls", 10000, 10, Integer.MAX_VALUE);
         MaxArcaSouls = BUILDER.comment("Arca Maximum Soul Count, Default: 100000")
                 .defineInRange("maxArcaSouls", 100000, 10, Integer.MAX_VALUE);
-        SoulRepair = BUILDER.comment("Dark and Necro Robes repair themselves using Soul Energy, Default: true")
+        SoulRepair = BUILDER.comment("Certain Items repair themselves using Soul Energy, Default: true")
                 .define("soulRepair", true);
         TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy, Default: true")
                 .define("totemUndying", true);
@@ -226,6 +235,10 @@ public class MainConfig {
                 .defineInRange("craftSouls", 1, 0, Integer.MAX_VALUE);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
                 .define("showNumber", false);
+        ApocalypseMode = BUILDER.comment("Nether Meteors deals environmental damage. WARNING: Causes lots of lag. Default: false")
+                .define("apocalypseMode", false);
+        SpecialBossBar = BUILDER.comment("Bosses from the Mod has custom looking Boss Bars. Default: true")
+                .define("specialBossBar", true);
         BUILDER.pop();
         BUILDER.push("Blocks");
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
@@ -234,8 +247,8 @@ public class MainConfig {
                 .define("deadSandDarkSky", false);
         DeadSandDarkSkyNoOcclude = BUILDER.comment("Dark Cloud will be produced if the Dead Sand cannot see the sky, Default: true")
                 .define("deadSandDarkSkyNoOcclude", true);
-        DeadSandDryWater = BUILDER.comment("Dead Sand will dry up surrounding Waters, Default: true")
-                .define("deadSandDryWater", true);
+        DeadSandDryWater = BUILDER.comment("Dead Sand will dry up surrounding Waters, Default: false")
+                .define("deadSandDryWater", false);
         DeadSandDesiccate = BUILDER.comment("Dead Sands will desiccate mobs, slowly killing them, Default: true")
                 .define("deadSandDesiccate", true);
         DeadSandMobs = BUILDER.comment("Allows special mobs to spawn/converted when there's Dead Sand around, Default: true")
@@ -318,6 +331,8 @@ public class MainConfig {
                 .defineInRange("iceStormCost", 16, 0, Integer.MAX_VALUE);
         LaunchCost = BUILDER.comment("Launch Spell Cost, Default: 4")
                 .defineInRange("launchCost", 4, 0, Integer.MAX_VALUE);
+        SonicBoomCost = BUILDER.comment("Sonic Boom Spell Cost, Default: 16")
+                .defineInRange("sonicBoomCost", 16, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Casting Time");
         VexDuration = BUILDER.comment("Time to cast Vex Spell, Default: 100")
@@ -356,6 +371,8 @@ public class MainConfig {
                 .defineInRange("soulShieldTime", 20, 0, 72000);
         IceStormDuration = BUILDER.comment("Time to cast Ice Storm Spell, Default: 60")
                 .defineInRange("iceStormTime", 60, 0, 72000);
+        SonicBoomDuration = BUILDER.comment("Time to cast Sonic Boom Spell, Default: 60")
+                .defineInRange("sonicBoomTime", 60, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Summon Down Duration");
         VexCooldown = BUILDER.comment("Vex Spell Cooldown, Default: 340")
@@ -469,7 +486,9 @@ public class MainConfig {
         IceStormInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Storm Spell, Default: 8")
                 .defineInRange("iceStormInfamyChance", 8, 0, Integer.MAX_VALUE);
         LaunchInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Launch Spell, Default: 0")
-                .defineInRange("iceStormInfamyChance", 0, 0, Integer.MAX_VALUE);
+                .defineInRange("launchInfamyChance", 0, 0, Integer.MAX_VALUE);
+        SonicBoomInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Sonic Boom Spell, Default: 0")
+                .defineInRange("sonicBoomInfamyChance", 0, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")
@@ -549,9 +568,15 @@ public class MainConfig {
         SoulSkullMinionWander = BUILDER.comment("Servants converted by Soul Skulls will automatically be in Wander Mode, Default: true")
                 .define("soulSkullServantWander", true);
         BUILDER.pop();
-        BUILDER.push("Robe Repairs");
+        BUILDER.push("Items");
         DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 10")
                 .defineInRange("darkArmoredRobeRepairSouls", 10, 1, Integer.MAX_VALUE);
+        EmeraldAmuletSouls = BUILDER.comment("Amount of Soul Energy Emerald Amulet gives every 5 seconds, Default: 1")
+                .defineInRange("emeraldAmuletSouls", 1, 1, Integer.MAX_VALUE);
+        NecroSoulSandSouls = BUILDER.comment("Amount of Soul Energy Necro Boots of Wander gives when running on Soul Sand Blocks, Default: 1")
+                .defineInRange("necroSoulSandSouls", 1, 1, Integer.MAX_VALUE);
+        ItemsRepairAmount = BUILDER.comment("Amount of Souls needed to repair certain Equipments per second, Default: 5")
+                .defineInRange("darkArmoredRobeRepairSouls", 5, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Enchantments");
         MaxSoulEaterLevel = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")

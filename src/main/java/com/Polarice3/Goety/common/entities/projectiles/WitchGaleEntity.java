@@ -1,8 +1,14 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
-import net.minecraft.entity.*;
+import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -16,12 +22,15 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -84,49 +93,47 @@ public class WitchGaleEntity extends DamagingProjectileEntity {
         } else {
             this.remove();
         }
+        int enchantment = 0;
+        int duration = 1;
+        if (this.getTrueOwner() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) this.getTrueOwner();
+            if (WandUtil.enchantedFocus(player)){
+                enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
+            }
+        }
+        List<LivingEntity> targets = new ArrayList<>();
         for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(AreaofEffect()))) {
-            if (entity != this.getTrueOwner() && entity != this.getOwner()) {
-                if (this.isUpgraded()) {
-                    entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1800, 1));
-                    entity.addEffect(new EffectInstance(Effects.WEAKNESS, 1800, 1));
-                    entity.addEffect(new EffectInstance(Effects.POISON, 432, 1));
-                    this.upgradedlaunch(entity);
-                } else {
-                    entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1800));
-                    entity.addEffect(new EffectInstance(Effects.WEAKNESS, 1800));
-                    entity.addEffect(new EffectInstance(Effects.POISON, 900));
-                    this.launch(entity);
+            if (this.getTrueOwner() != null) {
+                if (entity != this.getTrueOwner() && !entity.isAlliedTo(this.getTrueOwner()) && !this.getTrueOwner().isAlliedTo(entity)) {
+                    targets.add(entity);
+                }
+            } else {
+                targets.add(entity);
+            }
+        }
+        if (!targets.isEmpty()){
+            for (LivingEntity livingEntity : targets) {
+                if (MobUtil.validEntity(livingEntity) && livingEntity != this.getTrueOwner()) {
+                    if (!this.level.isClientSide) {
+                        if (this.isUpgraded()) {
+                            livingEntity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 2.0F + enchantment);
+                        }
+                        livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200 * duration, enchantment));
+                        livingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 200 * duration, enchantment));
+                        livingEntity.addEffect(new EffectInstance(Effects.POISON, 200 * duration, enchantment));
+                        this.suckInMobs(livingEntity);
+                    }
                 }
             }
         }
     }
 
-    private void launch(Entity entity) {
-        double d0 = entity.getX() - this.getX();
-        double d1 = entity.getZ() - this.getZ();
-        double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        if (entity instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) entity;
-            if (!player.isCreative() && !player.isSpectator()){
-                entity.push(d0 / d2 * 2.0D, 0.2D, d1 / d2 * 2.0D);
-            }
-        } else {
-            entity.push(d0 / d2 * 2.0D, 0.2D, d1 / d2 * 2.0D);
-        }
-    }
+    private void suckInMobs(LivingEntity livingEntity) {
+        Vector3d vector3d = new Vector3d(this.getX() + 0.5, this.getY() + 0.5, this.getZ() + 0.5);
+        Vector3d vector3d1 = vector3d.subtract(livingEntity.position()).normalize();
 
-    private void upgradedlaunch(Entity entity) {
-        double d0 = entity.getX() - this.getX();
-        double d1 = entity.getZ() - this.getZ();
-        double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
-        if (entity instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) entity;
-            if (!player.isCreative() && !player.isSpectator()){
-                entity.push(d0 / d2 * 4.0D, 0.4D, d1 / d2 * 4.0D);
-            }
-        } else {
-            entity.push(d0 / d2 * 4.0D, 0.4D, d1 / d2 * 4.0D);
-        }
+        MobUtil.push(livingEntity, vector3d1.x, 0.2, vector3d1.z);
     }
 
     public double AreaofEffect(){

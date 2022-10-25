@@ -9,7 +9,7 @@
   "duration": 30,
   "ingredients": [
     {
-      "tag": "forge:obsidian"
+      "item": "minecraft:heart_of_the_sea"
     },
     {
       "item": "goety:goldtotem"
@@ -21,10 +21,10 @@
       "tag": "forge:ender_pearls"
     },
     {
-      "item": "minecraft:lava_bucket"
+      "item": "minecraft:dark_prismarine"
     },
     {
-      "item": "minecraft:water_bucket"
+      "item": "minecraft:lodestone"
     },
     {
       "tag": "forge:obsidian"

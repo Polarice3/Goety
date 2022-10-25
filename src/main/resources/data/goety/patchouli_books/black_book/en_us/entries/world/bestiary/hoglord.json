@@ -1,0 +1,24 @@
+{
+  "name": "Hoglords",
+  "icon": "goety:burning_tusk",
+  "category": "goety:world/bestiary",
+  "advancement": "goety:goety/kill_a_hoglord",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Summoned from the far reaches of the Nether, these Hoglins have been infused the magics of the Nether, some saying blessed by the Nether itself."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:hoglord"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The name 'Hoglord' is no misnomer. The beast truly rules over Hoglins to a great extant that even the wrathful Zoglins won't attack and even defend this creature."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The Hoglord's tusks are made similar to Blaze rods, only denser and harder. Due to this, their attacks sets their targets on fire. Occasionally, the beast spews out a gout of flame akin to Red Dragons of old, attacking it's target from afar. After a while, the Hoglord will start to do... something. Let's just say you want to stay away from it, else you get some of its... muck on you."
+    }
+  ]
+}

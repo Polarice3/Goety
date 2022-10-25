@@ -1,37 +1,34 @@
 package com.Polarice3.Goety.client.events;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.client.audio.IceStormSound;
 import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
-import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
-import com.Polarice3.Goety.common.entities.projectiles.IceStormEntity;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandKeyPacket;
-import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModKeybindings;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingConversionEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
+
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -43,37 +40,6 @@ public class ClientEvents {
             Minecraft minecraft = Minecraft.getInstance();
             if (entity instanceof LocustEntity){
                 minecraft.getSoundManager().queueTickingSound(new LocustSound((LocustEntity) entity));
-            }
-            if (entity instanceof IceStormEntity){
-                minecraft.getSoundManager().queueTickingSound(new IceStormSound((IceStormEntity) entity));
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onBreakingBlock(BlockEvent.BreakEvent event){
-        PlayerEntity player = event.getPlayer();
-        if (player.hasEffect(ModEffects.NOMINE.get())){
-            if (BlockFinder.NoBreak(event.getState()) && !(event.getState().getBlock() == ModBlocks.GUARDIAN_OBELISK.get())){
-                if (player.level.isClientSide) {
-                    new SoundUtil(event.getPos(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    new ParticleUtil(ParticleTypes.HAPPY_VILLAGER, event.getPos(), event.getState());
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void onConversion(LivingConversionEvent.Post event){
-        if (event.getOutcome() instanceof BeldamEntity){
-            if (event.getOutcome().level.isClientSide){
-                for (int i = 0; i < 5; ++i) {
-                    double d0 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
-                    double d1 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
-                    double d2 = event.getOutcome().getRandom().nextGaussian() * 0.02D;
-                    event.getOutcome().level.addParticle(ParticleTypes.HAPPY_VILLAGER, event.getOutcome().getRandomX(1.0D), event.getOutcome().getRandomY() + 1.0D, event.getOutcome().getRandomZ(1.0D), d0, d1, d2);
-                }
-                new SoundUtil(event.getOutcome().blockPosition(), SoundEvents.WITCH_CELEBRATE, SoundCategory.HOSTILE, 1.0F, 1.0F);
             }
         }
     }
@@ -89,6 +55,30 @@ public class ClientEvents {
         if (player != null) {
             if (LichdomHelper.isLich(player)){
                 event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderFogColors(EntityViewRenderEvent.FogColors event){
+        ApostleEntity apostleEntity = null;
+        Set<MobEntity> bosses = BossBarEvent.getBosses();
+        if (!bosses.isEmpty()){
+            for (MobEntity boss : bosses){
+                if (boss instanceof ApostleEntity && apostleEntity == null){
+                    apostleEntity = (ApostleEntity) boss;
+                }
+            }
+        }
+        if (apostleEntity != null && !apostleEntity.removed){
+            if (!apostleEntity.isSecondPhase()) {
+                event.setRed(event.getRed() * 0.7F);
+                event.setGreen(event.getGreen() * 0.5F);
+                event.setBlue(event.getBlue() * 0.5F);
+            } else {
+                event.setRed(event.getRed() * 0.3F);
+                event.setGreen(event.getGreen() * 0.3F);
+                event.setBlue(event.getBlue() * 0.3F);
             }
         }
     }
@@ -111,10 +101,8 @@ public class ClientEvents {
         final PlayerEntity player = Minecraft.getInstance().player;
 
         if (player != null) {
-            if (SEHelper.getSEActive(player)){
-                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
-            } else if (!GoldTotemFinder.FindTotem(player).isEmpty()) {
-                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
+            if (SEHelper.getSoulsContainer(player)){
+                new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack(), event.getPartialTicks());
             }
         }
     }
@@ -133,4 +121,5 @@ public class ClientEvents {
             ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CBagKeyPacket());
         }
     }
+
 }

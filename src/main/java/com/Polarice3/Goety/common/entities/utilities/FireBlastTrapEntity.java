@@ -11,6 +11,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SSpawnObjectPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -21,9 +24,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FireBlastTrapEntity extends Entity {
+    private static final DataParameter<Boolean> IMMEDIATE = EntityDataManager.defineId(FireBlastTrapEntity.class, DataSerializers.BOOLEAN);
     public LivingEntity owner;
     private UUID ownerUniqueId;
 
@@ -39,6 +45,7 @@ public class FireBlastTrapEntity extends Entity {
 
     @Override
     protected void defineSynchedData() {
+        this.entityData.define(IMMEDIATE, false);
     }
 
     @Override
@@ -72,6 +79,14 @@ public class FireBlastTrapEntity extends Entity {
         return this.owner;
     }
 
+    public void setImmediate(boolean immediate){
+        this.entityData.set(IMMEDIATE, immediate);
+    }
+
+    public boolean getImmediate(){
+        return this.entityData.get(IMMEDIATE);
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -86,29 +101,31 @@ public class FireBlastTrapEntity extends Entity {
                 float f9 = MathHelper.sin(f6) * f7;
                 serverWorld.sendParticles(ModParticleTypes.BURNING.get(), this.getX() + (double) f8, this.getY(), this.getZ() + (double) f9, 1, 0, 0, 0, 0);
             }
-            if (this.tickCount % 20 == 0){
+            if (this.tickCount % 20 == 0 || this.getImmediate()){
                 for (int j1 = 0; j1 < 16; ++j1) {
                     for (int k1 = 0; (float) k1 < f5; ++k1) {
                         float f6 = this.random.nextFloat() * ((float) Math.PI * 2F);
                         float f7 = MathHelper.sqrt(this.random.nextFloat()) * f;
                         float f8 = MathHelper.cos(f6) * f7;
                         float f9 = MathHelper.sin(f6) * f7;
-                        serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + (double) f8, (this.getY() + 1.0F) - k1, this.getZ() + (double) f9, 0, 0, 0.5D, 0, 0.5F);
+                        serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + (double) f8, this.getY(), this.getZ() + (double) f9, 0, 0, 0.5D, 0, 0.5F);
                     }
                 }
-                boolean flag = false;
+                List<LivingEntity> targets = new ArrayList<>();
                 for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(1))){
                     if (this.owner != null) {
-                        if (livingEntity != this.owner && !livingEntity.isAlliedTo(this.owner) && !this.owner.isAlliedTo(livingEntity)) {
-                            flag = true;
+                        if (livingEntity != this.owner && !livingEntity.isAlliedTo(this.owner)) {
+                            targets.add(livingEntity);
                         }
                     } else {
-                        flag = true;
+                        targets.add(livingEntity);
                     }
-                    if (flag){
-                        if(!(livingEntity instanceof ApostleEntity)) {
-                            MobUtil.push(livingEntity, 0, 1, 0);
-                            if (this.owner instanceof ApostleEntity){
+                }
+                if (!targets.isEmpty()){
+                    for (LivingEntity livingEntity : targets) {
+                        if (!(livingEntity instanceof ApostleEntity)) {
+                            MobUtil.push(livingEntity, 0, 0.5, 0);
+                            if (this.owner instanceof ApostleEntity) {
                                 livingEntity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 1200));
                             }
                             if (!livingEntity.fireImmune()) {

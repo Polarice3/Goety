@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "minecraft:gold_ingot"
+      "item": "goety:tall_skull"
     },
     "title": {
       "translate": "advancements.goety.kill_illagers.title"

@@ -11,7 +11,30 @@ public class RitualStructures {
 
     public static final int RANGE = 8;
 
-    public static void findAnimaStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
+    public static boolean getProperStructure(String craftType, RitualTileEntity pTileEntity, BlockPos pPos, World pLevel){
+        findStructures(craftType, pTileEntity, pPos, pLevel);
+        switch (craftType){
+            case "animalis":
+            case "necroturgy":
+            case "lich":
+            case "minor_nether":
+            case "forge":
+            case "magic":
+            case "sabbath":
+                return RitualStructures.checkRequirements(craftType, pTileEntity);
+            case "adept_nether":
+                return pLevel.dimensionType().ultraWarm();
+            case "expert_nether":
+                return RitualStructures.checkRequirements(craftType, pTileEntity) && pLevel.dimensionType().ultraWarm();
+            case "air":
+                return pPos.getY() >= 128;
+            case "storm":
+                return RitualStructures.checkRequirements(craftType, pTileEntity) && pPos.getY() >= 128 && pLevel.isThundering() && pLevel.canSeeSky(pPos);
+        }
+        return false;
+    }
+
+    public static void findStructures(String craftType, RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
         pTileEntity.first.clear();
         pTileEntity.second.clear();
         pTileEntity.third.clear();
@@ -21,191 +44,143 @@ public class RitualStructures {
                     BlockPos blockpos1 = pPos.offset(i, j, k);
                     assert pLevel != null;
                     BlockState blockstate = pLevel.getBlockState(blockpos1);
-
-                    if (blockstate.getBlock() == Blocks.LADDER) {
-                        pTileEntity.first.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.RAIL) {
-                        pTileEntity.second.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.CARVED_PUMPKIN) {
-                        pTileEntity.third.add(blockpos1);
-                    }
+                    getBlocks(craftType, pTileEntity, blockstate, blockpos1, pLevel);
                 }
             }
         }
     }
 
-    public static boolean checkAnimaRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 15 && pTileEntity.second.size() >= 15 && pTileEntity.third.size() >= 1;
-    }
-
-    public static void findNecroStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
-        pTileEntity.first.clear();
-        pTileEntity.second.clear();
-        pTileEntity.third.clear();
-        for (int i = -RANGE; i <= RANGE; ++i) {
-            for (int j = -RANGE; j <= RANGE; ++j) {
-                for (int k = -RANGE; k <= RANGE; ++k) {
-                    BlockPos blockpos1 = pPos.offset(i, j, k);
-                    assert pLevel != null;
-                    BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() instanceof IDeadBlock) {
-                        pTileEntity.first.add(blockpos1);
+    public static void getBlocks(String craftType, RitualTileEntity pTileEntity, BlockState pState, BlockPos pPos, World pLevel){
+        switch (craftType){
+            case "animalis":
+                if (pState.getBlock() == Blocks.LADDER) {
+                    pTileEntity.first.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.RAIL) {
+                    pTileEntity.second.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.CARVED_PUMPKIN) {
+                    pTileEntity.third.add(pPos);
+                }
+            case "necroturgy":
+            case "lich":
+                if (pState.getBlock() instanceof IDeadBlock) {
+                    pTileEntity.first.add(pPos);
+                }
+                if (pState.getBlock() instanceof SlabBlock) {
+                    pTileEntity.second.add(pPos);
+                }
+                if (pState.getBlock() instanceof FlowerPotBlock) {
+                    if (((FlowerPotBlock) pState.getBlock()).getContent() != Blocks.AIR){
+                        pTileEntity.third.add(pPos);
                     }
-                    if (blockstate.getBlock() instanceof SlabBlock) {
-                        pTileEntity.second.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() instanceof FlowerPotBlock) {
-                        if (((FlowerPotBlock) blockstate.getBlock()).getContent() != Blocks.AIR){
-                            pTileEntity.third.add(blockpos1);
+                }
+            case "minor_nether":
+                if (pState.getBlock() == Blocks.NETHER_PORTAL) {
+                    pTileEntity.first.add(pPos);
+                }
+            case "forge":
+                if (pState.getBlock() == Blocks.SMITHING_TABLE) {
+                    pTileEntity.first.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.FURNACE || pState.getBlock() == Blocks.BLAST_FURNACE) {
+                    pTileEntity.second.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.ANVIL || pState.getBlock() == Blocks.CHIPPED_ANVIL || pState.getBlock() == Blocks.DAMAGED_ANVIL) {
+                    pTileEntity.third.add(pPos);
+                }
+            case "magic":
+                if (pState.getBlock() == Blocks.BOOKSHELF) {
+                    pTileEntity.first.add(pPos);
+                }
+                if (pState.getBlock() instanceof LecternBlock) {
+                    if (pState.hasTileEntity() && pLevel.getBlockEntity(pPos) instanceof LecternTileEntity){
+                        LecternTileEntity lecternTileEntity = (LecternTileEntity) pLevel.getBlockEntity(pPos);
+                        if (lecternTileEntity.hasBook()){
+                            pTileEntity.second.add(pPos);
                         }
                     }
                 }
-            }
-        }
-    }
-
-    public static boolean checkNecroRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 16 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 8;
-    }
-
-    public static void findMinorNetherStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
-        pTileEntity.first.clear();
-        pTileEntity.second.clear();
-        pTileEntity.third.clear();
-        for (int i = -RANGE; i <= RANGE; ++i) {
-            for (int j = -RANGE; j <= RANGE; ++j) {
-                for (int k = -RANGE; k <= RANGE; ++k) {
-                    BlockPos blockpos1 = pPos.offset(i, j, k);
-                    assert pLevel != null;
-                    BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == Blocks.NETHER_PORTAL) {
-                        pTileEntity.first.add(blockpos1);
-                    }
+                if (pState.getBlock() instanceof EnchantingTableBlock) {
+                    pTileEntity.third.add(pPos);
                 }
-            }
-        }
-    }
-
-    public static boolean checkMinorNetherRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 1 && pTileEntity.second.size() == 0 && pTileEntity.third.size() == 0;
-    }
-
-    public static void findForgeStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
-        pTileEntity.first.clear();
-        pTileEntity.second.clear();
-        pTileEntity.third.clear();
-        for (int i = -RANGE; i <= RANGE; ++i) {
-            for (int j = -RANGE; j <= RANGE; ++j) {
-                for (int k = -RANGE; k <= RANGE; ++k) {
-                    BlockPos blockpos1 = pPos.offset(i, j, k);
-                    assert pLevel != null;
-                    BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == Blocks.SMITHING_TABLE) {
-                        pTileEntity.first.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.FURNACE || blockstate.getBlock() == Blocks.BLAST_FURNACE) {
-                        pTileEntity.second.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.ANVIL || blockstate.getBlock() == Blocks.CHIPPED_ANVIL || blockstate.getBlock() == Blocks.DAMAGED_ANVIL) {
-                        pTileEntity.third.add(blockpos1);
-                    }
+            case "sabbath":
+                if (pState.getBlock() == Blocks.CRYING_OBSIDIAN) {
+                    pTileEntity.first.add(pPos);
                 }
-            }
-        }
-    }
-
-    public static boolean checkForgeRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 1 && pTileEntity.second.size() >= 3 && pTileEntity.third.size() >= 4;
-    }
-
-    public static void findMagicStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
-        pTileEntity.first.clear();
-        pTileEntity.second.clear();
-        pTileEntity.third.clear();
-        for (int i = -RANGE; i <= RANGE; ++i) {
-            for (int j = -RANGE; j <= RANGE; ++j) {
-                for (int k = -RANGE; k <= RANGE; ++k) {
-                    BlockPos blockpos1 = pPos.offset(i, j, k);
-                    assert pLevel != null;
-                    BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == Blocks.BOOKSHELF) {
-                        pTileEntity.first.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() instanceof LecternBlock) {
-                        if (blockstate.hasTileEntity() && pLevel.getBlockEntity(blockpos1) instanceof LecternTileEntity){
-                            LecternTileEntity lecternTileEntity = (LecternTileEntity) pLevel.getBlockEntity(blockpos1);
-                            if (lecternTileEntity.hasBook()){
-                                pTileEntity.second.add(blockpos1);
-                            }
-                        }
-                    }
-                    if (blockstate.getBlock() instanceof EnchantingTableBlock) {
-                        pTileEntity.third.add(blockpos1);
-                    }
+                if (pState.getBlock() == Blocks.OBSIDIAN) {
+                    pTileEntity.second.add(pPos);
                 }
-            }
-        }
-    }
-
-    public static boolean checkMagicRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 16 && pTileEntity.second.size() >= 1 && pTileEntity.third.size() >= 2;
-    }
-
-    public static void findSabbathStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
-        pTileEntity.first.clear();
-        pTileEntity.second.clear();
-        pTileEntity.third.clear();
-        for (int i = -RANGE; i <= RANGE; ++i) {
-            for (int j = -RANGE; j <= RANGE; ++j) {
-                for (int k = -RANGE; k <= RANGE; ++k) {
-                    BlockPos blockpos1 = pPos.offset(i, j, k);
-                    assert pLevel != null;
-                    BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == Blocks.CRYING_OBSIDIAN) {
-                        pTileEntity.first.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.OBSIDIAN) {
-                        pTileEntity.second.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.SOUL_FIRE) {
-                        pTileEntity.third.add(blockpos1);
-                    }
+                if (pState.getBlock() == Blocks.SOUL_FIRE) {
+                    pTileEntity.third.add(pPos);
                 }
-            }
-        }
-    }
-
-    public static boolean checkSabbathRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 8 && pTileEntity.second.size() >= 16 && pTileEntity.third.size() >= 4;
-    }
-
-    public static void findExpertNetherStructure(RitualTileEntity pTileEntity, BlockPos pPos, World pLevel) {
-        pTileEntity.first.clear();
-        pTileEntity.second.clear();
-        pTileEntity.third.clear();
-        for (int i = -RANGE; i <= RANGE; ++i) {
-            for (int j = -RANGE; j <= RANGE; ++j) {
-                for (int k = -RANGE; k <= RANGE; ++k) {
-                    BlockPos blockpos1 = pPos.offset(i, j, k);
-                    assert pLevel != null;
-                    BlockState blockstate = pLevel.getBlockState(blockpos1);
-                    if (blockstate.getBlock() == Blocks.WITHER_SKELETON_SKULL || blockstate.getBlock() == Blocks.WITHER_SKELETON_WALL_SKULL) {
-                        pTileEntity.first.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.NETHER_BRICKS || blockstate.getBlock() == Blocks.RED_NETHER_BRICKS) {
-                        pTileEntity.second.add(blockpos1);
-                    }
-                    if (blockstate.getBlock() == Blocks.NETHER_WART) {
-                        pTileEntity.third.add(blockpos1);
-                    }
+            case "expert_nether":
+                if (pState.getBlock() == Blocks.WITHER_SKELETON_SKULL || pState.getBlock() == Blocks.WITHER_SKELETON_WALL_SKULL) {
+                    pTileEntity.first.add(pPos);
                 }
-            }
+                if (pState.getBlock() == Blocks.NETHER_BRICKS || pState.getBlock() == Blocks.RED_NETHER_BRICKS) {
+                    pTileEntity.second.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.NETHER_WART) {
+                    pTileEntity.third.add(pPos);
+                }
+            case "storm":
+                if (pState.getBlock() == Blocks.IRON_BLOCK) {
+                    pTileEntity.first.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.GLOWSTONE) {
+                    pTileEntity.second.add(pPos);
+                }
+                if (pState.getBlock() == Blocks.CHAIN) {
+                    pTileEntity.third.add(pPos);
+                }
         }
     }
 
-    public static boolean checkExpertNetherRequirements(RitualTileEntity pTileEntity){
-        return pTileEntity.first.size() >= 4 && pTileEntity.second.size() >= 32 && pTileEntity.third.size() >= 8;
+    public static boolean checkRequirements(String craftType, RitualTileEntity pTileEntity){
+        int first = 0;
+        int second = 0;
+        int third = 0;
+        switch (craftType){
+            case "animalis":
+                first = 15;
+                second = 15;
+                third = 1;
+                break;
+            case "necroturgy":
+            case "lich":
+                first = 16;
+                second = 16;
+                third = 8;
+                break;
+            case "minor_nether":
+                first = 1;
+                break;
+            case "forge":
+                first = 1;
+                second = 3;
+                third = 4;
+                break;
+            case "magic":
+                first = 16;
+                second = 1;
+                third = 2;
+                break;
+            case "sabbath":
+                first = 8;
+                second = 16;
+                third = 4;
+                break;
+            case "expert_nether":
+                first = 4;
+                second = 32;
+                third = 8;
+                break;
+            case "storm":
+                first = 12;
+                second = 4;
+                third = 20;
+        }
+        return pTileEntity.first.size() >= first && pTileEntity.second.size() >= second && pTileEntity.third.size() >= third;
     }
 }

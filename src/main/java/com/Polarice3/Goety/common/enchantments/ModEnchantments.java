@@ -31,7 +31,7 @@ public class ModEnchantments {
             () -> new RadiusEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.MAINHAND));
 
     public static final RegistryObject<Enchantment> BURNING = ENCHANTMENTS.register("burning",
-            () -> new BurningEnchantment(Enchantment.Rarity.RARE, EquipmentSlotType.MAINHAND));
+            () -> new BurningEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlotType.MAINHAND));
 
     public static final RegistryObject<Enchantment> RANGE = ENCHANTMENTS.register("range",
             () -> new RangeEnchantment(Enchantment.Rarity.COMMON, EquipmentSlotType.MAINHAND));
@@ -40,6 +40,6 @@ public class ModEnchantments {
             () -> new AbsorbEnchantment(Enchantment.Rarity.VERY_RARE, EquipmentSlotType.MAINHAND));
 
     public static final RegistryObject<Enchantment> DURATION = ENCHANTMENTS.register("duration",
-            () -> new DurationEnchantment(Enchantment.Rarity.COMMON, EquipmentSlotType.MAINHAND));
+            () -> new DurationEnchantment(Enchantment.Rarity.UNCOMMON, EquipmentSlotType.MAINHAND));
 
 }

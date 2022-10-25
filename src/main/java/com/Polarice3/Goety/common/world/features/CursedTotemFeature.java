@@ -7,6 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.pattern.BlockStateMatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -29,6 +30,10 @@ public class CursedTotemFeature extends Feature<NoFeatureConfig> {
     public boolean place(ISeedReader reader, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config) {
         int h = random.nextInt(3) + 3;
         int totem = random.nextInt(3);
+
+        if (reader.getLevel().dimension() != World.OVERWORLD){
+            return false;
+        }
 
         reader.setBlock(pos.offset(0, -1, 0), this.cursedtiles, 2);
 

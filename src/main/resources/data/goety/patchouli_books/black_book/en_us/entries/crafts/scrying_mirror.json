@@ -15,7 +15,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "goety:scrying_mirror",
-      "text": "Through the use of the Eye of Ender, you've found a way to spy on the Illagers back. Using the mirror on a Chicken or Cat will give you an idea on how they see you as a threat."
+      "text": "Through the use of the Eye of Ender, you've found a way to spy on the Illagers back. Using the mirror on a Chicken or Cat will give you an idea on how much they see you as a threat."
     },
     {
       "type": "patchouli:text",

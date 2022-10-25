@@ -75,6 +75,10 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
         this.spreadSand(pLevel, pPos, pRandom);
     }
 
+    public void forceSpread(ServerWorld pLevel, BlockPos pPos, Random pRandom){
+        this.spreadSand(pLevel, pPos, pRandom);
+    }
+
     public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
@@ -90,7 +94,8 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
                 && !type.equals(PlantType.BEACH) && !type.equals(PlantType.WATER) && !type.equals(PlantType.NETHER)
                 && !(plant.getBlock() instanceof TallGrassBlock)
                 && !(plant.getBlock() instanceof ILiquidContainer))
-                || plant.getBlock().is(ModBlocks.HAUNTED_CACTUS.get())) {
+                || plant.getBlock().is(ModBlocks.HAUNTED_CACTUS.get())
+                || plant.getBlock() instanceof CactusBlock) {
             return state.is(this);
         }
         return false;

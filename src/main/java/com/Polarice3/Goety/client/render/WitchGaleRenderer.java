@@ -20,15 +20,10 @@ public class WitchGaleRenderer extends EntityRenderer<WitchGaleEntity> {
         super(p_i46179_1_);
     }
 
-    protected float getBob(WitchGaleEntity pLivingBase, float pPartialTicks) {
-        return (float)pLivingBase.tickCount + pPartialTicks;
-    }
-
     public void render(WitchGaleEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        float f7 = this.getBob(entityIn, partialTicks);
         matrixStackIn.pushPose();
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(TEXTURES));
-        this.model.setupAnim(entityIn, 0.0F, 0.0F, f7, 0, 0);
+        this.model.setupAnim(entityIn, 0.0F, 0.0F, partialTicks/10, 0, 0);
         matrixStackIn.translate(0.0D, (double)(entityIn.getBbHeight() + (entityIn.isUpgraded() ? 1.5F: 0.5F)), 0.0D);
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
         this.scale(entityIn, matrixStackIn);

@@ -1,9 +1,13 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -12,8 +16,11 @@ import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
@@ -24,9 +31,22 @@ import java.util.UUID;
 
 public class OwnedEntity extends CreatureEntity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
+    protected static final DataParameter<Boolean> HOSTILE = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
+    private final NearestAttackableTargetGoal<PlayerEntity> targetGoal = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true);
 
     protected OwnedEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
+        this.reassessGoal();
+    }
+
+    public void reassessGoal() {
+        if (this.level != null && !this.level.isClientSide) {
+            this.targetSelector.removeGoal(this.targetGoal);
+            if (this.getTrueOwner() instanceof MonsterEntity){
+                this.targetSelector.addGoal(2, this.targetGoal);
+                this.setHostile(true);
+            }
+        }
     }
 
     public void tick(){
@@ -35,12 +55,25 @@ public class OwnedEntity extends CreatureEntity {
             OwnedEntity ownedEntity = (OwnedEntity) this.getTarget();
             if (ownedEntity.getTrueOwner() == this.getTrueOwner()){
                 this.setTarget(null);
+                if (this.getLastHurtByMob() == ownedEntity){
+                    this.setLastHurtByMob(null);
+                }
+            }
+        }
+        if (this.getLastHurtByMob() == this.getTrueOwner()){
+            this.setLastHurtByMob(null);
+        }
+        for (OwnedEntity target : this.level.getEntitiesOfClass(OwnedEntity.class, this.getBoundingBox().inflate(32))) {
+            if (target.getTrueOwner() != this.getTrueOwner()
+                    && this.getTrueOwner() != target.getTrueOwner()
+                    && target.getTarget() == this.getTrueOwner()){
+                this.setTarget(target);
             }
         }
     }
 
     public Team getTeam() {
-        if (this.getOwnerId() != null) {
+        if (this.getTrueOwner() != null) {
             LivingEntity livingentity = this.getTrueOwner();
             if (livingentity != null) {
                 return livingentity.getTeam();
@@ -51,15 +84,12 @@ public class OwnedEntity extends CreatureEntity {
     }
 
     public boolean isAlliedTo(Entity entityIn) {
-        if (this.getOwnerId() != null) {
+        if (this.getTrueOwner() != null) {
             LivingEntity livingentity = this.getTrueOwner();
             if (entityIn == livingentity) {
                 return true;
             }
-
-            if (livingentity != null) {
-                return livingentity.isAlliedTo(entityIn);
-            }
+            return livingentity.isAlliedTo(entityIn);
         }
         if (entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
             return true;
@@ -70,6 +100,7 @@ public class OwnedEntity extends CreatureEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
+        this.entityData.define(HOSTILE, false);
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -89,6 +120,7 @@ public class OwnedEntity extends CreatureEntity {
             }
         }
 
+        this.reassessGoal();
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
@@ -96,7 +128,13 @@ public class OwnedEntity extends CreatureEntity {
         if (this.getOwnerId() != null) {
             compound.putUUID("Owner", this.getOwnerId());
         }
+    }
 
+    @Nullable
+    public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
+        pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+        this.reassessGoal();
+        return pSpawnData;
     }
 
     public LivingEntity getTrueOwner() {
@@ -119,6 +157,31 @@ public class OwnedEntity extends CreatureEntity {
 
     public void setTrueOwner(LivingEntity livingEntity){
         this.setOwnerId(livingEntity.getUUID());
+    }
+
+    public void setHostile(boolean hostile){
+        this.entityData.set(HOSTILE, hostile);
+    }
+
+    public boolean getHostile(){
+        return this.entityData.get(HOSTILE);
+    }
+
+    public boolean canBeAffected(EffectInstance pPotioneffect) {
+        return pPotioneffect.getEffect() != ModEffects.GOLDTOUCHED.get() && super.canBeAffected(pPotioneffect);
+    }
+
+    protected int getExperienceReward(PlayerEntity pPlayer) {
+        if (this.getHostile()) {
+            this.xpReward = 5;
+        }
+
+        return super.getExperienceReward(pPlayer);
+    }
+
+    @Override
+    protected boolean shouldDespawnInPeaceful() {
+        return this.getHostile();
     }
 
     public class OwnerHurtTargetGoal extends TargetGoal {

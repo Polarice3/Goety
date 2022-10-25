@@ -26,19 +26,14 @@ public class SoulEnergyGui extends AbstractGui {
     }
 
     public boolean shouldDisplayBar(){
-        ItemStack stack = GoldTotemFinder.FindTotem(player);
-        if (SEHelper.getSEActive(player)){
-            return true;
-        } else {
-            return !stack.isEmpty();
-        }
+        return SEHelper.getSoulsContainer(player);
     }
 
     public FontRenderer getFont() {
         return this.minecraft.font;
     }
 
-    public void drawHUD(MatrixStack ms) {
+    public void drawHUD(MatrixStack ms, float partialTicks) {
         this.screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
         this.screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
         if(!shouldDisplayBar()) {
@@ -64,6 +59,8 @@ public class SoulEnergyGui extends AbstractGui {
 
         int height = this.screenHeight - 5;
 
+        int offset = (int) ((player.tickCount + partialTicks) % 234);
+
         if (SEHelper.getSEActive(player)){
             Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder2.png"));
             blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
@@ -74,7 +71,7 @@ public class SoulEnergyGui extends AbstractGui {
             blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
         }
         Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy.png"));
-        blit(ms,i + 9, height - 7, 0, 0, energylength,5, 117, 5);
+        blit(ms,i + 9, height - 7, offset, 0, energylength,5, 234, 5);
         if (MainConfig.ShowNum.get()) {
             this.minecraft.getProfiler().push("soulenergy");
             String s = "" + SoulEnergy + "/" + "" + SoulEnergyTotal;

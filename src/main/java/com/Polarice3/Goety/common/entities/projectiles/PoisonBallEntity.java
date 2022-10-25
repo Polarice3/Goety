@@ -1,11 +1,17 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -13,6 +19,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -22,19 +29,27 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class PoisonBallEntity extends ThrowableEntity {
+@OnlyIn(
+        value = Dist.CLIENT,
+        _interface = IRendersAsItem.class
+)
+public class PoisonBallEntity extends ProjectileItemEntity {
     private static final DataParameter<Boolean> DATA_UPGRADED = EntityDataManager.defineId(PoisonBallEntity.class, DataSerializers.BOOLEAN);
 
     public PoisonBallEntity(EntityType<? extends PoisonBallEntity> p_i50147_1_, World p_i50147_2_) {
         super(p_i50147_1_, p_i50147_2_);
     }
 
-    public PoisonBallEntity(EntityType<? extends ThrowableEntity> p_i48541_1_, double p_i50156_2_, double p_i50156_4_, double p_i50156_6_, World p_i50156_8_) {
+    public PoisonBallEntity(EntityType<? extends ProjectileItemEntity> p_i48541_1_, double p_i50156_2_, double p_i50156_4_, double p_i50156_6_, World p_i50156_8_) {
         super(ModEntityType.POISON_BALL.get(), p_i50156_2_, p_i50156_4_, p_i50156_6_, p_i50156_8_);
     }
 
-    public PoisonBallEntity(EntityType<? extends ThrowableEntity> p_i50157_1_, LivingEntity p_i50157_2_, World p_i50157_3_) {
+    public PoisonBallEntity(EntityType<? extends ProjectileItemEntity> p_i50157_1_, LivingEntity p_i50157_2_, World p_i50157_3_) {
         super(ModEntityType.POISON_BALL.get(), p_i50157_2_, p_i50157_3_);
+    }
+
+    protected Item getDefaultItem() {
+        return Items.SLIME_BALL;
     }
 
     @Override
@@ -57,18 +72,26 @@ public class PoisonBallEntity extends ThrowableEntity {
         if (!this.level.isClientSide) {
             Entity target = pResult.getEntity();
             Entity owner = this.getOwner();
+            int enchantment = 0;
+            int duration = 1;
+            if (owner instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) owner;
+                if (WandUtil.enchantedFocus(player)){
+                    enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                    duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
+                }
+            }
             if (owner instanceof LivingEntity) {
                 LivingEntity LivingOwner = (LivingEntity)owner;
                 if (target instanceof LivingEntity){
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (livingTarget.isAlive()){
                         if (this.isUpgraded()){
-                            livingTarget.addEffect(new EffectInstance(Effects.POISON, 432, 1));
-                        } else {
-                            livingTarget.addEffect(new EffectInstance(Effects.POISON, 900));
+                            livingTarget.hurt(DamageSource.indirectMagic(this, LivingOwner), 4.0F + enchantment);
                         }
+                        livingTarget.addEffect(new EffectInstance(Effects.POISON, 432 * duration, enchantment));
                         if (RobeArmorFinder.FindFelSet(LivingOwner)){
-                            livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1800));
+                            livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 400 * duration, enchantment));
                         }
                     }
                 }
@@ -77,15 +100,14 @@ public class PoisonBallEntity extends ThrowableEntity {
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (livingTarget.isAlive()){
                         if (this.isUpgraded()){
-                            livingTarget.addEffect(new EffectInstance(Effects.POISON, 432, 1));
-                        } else {
-                            livingTarget.addEffect(new EffectInstance(Effects.POISON, 900));
+                            livingTarget.hurt(DamageSource.MAGIC, 4.0F);
                         }
+                        livingTarget.addEffect(new EffectInstance(Effects.POISON, 432));
                     }
                 }
             }
-            this.level.playLocalSound(pResult.getLocation().x, pResult.getLocation().y, pResult.getLocation().z, SoundEvents.SLIME_ATTACK, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
         }
+        this.level.playLocalSound(pResult.getLocation().x, pResult.getLocation().y, pResult.getLocation().z, SoundEvents.SLIME_ATTACK, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
     }
 
     protected void onHit(RayTraceResult pResult) {

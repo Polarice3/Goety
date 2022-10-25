@@ -6,11 +6,12 @@ import com.Polarice3.Goety.common.capabilities.lichdom.LichUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.soulenergy.SEUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsUpdatePacket;
 import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
-import com.Polarice3.Goety.common.network.packets.client.CTotemDeathPacket;
+import com.Polarice3.Goety.common.network.packets.client.CSoulEnergyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandKeyPacket;
 import com.Polarice3.Goety.common.network.packets.server.SChangeFocusPacket;
 import com.Polarice3.Goety.common.network.packets.server.SOpenItemPacket;
+import com.Polarice3.Goety.common.network.packets.server.TotemDeathPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -40,10 +41,11 @@ public class ModNetwork {
         INSTANCE.registerMessage(nextID(), EntityUpdatePacket.class, EntityUpdatePacket::encode, EntityUpdatePacket::decode, EntityUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), SOpenItemPacket.class, SOpenItemPacket::encode, SOpenItemPacket::decode, SOpenItemPacket::consume);
         INSTANCE.registerMessage(nextID(), SChangeFocusPacket.class, SChangeFocusPacket::encode, SChangeFocusPacket::decode, SChangeFocusPacket::consume);
-        INSTANCE.registerMessage(nextID(), CTotemDeathPacket.class, CTotemDeathPacket::encode, CTotemDeathPacket::decode, CTotemDeathPacket::consume);
+        INSTANCE.registerMessage(nextID(), TotemDeathPacket.class, TotemDeathPacket::encode, TotemDeathPacket::decode, TotemDeathPacket::consume);
         INSTANCE.registerMessage(nextID(), CWandKeyPacket.class, CWandKeyPacket::encode, CWandKeyPacket::decode, CWandKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CBagKeyPacket.class, CBagKeyPacket::encode, CBagKeyPacket::decode, CBagKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CWandAndBagKeyPacket.class, CWandAndBagKeyPacket::encode, CWandAndBagKeyPacket::decode, CWandAndBagKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(nextID(), CSoulEnergyPacket.class, CSoulEnergyPacket::encode, CSoulEnergyPacket::decode, CSoulEnergyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static <MSG> void sendTo(PlayerEntity player, MSG msg) {

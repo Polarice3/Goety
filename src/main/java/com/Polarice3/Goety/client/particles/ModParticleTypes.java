@@ -40,12 +40,21 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> LASER_GATHER = PARTICLE_TYPES.register("laser",
             () -> new BasicParticleType(true));
 
-    public static final RegistryObject<BasicParticleType> TORNADO_GATHER = PARTICLE_TYPES.register("tornado",
+    public static final RegistryObject<BasicParticleType> SONIC_GATHER = PARTICLE_TYPES.register("sonic",
             () -> new BasicParticleType(true));
 
     public static final RegistryObject<BasicParticleType> POISON = PARTICLE_TYPES.register("poison",
             () -> new BasicParticleType(true));
 
     public static final RegistryObject<BasicParticleType> BURNING = PARTICLE_TYPES.register("burning",
+            () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> CULT_SPELL = PARTICLE_TYPES.register("cult_spell",
+            () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> SONIC_BOOM = PARTICLE_TYPES.register("sonic_boom",
+            () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> CONFUSED = PARTICLE_TYPES.register("confused",
             () -> new BasicParticleType(true));
 }

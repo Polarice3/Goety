@@ -202,6 +202,10 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.FEATHER));
             index++;
+        } else if (recipe.getCraftType().contains("storm")){
+            recipeLayout.getItemStacks().init(index, false, 0, 0);
+            recipeLayout.getItemStacks().set(index, new ItemStack(Items.CHAIN));
+            index++;
         } else {
             recipeLayout.getItemStacks().init(index, false, 0, 0);
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.OBSIDIAN));

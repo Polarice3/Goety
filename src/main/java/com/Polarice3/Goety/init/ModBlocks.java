@@ -1,8 +1,10 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.client.render.tileentities.ModItemTERenderer;
 import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.common.items.SoulFangTotemItem;
+import com.Polarice3.Goety.common.items.TallSkullItem;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -41,6 +43,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SOUL_FANG_TOTEM = BLOCKS.register("soul_fang_totem", SoulFangTotemBlock::new);
     public static final RegistryObject<Block> OBELISK = BLOCKS.register("obelisk", ObeliskBlock::new);
     public static final RegistryObject<Block> GUARDIAN_OBELISK = BLOCKS.register("guardian_obelisk", GuardianObeliskBlock::new);
+    public static final RegistryObject<Block> DRY_OBELISK = BLOCKS.register("dry_obelisk", DryObeliskBlock::new);
     public static final RegistryObject<Block> CURSED_BURNER = BLOCKS.register("cursed_burner", CursedBurnerBlock::new);
     public static final RegistryObject<Block> CURSED_KILN = BLOCKS.register("cursed_kiln", CursedKilnBlock::new);
     public static final RegistryObject<Block> DARK_ALTAR = BLOCKS.register("dark_altar", DarkAltarBlock::new);
@@ -219,6 +222,8 @@ public class ModBlocks {
             () -> new BlockItemBase(OBELISK.get()));
     public static final RegistryObject<Item> GUARDIAN_OBELISK_ITEM = BLOCK_ITEMS.register("guardian_obelisk",
             () -> new BlockItemBase(GUARDIAN_OBELISK.get()));
+    public static final RegistryObject<Item> DRY_OBELISK_ITEM = BLOCK_ITEMS.register("dry_obelisk",
+            () -> new BlockItemBase(DRY_OBELISK.get()));
     public static final RegistryObject<Item> CURSED_BURNER_ITEM = BLOCK_ITEMS.register("cursed_burner",
             () -> new BlockItemBase(CURSED_BURNER.get()));
     public static final RegistryObject<Item> CURSED_KILN_ITEM = BLOCK_ITEMS.register("cursed_kiln",
@@ -303,7 +308,7 @@ public class ModBlocks {
     public static final RegistryObject<Item> HAUNTED_SIGN_ITEM = BLOCK_ITEMS.register("haunted_sign",
             () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()));
     public static final RegistryObject<Item> TALL_SKULL_ITEM = BLOCK_ITEMS.register("tall_skull",
-            () -> new WallOrFloorItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON)));
+            () -> new TallSkullItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON).setISTER(() -> ModItemTERenderer::new)));
 
     public static Boolean never(BlockState p_235427_0_, IBlockReader p_235427_1_, BlockPos p_235427_2_, EntityType<?> p_235427_3_) {
         return false;

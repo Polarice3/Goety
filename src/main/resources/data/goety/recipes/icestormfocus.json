@@ -4,7 +4,7 @@
   "activation_item": {
     "item": "goety:frostbreathfocus"
   },
-  "craftType": "air",
+  "craftType": "storm",
   "soulCost": 1,
   "duration": 10,
   "ingredients": [

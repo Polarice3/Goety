@@ -10,7 +10,6 @@ import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -108,9 +107,9 @@ public class IceStormEntity extends DamagingProjectileEntity {
                                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                             }
                         }
-                        livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getTrueOwner()), livingEntity instanceof BlazeEntity ? 2.0F : 1.0F + enchantment);
+                        livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getTrueOwner()), MobUtil.extraFrostDamage(livingEntity) ? 2.0F : 1.0F + enchantment);
                     } else {
-                        livingEntity.hurt(ModDamageSource.FROST, livingEntity instanceof BlazeEntity ? 2.0F : 1.0F);
+                        livingEntity.hurt(ModDamageSource.FROST, MobUtil.extraFrostDamage(livingEntity) ? 2.0F : 1.0F);
                     }
                     if (!this.level.isClientSide) {
                         livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration, this.isUpgraded() ? 1 : 0));

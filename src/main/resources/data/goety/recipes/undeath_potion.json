@@ -9,7 +9,7 @@
     "tag": "forge:villagers",
     "display_name": "info.goety.ritual.villager"
   },
-  "soulCost": 10,
+  "soulCost": 1000,
   "duration": 60,
   "ingredients": [
     {

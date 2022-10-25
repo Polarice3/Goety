@@ -40,7 +40,7 @@ public class LaunchSpell extends InstantCastSpells{
                 player.setOnGround(false);
             }
             Vector3d vector3d = player.getLookAngle();
-            double d0 = 2.0D + (double) (enchantment/2);
+            double d0 = 2.5D + (double) (enchantment/2);
             player.setDeltaMovement(vector3d.x * d0, vector3d.y * d0, vector3d.z * d0);
             player.hasImpulse = true;
             player.fallDistance = 0;
@@ -65,7 +65,7 @@ public class LaunchSpell extends InstantCastSpells{
                 player.setOnGround(false);
             }
             Vector3d vector3d = player.getLookAngle();
-            double d0 = 4.0D + (double) (enchantment/2);
+            double d0 = 5.0D + (double) (enchantment/2);
             player.setDeltaMovement(vector3d.x * d0, vector3d.y * d0, vector3d.z * d0);
             player.hasImpulse = true;
             player.fallDistance = 0;

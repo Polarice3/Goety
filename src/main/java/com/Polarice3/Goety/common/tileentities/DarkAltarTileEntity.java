@@ -202,114 +202,14 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
                         int totalSTime = 60;
 
-                        if (recipe.getCraftType().contains("animalis")) {
-                            RitualStructures.findAnimaStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkAnimaRequirements(this)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
+                        if (!RitualStructures.getProperStructure(recipe.getCraftType(), this, this.worldPosition, this.level)){
+                            ++this.structureTime;
+                            if (this.structureTime >= totalSTime) {
+                                this.castingPlayer.displayClientMessage(new TranslationTextComponent("info.goety.ritual.structure.fail"), true);
+                                this.stopRitual(false);
                             }
-                        }
-
-                        if (recipe.getCraftType().contains("necroturgy") || recipe.getCraftType().contains("lich")) {
-                            RitualStructures.findNecroStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkNecroRequirements(this)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("minor_nether")) {
-                            RitualStructures.findMinorNetherStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkMinorNetherRequirements(this)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("forge")) {
-                            RitualStructures.findForgeStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkForgeRequirements(this)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("magic")) {
-                            RitualStructures.findMagicStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkMagicRequirements(this)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("sabbath")) {
-                            RitualStructures.findSabbathStructure(this, this.worldPosition, this.level);
-                            if (!RitualStructures.checkSabbathRequirements(this)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("adept_nether")) {
-                            if (!this.level.dimensionType().ultraWarm()) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("expert_nether")) {
-                            if (!this.level.dimensionType().ultraWarm()) {
-                                RitualStructures.findExpertNetherStructure(this, this.worldPosition, this.level);
-                                if (!RitualStructures.checkExpertNetherRequirements(this)) {
-                                    ++this.structureTime;
-                                    if (this.structureTime >= totalSTime) {
-                                        this.stopRitual(false);
-                                    }
-                                } else {
-                                    this.structureTime = 0;
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
-                        }
-
-                        if (recipe.getCraftType().contains("air")) {
-                            if (!(this.getBlockPos().getY() >= 128)) {
-                                ++this.structureTime;
-                                if (this.structureTime >= totalSTime) {
-                                    this.stopRitual(false);
-                                }
-                            } else {
-                                this.structureTime = 0;
-                            }
+                        } else {
+                            this.structureTime = 0;
                         }
                     } else {
                         if (this.level.getGameTime() % 20 == 0) {
@@ -356,7 +256,11 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
                     if (ritualRecipe != null) {
                         if (ritualRecipe.getRitual().isValid(world, pos, this, player, activationItem, ritualRecipe.getIngredients())) {
-                            if (ritualRecipe.getCraftType().contains("adept_nether") || ritualRecipe.getCraftType().contains("sabbath") || ritualRecipe.getCraftType().contains("expert_nether")){
+
+                            if (!RitualStructures.getProperStructure(ritualRecipe.getCraftType(), this, pos, world)){
+                                player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.structure.fail"), true);
+                                return false;
+                            } else if (ritualRecipe.getCraftType().contains("adept_nether") || ritualRecipe.getCraftType().contains("sabbath") || ritualRecipe.getCraftType().contains("expert_nether")){
                                 CompoundNBT playerData = player.getPersistentData();
                                 CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
                                 if (data.getBoolean(ConstantPaths.readNetherBook())){
