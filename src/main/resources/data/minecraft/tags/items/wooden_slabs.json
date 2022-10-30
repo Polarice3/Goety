@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "goety:haunted_slab"
+    "goety:haunted_slab",
+    "goety:gloom_slab",
+    "goety:murk_slab"
   ]
 }

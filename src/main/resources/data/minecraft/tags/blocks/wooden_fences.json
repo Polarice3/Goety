@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "goety:haunted_fence"
+    "goety:haunted_fence",
+    "goety:gloom_fence",
+    "goety:murk_fence"
   ]
 }

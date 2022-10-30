@@ -37,7 +37,13 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.function.Predicate;
+
 public class MobUtil {
+    public static final Predicate<LivingEntity> NO_CREATIVE_OR_SPECTATOR = (p_200824_0_) -> {
+        return !(p_200824_0_ instanceof PlayerEntity) || !p_200824_0_.isSpectator() && !((PlayerEntity)p_200824_0_).isCreative();
+    };
+
     public static void deadSandConvert(Entity entity, boolean natural){
         if (entity instanceof MonsterEntity && !(entity instanceof IDeadMob)){
             MonsterEntity monster = (MonsterEntity) entity;

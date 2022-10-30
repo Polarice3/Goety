@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "goety:haunted_pressure_plate"
+    "goety:haunted_pressure_plate",
+    "goety:dark_pressure_plate",
+    "goety:gloom_pressure_plate",
+    "goety:murk_pressure_plate"
   ]
 }

@@ -209,6 +209,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SalvagedFortGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DecrepitFortGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> RuinedRitualGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> GloomTreeGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> MurkTreeGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
@@ -527,8 +529,14 @@ public class MainConfig {
                 .defineInRange("ruinedRitualSpacing", 45, 0, Integer.MAX_VALUE);
         RuinedRitualSeperation = BUILDER.comment("Separation for Ruined Rituals, Default: 10")
                 .defineInRange("ruinedRitualSeparation", 10, 0, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("World Generation");
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
                 .define("totemGen", true);
+        GloomTreeGen = BUILDER.comment("Gloom Trees Generates in the World, Default: true")
+                .define("gloomTreeGen", true);
+        MurkTreeGen = BUILDER.comment("Murk Trees Generates in the World, Default: true")
+                .define("murkTreeGen", true);
         BUILDER.pop();
         BUILDER.push("Minions");
         UndeadTeleport = BUILDER.comment("Whether Undead Minions can teleport to Players, Default: false")

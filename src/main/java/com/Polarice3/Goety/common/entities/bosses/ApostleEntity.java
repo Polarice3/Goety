@@ -470,6 +470,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             this.remove();
         }
 
+        if (!this.level.getNearbyPlayers(new EntityPredicate().selector(MobUtil.NO_CREATIVE_OR_SPECTATOR), this, this.getBoundingBox().inflate(16)).isEmpty()){
+            if (!(pSource.getEntity() instanceof PlayerEntity)){
+                trueAmount = trueAmount/2;
+            }
+        }
+
         return super.hurt(pSource, Math.min(trueAmount, 20.0F));
     }
 

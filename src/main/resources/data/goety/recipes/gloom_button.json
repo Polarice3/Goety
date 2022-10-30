@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "wooden_button",
+  "ingredients": [
+    {
+      "item": "goety:gloom_planks"
+    }
+  ],
+  "result": {
+    "item": "goety:gloom_button"
+  }
+}

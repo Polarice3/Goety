@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "goety:haunted_stairs"
+    "goety:haunted_stairs",
+    "goety:gloom_stairs",
+    "goety:murk_stairs"
   ]
 }

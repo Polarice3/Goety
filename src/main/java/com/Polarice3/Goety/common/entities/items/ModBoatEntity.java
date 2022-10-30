@@ -50,7 +50,9 @@ public class ModBoatEntity extends BoatEntity {
     }
 
     public static enum Type {
-        HAUNTED(ModBlocks.HAUNTED_PLANKS.get(), "haunted");
+        HAUNTED(ModBlocks.HAUNTED_PLANKS.get(), "haunted"),
+        GLOOM(ModBlocks.GLOOM_PLANKS.get(), "gloom"),
+        MURK(ModBlocks.MURK_PLANKS.get(), "murk");
 
         private final String name;
         private final Block planks;

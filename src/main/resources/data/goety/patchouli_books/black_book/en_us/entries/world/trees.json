@@ -1,0 +1,26 @@
+{
+  "name": "Unusual Trees",
+  "icon": "goety:murk_sapling",
+  "category": "goety:world",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You've spotted some unusual trees that are unlike any other. They seemed to naturally grow less commonly than the usual collection of trees."
+    },
+    {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/gloom_tree.png"],
+      "border": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The pale Gloom Trees can be found within swamps and the Murk Trees can be found in forests or hills. Interestingly, these trees and its wood are non-flammable. Useful for building wooden structures that don't burn due to a mishap with a non-campfire fireplace."
+    },
+    {
+      "type": "patchouli:image",
+      "images": ["goety:textures/gui/entries/murk_tree.png"],
+      "border": true
+    }
+  ]
+}

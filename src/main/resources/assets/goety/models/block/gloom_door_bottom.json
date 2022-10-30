@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom",
+  "textures": {
+    "top": "goety:blocks/gloom_door_top",
+    "bottom": "goety:blocks/gloom_door_bottom"
+  }
+}

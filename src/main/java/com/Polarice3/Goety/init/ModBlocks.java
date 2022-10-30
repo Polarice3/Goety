@@ -5,9 +5,12 @@ import com.Polarice3.Goety.client.render.tileentities.ModItemTERenderer;
 import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.common.items.SoulFangTotemItem;
 import com.Polarice3.Goety.common.items.TallSkullItem;
+import com.Polarice3.Goety.common.world.features.trees.GloomTree;
+import com.Polarice3.Goety.common.world.features.trees.MurkTree;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 import net.minecraft.util.math.BlockPos;
@@ -70,7 +73,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> HAUNTED_BUSH = BLOCKS.register("haunted_bush", HauntedBushBlock::new);
     public static final RegistryObject<Block> IRON_FINGER = BLOCKS.register("iron_finger", IronFingerBlock::new);
 
-    //Tree
+    //Haunted
     public static final RegistryObject<Block> HAUNTED_PLANKS = BLOCKS.register("haunted_planks",
             () -> new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> HAUNTED_LOG = BLOCKS.register("haunted_log", HauntedLogBlock::new);
@@ -99,6 +102,69 @@ public class ModBlocks {
             () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.HAUNTED));
     public static final RegistryObject<Block> HAUNTED_WALL_SIGN = BLOCKS.register("haunted_wall_sign",
             () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(HAUNTED_SIGN.get()), ModWoodType.HAUNTED));
+
+    //Gloom
+    public static final RegistryObject<Block> GLOOM_PLANKS = BLOCKS.register("gloom_planks",
+            () -> new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_LOG = BLOCKS.register("gloom_log", () -> new ModLogBlock(MaterialColor.COLOR_LIGHT_GRAY));
+    public static final RegistryObject<Block> STRIPPED_GLOOM_LOG = BLOCKS.register("stripped_gloom_log", () -> new ModLogBlock(MaterialColor.COLOR_LIGHT_GRAY));
+    public static final RegistryObject<Block> GLOOM_WOOD = BLOCKS.register("gloom_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> STRIPPED_GLOOM_WOOD = BLOCKS.register("stripped_gloom_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_PRESSURE_PLATE = BLOCKS.register("gloom_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).noCollission().strength(0.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_TRAPDOOR = BLOCKS.register("gloom_trapdoor",
+            () -> new TrapDoorBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> GLOOM_BUTTON = BLOCKS.register("gloom_button",
+            () -> new WoodButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_STAIRS = BLOCKS.register("gloom_stairs",
+            () -> new StairsBlock(GLOOM_PLANKS.get().defaultBlockState(), AbstractBlock.Properties.copy(GLOOM_PLANKS.get())));
+    public static final RegistryObject<Block> GLOOM_SLAB = BLOCKS.register("gloom_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_FENCE_GATE = BLOCKS.register("gloom_fence_gate",
+            () -> new FenceGateBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_FENCE = BLOCKS.register("gloom_fence",
+            () -> new FenceBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> GLOOM_DOOR = BLOCKS.register("gloom_door",
+            () -> new DoorBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> GLOOM_SIGN = BLOCKS.register("gloom_sign",
+            () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.GLOOM));
+    public static final RegistryObject<Block> GLOOM_WALL_SIGN = BLOCKS.register("gloom_wall_sign",
+            () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(GLOOM_SIGN.get()), ModWoodType.GLOOM));
+    public static final RegistryObject<Block> GLOOM_LEAVES = BLOCKS.register("gloom_leaves", ModBlocks::leaves);
+    public static final RegistryObject<Block> GLOOM_SAPLING = BLOCKS.register("gloom_sapling", () -> sapling(new GloomTree()));
+
+    //Murk
+    public static final RegistryObject<Block> MURK_PLANKS = BLOCKS.register("murk_planks",
+            () -> new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_LOG = BLOCKS.register("murk_log", () -> new ModLogBlock(MaterialColor.COLOR_BROWN));
+    public static final RegistryObject<Block> STRIPPED_MURK_LOG = BLOCKS.register("stripped_murk_log", () -> new ModLogBlock(MaterialColor.COLOR_BROWN));
+    public static final RegistryObject<Block> MURK_WOOD = BLOCKS.register("murk_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> STRIPPED_MURK_WOOD = BLOCKS.register("stripped_murk_wood",
+            () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_PRESSURE_PLATE = BLOCKS.register("murk_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).noCollission().strength(0.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_TRAPDOOR = BLOCKS.register("murk_trapdoor",
+            () -> new TrapDoorBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> MURK_BUTTON = BLOCKS.register("murk_button",
+            () -> new WoodButtonBlock(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_STAIRS = BLOCKS.register("murk_stairs",
+            () -> new StairsBlock(MURK_PLANKS.get().defaultBlockState(), AbstractBlock.Properties.copy(MURK_PLANKS.get())));
+    public static final RegistryObject<Block> MURK_SLAB = BLOCKS.register("murk_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_FENCE_GATE = BLOCKS.register("murk_fence_gate",
+            () -> new FenceGateBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_FENCE = BLOCKS.register("murk_fence",
+            () -> new FenceBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> MURK_DOOR = BLOCKS.register("murk_door",
+            () -> new DoorBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> MURK_SIGN = BLOCKS.register("murk_sign",
+            () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.MURK));
+    public static final RegistryObject<Block> MURK_WALL_SIGN = BLOCKS.register("murk_wall_sign",
+            () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(MURK_SIGN.get()), ModWoodType.MURK));
+    public static final RegistryObject<Block> MURK_LEAVES = BLOCKS.register("murk_leaves", ModBlocks::leaves);
+    public static final RegistryObject<Block> MURK_SAPLING = BLOCKS.register("murk_sapling", () -> sapling(new MurkTree()));
+
     //Slabs
     public static final RegistryObject<Block> CURSED_STONE_SLAB_BLOCK = BLOCKS.register("cursed_stone_slab",
             () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.STONE)
@@ -276,7 +342,10 @@ public class ModBlocks {
             () -> new BlockItemBase(PITHOS_BLOCK.get()));
     public static final RegistryObject<Item> DEAD_TNT_ITEM = BLOCK_ITEMS.register("dead_tnt",
             () -> new BlockItemBase(DEAD_TNT.get()));
-    //TreeItems
+    public static final RegistryObject<Item> TALL_SKULL_ITEM = BLOCK_ITEMS.register("tall_skull",
+            () -> new TallSkullItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON).setISTER(() -> ModItemTERenderer::new)));
+
+    //HauntedItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
             () -> new BlockItemBase(HAUNTED_PLANKS.get()));
     public static final RegistryObject<Item> HAUNTED_LOG_ITEM = BLOCK_ITEMS.register("haunted_log",
@@ -307,8 +376,90 @@ public class ModBlocks {
             () -> new BlockItemBase(DARK_PRESSURE_PLATE.get()));
     public static final RegistryObject<Item> HAUNTED_SIGN_ITEM = BLOCK_ITEMS.register("haunted_sign",
             () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()));
-    public static final RegistryObject<Item> TALL_SKULL_ITEM = BLOCK_ITEMS.register("tall_skull",
-            () -> new TallSkullItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON).setISTER(() -> ModItemTERenderer::new)));
+
+    //GloomItems
+    public static final RegistryObject<Item> GLOOM_PLANKS_ITEM = BLOCK_ITEMS.register("gloom_planks",
+            () -> new BlockItemBase(GLOOM_PLANKS.get()));
+    public static final RegistryObject<Item> GLOOM_LOG_ITEM = BLOCK_ITEMS.register("gloom_log",
+            () -> new BlockItemBase(GLOOM_LOG.get()));
+    public static final RegistryObject<Item> STRIPPED_GLOOM_LOG_ITEM = BLOCK_ITEMS.register("stripped_gloom_log",
+            () -> new BlockItemBase(STRIPPED_GLOOM_LOG.get()));
+    public static final RegistryObject<Item> GLOOM_WOOD_ITEM = BLOCK_ITEMS.register("gloom_wood",
+            () -> new BlockItemBase(GLOOM_WOOD.get()));
+    public static final RegistryObject<Item> STRIPPED_GLOOM_WOOD_ITEM = BLOCK_ITEMS.register("stripped_gloom_wood",
+            () -> new BlockItemBase(STRIPPED_GLOOM_WOOD.get()));
+    public static final RegistryObject<Item> GLOOM_PRESSURE_PLATE_ITEM = BLOCK_ITEMS.register("gloom_pressure_plate",
+            () -> new BlockItemBase(GLOOM_PRESSURE_PLATE.get()));
+    public static final RegistryObject<Item> GLOOM_BUTTON_ITEM = BLOCK_ITEMS.register("gloom_button",
+            () -> new BlockItemBase(GLOOM_BUTTON.get()));
+    public static final RegistryObject<Item> GLOOM_DOOR_ITEM = BLOCK_ITEMS.register("gloom_door",
+            () -> new TallBlockItem(GLOOM_DOOR.get(), (new Item.Properties()).tab(Goety.TAB)));
+    public static final RegistryObject<Item> GLOOM_TRAPDOOR_ITEM = BLOCK_ITEMS.register("gloom_trapdoor",
+            () -> new BlockItemBase(GLOOM_TRAPDOOR.get()));
+    public static final RegistryObject<Item> GLOOM_FENCE_ITEM = BLOCK_ITEMS.register("gloom_fence",
+            () -> new BlockItemBase(GLOOM_FENCE.get()));
+    public static final RegistryObject<Item> GLOOM_FENCE_GATE_ITEM = BLOCK_ITEMS.register("gloom_fence_gate",
+            () -> new BlockItemBase(GLOOM_FENCE_GATE.get()));
+    public static final RegistryObject<Item> GLOOM_SLAB_ITEM = BLOCK_ITEMS.register("gloom_slab",
+            () -> new BlockItemBase(GLOOM_SLAB.get()));
+    public static final RegistryObject<Item> GLOOM_STAIRS_ITEM = BLOCK_ITEMS.register("gloom_stairs",
+            () -> new BlockItemBase(GLOOM_STAIRS.get()));
+    public static final RegistryObject<Item> GLOOM_LEAVES_ITEM = BLOCK_ITEMS.register("gloom_leaves",
+            () -> new BlockItemBase(GLOOM_LEAVES.get()));
+    public static final RegistryObject<Item> GLOOM_SIGN_ITEM = BLOCK_ITEMS.register("gloom_sign",
+            () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.GLOOM_SIGN.get(), ModBlocks.GLOOM_WALL_SIGN.get()));
+    public static final RegistryObject<Item> GLOOM_SAPLING_ITEM = BLOCK_ITEMS.register("gloom_sapling",
+            () -> new BlockItemBase(GLOOM_SAPLING.get()));
+
+    //MurkItems
+    public static final RegistryObject<Item> MURK_PLANKS_ITEM = BLOCK_ITEMS.register("murk_planks",
+            () -> new BlockItemBase(MURK_PLANKS.get()));
+    public static final RegistryObject<Item> MURK_LOG_ITEM = BLOCK_ITEMS.register("murk_log",
+            () -> new BlockItemBase(MURK_LOG.get()));
+    public static final RegistryObject<Item> STRIPPED_MURK_LOG_ITEM = BLOCK_ITEMS.register("stripped_murk_log",
+            () -> new BlockItemBase(STRIPPED_MURK_LOG.get()));
+    public static final RegistryObject<Item> MURK_WOOD_ITEM = BLOCK_ITEMS.register("murk_wood",
+            () -> new BlockItemBase(MURK_WOOD.get()));
+    public static final RegistryObject<Item> STRIPPED_MURK_WOOD_ITEM = BLOCK_ITEMS.register("stripped_murk_wood",
+            () -> new BlockItemBase(STRIPPED_MURK_WOOD.get()));
+    public static final RegistryObject<Item> MURK_PRESSURE_PLATE_ITEM = BLOCK_ITEMS.register("murk_pressure_plate",
+            () -> new BlockItemBase(MURK_PRESSURE_PLATE.get()));
+    public static final RegistryObject<Item> MURK_BUTTON_ITEM = BLOCK_ITEMS.register("murk_button",
+            () -> new BlockItemBase(MURK_BUTTON.get()));
+    public static final RegistryObject<Item> MURK_DOOR_ITEM = BLOCK_ITEMS.register("murk_door",
+            () -> new TallBlockItem(MURK_DOOR.get(), (new Item.Properties()).tab(Goety.TAB)));
+    public static final RegistryObject<Item> MURK_TRAPDOOR_ITEM = BLOCK_ITEMS.register("murk_trapdoor",
+            () -> new BlockItemBase(MURK_TRAPDOOR.get()));
+    public static final RegistryObject<Item> MURK_FENCE_ITEM = BLOCK_ITEMS.register("murk_fence",
+            () -> new BlockItemBase(MURK_FENCE.get()));
+    public static final RegistryObject<Item> MURK_FENCE_GATE_ITEM = BLOCK_ITEMS.register("murk_fence_gate",
+            () -> new BlockItemBase(MURK_FENCE_GATE.get()));
+    public static final RegistryObject<Item> MURK_SLAB_ITEM = BLOCK_ITEMS.register("murk_slab",
+            () -> new BlockItemBase(MURK_SLAB.get()));
+    public static final RegistryObject<Item> MURK_STAIRS_ITEM = BLOCK_ITEMS.register("murk_stairs",
+            () -> new BlockItemBase(MURK_STAIRS.get()));
+    public static final RegistryObject<Item> MURK_LEAVES_ITEM = BLOCK_ITEMS.register("murk_leaves",
+            () -> new BlockItemBase(MURK_LEAVES.get()));
+    public static final RegistryObject<Item> MURK_SIGN_ITEM = BLOCK_ITEMS.register("murk_sign",
+            () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.MURK_SIGN.get(), ModBlocks.MURK_WALL_SIGN.get()));
+    public static final RegistryObject<Item> MURK_SAPLING_ITEM = BLOCK_ITEMS.register("murk_sapling",
+            () -> new BlockItemBase(MURK_SAPLING.get()));
+
+    private static LeavesBlock leaves() {
+        return new LeavesBlock(AbstractBlock.Properties.of(Material.CACTUS).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(ModBlocks::ocelotOrParrot).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never));
+    }
+
+    private static SaplingBlock sapling(Tree tree){
+        return new SaplingBlock(tree, AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS));
+    }
+
+    private static boolean ocelotOrParrot(BlockState blockState, IBlockReader iBlockReader, BlockPos blockPos, EntityType<?> entityType) {
+        return entityType == EntityType.OCELOT || entityType == EntityType.PARROT;
+    }
+
+    private static boolean never(BlockState blockState, IBlockReader iBlockReader, BlockPos blockPos) {
+        return false;
+    }
 
     public static Boolean never(BlockState p_235427_0_, IBlockReader p_235427_1_, BlockPos p_235427_2_, EntityType<?> p_235427_3_) {
         return false;

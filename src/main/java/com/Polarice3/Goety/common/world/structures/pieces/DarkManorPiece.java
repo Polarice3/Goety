@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.world.structures.pieces;
 
+import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
+import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -44,6 +46,37 @@ public class DarkManorPiece extends ModStructurePiece {
 
     @Override
     protected void handleDataMarker(String function, BlockPos pPos, IServerWorld pLevel, Random pRandom, MutableBoundingBox pSbb) {
+        if (function.contains("mutant")){
+            if (pRandom.nextBoolean()) {
+                MutatedEntity mutatedEntity;
+                switch (pRandom.nextInt(5)) {
+                    case 0:
+                        mutatedEntity = ModEntityType.MUTATED_CHICKEN.get().create(pLevel.getLevel());
+                        break;
+                    case 1:
+                        mutatedEntity = ModEntityType.MUTATED_COW.get().create(pLevel.getLevel());
+                        break;
+                    case 2:
+                        mutatedEntity = ModEntityType.MUTATED_SHEEP.get().create(pLevel.getLevel());
+                        break;
+                    case 3:
+                        mutatedEntity = ModEntityType.MUTATED_PIG.get().create(pLevel.getLevel());
+                        break;
+                    case 4:
+                        mutatedEntity = ModEntityType.MUTATED_RABBIT.get().create(pLevel.getLevel());
+                        break;
+                    default:
+                        return;
+                }
+                if (mutatedEntity != null) {
+                    mutatedEntity.setPersistenceRequired();
+                    mutatedEntity.moveTo(pPos, 0.0F, 0.0F);
+                    mutatedEntity.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(mutatedEntity.blockPosition()), SpawnReason.STRUCTURE, null, null);
+                    pLevel.addFreshEntityWithPassengers(mutatedEntity);
+                    pLevel.setBlock(pPos, Blocks.AIR.defaultBlockState(), 2);
+                }
+            }
+        }
         AbstractRaiderEntity illager;
         switch (function) {
             case "pillager":

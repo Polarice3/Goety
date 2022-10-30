@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "goety:block/murk_slab"
+    },
+    "type=double": {
+      "model": "goety:block/murk_planks"
+    },
+    "type=top": {
+      "model": "goety:block/murk_slab_top"
+    }
+  }
+}

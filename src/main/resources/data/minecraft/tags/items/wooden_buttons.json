@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "goety:haunted_button"
+    "goety:haunted_button",
+    "goety:gloom_button",
+    "goety:murk_button"
   ]
 }

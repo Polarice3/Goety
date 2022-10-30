@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_trapdoor",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "goety:murk_planks"
+    }
+  },
+  "result": {
+    "item": "goety:murk_trapdoor",
+    "count": 2
+  }
+}

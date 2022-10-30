@@ -42,7 +42,7 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
         head.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         body.addChild(head);
         head.texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 10.0F, 8.0F, scaleFactor, false);
-        head.texOffs(0, 80).addBox(-5.0F, -3.0F, -4.0F, 10.0F, 4.0F, 9.0F, scaleFactor, false);
+        head.texOffs(0, 81).addBox(-5.0F, -3.0F, -4.0F, 10.0F, 4.0F, 9.0F, scaleFactor, false);
 
         nose = new ModelRenderer(this);
         nose.setPos(0.0F, -2.0F + p_i47227_2_, 0.0F);
@@ -50,9 +50,9 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
         nose.texOffs(24, 0).addBox(-1.0F, -1.0F, -6.0F, 2.0F, 4.0F, 2.0F, scaleFactor, false);
 
         Hat = new ModelRenderer(this);
-        Hat.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
+        Hat.setPos(0.0F, 0.0F, 0.0F);
         head.addChild(Hat);
-        Hat.texOffs(0, 64).addBox(-5.0F, -12.0F, -5.0F, 10.0F, 6.0F, 10.0F, scaleFactor, false);
+        Hat.texOffs(0, 64).addBox(-5.0F, -13.0F, -5.0F, 10.0F, 7.0F, 10.0F, scaleFactor, false);
 
         mustache = new ModelRenderer(this);
         mustache.setPos(0.0F, 0.0F, 0.0F);

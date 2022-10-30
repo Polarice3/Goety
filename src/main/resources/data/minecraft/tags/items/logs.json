@@ -4,6 +4,14 @@
     "goety:haunted_log",
     "goety:haunted_wood",
     "goety:stripped_haunted_log",
-    "goety:stripped_haunted_wood"
+    "goety:stripped_haunted_wood",
+    "goety:gloom_log",
+    "goety:gloom_wood",
+    "goety:stripped_gloom_log",
+    "goety:stripped_gloom_wood",
+    "goety:murk_log",
+    "goety:murk_wood",
+    "goety:stripped_murk_log",
+    "goety:stripped_murk_wood"
   ]
 }

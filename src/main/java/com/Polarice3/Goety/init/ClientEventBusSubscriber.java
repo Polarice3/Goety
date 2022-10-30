@@ -12,6 +12,7 @@ import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.particle.*;
@@ -19,12 +20,17 @@ import net.minecraft.client.renderer.Atlases;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.FoliageColors;
+import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -147,6 +153,13 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_CACTUS.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_BUSH.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.IRON_FINGER.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_TRAPDOOR.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.MURK_TRAPDOOR.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_DOOR.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_SAPLING.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.MURK_SAPLING.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_LEAVES.get(), RenderType.cutoutMipped());
+        RenderTypeLookup.setRenderLayer(ModBlocks.MURK_LEAVES.get(), RenderType.cutoutMipped());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
         ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);
@@ -155,6 +168,8 @@ public class ClientEventBusSubscriber {
         forgeBus.addListener(BossBarEvent::renderBossBar);
         event.enqueueWork(() -> {
             Atlases.addWoodType(ModWoodType.HAUNTED);
+            Atlases.addWoodType(ModWoodType.GLOOM);
+            Atlases.addWoodType(ModWoodType.MURK);
         });
 
         ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("souls"),
@@ -166,6 +181,23 @@ public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void onRegisterEntities(final RegistryEvent.Register<EntityType<?>> event){
         ModSpawnEggItem.initSpawnEggs();
+    }
+
+    @SubscribeEvent
+    public static void colorLeavesBlock(ColorHandlerEvent.Block event){
+        event.getBlockColors().register(
+                (state, lightReader, pos, color) ->
+                        lightReader != null && pos != null ? BiomeColors.getAverageFoliageColor(lightReader, pos) :
+                        FoliageColors.get(0.5D, 1.0D), ModBlocks.GLOOM_LEAVES.get(), ModBlocks.MURK_LEAVES.get());
+    }
+
+    @SubscribeEvent
+    public static void colorLeavesItem(ColorHandlerEvent.Item event){
+        IItemColor handler = (stack, tint) -> {
+            BlockState state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
+            return event.getBlockColors().getColor(state, null, null, tint);
+        };
+        event.getItemColors().register(handler, ModBlocks.GLOOM_LEAVES.get(), ModBlocks.MURK_LEAVES.get());
     }
 
     @SubscribeEvent

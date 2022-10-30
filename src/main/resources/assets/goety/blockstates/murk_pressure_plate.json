@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "goety:block/murk_pressure_plate"
+    },
+    "powered=true": {
+      "model": "goety:block/murk_pressure_plate_down"
+    }
+  }
+}

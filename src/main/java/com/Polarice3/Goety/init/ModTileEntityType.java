@@ -65,7 +65,10 @@ public class ModTileEntityType {
             () -> TileEntityType.Builder.of(PithosTileEntity::new, ModBlocks.PITHOS_BLOCK.get()).build(null));
 
     public static final RegistryObject<TileEntityType<ModSignTileEntity>> SIGN_TILE_ENTITIES = TILEENTITY_TYPES.register("sign",
-            () -> TileEntityType.Builder.of(ModSignTileEntity::new, ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()).build(null));
+            () -> TileEntityType.Builder.of(ModSignTileEntity::new,
+                    ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get(),
+                    ModBlocks.GLOOM_SIGN.get(), ModBlocks.GLOOM_WALL_SIGN.get(),
+                    ModBlocks.MURK_SIGN.get(), ModBlocks.MURK_WALL_SIGN.get()).build(null));
 
     public static final RegistryObject<TileEntityType<TallSkullTileEntity>> TALL_SKULL = TILEENTITY_TYPES.register("tall_skull",
             () -> TileEntityType.Builder.of(TallSkullTileEntity::new, ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get()).build(null));

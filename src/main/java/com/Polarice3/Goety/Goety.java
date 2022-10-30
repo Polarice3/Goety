@@ -147,6 +147,8 @@ public class Goety {
                 }
             });
             WoodType.register(ModWoodType.HAUNTED);
+            WoodType.register(ModWoodType.GLOOM);
+            WoodType.register(ModWoodType.MURK);
             ConfiguredStructures.registerConfiguredStructures();
         });
 
@@ -271,6 +273,18 @@ public class Goety {
                     && event.getCategory() != Biome.Category.OCEAN
                     && event.getCategory() != Biome.Category.RIVER) {
                 event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.CONFIGURED_CURSEDTOTEM);
+            }
+        }
+        if (MainConfig.GloomTreeGen.get()) {
+            if (event.getCategory() == Biome.Category.SWAMP) {
+                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.GLOOM_TREE);
+            }
+        }
+        if (MainConfig.MurkTreeGen.get()) {
+            if (event.getCategory() == Biome.Category.FOREST
+                    || event.getCategory() == Biome.Category.TAIGA
+                    || event.getCategory() == Biome.Category.EXTREME_HILLS) {
+                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.MURK_TREE);
             }
         }
     }

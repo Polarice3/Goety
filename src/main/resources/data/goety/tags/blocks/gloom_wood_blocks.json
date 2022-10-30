@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "goety:gloom_log",
+    "goety:gloom_wood",
+    "goety:gloom_planks",
+    "goety:gloom_door",
+    "goety:gloom_fence",
+    "goety:gloom_fence_gate",
+    "goety:gloom_slab",
+    "goety:gloom_stairs",
+    "goety:gloom_trapdoor",
+    "goety:gloom_button",
+    "goety:gloom_pressure_plate",
+    "goety:gloom_sign",
+    "goety:gloom_wall_sign",
+    "goety:stripped_gloom_log",
+    "goety:stripped_gloom_wood"
+  ]
+}

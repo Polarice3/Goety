@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "goety:murk_log",
+    "goety:murk_wood",
+    "goety:murk_planks",
+    "goety:murk_door",
+    "goety:murk_fence",
+    "goety:murk_fence_gate",
+    "goety:murk_slab",
+    "goety:murk_stairs",
+    "goety:murk_trapdoor",
+    "goety:murk_button",
+    "goety:murk_pressure_plate",
+    "goety:murk_sign",
+    "goety:murk_wall_sign",
+    "goety:stripped_murk_log",
+    "goety:stripped_murk_wood"
+  ]
+}

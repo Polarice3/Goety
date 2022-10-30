@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_rh",
+  "textures": {
+    "top": "goety:blocks/murk_door_top",
+    "bottom": "goety:blocks/murk_door_bottom"
+  }
+}

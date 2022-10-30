@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "goety:haunted_boat"
+    "goety:haunted_boat",
+    "goety:gloom_boat",
+    "goety:murk_boat"
   ]
 }

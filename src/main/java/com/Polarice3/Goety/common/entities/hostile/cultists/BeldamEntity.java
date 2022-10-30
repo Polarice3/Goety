@@ -126,7 +126,7 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
     public void die(DamageSource pCause) {
         if (pCause.getEntity() != null && pCause.getEntity() instanceof LivingEntity){
             LivingEntity livingEntity = (LivingEntity) pCause.getEntity();
-            livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 600));
+            livingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 300));
         }
         super.die(pCause);
     }
@@ -170,7 +170,7 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
 
                 if (potion != null) {
                     this.setItemSlot(EquipmentSlotType.MAINHAND, PotionUtils.setPotion(new ItemStack(Items.POTION), potion));
-                    this.usingTime = this.getMainHandItem().getUseDuration()/2;
+                    this.usingTime = this.getMainHandItem().getUseDuration();
                     this.setUsingItem(true);
                     if (!this.isSilent()) {
                         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.WITCH_DRINK, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
@@ -184,7 +184,7 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
                         for (EffectInstance effectInstance : this.getActiveEffects()){
                             if (!effectInstance.getEffect().isBeneficial()){
                                 this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.MILK_BUCKET));
-                                this.usingTime = this.getMainHandItem().getUseDuration()/2;
+                                this.usingTime = this.getMainHandItem().getUseDuration();
                                 this.setUsingItem(true);
                                 if (!this.isSilent()) {
                                     this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.WANDERING_TRADER_DRINK_MILK, this.getSoundSource(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);

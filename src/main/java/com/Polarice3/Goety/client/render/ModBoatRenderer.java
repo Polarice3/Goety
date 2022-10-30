@@ -16,7 +16,7 @@ import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class ModBoatRenderer extends EntityRenderer<ModBoatEntity> {
-    private static final ResourceLocation[] BOAT_TEXTURE_LOCATIONS = new ResourceLocation[]{Goety.location("textures/entity/boat/haunted.png")};
+    private static final ResourceLocation[] BOAT_TEXTURE_LOCATIONS = new ResourceLocation[]{Goety.location("textures/entity/boat/haunted.png"), Goety.location("textures/entity/boat/gloom.png"), Goety.location("textures/entity/boat/murk.png")};
     protected final BoatModel model = new BoatModel();
 
     public ModBoatRenderer(EntityRendererManager p_i46190_1_) {
