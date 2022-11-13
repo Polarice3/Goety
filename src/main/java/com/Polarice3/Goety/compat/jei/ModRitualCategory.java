@@ -22,7 +22,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3i;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,9 +80,6 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
                 Stream.of(recipe.getActivationItem()),
                 recipe.getIngredients().stream()
         );
-        if (recipe.requiresItemUse()) {
-            ingredientStream = Stream.concat(Stream.of(recipe.getItemToUse()), ingredientStream);
-        }
         ingredients.setInputIngredients(
                 ingredientStream.collect(Collectors.toList())
         );
@@ -97,10 +93,6 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
         this.recipeOutputOffsetX = 75;
 
         int currentIngredient = 0;
-        List<ItemStack> itemToUse = new ArrayList<>();
-        if (recipe.requiresItemUse()) {
-            itemToUse = ingredients.getInputs(VanillaTypes.ITEM).get(currentIngredient++);
-        }
         List<ItemStack> activationItem = ingredients.getInputs(VanillaTypes.ITEM).get(currentIngredient++);
         List<List<ItemStack>> inputItems =
                 ingredients.getInputs(VanillaTypes.ITEM).stream().skip(currentIngredient).collect(Collectors.toList());
@@ -176,7 +168,7 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
 
         if (recipe.getCraftType().contains("animalis")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);
-            recipeLayout.getItemStacks().set(index, new ItemStack(ModItems.ANIMALISCORE.get()));
+            recipeLayout.getItemStacks().set(index, new ItemStack(ModItems.ANIMALIS_CORE.get()));
             index++;
         } else if (recipe.getCraftType().contains("necroturgy") || recipe.getCraftType().contains("lich")){
             recipeLayout.getItemStacks().init(index, false, 0, 0);
@@ -211,22 +203,6 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
             recipeLayout.getItemStacks().set(index, new ItemStack(Items.OBSIDIAN));
             index++;
         }
-
-        if (recipe.requiresItemUse()) {
-            int infotextY = 0;
-            if (recipe.requiresSacrifice()) {
-                infotextY += 10;
-            }
-
-            infotextY += 10;
-            String text = I18n.get("jei.goety.item_to_use");
-            int itemToUseY = infotextY - 5;
-            int itemToUseX = this.getStringCenteredMaxX(Minecraft.getInstance().font, text, 84, infotextY);
-
-            recipeLayout.getItemStacks().init(index, false, itemToUseX, itemToUseY);
-            recipeLayout.getItemStacks().set(index, itemToUse);
-            index++;
-        }
     }
 
     @Override
@@ -240,12 +216,6 @@ public class ModRitualCategory implements IRecipeCategory<RitualRecipe> {
             infotextY += 13;
             this.drawStringCentered(matrixStack, Minecraft.getInstance().font,
                     I18n.get("jei.goety.sacrifice", I18n.get(recipe.getEntityToSacrificeDisplayName())), 84, infotextY);
-        }
-
-        if (recipe.requiresItemUse()) {
-            infotextY += 13;
-            String text = I18n.get("jei.goety.item_to_use");
-            this.drawStringCentered(matrixStack, Minecraft.getInstance().font, text, 84, infotextY);
         }
 
         if (recipe.getEntityToSummon() != null) {

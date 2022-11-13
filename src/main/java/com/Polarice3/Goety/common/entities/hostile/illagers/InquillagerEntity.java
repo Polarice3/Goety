@@ -41,9 +41,14 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public class InquillagerEntity extends HuntingIllagerEntity {
+    public int coolDown;
+    public int healTimes;
+
     public InquillagerEntity(EntityType<? extends InquillagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
         this.xpReward = 20;
+        this.coolDown = 0;
+        this.healTimes = 0;
     }
 
     protected void registerGoals() {
@@ -68,14 +73,46 @@ public class InquillagerEntity extends HuntingIllagerEntity {
 
     public void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
+        this.coolDown = pCompound.getInt("Cooldown");
+        this.healTimes = pCompound.getInt("HealTimes");
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
+        pCompound.putInt("Cooldown", this.coolDown);
+        pCompound.putInt("HealTimes", this.healTimes);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.coolDown > 0){
+            --this.coolDown;
+        }
     }
 
     protected void customServerAiStep() {
         super.customServerAiStep();
+    }
+
+    public void setCoolDown(int coolDown){
+        this.coolDown = coolDown;
+    }
+
+    public int getCoolDown() {
+        return coolDown;
+    }
+
+    public void increaseHealTimes(){
+        ++this.healTimes;
+    }
+
+    public void setHealTimes(int healTimes){
+        this.healTimes = healTimes;
+    }
+
+    public int getHealTimes() {
+        return healTimes;
     }
 
     @Override
@@ -158,6 +195,7 @@ public class InquillagerEntity extends HuntingIllagerEntity {
     }
 
     public void die(DamageSource pCause) {
+        super.die(pCause);
         SoundEvent soundevent = SoundEvents.VINDICATOR_DEATH;
         this.playSound(soundevent, 1.0F, 1.5F);
     }
@@ -218,7 +256,7 @@ public class InquillagerEntity extends HuntingIllagerEntity {
             if (!super.canUse()) {
                 return false;
             } else {
-                return InquillagerEntity.this.getHealth() < InquillagerEntity.this.getMaxHealth()/2;
+                return InquillagerEntity.this.getHealth() < InquillagerEntity.this.getMaxHealth()/2 && InquillagerEntity.this.getCoolDown() <= 0;
             }
         }
 
@@ -242,6 +280,13 @@ public class InquillagerEntity extends HuntingIllagerEntity {
                 }
             }
             InquillagerEntity.this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 2.0F);
+            if (InquillagerEntity.this.getHealTimes() > 3){
+                InquillagerEntity.this.setHealTimes(0);
+                InquillagerEntity.this.setCoolDown(600);
+            } else {
+                InquillagerEntity.this.increaseHealTimes();
+                InquillagerEntity.this.setCoolDown(100);
+            }
         }
 
         protected SoundEvent getSpellPrepareSound() {

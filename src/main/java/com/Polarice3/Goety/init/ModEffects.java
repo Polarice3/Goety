@@ -1,10 +1,10 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.potions.DesiccateEffect;
-import com.Polarice3.Goety.common.potions.IllagueEffect;
-import com.Polarice3.Goety.common.potions.ModEffect;
-import com.Polarice3.Goety.common.potions.SoulHungerEffect;
+import com.Polarice3.Goety.common.effects.DesiccateEffect;
+import com.Polarice3.Goety.common.effects.IllagueEffect;
+import com.Polarice3.Goety.common.effects.ModEffect;
+import com.Polarice3.Goety.common.effects.SoulHungerEffect;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.potion.Effect;

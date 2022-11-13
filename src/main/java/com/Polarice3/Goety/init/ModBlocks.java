@@ -13,6 +13,7 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -51,6 +52,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> CURSED_KILN = BLOCKS.register("cursed_kiln", CursedKilnBlock::new);
     public static final RegistryObject<Block> DARK_ALTAR = BLOCKS.register("dark_altar", DarkAltarBlock::new);
     public static final RegistryObject<Block> PEDESTAL = BLOCKS.register("pedestal", PedestalBlock::new);
+    public static final RegistryObject<Block> SOUL_ABSORBER = BLOCKS.register("soul_absorber", SoulAbsorberBlock::new);
     public static final RegistryObject<Block> DEAD_SAND = BLOCKS.register("dead_sand", DeadSandBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE = BLOCKS.register("dead_sandstone", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE_CHISELED = BLOCKS.register("dead_sandstone_chiseled", DeadSandStoneBlock::new);
@@ -67,6 +69,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> WALL_TALL_SKULL_BLOCK = BLOCKS.register("wall_tall_skull", WallTallSkullBlock::new);
     public static final RegistryObject<Block> FALSE_PORTAL = BLOCKS.register("false_portal", FalsePortalBlock::new);
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
+    public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -106,8 +109,8 @@ public class ModBlocks {
     //Gloom
     public static final RegistryObject<Block> GLOOM_PLANKS = BLOCKS.register("gloom_planks",
             () -> new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-    public static final RegistryObject<Block> GLOOM_LOG = BLOCKS.register("gloom_log", () -> new ModLogBlock(MaterialColor.COLOR_LIGHT_GRAY));
-    public static final RegistryObject<Block> STRIPPED_GLOOM_LOG = BLOCKS.register("stripped_gloom_log", () -> new ModLogBlock(MaterialColor.COLOR_LIGHT_GRAY));
+    public static final RegistryObject<Block> GLOOM_LOG = BLOCKS.register("gloom_log", () -> log(MaterialColor.COLOR_BROWN, MaterialColor.COLOR_LIGHT_GRAY));
+    public static final RegistryObject<Block> STRIPPED_GLOOM_LOG = BLOCKS.register("stripped_gloom_log", () -> log(MaterialColor.COLOR_BROWN, MaterialColor.COLOR_LIGHT_GRAY));
     public static final RegistryObject<Block> GLOOM_WOOD = BLOCKS.register("gloom_wood",
             () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(2.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> STRIPPED_GLOOM_WOOD = BLOCKS.register("stripped_gloom_wood",
@@ -137,8 +140,8 @@ public class ModBlocks {
     //Murk
     public static final RegistryObject<Block> MURK_PLANKS = BLOCKS.register("murk_planks",
             () -> new Block(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-    public static final RegistryObject<Block> MURK_LOG = BLOCKS.register("murk_log", () -> new ModLogBlock(MaterialColor.COLOR_BROWN));
-    public static final RegistryObject<Block> STRIPPED_MURK_LOG = BLOCKS.register("stripped_murk_log", () -> new ModLogBlock(MaterialColor.COLOR_BROWN));
+    public static final RegistryObject<Block> MURK_LOG = BLOCKS.register("murk_log", () -> log(MaterialColor.COLOR_BROWN, MaterialColor.COLOR_BROWN));
+    public static final RegistryObject<Block> STRIPPED_MURK_LOG = BLOCKS.register("stripped_murk_log", () -> log(MaterialColor.COLOR_BROWN, MaterialColor.COLOR_BROWN));
     public static final RegistryObject<Block> MURK_WOOD = BLOCKS.register("murk_wood",
             () -> new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> STRIPPED_MURK_WOOD = BLOCKS.register("stripped_murk_wood",
@@ -294,6 +297,8 @@ public class ModBlocks {
             () -> new BlockItemBase(CURSED_BURNER.get()));
     public static final RegistryObject<Item> CURSED_KILN_ITEM = BLOCK_ITEMS.register("cursed_kiln",
             () -> new BlockItemBase(CURSED_KILN.get()));
+    public static final RegistryObject<Item> SOUL_ABSORBER_ITEM = BLOCK_ITEMS.register("soul_absorber",
+            () -> new BlockItemBase(SOUL_ABSORBER.get()));
     public static final RegistryObject<Item> DARK_ALTAR_ITEM = BLOCK_ITEMS.register("dark_altar",
             () -> new BlockItemBase(DARK_ALTAR.get()));
     public static final RegistryObject<Item> PEDESTAL_ITEM = BLOCK_ITEMS.register("pedestal",
@@ -344,6 +349,8 @@ public class ModBlocks {
             () -> new BlockItemBase(DEAD_TNT.get()));
     public static final RegistryObject<Item> TALL_SKULL_ITEM = BLOCK_ITEMS.register("tall_skull",
             () -> new TallSkullItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON).setISTER(() -> ModItemTERenderer::new)));
+    public static final RegistryObject<Item> FROST_BLOCK_ITEM = BLOCK_ITEMS.register("frost_block",
+            () -> new BlockItemBase(FROST_BLOCK.get()));
 
     //HauntedItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",
@@ -455,6 +462,12 @@ public class ModBlocks {
 
     private static boolean ocelotOrParrot(BlockState blockState, IBlockReader iBlockReader, BlockPos blockPos, EntityType<?> entityType) {
         return entityType == EntityType.OCELOT || entityType == EntityType.PARROT;
+    }
+
+    private static RotatedPillarBlock log(MaterialColor pTopColor, MaterialColor pBarkColor) {
+        return new RotatedPillarBlock(AbstractBlock.Properties.of(Material.WOOD, (p_235431_2_) -> {
+            return p_235431_2_.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? pTopColor : pBarkColor;
+        }).strength(2.0F).sound(SoundType.WOOD));
     }
 
     private static boolean never(BlockState blockState, IBlockReader iBlockReader, BlockPos blockPos) {

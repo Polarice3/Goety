@@ -37,7 +37,7 @@ public class ConfiguredFeatures {
                             .heightmap(Heightmap.Type.MOTION_BLOCKING)
                             .build()));
     public static final ConfiguredFeature<?, ?> GLOOM_TREE = register("gloom_tree",
-            ModFeatures.OVERWORLD_TREE.get().configured(getGloomTree()
+            Feature.TREE.configured(getGloomTree()
                             .maxWaterDepth(1)
                             .decorators(ImmutableList.of(TrunkVineTreeDecorator.INSTANCE, LeaveVineTreeDecorator.INSTANCE))
                             .build())
@@ -45,7 +45,7 @@ public class ConfiguredFeatures {
                             .decorated(Placement.COUNT_EXTRA.configured(
                                     new AtSurfaceWithExtraConfig(0, 0.1F, 1))));
     public static final ConfiguredFeature<?, ?> MURK_TREE = register("murk_tree",
-            ModFeatures.OVERWORLD_TREE.get().configured(getMurkTree().build())
+            Feature.TREE.configured(getMurkTree().build())
                     .decorated(Features.Placements.HEIGHTMAP_SQUARE)
                     .decorated(Placement.COUNT_EXTRA.configured(
                             new AtSurfaceWithExtraConfig(0, 0.01F, 1))));

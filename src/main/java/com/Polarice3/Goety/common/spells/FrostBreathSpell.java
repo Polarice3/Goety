@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
-import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
@@ -48,14 +47,13 @@ public class FrostBreathSpell extends SpewingSpell{
             if (target != null) {
                 if (target instanceof LivingEntity) {
                     LivingEntity livingTarget = (LivingEntity) target;
-                    if (MobUtil.notImmuneToFrost(livingTarget)) {
+                    if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 1.0F + enchantment)){
                         livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
-                        livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), MobUtil.extraFrostDamage(livingTarget) ? 2.0F : 1.0F + enchantment);
                     }
                 }
             }
         }
-        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PLAYER_BREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PLAYER_BREATH, SoundCategory.NEUTRAL, worldIn.random.nextFloat() * 0.5F, worldIn.random.nextFloat() * 0.5F);
     }
 
     @Override
@@ -77,14 +75,13 @@ public class FrostBreathSpell extends SpewingSpell{
             if (target != null) {
                 if (target instanceof LivingEntity) {
                     LivingEntity livingTarget = (LivingEntity) target;
-                    if (MobUtil.notImmuneToFrost(livingTarget)) {
+                    if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 2.0F + enchantment)){
                         livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
-                        livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), MobUtil.extraFrostDamage(livingTarget) ? 4.0F : 2.0F + enchantment);
                     }
                 }
             }
         }
-        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PLAYER_BREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.PLAYER_BREATH, SoundCategory.NEUTRAL, worldIn.random.nextFloat() * 0.5F, worldIn.random.nextFloat() * 0.5F);
     }
 
     @Override

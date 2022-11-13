@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "goety:wind_totem"
+    }
+  ],
+  "result": {
+    "item": "goety:wind_core",
+    "count": 1
+  }
+}

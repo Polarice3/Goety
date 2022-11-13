@@ -1,0 +1,16 @@
+{
+  "name": "Frost Scythe",
+  "icon": "goety:frost_scythe",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/gain_cold_heart",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Frost Scythe acts like the Dark Scythe and the frost tools, except it has higher durability and gives Slowness II when hitting creatures."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:frost_scythe"
+    }
+  ]
+}

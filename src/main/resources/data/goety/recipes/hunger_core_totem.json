@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "goety:fang_totem"
+    }
+  ],
+  "result": {
+    "item": "goety:hunger_core",
+    "count": 1
+  }
+}

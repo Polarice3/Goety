@@ -5,10 +5,7 @@ import com.Polarice3.Goety.common.capabilities.infamy.InfamyUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.lichdom.LichUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.soulenergy.SEUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsUpdatePacket;
-import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
-import com.Polarice3.Goety.common.network.packets.client.CSoulEnergyPacket;
-import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
-import com.Polarice3.Goety.common.network.packets.client.CWandKeyPacket;
+import com.Polarice3.Goety.common.network.packets.client.*;
 import com.Polarice3.Goety.common.network.packets.server.SChangeFocusPacket;
 import com.Polarice3.Goety.common.network.packets.server.SOpenItemPacket;
 import com.Polarice3.Goety.common.network.packets.server.TotemDeathPacket;
@@ -46,6 +43,7 @@ public class ModNetwork {
         INSTANCE.registerMessage(nextID(), CBagKeyPacket.class, CBagKeyPacket::encode, CBagKeyPacket::decode, CBagKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CWandAndBagKeyPacket.class, CWandAndBagKeyPacket::encode, CWandAndBagKeyPacket::decode, CWandAndBagKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CSoulEnergyPacket.class, CSoulEnergyPacket::encode, CSoulEnergyPacket::decode, CSoulEnergyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(nextID(), CScytheStrikePacket.class, CScytheStrikePacket::encode, CScytheStrikePacket::decode, CScytheStrikePacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static <MSG> void sendTo(PlayerEntity player, MSG msg) {

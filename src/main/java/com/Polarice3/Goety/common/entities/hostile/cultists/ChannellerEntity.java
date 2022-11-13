@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -15,6 +16,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -28,6 +30,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
@@ -35,7 +39,7 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
     private static final Predicate<LivingEntity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof ChannellerEntity);
     };
-    private static final DataParameter<Integer> TARGET_ALLY = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.INT);
+    private static final DataParameter<Optional<UUID>> ALLY_UUID = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.OPTIONAL_UUID);
     private int prayingTick;
 
     public ChannellerEntity(EntityType<? extends ChannellerEntity> type, World worldIn) {
@@ -72,35 +76,62 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(IS_PRAYING, false);
-        this.entityData.define(TARGET_ALLY, 0);
+        this.entityData.define(ALLY_UUID, Optional.empty());
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
+        UUID uuid;
+        if (compound.hasUUID("ally")) {
+            uuid = compound.getUUID("ally");
+        } else {
+            String s = compound.getString("ally");
+            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
+        }
+
+        if (uuid != null) {
+            try {
+                this.setAllyUUID(uuid);
+            } catch (Throwable ignored) {
+            }
+        }
         this.prayingTick = compound.getInt("prayingTick");
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
+        if (this.getAllyUUID() != null) {
+            compound.putUUID("ally", this.getAllyUUID());
+        }
         compound.putInt("prayingTick", this.prayingTick);
     }
 
-    private void setAllyTarget(int AllyTargetIn) {
-        this.entityData.set(TARGET_ALLY, AllyTargetIn);
-    }
-
-    public boolean hasAllyTarget() {
-        return this.entityData.get(TARGET_ALLY) != 0;
-    }
-
-    public MonsterEntity getAllyTarget() {
-        Entity entity = this.level.getEntity(this.entityData.get(TARGET_ALLY));
-        if (entity instanceof MonsterEntity
-                && !(entity instanceof CreeperEntity)) {
-            return (MonsterEntity) entity;
-        } else {
+    @Nullable
+    public MonsterEntity getAlly() {
+        try {
+            UUID uuid = this.getAllyUUID();
+            if (uuid != null){
+                if (EntityFinder.getLivingEntityByUuiD(uuid) instanceof MonsterEntity){
+                    return (MonsterEntity) EntityFinder.getLivingEntityByUuiD(uuid);
+                }
+            }
+            return null;
+        } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }
+    }
+
+    @Nullable
+    public UUID getAllyUUID() {
+        return this.entityData.get(ALLY_UUID).orElse(null);
+    }
+
+    public void setAllyUUID(UUID uuid){
+        this.entityData.set(ALLY_UUID, Optional.ofNullable(uuid));
+    }
+
+    public void setAlly(MonsterEntity monster){
+        this.setAllyUUID(monster.getUUID());
     }
 
     public boolean hurt(DamageSource source, float amount){
@@ -144,45 +175,44 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
 
     public void aiStep() {
         super.aiStep();
-        List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
-        if (!list.isEmpty() && !this.hasAllyTarget()) {
-            MonsterEntity ally = list.get(this.random.nextInt(list.size()));
-            this.setAllyTarget(ally.getId());
-        }
-        if (this.hasAllyTarget()) {
+        if (this.getAlly() != null) {
             if (this.prayingTick < 20) {
                 ++this.prayingTick;
             } else {
-                if (this.getAllyTarget() != null) {
-                    if (this.distanceTo(this.getAllyTarget()) >= 12.0D) {
-                        Vector3d vector3d = getAllyTarget().position();
-                        this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
-                    } else {
-                        this.navigation.stop();
-                        this.noActionTime = 0;
-                        this.setIsPraying(true);
-                        this.getLookControl().setLookAt(this.getAllyTarget(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
-                        this.getAllyTarget().setTarget(this.getTarget());
-                        this.getAllyTarget().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
-                        this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
-                        this.getAllyTarget().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
-                        this.getAllyTarget().setPersistenceRequired();
-                        if (this.getHealth() < this.getMaxHealth()) {
-                            if (this.tickCount % 10 == 0) {
-                                this.getAllyTarget().hurt(DamageSource.STARVE, 5.0F);
-                                this.heal(5.0F);
-                            }
+                if (this.distanceTo(this.getAlly()) >= 12.0D) {
+                    Vector3d vector3d = getAlly().position();
+                    this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
+                } else {
+                    this.navigation.stop();
+                    this.noActionTime = 0;
+                    this.setIsPraying(true);
+                    this.getLookControl().setLookAt(this.getAlly(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
+                    this.getAlly().setTarget(this.getTarget());
+                    this.getAlly().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
+                    this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
+                    this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
+                    this.getAlly().setPersistenceRequired();
+                    if (this.getHealth() < this.getMaxHealth()) {
+                        if (this.tickCount % 10 == 0) {
+                            this.getAlly().hurt(DamageSource.STARVE, 5.0F);
+                            this.heal(5.0F);
                         }
                     }
-                    if (this.getAllyTarget().isDeadOrDying()) {
-                        this.setAllyTarget(0);
-                        this.setIsPraying(false);
-                    }
-                } else {
-                    this.prayingTick = 0;
+                }
+                if (this.getAlly().isDeadOrDying()) {
+                    this.setAllyUUID(null);
+                    this.setIsPraying(false);
                 }
             }
         } else {
+            List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
+            if (!list.isEmpty()) {
+                for (MonsterEntity ally : list){
+                    if (!(ally instanceof CreeperEntity)){
+                        this.setAlly(ally);
+                    }
+                }
+            }
             this.prayingTick = 0;
             if (this.tickCount % 100 == 0){
                 if (this.level instanceof ServerWorld) {

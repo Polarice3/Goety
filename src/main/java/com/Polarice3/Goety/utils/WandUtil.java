@@ -2,7 +2,7 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
-import com.Polarice3.Goety.common.items.SoulWand;
+import com.Polarice3.Goety.common.items.magic.SoulWand;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;

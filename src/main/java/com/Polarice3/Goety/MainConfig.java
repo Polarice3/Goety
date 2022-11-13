@@ -19,6 +19,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DredenCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingCost;
@@ -48,6 +49,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DredenDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingDuration;
@@ -68,6 +70,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RoarInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DredenInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingInfamyChance;
@@ -108,6 +111,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> VexCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> ZombieCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonCooldown;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DredenCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCooldown;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadSouls;
@@ -145,6 +149,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> EmeraldAmuletSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> NecroSoulSandSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> ItemsRepairAmount;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DarkScytheSouls;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WitchBowSouls;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
@@ -164,6 +170,10 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DecrepitFortSeperation;
     public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSpacing;
     public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSeperation;
+
+    public static final ForgeConfigSpec.ConfigValue<Integer> DredenSpawnWeight;
+
+    public static final ForgeConfigSpec.ConfigValue<Integer> UrbhadhachSpawnWeight;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
@@ -213,6 +223,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> MurkTreeGen;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> UrbhadhachThrall;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
@@ -287,6 +298,8 @@ public class MainConfig {
                 .defineInRange("zombieCost", 5, 0, Integer.MAX_VALUE);
         SkeletonCost = BUILDER.comment("Osseous Spell Cost, Default: 8")
                 .defineInRange("skeletonCost", 8, 0, Integer.MAX_VALUE);
+        DredenCost = BUILDER.comment("Rigid Spell Cost, Default: 16")
+                .defineInRange("dredenCost", 16, 0, Integer.MAX_VALUE);
         UndeadWolfCost = BUILDER.comment("Hounding Spell Cost, Default: 2")
                 .defineInRange("undeadWolfCost", 2, 0, Integer.MAX_VALUE);
         WitchGaleCost = BUILDER.comment("Witch's Gale Spell Cost, Default: 15")
@@ -347,6 +360,8 @@ public class MainConfig {
                 .defineInRange("zombieTime", 20, 0, 72000);
         SkeletonDuration = BUILDER.comment("Time to cast Osseous Spell, Default: 60")
                 .defineInRange("skeletonTime", 60, 0, 72000);
+        DredenDuration = BUILDER.comment("Time to cast Rigid Spell, Default: 60")
+                .defineInRange("dredenTime", 60, 0, 72000);
         UndeadWolfDuration = BUILDER.comment("Time to cast Hounding Spell, Default: 20")
                 .defineInRange("undeadWolfTime", 20, 0, 72000);
         WitchGaleDuration = BUILDER.comment("Time to cast Witch's Gale Spell, Default: 20")
@@ -383,6 +398,8 @@ public class MainConfig {
                 .defineInRange("zombieCooldown", 120, 0, 72000);
         SkeletonCooldown = BUILDER.comment("Osseous Spell Cooldown, Default: 280")
                 .defineInRange("skeletonCooldown", 280, 0, 72000);
+        DredenCooldown = BUILDER.comment("Rigid Spell Cooldown, Default: 300")
+                .defineInRange("dredenCooldown", 300, 0, 72000);
         UndeadWolfCooldown = BUILDER.comment("Hounding Spell Cooldown, Default: 30")
                 .defineInRange("undeadWolfCooldown", 30, 0, 72000);
         BUILDER.pop();
@@ -391,10 +408,16 @@ public class MainConfig {
                 .defineInRange("mutatedRabbitMax", 16, 0, 100);
         VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")
                 .define("vizierMinion", false);
+        UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: true")
+                .define("urbhadhachEnthrall", true);
         FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 4")
                 .defineInRange("fanaticPitchforkChance", 4, 0, Integer.MAX_VALUE);
         FanaticWitchBombChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Witch's Bomb, Default: 4")
                 .defineInRange("fanaticWitchBombChance", 4, 0, Integer.MAX_VALUE);
+        DredenSpawnWeight = BUILDER.comment("Spawn Weight for Dreden, Default: 10")
+                .defineInRange("dredenSpawnWeight", 10, 0, Integer.MAX_VALUE);
+        UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 8")
+                .defineInRange("urbhadhachSpawnWeight", 8, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Infamy");
         InfamySpawn = BUILDER.comment("Special Illagers Spawning due to Infamy, Default: true")
@@ -449,6 +472,8 @@ public class MainConfig {
                 .defineInRange("zombieInfamyChance", 16, 0, Integer.MAX_VALUE);
         SkeletonInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Osseous Spell, Default: 16")
                 .defineInRange("skeletonInfamyChance", 16, 0, Integer.MAX_VALUE);
+        DredenInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Rigid Spell, Default: 8")
+                .defineInRange("dredenInfamyChance", 8, 0, Integer.MAX_VALUE);
         UndeadWolfInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Hounding Spell, Default: 32")
                 .defineInRange("undeadWolfInfamyChance", 32, 0, Integer.MAX_VALUE);
         WitchGaleInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Witch's Gale Spell, Default: 16")
@@ -583,6 +608,10 @@ public class MainConfig {
                 .defineInRange("emeraldAmuletSouls", 1, 1, Integer.MAX_VALUE);
         NecroSoulSandSouls = BUILDER.comment("Amount of Soul Energy Necro Boots of Wander gives when running on Soul Sand Blocks, Default: 1")
                 .defineInRange("necroSoulSandSouls", 1, 1, Integer.MAX_VALUE);
+        DarkScytheSouls = BUILDER.comment("Amount of Soul Energy Dark Scythe gives when hitting mob(s), Default: 1")
+                .defineInRange("darkScytheSouls", 1, 1, Integer.MAX_VALUE);
+        WitchBowSouls = BUILDER.comment("Amount of Soul Energy Witch's Bow required to shoot a tipped Arrow, Default: 25")
+                .defineInRange("witchBowSouls", 25, 1, Integer.MAX_VALUE);
         ItemsRepairAmount = BUILDER.comment("Amount of Souls needed to repair certain Equipments per second, Default: 5")
                 .defineInRange("darkArmoredRobeRepairSouls", 5, 1, Integer.MAX_VALUE);
         BUILDER.pop();

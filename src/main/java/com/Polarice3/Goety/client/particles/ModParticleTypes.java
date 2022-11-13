@@ -57,4 +57,7 @@ public class ModParticleTypes {
 
     public static final RegistryObject<BasicParticleType> CONFUSED = PARTICLE_TYPES.register("confused",
             () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> WHITE_EFFECT = PARTICLE_TYPES.register("white_effect",
+            () -> new BasicParticleType(false));
 }

@@ -2,7 +2,7 @@
   "type": "goety:ritual",
   "ritual_type": "goety:craft",
   "activation_item": {
-    "item": "goety:fang_totem"
+    "item": "goety:cursed_stone"
   },
   "craftType": "necroturgy",
   "entity_to_sacrifice": {
@@ -25,7 +25,7 @@
       "tag": "minecraft:soul_fire_base_blocks"
     },
     {
-      "item": "goety:cursed_stone"
+      "item": "goety:hunger_core"
     },
     {
       "item": "minecraft:book"

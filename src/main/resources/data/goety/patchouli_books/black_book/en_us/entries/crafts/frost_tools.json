@@ -1,0 +1,26 @@
+{
+  "name": "Frost Tools",
+  "icon": "goety:frost_ingot",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/gain_cold_heart",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You've found a way to create a new type of metal ingot that utilizes the power of frost and snow. These tools are a bit stronger than Iron and can be used to mine Obsidian. Due to their frosty nature, the tools deal double damage to beings vulnerable to frost like Blazes, and slow down enemies. However, these tools deal less damage to foes immune to frost damage and cannot be enchanted with Fire enchantments."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:frost_ore"
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "goety:frost_ingot_smelting"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:frost_sword",
+      "title": "Frost Tools",
+      "text": "To create a frost tool, combine an Iron Tool with a Frost Ingot on a Smithing Table."
+    }
+  ]
+}

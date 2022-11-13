@@ -4,6 +4,11 @@
     "minecraft:stray",
     "minecraft:polar_bear",
     "minecraft:snow_golem",
-    "minecraft:wither"
+    "minecraft:wither",
+    "goety:huskarl",
+    "goety:stray_minion",
+    "goety:dreden_minion",
+    "goety:dreden",
+    "goety:urbhadhach"
   ]
 }

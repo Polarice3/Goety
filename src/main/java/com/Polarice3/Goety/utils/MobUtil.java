@@ -10,14 +10,11 @@ import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.PolarBearEntity;
-import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -112,8 +109,8 @@ public class MobUtil {
     }
 
     public static class MoveHelperController extends MovementController {
-        public MoveHelperController(MobEntity vex) {
-            super(vex);
+        public MoveHelperController(MobEntity mob) {
+            super(mob);
         }
 
         public void tick() {
@@ -240,7 +237,11 @@ public class MobUtil {
     }
 
     public static boolean notImmuneToFrost(LivingEntity livingEntity){
-        return !(livingEntity instanceof SnowGolemEntity) && !(livingEntity instanceof StrayEntity) && !(livingEntity instanceof PolarBearEntity) && !(livingEntity instanceof WitherEntity) && !(livingEntity.getType().is(ModTags.EntityTypes.FROST_IMMUNE));
+        return !(livingEntity.getType().is(ModTags.EntityTypes.FROST_IMMUNE));
+    }
+
+    public static boolean immuneToFrost(LivingEntity livingEntity){
+        return (livingEntity.getType().is(ModTags.EntityTypes.FROST_IMMUNE));
     }
 
     public static boolean extraFrostDamage(LivingEntity livingEntity){

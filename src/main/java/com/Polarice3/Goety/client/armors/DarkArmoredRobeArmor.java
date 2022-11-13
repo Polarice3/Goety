@@ -52,6 +52,10 @@ public class DarkArmoredRobeArmor extends ArmorItem {
         }
     }
 
+    public boolean isFoil(ItemStack pStack) {
+        return false;
+    }
+
     @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
         return stack.getItem() == ModItems.DARKARMOREDLEGGINGS.get();

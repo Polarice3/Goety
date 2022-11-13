@@ -56,7 +56,7 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.durationLeft > 0 && this.attacker.isAlive() && this.attackTarget.isAlive()
+        return this.durationLeft > 0 && this.attacker.isAlive() && !this.attacker.isDeadOrDying() && this.attackTarget.isAlive()
                 && this.attacker.distanceTo(attackTarget) <= this.spewingRange
                 && this.attacker.getSensing().canSee(attackTarget);
     }
@@ -88,13 +88,12 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
 
     private Entity getTargets() {
         Entity target = null;
-        double range = 30.0D;
-        double offset = this.spewingRange;
+        double range = this.spewingRange;
         Vector3d srcVec = new Vector3d(this.attacker.getX(), this.attacker.getY() + 0.25, this.attacker.getZ());
         Vector3d lookVec = this.attacker.getViewVector(1.0F);
         Vector3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
         float size = 1.0F;
-        List<Entity> possibleTargets = this.attacker.level.getEntities(this.attacker, this.attacker.getBoundingBox().expandTowards(lookVec.x * offset, lookVec.y * offset, lookVec.z * offset).inflate(size, size, size));
+        List<Entity> possibleTargets = this.attacker.level.getEntities(this.attacker, this.attacker.getBoundingBox().expandTowards(lookVec.x * range, lookVec.y * range, lookVec.z * range).inflate(size, size, size));
         double hitDist = 0;
 
         for (Entity entity : possibleTargets) {
@@ -104,7 +103,7 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
                 Optional<Vector3d> interceptPos = collisionBB.clip(srcVec, destVec);
 
                 if (collisionBB.contains(srcVec)) {
-                    if (0.0D < hitDist || hitDist == 0.0D) {
+                    if (0.0D <= hitDist) {
                         target = entity;
                         hitDist = 0.0D;
                     }

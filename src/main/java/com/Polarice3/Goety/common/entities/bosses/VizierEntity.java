@@ -5,6 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SpikeEntity;
+import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
@@ -43,7 +44,6 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
-import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,7 +66,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
     protected static final DataParameter<Integer> CAST_TIMES = EntityDataManager.defineId(VizierEntity.class, DataSerializers.INT);
     protected static final DataParameter<Integer> CASTING = EntityDataManager.defineId(VizierEntity.class, DataSerializers.INT);
     private static final DataParameter<Integer> CONFUSED = EntityDataManager.defineId(VizierEntity.class, DataSerializers.INT);
-    private final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.PROGRESS);
+    private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.PROGRESS);
     public float oBob;
     public float bob;
     public double xCloakO;
@@ -436,6 +436,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         if (this.hasCustomName()) {
             this.bossInfo.setName(this.getDisplayName());
         }
+        this.bossInfo.setId(this.getUUID());
     }
 
     public void setCustomName(@Nullable ITextComponent name) {

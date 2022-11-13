@@ -33,7 +33,7 @@ public abstract class SpewingSpell extends ChargingSpells{
                 Optional<Vector3d> interceptPos = collisionBB.clip(srcVec, destVec);
 
                 if (collisionBB.contains(srcVec)) {
-                    if (0.0D < hitDist || hitDist == 0.0D) {
+                    if (0.0D <= hitDist) {
                         target = entity;
                         hitDist = 0.0D;
                     }

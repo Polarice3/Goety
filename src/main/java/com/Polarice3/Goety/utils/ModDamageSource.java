@@ -3,81 +3,61 @@ package com.Polarice3.Goety.utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
 
 import javax.annotation.Nullable;
 
 public class ModDamageSource extends DamageSource {
-    public static final DamageSource DESICCATE = (new ModDamageSource("desiccate")).setDesiccate().bypassArmor().setMagic();
-    public static final DamageSource FROST = (new ModDamageSource("frost")).setIsFrost().setMagic();
-    private boolean isBreath;
-    private boolean isDesiccate;
-    private boolean isFrost;
+    public static final DamageSource DESICCATE = (new ModDamageSource(source("desiccate"))).bypassArmor().setMagic();
+    public static final DamageSource FROST = (new ModDamageSource(source("frost"))).setMagic();
 
     public ModDamageSource(String pMessageId) {
         super(pMessageId);
     }
 
     public static DamageSource fireBreath(LivingEntity pMob) {
-        return new ModEntityDamageSource("fire_breath", pMob).setBreath().setIsFire();
+        return new EntityDamageSource(source("fire_breath"), pMob).setIsFire();
     }
 
     public static DamageSource frostBreath(LivingEntity pMob){
-        return new ModEntityDamageSource("frost_breath", pMob).setBreath().setIsFrost();
+        return new EntityDamageSource(source("frost_breath"), pMob);
     }
 
     public static DamageSource directDesiccate(LivingEntity pMob) {
-        return new ModEntityDamageSource("directDesiccate", pMob).setDesiccate().bypassArmor().setMagic();
+        return new EntityDamageSource(source("directDesiccate"), pMob).bypassArmor().setMagic();
     }
 
     public static DamageSource indirectDesiccate(Entity pSource, @Nullable Entity pIndirectEntity) {
-        return (new ModIndirectEntityDamageSource("indirectDesiccate", pSource, pIndirectEntity)).setDesiccate().bypassArmor().setMagic();
+        return (new IndirectEntityDamageSource(source("indirectDesiccate"), pSource, pIndirectEntity)).bypassArmor().setMagic();
     }
 
     public static DamageSource directFrost(LivingEntity pMob) {
-        return new ModEntityDamageSource("directFrost", pMob).setIsFrost().setMagic();
+        return new EntityDamageSource(source("directFrost"), pMob).setMagic();
     }
 
     public static DamageSource indirectFrost(Entity pSource, @Nullable Entity pIndirectEntity) {
-        return (new ModIndirectEntityDamageSource("indirectFrost", pSource, pIndirectEntity)).setIsFrost().setMagic();
+        return (new IndirectEntityDamageSource(source("indirectFrost"), pSource, pIndirectEntity)).setMagic();
     }
 
     public static DamageSource sonicBoom(Entity p_216877_) {
-        return (new ModEntityDamageSource("sonic_boom", p_216877_)).bypassArmor().bypassMagic().setMagic();
+        return (new EntityDamageSource(source("sonic_boom"), p_216877_)).bypassArmor().bypassMagic().setMagic();
     }
 
-    public boolean isBreath() {
-        return this.isBreath;
-    }
-
-    public ModDamageSource setBreath() {
-        this.isBreath = true;
-        return this;
-    }
-
-    public boolean isDesiccate() {
-        return this.isDesiccate;
-    }
-
-    public ModDamageSource setDesiccate() {
-        this.isDesiccate = true;
-        return this;
-    }
-
-    public boolean isFrost() {
-        return this.isFrost;
-    }
-
-    public ModDamageSource setIsFrost() {
-        this.isFrost = true;
-        return this;
+    public static boolean breathAttacks(DamageSource source){
+        return source.getMsgId().contains("breath");
     }
 
     public static boolean desiccateAttacks(DamageSource source){
-        return source == ModDamageSource.DESICCATE || (source instanceof ModDamageSource && ((ModDamageSource) source).isDesiccate());
+        return source.getMsgId().contains("desiccate") || source.getMsgId().contains("Desiccate");
     }
 
     public static boolean frostAttacks(DamageSource source){
-        return source == ModDamageSource.FROST || (source instanceof ModDamageSource && ((ModDamageSource) source).isFrost());
+        return source.getMsgId().contains("frost") || source.getMsgId().contains("Frost");
+    }
+
+    public static String source(String source){
+        return "goety." + source;
     }
 
 }

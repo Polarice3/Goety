@@ -1,0 +1,43 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:osseousfocus"
+  },
+  "craftType": "necroturgy",
+  "entity_to_sacrifice": {
+    "tag": "goety:shade",
+    "display_name": "info.goety.ritual.shade"
+  },
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "goety:cold_shard"
+    },
+    {
+      "item": "goety:darkfabric"
+    },
+    {
+      "item": "minecraft:blue_ice"
+    },
+    {
+      "item": "goety:darkfabric"
+    },
+    {
+      "item": "goety:frostbreathfocus"
+    },
+    {
+      "item": "goety:darkfabric"
+    },
+    {
+      "item": "minecraft:snow_block"
+    },
+    {
+      "item": "goety:darkfabric"
+    }
+  ],
+  "result": {
+    "item": "goety:rigidfocus"
+  }
+}

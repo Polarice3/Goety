@@ -31,7 +31,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
     public List<Ingredient> remainingAdditionalIngredients = new ArrayList<>();
     public List<ItemStack> consumedIngredients = new ArrayList<>();
     public boolean sacrificeProvided;
-    public boolean itemUseProvided;
     public int currentTime;
     public int structureTime;
 
@@ -85,9 +83,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
         if (compound.contains("sacrificeProvided")) {
             this.sacrificeProvided = compound.getBoolean("sacrificeProvided");
         }
-        if (compound.contains("requiredItemUsed")) {
-            this.itemUseProvided = compound.getBoolean("requiredItemUsed");
-        }
     }
 
     @Override
@@ -101,7 +96,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                 compound.put("consumedIngredients", list);
             }
             compound.putBoolean("sacrificeProvided", this.sacrificeProvided);
-            compound.putBoolean("requiredItemUsed", this.itemUseProvided);
         }
         return super.save(compound);
     }
@@ -152,7 +146,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
                         this.restoreCastingPlayer();
 
-                        if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
+                        if (this.castingPlayer == null || !this.sacrificeFulfilled()) {
                             for (int p = 0; p < 4; ++p) {
                                 serverWorld.sendParticles(ParticleTypes.FLAME, d0, d1, d2, 1, 0.0F, 0.0F, 0.0F, 0.0F);
                             }
@@ -177,7 +171,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                             return;
                         }
 
-                        if (this.castingPlayer == null || !this.sacrificeFulfilled() || !this.itemUseFulfilled()) {
+                        if (this.castingPlayer == null || !this.sacrificeFulfilled()) {
                             return;
                         }
 
@@ -309,7 +303,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
         this.castingPlayer = null;
         this.currentTime = 0;
         this.sacrificeProvided = false;
-        this.itemUseProvided = false;
         if (this.remainingAdditionalIngredients != null)
             this.remainingAdditionalIngredients.clear();
         this.consumedIngredients.clear();
@@ -325,7 +318,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
             this.castingPlayer = player;
             this.currentTime = 0;
             this.sacrificeProvided = false;
-            this.itemUseProvided = false;
             this.consumedIngredients.clear();
             this.remainingAdditionalIngredients = new ArrayList<>(this.currentRitualRecipe.getIngredients());
             IItemHandler handler = this.itemStackHandler.orElseThrow(RuntimeException::new);
@@ -357,7 +349,6 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
             this.castingPlayer = null;
             this.currentTime = 0;
             this.sacrificeProvided = false;
-            this.itemUseProvided = false;
             if (this.remainingAdditionalIngredients != null)
                 this.remainingAdditionalIngredients.clear();
             this.consumedIngredients.clear();
@@ -371,16 +362,8 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
         return !this.getCurrentRitualRecipe().requiresSacrifice() || this.sacrificeProvided;
     }
 
-    public boolean itemUseFulfilled() {
-        return !this.getCurrentRitualRecipe().requiresItemUse() || this.itemUseProvided;
-    }
-
     public void notifySacrifice(LivingEntity entityLivingBase) {
         this.sacrificeProvided = true;
-    }
-
-    public void notifyItemUse(PlayerInteractEvent.RightClickItem event) {
-        this.itemUseProvided = true;
     }
 
     protected void restoreRemainingAdditionalIngredients() {

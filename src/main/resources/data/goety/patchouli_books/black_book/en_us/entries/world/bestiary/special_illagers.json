@@ -34,7 +34,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "An unexpected Illager trained to attack users of magics as they're immune to magic damage. They wield flaming swords and throw Harming Potions."
+      "text": "An unexpected Illager trained to attack magic users as they're immune to their spells. They wield flaming swords and throw Harming Potions."
     },
     {
       "type": "patchouli:entity",

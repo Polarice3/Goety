@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "cc",
+    "cc"
+  ],
+  "key":
+  {
+    "c":
+    {
+      "item": "goety:cold_shard"
+    }
+  },
+  "result":
+  {
+    "item": "minecraft:blue_ice",
+    "count": 1
+  }
+}

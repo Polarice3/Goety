@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "goety:cold_heart"
+    },
+    {
+      "item": "goety:cursed_ingot"
+    },
+    {
+      "item": "minecraft:gravel"
+    }
+  ],
+  "result": {
+    "item": "goety:frost_ore",
+    "count": 1
+  }
+}

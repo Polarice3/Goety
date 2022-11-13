@@ -5,7 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;

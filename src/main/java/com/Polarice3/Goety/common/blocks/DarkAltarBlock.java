@@ -24,7 +24,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeBlock;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -88,25 +87,6 @@ public class DarkAltarBlock extends ContainerBlock implements IForgeBlock {
     public static void dropInventoryItems(World worldIn, BlockPos pos, IItemHandler itemHandler) {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
-        }
-    }
-
-    @SubscribeEvent
-    public void onPlayerRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        PlayerEntity player = event.getPlayer();
-        if (!player.level.isClientSide) {
-            BlockPos pos = player.blockPosition();
-            int range = Ritual.ITEM_USE_DETECTION_RANGE;
-            for (BlockPos positionToCheck : BlockPos.betweenClosed(pos.offset(-range, -range, -range),
-                    pos.offset(range, range, range))) {
-                TileEntity tileEntity = player.level.getBlockEntity(positionToCheck);
-                if (tileEntity instanceof DarkAltarTileEntity) {
-                    DarkAltarTileEntity darkAltarTile = (DarkAltarTileEntity) tileEntity;
-                    if (darkAltarTile.getCurrentRitualRecipe() != null && darkAltarTile.getCurrentRitualRecipe().getRitual().isValidItemUse(event)) {
-                        darkAltarTile.notifyItemUse(event);
-                    }
-                }
-            }
         }
     }
 

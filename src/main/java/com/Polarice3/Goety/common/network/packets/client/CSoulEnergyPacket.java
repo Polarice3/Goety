@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.network.packets.client;
 
-import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;

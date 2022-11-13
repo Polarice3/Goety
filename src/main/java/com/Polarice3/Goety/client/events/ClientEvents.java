@@ -6,6 +6,7 @@ import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
+import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
@@ -21,6 +22,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -104,6 +106,23 @@ public class ClientEvents {
             if (SEHelper.getSoulsContainer(player)){
                 new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack(), event.getPartialTicks());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void offsetFOV(FOVUpdateEvent event){
+        float f = 1.0F;
+        if (event.getEntity().isUsingItem() && event.getEntity().getUseItem().getItem() instanceof NetheriteBowItem) {
+            int i = event.getEntity().getTicksUsingItem();
+            float f1 = (float)i / NetheriteBowItem.getBowTime();
+            if (f1 > 1.0F) {
+                f1 = 1.0F;
+            } else {
+                f1 = f1 * f1;
+            }
+
+            f *= 1.0F - f1 * 0.15F;
+            event.setNewfov(f);
         }
     }
 

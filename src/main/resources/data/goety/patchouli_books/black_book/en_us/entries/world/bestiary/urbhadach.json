@@ -1,0 +1,31 @@
+{
+  "name": "Urbhadhach",
+  "icon": "goety:cold_heart",
+  "category": "goety:world/bestiary",
+  "advancement": "goety:goety/kill_a_urbhadhach",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Urbhadhachs are one of the most foul creatures to roam the Overworld. Many folklore and legends spoke of these creatures and have many theories on their origins, from being born from a non-polar bear murdered in dead winter to corpses of Polar Bears dying in childbirth with a stillborn child."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Whatever the origin, these undead horrors stalk the cold wilderness with an appetite for children. Stories surrounding this creature mentions how it attracts children by blending to its surroundings while creating a bell-like sounds that puts them into a trance and have them go towards it. Once close, the Urbhadhach reveals itself and devours the child and after digesting, will start making its call once more, for its appetite can never be satiated."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Tales of Heroism that involve this creature mentions of its might and ferocity. One story shows an Urbhadhach revealing itself from its environment when a threat comes near them while they call. Most stories talks of it making a terrifying roar that weakens every living creature's hearts and jumping from a far to maul their foes. They mentioned how the Urbhadhach's hearts are exposed, and that heroes striking while it stands causes more damage to the beast."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:urbhadhach",
+      "text": "Their frosty hearts makes them immune to frost damage. The stories mentioned how they are excellent swimmers."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:cold_heart",
+      "title": "Cold Hearts",
+      "text": "Urbhadhach can drop Cold Hearts when killed. These hearts can be used to craft a Frozen Clump which can be smelted into a Frost Ingot or as components for creating new Focus or other magical items."
+    }
+  ]
+}

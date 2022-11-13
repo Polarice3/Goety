@@ -37,6 +37,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<CursedKilnTileEntity>> CURSED_KILN = TILEENTITY_TYPES.register("cursed_kiln",
             () -> TileEntityType.Builder.of(CursedKilnTileEntity::new, ModBlocks.CURSED_KILN.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<SoulAbsorberTileEntity>> SOUL_ABSORBER = TILEENTITY_TYPES.register("soul_absorber",
+            () -> TileEntityType.Builder.of(SoulAbsorberTileEntity::new, ModBlocks.SOUL_ABSORBER.get()).build(null));
+
     public static final RegistryObject<TileEntityType<CursedCageTileEntity>> CURSED_CAGE = TILEENTITY_TYPES.register("cursed_cage",
             () -> TileEntityType.Builder.of(CursedCageTileEntity::new, ModBlocks.CURSED_CAGE_BLOCK.get()).build(null));
 

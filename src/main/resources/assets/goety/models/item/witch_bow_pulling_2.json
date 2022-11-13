@@ -1,0 +1,6 @@
+{
+    "parent": "goety:item/witch_bow",
+    "textures": {
+        "layer0": "goety:items/witch_bow_pulling_2"
+    }
+}

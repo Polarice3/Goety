@@ -16,12 +16,8 @@ import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.*;
 import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.PatrollerEntity;
-import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -65,6 +61,18 @@ public class ModEntityType {
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "dragon_fireball").toString()));
+
+    public static final RegistryObject<EntityType<FrostBallEntity>> FROST_BALL = ENTITY_TYPES.register("frost_ball",
+            () -> EntityType.Builder.<FrostBallEntity>of(FrostBallEntity::new, EntityClassification.MISC)
+                    .sized(0.3125F, 0.3125F)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "frost_ball").toString()));
+
+    public static final RegistryObject<EntityType<ScytheProjectileEntity>> SCYTHE = ENTITY_TYPES.register("scythe",
+            () -> EntityType.Builder.<ScytheProjectileEntity>of(ScytheProjectileEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "scythe").toString()));
 
     public static final RegistryObject<EntityType<WarpedSpearEntity>> WARPED_SPEAR = ENTITY_TYPES.register("warped_spear",
             () -> EntityType.Builder.<WarpedSpearEntity>of(WarpedSpearEntity::new, EntityClassification.MISC)
@@ -316,6 +324,18 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "shade").toString()));
 
+    public static final RegistryObject<EntityType<DredenEntity>> DREDEN = ENTITY_TYPES.register("dreden",
+            () -> EntityType.Builder.of(DredenEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "dreden").toString()));
+
+    public static final RegistryObject<EntityType<UrbhadhachEntity>> URBHADHACH = ENTITY_TYPES.register("urbhadhach",
+            () -> EntityType.Builder.of(UrbhadhachEntity::new, EntityClassification.MONSTER)
+                    .sized(1.4F, 1.4F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "urbhadhach").toString()));
+
     public static final RegistryObject<EntityType<BoomerEntity>> BOOMER = ENTITY_TYPES.register("boomer",
             () -> EntityType.Builder.of(BoomerEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.7F)
@@ -416,6 +436,18 @@ public class ModEntityType {
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "skeleton_minion").toString()));
+
+    public static final RegistryObject<EntityType<StrayMinionEntity>> STRAY_MINION = ENTITY_TYPES.register("stray_minion",
+            () -> EntityType.Builder.of(StrayMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "stray_minion").toString()));
+
+    public static final RegistryObject<EntityType<DredenMinionEntity>> DREDEN_MINION = ENTITY_TYPES.register("dreden_minion",
+            () -> EntityType.Builder.of(DredenMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "dreden_minion").toString()));
 
     public static final RegistryObject<EntityType<FarmerMinionEntity>> FARMER_MINION = ENTITY_TYPES.register("farmer_minion",
             () -> EntityType.Builder.of(FarmerMinionEntity::new, EntityClassification.MONSTER)
@@ -564,13 +596,5 @@ public class ModEntityType {
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "laser").toString()));
-
-    public static void EntitySpawnPlacementRegistry() {
-        EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.FANATIC.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.ZEALOT.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.DISCIPLE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.THUG.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-    }
 
 }

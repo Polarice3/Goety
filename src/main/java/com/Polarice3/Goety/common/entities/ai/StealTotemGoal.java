@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.ai;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Items;

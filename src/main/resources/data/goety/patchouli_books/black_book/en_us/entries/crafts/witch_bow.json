@@ -1,0 +1,15 @@
+{
+  "name": "Witch Bow",
+  "icon": "goety:witch_bow",
+  "category": "goety:crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "On its own, the Witch Bow acts like a regular old bow, but when enchanted with Infinity it will not use up any Tipped Arrows within your inventory."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:witch_bow"
+    }
+  ]
+}

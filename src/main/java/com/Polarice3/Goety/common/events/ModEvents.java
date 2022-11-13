@@ -15,6 +15,7 @@ import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
+import com.Polarice3.Goety.common.entities.hostile.DredenEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
@@ -29,7 +30,10 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
-import com.Polarice3.Goety.common.items.WarpedSpearItem;
+import com.Polarice3.Goety.common.items.ModItemTiers;
+import com.Polarice3.Goety.common.items.equipment.DeathScytheItem;
+import com.Polarice3.Goety.common.items.equipment.FrostScytheItem;
+import com.Polarice3.Goety.common.items.equipment.WarpedSpearItem;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -39,7 +43,6 @@ import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
@@ -54,6 +57,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.TieredItem;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
@@ -117,6 +121,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
+        World world = event.getWorld();
         if (entity instanceof LivingEntity && !event.getWorld().isClientSide()) {
             if (entity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entity;
@@ -161,12 +166,11 @@ public class ModEvents {
             }
             if (MainConfig.IllagerRaid.get()) {
                 AbstractRaiderEntity raider = (AbstractRaiderEntity) entity;
-                World world = event.getWorld();
                 if (world instanceof ServerWorld) {
                     IServerWorld serverWorld = (IServerWorld) world;
                     if (raider.hasActiveRaid()) {
                         Raid raid = raider.getCurrentRaid();
-                        if (raid != null) {
+                        if (raid != null && raid.isActive() && !raid.isBetweenWaves() && !raid.isOver() && !raid.isStopped()) {
                             PlayerEntity player = EntityFinder.getNearbyPlayer(world, raid.getCenter());
                             if (player != null) {
                                 IInfamy infamy = InfamyHelper.getCapability(player);
@@ -280,6 +284,14 @@ public class ModEvents {
                 if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
                     event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
                 }
+                if (biome.getPrecipitation() == Biome.RainType.SNOW && BlockFinder.biomeIsInOverworld(event.getName())){
+                    event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                            .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
+                                    MainConfig.DredenSpawnWeight.get(), 1, 1));
+                    event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                            .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
+                                    MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                }
             }
         }
     }
@@ -353,6 +365,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void SpecialSpawnEvents(LivingSpawnEvent.CheckSpawn event){
+        World world = event.getEntityLiving().level;
         if (event.getEntityLiving() instanceof AbstractCultistEntity){
             SpawnReason spawnReason = event.getSpawnReason();
             if (PatrollerEntity.checkPatrollingMonsterSpawnRules(ModEntityType.FANATIC.get(), event.getWorld(), spawnReason, event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
@@ -362,6 +375,22 @@ public class ModEvents {
         if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
             if (event.getSpawnReason() == SpawnReason.STRUCTURE){
                 event.getEntityLiving().addTag(ConstantPaths.structureMob());
+            }
+        }
+        if (event.getEntityLiving() instanceof SkeletonEntity){
+            if (event.getSpawnReason() == SpawnReason.NATURAL || event.getSpawnReason() == SpawnReason.CHUNK_GENERATION) {
+                SkeletonEntity skeletonEntity = (SkeletonEntity) event.getEntityLiving();
+                if (!world.isClientSide) {
+                    ServerWorld serverWorld = (ServerWorld) world;
+                    if (!serverWorld.getEntitiesOfClass(DredenEntity.class, event.getEntityLiving().getBoundingBox().inflate(16)).isEmpty()) {
+                        StrayEntity strayEntity = skeletonEntity.convertTo(EntityType.STRAY, true);
+                        if (strayEntity != null) {
+                            strayEntity.moveTo(skeletonEntity.getX(), skeletonEntity.getY(), skeletonEntity.getZ());
+                            strayEntity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(skeletonEntity.blockPosition()), SpawnReason.NATURAL, null, null);
+                            serverWorld.addFreshEntity(strayEntity);
+                        }
+                    }
+                }
             }
         }
     }
@@ -458,7 +487,7 @@ public class ModEvents {
                         }
                     }
                 }
-                if (summonedEntity instanceof SkeletonMinionEntity){
+                if (summonedEntity instanceof AbstractSMEntity){
                     ++skeletons;
                     if (MainConfig.SkeletonLimit.get() < skeletons){
                         if (summonedEntity.tickCount % 20 == 0){
@@ -566,13 +595,6 @@ public class ModEvents {
                         }
                         player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 210, 0, false, false));
                     }
-                }
-            }
-        }
-        if (player.hasEffect(ModEffects.SOUL_SHIELD.get())){
-            for (AbstractArrowEntity arrowEntity: player.level.getEntitiesOfClass(AbstractArrowEntity.class, player.getBoundingBox().inflate(2.0D))){
-                if (arrowEntity.getOwner() != player && !(arrowEntity.getOwner() instanceof ApostleEntity)){
-                    arrowEntity.remove();
                 }
             }
         }
@@ -721,12 +743,6 @@ public class ModEvents {
             event.setAmount(event.getAmount() * (1.0F + i));
         }
         if (RobeArmorFinder.FindFelArmor(victim)){
-            if (attacker instanceof CreeperlingMinionEntity){
-                CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) attacker;
-                if (creeperlingMinion.getTrueOwner() == victim){
-                    event.setAmount(0);
-                }
-            }
             if (event.getSource().isExplosion()){
                 event.setAmount((float) (event.getAmount()/1.5));
             }
@@ -746,8 +762,8 @@ public class ModEvents {
                 }
             }
         }
-        if (attacker instanceof FangEntity){
-            FangEntity fangEntity = (FangEntity) attacker;
+        if (event.getSource().getDirectEntity() instanceof FangEntity){
+            FangEntity fangEntity = (FangEntity) event.getSource().getDirectEntity();
             if (fangEntity.getOwner() instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) fangEntity.getOwner();
                 if (fangEntity.isAbsorbing()) {
@@ -755,16 +771,34 @@ public class ModEvents {
                 }
             }
         }
-        if (attacker instanceof LivingEntity){
-            LivingEntity livingEntity = (LivingEntity) attacker;
-            if (event.getSource() instanceof ModDamageSource) {
-                ModDamageSource modDamageSource = (ModDamageSource) event.getSource();
-                if (modDamageSource.isBreath()) {
-                    float f1 = (float) livingEntity.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
-                    if (f1 > 0.0F) {
-                        (victim).knockback(f1 * 0.5F, (double) MathHelper.sin(victim.yRot * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(victim.yRot * ((float) Math.PI / 180F))));
-                        victim.setDeltaMovement(victim.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+        if (event.getSource().getDirectEntity() instanceof LivingEntity){
+            LivingEntity livingAttacker = (LivingEntity) event.getSource().getDirectEntity();
+            if (livingAttacker.getMainHandItem().getItem() instanceof TieredItem){
+                TieredItem weapon = (TieredItem) livingAttacker.getMainHandItem().getItem();
+                if (weapon.getTier() == ModItemTiers.FROST){
+                    if (MobUtil.immuneToFrost(victim)) {
+                        event.setAmount(event.getAmount() / 2.0F);
+                    } else {
+                        int i = 0;
+                        if (weapon instanceof FrostScytheItem){
+                            i = 1;
+                        }
+                        victim.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, i));
                     }
+                    if (MobUtil.extraFrostDamage(victim)){
+                        event.setAmount(event.getAmount() * 2.0F);
+                    }
+                }
+                if (weapon instanceof DeathScytheItem){
+                    victim.addEffect(new EffectInstance(Effects.WITHER, 60, 1));
+                }
+            }
+        }
+        if (event.getSource() instanceof ModDamageSource) {
+            ModDamageSource modDamageSource = (ModDamageSource) event.getSource();
+            if (ModDamageSource.frostAttacks(modDamageSource)){
+                if (MobUtil.extraFrostDamage(victim)){
+                    event.setAmount(event.getAmount() * 2);
                 }
             }
         }
@@ -774,11 +808,17 @@ public class ModEvents {
     public static void AttackEvent(LivingAttackEvent event){
         LivingEntity victim = event.getEntityLiving();
         Entity attacker = event.getSource().getEntity();
+        Entity direct = event.getSource().getDirectEntity();
         if (RobeArmorFinder.FindFelBootsofWander(victim)){
             if (attacker instanceof SlimeEntity){
                 if (((SlimeEntity) attacker).getTarget() != victim){
                     event.setCanceled(true);
                 }
+            }
+        }
+        if (ModDamageSource.frostAttacks(event.getSource())){
+            if (MobUtil.immuneToFrost(victim)){
+                event.setCanceled(true);
             }
         }
         if (MainConfig.MinionsMasterImmune.get()){
@@ -788,8 +828,8 @@ public class ModEvents {
                 }
             }
         }
-        if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
-            AbstractArrowEntity arrowEntity = (AbstractArrowEntity) event.getSource().getDirectEntity();
+        if (direct instanceof AbstractArrowEntity){
+            AbstractArrowEntity arrowEntity = (AbstractArrowEntity) direct;
             if (arrowEntity.getTags().contains(ConstantPaths.rainArrow())){
                 if (arrowEntity.getOwner() != null) {
                     if (victim instanceof OwnedEntity) {
@@ -803,6 +843,11 @@ public class ModEvents {
                     if (victim == arrowEntity.getOwner()){
                         event.setCanceled(true);
                     }
+                }
+            }
+            if (victim.hasEffect(ModEffects.SOUL_SHIELD.get())){
+                if (!(arrowEntity.getOwner() instanceof ApostleEntity)){
+                    event.setCanceled(true);
                 }
             }
         }
@@ -892,6 +937,16 @@ public class ModEvents {
                     LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), beldam);
                     LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
                     loottable.getRandomItems(ctx).forEach(beldam::spawnAtLocation);
+                }
+            }
+        }
+        if (killed instanceof SkeletonEntity){
+            if (killer instanceof DredenEntity){
+                StrayEntity strayEntity = ((SkeletonEntity) killed).convertTo(EntityType.STRAY, false);
+                if (strayEntity != null) {
+                    strayEntity.finalizeSpawn((IServerWorld) killed.level, killed.level.getCurrentDifficultyAt(strayEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, strayEntity);
+                    strayEntity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
                 }
             }
         }
@@ -1023,7 +1078,7 @@ public class ModEvents {
                 }
                 if (event.getDamageSource() instanceof ModDamageSource) {
                     ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
-                    if (modDamageSource.isBreath()) {
+                    if (ModDamageSource.breathAttacks(modDamageSource)) {
                         event.setLootingLevel(event.getLootingLevel() + looting);
                     }
                 }
@@ -1090,10 +1145,14 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void ProjectileImpactEvent(ProjectileImpactEvent.Arrow event){
+        AbstractArrowEntity arrowEntity = event.getArrow();
         if (event.getArrow().getTags().contains(ConstantPaths.rainArrow())){
-            AbstractArrowEntity arrowEntity = event.getArrow();
             arrowEntity.remove();
         }
+    }
+
+    @SubscribeEvent
+    public static void PotionApplicationEvents(PotionEvent.PotionApplicableEvent event){
     }
 
     @SubscribeEvent
@@ -1113,66 +1172,66 @@ public class ModEvents {
     public static void Mutation(PotionEvent.PotionAddedEvent event){
         if (event.getPotionEffect().getEffect() == ModEffects.COSMIC.get()){
             World world = event.getEntityLiving().level;
-            LivingEntity entity = event.getEntityLiving();
+            LivingEntity livingEntity = event.getEntityLiving();
             if (!world.isClientSide){
                 ServerWorld serverWorld = (ServerWorld) world;
                 for (int i = 0; i < world.random.nextInt(35) + 10; ++i) {
-                    serverWorld.sendParticles(ParticleTypes.DRAGON_BREATH, entity.getRandomX(0.5D), entity.getEyeY(), entity.getRandomZ(0.5D), 0, 0.7F, 0.7F, 0.7F, 0.5F);
+                    serverWorld.sendParticles(ParticleTypes.DRAGON_BREATH, livingEntity.getRandomX(0.5D), livingEntity.getEyeY(), livingEntity.getRandomZ(0.5D), 0, 0.7F, 0.7F, 0.7F, 0.5F);
                 }
             }
-            if (entity instanceof CowEntity){
+            if (livingEntity instanceof CowEntity){
                 MutatedCowEntity mutatedCowEntity = new MutatedCowEntity(ModEntityType.MUTATED_COW.get(), world);
-                mutatedCowEntity.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.yRot, entity.xRot);
+                mutatedCowEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
                 mutatedCowEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedCowEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (entity.hasCustomName()) {
-                    mutatedCowEntity.setCustomName(entity.getCustomName());
-                    mutatedCowEntity.setCustomNameVisible(entity.isCustomNameVisible());
+                if (livingEntity.hasCustomName()) {
+                    mutatedCowEntity.setCustomName(livingEntity.getCustomName());
+                    mutatedCowEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
                 }
                 mutatedCowEntity.setPersistenceRequired();
                 world.addFreshEntity(mutatedCowEntity);
-                entity.remove();
-            } else if (entity instanceof ChickenEntity){
+                livingEntity.remove();
+            } else if (livingEntity instanceof ChickenEntity){
                 MutatedChickenEntity mutatedChickenEntity = new MutatedChickenEntity(ModEntityType.MUTATED_CHICKEN.get(), world);
-                mutatedChickenEntity.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.yRot, entity.xRot);
+                mutatedChickenEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
                 mutatedChickenEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedChickenEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (entity.hasCustomName()) {
-                    mutatedChickenEntity.setCustomName(entity.getCustomName());
-                    mutatedChickenEntity.setCustomNameVisible(entity.isCustomNameVisible());
+                if (livingEntity.hasCustomName()) {
+                    mutatedChickenEntity.setCustomName(livingEntity.getCustomName());
+                    mutatedChickenEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
                 }
                 mutatedChickenEntity.setPersistenceRequired();
                 world.addFreshEntity(mutatedChickenEntity);
-                entity.remove();
-            } else if (entity instanceof SheepEntity){
+                livingEntity.remove();
+            } else if (livingEntity instanceof SheepEntity){
                 MutatedSheepEntity mutatedSheepEntity = new MutatedSheepEntity(ModEntityType.MUTATED_SHEEP.get(), world);
-                mutatedSheepEntity.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.yRot, entity.xRot);
+                mutatedSheepEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
                 mutatedSheepEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedSheepEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (entity.hasCustomName()) {
-                    mutatedSheepEntity.setCustomName(entity.getCustomName());
-                    mutatedSheepEntity.setCustomNameVisible(entity.isCustomNameVisible());
+                if (livingEntity.hasCustomName()) {
+                    mutatedSheepEntity.setCustomName(livingEntity.getCustomName());
+                    mutatedSheepEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
                 }
-                mutatedSheepEntity.setColor(((SheepEntity) entity).getColor());
+                mutatedSheepEntity.setColor(((SheepEntity) livingEntity).getColor());
                 mutatedSheepEntity.setPersistenceRequired();
                 world.addFreshEntity(mutatedSheepEntity);
-                entity.remove();
-            } else if (entity instanceof PigEntity){
+                livingEntity.remove();
+            } else if (livingEntity instanceof PigEntity){
                 MutatedPigEntity mutatedPigEntity = new MutatedPigEntity(ModEntityType.MUTATED_PIG.get(), world);
-                mutatedPigEntity.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.yRot, entity.xRot);
+                mutatedPigEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
                 mutatedPigEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedPigEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (entity.hasCustomName()) {
-                    mutatedPigEntity.setCustomName(entity.getCustomName());
-                    mutatedPigEntity.setCustomNameVisible(entity.isCustomNameVisible());
+                if (livingEntity.hasCustomName()) {
+                    mutatedPigEntity.setCustomName(livingEntity.getCustomName());
+                    mutatedPigEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
                 }
                 mutatedPigEntity.setPersistenceRequired();
                 world.addFreshEntity(mutatedPigEntity);
-                entity.remove();
-            } else if (entity instanceof RabbitEntity){
-                RabbitEntity rabbit = (RabbitEntity) entity;
+                livingEntity.remove();
+            } else if (livingEntity instanceof RabbitEntity){
+                RabbitEntity rabbit = (RabbitEntity) livingEntity;
                 MutatedRabbitEntity mutatedRabbitEntity = new MutatedRabbitEntity(ModEntityType.MUTATED_RABBIT.get(), world);
-                mutatedRabbitEntity.moveTo(entity.getX(), entity.getY(), entity.getZ(), entity.yRot, entity.xRot);
+                mutatedRabbitEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
                 mutatedRabbitEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedRabbitEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (entity.hasCustomName()) {
-                    mutatedRabbitEntity.setCustomName(entity.getCustomName());
-                    mutatedRabbitEntity.setCustomNameVisible(entity.isCustomNameVisible());
+                if (livingEntity.hasCustomName()) {
+                    mutatedRabbitEntity.setCustomName(livingEntity.getCustomName());
+                    mutatedRabbitEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
                 }
                 if (rabbit.getRabbitType() != 99) {
                     mutatedRabbitEntity.setRabbitType(rabbit.getRabbitType());
@@ -1181,7 +1240,7 @@ public class ModEvents {
                 }
                 mutatedRabbitEntity.setPersistenceRequired();
                 world.addFreshEntity(mutatedRabbitEntity);
-                entity.remove();
+                livingEntity.remove();
             }
         }
     }

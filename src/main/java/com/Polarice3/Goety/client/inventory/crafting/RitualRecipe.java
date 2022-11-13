@@ -33,7 +33,6 @@ public class RitualRecipe extends ShapelessRecipe {
     private final Ingredient activationItem;
     private final ITag<EntityType<?>> entityToSacrifice;
     private final EntityType<?> entityToSummon;
-    private final Ingredient itemToUse;
     private final int duration;
     private final int summonLife;
     private final float durationPerIngredient;
@@ -42,7 +41,7 @@ public class RitualRecipe extends ShapelessRecipe {
 
     public RitualRecipe(ResourceLocation id, String group, String pCraftType, ResourceLocation ritualType,
                         ItemStack result, EntityType<?> entityToSummon, Ingredient activationItem, NonNullList<Ingredient> input, int duration, int summonLife, int pSoulCost,
-                        ITag<EntityType<?>> entityToSacrifice, String entityToSacrificeDisplayName, Ingredient itemToUse) {
+                        ITag<EntityType<?>> entityToSacrifice, String entityToSacrificeDisplayName) {
         super(id, group, result, input);
         this.craftType = pCraftType;
         this.soulCost = pSoulCost;
@@ -55,7 +54,6 @@ public class RitualRecipe extends ShapelessRecipe {
         this.durationPerIngredient = this.duration / (float) (this.getIngredients().size() + 1);
         this.entityToSacrifice = entityToSacrifice;
         this.entityToSacrificeDisplayName = entityToSacrificeDisplayName;
-        this.itemToUse = itemToUse;
     }
 
     public String getCraftType() {
@@ -108,14 +106,6 @@ public class RitualRecipe extends ShapelessRecipe {
 
     public boolean requiresSacrifice() {
         return this.entityToSacrifice != null;
-    }
-
-    public Ingredient getItemToUse() {
-        return this.itemToUse;
-    }
-
-    public boolean requiresItemUse() {
-        return this.itemToUse != Ingredient.EMPTY;
     }
 
     public EntityType<?> getEntityToSummon() {
@@ -176,18 +166,9 @@ public class RitualRecipe extends ShapelessRecipe {
                 entityToSacrificeDisplayName = json.getAsJsonObject("entity_to_sacrifice").get("display_name").getAsString();
             }
 
-            Ingredient itemToUse = Ingredient.EMPTY;
-            if (json.has("item_to_use")) {
-                JsonElement itemToUseElement =
-                        JSONUtils.isArrayNode(json, "item_to_use") ? JSONUtils.getAsJsonArray(json,
-                                "item_to_use") : JSONUtils.getAsJsonObject(json, "item_to_use");
-                itemToUse = Ingredient.fromJson(itemToUseElement);
-
-            }
-
             return new RitualRecipe(recipeId, group, craftType, ritualType,
                     result, entityToSummon, activationItem, ingredients, duration,
-                    summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName, itemToUse);
+                    summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName);
         }
 
         private static NonNullList<Ingredient> itemsFromJson(JsonArray pIngredientArray) {
@@ -228,14 +209,9 @@ public class RitualRecipe extends ShapelessRecipe {
                 entityToSacrificeDisplayName = buffer.readUtf();
             }
 
-            Ingredient itemToUse = Ingredient.EMPTY;
-            if (buffer.readBoolean()) {
-                itemToUse = Ingredient.fromNetwork(buffer);
-            }
-
             assert recipe != null;
             return new RitualRecipe(recipe.getId(), recipe.getGroup(), craftType, ritualType, recipe.getResultItem(), entityToSummon,
-                    activationItem, recipe.getIngredients(), duration, summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName, itemToUse);
+                    activationItem, recipe.getIngredients(), duration, summonLife, soulCost, entityToSacrifice, entityToSacrificeDisplayName);
         }
 
         @Override
@@ -258,9 +234,6 @@ public class RitualRecipe extends ShapelessRecipe {
                 buffer.writeResourceLocation(TagCollectionManager.getInstance().getEntityTypes().getId(recipe.entityToSacrifice));
                 buffer.writeUtf(recipe.entityToSacrificeDisplayName);
             }
-            buffer.writeBoolean(recipe.itemToUse != Ingredient.EMPTY);
-            if (recipe.itemToUse != Ingredient.EMPTY)
-                recipe.itemToUse.toNetwork(buffer);
         }
     }
 }

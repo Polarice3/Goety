@@ -24,33 +24,28 @@ public class BossBarEvent {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/gui/boss_bar.png");
     protected static final ResourceLocation BOSS_BAR_1 = new ResourceLocation(Goety.MOD_ID, "textures/gui/boss_bar_1.png");
     private static Minecraft minecraft;
-    public static final Set<MobEntity> bosses = Collections.newSetFromMap(new WeakHashMap<>());
+    public static final Set<MobEntity> BOSSES = Collections.newSetFromMap(new WeakHashMap<>());
 
     @SubscribeEvent
     public static void renderBossBar(RenderGameOverlayEvent.BossInfo event){
         minecraft = Minecraft.getInstance();
         if (MainConfig.SpecialBossBar.get()) {
-            if (!bosses.isEmpty()) {
+            if (!BOSSES.isEmpty()) {
                 int i = minecraft.getWindow().getGuiScaledWidth();
-                int j = 12;
-
-                for (MobEntity boss : bosses) {
-                    if (!boss.removed) {
+                for (MobEntity boss : BOSSES) {
+                    if (event.getBossInfo().getId() == boss.getUUID()) {
                         event.setCanceled(true);
                         int k = i / 2 - 100;
                         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                        drawBar(event.getMatrixStack(), k, j, event.getPartialTicks(), boss);
+                        drawBar(event.getMatrixStack(), k, event.getY(), event.getPartialTicks(), boss);
                         ITextComponent itextcomponent = boss.getDisplayName();
                         int l = minecraft.font.width(itextcomponent);
                         int i1 = i / 2 - l / 2;
-                        int j1 = j - 9;
-                        j += 12 + minecraft.font.lineHeight;
-                        minecraft.font.drawShadow(event.getMatrixStack(), itextcomponent, (float) i1, (float) j1, 16777215);
-                        if (j >= minecraft.getWindow().getGuiScaledHeight() / 3) {
+                        minecraft.font.drawShadow(event.getMatrixStack(), itextcomponent, (float) i1, (float) event.getY() - 9, 16777215);
+                        if (event.getY() >= minecraft.getWindow().getGuiScaledHeight() / 3) {
                             break;
                         }
-                    } else {
-                        bosses.remove(boss);
+                        event.setIncrement(12 + minecraft.font.lineHeight);
                     }
                 }
 
@@ -109,15 +104,15 @@ public class BossBarEvent {
     }
 
     public static void addBoss(MobEntity mob){
-        bosses.add(mob);
+        BOSSES.add(mob);
     }
 
     public static void removeBoss(MobEntity mob){
-        bosses.remove(mob);
+        BOSSES.remove(mob);
     }
 
     public static Set<MobEntity> getBosses(){
-        return bosses;
+        return BOSSES;
     }
 
 }

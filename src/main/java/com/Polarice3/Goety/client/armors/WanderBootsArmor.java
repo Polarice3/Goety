@@ -65,6 +65,10 @@ public class WanderBootsArmor extends ArmorItem {
         }
     }
 
+    public boolean isFoil(ItemStack pStack) {
+        return false;
+    }
+
     public IArmorMaterial getArmorMaterial(ArmorItem armorItem){
         return armorItem.getMaterial();
     }

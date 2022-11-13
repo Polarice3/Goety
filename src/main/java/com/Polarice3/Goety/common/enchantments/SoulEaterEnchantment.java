@@ -7,7 +7,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 
 public class SoulEaterEnchantment extends Enchantment {
     public SoulEaterEnchantment(Rarity rarityIn, EquipmentSlotType... slots) {
-        super(rarityIn, EnchantmentType.WEAPON, slots);
+        super(rarityIn, EnchantmentType.BREAKABLE, slots);
     }
 
     public int getMinCost(int enchantmentLevel) {

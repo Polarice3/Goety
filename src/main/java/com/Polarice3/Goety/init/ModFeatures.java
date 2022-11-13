@@ -2,8 +2,6 @@ package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.world.features.CursedTotemFeature;
-import com.Polarice3.Goety.common.world.features.trees.OverworldTreeFeature;
-import net.minecraft.world.gen.feature.BaseTreeFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.fml.RegistryObject;
@@ -15,7 +13,6 @@ public class ModFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, Goety.MOD_ID);
 
     public static final RegistryObject<Feature<NoFeatureConfig>> CURSEDTOTEM = FEATURES.register("cursed_totem_feature", () -> (new CursedTotemFeature(NoFeatureConfig.CODEC)));
-    public static final RegistryObject<Feature<BaseTreeFeatureConfig>> OVERWORLD_TREE = FEATURES.register("overworld_tree", () -> (new OverworldTreeFeature(BaseTreeFeatureConfig.CODEC)));
 
     public static void init(){
         FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());

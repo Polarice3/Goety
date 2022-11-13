@@ -1,0 +1,23 @@
+{
+  "name": "Dredens",
+  "icon": "goety:cold_shard",
+  "category": "goety:world/bestiary",
+  "advancement": "goety:goety/kill_a_dreden",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Dreden are undead creatures that roam the cold regions of the Overworld. From afar, they attack with magical balls of Frost, and when close they will either attack with a surprising amount of strength or breath a torrent of frost upon their foes."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:dreden",
+      "text": "As you can guess, they are immune to frost damage, and will float gently down when falling."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:cold_shard",
+      "title": "Cold Shards",
+      "text": "Dredens can drop Cold Shards when vanquished. These shards can be used to craft Arrows of Slowness, Blue Ice or as components for creating new Focus or other magical items."
+    }
+  ]
+}

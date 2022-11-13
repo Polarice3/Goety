@@ -19,6 +19,10 @@ public class CultistArmoredRobeArmor extends ArmorItem {
         super(materialIn, slot, builderIn);
     }
 
+    public boolean isFoil(ItemStack pStack) {
+        return false;
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {

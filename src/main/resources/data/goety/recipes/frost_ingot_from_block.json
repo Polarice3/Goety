@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "goety:frost_block"
+    }
+  ],
+  "result": {
+    "item": "goety:frost_ingot",
+    "count": 9
+  }
+}

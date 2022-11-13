@@ -10,8 +10,9 @@ import com.Polarice3.Goety.client.particles.*;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
+import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -47,12 +48,14 @@ public class ClientEventBusSubscriber {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event){
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHBOMB.get(), WitchBombRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHBOMB.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_POTION.get(), BurningPotionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHER_METEOR.get(), NetherMeteorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_FIREBALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LAVABALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 3.0F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_DRAGON_FIREBALL.get(), ModDragonFireballRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FROST_BALL.get(), FrostBallRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCYTHE.get(), ScytheProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOULSKULL.get(), SoulSkullRenderer::new);
@@ -87,6 +90,8 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.TORMENTOR.get(), TormentorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HUSKARL.get(), HuskarlRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SHADE.get(), ShadeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DREDEN.get(), DredenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.URBHADHACH.get(), UrbhadhachRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BOOMER.get(), BoomerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DUNE_SPIDER.get(), DuneSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FALLEN.get(), FallenRenderer::new);
@@ -104,6 +109,8 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_MINION.get(), SkeletonMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STRAY_MINION.get(), SkeletonMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DREDEN_MINION.get(), DredenMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FARMER_MINION.get(), FarmerMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneRenderer::new);
@@ -138,6 +145,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.DARK_ALTAR.get(), DarkAltarTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.PEDESTAL.get(), PedestalTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_ABSORBER.get(), SoulAbsorberTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.TEMP_WEB.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ARCA.get(), ArcaTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGN_TILE_ENTITIES.get(), SignTileEntityRenderer::new);
@@ -176,6 +184,26 @@ public class ClientEventBusSubscriber {
                 (stack, world, living) -> ((float) GoldTotemItem.currentSouls(stack)) / GoldTotemItem.MAXSOULS);
         ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("activated"),
                 (stack, world, living) -> GoldTotemItem.isActivated(stack) ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.NETHERITE_BOW.get(), new ResourceLocation("pull"),
+                (stack, world, living) -> {
+                    if (living == null) {
+                        return 0.0F;
+                    } else {
+                        return living.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration() - living.getUseItemRemainingTicks()) / NetheriteBowItem.getBowTime();
+                    }
+                });
+        ItemModelsProperties.register(ModItems.NETHERITE_BOW.get(), new ResourceLocation("pulling")
+                , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.WITCH_BOW.get(), new ResourceLocation("pull"),
+                (stack, world, living) -> {
+                    if (living == null) {
+                        return 0.0F;
+                    } else {
+                        return living.getUseItem() != stack ? 0.0F : (float)(stack.getUseDuration() - living.getUseItemRemainingTicks()) / 20;
+                    }
+                });
+        ItemModelsProperties.register(ModItems.WITCH_BOW.get(), new ResourceLocation("pulling")
+                , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
     }
 
     @SubscribeEvent
@@ -205,6 +233,7 @@ public class ClientEventBusSubscriber {
         ParticleManager particles = Minecraft.getInstance().particleEngine;
 
         particles.register(ModParticleTypes.TOTEM_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.WHITE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.GLOW_EFFECT.get(), SpellParticle.Factory::new);

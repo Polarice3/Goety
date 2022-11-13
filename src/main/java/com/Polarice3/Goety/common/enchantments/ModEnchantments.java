@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.enchantments;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.items.MagicFocusItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
+import com.Polarice3.Goety.common.items.magic.MagicFocusItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;

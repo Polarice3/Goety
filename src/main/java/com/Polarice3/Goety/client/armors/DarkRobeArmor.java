@@ -48,6 +48,10 @@ public class DarkRobeArmor extends ArmorItem {
         }
     }
 
+    public boolean isFoil(ItemStack pStack) {
+        return false;
+    }
+
     @OnlyIn(Dist.CLIENT)
     @Nullable
     public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {

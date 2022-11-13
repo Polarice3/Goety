@@ -1,0 +1,6 @@
+{
+    "parent": "goety:item/netherite_bow",
+    "textures": {
+        "layer0": "goety:items/netherite_bow_pulling_0"
+    }
+}

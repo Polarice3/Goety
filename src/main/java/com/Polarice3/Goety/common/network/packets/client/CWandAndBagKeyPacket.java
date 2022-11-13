@@ -1,9 +1,9 @@
 package com.Polarice3.Goety.common.network.packets.client;
 
 import com.Polarice3.Goety.client.inventory.container.WandandBagContainer;
-import com.Polarice3.Goety.common.items.SoulWand;
 import com.Polarice3.Goety.common.items.handler.FocusBagItemHandler;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
+import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.utils.FocusBagFinder;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;

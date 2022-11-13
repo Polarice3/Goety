@@ -22,7 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
-import static com.Polarice3.Goety.common.items.GoldTotemItem.SOULSAMOUNT;
+import static com.Polarice3.Goety.common.items.magic.GoldTotemItem.SOULSAMOUNT;
 
 public class CursedCageTileEntity extends TileEntity implements IClearable, ITickableTileEntity {
     private ItemStack item = ItemStack.EMPTY;

@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.entities.projectiles.FireTornadoEntity;
 import com.Polarice3.Goety.common.entities.projectiles.NetherMeteorEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.*;
+import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
@@ -47,7 +48,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -70,7 +70,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     protected static final DataParameter<Byte> BOSS_FLAGS = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Float> SPIN = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> HAT = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.BOOLEAN);
-    private final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
+    private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
     private final Predicate<LivingEntity> ZOMBIE_MINIONS = (livingEntity) -> {
         return livingEntity instanceof ZombieVillagerMinionEntity || livingEntity instanceof ZPiglinMinionEntity;
     };
@@ -195,6 +195,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (this.hasCustomName()) {
             this.bossInfo.setName(this.getDisplayName());
         }
+        this.bossInfo.setId(this.getUUID());
     }
 
     public void setCustomName(@Nullable ITextComponent name) {
@@ -415,7 +416,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     @OnlyIn(Dist.CLIENT)
     public ArmPose getArmPose() {
-        if (this.getMainHandItem().getItem() == Items.BOW) {
+        if (this.getMainHandItem().getItem() instanceof BowItem) {
             if (this.isAggressive() && !this.isSpellcasting() && !this.isSettingupSecond()){
                 return ArmPose.BOW_AND_ARROW;
             } else if (this.isSpellcasting()){
@@ -436,6 +437,14 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public void setFiring(boolean firing){
         this.roarParticles = firing;
+    }
+
+    public int hitTimeTeleport(){
+        return 1;
+    }
+
+    public void resetHitTime(){
+        this.hitTimes = 0;
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
@@ -496,11 +505,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 double d5 = this.getZ() + (this.getRandom().nextDouble() - 0.5D) * 32.0D;
                 if (this.randomTeleport(d3, d4, d5, false)) {
                     this.teleportHits();
-                    if (this.isSecondPhase() && this.getHealth() < this.getMaxHealth()/2){
-                        --this.hitTimes;
-                    } else {
-                        this.hitTimes = 0;
-                    }
+                    this.resetHitTime();
                     break;
                 }
             }
@@ -592,9 +597,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
         if (this.isSettingupSecond()){
             this.serverAiStep();
-            if (this.tickCount % 20 == 0) {
-                this.heal(20.0F);
-            }
+            this.heal(1.0F);
             for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3.0D), ALIVE)) {
                 if (!entity.isAlliedTo(this)) {
                     this.barrier(entity, this);
@@ -602,7 +605,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             }
 
             if (!this.level.isClientSide){
-                this.hitTimes = 0;
+                this.resetHitTime();
                 ServerWorld serverWorld = (ServerWorld) this.level;
                 for(int i = 0; i < 40; ++i) {
                     double d0 = this.random.nextGaussian() * 0.2D;
@@ -663,7 +666,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.spellcycle = 1;
             }
             if (!this.level.isClientSide) {
-                if (this.hitTimes >= 1) {
+                if (this.hitTimes >= this.hitTimeTeleport() && this.random.nextBoolean()) {
                     this.teleport();
                 }
                 if (this.getHealth() <= this.getMaxHealth()/8){
@@ -709,7 +712,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 }
             }
             if (!this.level.isClientSide) {
-                if (this.hitTimes >= 2 && this.getHealth() > this.getMaxHealth() / 1.5) {
+                if (this.hitTimes >= (this.hitTimeTeleport() * 2) && this.random.nextBoolean()) {
                     this.teleport();
                 }
             }
@@ -740,7 +743,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             }
         }
         if (target == null){
-            this.hitTimes = 0;
+            this.resetHitTime();
             for (PlayerEntity player : this.level.getEntitiesOfClass(PlayerEntity.class, this.getBoundingBox().inflate(64), EntityPredicates.NO_CREATIVE_OR_SPECTATOR)){
                 this.setTarget(player);
             }
@@ -830,10 +833,10 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof net.minecraft.item.BowItem)));
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
         AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, pDistanceFactor);
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem) {
-            abstractarrowentity = ((net.minecraft.item.BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        if (this.getMainHandItem().getItem() instanceof BowItem) {
+            abstractarrowentity = ((BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
         }
         double d0 = pTarget.getX() - this.getX();
         double d1 = pTarget.getY(0.3333333333333333D) - abstractarrowentity.getY();
@@ -862,11 +865,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (this.getFireArrow()){
             abstractarrowentity.setRemainingFireTicks(100);
         }
+        abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() * 1.5D);
         return abstractarrowentity;
     }
 
     public boolean canFireProjectileWeapon(ShootableItem p_230280_1_) {
-        return p_230280_1_ == Items.BOW;
+        return p_230280_1_ instanceof BowItem;
     }
 
     public ItemStack getProjectile(ItemStack shootable) {
@@ -1399,7 +1403,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
     }
 
-    static class BowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T>{
+    static class BowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T> {
         private final T mob;
 
         public BowAttackGoal(T p_i47515_1_) {
@@ -1417,7 +1421,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
     }
 
-    static class FasterBowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T>{
+    static class FasterBowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T> {
         private final T mob;
 
         public FasterBowAttackGoal(T p_i47515_1_) {
@@ -1435,7 +1439,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
     }
 
-    static class FastestBowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T>{
+    static class FastestBowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T> {
         private final T mob;
 
         public FastestBowAttackGoal(T p_i47515_1_) {

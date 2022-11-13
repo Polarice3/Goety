@@ -1,0 +1,92 @@
+{
+  "parent": "goety:goety/root",
+  "criteria": {
+    "boomer": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:boomer"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "fallen": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:fallen"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "desiccated": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:desiccated"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "dune_spider": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:dune_spider"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    },
+    "marcire": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "goety:marcire"
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boomer"
+    ],
+    [
+      "fallen"
+    ],
+    [
+      "desiccated"
+    ],
+    [
+      "dune_spider"
+    ],
+    [
+      "marcire"
+    ]
+  ]
+}

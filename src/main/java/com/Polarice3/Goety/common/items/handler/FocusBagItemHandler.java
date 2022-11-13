@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.items.handler;
 
-import com.Polarice3.Goety.common.items.MagicFocusItem;
+import com.Polarice3.Goety.common.items.magic.MagicFocusItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

@@ -43,8 +43,8 @@ public class ChannellerRenderer extends MobRenderer<ChannellerEntity, Channeller
         if (super.shouldRender(livingEntityIn, camera, camX, camY, camZ)) {
             return true;
         } else {
-            if (livingEntityIn.getAllyTarget() != null) {
-                LivingEntity livingentity = livingEntityIn.getAllyTarget();
+            if (livingEntityIn.getAlly() != null) {
+                LivingEntity livingentity = livingEntityIn.getAlly();
                 if (livingentity != null) {
                     Vector3d vector3d = this.blockPosition(livingentity, (double)livingentity.getBbHeight() * 0.5D, 1.0F);
                     Vector3d vector3d1 = this.blockPosition(livingEntityIn, (double)livingEntityIn.getEyeHeight(), 1.0F);
@@ -58,7 +58,7 @@ public class ChannellerRenderer extends MobRenderer<ChannellerEntity, Channeller
 
     public void render(ChannellerEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        LivingEntity target = entityIn.getAllyTarget();
+        LivingEntity target = entityIn.getAlly();
         if (target != null && !target.isDeadOrDying() && entityIn.isPraying()) {
             float f = partialTicks/4;
             float f1 = (float)entityIn.level.getGameTime() + partialTicks;

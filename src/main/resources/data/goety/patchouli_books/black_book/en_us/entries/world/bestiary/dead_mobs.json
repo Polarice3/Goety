@@ -1,0 +1,60 @@
+{
+  "name": "Creatures of Dead Sands",
+  "icon": "goety:dead_sandstone",
+  "category": "goety:world/bestiary",
+  "advancement": "goety:goety/kill_most_dead_mobs",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Dead Sands seems to have spawned a variety of creatures that are similar to ones you are familiar with. Some seemed to be remnants of an old past, while others are clearly converted to increase the spread of the dark desert."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "They are all share certain traits. One, they all give the Desiccate Effect, a curse that lowers Attack, Digging and Movement Speed and occasionally does damage. Two, they cannot survive in water and away from Dead Sand Blocks. Three, they're hostile to most non-undead creatures."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:boomer"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "It appears that Creepers desiccate faster when standing on a Dead Sand Block due to its leafy biology, causing their skin and being to be converted into Dead Sands. While they are as hostile as the rest of the Dead Sand Creatures, they will also explode when it sense that the surrounding blocks aren't made of Dead Sands. As you can tell, these creature's explosions spread Dead Sands, making you think some troubling thoughts whether the very Sands are intelligent."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:fallen"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "How does one wage war against sand? The ancient war against the Dead Sands might befuddle certain people as to why the combatants geared up like knights and warriors when they're fighting what appears to be an ever growing pile of sand. Of course, these knights, most of them, aren't slashing the sand with their swords but rather what's coming out of the sands. Unfortunately, some had fallen to their adversary and their failures haunt the world once more..."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:desiccated"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "During the time where the Dead Sands were aplenty, it brought drought and plague upon the civilians, causing them to die from heat or starvation. Some had succumb to the curse of the Dead Sands, and their bones ache with the desire to kill and spread their curse to the living."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:dune_spider"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The giant Spiders that infests the night and the underworld are transformed by the sands, making them more manic and bloodthirsty than before, for their thirst can only be satiated through the blood of the living."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:marcire"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Either a fallen mage or a clergyman, these undead horrors are perhaps the most dangerous of the Dead Sand Creatures. From their staff, they shoot off explosive skulls that spread the sands when exploded and summon Locusts that converts blocks beneath them into more of the sand. Fortunately, they aren't common amongst the Dead Sand's forces, but their appearance signals how bad the spread has become."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Curiously, some of these creatures have a very small chance of dropping a small piece of a parchment that seems to hold dark power within it, with Marcires having a larger chance of dropping it."
+    }
+  ]
+}

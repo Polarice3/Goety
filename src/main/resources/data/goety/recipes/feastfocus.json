@@ -9,7 +9,7 @@
   "duration": 10,
   "ingredients": [
     {
-      "item": "goety:fang_totem"
+      "item": "goety:hunger_core"
     },
     {
       "tag": "forge:ender_pearls"

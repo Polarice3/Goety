@@ -14,11 +14,11 @@
     },
     "s":
     {
-      "item": "minecraft:blue_ice"
+      "item": "goety:cold_shard"
     },
     "c":
     {
-      "item": "minecraft:snow_block"
+      "item": "minecraft:snowball"
     }
   },
   "result":

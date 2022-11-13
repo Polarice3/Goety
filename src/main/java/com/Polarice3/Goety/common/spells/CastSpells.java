@@ -65,6 +65,8 @@ public class CastSpells {
                 return new LaunchSpell();
             case 27:
                 return new SonicBoomSpell();
+            case 28:
+                return new DredenSpell();
             default:
                 return null;
         }

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "goety:frost_ore"
+  },
+  "result": "goety:frost_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

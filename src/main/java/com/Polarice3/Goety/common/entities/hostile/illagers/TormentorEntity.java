@@ -186,6 +186,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
     }
 
     public void die(DamageSource pCause) {
+        super.die(pCause);
         SoundEvent soundevent = SoundEvents.VINDICATOR_DEATH;
         this.playSound(soundevent, 1.0F, 0.15F);
     }

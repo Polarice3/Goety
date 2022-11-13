@@ -5,7 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CSoulEnergyPacket;
 import com.Polarice3.Goety.common.network.packets.server.TotemDeathPacket;

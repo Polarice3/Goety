@@ -9,7 +9,7 @@ import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.events.ArcaTeleporter;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.compat.minecolonies.MinecoloniesLoaded;
 import net.minecraft.enchantment.EnchantmentHelper;

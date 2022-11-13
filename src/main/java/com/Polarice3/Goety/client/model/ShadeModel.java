@@ -74,15 +74,17 @@ public class ShadeModel extends SegmentedModel<ShadeEntity> {
         cube_r1.setPos(4.0F, 0.0F, 0.0F);
         bone2.addChild(cube_r1);
         setRotationAngle(cube_r1, 0.0F, -0.7854F, 0.0F);
-        cube_r1.texOffs(0, 22).addBox(-1.0F, 2.0F, -1.5F, 2.0F, 2.0F, 1.0F, 0.0F, false);
-        cube_r1.texOffs(0, 22).addBox(-1.0F, -1.0F, -1.5F, 2.0F, 2.0F, 1.0F, 0.0F, false);
+        cube_r1.texOffs(0, 22).addBox(-2.0F, 3.0F, -1.5F, 3.0F, 1.0F, 1.0F, 0.0F, false);
+        cube_r1.texOffs(0, 22).addBox(-2.0F, 1.0F, -1.5F, 3.0F, 1.0F, 1.0F, 0.0F, false);
+        cube_r1.texOffs(0, 22).addBox(-2.0F, -1.0F, -1.5F, 3.0F, 1.0F, 1.0F, 0.0F, false);
 
         cube_r2 = new ModelRenderer(this);
         cube_r2.setPos(0.0F, 0.0F, 0.0F);
         bone2.addChild(cube_r2);
         setRotationAngle(cube_r2, 0.0F, 0.7854F, 0.0F);
-        cube_r2.texOffs(0, 22).addBox(-1.0F, 2.0F, -1.5F, 2.0F, 2.0F, 1.0F, 0.0F, false);
-        cube_r2.texOffs(0, 22).addBox(-1.0F, -1.0F, -1.5F, 2.0F, 2.0F, 1.0F, 0.0F, false);
+        cube_r2.texOffs(0, 22).addBox(-1.0F, 3.0F, -1.5F, 3.0F, 1.0F, 1.0F, 0.0F, false);
+        cube_r2.texOffs(0, 22).addBox(-1.0F, 1.0F, -1.5F, 3.0F, 1.0F, 1.0F, 0.0F, false);
+        cube_r2.texOffs(0, 22).addBox(-1.0F, -1.0F, -1.5F, 3.0F, 1.0F, 1.0F, 0.0F, false);
     }
 
     public Iterable<ModelRenderer> parts() {

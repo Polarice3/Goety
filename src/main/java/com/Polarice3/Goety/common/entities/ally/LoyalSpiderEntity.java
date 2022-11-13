@@ -6,7 +6,7 @@ import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
 import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
-import com.Polarice3.Goety.common.items.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;

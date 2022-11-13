@@ -18,6 +18,7 @@ import com.Polarice3.Goety.common.capabilities.soulenergy.SEStore;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
 import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsImp;
 import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsStore;
+import com.Polarice3.Goety.common.effects.ModPotions;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
@@ -32,19 +33,25 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.potions.ModPotions;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.curios.CuriosCompat;
 import com.Polarice3.Goety.init.*;
+import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.WoodType;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.OptionalDispenseBehavior;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.PatrollerEntity;
+import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -52,10 +59,12 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -73,6 +82,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -136,9 +146,9 @@ public class Goety {
         ModNetwork.init();
 
         CuriosCompat.setup(event);
+        EntitySpawnPlacementRegistry();
 
         event.enqueueWork(() -> {
-            ModEntityType.EntitySpawnPlacementRegistry();
             ModStructures.setupStructures();
             DispenserBlock.registerBehavior(ModBlocks.TALL_SKULL_ITEM.get(), new OptionalDispenseBehavior() {
                 protected ItemStack execute(IBlockSource source, ItemStack stack) {
@@ -146,12 +156,29 @@ public class Goety {
                     return stack;
                 }
             });
+            AxeItem.STRIPABLES = Maps.newHashMap(AxeItem.STRIPABLES);
+            AxeItem.STRIPABLES.put(ModBlocks.HAUNTED_LOG.get(), ModBlocks.STRIPPED_HAUNTED_LOG.get());
+            AxeItem.STRIPABLES.put(ModBlocks.HAUNTED_WOOD.get(), ModBlocks.STRIPPED_HAUNTED_WOOD.get());
+            AxeItem.STRIPABLES.put(ModBlocks.GLOOM_LOG.get(), ModBlocks.STRIPPED_GLOOM_LOG.get());
+            AxeItem.STRIPABLES.put(ModBlocks.GLOOM_WOOD.get(), ModBlocks.STRIPPED_GLOOM_WOOD.get());
+            AxeItem.STRIPABLES.put(ModBlocks.MURK_LOG.get(), ModBlocks.STRIPPED_MURK_LOG.get());
+            AxeItem.STRIPABLES.put(ModBlocks.MURK_WOOD.get(), ModBlocks.STRIPPED_MURK_WOOD.get());
             WoodType.register(ModWoodType.HAUNTED);
             WoodType.register(ModWoodType.GLOOM);
             WoodType.register(ModWoodType.MURK);
             ConfiguredStructures.registerConfiguredStructures();
         });
 
+    }
+
+    public static void EntitySpawnPlacementRegistry() {
+        EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.DREDEN.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.URBHADHACH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.FANATIC.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.ZEALOT.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.DISCIPLE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.THUG.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
@@ -174,6 +201,8 @@ public class Goety {
         event.put(ModEntityType.TORMENTOR.get(), TormentorEntity.setCustomAttributes().build());
         event.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
         event.put(ModEntityType.SHADE.get(), ShadeEntity.setCustomAttributes().build());
+        event.put(ModEntityType.DREDEN.get(), DredenEntity.setCustomAttributes().build());
+        event.put(ModEntityType.URBHADHACH.get(), UrbhadhachEntity.setCustomAttributes().build());
         event.put(ModEntityType.BOOMER.get(), BoomerEntity.setCustomAttributes().build());
         event.put(ModEntityType.DUNE_SPIDER.get(), DuneSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.FALLEN.get(), FallenEntity.setCustomAttributes().build());
@@ -191,6 +220,8 @@ public class Goety {
         event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.STRAY_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.DREDEN_MINION.get(), DredenMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.FARMER_MINION.get(), FarmerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfEntity.setCustomAttributes().build());
         event.put(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneEntity.setCustomAttributes().build());
@@ -214,77 +245,81 @@ public class Goety {
     }
 
     public void biomeModification(final BiomeLoadingEvent event) {
-
-        if (MainConfig.DarkManorGen.get()) {
-            if (event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.ICY
-                    || event.getCategory() == Biome.Category.TAIGA) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DARK_MANOR);
-            }
-        }
-        if (MainConfig.CursedGraveyardGen.get()) {
-            if (event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.SAVANNA
-                    || event.getCategory() == Biome.Category.TAIGA
-                    || event.getCategory() == Biome.Category.PLAINS
-                    || event.getCategory() == Biome.Category.EXTREME_HILLS
-                    || event.getCategory() == Biome.Category.SWAMP) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_CURSED_GRAVEYARD);
-            }
-        }
-        if (MainConfig.SalvagedFortGen.get()) {
-            if (event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.ICY
-                    || event.getCategory() == Biome.Category.TAIGA
-                    || event.getCategory() == Biome.Category.PLAINS) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_SALVAGED_FORT);
-            }
-        }
-        if (MainConfig.DecrepitFortGen.get()) {
-            if (event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.ICY
-                    || event.getCategory() == Biome.Category.TAIGA
-                    || event.getCategory() == Biome.Category.PLAINS) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DECREPIT_FORT);
-            }
-        }
-        if (MainConfig.RuinedRitualGen.get()){
-            if (event.getCategory() == Biome.Category.PLAINS
-                    || event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.TAIGA
-                    || event.getCategory() == Biome.Category.SAVANNA){
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.RUINED_RITUAL_STANDARD);
-            }
-            if (event.getCategory() == Biome.Category.JUNGLE){
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.RUINED_RITUAL_JUNGLE);
-            }
-        }
-        if (MainConfig.PortalOutpostGen.get()) {
-            if (event.getCategory() != Biome.Category.NETHER
-                    && event.getCategory() != Biome.Category.OCEAN
-                    && event.getCategory() != Biome.Category.RIVER) {
-                event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_PORTAL_OUTPOST);
-            }
-        }
-        if (MainConfig.TotemGen.get()) {
-            if (event.getCategory() != Biome.Category.THEEND
-                    && event.getCategory() != Biome.Category.MUSHROOM
-                    && event.getCategory() != Biome.Category.NETHER
-                    && event.getCategory() != Biome.Category.OCEAN
-                    && event.getCategory() != Biome.Category.RIVER) {
-                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.CONFIGURED_CURSEDTOTEM);
-            }
-        }
-        if (MainConfig.GloomTreeGen.get()) {
-            if (event.getCategory() == Biome.Category.SWAMP) {
-                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.GLOOM_TREE);
-            }
-        }
-        if (MainConfig.MurkTreeGen.get()) {
-            if (event.getCategory() == Biome.Category.FOREST
-                    || event.getCategory() == Biome.Category.TAIGA
-                    || event.getCategory() == Biome.Category.EXTREME_HILLS) {
-                event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.MURK_TREE);
+        if (event.getName() != null) {
+            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
+            if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD)){
+                if (MainConfig.DarkManorGen.get()) {
+                    if (event.getCategory() == Biome.Category.FOREST
+                            || event.getCategory() == Biome.Category.ICY
+                            || event.getCategory() == Biome.Category.TAIGA) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DARK_MANOR);
+                    }
+                }
+                if (MainConfig.CursedGraveyardGen.get()) {
+                    if (event.getCategory() == Biome.Category.FOREST
+                            || event.getCategory() == Biome.Category.SAVANNA
+                            || event.getCategory() == Biome.Category.TAIGA
+                            || event.getCategory() == Biome.Category.PLAINS
+                            || event.getCategory() == Biome.Category.EXTREME_HILLS
+                            || event.getCategory() == Biome.Category.SWAMP) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_CURSED_GRAVEYARD);
+                    }
+                }
+                if (MainConfig.SalvagedFortGen.get()) {
+                    if (event.getCategory() == Biome.Category.FOREST
+                            || event.getCategory() == Biome.Category.ICY
+                            || event.getCategory() == Biome.Category.TAIGA
+                            || event.getCategory() == Biome.Category.PLAINS) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_SALVAGED_FORT);
+                    }
+                }
+                if (MainConfig.DecrepitFortGen.get()) {
+                    if (event.getCategory() == Biome.Category.FOREST
+                            || event.getCategory() == Biome.Category.ICY
+                            || event.getCategory() == Biome.Category.TAIGA
+                            || event.getCategory() == Biome.Category.PLAINS) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_DECREPIT_FORT);
+                    }
+                }
+                if (MainConfig.RuinedRitualGen.get()){
+                    if (event.getCategory() == Biome.Category.PLAINS
+                            || event.getCategory() == Biome.Category.FOREST
+                            || event.getCategory() == Biome.Category.TAIGA
+                            || event.getCategory() == Biome.Category.SAVANNA){
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.RUINED_RITUAL_STANDARD);
+                    }
+                    if (event.getCategory() == Biome.Category.JUNGLE){
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.RUINED_RITUAL_JUNGLE);
+                    }
+                }
+                if (MainConfig.PortalOutpostGen.get()) {
+                    if (event.getCategory() != Biome.Category.NETHER
+                            && event.getCategory() != Biome.Category.OCEAN
+                            && event.getCategory() != Biome.Category.RIVER) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_PORTAL_OUTPOST);
+                    }
+                }
+                if (MainConfig.TotemGen.get()) {
+                    if (event.getCategory() != Biome.Category.THEEND
+                            && event.getCategory() != Biome.Category.MUSHROOM
+                            && event.getCategory() != Biome.Category.NETHER
+                            && event.getCategory() != Biome.Category.OCEAN
+                            && event.getCategory() != Biome.Category.RIVER) {
+                        event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.CONFIGURED_CURSEDTOTEM);
+                    }
+                }
+                if (MainConfig.GloomTreeGen.get()) {
+                    if (event.getCategory() == Biome.Category.SWAMP) {
+                        event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.GLOOM_TREE);
+                    }
+                }
+                if (MainConfig.MurkTreeGen.get()) {
+                    if (event.getCategory() == Biome.Category.FOREST
+                            || event.getCategory() == Biome.Category.TAIGA
+                            || event.getCategory() == Biome.Category.EXTREME_HILLS) {
+                        event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.MURK_TREE);
+                    }
+                }
             }
         }
     }

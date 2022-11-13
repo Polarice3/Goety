@@ -22,7 +22,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -259,16 +258,8 @@ public abstract class Ritual {
         return entity != null && this.recipe.requiresSacrifice() && this.recipe.getEntityToSacrifice().contains(entity.getType());
     }
 
-    public boolean isValidItemUse(PlayerInteractEvent.RightClickItem event) {
-        return this.recipe.requiresItemUse() && this.recipe.getItemToUse().test(event.getItemStack());
-    }
-
     public boolean requiresSacrifice() {
         return this.recipe.requiresSacrifice();
-    }
-
-    public boolean require() {
-        return this.recipe.requiresItemUse();
     }
 
     public void dropResult(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,

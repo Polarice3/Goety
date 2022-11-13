@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.model;
 
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
-import com.Polarice3.Goety.common.items.PitchforkItem;
+import com.Polarice3.Goety.common.items.equipment.PitchforkItem;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.matrix.MatrixStack;

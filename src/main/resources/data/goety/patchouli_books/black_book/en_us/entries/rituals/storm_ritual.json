@@ -1,6 +1,6 @@
 {
   "name": "Storm Ritual",
-  "icon": "minecraft:iron_bars",
+  "icon": "minecraft:chain",
   "category": "goety:rituals",
   "sortnum": 5,
   "pages": [
