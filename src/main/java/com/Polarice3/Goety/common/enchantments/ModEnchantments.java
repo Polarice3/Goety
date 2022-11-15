@@ -6,6 +6,7 @@ import com.Polarice3.Goety.common.items.magic.MagicFocusItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ShootableItem;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,9 +18,16 @@ public class ModEnchantments {
 
     public static final EnchantmentType RINGS = EnchantmentType.create("rings", (item) -> (item instanceof RingItem));
     public static final EnchantmentType FOCUS = EnchantmentType.create("focus", (item) -> (item instanceof MagicFocusItem));
+    public static final EnchantmentType SHOOTABLES = EnchantmentType.create("shootables", (item) -> (item instanceof ShootableItem));
 
-    public static final RegistryObject<Enchantment> SOULEATER = ENCHANTMENTS.register("souleater",
-            () -> new SoulEaterEnchantment(Enchantment.Rarity.UNCOMMON, EquipmentSlotType.MAINHAND));
+    public static final RegistryObject<Enchantment> SOUL_EATER = ENCHANTMENTS.register("souleater",
+            () -> new SoulEaterEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentType.WEAPON, EquipmentSlotType.MAINHAND));
+
+    public static final RegistryObject<Enchantment> SOUL_TAKER = ENCHANTMENTS.register("soultaker",
+            () -> new SoulEaterEnchantment(Enchantment.Rarity.UNCOMMON, SHOOTABLES, EquipmentSlotType.MAINHAND));
+
+    public static final RegistryObject<Enchantment> SOUL_FEEDER = ENCHANTMENTS.register("soulfeeder",
+            () -> new SoulEaterEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentType.DIGGER, EquipmentSlotType.MAINHAND));
 
     public static final RegistryObject<Enchantment> WANTING = ENCHANTMENTS.register("wanting",
             () -> new LootingEnchantment(Enchantment.Rarity.RARE, RINGS, EquipmentSlotType.MAINHAND));

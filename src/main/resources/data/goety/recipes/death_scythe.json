@@ -1,0 +1,39 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "tag": "goety:scythes"
+  },
+  "craftType": "necroturgy",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "item": "goety:apostle_blood_bottle"
+    },
+    {
+      "item": "minecraft:dragon_breath"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    }
+  ],
+  "result": {
+    "item": "goety:death_scythe"
+  }
+}

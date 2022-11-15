@@ -3,11 +3,12 @@ package com.Polarice3.Goety.common.enchantments;
 import com.Polarice3.Goety.MainConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.inventory.EquipmentSlotType;
 
 public class SoulEaterEnchantment extends Enchantment {
-    public SoulEaterEnchantment(Rarity rarityIn, EquipmentSlotType... slots) {
-        super(rarityIn, EnchantmentType.BREAKABLE, slots);
+    public SoulEaterEnchantment(Rarity rarityIn, EnchantmentType enchantmentType, EquipmentSlotType... slots) {
+        super(rarityIn, enchantmentType, slots);
     }
 
     public int getMinCost(int enchantmentLevel) {
@@ -20,5 +21,9 @@ public class SoulEaterEnchantment extends Enchantment {
 
     public int getMaxLevel() {
         return MainConfig.MaxSoulEaterLevel.get();
+    }
+
+    public boolean checkCompatibility(Enchantment pEnch) {
+        return super.checkCompatibility(pEnch) && !(pEnch instanceof SoulEaterEnchantment);
     }
 }

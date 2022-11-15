@@ -224,6 +224,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UrbhadhachThrall;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> InterDimensionalMobs;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
@@ -414,10 +415,12 @@ public class MainConfig {
                 .defineInRange("fanaticPitchforkChance", 4, 0, Integer.MAX_VALUE);
         FanaticWitchBombChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Witch's Bomb, Default: 4")
                 .defineInRange("fanaticWitchBombChance", 4, 0, Integer.MAX_VALUE);
-        DredenSpawnWeight = BUILDER.comment("Spawn Weight for Dreden, Default: 10")
-                .defineInRange("dredenSpawnWeight", 10, 0, Integer.MAX_VALUE);
-        UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 8")
-                .defineInRange("urbhadhachSpawnWeight", 8, 0, Integer.MAX_VALUE);
+        InterDimensionalMobs = BUILDER.comment("Whether Goety Mobs can spawn in Overworld-like modded dimensions, Default: false")
+                .define("interDimensionalMobs", false);
+        DredenSpawnWeight = BUILDER.comment("Spawn Weight for Dreden, Default: 20")
+                .defineInRange("dredenSpawnWeight", 20, 0, Integer.MAX_VALUE);
+        UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 16")
+                .defineInRange("urbhadhachSpawnWeight", 16, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Infamy");
         InfamySpawn = BUILDER.comment("Special Illagers Spawning due to Infamy, Default: true")

@@ -38,7 +38,7 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 4866583));
     public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
             () -> new ModEffect(EffectType.NEUTRAL, 4393481));
-    public static final RegistryObject<Effect> APOSTLE_CURSE = EFFECTS.register("apostle_curse",
+    public static final RegistryObject<Effect> BURN_HEX = EFFECTS.register("apostle_curse",
             () -> new ModEffect(EffectType.HARMFUL, 2236962));
     public static final RegistryObject<Effect> SOUL_SHIELD = EFFECTS.register("soul_shield",
             () -> new ModEffect(EffectType.BENEFICIAL, 0));

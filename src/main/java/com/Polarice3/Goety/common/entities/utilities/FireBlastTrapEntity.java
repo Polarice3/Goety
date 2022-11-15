@@ -126,7 +126,7 @@ public class FireBlastTrapEntity extends Entity {
                         if (!(livingEntity instanceof ApostleEntity)) {
                             MobUtil.push(livingEntity, 0, 0.5, 0);
                             if (this.owner instanceof ApostleEntity) {
-                                livingEntity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 1200));
+                                livingEntity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
                             }
                             if (!livingEntity.fireImmune()) {
                                 livingEntity.setSecondsOnFire(8);

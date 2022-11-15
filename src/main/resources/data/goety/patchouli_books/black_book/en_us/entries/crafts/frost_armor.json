@@ -1,0 +1,18 @@
+{
+  "name": "Frost Armor",
+  "icon": "goety:frost_helmet",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/gain_cold_heart",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "While providing the same amount of defence as Iron Armor, the wearer has high resistance against frost damage and fire. However, fire damage causes the Frost Armor to use up durability a lot more."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety:frost_helmet",
+      "title": "Frost Armor Pieces",
+      "text": "To create a frost tool, combine a piece of Iron Armor with a Frost Ingot on a Smithing Table."
+    }
+  ]
+}

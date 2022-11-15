@@ -39,6 +39,7 @@ import com.Polarice3.Goety.compat.curios.CuriosCompat;
 import com.Polarice3.Goety.init.*;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
+import net.minecraft.block.ComposterBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.WoodType;
 import net.minecraft.dispenser.IBlockSource;
@@ -163,6 +164,8 @@ public class Goety {
             AxeItem.STRIPABLES.put(ModBlocks.GLOOM_WOOD.get(), ModBlocks.STRIPPED_GLOOM_WOOD.get());
             AxeItem.STRIPABLES.put(ModBlocks.MURK_LOG.get(), ModBlocks.STRIPPED_MURK_LOG.get());
             AxeItem.STRIPABLES.put(ModBlocks.MURK_WOOD.get(), ModBlocks.STRIPPED_MURK_WOOD.get());
+            ComposterBlock.COMPOSTABLES.put(ModBlocks.MURK_SAPLING_ITEM.get(), 0.3F);
+            ComposterBlock.COMPOSTABLES.put(ModBlocks.GLOOM_SAPLING_ITEM.get(), 0.3F);
             WoodType.register(ModWoodType.HAUNTED);
             WoodType.register(ModWoodType.GLOOM);
             WoodType.register(ModWoodType.MURK);

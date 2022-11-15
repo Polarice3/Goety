@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.client.armors.ModArmorMaterial;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
 import com.Polarice3.Goety.common.capabilities.infamy.InfamyProvider;
@@ -54,10 +55,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.TieredItem;
+import net.minecraft.item.*;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
@@ -284,13 +282,26 @@ public class ModEvents {
                 if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
                     event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
                 }
-                if (biome.getPrecipitation() == Biome.RainType.SNOW && BlockFinder.biomeIsInOverworld(event.getName())){
-                    event.getSpawns().getSpawner(EntityClassification.MONSTER)
-                            .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
-                                    MainConfig.DredenSpawnWeight.get(), 1, 1));
-                    event.getSpawns().getSpawner(EntityClassification.MONSTER)
-                            .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
-                                    MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                if (MainConfig.InterDimensionalMobs.get()){
+                    if (biome.getPrecipitation() == Biome.RainType.SNOW){
+                        event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
+                                        MainConfig.DredenSpawnWeight.get(), 1, 1));
+                        event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
+                                        MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                    }
+                } else {
+                    if (BlockFinder.biomeIsInOverworld(event.getName())) {
+                        if (biome.getPrecipitation() == Biome.RainType.SNOW) {
+                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                    .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
+                                            MainConfig.DredenSpawnWeight.get(), 1, 1));
+                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                    .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
+                                            MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                        }
+                    }
                 }
             }
         }
@@ -414,7 +425,7 @@ public class ModEvents {
                     livingEntity.clearFire();
                 }
             }
-            if (livingEntity.hasEffect(ModEffects.APOSTLE_CURSE.get())){
+            if (livingEntity.hasEffect(ModEffects.BURN_HEX.get())){
                 if (livingEntity.hasEffect(Effects.FIRE_RESISTANCE)){
                     livingEntity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
                 }
@@ -750,9 +761,50 @@ public class ModEvents {
                 event.setAmount((float) (event.getAmount() * 1.5));
             }
         }
+        for (EquipmentSlotType equipmentSlotType: EquipmentSlotType.values()){
+            if (equipmentSlotType.getType() == EquipmentSlotType.Group.ARMOR){
+                ItemStack itemStack = victim.getItemBySlot(equipmentSlotType);
+                if (itemStack.getItem() instanceof ArmorItem){
+                    ArmorItem armorItem = (ArmorItem) itemStack.getItem();
+                    if (armorItem.getMaterial() == ModArmorMaterial.FROST){
+                        if (ModDamageSource.frostAttacks(event.getSource())){
+                            switch (equipmentSlotType){
+                                case HEAD:
+                                case FEET:
+                                    event.setAmount(event.getAmount()/1.1F);
+                                    break;
+                                case CHEST:
+                                    event.setAmount(event.getAmount()/1.5F);
+                                    break;
+                                case LEGS:
+                                    event.setAmount(event.getAmount()/1.3F);
+                                    break;
+                            }
+                        }
+                        if (event.getSource().isFire()) {
+                            switch (equipmentSlotType){
+                                case HEAD:
+                                case LEGS:
+                                case FEET:
+                                    event.setAmount(event.getAmount()/1.1F);
+                                    break;
+                                case CHEST:
+                                    event.setAmount(event.getAmount()/1.2F);
+                                    break;
+                            }
+                            float damage = event.getAmount() / 4.0F;
+                            if (damage < 1.0F) {
+                                damage = 1.0F;
+                            }
+                            ItemHelper.hurtAndBreak(itemStack, (int) damage, victim);
+                        }
+                    }
+                }
+            }
+        }
         if (victim.level.getDifficulty() == Difficulty.HARD){
-            if (victim.hasEffect(ModEffects.APOSTLE_CURSE.get())){
-                EffectInstance effectInstance = victim.getEffect(ModEffects.APOSTLE_CURSE.get());
+            if (victim.hasEffect(ModEffects.BURN_HEX.get())){
+                EffectInstance effectInstance = victim.getEffect(ModEffects.BURN_HEX.get());
                 int i = 2;
                 if (effectInstance != null) {
                     i = effectInstance.getAmplifier() + 2;

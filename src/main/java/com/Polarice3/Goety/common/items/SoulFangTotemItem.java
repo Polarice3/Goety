@@ -18,7 +18,7 @@ public class SoulFangTotemItem extends BlockItem {
         return stack.getCount() == 1 && (enchantment == ModEnchantments.POTENCY.get()
                 || enchantment == ModEnchantments.RANGE.get()
                 || enchantment == ModEnchantments.BURNING.get()
-                || enchantment == ModEnchantments.SOULEATER.get());
+                || enchantment == ModEnchantments.SOUL_EATER.get());
     }
 
     @Override

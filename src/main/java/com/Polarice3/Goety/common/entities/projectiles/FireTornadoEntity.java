@@ -144,7 +144,7 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
                         if (this.getTrueOwner() != null) {
                             entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 6.0F);
                             if (this.getTrueOwner() instanceof ApostleEntity) {
-                                entity.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 1200));
+                                entity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
                             }
                         } else {
                             entity.hurt(DamageSource.IN_FIRE, 6.0F);

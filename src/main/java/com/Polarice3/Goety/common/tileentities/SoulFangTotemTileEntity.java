@@ -317,7 +317,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
             this.getLevel().addFreshEntity(new FangEntity(this.getLevel(), pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, 0,
                     this.enchantments.getOrDefault(ModEnchantments.POTENCY.get(), 0),
                     this.enchantments.getOrDefault(ModEnchantments.BURNING.get(), 0),
-                    this.enchantments.getOrDefault(ModEnchantments.SOULEATER.get(), 0) + 1,
+                    this.enchantments.getOrDefault(ModEnchantments.SOUL_EATER.get(), 0) + 1,
                     this.getTrueOwner()));
         }
 

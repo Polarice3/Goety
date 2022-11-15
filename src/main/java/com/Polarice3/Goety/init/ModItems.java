@@ -189,6 +189,15 @@ public class ModItems {
     public static final RegistryObject<Item> CULTISTARMOREDROBE = ITEMS.register("cultistarmoredrobe", () ->
             new CultistArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
 
+    public static final RegistryObject<Item> FROST_HELMET = ITEMS.register("frost_helmet", () ->
+            new FrostArmor(EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> FROST_CHESTPLATE = ITEMS.register("frost_chestplate", () ->
+            new FrostArmor(EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> FROST_LEGGINGS = ITEMS.register("frost_leggings", () ->
+            new FrostArmor(EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> FROST_BOOTS = ITEMS.register("frost_boots", () ->
+            new FrostArmor(EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
+
     //JEI
     public static final RegistryObject<DummyItem> JEI_DUMMY_NONE = ITEMS.register(
             "jei_dummy/none", () -> new DummyItem(new Item.Properties()));

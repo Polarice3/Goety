@@ -89,7 +89,7 @@ public class DarkScytheItem extends TieredItem implements IVanishable {
     }
 
     public void attackMobs(ItemStack pStack, LivingEntity pTarget, PlayerEntity pPlayer){
-        int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOULEATER.get(), pStack);
+        int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER.get(), pStack);
         int soulEater = MathHelper.clamp(enchantment + 1, 1, 10);
         SEHelper.increaseSouls(pPlayer, MainConfig.DarkScytheSouls.get() * soulEater);
 

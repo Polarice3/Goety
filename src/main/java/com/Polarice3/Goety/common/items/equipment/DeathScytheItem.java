@@ -1,10 +1,14 @@
 package com.Polarice3.Goety.common.items.equipment;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.ScytheProjectileEntity;
 import com.Polarice3.Goety.common.items.ModItemTiers;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CScytheStrikePacket;
+import com.Polarice3.Goety.utils.SEHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
@@ -19,6 +23,28 @@ public class DeathScytheItem extends DarkScytheItem{
         super(ModItemTiers.DEATH);
         MinecraftForge.EVENT_BUS.addListener(this::EmptyStrike);
         MinecraftForge.EVENT_BUS.addListener(this::AttackStrike);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if (MainConfig.SoulRepair.get()) {
+            if (entityIn instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) entityIn;
+                if (!(player.swinging && isSelected)) {
+                    if (stack.isDamaged()) {
+                        if (SEHelper.getSoulsContainer(player)){
+                            if (SEHelper.getSoulsAmount(player, MainConfig.ItemsRepairAmount.get())){
+                                if (player.tickCount % 20 == 0) {
+                                    stack.setDamageValue(stack.getDamageValue() - 1);
+                                    SEHelper.decreaseSouls(player, MainConfig.ItemsRepairAmount.get());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
     private void EmptyStrike(PlayerInteractEvent.LeftClickEmpty event){

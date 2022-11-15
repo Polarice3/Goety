@@ -198,7 +198,7 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
                         f += EnchantmentHelper.getDamageBonus(this.weapon, entity.getMobType());
                         if (entity.hurt(DamageSource.mobAttack(this.getTrueOwner()), f)) {
                             if (this.getTrueOwner() instanceof PlayerEntity) {
-                                int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOULEATER.get(), this.weapon);
+                                int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER.get(), this.weapon);
                                 int soulEater = MathHelper.clamp(enchantment + 1, 1, 10);
                                 PlayerEntity player = (PlayerEntity) this.getTrueOwner();
                                 SEHelper.increaseSouls(player, MainConfig.DarkScytheSouls.get() * soulEater);

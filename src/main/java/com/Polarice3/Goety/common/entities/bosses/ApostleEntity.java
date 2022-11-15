@@ -161,7 +161,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     public boolean canBeAffected(EffectInstance pPotioneffect) {
-        return pPotioneffect.getEffect() != ModEffects.APOSTLE_CURSE.get() && pPotioneffect.getEffect() != Effects.WITHER && super.canBeAffected(pPotioneffect);
+        return pPotioneffect.getEffect() != ModEffects.BURN_HEX.get() && pPotioneffect.getEffect() != Effects.WITHER && super.canBeAffected(pPotioneffect);
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
@@ -801,7 +801,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
         if (this.level.dimension() == World.NETHER){
             if (target != null){
-                target.addEffect(new EffectInstance(ModEffects.APOSTLE_CURSE.get(), 100));
+                target.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 100));
             }
         }
     }

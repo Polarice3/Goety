@@ -142,8 +142,20 @@ public class SEHelper {
 
     public static int SoulMultiply(LivingEntity livingEntity){
         ItemStack weapon= livingEntity.getMainHandItem();
-        int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOULEATER.get(), weapon);
-        return MathHelper.clamp(i + 1, 1, 10);
+        int multiply = 1;
+        int i = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER.get(), weapon);
+        if (i > 0) {
+            multiply = MathHelper.clamp(i + 1, 1, 10);
+        }
+        int j = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_TAKER.get(), weapon);
+        if (j > 0) {
+            multiply = MathHelper.clamp(j + 1, 1, 10);
+        }
+        int k = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_FEEDER.get(), weapon);
+        if (k > 0) {
+            multiply = MathHelper.clamp(k + 1, 1, 10);
+        }
+        return multiply;
     }
 
     public static void teleportDeathArca(PlayerEntity player){

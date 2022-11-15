@@ -1,0 +1,39 @@
+{
+  "name": "Armored Robes",
+  "icon": "goety:darkarmoredrobe",
+  "category": "goety:crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The robes provide magical benefits, but are severally lacking when it comes to defense. Fortunately, by utilizing some Cursed Ingots, you've managed to upgrade your Robes to provide Iron Level protection."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkarmoredhelm"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkarmoredrobe"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkarmoredleggings"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:necroarmoredhelm"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:necroarmoredrobe"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:felarmoredhelm"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:felarmoredrobe"
+    }
+  ]
+}

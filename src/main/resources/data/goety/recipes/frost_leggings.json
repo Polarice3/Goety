@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "minecraft:iron_leggings"
+  },
+  "addition": {
+    "item": "goety:frost_ingot"
+  },
+  "result": {
+    "item": "goety:frost_leggings"
+  }
+}
