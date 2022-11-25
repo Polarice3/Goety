@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -70,7 +71,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     protected static final DataParameter<Byte> BOSS_FLAGS = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Float> SPIN = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> HAT = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.BOOLEAN);
-    private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
+    private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS).setDarkenScreen(true).setCreateWorldFog(true);
     private final Predicate<LivingEntity> ZOMBIE_MINIONS = (livingEntity) -> {
         return livingEntity instanceof ZombieVillagerMinionEntity || livingEntity instanceof ZPiglinMinionEntity;
     };
@@ -84,6 +85,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         super(type, worldIn);
         this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
         this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, 0.0F);
+        this.maxUpStep = 1.0F;
         this.xpReward = 200;
         this.f = 0;
         this.cooldown = 100;
@@ -220,6 +222,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     protected boolean isAffectedByFluids() {
         return false;
+    }
+
+    public boolean isAlliedTo(Entity entityIn) {
+        if (entityIn instanceof WitherEntity) {
+            return this.getTeam() == null && entityIn.getTeam() == null;
+        } else return super.isAlliedTo(entityIn);
     }
 
     public void die(DamageSource cause) {
@@ -479,7 +487,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             this.remove();
         }
 
-        if (!this.level.getNearbyPlayers(new EntityPredicate().selector(MobUtil.NO_CREATIVE_OR_SPECTATOR), this, this.getBoundingBox().inflate(16)).isEmpty()){
+        if (!this.level.getNearbyPlayers(new EntityPredicate().selector(MobUtil.NO_CREATIVE_OR_SPECTATOR), this, this.getBoundingBox().inflate(32)).isEmpty()){
             if (!(pSource.getEntity() instanceof PlayerEntity)){
                 trueAmount = trueAmount/2;
             }

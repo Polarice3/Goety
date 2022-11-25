@@ -183,19 +183,11 @@ public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeable
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
+        return SoundEvents.CREEPER_DEATH;
     }
 
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.15F);
-        }
-    }
-
-    public void die(DamageSource pCause) {
-        SoundEvent soundevent = SoundEvents.CREEPER_DEATH;
-        this.playSound(soundevent, 1.0F, 0.15F);
+    protected float getVoicePitch() {
+        return 0.15F;
     }
 
     public boolean doHurtTarget(Entity pEntity) {

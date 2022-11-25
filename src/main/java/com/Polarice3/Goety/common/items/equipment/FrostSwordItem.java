@@ -15,6 +15,7 @@ public class FrostSwordItem extends SwordItem {
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return super.canApplyAtEnchantingTable(stack, enchantment) && !(enchantment instanceof FireAspectEnchantment)
-                && !enchantment.getDescriptionId().contains("smelt") && !enchantment.getDescriptionId().contains("heat");
+                && !enchantment.getDescriptionId().contains("smelt") && !enchantment.getDescriptionId().contains("heat")
+                && !enchantment.getDescriptionId().contains("fire");
     }
 }

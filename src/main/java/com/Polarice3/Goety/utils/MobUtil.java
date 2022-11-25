@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
@@ -34,6 +35,7 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class MobUtil {
@@ -265,5 +267,56 @@ public class MobUtil {
     public static boolean isInRain(Entity pEntity){
         BlockPos blockpos = pEntity.blockPosition();
         return pEntity.level.isRainingAt(blockpos) || pEntity.level.isRainingAt(new BlockPos((double)blockpos.getX(), pEntity.getBoundingBox().maxY, (double)blockpos.getZ()));
+    }
+
+    public static boolean healthIsHalved(LivingEntity livingEntity){
+        return livingEntity.getHealth() <= livingEntity.getMaxHealth()/2;
+    }
+
+    @Nullable
+    public static <T extends MobEntity> T ownedConversion(LivingEntity killer, MobEntity mobEntity, EntityType<T> p_233656_1_, boolean p_233656_2_) {
+        if (mobEntity.removed) {
+            return (T)null;
+        } else {
+            T t = p_233656_1_.create(mobEntity.level);
+            t.copyPosition(mobEntity);
+            t.setBaby(mobEntity.isBaby());
+            t.setNoAi(mobEntity.isNoAi());
+            if (mobEntity.hasCustomName()) {
+                t.setCustomName(mobEntity.getCustomName());
+                t.setCustomNameVisible(mobEntity.isCustomNameVisible());
+            }
+
+            if (mobEntity.isPersistenceRequired()) {
+                t.setPersistenceRequired();
+            }
+
+            t.setInvulnerable(mobEntity.isInvulnerable());
+            if (p_233656_2_) {
+                t.setCanPickUpLoot(mobEntity.canPickUpLoot());
+
+                for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
+                    ItemStack itemstack = mobEntity.getItemBySlot(equipmentslottype);
+                    if (!itemstack.isEmpty()) {
+                        t.setItemSlot(equipmentslottype, itemstack.copy());
+                        itemstack.setCount(0);
+                    }
+                }
+            }
+            if (mobEntity instanceof OwnedEntity){
+                OwnedEntity ownedEntity = (OwnedEntity) mobEntity;
+                ownedEntity.setTrueOwner(killer);
+            }
+
+            mobEntity.level.addFreshEntity(t);
+            if (mobEntity.isPassenger()) {
+                Entity entity = mobEntity.getVehicle();
+                mobEntity.stopRiding();
+                t.startRiding(entity, true);
+            }
+
+            mobEntity.remove();
+            return t;
+        }
     }
 }

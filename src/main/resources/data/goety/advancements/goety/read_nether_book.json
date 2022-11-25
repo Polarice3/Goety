@@ -1,4 +1,19 @@
 {
+  "display": {
+    "icon": {
+      "item": "goety:nether_book_translated"
+    },
+    "title": {
+      "translate": "advancements.goety.read_nether_book.title"
+    },
+    "description": {
+      "translate": "advancements.goety.read_nether_book.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
   "parent": "goety:goety/root",
   "criteria": {
     "nether_book": {

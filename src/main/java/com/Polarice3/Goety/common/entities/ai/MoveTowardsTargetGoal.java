@@ -23,14 +23,12 @@ public class MoveTowardsTargetGoal<T extends CreatureEntity> extends Goal {
     @Override
     public boolean canUse() {
         List<PlayerEntity> list = this.mob.level.getNearbyEntities(PlayerEntity.class, this.target, this.mob, this.mob.getBoundingBox().inflate(128.0D, 32.0D, 128.0D));
-        if (!list.isEmpty()){
-            this.mob.setTarget(list.get(this.mob.level.random.nextInt(list.size())));
-            LivingEntity livingEntity = this.mob.getTarget();
-            if (livingEntity != null) {
-                return this.mob.distanceTo(livingEntity) > 32.0D;
-            } else {
-                return false;
-            }
+        for (PlayerEntity player : list){
+            this.mob.setTarget(player);
+        }
+        LivingEntity livingEntity = this.mob.getTarget();
+        if (livingEntity != null) {
+            return this.mob.distanceTo(livingEntity) > 32.0D;
         } else {
             return false;
         }

@@ -2,7 +2,7 @@
   "name": "Dark Wand",
   "icon": "goety:soulwand",
   "category": "goety:intro",
-  "sortnum": 4,
+  "sortnum": 5,
   "pages": [
     {
       "type": "patchouli:text",

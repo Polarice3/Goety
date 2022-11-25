@@ -12,9 +12,9 @@
     "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
-    "hidden": true
+    "hidden": false
   },
-  "parent": "goety:goety/root",
+  "parent": "goety:goety/read_forbidden_scroll",
   "criteria": {
     "undeath": {
       "trigger": "minecraft:consume_item",

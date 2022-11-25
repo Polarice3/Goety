@@ -435,7 +435,7 @@ public class SummonedEntity extends OwnedEntity {
 
         public boolean canUse() {
             if (super.canUse()){
-                return !SummonedEntity.this.isStaying();
+                return !SummonedEntity.this.isStaying() || SummonedEntity.this.getTrueOwner() == null;
             } else {
                 return false;
             }

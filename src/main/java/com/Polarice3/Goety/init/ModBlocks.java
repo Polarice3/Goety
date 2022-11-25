@@ -70,6 +70,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> FALSE_PORTAL = BLOCKS.register("false_portal", FalsePortalBlock::new);
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
     public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
+    public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -351,6 +352,8 @@ public class ModBlocks {
             () -> new TallSkullItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON).setISTER(() -> ModItemTERenderer::new)));
     public static final RegistryObject<Item> FROST_BLOCK_ITEM = BLOCK_ITEMS.register("frost_block",
             () -> new BlockItemBase(FROST_BLOCK.get()));
+    public static final RegistryObject<Item> FORBIDDEN_GRASS_BLOCK_ITEM = BLOCK_ITEMS.register("forbidden_grass",
+            () -> new BlockItemBase(FORBIDDEN_GRASS.get()));
 
     //HauntedItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",

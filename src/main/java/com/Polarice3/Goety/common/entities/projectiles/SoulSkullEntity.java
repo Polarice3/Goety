@@ -109,9 +109,8 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                         if (MainConfig.SoulSkullZombie.get()) {
                             if (target instanceof ZombieEntity) {
                                 if (flag2) {
-                                    ZombieMinionEntity summonedentity = ((ZombieEntity) target).convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
+                                    ZombieMinionEntity summonedentity = MobUtil.ownedConversion(livingentity, (ZombieEntity) target, ModEntityType.ZOMBIE_MINION.get(), false);
                                     if (summonedentity != null) {
-                                        summonedentity.setOwnerId(livingentity.getUUID());
                                         if (MainConfig.SoulSkullMinionWander.get()) {
                                             summonedentity.setWandering(true);
                                         }
@@ -130,9 +129,8 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                         if (MainConfig.SoulSkullSkeleton.get()) {
                             if (target instanceof SkeletonEntity) {
                                 if (flag2) {
-                                    SkeletonMinionEntity summonedentity = ((SkeletonEntity) target).convertTo(ModEntityType.SKELETON_MINION.get(), false);
+                                    SkeletonMinionEntity summonedentity = MobUtil.ownedConversion(livingentity, (SkeletonEntity)target, ModEntityType.SKELETON_MINION.get(), false);
                                     if (summonedentity != null) {
-                                        summonedentity.setOwnerId(livingentity.getUUID());
                                         if (MainConfig.SoulSkullMinionWander.get()) {
                                             summonedentity.setWandering(true);
                                         }

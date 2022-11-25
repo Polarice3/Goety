@@ -5,9 +5,11 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.*;
+import com.Polarice3.Goety.utils.LichdomHelper;
+import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
@@ -16,11 +18,13 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
@@ -31,6 +35,7 @@ import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -103,60 +108,32 @@ public class LichEvents {
                 }
             }
 
-            if (player.hasEffect(Effects.REGENERATION)){
-                player.removeEffectNoUpdate(Effects.REGENERATION);
-            }
-            if (player.hasEffect(Effects.POISON)){
-                player.removeEffectNoUpdate(Effects.POISON);
-            }
-            if (player.hasEffect(Effects.BLINDNESS)){
-                player.removeEffectNoUpdate(Effects.BLINDNESS);
-            }
-            if (player.hasEffect(Effects.CONFUSION)){
-                player.removeEffectNoUpdate(Effects.CONFUSION);
-            }
-            if (player.hasEffect(Effects.HUNGER)){
-                player.removeEffectNoUpdate(Effects.HUNGER);
-            }
-            if (player.hasEffect(Effects.SATURATION)){
-                player.removeEffectNoUpdate(Effects.SATURATION);
-            }
-            if (player.hasEffect(ModEffects.DESICCATE.get())){
-                player.removeEffectNoUpdate(ModEffects.DESICCATE.get());
-            }
-            ItemStack goldtotem = GoldTotemFinder.FindTotem(player);
-            if (SEHelper.getSEActive(player)){
-                if (player.hasEffect(ModEffects.SOUL_HUNGER.get())){
-                    if (SEHelper.getSESouls(player) > MainConfig.MaxSouls.get()){
-                        player.removeEffectNoUpdate(ModEffects.SOUL_HUNGER.get());
-                    }
+            for (EffectInstance effectInstance : player.getActiveEffects()){
+                Effect effect = effectInstance.getEffect();
+                if (!new ZombieEntity(world).canBeAffected(effectInstance)){
+                    player.removeEffectNoUpdate(effect);
                 }
-                if (!player.isOnFire()) {
-                    if (player.getHealth() < player.getMaxHealth()) {
-                        if (player.tickCount % 20 == 0 && SEHelper.getSESouls(player) > MainConfig.LichHealCost.get()) {
-                            player.heal(1.0F);
-                            Vector3d vector3d = player.getDeltaMovement();
-                            if (!player.level.isClientSide){
-                                ServerWorld serverWorld = (ServerWorld) player.level;
-                                serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
-                            }
-                            SEHelper.decreaseSESouls(player, MainConfig.LichHealCost.get());
-                            SEHelper.sendSEUpdatePacket(player);
-                        }
-                    }
+                if (effect == Effects.BLINDNESS || effect == Effects.CONFUSION
+                        || effect == Effects.HUNGER || effect == Effects.SATURATION
+                        || effect == ModEffects.DESICCATE.get()){
+                    player.removeEffectNoUpdate(effect);
                 }
-            } else if (!goldtotem.isEmpty()){
-                if (!player.isOnFire()) {
-                    if (player.getHealth() < player.getMaxHealth()) {
-                        if (player.tickCount % 20 == 0 && GoldTotemItem.currentSouls(goldtotem) > MainConfig.LichHealCost.get()) {
-                            player.heal(1.0F);
-                            Vector3d vector3d = player.getDeltaMovement();
-                            if (!player.level.isClientSide){
-                                ServerWorld serverWorld = (ServerWorld) player.level;
-                                serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
-                            }
-                            GoldTotemItem.decreaseSouls(goldtotem, MainConfig.LichHealCost.get());
+            }
+            if (player.hasEffect(ModEffects.SOUL_HUNGER.get())){
+                if (SEHelper.getSoulsAmount(player, MainConfig.MaxSouls.get())){
+                    player.removeEffectNoUpdate(ModEffects.SOUL_HUNGER.get());
+                }
+            }
+            if (!player.isOnFire()) {
+                if (player.getHealth() < player.getMaxHealth()) {
+                    if (player.tickCount % 20 == 0 && SEHelper.getSoulsAmount(player, MainConfig.LichHealCost.get())) {
+                        player.heal(1.0F);
+                        Vector3d vector3d = player.getDeltaMovement();
+                        if (!player.level.isClientSide){
+                            ServerWorld serverWorld = (ServerWorld) player.level;
+                            serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
                         }
+                        SEHelper.decreaseSouls(player, MainConfig.LichHealCost.get());
                     }
                 }
             }
@@ -186,10 +163,7 @@ public class LichEvents {
         if (event.getEntityLiving() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (LichdomHelper.isLich(player)){
-                if (event.getPotionEffect().getEffect() == Effects.POISON){
-                    event.setResult(Event.Result.DENY);
-                }
-                if (event.getPotionEffect().getEffect() == Effects.REGENERATION){
+                if (!new ZombieEntity(player.level).canBeAffected(event.getPotionEffect())){
                     event.setResult(Event.Result.DENY);
                 }
                 if (event.getPotionEffect().getEffect() == Effects.BLINDNESS){
@@ -285,8 +259,23 @@ public class LichEvents {
         if (event.getSource().getEntity() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getSource().getEntity();
             if (LichdomHelper.isLich(player)){
-                if (player.getMainHandItem().isEmpty()){
+                if (player.getMainHandItem().isEmpty() && event.getEntityLiving() != player){
                     event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void AttackEvent(LivingAttackEvent event){
+        if (event.getEntityLiving() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            if (LichdomHelper.isLich(player)) {
+                if (!new ZombieEntity(player.level).hurt(event.getSource(), event.getAmount())) {
+                    event.setCanceled(true);
+                }
+                if (event.getSource() == DamageSource.DROWN){
+                    event.setCanceled(true);
                 }
             }
         }

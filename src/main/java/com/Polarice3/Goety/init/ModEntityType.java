@@ -558,6 +558,14 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireblasttrap").toString()));
 
+    public static final RegistryObject<EntityType<MagicBlastTrapEntity>> MAGICBLASTTRAP = ENTITY_TYPES.register("magicblasttrap",
+            () -> EntityType.Builder.<MagicBlastTrapEntity>of(MagicBlastTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(1.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .build(new ResourceLocation(Goety.MOD_ID, "magicblasttrap").toString()));
+
     public static final RegistryObject<EntityType<BurningGroundEntity>> BURNING_GROUND = ENTITY_TYPES.register("burning_ground",
             () -> EntityType.Builder.<BurningGroundEntity>of(BurningGroundEntity::new, EntityClassification.MISC)
                     .fireImmune()

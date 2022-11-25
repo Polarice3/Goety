@@ -45,9 +45,6 @@ public class MagicFocusItem extends Item{
         if (stack.getItem() == ModItems.TELEPORT_FOCUS.get()){
             return enchantment == ModEnchantments.RANGE.get();
         }
-        if (stack.getItem() == ModItems.SOULSHIELD_FOCUS.get()){
-            return enchantment == ModEnchantments.DURATION.get();
-        }
         if (stack.getItem() == ModItems.DRAGONFIREBALL_FOCUS.get()){
             return enchantment == ModEnchantments.RADIUS.get()
                     || enchantment == ModEnchantments.DURATION.get();

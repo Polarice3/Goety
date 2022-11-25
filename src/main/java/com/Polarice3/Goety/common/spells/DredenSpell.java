@@ -14,9 +14,12 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 
 public class DredenSpell extends SummonSpells{
@@ -69,6 +72,11 @@ public class DredenSpell extends SummonSpells{
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
+                if (enchantment > 0){
+                    int boost = MathHelper.clamp(enchantment - 1, 0, 10);
+                    summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
+                }
+                this.SummonSap(entityLiving, summonedentity);
                 worldIn.addFreshEntity(summonedentity);
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
@@ -113,6 +121,11 @@ public class DredenSpell extends SummonSpells{
                     summonedentity.setUpgraded(this.NecroPower(entityLiving));
                     summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                     summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                    if (enchantment > 0){
+                        int boost = MathHelper.clamp(enchantment - 1, 0, 10);
+                        summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
+                    }
+                    this.SummonSap(entityLiving, summonedentity);
                     worldIn.addFreshEntity(summonedentity);
                     for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                         worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);

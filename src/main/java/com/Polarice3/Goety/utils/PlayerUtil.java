@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -59,5 +60,9 @@ public class PlayerUtil {
                 reach.removePermanentModifier(REACH_UUID);
             }
         }
+    }
+
+    public static boolean starAmuletActive(PlayerEntity player){
+        return CuriosFinder.findAmulet(player).getItem() == ModItems.STAR_AMULET.get() && MobUtil.healthIsHalved(player);
     }
 }

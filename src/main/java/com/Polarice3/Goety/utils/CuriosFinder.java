@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.common.items.curios.AmuletItem;
+import com.Polarice3.Goety.common.items.curios.GloveItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
 import com.Polarice3.Goety.compat.curios.CuriosLoaded;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,6 +45,28 @@ public class CuriosFinder {
             for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
                 ItemStack itemStack = playerEntity.inventory.getItem(i);
                 if (!itemStack.isEmpty() && isRing(itemStack)) {
+                    foundStack = itemStack;
+                    break;
+                }
+            }
+        }
+
+        return foundStack;
+    }
+
+    private static boolean isGlove(ItemStack itemStack) {
+        return itemStack.getItem() instanceof GloveItem;
+    }
+
+    public static ItemStack findGlove(PlayerEntity playerEntity){
+        ItemStack foundStack = ItemStack.EMPTY;
+        if (CuriosLoaded.CURIOS.isLoaded()) {
+            foundStack = CuriosApi.getCuriosHelper().findEquippedCurio(CuriosFinder::isGlove, playerEntity).map(
+                    ImmutableTriple::getRight).orElse(ItemStack.EMPTY);
+        } else {
+            for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
+                ItemStack itemStack = playerEntity.inventory.getItem(i);
+                if (!itemStack.isEmpty() && isGlove(itemStack)) {
                     foundStack = itemStack;
                     break;
                 }

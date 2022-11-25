@@ -1,13 +1,15 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.ai.ManoeuvrableCrossbowGoal;
+import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
-import net.minecraft.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -19,6 +21,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -41,8 +44,9 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
 
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(1, new PotionGroupGoal<>(this, 1.25F));
         this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 20, 30.0F));
-        this.goalSelector.addGoal(2, new RangedCrossbowAttackGoal<>(this, 1.0D, 24.0F));
+        this.goalSelector.addGoal(2, new ManoeuvrableCrossbowGoal<>(this, 1.0D, 24.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -89,6 +93,7 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
         } else {
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.CROSSBOW));
         }
+        this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
         boolean flag = true;
 
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
@@ -107,6 +112,7 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
                     Item item = getEquipmentForSlot(equipmentslottype, i);
                     if (item != null) {
                         this.setItemSlot(equipmentslottype, new ItemStack(item));
+                        this.setDropChance(equipmentslottype, 0.025F);
                     }
                 }
             }
@@ -139,7 +145,16 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
     }
 
     protected AbstractArrowEntity getMobArrow(ItemStack arrowStack, float distanceFactor) {
-        return ProjectileHelper.getMobArrow(this, arrowStack, distanceFactor);
+        AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, arrowStack, distanceFactor);
+        if (!this.getActiveEffects().isEmpty()){
+            ArrowEntity arrowEntity = (ArrowEntity) abstractarrowentity;
+            for (EffectInstance effectInstance : this.getActiveEffects()){
+                if (!effectInstance.getEffect().isBeneficial()) {
+                    arrowEntity.addEffect(effectInstance);
+                }
+            }
+        }
+        return abstractarrowentity;
     }
 
     public boolean canFireProjectileWeapon(ShootableItem p_230280_1_) {

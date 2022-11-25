@@ -6,6 +6,7 @@ import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.items.*;
 import com.Polarice3.Goety.common.items.curios.AmuletItem;
+import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
 import com.Polarice3.Goety.common.items.equipment.*;
 import com.Polarice3.Goety.common.items.magic.*;
@@ -82,12 +83,15 @@ public class ModItems {
     public static final RegistryObject<Item> FORBIDDEN_FRAGMENT = ITEMS.register("forbidden_fragment", ItemBase::new);
     public static final RegistryObject<Item> FORBIDDEN_PIECE = ITEMS.register("forbidden_piece", ItemBase::new);
     public static final RegistryObject<Item> BURNING_TUSK = ITEMS.register("burning_tusk", ItemBase::new);
+    public static final RegistryObject<Item> LAPIS_STRING = ITEMS.register("lapis_string", ItemBase::new);
 
     //Curios
     public static final RegistryObject<GoldTotemItem> GOLDTOTEM = ITEMS.register("goldtotem", GoldTotemItem::new);
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", AmuletItem::new);
+    public static final RegistryObject<Item> STAR_AMULET = ITEMS.register("star_amulet", AmuletItem::new);
     public static final RegistryObject<Item> RING_OF_WANT = ITEMS.register("ring_of_want", RingItem::new);
+    public static final RegistryObject<Item> GRAVE_GLOVE = ITEMS.register("grave_glove", GraveGloveItem::new);
 
     //Focuses
     public static final RegistryObject<Item> VEXING_FOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));

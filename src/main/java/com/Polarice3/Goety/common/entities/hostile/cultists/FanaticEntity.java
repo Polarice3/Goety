@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -54,6 +55,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(1, new PotionGroupGoal<>(this, 1.25F));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
         this.goalSelector.addGoal(2, new PitchforkAttackGoal(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(2, new ThrowBombsGoal(this));
@@ -264,6 +266,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         } else {
             this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.PITCHFORK.get()));
         }
+        this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
         boolean flag = true;
 
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
@@ -282,6 +285,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
                     Item item = getEquipmentForSlot(equipmentslottype, i);
                     if (item != null) {
                         this.setItemSlot(equipmentslottype, new ItemStack(item));
+                        this.setDropChance(equipmentslottype, 0.025F);
                     }
                 }
             }
@@ -309,7 +313,10 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         }
 
         public boolean canUse() {
-            return super.canUse() && this.fanatic.getMainHandItem().getItem() == ModItems.PITCHFORK.get();
+            return super.canUse()
+                    && this.fanatic.getTarget() != null
+                    && !this.fanatic.getTarget().closerThan(this.fanatic, 5.0F)
+                    && this.fanatic.getMainHandItem().getItem() == ModItems.PITCHFORK.get();
         }
 
         public void start() {

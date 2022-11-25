@@ -1,8 +1,12 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.utils.ServerParticleUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -14,12 +18,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -32,13 +41,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
     private static final DataParameter<Boolean> IS_PRAYING = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.BOOLEAN);
-    private static final Predicate<LivingEntity> field_213690_b = (p_213685_0_) -> {
-        return p_213685_0_.isAlive() && !(p_213685_0_ instanceof ChannellerEntity);
-    };
     private static final DataParameter<Optional<UUID>> ALLY_UUID = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.OPTIONAL_UUID);
     private int prayingTick;
 
@@ -107,12 +112,12 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
     }
 
     @Nullable
-    public MonsterEntity getAlly() {
+    public MobEntity getAlly() {
         try {
             UUID uuid = this.getAllyUUID();
             if (uuid != null){
-                if (EntityFinder.getLivingEntityByUuiD(uuid) instanceof MonsterEntity){
-                    return (MonsterEntity) EntityFinder.getLivingEntityByUuiD(uuid);
+                if (EntityFinder.getLivingEntityByUuiD(uuid) instanceof MobEntity){
+                    return (MobEntity) EntityFinder.getLivingEntityByUuiD(uuid);
                 }
             }
             return null;
@@ -130,8 +135,8 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
         this.entityData.set(ALLY_UUID, Optional.ofNullable(uuid));
     }
 
-    public void setAlly(MonsterEntity monster){
-        this.setAllyUUID(monster.getUUID());
+    public void setAlly(MobEntity mob){
+        this.setAllyUUID(mob.getUUID());
     }
 
     public boolean hurt(DamageSource source, float amount){
@@ -163,8 +168,6 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
         return false;
     }
 
-    private final EntityPredicate ally = (new EntityPredicate().range(32.0D).allowSameTeam().selector(field_213690_b));
-
     public void setIsPraying(boolean praying) {
         this.entityData.set(IS_PRAYING, praying);
     }
@@ -194,8 +197,22 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                     this.getAlly().setPersistenceRequired();
                     if (this.getHealth() < this.getMaxHealth()) {
                         if (this.tickCount % 10 == 0) {
-                            this.getAlly().hurt(DamageSource.STARVE, 5.0F);
-                            this.heal(5.0F);
+                            this.getAlly().hurt(DamageSource.STARVE, 2.0F);
+                            this.heal(2.0F);
+                        }
+                    }
+                    if (this.getTarget() != null && this.canSee(this.getTarget())){
+                        double d = this.distanceToSqr(this.getTarget());
+                        float f = MathHelper.sqrt(MathHelper.sqrt(d)) * 0.5F;
+                        if (this.tickCount % 100 == 0){
+                            this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
+                            double d0 = Math.min(this.getTarget().getY(), this.getY());
+                            double d1 = Math.max(this.getTarget().getY(), this.getY()) + 1.0D;
+                            spawnBlast(this, this.getTarget().getX(), this.getTarget().getZ(), d0, d1);
+                            for(int i = 0; i < 5; ++i) {
+                                float f1 = f + (float)i * (float)Math.PI * 0.4F;
+                                spawnBlast(this, this.getTarget().getX() + (double) MathHelper.cos(f1) * 1.5D, this.getTarget().getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1);
+                            }
                         }
                     }
                 }
@@ -205,16 +222,26 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                 }
             }
         } else {
-            List<MonsterEntity> list = this.level.getNearbyEntities(MonsterEntity.class, this.ally, this, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
+            List<MobEntity> list = this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
             if (!list.isEmpty()) {
-                for (MonsterEntity ally : list){
-                    if (!(ally instanceof CreeperEntity)){
-                        this.setAlly(ally);
+                for (MobEntity mob : list){
+                    if (mob instanceof MonsterEntity && !(mob instanceof CreeperEntity)){
+                        this.setAlly(mob);
+                    }
+                    if (mob instanceof OwnedEntity){
+                        OwnedEntity ownedEntity = (OwnedEntity) mob;
+                        if (ownedEntity.getTrueOwner() instanceof AbstractCultistEntity){
+                            this.setAlly(mob);
+                        }
                     }
                 }
             }
             this.prayingTick = 0;
-            if (this.tickCount % 100 == 0){
+            if (!this.level.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                ServerParticleUtil.gatheringParticles(ModParticleTypes.FLAME_GATHER.get(), this, serverWorld);
+            }
+            if (this.tickCount % 100 == 0 && !this.isDeadOrDying()){
                 if (this.level instanceof ServerWorld) {
                     ServerWorld serverWorld = (ServerWorld) this.level;
                     OwnedEntity minion = null;
@@ -236,9 +263,49 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                         minion.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(this.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
                         serverWorld.addFreshEntity(minion);
                     }
+                    for(int k = 0; k < 60; ++k) {
+                        float f2 = random.nextFloat() * 4.0F;
+                        float f1 = random.nextFloat() * ((float)Math.PI * 2F);
+                        double d1 = MathHelper.cos(f1) * f2;
+                        double d2 = 0.01D + random.nextDouble() * 0.5D;
+                        double d3 = MathHelper.sin(f1) * f2;
+                        serverWorld.sendParticles(ParticleTypes.SMOKE, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.25F);
+                    }
                 }
             }
         }
+    }
+
+    public void spawnBlast(LivingEntity livingEntity, double pPosX, double pPosZ, double PPPosY, double pOPosY) {
+        BlockPos blockpos = new BlockPos(pPosX, pOPosY, pPosZ);
+        boolean flag = false;
+        double d0 = 0.0D;
+
+        do {
+            BlockPos blockpos1 = blockpos.below();
+            BlockState blockstate = livingEntity.level.getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(livingEntity.level, blockpos1, Direction.UP)) {
+                if (!livingEntity.level.isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = livingEntity.level.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(livingEntity.level, blockpos);
+                    if (!voxelshape.isEmpty()) {
+                        d0 = voxelshape.max(Direction.Axis.Y);
+                    }
+                }
+
+                flag = true;
+                break;
+            }
+
+            blockpos = blockpos.below();
+        } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
+
+        if (flag) {
+            MagicBlastTrapEntity fireBlastTrap = new MagicBlastTrapEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ);
+            fireBlastTrap.setOwner(livingEntity);
+            livingEntity.level.addFreshEntity(fireBlastTrap);
+        }
+
     }
 
     protected float getDamageAfterMagicAbsorb(DamageSource source, float damage) {

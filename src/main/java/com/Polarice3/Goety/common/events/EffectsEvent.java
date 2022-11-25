@@ -201,7 +201,7 @@ public class EffectsEvent {
                         pLivingEntity.addEffect(new EffectInstance(ModEffects.HOSTED.get(), 400, a));
                         break;
                     case 14:
-                        pLivingEntity.addEffect(new EffectInstance(ModEffects.CURSED.get(), 400, a));
+                        pLivingEntity.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 400, a));
                         break;
                     case 15:
                         pLivingEntity.addEffect(new EffectInstance(Effects.UNLUCK, 400, a));

@@ -1,0 +1,24 @@
+{
+  "name": "Magical Fabrics",
+  "icon": "goety:lapis_string",
+  "category": "goety:intro",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Lapis Lazuli seems to be the main component for utilizing magic. Combining it with a bunch of strings creates a special string that channels magic better than its mundane counterpart. By combining these special strings with a dye, you're capable of creating special fabrics."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:lapis_string"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:darkfabric"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:magicfabric"
+    }
+  ]
+}

@@ -69,7 +69,6 @@ public class VexSpell extends SummonSpells {
                 } else {
                     vexentity.setLimitedLife(1);
                     vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
-                    vexentity.addEffect(new EffectInstance(Effects.WEAKNESS, 800, 1));
                 }
                 if (enchantment > 0){
                     Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(vexentity.getMainHandItem());
@@ -77,6 +76,7 @@ public class VexSpell extends SummonSpells {
                     EnchantmentHelper.setEnchantments(map, vexentity.getMainHandItem());
                     vexentity.setItemSlot(EquipmentSlotType.MAINHAND, vexentity.getMainHandItem());
                 }
+                this.SummonSap(entityLiving, vexentity);
                 worldIn.addFreshEntity(vexentity);
             }
             worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
@@ -116,6 +116,7 @@ public class VexSpell extends SummonSpells {
                     EnchantmentHelper.setEnchantments(map, vexentity.getMainHandItem());
                     vexentity.setItemSlot(EquipmentSlotType.MAINHAND, vexentity.getMainHandItem());
                 }
+                this.SummonSap(entityLiving, vexentity);
                 worldIn.addFreshEntity(vexentity);
             }
             this.SummonDown(entityLiving);

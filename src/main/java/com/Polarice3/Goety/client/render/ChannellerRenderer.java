@@ -24,7 +24,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ChannellerRenderer extends MobRenderer<ChannellerEntity, ChannellerModel> {
-    public static final ResourceLocation BEAM_TEXTURES = new ResourceLocation("textures/entity/end_crystal/end_crystal_beam.png");
+    public static final ResourceLocation BEAM_TEXTURES = Goety.location("textures/entity/cultist/channeller_connection.png");
     protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/cultist/channeller.png");
     private static final RenderType BEAM_RENDER_TYPE = RenderType.entitySmoothCutout(BEAM_TEXTURES);
 
@@ -78,9 +78,9 @@ public class ChannellerRenderer extends MobRenderer<ChannellerEntity, Channeller
             int i = 1;
             float f7 = f1 * 0.05F * -1.5F;
             float f8 = f * f;
-            int j = 64 + (int)(f8 * 191.0F);
-            int k = 32 + (int)(f8 * 191.0F);
-            int l = 128 - (int)(f8 * 64.0F);
+            int j = 125 + (int)(f8 * 191.0F);
+            int k = 70 + (int)(f8 * 191.0F);
+            int l = 20 - (int)(f8 * 64.0F);
             float f9 = 0.2F;
             float f10 = 0.282F;
             float f11 = MathHelper.cos(f7 + 2.3561945F) * 0.282F;
@@ -107,29 +107,29 @@ public class ChannellerRenderer extends MobRenderer<ChannellerEntity, Channeller
             MatrixStack.Entry matrixstack$entry = matrixStackIn.last();
             Matrix4f matrix4f = matrixstack$entry.pose();
             Matrix3f matrix3f = matrixstack$entry.normal();
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f19, f4, f20, j, k, l, 0.4999F, f30);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f19, 0.0F, f20, j, k, l, 0.4999F, f29);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f21, 0.0F, f22, j, k, l, 0.0F, f29);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f21, f4, f22, j, k, l, 0.0F, f30);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f23, f4, f24, j, k, l, 0.4999F, f30);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f23, 0.0F, f24, j, k, l, 0.4999F, f29);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f25, 0.0F, f26, j, k, l, 0.0F, f29);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f25, f4, f26, j, k, l, 0.0F, f30);
             float f31 = 0.0F;
             if (entityIn.tickCount % 2 == 0) {
                 f31 = 0.5F;
             }
 
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31);
-            func_229108_a_(ivertexbuilder, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f11, f4, f12, j, k, l, 0.5F, f31 + 0.5F);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f13, f4, f14, j, k, l, 1.0F, f31 + 0.5F);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f17, f4, f18, j, k, l, 1.0F, f31);
+            vertex(ivertexbuilder, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
             matrixStackIn.popPose();
         }
     }
 
-    private static void func_229108_a_(IVertexBuilder p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_) {
-        p_229108_0_.vertex(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).uv(p_229108_9_, p_229108_10_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
+    private static void vertex(IVertexBuilder vertexBuilder, Matrix4f pMatrix4f, Matrix3f pMatrix3f, float pX, float pY, float pZ, int pRed, int pGreen, int pBlue, float pU, float pV) {
+        vertexBuilder.vertex(pMatrix4f, pX, pY, pZ).color(pRed, pGreen, pBlue, 255).uv(pU, pV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(pMatrix3f, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     public ResourceLocation getTextureLocation(ChannellerEntity entity) {

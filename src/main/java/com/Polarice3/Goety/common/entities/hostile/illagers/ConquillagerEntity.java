@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.entities.ai.BackawayCrossbowGoal;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
 import com.google.common.collect.Lists;
@@ -13,7 +14,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.RangedCrossbowAttackGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,7 +51,7 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(2, new FindTargetGoal(this, 10.0F));
-        this.goalSelector.addGoal(3, new RangedCrossbowAttackGoal<>(this, 1.0D, 16.0F));
+        this.goalSelector.addGoal(3, new BackawayCrossbowGoal<>(this, 1.0D, 16.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){

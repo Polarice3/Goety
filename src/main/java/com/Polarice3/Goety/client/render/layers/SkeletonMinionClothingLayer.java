@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class SkeletonMinionClothingLayer <T extends MobEntity & IRangedAttackMob, M extends EntityModel<T>> extends LayerRenderer<T, M> {
     private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID, "textures/entity/skeletonminion_overlay.png");
-    private static final ResourceLocation STRAY = new ResourceLocation(Goety.MOD_ID, "textures/entity/strayminion_overlay.png");
+    private static final ResourceLocation STRAY = new ResourceLocation("textures/entity/skeleton/stray_overlay.png");
     private final SkeletonModel<T> layerModel = new SkeletonModel<>(0.25F, true);
 
     public SkeletonMinionClothingLayer(IEntityRenderer<T, M> p_i50919_1_) {

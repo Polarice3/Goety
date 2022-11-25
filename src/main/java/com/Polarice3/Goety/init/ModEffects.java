@@ -34,6 +34,8 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 4866583));
     public static final RegistryObject<Effect> CURSED = EFFECTS.register("cursed",
             () -> new ModEffect(EffectType.HARMFUL, 197379));
+    public static final RegistryObject<Effect> SAPPED = EFFECTS.register("sapped",
+            () -> new ModEffect(EffectType.HARMFUL, 197379));
     public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
             () -> new ModEffect(EffectType.HARMFUL, 4866583));
     public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
@@ -41,6 +43,8 @@ public class ModEffects {
     public static final RegistryObject<Effect> BURN_HEX = EFFECTS.register("apostle_curse",
             () -> new ModEffect(EffectType.HARMFUL, 2236962));
     public static final RegistryObject<Effect> SOUL_SHIELD = EFFECTS.register("soul_shield",
+            () -> new ModEffect(EffectType.BENEFICIAL, 0));
+    public static final RegistryObject<Effect> ILLAGER_BANE = EFFECTS.register("illager_bane",
             () -> new ModEffect(EffectType.BENEFICIAL, 0));
     public static final RegistryObject<Effect> HEALTH_LOSS = EFFECTS.register("health_loss",
             () -> new ModEffect(EffectType.HARMFUL, 9244735)

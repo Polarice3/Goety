@@ -1,9 +1,19 @@
 {
-  "type": "goety:cursed_burner_recipes",
-  "ingredient": {
-    "item": "minecraft:yellow_wool"
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#$#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "goety:lapis_string"
+    },
+    "$": {
+      "item": "minecraft:yellow_dye"
+    }
   },
-  "result": "goety:magicfabric",
-  "experience": 0.0,
-  "cookingtime": 60
+  "result": {
+    "item": "goety:magicfabric"
+  }
 }

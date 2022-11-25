@@ -7,7 +7,7 @@
   "craftType": "lich",
   "entity_to_sacrifice": {
     "tag": "forge:villagers",
-    "display_name": "info.goety.ritual.villager"
+    "display_name": "entity.minecraft.villager.none"
   },
   "soulCost": 1000,
   "duration": 60,

@@ -2,26 +2,23 @@
   "type": "goety:ritual",
   "ritual_type": "goety:craft",
   "activation_item": {
-    "item": "goety:emptycore"
+    "item": "minecraft:nether_star"
   },
   "craftType": "magic",
   "soulCost": 1,
   "duration": 10,
   "ingredients": [
     {
-      "item": "minecraft:nether_star"
+      "tag": "forge:string"
     },
     {
-      "item": "minecraft:shield"
+      "tag": "forge:string"
     },
     {
-      "item": "minecraft:shield"
-    },
-    {
-      "tag": "forge:ender_pearls"
+      "tag": "forge:gems/lapis"
     }
   ],
   "result": {
-    "item": "goety:soulshieldfocus"
+    "item": "goety:star_amulet"
   }
 }

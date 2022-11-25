@@ -1,9 +1,11 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -16,11 +18,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -108,7 +113,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NETHER_BOOK.get()));
-        this.setDropChance(EquipmentSlotType.MAINHAND, 0.025F);
+        this.setDropChance(EquipmentSlotType.MAINHAND, 0.085F);
         this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTISTHELM.get()));
         this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.CULTISTROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
@@ -131,6 +136,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                     Item item = getEquipmentForSlot(equipmentslottype, i);
                     if (item != null) {
                         this.setItemSlot(equipmentslottype, new ItemStack(item));
+                        this.setDropChance(equipmentslottype, 0.025F);
                     }
                 }
             }
@@ -243,22 +249,64 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         public void castSpell() {
             LivingEntity livingentity = DiscipleEntity.this.getTarget();
             if (livingentity != null) {
-                double d0 = DiscipleEntity.this.distanceToSqr(livingentity);
-                float f = MathHelper.sqrt(MathHelper.sqrt(d0)) * 0.5F;
-                double d1 = livingentity.getX() - DiscipleEntity.this.getX();
-                double d2 = livingentity.getY(0.5D) - DiscipleEntity.this.getY(0.5D);
-                double d3 = livingentity.getZ() - DiscipleEntity.this.getZ();
-                for(int i = 0; i < 3; ++i) {
-                    SmallFireballEntity smallfireballentity = new SmallFireballEntity(DiscipleEntity.this.level, DiscipleEntity.this, d1 + DiscipleEntity.this.getRandom().nextGaussian() * (double)f, d2, d3 + DiscipleEntity.this.getRandom().nextGaussian() * (double)f);
-                    smallfireballentity.setPos(smallfireballentity.getX(), DiscipleEntity.this.getY(0.5), smallfireballentity.getZ());
-                    DiscipleEntity.this.level.addFreshEntity(smallfireballentity);
-                }
-                if (!DiscipleEntity.this.isSilent()) {
-                    DiscipleEntity.this.level.levelEvent(null, 1016, DiscipleEntity.this.blockPosition(), 0);
+                double d = DiscipleEntity.this.distanceToSqr(livingentity);
+                float f = MathHelper.sqrt(MathHelper.sqrt(d)) * 0.5F;
+                if (!livingentity.fireImmune() && !livingentity.hasEffect(Effects.FIRE_RESISTANCE)) {
+                    double d1 = livingentity.getX() - DiscipleEntity.this.getX();
+                    double d2 = livingentity.getY(0.5D) - DiscipleEntity.this.getY(0.5D);
+                    double d3 = livingentity.getZ() - DiscipleEntity.this.getZ();
+                    for (int i = 0; i < 3; ++i) {
+                        SmallFireballEntity smallfireballentity = new SmallFireballEntity(DiscipleEntity.this.level, DiscipleEntity.this, d1 + DiscipleEntity.this.getRandom().nextGaussian() * (double) f, d2, d3 + DiscipleEntity.this.getRandom().nextGaussian() * (double) f);
+                        smallfireballentity.setPos(smallfireballentity.getX(), DiscipleEntity.this.getY(0.5), smallfireballentity.getZ());
+                        DiscipleEntity.this.level.addFreshEntity(smallfireballentity);
+                    }
+                    if (!DiscipleEntity.this.isSilent()) {
+                        DiscipleEntity.this.level.levelEvent(null, 1016, DiscipleEntity.this.blockPosition(), 0);
+                    }
+                } else {
+                    double d0 = Math.min(DiscipleEntity.this.getTarget().getY(), DiscipleEntity.this.getY());
+                    double d1 = Math.max(DiscipleEntity.this.getTarget().getY(), DiscipleEntity.this.getY()) + 1.0D;
+                    spawnBlast(DiscipleEntity.this, livingentity.getX(), livingentity.getZ(), d0, d1);
+                    for(int i = 0; i < 5; ++i) {
+                        float f1 = f + (float)i * (float)Math.PI * 0.4F;
+                        spawnBlast(DiscipleEntity.this, DiscipleEntity.this.getTarget().getX() + (double)MathHelper.cos(f1) * 1.5D, DiscipleEntity.this.getTarget().getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1);
+                    }
                 }
                 DiscipleEntity.this.cooldown = 0;
                 ++DiscipleEntity.this.spellcycle;
             }
+        }
+
+        public void spawnBlast(LivingEntity livingEntity, double pPosX, double pPosZ, double PPPosY, double pOPosY) {
+            BlockPos blockpos = new BlockPos(pPosX, pOPosY, pPosZ);
+            boolean flag = false;
+            double d0 = 0.0D;
+
+            do {
+                BlockPos blockpos1 = blockpos.below();
+                BlockState blockstate = livingEntity.level.getBlockState(blockpos1);
+                if (blockstate.isFaceSturdy(livingEntity.level, blockpos1, Direction.UP)) {
+                    if (!livingEntity.level.isEmptyBlock(blockpos)) {
+                        BlockState blockstate1 = livingEntity.level.getBlockState(blockpos);
+                        VoxelShape voxelshape = blockstate1.getCollisionShape(livingEntity.level, blockpos);
+                        if (!voxelshape.isEmpty()) {
+                            d0 = voxelshape.max(Direction.Axis.Y);
+                        }
+                    }
+
+                    flag = true;
+                    break;
+                }
+
+                blockpos = blockpos.below();
+            } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
+
+            if (flag) {
+                MagicBlastTrapEntity fireBlastTrap = new MagicBlastTrapEntity(livingEntity.level, pPosX, (double)blockpos.getY() + d0, pPosZ);
+                fireBlastTrap.setOwner(livingEntity);
+                livingEntity.level.addFreshEntity(fireBlastTrap);
+            }
+
         }
 
         protected SoundEvent getSpellPrepareSound() {

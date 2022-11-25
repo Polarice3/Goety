@@ -29,7 +29,7 @@ public enum ModArmorMaterial implements IArmorMaterial {
     ARMOREDFELTURGE(Goety.MOD_ID + ":armoredfelturge", 15, new int[]{2, 5, 6, 2}, 25,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.CURSED_INGOT.get());
     }),
-    FROST(Goety.MOD_ID + ":frost", 25, new int[]{2, 5, 6, 2}, 20,
+    FROST(Goety.MOD_ID + ":frost", 27, new int[]{2, 5, 6, 2}, 20,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.FROST_INGOT.get());
     });
 

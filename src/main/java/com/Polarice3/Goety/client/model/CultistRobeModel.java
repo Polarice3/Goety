@@ -51,15 +51,15 @@ public class CultistRobeModel<T extends LivingEntity> extends BipedModel<T> {
         Mask.texOffs(0, 76).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
 
         Body = new ModelRenderer(this);
-        Body.setPos(0.0F, 13.0F, 0.0F);
+        Body.setPos(0.0F, 0.0F, 0.0F);
         darkrobe.addChild(Body);
-        Body.texOffs(16, 48).addBox(-4.0F, -12.0F, -2.0F, 8.0F, 24.0F, 4.0F, 1.01F, false);
-        Body.texOffs(0, 92).addBox(-5.0F, -13.0F, -4.0F, 10.0F, 6.0F, 8.0F, 0.0F, false);
+        Body.texOffs(16, 48).addBox(-4.0F, 1.0F, -2.0F, 8.0F, 24.0F, 4.0F, 1.01F, false);
+        Body.texOffs(0, 92).addBox(-6.0F, -1.0F, -4.0F, 12.0F, 8.0F, 8.0F, -0.75F, false);
 
         RightArm = new ModelRenderer(this);
         RightArm.setPos(-1.5F, 5.0F, 0.0F);
         darkrobe.addChild(RightArm);
-        RightArm.texOffs(40, 48).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, 1.0F, false);
+        RightArm.texOffs(40, 48).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.5F, false);
 
         Pauldron = new ModelRenderer(this);
         Pauldron.setPos(-0.5F, -5.0F, 0.0F);
@@ -69,7 +69,7 @@ public class CultistRobeModel<T extends LivingEntity> extends BipedModel<T> {
         LeftArm = new ModelRenderer(this);
         LeftArm.setPos(1.5F, 5.0F, 0.0F);
         darkrobe.addChild(LeftArm);
-        LeftArm.texOffs(40, 48).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, 1.0F, true);
+        LeftArm.texOffs(40, 48).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, 0.5F, true);
 
         Pauldron2 = new ModelRenderer(this);
         Pauldron2.setPos(0.5F, -5.0F, 0.0F);

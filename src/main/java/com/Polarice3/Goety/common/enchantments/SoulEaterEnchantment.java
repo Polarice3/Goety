@@ -3,7 +3,6 @@ package com.Polarice3.Goety.common.enchantments;
 import com.Polarice3.Goety.MainConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.inventory.EquipmentSlotType;
 
 public class SoulEaterEnchantment extends Enchantment {

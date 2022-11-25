@@ -5,6 +5,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
 import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
+import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -49,7 +50,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount{
+public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IOwned {
     protected static final DataParameter<Byte> STATUS = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
     protected static final DataParameter<Byte> SITTING = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.OPTIONAL_UUID);

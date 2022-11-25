@@ -1,0 +1,33 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "craftType": "necroturgy",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "goety:dried_remnant"
+    },
+    {
+      "item": "goety:dried_remnant"
+    },
+    {
+      "item": "goety:lapis_string"
+    },
+    {
+      "item": "goety:lapis_string"
+    }
+  ],
+  "result": {
+    "item": "goety:grave_glove"
+  }
+}

@@ -76,6 +76,7 @@ public class UndeadWolfSpell extends SummonSpells{
                     int boost = MathHelper.clamp(enchantment - 1, 0, 10);
                     summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
                 }
+                this.SummonSap(entityLiving, summonedentity);
                 worldIn.addFreshEntity(summonedentity);
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
@@ -123,6 +124,7 @@ public class UndeadWolfSpell extends SummonSpells{
                         int boost = MathHelper.clamp(enchantment - 1, 0, 10);
                         summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
                     }
+                    this.SummonSap(entityLiving, summonedentity);
                     worldIn.addFreshEntity(summonedentity);
                     for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                         worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);

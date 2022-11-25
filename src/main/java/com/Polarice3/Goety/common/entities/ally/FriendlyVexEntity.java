@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.monster.VexEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,14 @@ public class FriendlyVexEntity extends MinionEntity {
         if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 1.0F);
+        }
+        for (VexEntity target : this.level.getEntitiesOfClass(VexEntity.class, this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE)))) {
+            if (target.getType() == EntityType.VEX) {
+                if (target.isAlive() && !target.isDeadOrDying()) {
+                    this.setTarget(target);
+                    target.setTarget(this);
+                }
+            }
         }
         super.tick();
     }

@@ -40,11 +40,11 @@ public class PoisonBallEntity extends ProjectileItemEntity {
         super(p_i50147_1_, p_i50147_2_);
     }
 
-    public PoisonBallEntity(EntityType<? extends ProjectileItemEntity> p_i48541_1_, double p_i50156_2_, double p_i50156_4_, double p_i50156_6_, World p_i50156_8_) {
+    public PoisonBallEntity(double p_i50156_2_, double p_i50156_4_, double p_i50156_6_, World p_i50156_8_) {
         super(ModEntityType.POISON_BALL.get(), p_i50156_2_, p_i50156_4_, p_i50156_6_, p_i50156_8_);
     }
 
-    public PoisonBallEntity(EntityType<? extends ProjectileItemEntity> p_i50157_1_, LivingEntity p_i50157_2_, World p_i50157_3_) {
+    public PoisonBallEntity(LivingEntity p_i50157_2_, World p_i50157_3_) {
         super(ModEntityType.POISON_BALL.get(), p_i50157_2_, p_i50157_3_);
     }
 

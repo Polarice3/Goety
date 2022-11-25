@@ -4,7 +4,6 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
-import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
@@ -18,10 +17,8 @@ import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -29,8 +26,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
-
-import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -57,30 +52,6 @@ public class ClientEvents {
         if (player != null) {
             if (LichdomHelper.isLich(player)){
                 event.setCanceled(true);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void renderFogColors(EntityViewRenderEvent.FogColors event){
-        ApostleEntity apostleEntity = null;
-        Set<MobEntity> bosses = BossBarEvent.getBosses();
-        if (!bosses.isEmpty()){
-            for (MobEntity boss : bosses){
-                if (boss instanceof ApostleEntity && apostleEntity == null){
-                    apostleEntity = (ApostleEntity) boss;
-                }
-            }
-        }
-        if (apostleEntity != null && !apostleEntity.removed){
-            if (!apostleEntity.isSecondPhase()) {
-                event.setRed(event.getRed() * 0.7F);
-                event.setGreen(event.getGreen() * 0.5F);
-                event.setBlue(event.getBlue() * 0.5F);
-            } else {
-                event.setRed(event.getRed() * 0.3F);
-                event.setGreen(event.getGreen() * 0.3F);
-                event.setBlue(event.getBlue() * 0.3F);
             }
         }
     }

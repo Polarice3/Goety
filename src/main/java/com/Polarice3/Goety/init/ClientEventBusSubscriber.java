@@ -8,6 +8,7 @@ import com.Polarice3.Goety.client.gui.screen.inventory.WandandBagScreen;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
 import com.Polarice3.Goety.client.particles.*;
 import com.Polarice3.Goety.client.render.*;
+import com.Polarice3.Goety.client.render.layers.PlayerSoulShieldLayer;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.client.renderer.tileentity.SignTileEntityRenderer;
 import net.minecraft.entity.EntityType;
@@ -41,6 +43,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventBusSubscriber {
@@ -129,6 +133,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ARROWRAINTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADOTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIREBLASTTRAP.get(), TrapRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MAGICBLASTTRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_GROUND.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_GROUND.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STORMUTIL.get(), TrapRenderer::new);
@@ -140,6 +145,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_FANG_TOTEM.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_LIGHT.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GLOW_LIGHT.get(), ModTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FORBIDDEN_GRASS.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_KILN.get(), CursedKilnTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
@@ -179,6 +185,10 @@ public class ClientEventBusSubscriber {
             Atlases.addWoodType(ModWoodType.GLOOM);
             Atlases.addWoodType(ModWoodType.MURK);
         });
+        Map<String, PlayerRenderer> skinMap = Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap();
+        for (PlayerRenderer render : skinMap.values()) {
+            render.addLayer(new PlayerSoulShieldLayer(render));
+        }
 
         ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("souls"),
                 (stack, world, living) -> ((float) GoldTotemItem.currentSouls(stack)) / GoldTotemItem.MAXSOULS);
@@ -244,6 +254,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.DEAD_SAND_EXPLOSION_EMITTER.get(), new HugeDSEParticle.Factory());
         particles.register(ModParticleTypes.LASER_GATHER.get(), GatheringParticle.Factory::new);
         particles.register(ModParticleTypes.SONIC_GATHER.get(), GatheringParticle.Factory::new);
+        particles.register(ModParticleTypes.FLAME_GATHER.get(), GatheringParticle.Factory::new);
         particles.register(ModParticleTypes.POISON.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.BURNING.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.CULT_SPELL.get(), SpellParticle.MobFactory::new);

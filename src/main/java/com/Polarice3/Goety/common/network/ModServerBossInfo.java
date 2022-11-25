@@ -57,7 +57,7 @@ public class ModServerBossInfo extends BossInfo {
 
     }
 
-    public BossInfo setDarkenScreen(boolean pDarkenSky) {
+    public ModServerBossInfo setDarkenScreen(boolean pDarkenSky) {
         if (pDarkenSky != this.darkenScreen) {
             super.setDarkenScreen(pDarkenSky);
             this.broadcast(SUpdateBossInfoPacket.Operation.UPDATE_PROPERTIES);
@@ -75,7 +75,7 @@ public class ModServerBossInfo extends BossInfo {
         return this;
     }
 
-    public BossInfo setCreateWorldFog(boolean pCreateFog) {
+    public ModServerBossInfo setCreateWorldFog(boolean pCreateFog) {
         if (pCreateFog != this.createWorldFog) {
             super.setCreateWorldFog(pCreateFog);
             this.broadcast(SUpdateBossInfoPacket.Operation.UPDATE_PROPERTIES);

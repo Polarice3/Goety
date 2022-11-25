@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.items.equipment;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
@@ -116,7 +117,13 @@ public class DarkScytheItem extends TieredItem implements IVanishable {
                         }
                         pStack.hurtAndBreak(1, pPlayer, (p_220045_0_) ->
                                 p_220045_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
-                        SEHelper.increaseSouls(pPlayer, MainConfig.DarkScytheSouls.get() * soulEater);
+                        if (livingentity instanceof IOwned){
+                            if (((IOwned) livingentity).getTrueOwner() != pPlayer){
+                                SEHelper.increaseSouls(pPlayer, MainConfig.DarkScytheSouls.get() * soulEater);
+                            }
+                        } else {
+                            SEHelper.increaseSouls(pPlayer, MainConfig.DarkScytheSouls.get() * soulEater);
+                        }
                         EnchantmentHelper.doPostHurtEffects(livingentity, pPlayer);
                         EnchantmentHelper.doPostDamageEffects(pPlayer, livingentity);
                     }

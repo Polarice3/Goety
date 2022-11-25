@@ -9,7 +9,7 @@ import net.minecraft.util.LazyValue;
 import java.util.function.Supplier;
 
 public enum ModItemTiers implements IItemTier {
-    FROST(3, 1000, 7.0F, 2.0F, 20, () -> {
+    FROST(3, 1000, 7.0F, 2.5F, 20, () -> {
         return Ingredient.of(ModItems.FROST_INGOT.get());
     }),
     DEATH(4, 444, 12.0F, 4.0F, 22, () -> {

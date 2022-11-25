@@ -32,6 +32,8 @@ import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.items.ModItemTiers;
+import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
+import com.Polarice3.Goety.common.items.equipment.DarkScytheItem;
 import com.Polarice3.Goety.common.items.equipment.DeathScytheItem;
 import com.Polarice3.Goety.common.items.equipment.FrostScytheItem;
 import com.Polarice3.Goety.common.items.equipment.WarpedSpearItem;
@@ -44,6 +46,9 @@ import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
@@ -61,6 +66,7 @@ import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
@@ -100,6 +106,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -626,6 +633,25 @@ public class ModEvents {
                 }
             }
         }
+
+        float increaseAttackSpeed = 0.5F;
+        ModifiableAttributeInstance attackSpeed = player.getAttribute(Attributes.ATTACK_SPEED);
+        AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString("d4818bbc-54ed-4ecf-95a3-a15fbf71b31d"), "Scythe Proficiency", increaseAttackSpeed, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        boolean flag = CuriosFinder.findGlove(player).getItem() instanceof GraveGloveItem && player.getMainHandItem().getItem() instanceof DarkScytheItem;
+        if (attackSpeed != null){
+            if (flag){
+                if (!attackSpeed.hasModifier(attributemodifier)){
+                    attackSpeed.addPermanentModifier(attributemodifier);
+                }
+            } else {
+                if (attackSpeed.hasModifier(attributemodifier)){
+                    attackSpeed.removeModifier(attributemodifier);
+                }
+            }
+        }
+        if (PlayerUtil.starAmuletActive(player)){
+            player.abilities.flying &= player.isCreative();
+        }
     }
 
     @SubscribeEvent
@@ -753,6 +779,14 @@ public class ModEvents {
             int i = effectInstance.getAmplifier() + 1;
             event.setAmount(event.getAmount() * (1.0F + i));
         }
+        if (victim.hasEffect(ModEffects.SAPPED.get())){
+            EffectInstance effectInstance = victim.getEffect(ModEffects.SAPPED.get());
+            assert effectInstance != null;
+            int i = effectInstance.getAmplifier();
+            float j = 1.2F + ((float)(i/10) * 2);
+            float f = event.getAmount() * j;
+            event.setAmount(f);
+        }
         if (RobeArmorFinder.FindFelArmor(victim)){
             if (event.getSource().isExplosion()){
                 event.setAmount((float) (event.getAmount()/1.5));
@@ -842,7 +876,7 @@ public class ModEvents {
                     }
                 }
                 if (weapon instanceof DeathScytheItem){
-                    victim.addEffect(new EffectInstance(Effects.WITHER, 60, 1));
+                    victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 60, 1));
                 }
             }
         }
@@ -897,8 +931,9 @@ public class ModEvents {
                     }
                 }
             }
-            if (victim.hasEffect(ModEffects.SOUL_SHIELD.get())){
-                if (!(arrowEntity.getOwner() instanceof ApostleEntity)){
+            if (victim instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) victim;
+                if (PlayerUtil.starAmuletActive(player)){
                     event.setCanceled(true);
                 }
             }
@@ -908,11 +943,15 @@ public class ModEvents {
     @SubscribeEvent
     public static void DamageEvent(LivingDamageEvent event){
         LivingEntity entity = event.getEntityLiving();
-        if (entity.hasEffect(ModEffects.SOUL_SHIELD.get())){
-            if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity && !(event.getSource().getEntity() instanceof ApostleEntity)){
-                event.setCanceled(true);
+        if (entity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entity;
+            if (PlayerUtil.starAmuletActive(player)){
+                if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
+                    event.setCanceled(true);
+                }
             }
         }
+
         if (event.getSource().getEntity() instanceof OwnedEntity){
             OwnedEntity summonedEntity = (OwnedEntity) event.getSource().getEntity();
             if (summonedEntity.getTrueOwner() != null){
@@ -993,11 +1032,20 @@ public class ModEvents {
             }
         }
         if (killed instanceof SkeletonEntity){
+            SkeletonEntity skeletonEntity = (SkeletonEntity) killed;
             if (killer instanceof DredenEntity){
                 StrayEntity strayEntity = ((SkeletonEntity) killed).convertTo(EntityType.STRAY, false);
                 if (strayEntity != null) {
                     strayEntity.finalizeSpawn((IServerWorld) killed.level, killed.level.getCurrentDifficultyAt(strayEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                     net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, strayEntity);
+                    strayEntity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
+                }
+            }
+            if (killer instanceof DredenMinionEntity){
+                DredenMinionEntity dredenMinion = (DredenMinionEntity) killer;
+                StrayMinionEntity strayEntity = MobUtil.ownedConversion(dredenMinion, skeletonEntity, ModEntityType.STRAY_MINION.get(), false);
+                if (strayEntity != null) {
+                    strayEntity.finalizeSpawn((IServerWorld) killed.level, killed.level.getCurrentDifficultyAt(strayEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
                     strayEntity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
                 }
             }
@@ -1205,17 +1253,38 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void PotionApplicationEvents(PotionEvent.PotionApplicableEvent event){
+        if (event.getPotionEffect().getEffect() == Effects.FIRE_RESISTANCE){
+            if (event.getEntityLiving().hasEffect(ModEffects.BURN_HEX.get())){
+                event.setResult(Event.Result.DENY);
+            }
+        }
+        if (event.getPotionEffect().getEffect() == ModEffects.SAPPED.get()){
+            if (event.getEntityLiving().hasEffect(ModEffects.CURSED.get())){
+                event.setResult(Event.Result.DENY);
+            }
+        }
     }
 
     @SubscribeEvent
     public static void PotionAddedEvents(PotionEvent.PotionAddedEvent event){
-        if (event.getPotionEffect().getEffect() == Effects.HERO_OF_THE_VILLAGE){
+        Effect effect = event.getPotionEffect().getEffect();
+        if (effect == Effects.HERO_OF_THE_VILLAGE){
             if (event.getEntityLiving() instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) event.getEntityLiving();
                 if (!GoldTotemFinder.FindTotem(player).isEmpty() || RobeArmorFinder.FindAnySet(player)){
                     InfamyHelper.increaseInfamy(player, 100);
                     InfamyHelper.sendInfamyUpdatePacket(player);
                 }
+            }
+        }
+        if (effect == ModEffects.BURN_HEX.get()){
+            if (event.getEntityLiving().hasEffect(Effects.FIRE_RESISTANCE)){
+                event.getEntityLiving().removeEffect(Effects.FIRE_RESISTANCE);
+            }
+        }
+        if (effect == ModEffects.CURSED.get()){
+            if (event.getEntityLiving().hasEffect(ModEffects.SAPPED.get())){
+                event.getEntityLiving().removeEffect(ModEffects.SAPPED.get());
             }
         }
     }

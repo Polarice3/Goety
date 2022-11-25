@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.neutral;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.TargetGoal;
@@ -29,7 +30,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
-public class OwnedEntity extends CreatureEntity {
+public class OwnedEntity extends CreatureEntity implements IOwned{
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
     protected static final DataParameter<Boolean> HOSTILE = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
     private final NearestAttackableTargetGoal<PlayerEntity> targetGoal = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true);
@@ -59,11 +60,22 @@ public class OwnedEntity extends CreatureEntity {
                     this.setLastHurtByMob(null);
                 }
             }
+            if (ownedEntity.getTrueOwner() == this){
+                this.setTarget(null);
+                if (this.getLastHurtByMob() == ownedEntity){
+                    this.setLastHurtByMob(null);
+                }
+            }
+        }
+        if (this.getTrueOwner() instanceof OwnedEntity){
+            if (this.getTrueOwner().isDeadOrDying() || !this.getTrueOwner().isAlive()){
+                this.kill();
+            }
         }
         if (this.getLastHurtByMob() == this.getTrueOwner()){
             this.setLastHurtByMob(null);
         }
-        for (OwnedEntity target : this.level.getEntitiesOfClass(OwnedEntity.class, this.getBoundingBox().inflate(32))) {
+        for (OwnedEntity target : this.level.getEntitiesOfClass(OwnedEntity.class, this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE)))) {
             if (target.getTrueOwner() != this.getTrueOwner()
                     && this.getTrueOwner() != target.getTrueOwner()
                     && target.getTarget() == this.getTrueOwner()){

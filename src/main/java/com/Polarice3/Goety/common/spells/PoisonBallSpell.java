@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.PoisonBallEntity;
-import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
@@ -24,7 +23,7 @@ public class PoisonBallSpell extends InstantCastSpells{
 
     @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
-        PoisonBallEntity smallFireballEntity = new PoisonBallEntity(ModEntityType.POISON_BALL.get(), entityLiving, worldIn);
+        PoisonBallEntity smallFireballEntity = new PoisonBallEntity(entityLiving, worldIn);
         smallFireballEntity.setOwner(entityLiving);
         smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
         worldIn.addFreshEntity(smallFireballEntity);
@@ -35,7 +34,7 @@ public class PoisonBallSpell extends InstantCastSpells{
     @Override
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         for(int i = 0; i < 3; ++i) {
-            PoisonBallEntity smallFireballEntity = new PoisonBallEntity(ModEntityType.POISON_BALL.get(), entityLiving, worldIn);
+            PoisonBallEntity smallFireballEntity = new PoisonBallEntity(entityLiving, worldIn);
             smallFireballEntity.setOwner(entityLiving);
             smallFireballEntity.setUpgraded(true);
             smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F - (float) i/10, 1.0F - (float) i/10);

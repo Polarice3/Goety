@@ -95,7 +95,7 @@ public class DredenEntity extends MonsterEntity implements ISpewing, IRangedAtta
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
+        return SoundEvents.STRAY_DEATH;
     }
 
     protected SoundEvent getStepSound() {
@@ -105,24 +105,8 @@ public class DredenEntity extends MonsterEntity implements ISpewing, IRangedAtta
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
     }
 
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.25F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.25F);
-        }
-    }
-
-    public void die(DamageSource pCause) {
-        super.die(pCause);
-        SoundEvent soundevent = SoundEvents.STRAY_DEATH;
-        this.playSound(soundevent, 1.0F, 0.25F);
+    protected float getVoicePitch() {
+        return 0.25F;
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {

@@ -165,7 +165,7 @@ public class ThugEntity extends AbstractCultistEntity {
                     for (BlockPos blockpos : BlockPos.betweenClosed(MathHelper.floor(axisalignedbb.minX), MathHelper.floor(axisalignedbb.minY), MathHelper.floor(axisalignedbb.minZ), MathHelper.floor(axisalignedbb.maxX), MathHelper.floor(axisalignedbb.maxY), MathHelper.floor(axisalignedbb.maxZ))) {
                         BlockState blockstate = this.level.getBlockState(blockpos);
                         Block block = blockstate.getBlock();
-                        if (block instanceof LeavesBlock || blockstate.getMaterial() == Material.WOOD) {
+                        if ((block instanceof LeavesBlock || blockstate.getMaterial() == Material.WOOD) && !blockstate.hasTileEntity()) {
                             flag = this.level.destroyBlock(blockpos, true, this) || flag;
                         }
                     }
