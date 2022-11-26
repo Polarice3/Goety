@@ -434,7 +434,7 @@
   "effect.goety.summondown": "Summon Down",
   "effect.goety.summondown.description": "Spells cost more Soul Energy to cast, higher levels increases cost. Newly summoned Mobs will gain Sapped and Weakness.",
   "effect.goety.sapped": "Sapped",
-  "effect.goety.sapped.description": "Causes the player to take 20% more damage per level.",
+  "effect.goety.sapped.description": "Player takes 20% more damage per level.",
   "effect.goety.hosted": "Hosted",
   "effect.goety.hosted.description": "Parasites occasionally spawns on the player.",
   "effect.goety.goldtouched": "Gold Touched",

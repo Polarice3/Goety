@@ -178,98 +178,100 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
 
     public void aiStep() {
         super.aiStep();
-        if (this.getAlly() != null) {
-            if (this.prayingTick < 20) {
-                ++this.prayingTick;
-            } else {
-                if (this.distanceTo(this.getAlly()) >= 12.0D) {
-                    Vector3d vector3d = getAlly().position();
-                    this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
+        if (this.level.isAreaLoaded(this.blockPosition(), 2)) {
+            if (this.getAlly() != null) {
+                if (this.prayingTick < 20) {
+                    ++this.prayingTick;
                 } else {
-                    this.navigation.stop();
-                    this.noActionTime = 0;
-                    this.setIsPraying(true);
-                    this.getLookControl().setLookAt(this.getAlly(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
-                    this.getAlly().setTarget(this.getTarget());
-                    this.getAlly().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
-                    this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
-                    this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
-                    this.getAlly().setPersistenceRequired();
-                    if (this.getHealth() < this.getMaxHealth()) {
-                        if (this.tickCount % 10 == 0) {
-                            this.getAlly().hurt(DamageSource.STARVE, 2.0F);
-                            this.heal(2.0F);
+                    if (this.distanceTo(this.getAlly()) >= 12.0D) {
+                        Vector3d vector3d = getAlly().position();
+                        this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
+                    } else {
+                        this.navigation.stop();
+                        this.noActionTime = 0;
+                        this.setIsPraying(true);
+                        this.getLookControl().setLookAt(this.getAlly(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
+                        this.getAlly().setTarget(this.getTarget());
+                        this.getAlly().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
+                        this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
+                        this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
+                        this.getAlly().setPersistenceRequired();
+                        if (this.getHealth() < this.getMaxHealth()) {
+                            if (this.tickCount % 10 == 0) {
+                                this.getAlly().hurt(DamageSource.STARVE, 2.0F);
+                                this.heal(2.0F);
+                            }
+                        }
+                        if (this.getTarget() != null && this.canSee(this.getTarget())) {
+                            double d = this.distanceToSqr(this.getTarget());
+                            float f = MathHelper.sqrt(MathHelper.sqrt(d)) * 0.5F;
+                            if (this.tickCount % 100 == 0) {
+                                this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
+                                double d0 = Math.min(this.getTarget().getY(), this.getY());
+                                double d1 = Math.max(this.getTarget().getY(), this.getY()) + 1.0D;
+                                spawnBlast(this, this.getTarget().getX(), this.getTarget().getZ(), d0, d1);
+                                for (int i = 0; i < 5; ++i) {
+                                    float f1 = f + (float) i * (float) Math.PI * 0.4F;
+                                    spawnBlast(this, this.getTarget().getX() + (double) MathHelper.cos(f1) * 1.5D, this.getTarget().getZ() + (double) MathHelper.sin(f1) * 1.5D, d0, d1);
+                                }
+                            }
                         }
                     }
-                    if (this.getTarget() != null && this.canSee(this.getTarget())){
-                        double d = this.distanceToSqr(this.getTarget());
-                        float f = MathHelper.sqrt(MathHelper.sqrt(d)) * 0.5F;
-                        if (this.tickCount % 100 == 0){
-                            this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
-                            double d0 = Math.min(this.getTarget().getY(), this.getY());
-                            double d1 = Math.max(this.getTarget().getY(), this.getY()) + 1.0D;
-                            spawnBlast(this, this.getTarget().getX(), this.getTarget().getZ(), d0, d1);
-                            for(int i = 0; i < 5; ++i) {
-                                float f1 = f + (float)i * (float)Math.PI * 0.4F;
-                                spawnBlast(this, this.getTarget().getX() + (double) MathHelper.cos(f1) * 1.5D, this.getTarget().getZ() + (double)MathHelper.sin(f1) * 1.5D, d0, d1);
+                    if (this.getAlly().isDeadOrDying()) {
+                        this.setAllyUUID(null);
+                        this.setIsPraying(false);
+                    }
+                }
+            } else {
+                List<MobEntity> list = this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
+                if (!list.isEmpty()) {
+                    for (MobEntity mob : list) {
+                        if (mob instanceof MonsterEntity && !(mob instanceof CreeperEntity) && !(mob instanceof ChannellerEntity)) {
+                            this.setAlly(mob);
+                        }
+                        if (mob instanceof OwnedEntity) {
+                            OwnedEntity ownedEntity = (OwnedEntity) mob;
+                            if (ownedEntity.getTrueOwner() instanceof AbstractCultistEntity) {
+                                this.setAlly(mob);
                             }
                         }
                     }
                 }
-                if (this.getAlly().isDeadOrDying()) {
-                    this.setAllyUUID(null);
-                    this.setIsPraying(false);
-                }
-            }
-        } else {
-            List<MobEntity> list = this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
-            if (!list.isEmpty()) {
-                for (MobEntity mob : list){
-                    if (mob instanceof MonsterEntity && !(mob instanceof CreeperEntity)){
-                        this.setAlly(mob);
-                    }
-                    if (mob instanceof OwnedEntity){
-                        OwnedEntity ownedEntity = (OwnedEntity) mob;
-                        if (ownedEntity.getTrueOwner() instanceof AbstractCultistEntity){
-                            this.setAlly(mob);
-                        }
-                    }
-                }
-            }
-            this.prayingTick = 0;
-            if (!this.level.isClientSide){
-                ServerWorld serverWorld = (ServerWorld) this.level;
-                ServerParticleUtil.gatheringParticles(ModParticleTypes.FLAME_GATHER.get(), this, serverWorld);
-            }
-            if (this.tickCount % 100 == 0 && !this.isDeadOrDying()){
-                if (this.level instanceof ServerWorld) {
+                this.prayingTick = 0;
+                if (!this.level.isClientSide) {
                     ServerWorld serverWorld = (ServerWorld) this.level;
-                    OwnedEntity minion = null;
-                    switch (this.random.nextInt(3)) {
-                        case (0):
-                            minion = ModEntityType.ZOMBIE_VILLAGER_MINION.get().create(this.level);
-                            break;
-                        case (1):
-                            minion = ModEntityType.SKELETON_VILLAGER_MINION.get().create(this.level);
-                            break;
-                        case (2):
-                            minion = ModEntityType.ZPIGLIN_MINION.get().create(this.level);
-                            break;
-                    }
-                    if (minion != null) {
-                        minion.setTrueOwner(this);
-                        minion.setPos(this.getX(), this.getY(), this.getZ());
-                        minion.spawnAnim();
-                        minion.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(this.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
-                        serverWorld.addFreshEntity(minion);
-                    }
-                    for(int k = 0; k < 60; ++k) {
-                        float f2 = random.nextFloat() * 4.0F;
-                        float f1 = random.nextFloat() * ((float)Math.PI * 2F);
-                        double d1 = MathHelper.cos(f1) * f2;
-                        double d2 = 0.01D + random.nextDouble() * 0.5D;
-                        double d3 = MathHelper.sin(f1) * f2;
-                        serverWorld.sendParticles(ParticleTypes.SMOKE, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.25F);
+                    ServerParticleUtil.gatheringParticles(ModParticleTypes.FLAME_GATHER.get(), this, serverWorld);
+                }
+                if (this.tickCount % 100 == 0 && !this.isDeadOrDying()) {
+                    if (this.level instanceof ServerWorld) {
+                        ServerWorld serverWorld = (ServerWorld) this.level;
+                        OwnedEntity minion = null;
+                        switch (this.random.nextInt(3)) {
+                            case (0):
+                                minion = ModEntityType.ZOMBIE_VILLAGER_MINION.get().create(this.level);
+                                break;
+                            case (1):
+                                minion = ModEntityType.SKELETON_VILLAGER_MINION.get().create(this.level);
+                                break;
+                            case (2):
+                                minion = ModEntityType.ZPIGLIN_MINION.get().create(this.level);
+                                break;
+                        }
+                        if (minion != null) {
+                            minion.setTrueOwner(this);
+                            minion.setPos(this.getX(), this.getY(), this.getZ());
+                            minion.spawnAnim();
+                            minion.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(this.blockPosition()), SpawnReason.MOB_SUMMONED, null, null);
+                            serverWorld.addFreshEntity(minion);
+                        }
+                        for (int k = 0; k < 60; ++k) {
+                            float f2 = random.nextFloat() * 4.0F;
+                            float f1 = random.nextFloat() * ((float) Math.PI * 2F);
+                            double d1 = MathHelper.cos(f1) * f2;
+                            double d2 = 0.01D + random.nextDouble() * 0.5D;
+                            double d3 = MathHelper.sin(f1) * f2;
+                            serverWorld.sendParticles(ParticleTypes.SMOKE, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.25F);
+                        }
                     }
                 }
             }
