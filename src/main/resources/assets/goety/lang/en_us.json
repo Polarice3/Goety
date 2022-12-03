@@ -29,9 +29,10 @@
   "title.goety.8" : "Cruel",
   "title.goety.9" : "Terrible",
   "title.goety.10" : "Glorious",
-  "title.goety.11" : "Accursed",
+  "title.goety.11" : "Atrocious",
 
   "desc.goety.info.focusbag.focus": "Focus",
+
   "entity.goety.channeller":"Channeller",
   "entity.goety.fanatic":"Fanatic",
   "entity.goety.zealot":"Zealot",
@@ -83,6 +84,7 @@
   "entity.goety.spiderling_minion":"Spiderling",
   "entity.goety.creeperling_minion":"Creeperling",
   "entity.goety.tamed_spider":"Loyal Spider",
+
   "entity.goety.vizier":"Vizier",
   "entity.goety.irk":"Irk",
   "entity.goety.scorch":"Scorch",
@@ -102,6 +104,7 @@
   "entity.goety.soulskull":"Soul Skull",
   "entity.goety.corruptskull":"Desiccated Skull",
   "entity.goety.dead_tnt":"Dead TNT",
+  "entity.goety.dead_slime_ball":"Dead Slime Ball",
   "entity.goety.ice_storm":"Ice Storm",
   "entity.goety.soul_bullet":"Soul Bullet",
   "entity.goety.soul_light":"Soul Light",
@@ -220,6 +223,7 @@
   "item.goety.dark_scroll": "Dark Scroll",
   "item.goety.witchbomb": "Witch's Bomb",
   "item.goety.burning_potion": "Burning Potion",
+  "item.goety.dead_slime_ball": "Dead Slime Ball",
 
   "item.goety.soulwand": "Dark Wand",
   "item.goety.soulstaff": "Dark Staff",
@@ -301,6 +305,7 @@
   "item.goety.gloom_boat": "Gloomy Boat",
   "item.goety.murk_boat": "Murky Boat",
   "item.goety.dried_remnant": "Dried Remnant",
+  "item.goety.dead_sand_heap": "Dead Sand Heap",
   "item.goety.forbidden_piece": "Forbidden Piece",
   "item.goety.forbidden_fragment": "Forbidden Fragment",
   "item.goety.forbidden_scroll": "Forbidden Scroll",
@@ -356,6 +361,7 @@
   "block.goety.dead_sandstone_stairs": "Dead Sandstone Stairs",
   "block.goety.dead_sandstone_smooth_stairs": "Dead Smooth Sandstone Stairs",
   "block.goety.dead_sandstone_wall": "Dead Sandstone Wall",
+  "block.goety.dead_pile": "Dead Sand Pile",
   "block.goety.dead_block": "Desiccated Block",
 
   "block.goety.haunted_cactus": "Haunted Cactus",

@@ -67,13 +67,7 @@ public class DryObeliskTileEntity extends TileEntity implements ITickableTileEnt
                             for (BlockPos blockToCheck : blocksToCheck) {
                                 BlockState blockState = this.level.getBlockState(blockToCheck);
                                 if (blockState.getBlock() instanceof IDeadBlock){
-                                    for(Direction direction : Direction.values()) {
-                                        BlockPos blockpos1 = blockToCheck.relative(direction);
-                                        BlockState blockstate = this.level.getBlockState(blockpos1);
-                                        if (BlockFinder.ActivateDeadSand(blockstate)) {
-                                            result.add(blockState.getBlock());
-                                        }
-                                    }
+                                    result.add(blockState.getBlock());
                                 }
                             }
                             if (result.size() < 32) {

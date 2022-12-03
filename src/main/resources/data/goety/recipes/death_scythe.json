@@ -18,7 +18,7 @@
       "tag": "forge:bones"
     },
     {
-      "tag": "forge:bones"
+      "tag": "forge:gems/lapis"
     },
     {
       "item": "goety:apostle_blood_bottle"
@@ -30,7 +30,7 @@
       "item": "minecraft:diamond"
     },
     {
-      "item": "minecraft:netherite_ingot"
+      "item": "goety:savagetooth"
     }
   ],
   "result": {

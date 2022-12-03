@@ -1,20 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " # ",
-    "#*#",
-    " # "
+    "X#X",
+    "#X#",
+    "X#X"
   ],
   "key": {
     "#": {
       "item": "goety:dried_remnant"
     },
-    "*": {
-      "item": "minecraft:tnt"
+    "X": {
+      "item": "minecraft:gunpowder"
     }
   },
   "result": {
-    "item": "goety:dead_tnt",
-    "count": 1
+    "item": "goety:dead_tnt"
   }
 }

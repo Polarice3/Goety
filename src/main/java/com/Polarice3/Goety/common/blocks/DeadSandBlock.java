@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.init.ModBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -25,7 +26,7 @@ public class DeadSandBlock extends FallingBlock implements IDeadBlock {
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
 
     public DeadSandBlock() {
-        super(Properties.of(Material.SAND)
+        super(Properties.of(Material.SAND, MaterialColor.COLOR_PURPLE)
                 .strength(0.5F)
                 .sound(SoundType.SAND)
                 .harvestLevel(0)

@@ -191,7 +191,7 @@ public class BlockFinder {
         }
     }
 
-    public static boolean isWet(World pLevel, BlockPos pPos){
+    public static boolean isInRain(World pLevel, BlockPos pPos){
         if (pLevel.getBiome(pPos).getPrecipitation() != Biome.RainType.NONE){
             return pLevel.isRaining() && pLevel.canSeeSky(pPos);
         } else {

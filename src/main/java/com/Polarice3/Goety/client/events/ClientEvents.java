@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
@@ -17,11 +18,15 @@ import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -79,6 +84,59 @@ public class ClientEvents {
             }
         }
     }
+
+    private static float darkenWorldAmount;
+    private static float darkenWorldAmountO;
+    private static ApostleEntity apostleEntity;
+
+/*    @SubscribeEvent
+    public static void clientTick(TickEvent.ClientTickEvent event){
+        if (apostleEntity == null) {
+            if (!BossBarEvent.getBosses().isEmpty()) {
+                for (MobEntity mob : BossBarEvent.getBosses()) {
+                    if (mob instanceof ApostleEntity && mob.isAlive()) {
+                        apostleEntity = (ApostleEntity) mob;
+                    }
+                }
+            }
+        }
+        darkenWorldAmountO = darkenWorldAmount;
+        if (apostleEntity != null) {
+            darkenWorldAmount += 0.05F;
+            if (darkenWorldAmount > 1.0F) {
+                darkenWorldAmount = 1.0F;
+            }
+            if (apostleEntity.isDeadOrDying() || !apostleEntity.isAlive()){
+                apostleEntity = null;
+            }
+        } else if (darkenWorldAmount > 0.0F) {
+            darkenWorldAmount -= 0.0125F;
+        }
+    }
+
+
+
+    @SubscribeEvent
+    public static void fogColors(EntityViewRenderEvent.FogColors event){
+        float fogRed = event.getRed();
+        float fogGreen = event.getGreen();
+        float fogBlue = event.getBlue();
+        float modifier = (float) MathHelper.lerp(event.getRenderPartialTicks(), darkenWorldAmountO, darkenWorldAmount);
+        if (apostleEntity != null) {
+            if (apostleEntity.isSecondPhase()){
+                fogRed = fogRed * (1.0F - modifier) + fogRed * 0.5F * modifier;
+                fogGreen = fogGreen * (1.0F - modifier) + fogGreen * 0.3F * modifier;
+                fogBlue = fogBlue * (1.0F - modifier) + fogBlue * 0.3F * modifier;
+            } else {
+                fogRed = fogRed * (1.0F - modifier) + fogRed * 0.8F * modifier;
+                fogGreen = fogGreen * (1.0F - modifier) + fogGreen * 0.6F * modifier;
+                fogBlue = fogBlue * (1.0F - modifier) + fogBlue * 0.6F * modifier;
+            }
+        }
+        event.setRed(fogRed);
+        event.setGreen(fogGreen);
+        event.setBlue(fogBlue);
+    }*/
 
     @SubscribeEvent
     public static void offsetFOV(FOVUpdateEvent event){

@@ -22,4 +22,13 @@ public class ExplosionUtil {
         explosion.finalizeExplosion(true);
         return explosion;
     }
+
+    public static FrostExplosion frostExplode(World world, @Nullable Entity pExploder, double pX, double pY, double pZ, float pSize, Explosion.Mode pMode) {
+        FrostExplosion explosion = new FrostExplosion(world, pExploder, pX, pY, pZ, pSize, pMode);
+        if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion)) return explosion;
+        explosion.explode();
+        explosion.finalizeExplosion(true);
+        explosion.iceExplosion();
+        return explosion;
+    }
 }

@@ -45,6 +45,7 @@ public class ModItems {
     public static final RegistryObject<ModBoatItem> MURK_BOAT = ITEMS.register("murk_boat", () -> new ModBoatItem(ModBoatEntity.Type.MURK, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_TRANSPORTATION)));
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
+    public static final RegistryObject<Item> DEAD_SLIME_BALL = ITEMS.register("dead_slime_ball", DeadSlimeBallItem::new);
     public static final RegistryObject<Item> FORBIDDEN_SCROLL = ITEMS.register("forbidden_scroll", ForbiddenScrollItem::new);
     public static final RegistryObject<Item> SACRED_FISH_BUCKET = ITEMS.register("sacred_fish_bucket", () -> new FishBucketItem(ModEntityType.SACRED_FISH,() -> Fluids.WATER, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_MISC)));
 
@@ -80,6 +81,7 @@ public class ModItems {
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
     public static final RegistryObject<Item> DRIED_REMNANT = ITEMS.register("dried_remnant", ItemBase::new);
+    public static final RegistryObject<Item> DEAD_SAND_HEAP = ITEMS.register("dead_sand_heap", ItemBase::new);
     public static final RegistryObject<Item> FORBIDDEN_FRAGMENT = ITEMS.register("forbidden_fragment", ItemBase::new);
     public static final RegistryObject<Item> FORBIDDEN_PIECE = ITEMS.register("forbidden_piece", ItemBase::new);
     public static final RegistryObject<Item> BURNING_TUSK = ITEMS.register("burning_tusk", ItemBase::new);

@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.common.tileentities.ForbiddenGrassTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 public class ForbiddenGrassBlock extends SnowyDirtBlock implements ITileEntityProvider {
     public ForbiddenGrassBlock() {
-        super(Properties.of(Material.GRASS)
+        super(Properties.of(Material.GRASS, MaterialColor.COLOR_PURPLE)
                 .randomTicks()
                 .strength(0.6F)
                 .sound(SoundType.GRASS));

@@ -58,6 +58,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_SANDSTONE_CHISELED = BLOCKS.register("dead_sandstone_chiseled", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE_CUT = BLOCKS.register("dead_sandstone_cut", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_SANDSTONE_SMOOTH = BLOCKS.register("dead_sandstone_smooth", DeadSandStoneBlock::new);
+    public static final RegistryObject<Block> DEAD_PILE = BLOCKS.register("dead_pile", DeadPileBlock::new);
     public static final RegistryObject<Block> DEAD_BLOCK = BLOCKS.register("dead_block", DeadBlock::new);
     public static final RegistryObject<Block> TEMP_WEB = BLOCKS.register("temp_web", TempWebBlock::new);
     public static final RegistryObject<Block> DARK_CLOUD = BLOCKS.register("dark_cloud", DarkCloudBlock::new);
@@ -326,6 +327,8 @@ public class ModBlocks {
             () -> new BlockItemBase(DEAD_SANDSTONE_SMOOTH_STAIRS_BLOCK.get()));
     public static final RegistryObject<Item> DEAD_SANDSTONE_WALL_ITEM = BLOCK_ITEMS.register("dead_sandstone_wall",
             () -> new BlockItemBase(DEAD_SANDSTONE_WALL_BLOCK.get()));
+    public static final RegistryObject<Item> DEAD_PILE_ITEM = BLOCK_ITEMS.register("dead_pile",
+            () -> new BlockItemBase(DEAD_PILE.get()));
     public static final RegistryObject<Item> DEAD_BLOCK_ITEM = BLOCK_ITEMS.register("dead_block",
             () -> new BlockItemBase(DEAD_BLOCK.get()));
     public static final RegistryObject<Item> HAUNTED_CACTUS_ITEM = BLOCK_ITEMS.register("haunted_cactus",

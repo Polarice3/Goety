@@ -29,7 +29,7 @@ public class PotionGroupGoal<T extends AbstractCultistEntity> extends Goal {
             }
         }
         if (this.beldam != null){
-            return this.mob.getActiveEffects().isEmpty() && this.mob.getTarget() != null;
+            return this.mob.getActiveEffects().isEmpty() && this.mob.getTarget() != null && this.mob.getSensing().canSee(this.beldam);
         }
         return false;
     }
@@ -37,19 +37,18 @@ public class PotionGroupGoal<T extends AbstractCultistEntity> extends Goal {
     public boolean canContinueToUse() {
         return this.mob.getActiveEffects().isEmpty()
                 && this.mob.getTarget() != null
+                && this.mob.getSensing().canSee(this.beldam)
                 && this.beldam != null
-                && !this.beldam.isDeadOrDying();
+                && !this.beldam.isDeadOrDying()
+                && !this.beldam.isInvisible();
     }
 
     public void tick() {
-        LivingEntity livingentity = this.beldam;
-        if (livingentity != null) {
-            double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-            boolean flag = this.mob.getSensing().canSee(livingentity);
+        double d0 = this.mob.distanceToSqr(this.beldam.getX(), this.beldam.getY(), this.beldam.getZ());
+        boolean flag = this.mob.getSensing().canSee(this.beldam);
 
-            if (flag && d0 > MathHelper.square(3)) {
-                this.mob.getNavigation().moveTo(livingentity, this.speedModifier);
-            }
+        if (flag && d0 > MathHelper.square(3)) {
+            this.mob.getNavigation().moveTo(this.beldam, this.speedModifier);
         }
     }
 }

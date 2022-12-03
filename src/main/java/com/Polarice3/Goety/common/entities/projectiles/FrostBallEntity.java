@@ -101,12 +101,13 @@ public class FrostBallEntity extends DamagingProjectileEntity {
         super.onHitEntity(pResult);
         if (!this.level.isClientSide) {
             Entity entity = pResult.getEntity();
-            Entity entity1 = this.getOwner();
-            boolean flag = entity.hurt(ModDamageSource.indirectFrost(this, entity1), 4.0F);
-            if (entity1 instanceof LivingEntity) {
-                flag = entity.hurt(ModDamageSource.indirectFrost(this, entity1), (float) ((LivingEntity) entity1).getAttributeValue(Attributes.ATTACK_DAMAGE));
-                this.doEnchantDamageEffects((LivingEntity)entity1, entity);
+            Entity owner = this.getOwner();
+            float damage = 4.0F;
+            if (owner instanceof MobEntity) {
+                damage = (float) ((MobEntity) owner).getAttributeValue(Attributes.ATTACK_DAMAGE);
+                this.doEnchantDamageEffects((MobEntity)owner, entity);
             }
+            boolean flag = entity.hurt(ModDamageSource.indirectFrost(this, owner), damage);
             if (flag && entity instanceof LivingEntity){
                 LivingEntity livingEntity = (LivingEntity) entity;
                 if (!livingEntity.hasEffect(Effects.MOVEMENT_SLOWDOWN)) {

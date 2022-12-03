@@ -27,6 +27,7 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -90,6 +91,20 @@ public class CultistEvents {
                                         serverWorld.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundCategory.HOSTILE, 1.0F, 0.5F, false);
                                         player.addEffect(new EffectInstance(ModEffects.CURSED.get(), 12000));
                                     }
+                                }
+                            }
+                            if (villager.tickCount % 100 == 0) {
+                                List<VillagerEntity> villagerEntities = serverWorld.getEntitiesOfClass(VillagerEntity.class, villager.getBoundingBox().inflate(32));
+                                List<VillagerEntity> regular = new ArrayList<>();
+                                for (VillagerEntity villagerEntity : villagerEntities) {
+                                    if (!villagerEntity.getTags().contains(ConstantPaths.secretCultist())) {
+                                        regular.add(villagerEntity);
+                                    } else {
+                                        regular.remove(villagerEntity);
+                                    }
+                                }
+                                if (regular.isEmpty()) {
+                                    MobUtil.revealCultist(serverWorld, villager);
                                 }
                             }
                         }

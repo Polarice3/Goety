@@ -145,10 +145,9 @@ public class LocustEntity extends OwnedEntity implements IDeadMob, IFlyingAnimal
             if (this.random.nextInt(30) == 0) {
                 for (int i = 1; i <= 2; ++i) {
                     BlockPos blockpos = this.blockPosition().below(i);
-                    BlockState blockstate = this.level.getBlockState(blockpos);
-                    Block block = blockstate.getBlock();
-                    if (block.is(ModTags.Blocks.DEAD_SAND_SPREADABLE)) {
-                        BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
+                    BlockState blockstate = ModBlocks.DEAD_PILE.get().defaultBlockState();
+                    if (this.level.isEmptyBlock(blockpos) && blockstate.canSurvive(this.level, blockpos)) {
+                        this.level.setBlockAndUpdate(blockpos, blockstate);
                     }
                 }
             }

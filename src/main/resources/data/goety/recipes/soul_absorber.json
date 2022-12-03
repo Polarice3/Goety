@@ -1,0 +1,33 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:cursed_burner"
+  },
+  "craftType": "forge",
+  "soulCost": 1,
+  "duration": 30,
+  "ingredients": [
+    {
+      "item": "goety:cursed_stone_chiseled"
+    },
+    {
+      "item": "goety:cursed_ingot"
+    },
+    {
+      "item": "goety:cursed_bricks"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "minecraft:hopper"
+    },
+    {
+      "item": "goety:hunger_core"
+    }
+  ],
+  "result": {
+    "item": "goety:soul_absorber"
+  }
+}

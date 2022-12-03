@@ -225,7 +225,7 @@ public class UrbhadhachEntity extends MonsterEntity {
                 List<AgeableEntity> list = this.level.getEntitiesOfClass(AgeableEntity.class, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
                 if (!list.isEmpty()) {
                     for (AgeableEntity ageableEntity : list) {
-                        if (ageableEntity.isBaby() && !ageableEntity.isDeadOrDying()) {
+                        if (ageableEntity.isBaby() && !ageableEntity.isDeadOrDying() && !ageableEntity.hasEffect(Effects.NIGHT_VISION)) {
                             this.setThrall(ageableEntity);
                         }
                     }
@@ -238,6 +238,14 @@ public class UrbhadhachEntity extends MonsterEntity {
                     this.getLookControl().setLookAt(this.getThrall().getX(), this.getThrall().getY(), this.getThrall().getZ());
                     if (this.getThrall().isSleeping()){
                         this.getThrall().stopSleeping();
+                    } else {
+                        float speed = 0.5F;
+                        if (this.getThrall().getAttribute(Attributes.FOLLOW_RANGE) != null) {
+                            if (this.getThrall().getAttributeValue(Attributes.MOVEMENT_SPEED) < 0.5F) {
+                                speed = 1.0F;
+                            }
+                            this.getThrall().getNavigation().moveTo(this, speed);
+                        }
                     }
                     this.getThrall().addEffect(new EffectInstance(Effects.NIGHT_VISION, 20));
                     if (this.tickCount % 100 == 0){
@@ -245,11 +253,6 @@ public class UrbhadhachEntity extends MonsterEntity {
                         this.getThrall().playSound(SoundEvents.BELL_RESONATE, 1.0F, 0.5F);
                     }
                     this.addEffect(new EffectInstance(Effects.INVISIBILITY, 4));
-                    if (this.getThrall().getAttributeValue(Attributes.MOVEMENT_SPEED) >= 0.5F){
-                        this.getThrall().getNavigation().moveTo(this, 0.5F);
-                    } else {
-                        this.getThrall().getNavigation().moveTo(this, 1.0F);
-                    }
                 } else {
                     this.thrallCooldown = 600;
                     this.setThralling(false);

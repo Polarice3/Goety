@@ -3,6 +3,7 @@ package com.Polarice3.Goety.client.model;
 import net.minecraft.client.renderer.entity.model.WitchModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
 public class ModWitchModel<T extends Entity> extends WitchModel<T> {
     protected ModelRenderer hood;
@@ -24,6 +25,11 @@ public class ModWitchModel<T extends Entity> extends WitchModel<T> {
             this.leg1.xRot = -1.4137167F;
             this.leg1.yRot = (-(float)Math.PI / 10F);
             this.leg1.zRot = -0.07853982F;
+        } else {
+            this.leg0.xRot = MathHelper.cos(pLimbSwing * 0.6662F) * 1.4F * pLimbSwingAmount * 0.5F;
+            this.leg1.xRot = MathHelper.cos(pLimbSwing * 0.6662F + (float)Math.PI) * 1.4F * pLimbSwingAmount * 0.5F;
+            this.leg0.yRot = 0.0F;
+            this.leg1.yRot = 0.0F;
         }
     }
 }

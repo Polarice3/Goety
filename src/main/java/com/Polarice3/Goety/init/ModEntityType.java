@@ -68,6 +68,12 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "frost_ball").toString()));
 
+    public static final RegistryObject<EntityType<DeadSlimeBallEntity>> DEAD_SLIME_BALL = ENTITY_TYPES.register("dead_slime_ball",
+            () -> EntityType.Builder.<DeadSlimeBallEntity>of(DeadSlimeBallEntity::new, EntityClassification.MISC)
+                    .sized(0.25f,0.25f)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "dead_slime_ball").toString()));
+
     public static final RegistryObject<EntityType<ScytheProjectileEntity>> SCYTHE = ENTITY_TYPES.register("scythe",
             () -> EntityType.Builder.<ScytheProjectileEntity>of(ScytheProjectileEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.5F)

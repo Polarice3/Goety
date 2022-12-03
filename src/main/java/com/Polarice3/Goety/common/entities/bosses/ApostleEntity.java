@@ -357,7 +357,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
                 break;
             case 11:
-                this.setArrowEffect(ModEffects.CURSED.get());
+                this.setArrowEffect(ModEffects.SAPPED.get());
                 break;
         }
     }
@@ -864,11 +864,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             } else {
                 amp = 0;
             }
-            if (this.getArrowEffect() == ModEffects.CURSED.get()){
-                ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(this.getArrowEffect(), 50, amp));
-            } else {
-                ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(this.getArrowEffect(), 100, amp));
-            }
+            ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(this.getArrowEffect(), 100, amp));
         }
         if (this.getFireArrow()){
             abstractarrowentity.setRemainingFireTicks(100);

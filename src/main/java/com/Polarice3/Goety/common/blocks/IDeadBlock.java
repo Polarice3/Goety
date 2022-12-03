@@ -44,6 +44,7 @@ public interface IDeadBlock {
     default void spreadSand(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (MainConfig.DeadSandSpread.get()) {
             boolean flag = false;
+            BlockState blockState = pLevel.getBlockState(pPos);
             for(Direction direction : Direction.values()) {
                 BlockPos blockpos1 = pPos.relative(direction);
                 BlockState blockstate = pLevel.getBlockState(blockpos1);
@@ -60,7 +61,7 @@ public interface IDeadBlock {
                 }
                 BlockPos blockpos = pPos.offset(pos1, pos2, pos3);
 
-                if (!BlockFinder.isWet(pLevel, pPos)) {
+                if (!BlockFinder.isInRain(pLevel, pPos)) {
                     if (getTotalDeadSands(pLevel, pPos).size() < SAND_LIMIT) {
                         BlockFinder.DeadSandReplaceLagFree(blockpos, pLevel);
                     } else {
@@ -81,7 +82,7 @@ public interface IDeadBlock {
                                     pLevel.removeBlock(blockpos2, false);
                                     pLevel.setBlockAndUpdate(blockpos2, ModBlocks.DEAD_BLOCK.get().defaultBlockState());
                                 }
-                                if (blockState2.getBlock() instanceof TallGrassBlock) {
+                                if (blockState2.getBlock() instanceof TallGrassBlock || blockState2.getBlock() instanceof SnowBlock) {
                                     pLevel.removeBlock(blockpos2, false);
                                 }
                             }
@@ -89,11 +90,13 @@ public interface IDeadBlock {
                     }
                 }
 
-                dryUpWater(pLevel, pPos);
+                if (blockState.isSolidRender(pLevel, pPos)){
+                    dryUpWater(pLevel, pPos);
+                    growHauntedCactus(pLevel, pPos, pRandom);
+                    growIronFingers(pLevel, pPos);
+                    blockSky(pLevel, pPos);
+                }
                 desiccateMobs(pLevel, pPos);
-                growHauntedCactus(pLevel, pPos, pRandom);
-                growIronFingers(pLevel, pPos);
-                blockSky(pLevel, pPos);
 
                 for (int l1 = -4; l1 <= 0; ++l1) {
                     int random = pRandom.nextInt(2);
@@ -151,6 +154,7 @@ public interface IDeadBlock {
 
     default void growHauntedCactus(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (MainConfig.DeadSandSpread.get()) {
+            BlockState cactus = ModBlocks.HAUNTED_CACTUS.get().defaultBlockState();
             int random = pRandom.nextInt(256);
             if (random == 0) {
                 BlockPos blockpos = pPos.above();
@@ -158,10 +162,13 @@ public interface IDeadBlock {
                 BlockPos east = blockpos.east();
                 BlockPos north = blockpos.north();
                 BlockPos south = blockpos.south();
-                if (pLevel.isEmptyBlock(blockpos) && pLevel.isEmptyBlock(west) && pLevel.isEmptyBlock(east)
-                && pLevel.isEmptyBlock(north) && pLevel.isEmptyBlock(south) && !pLevel.isEmptyBlock(pPos.below())) {
-                    if (getSurroundingCactus(pLevel, pPos).isEmpty() && getTotalCactus(pLevel, pPos).size() < 6) {
-                        pLevel.setBlockAndUpdate(blockpos, ModBlocks.HAUNTED_CACTUS.get().defaultBlockState());
+                if (!pLevel.isEmptyBlock(pPos) && cactus.canSurvive(pLevel, blockpos)) {
+                    if ((pLevel.isEmptyBlock(blockpos) || pLevel.getBlockState(blockpos).getBlock() == ModBlocks.DEAD_PILE.get())
+                            && pLevel.isEmptyBlock(west) && pLevel.isEmptyBlock(east)
+                            && pLevel.isEmptyBlock(north) && pLevel.isEmptyBlock(south)) {
+                        if (getSurroundingCactus(pLevel, pPos).isEmpty() && getTotalCactus(pLevel, pPos).size() < 6) {
+                            pLevel.setBlockAndUpdate(blockpos, cactus);
+                        }
                     }
                 }
             }
@@ -185,7 +192,7 @@ public interface IDeadBlock {
 
     default List<Block> getTotalCactus(World world, BlockPos currentTile) {
         List<Block> result = new ArrayList<>();
-        int radius = 24;
+        int radius = 64;
         Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
                 currentTile.offset(-radius, -radius, -radius),
                 currentTile.offset(radius, radius, radius));
@@ -215,16 +222,19 @@ public interface IDeadBlock {
 
     default void growIronFingers(ServerWorld pLevel, BlockPos pPos){
         if (MainConfig.DeadSandSpread.get()) {
+            BlockState finger = ModBlocks.IRON_FINGER.get().defaultBlockState();
             if (!pLevel.isDay() || !pLevel.isRaining()) {
                 BlockPos blockpos = pPos.above();
                 BlockPos west = blockpos.west();
                 BlockPos east = blockpos.east();
                 BlockPos north = blockpos.north();
                 BlockPos south = blockpos.south();
-                if (pLevel.isEmptyBlock(blockpos) && pLevel.isEmptyBlock(west) && pLevel.isEmptyBlock(east)
-                        && pLevel.isEmptyBlock(north) && pLevel.isEmptyBlock(south) && !pLevel.isEmptyBlock(pPos.below())) {
+                if (!pLevel.isEmptyBlock(pPos) && finger.canSurvive(pLevel, blockpos))
+                if ((pLevel.isEmptyBlock(blockpos) || pLevel.getBlockState(blockpos).getBlock() == ModBlocks.DEAD_PILE.get())
+                        && pLevel.isEmptyBlock(west) && pLevel.isEmptyBlock(east)
+                        && pLevel.isEmptyBlock(north) && pLevel.isEmptyBlock(south)) {
                     if (getSurroundingCactus(pLevel, pPos).size() >= 4 && getTotalFingers(pLevel, pPos).isEmpty()) {
-                        pLevel.setBlockAndUpdate(blockpos, ModBlocks.IRON_FINGER.get().defaultBlockState());
+                        pLevel.setBlockAndUpdate(blockpos, finger);
                     }
                 }
             }
@@ -233,7 +243,7 @@ public interface IDeadBlock {
 
     default List<Block> getTotalFingers(World world, BlockPos currentTile) {
         List<Block> result = new ArrayList<>();
-        int radius = 8;
+        int radius = 16;
         Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
                 currentTile.offset(-radius, -radius, -radius),
                 currentTile.offset(radius, radius, radius));
@@ -250,7 +260,7 @@ public interface IDeadBlock {
         if (MainConfig.DeadSandSpread.get()) {
             BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
             BlockState blockState = pLevel.getBlockState(blockpos);
-            if (!BlockFinder.isWet(pLevel, pPos)) {
+            if (!BlockFinder.isInRain(pLevel, pPos)) {
                 if (getTotalDeadSands(pLevel, pPos).size() < SAND_LIMIT) {
                     sandSpread(pLevel, blockState, blockpos);
                 } else {
@@ -305,7 +315,7 @@ public interface IDeadBlock {
 
     default void dryUpWater(World pLevel, BlockPos pPos) {
         if (MainConfig.DeadSandDryWater.get()) {
-            if (!BlockFinder.isWet(pLevel, pPos)) {
+            if (!BlockFinder.isInRain(pLevel, pPos)) {
                 Queue<Tuple<BlockPos, Integer>> queue = Lists.newLinkedList();
                 queue.add(new Tuple<>(pPos, 0));
                 int i = 0;
@@ -370,7 +380,7 @@ public interface IDeadBlock {
                 }
             }
             if (result.size() > 32 && result2.isEmpty()) {
-                if (!BlockFinder.isWet(pLevel, pPos)) {
+                if (!BlockFinder.isInRain(pLevel, pPos)) {
                     for (LivingEntity livingEntity : pLevel.getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(pPos.above()))) {
                         if (!RobeArmorFinder.FindNecroBootsofWander(livingEntity)){
                             desiccate(livingEntity);

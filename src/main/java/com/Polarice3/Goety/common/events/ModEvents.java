@@ -289,25 +289,22 @@ public class ModEvents {
                 if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
                     event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
                 }
+                boolean flag = false;
                 if (MainConfig.InterDimensionalMobs.get()){
-                    if (biome.getPrecipitation() == Biome.RainType.SNOW){
+                    flag = true;
+                } else {
+                    if (BlockFinder.biomeIsInOverworld(event.getName())) {
+                        flag = true;
+                    }
+                }
+                if (flag){
+                    if (biome.getPrecipitation() == Biome.RainType.SNOW) {
                         event.getSpawns().getSpawner(EntityClassification.MONSTER)
                                 .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
                                         MainConfig.DredenSpawnWeight.get(), 1, 1));
                         event.getSpawns().getSpawner(EntityClassification.MONSTER)
                                 .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
                                         MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
-                    }
-                } else {
-                    if (BlockFinder.biomeIsInOverworld(event.getName())) {
-                        if (biome.getPrecipitation() == Biome.RainType.SNOW) {
-                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
-                                    .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
-                                            MainConfig.DredenSpawnWeight.get(), 1, 1));
-                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
-                                    .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
-                                            MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
-                        }
                     }
                 }
             }
@@ -802,35 +799,39 @@ public class ModEvents {
                     ArmorItem armorItem = (ArmorItem) itemStack.getItem();
                     if (armorItem.getMaterial() == ModArmorMaterial.FROST){
                         if (ModDamageSource.frostAttacks(event.getSource())){
+                            float damage = 1.0F;
                             switch (equipmentSlotType){
                                 case HEAD:
                                 case FEET:
-                                    event.setAmount(event.getAmount()/1.1F);
+                                    damage = damage - 0.1F;
                                     break;
                                 case CHEST:
-                                    event.setAmount(event.getAmount()/1.5F);
+                                    damage = damage - 0.5F;
                                     break;
                                 case LEGS:
-                                    event.setAmount(event.getAmount()/1.3F);
+                                    damage = damage - 0.3F;
                                     break;
                             }
+                            event.setAmount(event.getAmount() * damage);
                         }
                         if (event.getSource().isFire()) {
+                            float damage = 1.0F;
                             switch (equipmentSlotType){
                                 case HEAD:
                                 case LEGS:
                                 case FEET:
-                                    event.setAmount(event.getAmount()/1.1F);
+                                    damage = damage - 0.1F;
                                     break;
                                 case CHEST:
-                                    event.setAmount(event.getAmount()/1.2F);
+                                    damage = damage - 0.2F;
                                     break;
                             }
-                            float damage = event.getAmount() / 4.0F;
-                            if (damage < 1.0F) {
-                                damage = 1.0F;
+                            event.setAmount(event.getAmount() * damage);
+                            float damage2 = event.getAmount() / 4.0F;
+                            if (damage2 < 1.0F) {
+                                damage2 = 1.0F;
                             }
-                            ItemHelper.hurtAndBreak(itemStack, (int) damage, victim);
+                            ItemHelper.hurtAndBreak(itemStack, (int) damage2, victim);
                         }
                     }
                 }
@@ -876,7 +877,17 @@ public class ModEvents {
                     }
                 }
                 if (weapon instanceof DeathScytheItem){
-                    victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 60, 1));
+                    if (!victim.hasEffect(ModEffects.SAPPED.get())) {
+                        victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 20));
+                        victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
+                    } else {
+                        if (victim.level.random.nextBoolean()) {
+                            EffectsUtil.amplifyEffect(victim, ModEffects.SAPPED.get(), 20);
+                            victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
+                        } else {
+                            EffectsUtil.resetDuration(victim, ModEffects.SAPPED.get(), 20);
+                        }
+                    }
                 }
             }
         }

@@ -40,17 +40,17 @@ public class EffectsEvent {
     }
 
     public void Illague(ServerWorld level, LivingEntity infected){
-        int d = Objects.requireNonNull(infected.getEffect(ModEffects.ILLAGUE.get())).getDuration() + 1;
-        int a = Objects.requireNonNull(infected.getEffect(ModEffects.ILLAGUE.get())).getAmplifier();
+        int duration = Objects.requireNonNull(infected.getEffect(ModEffects.ILLAGUE.get())).getDuration() + 1;
+        int amplifier = Objects.requireNonNull(infected.getEffect(ModEffects.ILLAGUE.get())).getAmplifier();
         if (MainConfig.IllagueSpread.get()) {
             for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, infected.getBoundingBox().inflate(8.0D))) {
                 if (!(livingEntity instanceof PatrollerEntity) && !(livingEntity instanceof IDeadMob) && !livingEntity.hasEffect(ModEffects.ILLAGUE.get())) {
                     if (livingEntity instanceof PlayerEntity) {
                         if (!((PlayerEntity) livingEntity).isCreative()) {
-                            livingEntity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), d / 2, a, false, false));
+                            livingEntity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), duration / 2, amplifier, false, false));
                         }
                     } else {
-                        livingEntity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), d / 2, a, false, false));
+                        livingEntity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), duration / 2, amplifier, false, false));
                     }
                 }
             }
@@ -60,8 +60,8 @@ public class EffectsEvent {
                 level.sendParticles(ModParticleTypes.PLAGUE_EFFECT.get(), infected.getRandomX(0.5D), infected.getRandomY(), infected.getRandomZ(0.5D), 1, 0.0D, 0.5D, 0.0D, 0);
             }
         }
-        int i1 = MathHelper.clamp(a * 50, 0, 250);
-        int i2 = a + 1;
+        int i1 = MathHelper.clamp(amplifier * 50, 0, 250);
+        int i2 = amplifier + 1;
         int i3 = i1 * 10;
         int c;
         switch (level.getDifficulty()){
@@ -76,14 +76,14 @@ public class EffectsEvent {
                 c = 1500;
                 break;
         }
-        int k = 600 >> a;
-        if ((k <= 0 || d % k == 0) && level.getDifficulty() != Difficulty.PEACEFUL) {
+        int k = 600 >> amplifier;
+        if ((infected.tickCount % k == 0) && level.getDifficulty() != Difficulty.PEACEFUL) {
             int r = level.random.nextInt(8);
             int r2 = level.random.nextInt(c - i3);
             int r3 = level.random.nextInt(i2);
             int r4 = r3 + 1;
             if (r2 == 0){
-                EffectsUtil.amplifyEffect(infected, ModEffects.ILLAGUE.get(), 6000, false, false);
+                EffectsUtil.amplifyEffect(infected, ModEffects.ILLAGUE.get(), 6000);
             }
             if (infected instanceof PlayerEntity){
                 switch (r) {
@@ -137,23 +137,20 @@ public class EffectsEvent {
 
     public void Desiccate(ServerWorld level, LivingEntity infected){
         int a = Objects.requireNonNull(infected.getEffect(ModEffects.DESICCATE.get())).getAmplifier();
-        int i1 = MathHelper.clamp(a * 50, 0, 250);
-        int random = level.random.nextInt(300 - i1);
-        if (random == 0) {
-            infected.hurt(ModDamageSource.DESICCATE, 2.0F);
-        }
-        if (a > 2){
-            if (random == 50) {
-                ExplosionUtil.deadSandExplode(level, infected, infected.getX(), infected.getY(), infected.getZ(), 1.0F, DeadSandExplosion.Mode.SPREAD);
+        int i = 100 >> a;
+        if (infected.tickCount % i == 0 && level.random.nextBoolean()) {
+            if (infected.hurt(ModDamageSource.DESICCATE, 2.0F)){
+                if (a > 2){
+                    ExplosionUtil.deadSandExplode(level, infected, infected.getX(), infected.getY(), infected.getZ(), 1.0F, DeadSandExplosion.Mode.SPREAD);
+                }
             }
         }
     }
 
     public void Cosmic(ServerWorld level, LivingEntity pLivingEntity){
-        int duration = Objects.requireNonNull(pLivingEntity.getEffect(ModEffects.COSMIC.get())).getDuration();
         int amplifier = Objects.requireNonNull(pLivingEntity.getEffect(ModEffects.COSMIC.get())).getAmplifier();
         int k = 1200 >> amplifier;
-        if (k <= 0 || duration % k == 0) {
+        if (pLivingEntity.tickCount % k == 0) {
             if (pLivingEntity instanceof PlayerEntity) {
                 int r = level.random.nextInt(20);
                 int a = level.random.nextInt(5);

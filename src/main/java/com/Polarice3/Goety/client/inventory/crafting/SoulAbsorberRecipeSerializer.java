@@ -27,7 +27,7 @@ public class SoulAbsorberRecipeSerializer <T extends SoulAbsorberRecipes> extend
         Ingredient ingredient = Ingredient.fromJson(jsonelement);
         int s = JSONUtils.getAsInt(pJson, "soulIncrease", this.defaultSoulIncrease);
         int i = JSONUtils.getAsInt(pJson, "cookingtime", this.defaultCookingTime);
-        return this.factory.create(pRecipeId, ingredient, i, s);
+        return this.factory.create(pRecipeId, ingredient, s, i);
     }
 
     @Nullable

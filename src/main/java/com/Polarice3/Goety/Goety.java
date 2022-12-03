@@ -31,29 +31,35 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
+import com.Polarice3.Goety.common.entities.projectiles.BurningPotionEntity;
+import com.Polarice3.Goety.common.entities.projectiles.DeadSlimeBallEntity;
+import com.Polarice3.Goety.common.entities.projectiles.DeadTNTEntity;
+import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
 import com.Polarice3.Goety.compat.curios.CuriosCompat;
 import com.Polarice3.Goety.init.*;
+import com.Polarice3.Goety.utils.ModPotionUtil;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.WoodType;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.OptionalDispenseBehavior;
+import net.minecraft.dispenser.*;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.Potions;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -67,6 +73,8 @@ import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipe;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -157,6 +165,50 @@ public class Goety {
                     return stack;
                 }
             });
+            DispenserBlock.registerBehavior(ModItems.WITCHBOMB.get(), new ProjectileDispenseBehavior() {
+                protected ProjectileEntity getProjectile(World pLevel, IPosition pPosition, ItemStack pStack) {
+                    return Util.make(new WitchBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z()), (witchBomb) -> {
+                        witchBomb.setItem(pStack);
+                    });
+                }
+            });
+            DispenserBlock.registerBehavior(ModItems.DEAD_SLIME_BALL.get(), new ProjectileDispenseBehavior() {
+                protected ProjectileEntity getProjectile(World pLevel, IPosition pPosition, ItemStack pStack) {
+                    return Util.make(new DeadSlimeBallEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z()), (deadSlimeBall) -> {
+                        deadSlimeBall.setItem(pStack);
+                    });
+                }
+            });
+            DispenserBlock.registerBehavior(ModItems.BURNING_POTION.get(), new IDispenseItemBehavior() {
+                public ItemStack dispense(IBlockSource p_dispense_1_, ItemStack p_dispense_2_) {
+                    return (new ProjectileDispenseBehavior() {
+                        protected ProjectileEntity getProjectile(World pLevel, IPosition pPosition, ItemStack pStack) {
+                            return Util.make(new BurningPotionEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z()), (burningPotion) -> {
+                                burningPotion.setItem(pStack);
+                            });
+                        }
+
+                        protected float getUncertainty() {
+                            return super.getUncertainty() * 0.5F;
+                        }
+
+                        protected float getPower() {
+                            return super.getPower() * 1.25F;
+                        }
+                    }).dispense(p_dispense_1_, p_dispense_2_);
+                }
+            });
+            DispenserBlock.registerBehavior(ModBlocks.DEAD_TNT.get(), new DefaultDispenseItemBehavior() {
+                protected ItemStack execute(IBlockSource pSource, ItemStack pStack) {
+                    World world = pSource.getLevel();
+                    BlockPos blockpos = pSource.getPos().relative(pSource.getBlockState().getValue(DispenserBlock.FACING));
+                    DeadTNTEntity tntentity = new DeadTNTEntity(world, (double)blockpos.getX() + 0.5D, (double)blockpos.getY(), (double)blockpos.getZ() + 0.5D, (LivingEntity)null);
+                    world.addFreshEntity(tntentity);
+                    world.playSound((PlayerEntity)null, tntentity.getX(), tntentity.getY(), tntentity.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    pStack.shrink(1);
+                    return pStack;
+                }
+            });
             AxeItem.STRIPABLES = Maps.newHashMap(AxeItem.STRIPABLES);
             AxeItem.STRIPABLES.put(ModBlocks.HAUNTED_LOG.get(), ModBlocks.STRIPPED_HAUNTED_LOG.get());
             AxeItem.STRIPABLES.put(ModBlocks.HAUNTED_WOOD.get(), ModBlocks.STRIPPED_HAUNTED_WOOD.get());
@@ -169,6 +221,7 @@ public class Goety {
             WoodType.register(ModWoodType.HAUNTED);
             WoodType.register(ModWoodType.GLOOM);
             WoodType.register(ModWoodType.MURK);
+            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(Ingredient.of(ModPotionUtil.setSplashPotion(Potions.AWKWARD)), Ingredient.of(Items.FIRE_CHARGE), new ItemStack(ModItems.BURNING_POTION.get())));
             ConfiguredStructures.registerConfiguredStructures();
         });
 

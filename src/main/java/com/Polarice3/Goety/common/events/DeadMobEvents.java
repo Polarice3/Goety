@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.blocks.DeadPileBlock;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.BoomerEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
@@ -16,11 +17,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.DrownedEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootTable;
@@ -32,7 +37,9 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.Event;
@@ -69,7 +76,7 @@ public class DeadMobEvents {
         World world = livingEntity.level;
         List<BlockState> result = new ArrayList<>();
         if (MainConfig.DeadSandMobs.get()) {
-            if (livingEntity instanceof CreeperEntity) {
+            if (livingEntity instanceof CreeperEntity || livingEntity instanceof SnowGolemEntity || livingEntity instanceof DrownedEntity) {
                 if (BlockFinder.isDeadBlock(world, livingEntity.blockPosition())) {
                     if (livingEntity.tickCount % 20 == 0) {
                         livingEntity.hurt(ModDamageSource.DESICCATE, livingEntity.getMaxHealth()/4);
@@ -77,16 +84,8 @@ public class DeadMobEvents {
                 }
             }
         }
-        if (livingEntity instanceof DrownedEntity) {
-            BlockState blockState = livingEntity.level.getBlockState(livingEntity.blockPosition().below());
-            if (blockState.getBlock() instanceof IDeadBlock) {
-                if (livingEntity.tickCount % 20 == 0) {
-                    livingEntity.hurt(ModDamageSource.DESICCATE, livingEntity.getMaxHealth()/4);
-                }
-            }
-        }
         if (livingEntity instanceof IDeadMob){
-            if (BlockFinder.isWet(world, livingEntity.blockPosition()) && !BlockFinder.isDeadBlock(world, livingEntity.blockPosition())){
+            if (BlockFinder.isInRain(world, livingEntity.blockPosition()) && !BlockFinder.isDeadBlock(world, livingEntity.blockPosition())){
                 if (livingEntity.tickCount % 20 == 0){
                     livingEntity.hurt(DamageSource.DROWN, 2.0F);
                 }
@@ -112,6 +111,7 @@ public class DeadMobEvents {
                     if (world.random.nextFloat() < 0.5F) {
                         livingEntity.hurt(DamageSource.STARVE, 2.0F);
                         livingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
+                        livingEntity.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 20, 1));
                     }
                 } else {
                     if (world.random.nextFloat() < 0.5F) {
@@ -198,6 +198,30 @@ public class DeadMobEvents {
                     }
                 }
             }
+            BlockState blockstate = ModBlocks.DEAD_PILE.get().defaultBlockState();
+            if (deadMob.level.random.nextFloat() <= 0.25F){
+                if (deadMob.getMaxHealth() >= 20.0F) {
+                    for (int l = 0; l < 4; ++l) {
+                        int i = MathHelper.floor(deadMob.getX() + (double) ((float) (l % 2 * 2 - 1) * 0.25F));
+                        int j = MathHelper.floor(deadMob.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, deadMob.blockPosition()).getY());
+                        int k = MathHelper.floor(deadMob.getZ() + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
+                        BlockPos blockpos = new BlockPos(i, j, k);
+                        if (deadMob.level.getBlockState(blockpos).getBlock() == ModBlocks.DEAD_PILE.get()){
+                            int i1 = deadMob.level.getBlockState(blockpos).getValue(DeadPileBlock.LAYERS);
+                            if (i1 < 8){
+                                deadMob.level.setBlockAndUpdate(blockpos, blockstate.setValue(DeadPileBlock.LAYERS, blockstate.getValue(DeadPileBlock.LAYERS) + 1));
+                            }
+                        } else if (deadMob.level.isEmptyBlock(blockpos) && blockstate.canSurvive(deadMob.level, blockpos)) {
+                            deadMob.level.setBlockAndUpdate(blockpos, blockstate);
+                        }
+                    }
+                } else {
+                    BlockPos blockpos = deadMob.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, deadMob.blockPosition());
+                    if (deadMob.level.isEmptyBlock(blockpos) && blockstate.canSurvive(deadMob.level, blockpos)) {
+                        deadMob.level.setBlockAndUpdate(blockpos, blockstate);
+                    }
+                }
+            }
             if (deadMob.isInWater() && !(deadMob instanceof BoomerEntity)){
                 AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(world, deadMob.getX(), deadMob.getY(), deadMob.getZ());
                 areaeffectcloudentity.setRadius(2.5F);
@@ -207,6 +231,20 @@ public class DeadMobEvents {
                 areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float)areaeffectcloudentity.getDuration());
                 areaeffectcloudentity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
                 world.addFreshEntity(areaeffectcloudentity);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void DropEvents(LivingDropsEvent event){
+        LivingEntity living = event.getEntityLiving();
+        if (ModDamageSource.desiccateAttacks(event.getSource()) || event.getSource().getEntity() instanceof IDeadMob){
+            if (living instanceof AnimalEntity){
+                for (ItemEntity itemEntity : event.getDrops()){
+                    if (itemEntity.getItem().isEdible()){
+                        itemEntity.setItem(new ItemStack(Items.ROTTEN_FLESH));
+                    }
+                }
             }
         }
     }
@@ -223,6 +261,9 @@ public class DeadMobEvents {
                 }
             }
             if (event.getEntityLiving().getMobType() == CreatureAttribute.UNDEAD){
+                event.setResult(Event.Result.DENY);
+            }
+            if (event.getEntityLiving().isSensitiveToWater()){
                 event.setResult(Event.Result.DENY);
             }
         }

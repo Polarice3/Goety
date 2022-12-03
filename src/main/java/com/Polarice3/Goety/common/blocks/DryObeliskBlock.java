@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.blocks;
 import com.Polarice3.Goety.common.tileentities.DryObeliskTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -28,7 +29,7 @@ public class DryObeliskBlock extends ContainerBlock implements IForgeBlock {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public DryObeliskBlock() {
-        super(Properties.of(Material.STONE)
+        super(Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE)
                 .strength(5.0F, 9.0F)
                 .sound(SoundType.STONE)
                 .harvestLevel(0)

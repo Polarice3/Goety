@@ -6,6 +6,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -20,7 +21,7 @@ public class DarkCloudBlock extends Block {
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
 
     public DarkCloudBlock() {
-        super(Properties.of(Material.WEB)
+        super(Properties.of(Material.WEB, MaterialColor.COLOR_BLACK)
                 .sound(SoundType.WOOL)
                 .randomTicks()
                 .instabreak()

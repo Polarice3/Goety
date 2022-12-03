@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.blocks.DeadPileBlock;
 import com.Polarice3.Goety.common.blocks.DeadTNTBlock;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -11,6 +12,7 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.TNTBlock;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.AreaEffectCloudEntity;
@@ -123,7 +125,7 @@ public class DeadSandExplosion {
                             BlockState blockstate = this.level.getBlockState(blockpos);
                             FluidState fluidstate = this.level.getFluidState(blockpos);
 
-                            if (BlockFinder.NotDeadSandImmune(blockstate) && fluidstate.isEmpty()) {
+                            if (fluidstate.isEmpty()) {
                                 set.add(blockpos);
                             }
 
@@ -220,6 +222,17 @@ public class DeadSandExplosion {
                 BlockFinder.DeadSandReplaceLagFree(blockpos, this.level);
 
                 BlockState blockstate = this.level.getBlockState(blockpos);
+                if (this.level.random.nextInt(3) == 0) {
+                    if (this.level.getBlockState(blockpos.above()).isAir()
+                            && blockstate.isSolidRender(this.level, blockpos)) {
+                        this.level.setBlockAndUpdate(blockpos.above(), ModBlocks.DEAD_PILE.get().defaultBlockState());
+                    }
+                    if (blockstate.getBlock() == ModBlocks.DEAD_PILE.get()
+                        && blockstate.getValue(DeadPileBlock.LAYERS) < 8){
+                        int i = this.level.getBlockState(blockpos).getValue(DeadPileBlock.LAYERS);
+                        this.level.setBlockAndUpdate(blockpos, blockstate.setValue(DeadPileBlock.LAYERS, i + 1));
+                    }
+                }
                 if (blockstate.getBlock().is(ModBlocks.DEAD_TNT.get())){
                     DeadTNTBlock.wasDeadExploded(this.level, blockpos, this);
                 }

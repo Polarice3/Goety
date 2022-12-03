@@ -42,7 +42,7 @@ public class UncookedMutatedItem extends FakeFoodItem {
                         EffectInstance effectinstance = new EffectInstance(ModEffects.COSMIC.get(), 3000, 0, false, false);
                         entityLiving.addEffect(effectinstance);
                     } else {
-                        EffectsUtil.amplifyEffect(entityLiving, ModEffects.COSMIC.get(), 3000, false, false);
+                        EffectsUtil.amplifyEffect(entityLiving, ModEffects.COSMIC.get(), 3000);
                     }
                 }
             }

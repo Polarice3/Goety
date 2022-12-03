@@ -26,6 +26,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -79,7 +80,8 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
                     }
                 } else {
                     this.itemStack.shrink(1);
-                    this.level.playSound(null, this.getBlockPos(), SoundEvents.BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.level.playSound(null, this.getBlockPos(), SoundEvents.FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.finishParticles();
                     this.markUpdated();
                     this.cookingProgress = 0;
                 }
@@ -96,7 +98,8 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
                         SEHelper.increaseSouls(this.getArcaOwner(), soulIncrease);
                     }
                     this.itemStack.shrink(1);
-                    this.level.playSound(null, this.getBlockPos(), SoundEvents.BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.level.playSound(null, this.getBlockPos(), SoundEvents.FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    this.finishParticles();
                     this.markUpdated();
                     this.cookingProgress = 0;
                 }
@@ -111,7 +114,7 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
             this.cookingProgress = 0;
             this.itemStack = pStack;
             assert this.level != null;
-            this.level.playSound(null, this.getBlockPos(), SoundEvents.CONDUIT_ACTIVATE, SoundCategory.BLOCKS, 1.0F, 0.5F);
+            this.level.playSound(null, this.getBlockPos(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.BLOCKS, 1.0F, 0.5F);
             this.markUpdated();
             return true;
         }
@@ -158,6 +161,24 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
         }
     }
 
+    private void finishParticles() {
+        BlockPos blockpos = this.getBlockPos();
+
+        if (this.level != null) {
+            if (!this.level.isClientSide) {
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                serverWorld.sendParticles(ParticleTypes.LARGE_SMOKE, blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, 1, 0, 0, 0, 0);
+                for (int p = 0; p < 6; ++p) {
+                    double d0 = (double) blockpos.getX() + serverWorld.random.nextDouble();
+                    double d1 = (double) blockpos.getY() + serverWorld.random.nextDouble();
+                    double d2 = (double) blockpos.getZ() + serverWorld.random.nextDouble();
+                    serverWorld.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, d0, d1, d2, 1, 0, 0, 0, 0);
+                    serverWorld.sendParticles(ParticleTypes.SMOKE, d0, d1, d2, 1, 0, 0, 0, 0);
+                }
+            }
+        }
+    }
+
     @OnlyIn(Dist.CLIENT)
     private void makeWorkParticles() {
         BlockPos blockpos = this.getBlockPos();
@@ -165,11 +186,11 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
 
         if (MINECRAFT.level != null) {
             long t = MINECRAFT.level.getGameTime();
-            double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
-            double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
-            double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
             if (t % 20 == 0) {
                 for (int p = 0; p < 6; ++p) {
+                    double d0 = (double)blockpos.getX() + MINECRAFT.level.random.nextDouble();
+                    double d1 = (double)blockpos.getY() + MINECRAFT.level.random.nextDouble();
+                    double d2 = (double)blockpos.getZ() + MINECRAFT.level.random.nextDouble();
                     MINECRAFT.level.addParticle(ParticleTypes.ENCHANT, d0, d1, d2, 0, 0, 0);
                     MINECRAFT.level.addParticle(ParticleTypes.PORTAL, d0, d1, d2, 0.0D, 0, 0.0D);
                 }

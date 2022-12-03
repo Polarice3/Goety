@@ -8,10 +8,10 @@ import net.minecraft.util.math.MathHelper;
 public class EffectsUtil {
 
     public static void amplifyEffect (LivingEntity infected, Effect effect, int duration){
-        amplifyEffect(infected, effect, duration, false, true);
+        amplifyEffect(infected, effect, duration, 4, false, true);
     }
 
-    public static void amplifyEffect(LivingEntity infected, Effect effect, int duration, boolean pAmbient, boolean pVisible){
+    public static void amplifyEffect(LivingEntity infected, Effect effect, int duration, int maxAmp, boolean pAmbient, boolean pVisible){
         EffectInstance effectinstance1 = infected.getEffect(effect);
         int i = 1;
         if (effectinstance1 != null) {
@@ -21,7 +21,7 @@ public class EffectsUtil {
             --i;
         }
 
-        i = MathHelper.clamp(i, 0, 4);
+        i = MathHelper.clamp(i, 0, maxAmp);
         EffectInstance effectinstance = new EffectInstance(effect, duration, i, pAmbient, pVisible);
         infected.addEffect(effectinstance);
     }

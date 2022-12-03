@@ -181,6 +181,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SpecialBossBar;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandSpread;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandStoneSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSky;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSkyNoOcclude;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryWater;
@@ -257,6 +258,8 @@ public class MainConfig {
         BUILDER.push("Blocks");
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
                 .define("deadSandSpread", true);
+        DeadSandStoneSpread = BUILDER.comment("Dead Sandstone can Spread itself instead of just Dead Sands. WARNING: Causes lots of lag., Default: false")
+                .define("deadSandstoneSpread", false);
         DeadSandDarkSky = BUILDER.comment("Dead Sand will produce a Dark Cloud at the height of the world if surrounded by other Dead Blocks, Default: false")
                 .define("deadSandDarkSky", false);
         DeadSandDarkSkyNoOcclude = BUILDER.comment("Dark Cloud will be produced if the Dead Sand cannot see the sky, Default: true")
