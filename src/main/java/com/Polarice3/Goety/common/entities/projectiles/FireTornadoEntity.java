@@ -140,20 +140,20 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
                         entity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
                     }
                     this.suckInMobs(entity);
-                    if (!entity.fireImmune()) {
-                        if (this.getTrueOwner() != null) {
-                            entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 6.0F);
-                            if (this.getTrueOwner() instanceof ApostleEntity) {
-                                entity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
-                            }
-                        } else {
+                    if (this.getTrueOwner() != null) {
+                        entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 6.0F);
+                        if (this.getTrueOwner() instanceof ApostleEntity) {
+                            entity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
+                        }
+                    } else {
+                        if (!entity.fireImmune()) {
                             entity.hurt(DamageSource.IN_FIRE, 6.0F);
                         }
-                        if (entity instanceof PlayerEntity){
-                            PlayerEntity player = (PlayerEntity) entity;
-                            if (player.isBlocking()) {
-                                player.disableShield(true);
-                            }
+                    }
+                    if (entity instanceof PlayerEntity){
+                        PlayerEntity player = (PlayerEntity) entity;
+                        if (player.isBlocking()) {
+                            player.disableShield(true);
                         }
                     }
                 }

@@ -22,11 +22,11 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class SkullLordRenderer extends MobRenderer<SkullLordEntity, SkullMobModel<SkullLordEntity>> {
-    public static final ResourceLocation CONNECTION = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord_connection.png");
-    public static final ResourceLocation LASER_BEAM = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord_laser.png");
-    private static final ResourceLocation LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord.png");
-    private static final ResourceLocation VULNERABLE = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord_vulnerable.png");
-    private static final ResourceLocation CHARGE = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord_charging.png");
+    public static final ResourceLocation CONNECTION = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord/skull_lord_connection.png");
+    public static final ResourceLocation LASER_BEAM = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord/skull_lord_laser.png");
+    private static final ResourceLocation LOCATION = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord/skull_lord.png");
+    private static final ResourceLocation VULNERABLE = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord/skull_lord_vulnerable.png");
+    private static final ResourceLocation CHARGE = new ResourceLocation(Goety.MOD_ID,"textures/entity/skull_lord/skull_lord_charging.png");
     private static final RenderType CONNECTION_RENDER_TYPE = RenderType.entityCutoutNoCull(CONNECTION);
     private static final RenderType LASER_RENDER_TYPE = RenderType.entityCutoutNoCull(LASER_BEAM);
 

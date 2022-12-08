@@ -60,7 +60,7 @@ public abstract class SummonSpells extends Spells{
         }
         if (SummonMastery(entityLiving)){
             if (entityLiving.level.random.nextBoolean()){
-                s = 0;
+                s = SummonDownDuration()/2;
             }
         }
         EffectInstance effectinstance = new EffectInstance(ModEffects.SUMMONDOWN.get(), s, i, false, false, true);

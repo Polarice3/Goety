@@ -282,7 +282,7 @@ public class SkullLordEntity extends MonsterEntity{
                 if (this.getPithos() instanceof PithosTileEntity) {
                     PithosTileEntity pithosTile = (PithosTileEntity) this.getPithos();
                     if (this.tickCount % 100 == 0) {
-                        this.setisDespawn(true);
+                        this.setIsDespawn(true);
                         pithosTile.lock();
                         if (this.getBoneLord() != null) {
                             this.getBoneLord().remove();
@@ -314,7 +314,7 @@ public class SkullLordEntity extends MonsterEntity{
                 if (!this.isLaserTime()){
                     --this.boneLordRegen;
                 }
-                this.setisInvulnerable(false);
+                this.setIsInvulnerable(false);
                 for (BoneLordEntity boneLordEntity : this.level.getEntitiesOfClass(BoneLordEntity.class, this.getBoundingBox().inflate(32))){
                     if (boneLordEntity.getSkullLord() == this){
                         this.setBoneLord(boneLordEntity);
@@ -338,7 +338,7 @@ public class SkullLordEntity extends MonsterEntity{
                         this.moveTo(this.getBoneLord().position());
                     }
                 }
-                this.setisInvulnerable(true);
+                this.setIsInvulnerable(true);
                 this.hitTimes = 0;
                 this.boneLordRegen = delay * 2;
             }
@@ -606,7 +606,7 @@ public class SkullLordEntity extends MonsterEntity{
         return this.geFlags(2);
     }
 
-    public void setisInvulnerable(boolean invulnerable) {
+    public void setIsInvulnerable(boolean invulnerable) {
         this.setFlags(2, invulnerable);
     }
 
@@ -614,7 +614,7 @@ public class SkullLordEntity extends MonsterEntity{
         return this.geFlags(4);
     }
 
-    public void setisDespawn(boolean invulnerable) {
+    public void setIsDespawn(boolean invulnerable) {
         this.setFlags(4, invulnerable);
     }
 

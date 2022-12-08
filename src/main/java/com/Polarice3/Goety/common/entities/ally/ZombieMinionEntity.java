@@ -10,6 +10,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.ZombieEntity;
@@ -18,6 +19,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -31,8 +35,12 @@ import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ZombieMinionEntity extends SummonedEntity {
+    private static final UUID SPEED_MODIFIER_BABY_UUID = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
+    private static final AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(SPEED_MODIFIER_BABY_UUID, "Baby speed boost", 0.5D, AttributeModifier.Operation.MULTIPLY_BASE);
+    private static final DataParameter<Boolean> DATA_BABY_ID = EntityDataManager.defineId(ZombieMinionEntity.class, DataSerializers.BOOLEAN);
 
     public ZombieMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -68,16 +76,51 @@ public class ZombieMinionEntity extends SummonedEntity {
                 .add(Attributes.ARMOR, 2.0D);
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
-        boolean flag = super.doHurtTarget(entityIn);
-        if (flag) {
-            float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
-                entityIn.setSecondsOnFire(2 * (int)f);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(DATA_BABY_ID, false);
+    }
+
+    public boolean isBaby() {
+        return this.getEntityData().get(DATA_BABY_ID);
+    }
+
+    public void setBaby(boolean pChildZombie) {
+        this.getEntityData().set(DATA_BABY_ID, pChildZombie);
+        if (this.level != null && !this.level.isClientSide) {
+            ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+            modifiableattributeinstance.removeModifier(SPEED_MODIFIER_BABY);
+            if (pChildZombie) {
+                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER_BABY);
             }
         }
 
-        return flag;
+    }
+
+    public void onSyncedDataUpdated(DataParameter<?> pKey) {
+        if (DATA_BABY_ID.equals(pKey)) {
+            this.refreshDimensions();
+        }
+
+        super.onSyncedDataUpdated(pKey);
+    }
+
+    public void addAdditionalSaveData(CompoundNBT pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putBoolean("IsBaby", this.isBaby());
+    }
+
+    public void readAdditionalSaveData(CompoundNBT pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.setBaby(pCompound.getBoolean("IsBaby"));
+    }
+
+    protected float getStandingEyeHeight(Pose pPose, EntitySize pSize) {
+        return this.isBaby() ? 0.93F : 1.74F;
+    }
+
+    public double getMyRidingOffset() {
+        return this.isBaby() ? 0.0D : -0.45D;
     }
 
     protected SoundEvent getAmbientSound() {
@@ -148,14 +191,16 @@ public class ZombieMinionEntity extends SummonedEntity {
         if (this.isUpgraded() && killedEntity instanceof ZombieEntity && random <= 0.5F && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(killedEntity, ModEntityType.ZOMBIE_MINION.get(), (timer) -> {})) {
             ZombieEntity zombieEntity = (ZombieEntity)killedEntity;
             ZombieMinionEntity zombieMinionEntity = zombieEntity.convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
-            zombieMinionEntity.finalizeSpawn(world, level.getCurrentDifficultyAt(zombieMinionEntity.blockPosition()), SpawnReason.CONVERSION, null, (CompoundNBT)null);
-            if (this.getTrueOwner() != null){
-                zombieMinionEntity.setOwnerId(this.getTrueOwner().getUUID());
-            }
-            zombieMinionEntity.setLimitedLife(10 * (15 + this.level.random.nextInt(45)));
-            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(killedEntity, zombieMinionEntity);
-            if (!this.isSilent()) {
-                world.levelEvent((PlayerEntity)null, 1026, this.blockPosition(), 0);
+            if (zombieMinionEntity != null) {
+                zombieMinionEntity.finalizeSpawn(world, level.getCurrentDifficultyAt(zombieMinionEntity.blockPosition()), SpawnReason.CONVERSION, null, (CompoundNBT) null);
+                zombieMinionEntity.setLimitedLife(10 * (15 + this.level.random.nextInt(45)));
+                if (this.getTrueOwner() != null){
+                    zombieMinionEntity.setTrueOwner(this.getTrueOwner());
+                }
+                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(killedEntity, zombieMinionEntity);
+                if (!this.isSilent()) {
+                    world.levelEvent((PlayerEntity) null, 1026, this.blockPosition(), 0);
+                }
             }
         }
 

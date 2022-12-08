@@ -274,48 +274,48 @@ public class MobUtil {
     }
 
     @Nullable
-    public static <T extends MobEntity> T ownedConversion(LivingEntity killer, MobEntity mobEntity, EntityType<T> p_233656_1_, boolean p_233656_2_) {
-        if (mobEntity.removed) {
+    public static <T extends MobEntity> T ownedConversion(LivingEntity owner, MobEntity killed, EntityType<T> p_233656_1_, boolean p_233656_2_) {
+        if (killed.removed) {
             return (T)null;
         } else {
-            T t = p_233656_1_.create(mobEntity.level);
-            t.copyPosition(mobEntity);
-            t.setBaby(mobEntity.isBaby());
-            t.setNoAi(mobEntity.isNoAi());
-            if (mobEntity.hasCustomName()) {
-                t.setCustomName(mobEntity.getCustomName());
-                t.setCustomNameVisible(mobEntity.isCustomNameVisible());
+            T t = p_233656_1_.create(killed.level);
+            t.copyPosition(killed);
+            t.setBaby(killed.isBaby());
+            t.setNoAi(killed.isNoAi());
+            if (killed.hasCustomName()) {
+                t.setCustomName(killed.getCustomName());
+                t.setCustomNameVisible(killed.isCustomNameVisible());
             }
 
-            if (mobEntity.isPersistenceRequired()) {
+            if (killed.isPersistenceRequired()) {
                 t.setPersistenceRequired();
             }
 
-            t.setInvulnerable(mobEntity.isInvulnerable());
+            t.setInvulnerable(killed.isInvulnerable());
             if (p_233656_2_) {
-                t.setCanPickUpLoot(mobEntity.canPickUpLoot());
+                t.setCanPickUpLoot(killed.canPickUpLoot());
 
                 for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
-                    ItemStack itemstack = mobEntity.getItemBySlot(equipmentslottype);
+                    ItemStack itemstack = killed.getItemBySlot(equipmentslottype);
                     if (!itemstack.isEmpty()) {
                         t.setItemSlot(equipmentslottype, itemstack.copy());
                         itemstack.setCount(0);
                     }
                 }
             }
-            if (mobEntity instanceof OwnedEntity){
-                OwnedEntity ownedEntity = (OwnedEntity) mobEntity;
-                ownedEntity.setTrueOwner(killer);
+            if (killed instanceof OwnedEntity){
+                OwnedEntity ownedEntity = (OwnedEntity) killed;
+                ownedEntity.setTrueOwner(owner);
             }
 
-            mobEntity.level.addFreshEntity(t);
-            if (mobEntity.isPassenger()) {
-                Entity entity = mobEntity.getVehicle();
-                mobEntity.stopRiding();
+            killed.level.addFreshEntity(t);
+            if (killed.isPassenger()) {
+                Entity entity = killed.getVehicle();
+                killed.stopRiding();
                 t.startRiding(entity, true);
             }
 
-            mobEntity.remove();
+            killed.remove();
             return t;
         }
     }

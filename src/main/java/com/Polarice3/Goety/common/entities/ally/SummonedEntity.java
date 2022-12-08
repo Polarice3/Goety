@@ -3,9 +3,8 @@ package com.Polarice3.Goety.common.entities.ally;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
@@ -16,6 +15,7 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
@@ -119,7 +119,7 @@ public class SummonedEntity extends OwnedEntity {
             }
             if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECROBOOTSOFWANDER.get()){
                 if (this.getMobType() == CreatureAttribute.UNDEAD){
-                    this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 1, false, false, false));
+                    this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 0, false, false, false));
                 }
             }
             if (this.getMobType() == CreatureAttribute.UNDEAD) {
@@ -128,31 +128,19 @@ public class SummonedEntity extends OwnedEntity {
                         if (this.getTrueOwner() instanceof PlayerEntity) {
                             if (RobeArmorFinder.FindNecroSet(this.getTrueOwner())) {
                                 PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
-                                ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
                                 int SoulCost = MainConfig.UndeadMinionHealCost.get();
                                 if (RobeArmorFinder.FindLeggings(owner)){
                                     if (this.random.nextBoolean()){
                                         SoulCost = 0;
                                     }
                                 }
-                                if (SEHelper.getSEActive(owner) && SEHelper.getSESouls(owner) > MainConfig.UndeadMinionHealCost.get()){
+                                if (SEHelper.getSoulsAmount(owner, MainConfig.UndeadMinionHealCost.get())){
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
-                                        SEHelper.decreaseSESouls(owner, SoulCost);
                                         if (!this.level.isClientSide){
                                             ServerWorld serverWorld = (ServerWorld) this.level;
-                                            SEHelper.sendSEUpdatePacket(owner);
-                                            serverWorld.sendParticles(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
-                                        }
-                                    }
-                                } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > MainConfig.UndeadMinionHealCost.get()) {
-                                    if (this.tickCount % 20 == 0) {
-                                        this.heal(1.0F);
-                                        Vector3d vector3d = this.getDeltaMovement();
-                                        GoldTotemItem.decreaseSouls(foundStack, SoulCost);
-                                        if (!this.level.isClientSide){
-                                            ServerWorld serverWorld = (ServerWorld) this.level;
+                                            SEHelper.decreaseSouls(owner, SoulCost);
                                             serverWorld.sendParticles(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
                                         }
                                     }
@@ -200,6 +188,44 @@ public class SummonedEntity extends OwnedEntity {
         return super.hurt(source, amount);
     }
 
+    public boolean doHurtTarget(Entity entityIn) {
+        boolean flag = super.doHurtTarget(entityIn);
+        if (flag) {
+            if (this.getMobType() == CreatureAttribute.UNDEAD){
+                float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+                if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
+                    entityIn.setSecondsOnFire(2 * (int)f);
+                }
+            }
+            if (!this.getMainHandItem().isEmpty() && this.getMainHandItem().isDamageableItem()){
+                ItemHelper.hurtAndBreak(this.getMainHandItem(), 1, this);
+            }
+        }
+
+        return flag;
+    }
+
+    protected void hurtArmor(DamageSource pDamageSource, float pDamage) {
+        if (!(pDamage <= 0.0F)) {
+            pDamage = pDamage / 4.0F;
+            if (pDamage < 1.0F) {
+                pDamage = 1.0F;
+            }
+
+            for(EquipmentSlotType equipmentSlotType : EquipmentSlotType.values()) {
+                if (equipmentSlotType.getType() == EquipmentSlotType.Group.ARMOR) {
+                    ItemStack itemstack = this.getItemBySlot(equipmentSlotType);
+                    if ((!pDamageSource.isFire() || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
+                        itemstack.hurtAndBreak((int) pDamage, this, (p_214023_1_) -> {
+                            p_214023_1_.broadcastBreakEvent(equipmentSlotType);
+                        });
+                    }
+                }
+            }
+
+        }
+    }
+
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SUMMONED_FLAGS, (byte)0);
@@ -239,7 +265,7 @@ public class SummonedEntity extends OwnedEntity {
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-        this.upgraded = compound.getBoolean("Upgraded");
+        this.setUpgraded(compound.getBoolean("Upgraded"));
         this.setWandering(compound.getBoolean("wandering"));
         this.setStaying(compound.getBoolean("staying"));
 
@@ -331,7 +357,7 @@ public class SummonedEntity extends OwnedEntity {
                 return false;
             } else if (this.summonedEntity.isWandering() || this.summonedEntity.isStaying()) {
                 return false;
-            } else if (this.summonedEntity.isAggressive()) {
+            } else if (this.summonedEntity.getTarget() != null) {
                 return false;
             } else {
                 this.owner = livingentity;
@@ -342,7 +368,7 @@ public class SummonedEntity extends OwnedEntity {
         public boolean canContinueToUse() {
             if (this.navigation.isDone()) {
                 return false;
-            } else if (this.summonedEntity.isAggressive()){
+            } else if (this.summonedEntity.getTarget() != null){
                 return false;
             } else {
                 return !(this.summonedEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));

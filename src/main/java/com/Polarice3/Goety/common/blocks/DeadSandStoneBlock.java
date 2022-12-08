@@ -27,7 +27,11 @@ public class DeadSandStoneBlock extends Block implements IDeadBlock {
 
     public void randomTick(BlockState pState, ServerWorld pLevel, BlockPos pPos, Random pRandom) {
         if (MainConfig.DeadSandStoneSpread.get()){
-            this.spreadSand(pLevel, pPos, pRandom);
+            if (pRandom.nextFloat() <= 0.05F) {
+                this.spreadSand(pLevel, pPos, pRandom);
+            } else {
+                this.spreadSandOnly(pLevel, pPos, pRandom);
+            }
         } else {
             this.spreadSandOnly(pLevel, pPos, pRandom);
         }

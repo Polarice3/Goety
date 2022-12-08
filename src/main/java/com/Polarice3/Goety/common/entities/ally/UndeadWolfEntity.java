@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -247,10 +248,10 @@ public class UndeadWolfEntity extends SummonedEntity{
             UndeadWolfEntity zombieMinionEntity = zombieEntity.convertTo(ModEntityType.UNDEAD_WOLF_MINION.get(), false);
             if (zombieMinionEntity != null) {
                 zombieMinionEntity.finalizeSpawn(world, level.getCurrentDifficultyAt(zombieMinionEntity.blockPosition()), SpawnReason.CONVERSION, null, (CompoundNBT) null);
-                if (this.getTrueOwner() != null) {
-                    zombieMinionEntity.setOwnerId(this.getTrueOwner().getUUID());
-                }
                 zombieMinionEntity.setLimitedLife(10 * (15 + this.level.random.nextInt(45)));
+                if (this.getTrueOwner() != null){
+                    zombieMinionEntity.setTrueOwner(this.getTrueOwner());
+                }
                 net.minecraftforge.event.ForgeEventFactory.onLivingConvert(killedEntity, zombieMinionEntity);
                 if (!this.isSilent()) {
                     world.levelEvent((PlayerEntity) null, 1026, this.blockPosition(), 0);

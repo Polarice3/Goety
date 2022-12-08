@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -129,18 +130,6 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
 
     }
 
-    public boolean doHurtTarget(Entity entityIn) {
-        boolean flag = super.doHurtTarget(entityIn);
-        if (flag) {
-            float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
-                entityIn.setSecondsOnFire(2 * (int)f);
-            }
-        }
-
-        return flag;
-    }
-
     protected abstract SoundEvent getStepSound();
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
@@ -190,6 +179,7 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
         AbstractArrowEntity abstractarrowentity = this.getMobArrow(itemstack, distanceFactor);
         if (this.getMainHandItem().getItem() instanceof BowItem) {
             abstractarrowentity = ((BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+            ItemHelper.hurtAndBreak(this.getMainHandItem(), 1, this);
         }
         abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() + this.getArrowPower());
         double d0 = target.getX() - this.getX();
@@ -203,8 +193,7 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
 
     protected AbstractArrowEntity getMobArrow(ItemStack arrowStack, float distanceFactor) {
         AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, arrowStack, distanceFactor);
-        int random = this.level.random.nextInt(4);
-        if (this.isUpgraded() && abstractarrowentity instanceof ArrowEntity && random == 0) {
+        if (this.isUpgraded() && abstractarrowentity instanceof ArrowEntity && this.level.random.nextFloat() <= 0.25F) {
             ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(Effects.WEAKNESS, 300));
         }
 

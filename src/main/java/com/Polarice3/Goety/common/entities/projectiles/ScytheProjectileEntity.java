@@ -181,7 +181,7 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
             this.setAnimation(0);
         }
         List<LivingEntity> targets = new ArrayList<>();
-        for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(1.0F))) {
+        for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5F))) {
             if (this.getTrueOwner() != null) {
                 if (entity != this.getTrueOwner() && !entity.isAlliedTo(this.getTrueOwner()) && !this.getTrueOwner().isAlliedTo(entity)) {
                     targets.add(entity);

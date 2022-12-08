@@ -927,7 +927,7 @@ public class ModEvents {
         }
         if (direct instanceof AbstractArrowEntity){
             AbstractArrowEntity arrowEntity = (AbstractArrowEntity) direct;
-            if (arrowEntity.getTags().contains(ConstantPaths.rainArrow())){
+            if (arrowEntity.getTags().contains(ConstantPaths.rainArrow()) || arrowEntity.getOwner() instanceof ApostleEntity){
                 if (arrowEntity.getOwner() != null) {
                     if (victim instanceof OwnedEntity) {
                         OwnedEntity ownedEntity = (OwnedEntity) victim;

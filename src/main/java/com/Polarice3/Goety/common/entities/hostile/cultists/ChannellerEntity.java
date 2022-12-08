@@ -187,32 +187,34 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                         Vector3d vector3d = getAlly().position();
                         this.getNavigation().moveTo(vector3d.x, vector3d.y, vector3d.z, 1.0D);
                     } else {
-                        this.navigation.stop();
-                        this.noActionTime = 0;
                         this.setIsPraying(true);
                         this.getLookControl().setLookAt(this.getAlly(), (float) this.getMaxHeadYRot(), (float) this.getMaxHeadXRot());
-                        this.getAlly().setTarget(this.getTarget());
-                        this.getAlly().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
-                        this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
-                        this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
-                        this.getAlly().setPersistenceRequired();
-                        if (this.getHealth() < this.getMaxHealth()) {
-                            if (this.tickCount % 10 == 0) {
-                                this.getAlly().hurt(DamageSource.STARVE, 2.0F);
-                                this.heal(2.0F);
+                        if (!this.level.isClientSide) {
+                            this.getNavigation().stop();
+                            this.noActionTime = 0;
+                            this.getAlly().setTarget(this.getTarget());
+                            this.getAlly().addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 60, 1));
+                            this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 60, 1));
+                            this.getAlly().addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 60, 1));
+                            this.getAlly().setPersistenceRequired();
+                            if (this.getHealth() < this.getMaxHealth()) {
+                                if (this.tickCount % 10 == 0) {
+                                    this.getAlly().hurt(DamageSource.STARVE, 2.0F);
+                                    this.heal(2.0F);
+                                }
                             }
-                        }
-                        if (this.getTarget() != null && this.canSee(this.getTarget())) {
-                            double d = this.distanceToSqr(this.getTarget());
-                            float f = MathHelper.sqrt(MathHelper.sqrt(d)) * 0.5F;
-                            if (this.tickCount % 100 == 0) {
-                                this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
-                                double d0 = Math.min(this.getTarget().getY(), this.getY());
-                                double d1 = Math.max(this.getTarget().getY(), this.getY()) + 1.0D;
-                                spawnBlast(this, this.getTarget().getX(), this.getTarget().getZ(), d0, d1);
-                                for (int i = 0; i < 5; ++i) {
-                                    float f1 = f + (float) i * (float) Math.PI * 0.4F;
-                                    spawnBlast(this, this.getTarget().getX() + (double) MathHelper.cos(f1) * 1.5D, this.getTarget().getZ() + (double) MathHelper.sin(f1) * 1.5D, d0, d1);
+                            if (this.getTarget() != null && this.canSee(this.getTarget())) {
+                                double d = this.distanceToSqr(this.getTarget());
+                                float f = MathHelper.sqrt(MathHelper.sqrt(d)) * 0.5F;
+                                if (this.tickCount % 100 == 0) {
+                                    this.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 1.0F);
+                                    double d0 = Math.min(this.getTarget().getY(), this.getY());
+                                    double d1 = Math.max(this.getTarget().getY(), this.getY()) + 1.0D;
+                                    spawnBlast(this, this.getTarget().getX(), this.getTarget().getZ(), d0, d1);
+                                    for (int i = 0; i < 5; ++i) {
+                                        float f1 = f + (float) i * (float) Math.PI * 0.4F;
+                                        spawnBlast(this, this.getTarget().getX() + (double) MathHelper.cos(f1) * 1.5D, this.getTarget().getZ() + (double) MathHelper.sin(f1) * 1.5D, d0, d1);
+                                    }
                                 }
                             }
                         }
@@ -241,10 +243,7 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                 if (!this.level.isClientSide) {
                     ServerWorld serverWorld = (ServerWorld) this.level;
                     ServerParticleUtil.gatheringParticles(ModParticleTypes.FLAME_GATHER.get(), this, serverWorld);
-                }
-                if (this.tickCount % 100 == 0 && !this.isDeadOrDying()) {
-                    if (this.level instanceof ServerWorld) {
-                        ServerWorld serverWorld = (ServerWorld) this.level;
+                    if (this.tickCount % 100 == 0 && !this.isDeadOrDying()) {
                         OwnedEntity minion = null;
                         switch (this.random.nextInt(3)) {
                             case (0):

@@ -73,6 +73,8 @@ public class IllagerSpawner {
                                 BlockPos.Mutable blockpos$mutable = playerentity.blockPosition().mutable().move(k, 0, l);
                                 if (!world.hasChunksAt(blockpos$mutable.getX() - 10, blockpos$mutable.getY() - 10, blockpos$mutable.getZ() - 10, blockpos$mutable.getX() + 10, blockpos$mutable.getY() + 10, blockpos$mutable.getZ() + 10)) {
                                     return 0;
+                                } else if (!world.dimensionType().hasRaids()){
+                                    return 0;
                                 } else {
                                     Biome biome = world.getBiome(blockpos$mutable);
                                     Biome.Category biome$category = biome.getBiomeCategory();

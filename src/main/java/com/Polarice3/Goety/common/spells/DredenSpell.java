@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.DredenMinionEntity;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -15,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -74,7 +74,7 @@ public class DredenSpell extends SummonSpells{
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
                 if (enchantment > 0){
                     int boost = MathHelper.clamp(enchantment - 1, 0, 10);
-                    summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
+                    summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost));
                 }
                 this.SummonSap(entityLiving, summonedentity);
                 worldIn.addFreshEntity(summonedentity);
@@ -123,7 +123,7 @@ public class DredenSpell extends SummonSpells{
                     summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                     if (enchantment > 0){
                         int boost = MathHelper.clamp(enchantment - 1, 0, 10);
-                        summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, boost));
+                        summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost));
                     }
                     this.SummonSap(entityLiving, summonedentity);
                     worldIn.addFreshEntity(summonedentity);

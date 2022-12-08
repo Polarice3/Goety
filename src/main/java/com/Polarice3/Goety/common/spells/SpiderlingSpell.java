@@ -3,12 +3,12 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -42,7 +42,7 @@ public class SpiderlingSpell extends ChargingSpells{
                 int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 if (enchantment != 0){
-                    summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, enchantment - 1, false, false));
+                    summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, enchantment - 1, false, false));
                 }
                 summonedentity.setLimitedLife(180 * duration);
             }
@@ -65,7 +65,7 @@ public class SpiderlingSpell extends ChargingSpells{
                     int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                     int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                     if (enchantment != 0){
-                        summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE, enchantment - 1, false, false));
+                        summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, enchantment - 1, false, false));
                     }
                     summonedentity.setLimitedLife(180 * duration);
                 }

@@ -127,10 +127,16 @@ public class FireBlastTrapEntity extends Entity {
                             MobUtil.push(livingEntity, 0, 0.25, 0);
                             if (this.owner instanceof ApostleEntity) {
                                 livingEntity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
+                                livingEntity.hurt(DamageSource.indirectMagic(this, this.owner), 7.0F);
+                            } else {
+                                if (this.owner != null){
+                                    livingEntity.hurt(DamageSource.indirectMagic(this, this.owner), 5.0F);
+                                } else {
+                                    livingEntity.hurt(DamageSource.MAGIC, 5.0F);
+                                }
                             }
-                            if (!livingEntity.fireImmune()) {
+                            if (!livingEntity.fireImmune()){
                                 livingEntity.setSecondsOnFire(8);
-                                livingEntity.hurt(DamageSource.IN_FIRE, 5);
                             }
                         }
                     }

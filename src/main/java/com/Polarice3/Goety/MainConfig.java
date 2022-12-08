@@ -258,7 +258,7 @@ public class MainConfig {
         BUILDER.push("Blocks");
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
                 .define("deadSandSpread", true);
-        DeadSandStoneSpread = BUILDER.comment("Dead Sandstone can Spread itself instead of just Dead Sands. WARNING: Causes lots of lag., Default: false")
+        DeadSandStoneSpread = BUILDER.comment("Dead Sandstone have a 5% chance of spreading itself instead of just Dead Sands, disable so that they only spread Dead Sands, Default: false")
                 .define("deadSandstoneSpread", false);
         DeadSandDarkSky = BUILDER.comment("Dead Sand will produce a Dark Cloud at the height of the world if surrounded by other Dead Blocks, Default: false")
                 .define("deadSandDarkSky", false);

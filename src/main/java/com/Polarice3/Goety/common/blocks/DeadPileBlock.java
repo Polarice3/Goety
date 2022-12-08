@@ -25,7 +25,7 @@ import net.minecraftforge.common.ToolType;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class DeadPileBlock extends FallingBlock implements IDeadBlock{
+public class DeadPileBlock extends Block implements IDeadBlock{
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
     protected static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[]{VoxelShapes.empty(), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), net.minecraft.block.Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
@@ -76,7 +76,7 @@ public class DeadPileBlock extends FallingBlock implements IDeadBlock{
         BlockState blockstate = pLevel.getBlockState(pPos.below());
         if (!blockstate.is(Blocks.ICE) && !blockstate.is(Blocks.PACKED_ICE) && !blockstate.is(Blocks.BARRIER)) {
             if (!blockstate.is(Blocks.HONEY_BLOCK) && !blockstate.is(Blocks.SOUL_SAND)) {
-                return net.minecraft.block.Block.isFaceFull(blockstate.getCollisionShape(pLevel, pPos.below()), Direction.UP) || blockstate.isAir() || blockstate.getBlock() == this && blockstate.getValue(LAYERS) == 8;
+                return Block.isFaceFull(blockstate.getCollisionShape(pLevel, pPos.below()), Direction.UP) || blockstate.getBlock() == this && blockstate.getValue(LAYERS) == 8;
             } else {
                 return true;
             }
@@ -87,10 +87,6 @@ public class DeadPileBlock extends FallingBlock implements IDeadBlock{
 
     public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, IWorld pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
         return !pState.canSurvive(pLevel, pCurrentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
-    }
-
-    protected void falling(FallingBlockEntity pEntity) {
-        pEntity.dropItem = false;
     }
 
     public void randomTick(BlockState pState, ServerWorld pLevel, BlockPos pPos, Random pRandom) {
@@ -137,9 +133,4 @@ public class DeadPileBlock extends FallingBlock implements IDeadBlock{
     protected void createBlockStateDefinition(StateContainer.Builder<net.minecraft.block.Block, BlockState> pBuilder) {
         pBuilder.add(LAYERS);
     }
-
-    public int getDustColor(BlockState pState, IBlockReader pLevel, BlockPos pPos) {
-        return 5064781;
-    }
-
 }

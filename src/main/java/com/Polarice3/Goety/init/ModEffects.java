@@ -44,12 +44,16 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 2236962));
     public static final RegistryObject<Effect> SOUL_SHIELD = EFFECTS.register("soul_shield",
             () -> new ModEffect(EffectType.BENEFICIAL, 0));
-    public static final RegistryObject<Effect> ILLAGER_BANE = EFFECTS.register("illager_bane",
-            () -> new ModEffect(EffectType.BENEFICIAL, 0));
+/*    public static final RegistryObject<Effect> ILLAGER_BANE = EFFECTS.register("illager_bane",
+            () -> new ModEffect(EffectType.BENEFICIAL, 0));*/
     public static final RegistryObject<Effect> HEALTH_LOSS = EFFECTS.register("health_loss",
             () -> new ModEffect(EffectType.HARMFUL, 9244735)
                     .addAttributeModifier(Attributes.MAX_HEALTH, "2f69ece0-0ddb-4e3a-9b44-4321548d7b71",
                             -4.0D, AttributeModifier.Operation.ADDITION));
+    public static final RegistryObject<Effect> BUFF = EFFECTS.register("buff",
+            () -> new ModEffect(EffectType.BENEFICIAL, 9643043)
+                    .addAttributeModifier(Attributes.ATTACK_DAMAGE, "f033b086-8a5e-44f2-8655-888dd700691c",
+                            1.0D, AttributeModifier.Operation.ADDITION));
 
     public static final RegistryObject<Effect> DESICCATE = EFFECTS.register("desiccate",
             DesiccateEffect::new);
