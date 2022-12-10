@@ -247,6 +247,15 @@ public class DeadMobEvents {
                 }
             }
         }
+        if (living instanceof IDeadMob){
+            for (ItemEntity itemEntity : event.getDrops()){
+                if (itemEntity.getItem().getItem().getFoodProperties() != null) {
+                    if (itemEntity.getItem().getItem().getFoodProperties().getEffects().isEmpty()) {
+                        itemEntity.setItem(new ItemStack(Items.ROTTEN_FLESH));
+                    }
+                }
+            }
+        }
     }
 
     @SubscribeEvent

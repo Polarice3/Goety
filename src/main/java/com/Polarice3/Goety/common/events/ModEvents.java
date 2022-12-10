@@ -161,14 +161,6 @@ public class ModEvents {
             }
         }
         if (entity instanceof AbstractRaiderEntity){
-            if (entity instanceof AbstractIllagerEntity && ((AbstractIllagerEntity) entity).getMaxHealth() < 100.0F){
-                AbstractIllagerEntity illager = (AbstractIllagerEntity) entity;
-                illager.goalSelector.addGoal(4, new AvoidEntityGoal<>(illager, ApostleEntity.class, 32.0F, 1.0D, 1.25D));
-            }
-            if (entity instanceof RavagerEntity){
-                RavagerEntity ravagerEntity = (RavagerEntity) entity;
-                ravagerEntity.goalSelector.addGoal(4, new AvoidEntityGoal<>(ravagerEntity, ApostleEntity.class, 32.0F, 1.0D, 1.25D));
-            }
             if (MainConfig.IllagerRaid.get()) {
                 AbstractRaiderEntity raider = (AbstractRaiderEntity) entity;
                 if (world instanceof ServerWorld) {
@@ -631,10 +623,27 @@ public class ModEvents {
             }
         }
 
-        float increaseAttackSpeed = 0.5F;
         ModifiableAttributeInstance attackSpeed = player.getAttribute(Attributes.ATTACK_SPEED);
+        boolean scythe = player.getMainHandItem().getItem() instanceof DarkScytheItem;
+
+        float increaseAttackSpeed0 = 0.25F;
+        AttributeModifier attributemodifier0 = new AttributeModifier(UUID.fromString("0c091f42-8c6d-4fde-96e9-148115731cbf"), "Two Handed Scythe", increaseAttackSpeed0, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        boolean flag0 = scythe && player.getOffhandItem().isEmpty();
+        if (attackSpeed != null){
+            if (flag0){
+                if (!attackSpeed.hasModifier(attributemodifier0)){
+                    attackSpeed.addPermanentModifier(attributemodifier0);
+                }
+            } else {
+                if (attackSpeed.hasModifier(attributemodifier0)){
+                    attackSpeed.removeModifier(attributemodifier0);
+                }
+            }
+        }
+
+        float increaseAttackSpeed = 0.5F;
         AttributeModifier attributemodifier = new AttributeModifier(UUID.fromString("d4818bbc-54ed-4ecf-95a3-a15fbf71b31d"), "Scythe Proficiency", increaseAttackSpeed, AttributeModifier.Operation.MULTIPLY_TOTAL);
-        boolean flag = CuriosFinder.findGlove(player).getItem() instanceof GraveGloveItem && player.getMainHandItem().getItem() instanceof DarkScytheItem;
+        boolean flag = CuriosFinder.findGlove(player).getItem() instanceof GraveGloveItem && scythe;
         if (attackSpeed != null){
             if (flag){
                 if (!attackSpeed.hasModifier(attributemodifier)){
@@ -711,7 +720,7 @@ public class ModEvents {
             MobEntity mob = (MobEntity) livingEntity;
             if (target != null){
                 if (target instanceof PlayerEntity){
-                    if (mob.getLastHurtByMob() instanceof OwnedEntity){
+                    if (mob.getLastHurtByMob() instanceof IOwned){
                         mob.setTarget(mob.getLastHurtByMob());
                     }
                     if (RobeArmorFinder.FindNecroSet(target) && RobeArmorFinder.FindNecroBootsofWander(target)){
@@ -1062,7 +1071,7 @@ public class ModEvents {
             }
         }
         if (killed instanceof AbstractIllagerEntity){
-            if (killer instanceof PlayerEntity || killer instanceof OwnedEntity) {
+            if (killer instanceof PlayerEntity || killer instanceof IOwned) {
                 if (killed instanceof PillagerEntity) {
                     if (killed.level.random.nextFloat() <= 0.25F || ((PillagerEntity) killed).isPatrolLeader()) {
                         InfamyHelper.addInfamy(killer, MainConfig.PillagerInfamy.get());

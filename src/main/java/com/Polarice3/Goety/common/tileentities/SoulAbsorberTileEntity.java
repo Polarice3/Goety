@@ -112,7 +112,7 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
         if (this.itemStack.isEmpty()) {
             this.cookingTime = pCookTime;
             this.cookingProgress = 0;
-            this.itemStack = pStack;
+            this.itemStack = pStack.split(1);
             assert this.level != null;
             this.level.playSound(null, this.getBlockPos(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.BLOCKS, 1.0F, 0.5F);
             this.markUpdated();

@@ -4,7 +4,7 @@ import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
 import com.Polarice3.Goety.common.capabilities.infamy.InfamyImp;
 import com.Polarice3.Goety.common.capabilities.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.capabilities.infamy.InfamyUpdatePacket;
-import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,8 +35,8 @@ public class InfamyHelper {
                 InfamyHelper.sendInfamyUpdatePacket(player);
             }
         }
-        if (killer instanceof OwnedEntity){
-            OwnedEntity summonedEntity = (OwnedEntity) killer;
+        if (killer instanceof IOwned){
+            IOwned summonedEntity = (IOwned) killer;
             if (summonedEntity.getTrueOwner() != null) {
                 if (summonedEntity.getTrueOwner() instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) summonedEntity.getTrueOwner();

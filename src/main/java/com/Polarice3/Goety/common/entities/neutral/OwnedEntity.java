@@ -44,7 +44,6 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
         if (this.level != null && !this.level.isClientSide) {
             this.targetSelector.removeGoal(this.targetGoal);
             if (this.getTrueOwner() instanceof MonsterEntity){
-                this.targetSelector.addGoal(2, this.targetGoal);
                 this.setHostile(true);
             }
         }
@@ -173,6 +172,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
 
     public void setHostile(boolean hostile){
         this.entityData.set(HOSTILE, hostile);
+        this.targetSelector.addGoal(2, this.targetGoal);
     }
 
     public boolean getHostile(){

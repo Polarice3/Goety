@@ -65,7 +65,7 @@ public class ConfiguredFeatures {
                 new SimpleBlockStateProvider(States.MURK_LEAVES),
                 new FancyFoliagePlacer(FeatureSpread.fixed(2),
                         FeatureSpread.fixed(4), 4),
-                new FancyTrunkPlacer(5, 9, 0),
+                new FancyTrunkPlacer(9, 12, 0),
                 new TwoLayerFeature(0, 0, 0,
                         OptionalInt.of(4)));
     }

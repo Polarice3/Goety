@@ -70,7 +70,7 @@ public class DryObeliskTileEntity extends TileEntity implements ITickableTileEnt
                                     result.add(blockState.getBlock());
                                 }
                             }
-                            if (result.size() < 32) {
+                            if (result.size() < 64) {
                                 deadSandsPos.add(blockpos2);
                             }
                         }
@@ -81,7 +81,7 @@ public class DryObeliskTileEntity extends TileEntity implements ITickableTileEnt
                 if (MainConfig.DeadSandSpread.get()) {
                     this.activated = 20;
                     long t = this.level.getGameTime();
-                    if (t % 40 == 0) {
+                    if (t % 20 == 0) {
                         for (BlockPos blockPos1 : deadSandsPos) {
                             if (this.level.getBlockState(blockPos1).getBlock() instanceof DeadSandBlock) {
                                 DeadSandBlock deadSandBlock = (DeadSandBlock) this.level.getBlockState(blockPos1).getBlock();

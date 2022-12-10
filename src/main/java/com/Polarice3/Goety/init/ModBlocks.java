@@ -72,6 +72,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
     public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
+    public static final RegistryObject<Block> REMNANT_BLOCK = BLOCKS.register("dried_remnant_block",
+            () -> new Block(AbstractBlock.Properties.of(Material.WOOL, MaterialColor.COLOR_PURPLE).strength(0.8F).sound(SoundType.WOOL)));
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -357,6 +359,8 @@ public class ModBlocks {
             () -> new BlockItemBase(FROST_BLOCK.get()));
     public static final RegistryObject<Item> FORBIDDEN_GRASS_BLOCK_ITEM = BLOCK_ITEMS.register("forbidden_grass",
             () -> new BlockItemBase(FORBIDDEN_GRASS.get()));
+    public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("dried_remnant_block",
+            () -> new BlockItemBase(REMNANT_BLOCK.get()));
 
     //HauntedItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",

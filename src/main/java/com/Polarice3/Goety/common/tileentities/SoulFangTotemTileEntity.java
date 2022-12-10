@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
+import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.init.ModBlocks;
@@ -20,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -142,23 +144,18 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                         }
                     }
                 } else {
-                    if (livingEntity instanceof OwnedEntity) {
-                        OwnedEntity summonedEntity = (OwnedEntity) livingEntity;
-                        if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
-                            return livingEntity;
-                        }
-                    } else if (livingEntity instanceof TameableEntity) {
-                        TameableEntity tameableEntity = (TameableEntity) livingEntity;
-                        if (tameableEntity.getOwner() != this.getTrueOwner()){
-                            return livingEntity;
-                        }
-                    } else if (livingEntity instanceof LoyalSpiderEntity) {
-                        LoyalSpiderEntity loyalSpiderEntity = (LoyalSpiderEntity) livingEntity;
-                        if (loyalSpiderEntity.getTrueOwner() != this.getTrueOwner()){
-                            return livingEntity;
-                        }
-                    } else {
-                        if (livingEntity.isOnGround()) {
+                    if (livingEntity.isOnGround()) {
+                        if (livingEntity instanceof IOwned) {
+                            IOwned summonedEntity = (IOwned) livingEntity;
+                            if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
+                                return livingEntity;
+                            }
+                        } else if (livingEntity instanceof TameableEntity) {
+                            TameableEntity tameableEntity = (TameableEntity) livingEntity;
+                            if (tameableEntity.getOwner() != this.getTrueOwner()) {
+                                return livingEntity;
+                            }
+                        } else {
                             return livingEntity;
                         }
                     }
@@ -263,23 +260,18 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                         }
                     }
                 } else {
-                    if (entity instanceof OwnedEntity) {
-                        OwnedEntity summonedEntity = (OwnedEntity) entity;
-                        if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
-                            this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
-                        }
-                    } else if (entity instanceof TameableEntity) {
-                        TameableEntity tameableEntity = (TameableEntity) entity;
-                        if (tameableEntity.getOwner() != this.getTrueOwner()){
-                            this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
-                        }
-                    } else if (entity instanceof LoyalSpiderEntity) {
-                        LoyalSpiderEntity loyalSpiderEntity = (LoyalSpiderEntity) entity;
-                        if (loyalSpiderEntity.getTrueOwner() != this.getTrueOwner()){
-                            this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
-                        }
-                    } else {
-                        if (entity.isOnGround()) {
+                    if (entity.isOnGround()) {
+                        if (entity instanceof IOwned) {
+                            IOwned summonedEntity = (IOwned) entity;
+                            if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
+                                this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
+                            }
+                        } else if (entity instanceof TameableEntity) {
+                            TameableEntity tameableEntity = (TameableEntity) entity;
+                            if (tameableEntity.getOwner() != this.getTrueOwner()) {
+                                this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
+                            }
+                        } else {
                             this.spawnFangs(entity.getX(), entity.getZ(), entity.getY(), entity.getY() + 1.0D, f);
                         }
                     }
@@ -323,6 +315,10 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
 
     }
 
+    @Nullable
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.worldPosition, -1, this.getUpdateTag());
+    }
 
     @Nullable
     public UUID getOwnerId() {
