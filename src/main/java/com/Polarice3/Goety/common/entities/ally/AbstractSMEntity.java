@@ -58,14 +58,6 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
         this.reassessWeaponGoal();
     }
 
-    public void tick() {
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.limitedLifeTicks = 20;
-            this.hurt(DamageSource.STARVE, 2.0F);
-        }
-        super.tick();
-    }
-
     @Override
     protected boolean isSunSensitive() {
         return true;

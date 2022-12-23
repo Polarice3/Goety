@@ -1,0 +1,15 @@
+{
+  "name": "Phantasm Focus",
+  "icon": "goety:phantasmfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Phantoms are an enigma to many. They seemed to only appear to those who haven't slept for 3 days yet have physical presence from their membranes. After some research you're able to summon and bind them to your will."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:phantasmfocus"
+    }
+  ]
+}

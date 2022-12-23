@@ -41,16 +41,25 @@ public class FireballSpell extends InstantCastSpells{
     @Override
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
-        for(int i = 0; i < 3; ++i) {
-            ModFireballEntity smallFireballEntity = new ModFireballEntity(worldIn,
-                    entityLiving.getX() + vector3d.x / 2,
+        ModFireballEntity smallFireballEntity = new ModFireballEntity(worldIn,
+                entityLiving.getX() + vector3d.x / 2,
+                entityLiving.getEyeY() - 0.2,
+                entityLiving.getZ() + vector3d.z / 2,
+                vector3d.x,
+                vector3d.y,
+                vector3d.z);
+        smallFireballEntity.setOwner(entityLiving);
+        worldIn.addFreshEntity(smallFireballEntity);
+        for(int i = 0; i < 2; ++i) {
+            ModFireballEntity smallFireballEntity2 = new ModFireballEntity(worldIn,
+                    entityLiving.getX() + vector3d.x / 2 + worldIn.random.nextGaussian(),
                     entityLiving.getEyeY() - 0.2,
-                    entityLiving.getZ() + vector3d.z / 2,
+                    entityLiving.getZ() + vector3d.z / 2 + worldIn.random.nextGaussian(),
                     vector3d.x,
                     vector3d.y,
                     vector3d.z);
-            smallFireballEntity.setOwner(entityLiving);
-            worldIn.addFreshEntity(smallFireballEntity);
+            smallFireballEntity2.setOwner(entityLiving);
+            worldIn.addFreshEntity(smallFireballEntity2);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);

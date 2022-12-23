@@ -12,6 +12,7 @@ import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.capabilities.soulenergy.SEProvider;
 import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsProvider;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.common.entities.ai.TargetHostileOwnedGoal;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
@@ -154,6 +155,10 @@ public class ModEvents {
             AbstractSkeletonEntity skeletonEntity = (AbstractSkeletonEntity) entity;
             skeletonEntity.goalSelector.addGoal(4, new AvoidEntityGoal<>(skeletonEntity, UndeadWolfEntity.class, 6.0F, 1.0D, 1.2D));
         }
+        if (entity instanceof GolemEntity && !(entity instanceof IMob)){
+            GolemEntity golemEntity = (GolemEntity) entity;
+            golemEntity.goalSelector.addGoal(3, new TargetHostileOwnedGoal<>(golemEntity, OwnedEntity.class));
+        }
         if (entity instanceof StormEntity){
             if (!entity.level.isClientSide){
                 ServerWorld serverWorld = (ServerWorld) entity.level;
@@ -278,8 +283,10 @@ public class ModEvents {
         if (event.getName() != null) {
             Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
             if (biome != null) {
-                if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
-                    event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
+                if (MainConfig.GoldenKingSpawn.get()) {
+                    if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
+                        event.getSpawns().getSpawner(EntityClassification.WATER_AMBIENT).add(new MobSpawnInfo.Spawners(ModEntityType.SACRED_FISH.get(), 1, 1, 1));
+                    }
                 }
                 boolean flag = false;
                 if (MainConfig.InterDimensionalMobs.get()){
@@ -291,12 +298,16 @@ public class ModEvents {
                 }
                 if (flag){
                     if (biome.getPrecipitation() == Biome.RainType.SNOW) {
-                        event.getSpawns().getSpawner(EntityClassification.MONSTER)
-                                .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
-                                        MainConfig.DredenSpawnWeight.get(), 1, 1));
-                        event.getSpawns().getSpawner(EntityClassification.MONSTER)
-                                .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
-                                        MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                        if (MainConfig.DredenSpawnWeight.get() > 0) {
+                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                    .add(new MobSpawnInfo.Spawners(ModEntityType.DREDEN.get(),
+                                            MainConfig.DredenSpawnWeight.get(), 1, 1));
+                        }
+                        if (MainConfig.UrbhadhachSpawnWeight.get() > 0) {
+                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                    .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
+                                            MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                        }
                     }
                 }
             }
@@ -374,30 +385,13 @@ public class ModEvents {
     public static void SpecialSpawnEvents(LivingSpawnEvent.CheckSpawn event){
         World world = event.getEntityLiving().level;
         if (event.getEntityLiving() instanceof AbstractCultistEntity){
-            SpawnReason spawnReason = event.getSpawnReason();
-            if (PatrollerEntity.checkPatrollingMonsterSpawnRules(ModEntityType.FANATIC.get(), event.getWorld(), spawnReason, event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
+            if (AbstractCultistEntity.spawnCultistsRules(event.getEntityLiving().getType(), event.getWorld(), event.getSpawnReason(), event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
                 event.setResult(Event.Result.ALLOW);
             }
         }
         if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
             if (event.getSpawnReason() == SpawnReason.STRUCTURE){
                 event.getEntityLiving().addTag(ConstantPaths.structureMob());
-            }
-        }
-        if (event.getEntityLiving() instanceof SkeletonEntity){
-            if (event.getSpawnReason() == SpawnReason.NATURAL || event.getSpawnReason() == SpawnReason.CHUNK_GENERATION) {
-                SkeletonEntity skeletonEntity = (SkeletonEntity) event.getEntityLiving();
-                if (!world.isClientSide) {
-                    ServerWorld serverWorld = (ServerWorld) world;
-                    if (!serverWorld.getEntitiesOfClass(DredenEntity.class, event.getEntityLiving().getBoundingBox().inflate(16)).isEmpty()) {
-                        StrayEntity strayEntity = skeletonEntity.convertTo(EntityType.STRAY, true);
-                        if (strayEntity != null) {
-                            strayEntity.moveTo(skeletonEntity.getX(), skeletonEntity.getY(), skeletonEntity.getZ());
-                            strayEntity.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(skeletonEntity.blockPosition()), SpawnReason.NATURAL, null, null);
-                            serverWorld.addFreshEntity(strayEntity);
-                        }
-                    }
-                }
             }
         }
     }
@@ -425,6 +419,9 @@ public class ModEvents {
                 if (livingEntity.hasEffect(Effects.FIRE_RESISTANCE)){
                     livingEntity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
                 }
+            }
+            if (livingEntity.hasEffect(ModEffects.NECROPOWER.get())){
+                livingEntity.clearFire();
             }
             if (livingEntity instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) livingEntity;
@@ -1054,18 +1051,23 @@ public class ModEvents {
         if (killed instanceof SkeletonEntity){
             SkeletonEntity skeletonEntity = (SkeletonEntity) killed;
             if (killer instanceof DredenEntity){
-                StrayEntity strayEntity = ((SkeletonEntity) killed).convertTo(EntityType.STRAY, false);
+                StrayEntity strayEntity = (skeletonEntity).convertTo(EntityType.STRAY, false);
                 if (strayEntity != null) {
                     strayEntity.finalizeSpawn((IServerWorld) killed.level, killed.level.getCurrentDifficultyAt(strayEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
-                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, strayEntity);
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(skeletonEntity, strayEntity);
                     strayEntity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
                 }
             }
             if (killer instanceof DredenMinionEntity){
                 DredenMinionEntity dredenMinion = (DredenMinionEntity) killer;
-                StrayMinionEntity strayEntity = MobUtil.ownedConversion(dredenMinion, skeletonEntity, ModEntityType.STRAY_MINION.get(), false);
+                StrayMinionEntity strayEntity = ((SkeletonEntity) killed).convertTo(ModEntityType.STRAY_MINION.get(), false);
                 if (strayEntity != null) {
                     strayEntity.finalizeSpawn((IServerWorld) killed.level, killed.level.getCurrentDifficultyAt(strayEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                    strayEntity.setLimitedLife(10 * (15 + strayEntity.level.random.nextInt(45)));
+                    if (dredenMinion.getTrueOwner() != null){
+                        strayEntity.setTrueOwner(dredenMinion.getTrueOwner());
+                    }
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) killed, strayEntity);
                     strayEntity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
                 }
             }
@@ -1180,54 +1182,74 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void SpellLoot(LootingLevelEvent event){
-        if (!event.getEntityLiving().level.isClientSide) {
-            int looting = 0;
-            if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
-                PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
-                Entity spell = event.getDamageSource().getDirectEntity();
-                if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
-                    if (CuriosFinder.findRing(player).isEnchanted()){
-                        looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+        if (event.getEntityLiving() != null) {
+            if (!event.getEntityLiving().level.isClientSide) {
+                int looting = 0;
+                if (event.getDamageSource().getEntity() != null) {
+                    if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
+                        PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
+                        if (player != null) {
+                            Entity spell = event.getDamageSource().getDirectEntity();
+                            if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                if (CuriosFinder.findRing(player).isEnchanted()) {
+                                    looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                }
+                            }
+                            if (spell != null) {
+                                if (spell instanceof FangEntity) {
+                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                }
+                                if (spell instanceof DamagingProjectileEntity) {
+                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                }
+                            }
+                            if (event.getDamageSource() instanceof ModDamageSource) {
+                                ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
+                                if (ModDamageSource.breathAttacks(modDamageSource)) {
+                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                }
+                            }
+                        }
                     }
-                }
-                if (spell instanceof FangEntity) {
-                    event.setLootingLevel(event.getLootingLevel() + looting);
-                }
-                if (spell instanceof DamagingProjectileEntity){
-                    event.setLootingLevel(event.getLootingLevel() + looting);
-                }
-                if (event.getDamageSource() instanceof ModDamageSource) {
-                    ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
-                    if (ModDamageSource.breathAttacks(modDamageSource)) {
-                        event.setLootingLevel(event.getLootingLevel() + looting);
+                    if (event.getDamageSource().getEntity() instanceof IOwned) {
+                        IOwned ownedEntity = (IOwned) event.getDamageSource().getEntity();
+                        if (ownedEntity != null) {
+                            if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
+                                PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
+                                if (player != null) {
+                                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                        if (CuriosFinder.findRing(player).isEnchanted()) {
+                                            looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                        }
+                                    }
+                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                }
+                            }
+                        }
                     }
                 }
             }
-            if (event.getDamageSource().getEntity() instanceof OwnedEntity) {
-                OwnedEntity ownedEntity = (OwnedEntity) event.getDamageSource().getEntity();
-                if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
-                    PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
-                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
-                        if (CuriosFinder.findRing(player).isEnchanted()){
-                            looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
-                        }
-                    }
-                    if (player != null) {
-                        event.setLootingLevel(event.getLootingLevel() + looting);
-                    }
-                }
-            }
-            if (event.getDamageSource().getEntity() instanceof LoyalSpiderEntity) {
-                LoyalSpiderEntity loyalSpiderEntity = (LoyalSpiderEntity) event.getDamageSource().getEntity();
-                if (loyalSpiderEntity.getTrueOwner() instanceof PlayerEntity) {
-                    PlayerEntity player = (PlayerEntity) loyalSpiderEntity.getTrueOwner();
-                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
-                        if (CuriosFinder.findRing(player).isEnchanted()){
-                            looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
-                        }
-                    }
-                    if (player != null) {
-                        event.setLootingLevel(event.getLootingLevel() + looting);
+        }
+    }
+
+    @SubscribeEvent
+    public static void DropEvents(LivingDropsEvent event){
+        if (event.getEntityLiving() != null) {
+            LivingEntity living = event.getEntityLiving();
+        }
+    }
+
+    @SubscribeEvent
+    public static void finishItemEvents(LivingEntityUseItemEvent.Finish event){
+        if (event.getItem().getItem() == Items.MILK_BUCKET){
+            if (event.getEntityLiving().hasEffect(ModEffects.ILLAGUE.get())){
+                int duration = Objects.requireNonNull(event.getEntityLiving().getEffect(ModEffects.ILLAGUE.get())).getDuration();
+                int amp = Objects.requireNonNull(event.getEntityLiving().getEffect(ModEffects.ILLAGUE.get())).getAmplifier();
+                if (duration > 0){
+                    if (amp <= 0) {
+                        EffectsUtil.halveDuration(event.getEntityLiving(), ModEffects.ILLAGUE.get(), duration, false, false);
+                    } else {
+                        EffectsUtil.deamplifyEffect(event.getEntityLiving(), ModEffects.ILLAGUE.get(), duration, false, false);
                     }
                 }
             }
@@ -1254,12 +1276,20 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void ExplosionDetonateEvent(ExplosionEvent.Detonate event){
-        if (event.getExplosion().getSourceMob() instanceof ApostleEntity){
-            event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || (entity == event.getExplosion().getSourceMob()));
-        }
-        if (event.getExplosion().getSourceMob() instanceof CreeperlingMinionEntity){
-            CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getExplosion().getSourceMob();
-            event.getAffectedEntities().removeIf(entity -> entity instanceof LivingEntity && creeperlingMinion.getTrueOwner() == (LivingEntity) entity && RobeArmorFinder.FindFelArmor((LivingEntity) entity));
+        if (event.getExplosion().getSourceMob() != null) {
+            if (event.getExplosion().getSourceMob() instanceof ApostleEntity) {
+                event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || (entity == event.getExplosion().getSourceMob()));
+            }
+            if (event.getExplosion().getSourceMob() instanceof OwnedEntity){
+                OwnedEntity sourceMob = (OwnedEntity) event.getExplosion().getSourceMob();
+                if (sourceMob.getTrueOwner() instanceof ApostleEntity){
+                    event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || entity == sourceMob.getTrueOwner());
+                }
+            }
+            if (event.getExplosion().getSourceMob() instanceof CreeperlingMinionEntity) {
+                CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getExplosion().getSourceMob();
+                event.getAffectedEntities().removeIf(entity -> entity instanceof LivingEntity && creeperlingMinion.getTrueOwner() == (LivingEntity) entity && RobeArmorFinder.FindFelArmor((LivingEntity) entity));
+            }
         }
     }
 
@@ -1281,6 +1311,18 @@ public class ModEvents {
         if (event.getPotionEffect().getEffect() == ModEffects.SAPPED.get()){
             if (event.getEntityLiving().hasEffect(ModEffects.CURSED.get())){
                 event.setResult(Event.Result.DENY);
+            }
+        }
+        if (event.getPotionEffect().getEffect() == ModEffects.NECROPOWER.get()){
+            if (event.getEntityLiving().getMobType() != CreatureAttribute.UNDEAD){
+                if (event.getEntityLiving() instanceof PlayerEntity){
+                    PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+                    if (!LichdomHelper.isLich(player)){
+                        event.setResult(Event.Result.DENY);
+                    }
+                } else {
+                    event.setResult(Event.Result.DENY);
+                }
             }
         }
     }

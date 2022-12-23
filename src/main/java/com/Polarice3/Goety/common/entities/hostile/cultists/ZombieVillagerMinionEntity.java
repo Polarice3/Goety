@@ -42,8 +42,6 @@ public class ZombieVillagerMinionEntity extends OwnedEntity{
         map.put(4, Goety.location("textures/entity/cultist/zombie/zombie_4.png"));
         map.put(5, Goety.location("textures/entity/cultist/zombie/zombie_5.png"));
     });
-    public boolean limitedLifespan;
-    public int limitedLifeTicks;
 
     public ZombieVillagerMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -54,6 +52,7 @@ public class ZombieVillagerMinionEntity extends OwnedEntity{
     }
 
     protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
         this.applyEntityAI();
@@ -94,39 +93,14 @@ public class ZombieVillagerMinionEntity extends OwnedEntity{
         return TEXTURE_BY_TYPE.size();
     }
 
-    public void tick(){
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.limitedLifeTicks = 20;
-            this.hurt(DamageSource.STARVE, 1.0F);
-        }
-        super.tick();
-    }
-
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-
-        if (compound.contains("LifeTicks")) {
-            this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-
         this.setOutfitType(compound.getInt("Outfit"));
-
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
-
-        if (this.limitedLifespan) {
-            compound.putInt("LifeTicks", this.limitedLifeTicks);
-        }
-
         compound.putInt("Outfit", this.getOutfitType());
-
-    }
-
-    public void setLimitedLife(int limitedLifeTicksIn) {
-        this.limitedLifespan = true;
-        this.limitedLifeTicks = limitedLifeTicksIn;
     }
 
     public boolean doHurtTarget(Entity entityIn) {
@@ -155,10 +129,6 @@ public class ZombieVillagerMinionEntity extends OwnedEntity{
 
     public SoundEvent getStepSound() {
         return SoundEvents.ZOMBIE_VILLAGER_STEP;
-    }
-
-    protected ItemStack getSkullDrop() {
-        return ItemStack.EMPTY;
     }
 
     protected void playStepSound(BlockPos pos, BlockState blockIn) {

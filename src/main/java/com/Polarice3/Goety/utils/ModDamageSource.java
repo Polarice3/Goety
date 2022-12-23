@@ -1,10 +1,13 @@
 package com.Polarice3.Goety.utils;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
@@ -42,6 +45,15 @@ public class ModDamageSource extends DamageSource {
 
     public static DamageSource sonicBoom(Entity p_216877_) {
         return (new EntityDamageSource(source("sonic_boom"), p_216877_)).bypassArmor().bypassMagic().setMagic();
+    }
+
+    public static DamageSource modFireball(@Nullable Entity pIndirectEntity, World world){
+        FireballEntity fireball = new FireballEntity(EntityType.FIREBALL, world);
+        return pIndirectEntity == null ? (new IndirectEntityDamageSource("onFire", fireball, fireball)).setIsFire().setProjectile() : (new IndirectEntityDamageSource("fireball", fireball, pIndirectEntity)).setIsFire().setProjectile();
+    }
+
+    public static DamageSource sword(Entity pSource, @Nullable Entity pIndirectEntity){
+        return (new IndirectEntityDamageSource(source("sword"), pSource, pIndirectEntity)).setProjectile();
     }
 
     public static boolean breathAttacks(DamageSource source){

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -171,36 +172,16 @@ public class TormentorEntity extends AbstractIllagerEntity {
         this.limitedLifeTicks = pLimitedLifeTicks;
     }
 
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.15F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.15F);
-        }
-    }
-
-    public void die(DamageSource pCause) {
-        super.die(pCause);
-        SoundEvent soundevent = SoundEvents.VINDICATOR_DEATH;
-        this.playSound(soundevent, 1.0F, 0.15F);
-    }
-
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.VINDICATOR_AMBIENT;
+        return ModSounds.TORMENTOR_AMBIENT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
+        return ModSounds.TORMENTOR_DEATH.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.VINDICATOR_HURT;
+        return ModSounds.TORMENTOR_HURT.get();
     }
 
     public float getBrightness() {
@@ -216,7 +197,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.VINDICATOR_CELEBRATE;
+        return ModSounds.TORMENTOR_CELEBRATE.get();
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
@@ -251,7 +232,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
             Vector3d vector3d = livingentity.position();
             TormentorEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, 1.0D);
             TormentorEntity.this.setIsCharging(true);
-            TormentorEntity.this.playSound(SoundEvents.VINDICATOR_CELEBRATE, 1.0F, 0.15F);
+            TormentorEntity.this.playSound(ModSounds.TORMENTOR_CHARGE.get(), 1.0F, 1.0F);
         }
 
         public void stop() {

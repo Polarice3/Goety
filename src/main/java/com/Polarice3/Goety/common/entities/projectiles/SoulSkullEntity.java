@@ -32,9 +32,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class SoulSkullEntity extends DamagingProjectileEntity {
-    private static final DataParameter<Boolean> DATA_DANGEROUS = EntityDataManager.defineId(SoulSkullEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DATA_UPGRADED = EntityDataManager.defineId(SoulSkullEntity.class, DataSerializers.BOOLEAN);
+public class SoulSkullEntity extends ExplosiveProjectileEntity {
+    public float explosionPower = 1.0F;
 
     public SoulSkullEntity(EntityType<? extends SoulSkullEntity> p_i50147_1_, World p_i50147_2_) {
         super(p_i50147_1_, p_i50147_2_);
@@ -58,12 +57,22 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
 
     public void tick() {
         super.tick();
-        if (this.isUpgraded()){
-            Vector3d vector3d = this.getDeltaMovement();
-            double d0 = this.getX() + vector3d.x;
-            double d1 = this.getY() + vector3d.y;
-            double d2 = this.getZ() + vector3d.z;
-            this.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, d0 + level.random.nextDouble()/2, d1 + 0.5D, d2 + level.random.nextDouble()/2, 0.0D, 0.0D, 0.0D);
+        if (!this.level.isClientSide) {
+            Entity owner = this.getOwner();
+            int flaming = 0;
+            if (owner instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) owner;
+                if (WandUtil.enchantedFocus(player)){
+                    flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
+                }
+            }
+            if (flaming != 0){
+                Vector3d vector3d = this.getDeltaMovement();
+                double d0 = this.getX() + vector3d.x;
+                double d1 = this.getY() + vector3d.y;
+                double d2 = this.getZ() + vector3d.z;
+                this.level.addParticle(ParticleTypes.SOUL_FIRE_FLAME, d0 + level.random.nextDouble()/2, d1 + 0.5D, d2 + level.random.nextDouble()/2, 0.0D, 0.0D, 0.0D);
+            }
         }
     }
 
@@ -101,11 +110,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
                             target.setSecondsOnFire(5 + flaming);
                         }
                     } else {
-                        if (this.isUpgraded()){
-                            livingentity.heal(5.0F);
-                        } else {
-                            livingentity.heal(1.0F);
-                        }
+                        livingentity.heal(1.0F);
                         if (MainConfig.SoulSkullZombie.get()) {
                             if (target instanceof ZombieEntity) {
                                 if (flag2) {
@@ -164,9 +169,6 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             PlayerEntity player = (PlayerEntity) owner;
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player)/2.5F;
-                if (this.isUpgraded()){
-                    enchantment = enchantment + 0.75F;
-                }
                 if (WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0){
                     flaming = true;
                 }
@@ -191,7 +193,7 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
             }
         }
         LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
-        ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 1.0F + enchantment, flaming, explodeMode, lootMode);
+        ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.explosionPower + enchantment, flaming, explodeMode, lootMode);
         this.remove();
 
     }
@@ -204,25 +206,14 @@ public class SoulSkullEntity extends DamagingProjectileEntity {
         return false;
     }
 
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_DANGEROUS, false);
-        this.entityData.define(DATA_UPGRADED, false);
+    @Override
+    public void setExplosionPower(float pExplosionPower) {
+        this.explosionPower = pExplosionPower;
     }
 
-    public boolean isDangerous() {
-        return this.entityData.get(DATA_DANGEROUS);
-    }
-
-    public void setDangerous(boolean pInvulnerable) {
-        this.entityData.set(DATA_DANGEROUS, pInvulnerable);
-    }
-
-    public boolean isUpgraded() {
-        return this.entityData.get(DATA_UPGRADED);
-    }
-
-    public void setUpgraded(boolean pInvulnerable) {
-        this.entityData.set(DATA_UPGRADED, pInvulnerable);
+    @Override
+    public float getExplosionPower() {
+        return this.explosionPower;
     }
 
     protected boolean shouldBurn() {

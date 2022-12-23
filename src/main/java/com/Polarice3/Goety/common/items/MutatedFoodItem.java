@@ -8,7 +8,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
-public class MutatedFoodItem extends FakeFoodItem {
+public class MutatedFoodItem extends MegaFoodItem {
 
     public MutatedFoodItem(int foodLevel, float saturation) {
         super(foodLevel, saturation);

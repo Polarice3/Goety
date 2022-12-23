@@ -1,10 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.effects.DesiccateEffect;
-import com.Polarice3.Goety.common.effects.IllagueEffect;
-import com.Polarice3.Goety.common.effects.ModEffect;
-import com.Polarice3.Goety.common.effects.SoulHungerEffect;
+import com.Polarice3.Goety.common.effects.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.potion.Effect;
@@ -38,14 +35,8 @@ public class ModEffects {
             () -> new ModEffect(EffectType.HARMFUL, 197379));
     public static final RegistryObject<Effect> NOMINE = EFFECTS.register("nomine",
             () -> new ModEffect(EffectType.HARMFUL, 4866583));
-    public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
-            () -> new ModEffect(EffectType.NEUTRAL, 4393481));
     public static final RegistryObject<Effect> BURN_HEX = EFFECTS.register("apostle_curse",
             () -> new ModEffect(EffectType.HARMFUL, 2236962));
-    public static final RegistryObject<Effect> SOUL_SHIELD = EFFECTS.register("soul_shield",
-            () -> new ModEffect(EffectType.BENEFICIAL, 0));
-/*    public static final RegistryObject<Effect> ILLAGER_BANE = EFFECTS.register("illager_bane",
-            () -> new ModEffect(EffectType.BENEFICIAL, 0));*/
     public static final RegistryObject<Effect> HEALTH_LOSS = EFFECTS.register("health_loss",
             () -> new ModEffect(EffectType.HARMFUL, 9244735)
                     .addAttributeModifier(Attributes.MAX_HEALTH, "2f69ece0-0ddb-4e3a-9b44-4321548d7b71",
@@ -59,4 +50,6 @@ public class ModEffects {
             DesiccateEffect::new);
     public static final RegistryObject<Effect> SOUL_HUNGER = EFFECTS.register("soul_hunger",
             SoulHungerEffect::new);
+    public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
+            NecroPowerEffect::new);
 }

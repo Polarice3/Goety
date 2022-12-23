@@ -1,6 +1,5 @@
 package com.Polarice3.Goety.client.render;
 
-
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.projectiles.NetherMeteorEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -21,7 +20,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class NetherMeteorRenderer extends EntityRenderer<NetherMeteorEntity> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID,"textures/entity/projectiles/nether_meteor.png");
-    private static final RenderType field_229044_e_ = RenderType.entityCutoutNoCull(TEXTURE);
 
     public NetherMeteorRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn);
@@ -39,7 +37,8 @@ public class NetherMeteorRenderer extends EntityRenderer<NetherMeteorEntity> {
         MatrixStack.Entry matrixstack$entry = matrixStackIn.last();
         Matrix4f matrix4f = matrixstack$entry.pose();
         Matrix3f matrix3f = matrixstack$entry.normal();
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(field_229044_e_);
+        RenderType renderType = RenderType.entityCutoutNoCull(this.getTextureLocation(entityIn));
+        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(renderType);
         func_229045_a_(ivertexbuilder, matrix4f, matrix3f, packedLightIn, 0.0F, 0, 0, 1);
         func_229045_a_(ivertexbuilder, matrix4f, matrix3f, packedLightIn, 1.0F, 0, 1, 1);
         func_229045_a_(ivertexbuilder, matrix4f, matrix3f, packedLightIn, 1.0F, 1, 1, 0);
@@ -52,9 +51,6 @@ public class NetherMeteorRenderer extends EntityRenderer<NetherMeteorEntity> {
         p_229045_0_.vertex(p_229045_1_, p_229045_4_ - 0.5F, (float)p_229045_5_ - 0.25F, 0.0F).color(255, 255, 255, 255).uv((float)p_229045_6_, (float)p_229045_7_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229045_3_).normal(p_229045_2_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     public ResourceLocation getTextureLocation(NetherMeteorEntity entity) {
         return TEXTURE;
     }

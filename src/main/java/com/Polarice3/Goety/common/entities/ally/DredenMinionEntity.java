@@ -116,7 +116,7 @@ public class DredenMinionEntity extends SummonedEntity implements ISpewing, IRan
     public boolean hurt(DamageSource pSource, float pAmount) {
         if (this.isInvulnerableTo(pSource)) {
             return false;
-        } else if (pSource.getEntity() instanceof StrayEntity) {
+        } else if (pSource.getEntity() instanceof StrayEntity || pSource.getEntity() instanceof StrayMinionEntity) {
             return false;
         } else {
             return super.hurt(pSource, pAmount);

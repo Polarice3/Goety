@@ -26,8 +26,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class DesiccatedSkullEntity extends DamagingProjectileEntity {
-    private static final DataParameter<Boolean> DATA_DANGEROUS = EntityDataManager.defineId(DesiccatedSkullEntity.class, DataSerializers.BOOLEAN);
+public class DesiccatedSkullEntity extends ExplosiveProjectileEntity {
+    public float explosionPower = 1.0F;
 
     public DesiccatedSkullEntity(EntityType<? extends DesiccatedSkullEntity> p_i50147_1_, World p_i50147_2_) {
         super(p_i50147_1_, p_i50147_2_);
@@ -102,7 +102,7 @@ public class DesiccatedSkullEntity extends DamagingProjectileEntity {
         super.onHit(pResult);
         if (!this.level.isClientSide) {
             DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
-            ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? 1.75F : 1.0F, explosion$mode);
+            ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? this.explosionPower + 0.75F : this.explosionPower, explosion$mode);
             this.remove();
         }
 
@@ -115,17 +115,13 @@ public class DesiccatedSkullEntity extends DamagingProjectileEntity {
     public boolean hurt(DamageSource pSource, float pAmount) {
         return false;
     }
-    
-    protected void defineSynchedData() {
-        this.entityData.define(DATA_DANGEROUS, false);
-    }
-    
-    public boolean isDangerous() {
-        return this.entityData.get(DATA_DANGEROUS);
+
+    public void setExplosionPower(float pExplosionPower) {
+        this.explosionPower = pExplosionPower;
     }
 
-    public void setDangerous(boolean pInvulnerable) {
-        this.entityData.set(DATA_DANGEROUS, pInvulnerable);
+    public float getExplosionPower() {
+        return this.explosionPower;
     }
 
     protected boolean shouldBurn() {

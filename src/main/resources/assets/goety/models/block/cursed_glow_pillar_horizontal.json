@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "goety:blocks/cursed_glow_pillar_top",
+    "side": "goety:blocks/cursed_glow_pillar_side"
+  }
+}

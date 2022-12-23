@@ -22,8 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class DarkArmoredRobeArmor extends ArmorItem {
-    private static final String COOL = "Cool";
+public class DarkArmoredRobeArmor extends ArmorItem implements IRobeArmor{
 
     public DarkArmoredRobeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
         super(materialIn, slot, builderIn);
@@ -33,16 +32,10 @@ public class DarkArmoredRobeArmor extends ArmorItem {
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
         if (MainConfig.SoulRepair.get()) {
-            if (stack.getTag() == null) {
-                CompoundNBT compound = stack.getOrCreateTag();
-                compound.putInt(COOL, 0);
-            }
             if (stack.isDamaged()){
                 if (SEHelper.getSoulsContainer(player)){
                     if (SEHelper.getSoulsAmount(player, MainConfig.DarkArmoredRobeRepairAmount.get())){
-                        stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
-                        if (stack.getTag().getInt(COOL) > 20) {
-                            stack.getTag().putInt(COOL, 0);
+                        if (player.tickCount % 20 == 0) {
                             stack.setDamageValue(stack.getDamageValue() - 1);
                             SEHelper.decreaseSouls(player, MainConfig.DarkArmoredRobeRepairAmount.get());
                         }

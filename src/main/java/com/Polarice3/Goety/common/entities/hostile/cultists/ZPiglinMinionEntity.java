@@ -34,8 +34,6 @@ public class ZPiglinMinionEntity extends OwnedEntity{
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 0.05D, AttributeModifier.Operation.ADDITION);
     private int playFirstAngerSoundIn;
-    public boolean limitedLifespan;
-    public int limitedLifeTicks;
 
     public ZPiglinMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -43,6 +41,7 @@ public class ZPiglinMinionEntity extends OwnedEntity{
     }
 
     protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(2, new CreatureZombieAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
@@ -73,37 +72,6 @@ public class ZPiglinMinionEntity extends OwnedEntity{
         }
 
         return pSpawnData;
-    }
-
-    public void tick(){
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.limitedLifeTicks = 20;
-            this.hurt(DamageSource.STARVE, 1.0F);
-        }
-        super.tick();
-    }
-
-    public void readAdditionalSaveData(CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
-
-        if (compound.contains("LifeTicks")) {
-            this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-
-    }
-
-    public void addAdditionalSaveData(CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
-
-        if (this.limitedLifespan) {
-            compound.putInt("LifeTicks", this.limitedLifeTicks);
-        }
-
-    }
-
-    public void setLimitedLife(int limitedLifeTicksIn) {
-        this.limitedLifespan = true;
-        this.limitedLifeTicks = limitedLifeTicksIn;
     }
 
     protected void customServerAiStep() {

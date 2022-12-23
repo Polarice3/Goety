@@ -1,0 +1,25 @@
+{
+    "parent": "goety:item/warped_spear",
+    "gui_light": "front",
+    "textures": {
+        "particle": "goety:entity/projectiles/warped_spear_item"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [0, 12, 1]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [0, 12, 1]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [4, 0, 0]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [4, 0, 0]
+        }
+    }
+}

@@ -48,7 +48,7 @@ public class BlockFinder {
     }
 
     public static boolean ActivateDeadSand(BlockState state){
-        return (state.is(ModTags.Blocks.DEAD_SAND_SPREADABLE) || state.getMaterial() == Material.AIR) && state.getMaterial() != Material.LAVA;
+        return (state.is(ModTags.Blocks.DEAD_SAND_SPREADABLE) || state.getMaterial() == Material.AIR || state.getFluidState().is(ModTags.Fluids.QUICKSAND)) && state.getMaterial() != Material.LAVA;
     }
 
     public static boolean LivingBlocks(BlockState state){

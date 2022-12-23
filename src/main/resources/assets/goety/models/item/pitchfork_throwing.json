@@ -1,0 +1,24 @@
+{
+    "parent": "goety:item/pitchfork",
+    "textures": {
+        "particle": "goety:entity/projectiles/pitchfork"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [0, 12, 1]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [0, 12, 1]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [4, 0, 0]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [4, 0, 0]
+        }
+    }
+}

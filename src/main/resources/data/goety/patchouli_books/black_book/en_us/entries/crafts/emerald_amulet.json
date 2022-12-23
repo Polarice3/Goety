@@ -2,7 +2,6 @@
   "name": "Emerald Amulet",
   "icon": "goety:emerald_amulet",
   "category": "goety:crafts",
-  "sortnum": 5,
   "pages": [
     {
       "type": "patchouli:text",

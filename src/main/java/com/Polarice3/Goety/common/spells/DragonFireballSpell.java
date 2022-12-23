@@ -50,6 +50,17 @@ public class DragonFireballSpell extends Spells{
                 vector3d.z);
         dragonFireball.setOwner(entityLiving);
         worldIn.addFreshEntity(dragonFireball);
+        for(int i = 0; i < 2; ++i) {
+            ModDragonFireballEntity dragonFireball1 = new ModDragonFireballEntity(worldIn,
+                    entityLiving.getX() + vector3d.x / 2 + worldIn.random.nextGaussian(),
+                    entityLiving.getEyeY() - 0.2,
+                    entityLiving.getZ() + vector3d.z / 2 + worldIn.random.nextGaussian(),
+                    vector3d.x,
+                    vector3d.y,
+                    vector3d.z);
+            dragonFireball1.setOwner(entityLiving);
+            worldIn.addFreshEntity(dragonFireball1);
+        }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ENDER_DRAGON_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.DragonFireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }

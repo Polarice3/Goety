@@ -3,11 +3,9 @@ package com.Polarice3.Goety.init;
 import com.Polarice3.Goety.Goety;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
@@ -15,6 +13,7 @@ public class ModTags {
     public static void init ()
     {
         ModTags.Blocks.init();
+        ModTags.Fluids.init();
         ModTags.Items.init();
         ModTags.EntityTypes.init();
     }
@@ -33,6 +32,17 @@ public class ModTags {
         private static Tags.IOptionalNamedTag<Block> tag(String name)
         {
             return BlockTags.createOptional(Goety.location(name));
+        }
+    }
+
+    public static class Fluids
+    {
+        private static void init(){}
+        public static final Tags.IOptionalNamedTag<Fluid> QUICKSAND = tag("quicksand");
+
+        private static Tags.IOptionalNamedTag<Fluid> tag(String name)
+        {
+            return FluidTags.createOptional(Goety.location(name));
         }
     }
 

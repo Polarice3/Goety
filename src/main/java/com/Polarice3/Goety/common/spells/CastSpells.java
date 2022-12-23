@@ -48,7 +48,7 @@ public class CastSpells {
             case 18:
                 return new IllusionSpell();
             case 19:
-                return new SoulShieldSpell();
+                return new PhantomSpell();
             case 20:
                 return new FireBreathSpell();
             case 21:
@@ -67,6 +67,8 @@ public class CastSpells {
                 return new SonicBoomSpell();
             case 28:
                 return new DredenSpell();
+            case 29:
+                return new AcidBreathSpell();
             default:
                 return null;
         }

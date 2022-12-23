@@ -74,6 +74,12 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "dead_slime_ball").toString()));
 
+    public static final RegistryObject<EntityType<SwordProjectileEntity>> SWORD = ENTITY_TYPES.register("sword",
+            () -> EntityType.Builder.<SwordProjectileEntity>of(SwordProjectileEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "sword").toString()));
+
     public static final RegistryObject<EntityType<ScytheProjectileEntity>> SCYTHE = ENTITY_TYPES.register("scythe",
             () -> EntityType.Builder.<ScytheProjectileEntity>of(ScytheProjectileEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.5F)
@@ -143,13 +149,6 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soul_bullet").toString()));
-
-    public static final RegistryObject<EntityType<SpikeGeyserEntity>> SPIKE_GEYSER = ENTITY_TYPES.register("spike_geyser",
-            () -> EntityType.Builder.<SpikeGeyserEntity>of(SpikeGeyserEntity::new, EntityClassification.MISC)
-                    .sized(0.25F, 0.25F)
-                    .clientTrackingRange(4)
-                    .updateInterval(1)
-                    .build(new ResourceLocation(Goety.MOD_ID, "spike_geyser").toString()));
 
     public static final RegistryObject<EntityType<PoisonBallEntity>> POISON_BALL = ENTITY_TYPES.register("poison_ball",
             () -> EntityType.Builder.<PoisonBallEntity>of(PoisonBallEntity::new, EntityClassification.MISC)
@@ -273,6 +272,21 @@ public class ModEntityType {
                     .fireImmune()
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "zpiglinbruteminion").toString()));
+
+    public static final RegistryObject<EntityType<ReturnedEntity>> RETURNED = ENTITY_TYPES.register("returned",
+            () -> EntityType.Builder.of(ReturnedEntity::new, EntityClassification.MONSTER)
+                    .canSpawnFarFromPlayer()
+                    .sized(0.6F, 1.95F)
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "returned").toString()));
+
+    public static final RegistryObject<EntityType<MalghastEntity>> MALGHAST = ENTITY_TYPES.register("malghast",
+            () -> EntityType.Builder.of(MalghastEntity::new, EntityClassification.MONSTER)
+                    .sized(2.0F, 2.0F)
+                    .fireImmune()
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "malghast").toString()));
 
     public static final RegistryObject<EntityType<HogLordEntity>> HOGLORD = ENTITY_TYPES.register("hoglord",
             () -> EntityType.Builder.of(HogLordEntity::new, EntityClassification.MONSTER)
@@ -466,6 +480,12 @@ public class ModEntityType {
                     .sized(0.6F, 0.85F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "undead_wolf").toString()));
+
+    public static final RegistryObject<EntityType<PhantomMinionEntity>> PHANTOM_MINION = ENTITY_TYPES.register("phantom_minion",
+            () -> EntityType.Builder.of(PhantomMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.9F, 0.5F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "phantom_minion").toString()));
 
     public static final RegistryObject<EntityType<SpiderlingMinionEntity>> SPIDERLING_MINION = ENTITY_TYPES.register("spiderling_minion",
             () -> EntityType.Builder.of(SpiderlingMinionEntity::new, EntityClassification.MONSTER)

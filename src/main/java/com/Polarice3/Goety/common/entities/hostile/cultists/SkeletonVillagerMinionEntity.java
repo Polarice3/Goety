@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.ai.BackawayCrossbowGoal;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import net.minecraft.block.BlockState;
@@ -9,6 +10,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
@@ -16,6 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -24,12 +29,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRangedAttackMob {
+public class SkeletonVillagerMinionEntity extends OwnedEntity implements ICrossbowUser, IRangedAttackMob {
+    private static final DataParameter<Boolean> DATA_CHARGING_STATE = EntityDataManager.defineId(SkeletonVillagerMinionEntity.class, DataSerializers.BOOLEAN);
     private final CreatureBowAttackGoal<SkeletonVillagerMinionEntity> bowGoal = new CreatureBowAttackGoal<>(this, 1.0D, 20, 15.0F);
+    private final BackawayCrossbowGoal<SkeletonVillagerMinionEntity> crossBowGoal = new BackawayCrossbowGoal<>(this, 1.0D, 16.0F);
     private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
 
         public void stop() {
@@ -42,8 +51,6 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRanged
             SkeletonVillagerMinionEntity.this.setAggressive(true);
         }
     };
-    public boolean limitedLifespan;
-    public int limitedLifeTicks;
 
     public SkeletonVillagerMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -64,24 +71,18 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRanged
                 .add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
-    public void tick(){
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.limitedLifeTicks = 20;
-            this.hurt(DamageSource.STARVE, 1.0F);
-        }
-        super.tick();
-    }
-
     public void reassessWeaponGoal() {
         if (this.level != null && !this.level.isClientSide) {
             this.goalSelector.removeGoal(this.meleeGoal);
             this.goalSelector.removeGoal(this.bowGoal);
-            ItemStack itemstack = this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem));
+            ItemStack itemstack = this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof ShootableItem));
             if (itemstack.getItem() == Items.BOW) {
                 int i = 20;
 
                 this.bowGoal.setMinAttackInterval(i);
                 this.goalSelector.addGoal(4, this.bowGoal);
+            } else if (itemstack.getItem() == Items.CROSSBOW){
+                this.goalSelector.addGoal(4, this.crossBowGoal);
             } else {
                 this.goalSelector.addGoal(4, this.meleeGoal);
             }
@@ -101,28 +102,14 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRanged
         return CreatureAttribute.UNDEAD;
     }
 
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_CHARGING_STATE, false);
+    }
+
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.reassessWeaponGoal();
-
-        if (compound.contains("LifeTicks")) {
-            this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-
-    }
-
-    public void addAdditionalSaveData(CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
-
-        if (this.limitedLifespan) {
-            compound.putInt("LifeTicks", this.limitedLifeTicks);
-        }
-
-    }
-
-    public void setLimitedLife(int limitedLifeTicksIn) {
-        this.limitedLifespan = true;
-        this.limitedLifeTicks = limitedLifeTicksIn;
     }
 
     public boolean doHurtTarget(Entity entityIn) {
@@ -159,7 +146,11 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRanged
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
         super.populateDefaultEquipmentSlots(pDifficulty);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+        if (this.level.random.nextBoolean()) {
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+        } else {
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.CROSSBOW));
+        }
     }
 
     @Nullable
@@ -189,15 +180,12 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRanged
         this.level.addFreshEntity(abstractarrowentity);
     }
 
-    /**
-     * Fires an arrow
-     */
     protected AbstractArrowEntity getArrow(ItemStack pArrowStack, float pDistanceFactor) {
         return ProjectileHelper.getMobArrow(this, pArrowStack, pDistanceFactor);
     }
 
     public boolean canFireProjectileWeapon(ShootableItem p_230280_1_) {
-        return p_230280_1_ == Items.BOW;
+        return p_230280_1_ == Items.BOW || p_230280_1_ == Items.CROSSBOW;
     }
 
     public ItemStack getProjectile(ItemStack shootable) {
@@ -214,4 +202,21 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements IRanged
         return 1.74F;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public boolean isCharging() {
+        return this.entityData.get(DATA_CHARGING_STATE);
+    }
+
+    public void setChargingCrossbow(boolean isCharging) {
+        this.entityData.set(DATA_CHARGING_STATE, isCharging);
+    }
+
+    @Override
+    public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
+        this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
+    }
+
+    public void onCrossbowAttackPerformed() {
+        this.noActionTime = 0;
+    }
 }

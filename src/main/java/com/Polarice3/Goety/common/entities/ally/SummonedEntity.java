@@ -42,8 +42,6 @@ import java.util.function.Predicate;
 
 public class SummonedEntity extends OwnedEntity {
     protected static final DataParameter<Byte> SUMMONED_FLAGS = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BYTE);
-    public boolean limitedLifespan;
-    public int limitedLifeTicks;
     public boolean upgraded;
 
     protected SummonedEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
@@ -51,10 +49,9 @@ public class SummonedEntity extends OwnedEntity {
     }
 
     protected void registerGoals() {
+        super.registerGoals();
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F));
         this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
     }
 
     public void aiStep() {
@@ -268,11 +265,6 @@ public class SummonedEntity extends OwnedEntity {
         this.setUpgraded(compound.getBoolean("Upgraded"));
         this.setWandering(compound.getBoolean("wandering"));
         this.setStaying(compound.getBoolean("staying"));
-
-        if (compound.contains("LifeTicks")) {
-            this.setLimitedLife(compound.getInt("LifeTicks"));
-        }
-
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
@@ -285,10 +277,6 @@ public class SummonedEntity extends OwnedEntity {
 
         if (this.isStaying()) {
             compound.putBoolean("staying", true);
-        }
-
-        if (this.limitedLifespan) {
-            compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
     }
 
@@ -316,11 +304,6 @@ public class SummonedEntity extends OwnedEntity {
 
     public void setUpgraded(boolean attackAll) {
         this.upgraded = attackAll;
-    }
-
-    public void setLimitedLife(int limitedLifeTicksIn) {
-        this.limitedLifespan = true;
-        this.limitedLifeTicks = limitedLifeTicksIn;
     }
 
     public static class FollowOwnerGoal extends Goal {

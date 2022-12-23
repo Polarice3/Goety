@@ -23,22 +23,27 @@ public class PoisonBallSpell extends InstantCastSpells{
 
     @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
-        PoisonBallEntity smallFireballEntity = new PoisonBallEntity(entityLiving, worldIn);
-        smallFireballEntity.setOwner(entityLiving);
-        smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
-        worldIn.addFreshEntity(smallFireballEntity);
+        PoisonBallEntity poisonBall = new PoisonBallEntity(entityLiving, worldIn);
+        poisonBall.setOwner(entityLiving);
+        poisonBall.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
+        worldIn.addFreshEntity(poisonBall);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
-        for(int i = 0; i < 3; ++i) {
-            PoisonBallEntity smallFireballEntity = new PoisonBallEntity(entityLiving, worldIn);
-            smallFireballEntity.setOwner(entityLiving);
-            smallFireballEntity.setUpgraded(true);
-            smallFireballEntity.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F - (float) i/10, 1.0F - (float) i/10);
-            worldIn.addFreshEntity(smallFireballEntity);
+        PoisonBallEntity poisonBall = new PoisonBallEntity(entityLiving, worldIn);
+        poisonBall.setOwner(entityLiving);
+        poisonBall.setUpgraded(true);
+        poisonBall.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
+        worldIn.addFreshEntity(poisonBall);
+        for(int i = 0; i < 2; ++i) {
+            PoisonBallEntity poisonBall1 = new PoisonBallEntity(entityLiving, worldIn);
+            poisonBall1.setOwner(entityLiving);
+            poisonBall1.setUpgraded(true);
+            poisonBall1.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F - (float) i/10, 1.0F - (float) i/10);
+            worldIn.addFreshEntity(poisonBall1);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);

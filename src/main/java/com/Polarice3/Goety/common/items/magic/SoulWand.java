@@ -42,12 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.Polarice3.Goety.common.items.magic.MagicFocusItem.FOCUS;
-
 public class SoulWand extends Item{
     private static final String SOULUSE = "Soul Use";
     private static final String CASTTIME = "Cast Time";
-    private static final String CURRENTFOCUS = "Focus";
     private static final String SOULCOST = "Soul Cost";
     private static final String DURATION = "Duration";
     private static final String COOLDOWN = "Cooldown";
@@ -69,12 +66,10 @@ public class SoulWand extends Item{
                 compound.putInt(CASTTIME, CastTime(livingEntity, stack));
                 compound.putInt(COOL, 0);
             }
-            if (getFocus(stack) != null && getFocus(stack) != ItemStack.EMPTY) {
+            if (getFocus(stack) != null && !getFocus(stack).isEmpty()) {
                 this.ChangeFocus(stack);
-                compound.putString(CURRENTFOCUS, FOCUS);
             } else {
                 compound.putInt(SPELL, -1);
-                compound.putString(CURRENTFOCUS, "none");
                 this.setSpellConditions(null, stack);
             }
             compound.putInt(SOULUSE, SoulUse(livingEntity, stack));
@@ -91,7 +86,6 @@ public class SoulWand extends Item{
         compound.putInt(CASTTIME, CastTime(pPlayer, pStack));
         compound.putInt(COOL, 0);
         compound.putInt(SPELL, -1);
-        compound.putString(CURRENTFOCUS, "none");
         this.setSpellConditions(null, pStack);
     }
 
@@ -232,7 +226,7 @@ public class SoulWand extends Item{
 
     public void ChangeFocus(ItemStack itemStack){
         if (!getFocus(itemStack).isEmpty() && getFocus(itemStack) != null && getFocus(itemStack).getTag() != null) {
-            String spell = getFocus(itemStack).getTag().getString(FOCUS);
+            String spell = getFocus(itemStack).getDescriptionId();
             if (spell.contains("vexing")) {
                 this.setSpellConditions(new VexSpell(), itemStack);
                 this.setSpell(0, itemStack);
@@ -290,8 +284,8 @@ public class SoulWand extends Item{
             } else if (spell.contains("illusion")) {
                 this.setSpellConditions(new IllusionSpell(), itemStack);
                 this.setSpell(18, itemStack);
-            } else if (spell.contains("soulshield")) {
-                this.setSpellConditions(new SoulShieldSpell(), itemStack);
+            } else if (spell.contains("phantasm")) {
+                this.setSpellConditions(new PhantomSpell(), itemStack);
                 this.setSpell(19, itemStack);
             } else if (spell.contains("firebreath")) {
                 this.setSpellConditions(new FireBreathSpell(), itemStack);
@@ -320,6 +314,9 @@ public class SoulWand extends Item{
             } else if (spell.contains("rigid")) {
                 this.setSpellConditions(new DredenSpell(), itemStack);
                 this.setSpell(28, itemStack);
+            } else if (spell.contains("enderacid")) {
+                this.setSpellConditions(new AcidBreathSpell(), itemStack);
+                this.setSpell(29, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

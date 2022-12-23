@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -47,10 +46,6 @@ public class UndeadWolfEntity extends SummonedEntity{
     }
 
     public void tick() {
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.limitedLifeTicks = 20;
-            this.hurt(DamageSource.STARVE, 2.0F);
-        }
         if (this.isAlive()) {
             this.interestedAngleO = this.interestedAngle;
             if (this.isInterested()) {
@@ -112,26 +107,16 @@ public class UndeadWolfEntity extends SummonedEntity{
         return SoundEvents.WOLF_HURT;
     }
 
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.5F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.5F);
-        }
-    }
-
     protected SoundEvent getDeathSound() {
-        return null;
+        return SoundEvents.WOLF_DEATH;
     }
 
     protected float getSoundVolume() {
         return 0.4F;
+    }
+
+    protected float getVoicePitch() {
+        return 0.5F;
     }
 
     protected float getStandingEyeHeight(Pose pPose, EntitySize pSize) {
@@ -265,8 +250,6 @@ public class UndeadWolfEntity extends SummonedEntity{
     }
 
     public void die(DamageSource pCause) {
-        SoundEvent soundevent = SoundEvents.WOLF_DEATH;
-        this.playSound(soundevent, 1.0F, 0.5F);
         if (!this.level.isClientSide && this.hasCustomName() && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayerEntity) {
             this.getTrueOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
         }

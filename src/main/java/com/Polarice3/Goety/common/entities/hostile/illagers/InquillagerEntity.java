@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Maps;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -180,40 +181,20 @@ public class InquillagerEntity extends HuntingIllagerEntity {
         }
     }
 
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 1.5F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 1.5F);
-        }
-    }
-
-    public void die(DamageSource pCause) {
-        super.die(pCause);
-        SoundEvent soundevent = SoundEvents.VINDICATOR_DEATH;
-        this.playSound(soundevent, 1.0F, 1.5F);
-    }
-
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.VINDICATOR_AMBIENT;
+        return ModSounds.INQUILLAGER_AMBIENT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
+        return ModSounds.INQUILLAGER_DEATH.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.VINDICATOR_HURT;
+        return ModSounds.INQUILLAGER_HURT.get();
     }
 
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.VINDICATOR_CELEBRATE;
+        return ModSounds.INQUILLAGER_CELEBRATE.get();
     }
 
     @Override

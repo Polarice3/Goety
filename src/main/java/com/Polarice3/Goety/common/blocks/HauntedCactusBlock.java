@@ -10,7 +10,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.state.IntegerProperty;
@@ -27,6 +29,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class HauntedCactusBlock extends Block implements net.minecraftforge.common.IPlantable {
@@ -136,6 +139,10 @@ public class HauntedCactusBlock extends Block implements net.minecraftforge.comm
 
     public boolean isPathfindable(BlockState pState, IBlockReader pLevel, BlockPos pPos, PathType pType) {
         return false;
+    }
+
+    public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity) {
+        return PathNodeType.DAMAGE_CACTUS;
     }
 
     @Override

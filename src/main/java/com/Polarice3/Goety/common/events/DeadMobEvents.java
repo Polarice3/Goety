@@ -84,6 +84,23 @@ public class DeadMobEvents {
                 }
             }
         }
+        if (livingEntity.isEyeInFluid(ModTags.Fluids.QUICKSAND)){
+            if (!(livingEntity instanceof IDeadMob)){
+                if (livingEntity.tickCount % 20 == 0) {
+                    livingEntity.hurt(ModDamageSource.DESICCATE, 2.0F);
+                }
+            }
+        }
+        if (livingEntity.hasEffect(ModEffects.DESICCATE.get())){
+            int amp = livingEntity.getEffect(ModEffects.DESICCATE.get()).getAmplifier() + 1;
+            if (livingEntity.isUnderWater()){
+                if (livingEntity.hurt(DamageSource.DROWN, 2.0F * amp)){
+                    livingEntity.removeEffect(ModEffects.DESICCATE.get());
+                }
+                livingEntity.setAirSupply(0);
+
+            }
+        }
         if (livingEntity instanceof IDeadMob){
             if (BlockFinder.isInRain(world, livingEntity.blockPosition()) && !BlockFinder.isDeadBlock(world, livingEntity.blockPosition())){
                 if (livingEntity.tickCount % 20 == 0){
@@ -238,16 +255,9 @@ public class DeadMobEvents {
     @SubscribeEvent
     public static void DropEvents(LivingDropsEvent event){
         LivingEntity living = event.getEntityLiving();
-        if (ModDamageSource.desiccateAttacks(event.getSource()) || event.getSource().getEntity() instanceof IDeadMob){
-            if (living instanceof AnimalEntity){
-                for (ItemEntity itemEntity : event.getDrops()){
-                    if (itemEntity.getItem().isEdible()){
-                        itemEntity.setItem(new ItemStack(Items.ROTTEN_FLESH));
-                    }
-                }
-            }
-        }
-        if (living instanceof IDeadMob){
+        if (ModDamageSource.desiccateAttacks(event.getSource())
+                || event.getSource().getEntity() instanceof IDeadMob
+                || living instanceof IDeadMob){
             for (ItemEntity itemEntity : event.getDrops()){
                 if (itemEntity.getItem().getItem().getFoodProperties() != null) {
                     if (itemEntity.getItem().getItem().getFoodProperties().getEffects().isEmpty()) {
@@ -265,7 +275,7 @@ public class DeadMobEvents {
                 event.setResult(Event.Result.DENY);
             }
             if (event.getEntityLiving() instanceof PlayerEntity){
-                if (!MobUtil.playerValidity((PlayerEntity) event.getEntityLiving(), true)){
+                if (LichdomHelper.isLich((PlayerEntity) event.getEntityLiving())){
                     event.setResult(Event.Result.DENY);
                 }
             }

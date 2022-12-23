@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -201,7 +202,7 @@ public class SkullLordEntity extends MonsterEntity{
                         this.moveControl.setWantedPosition(nx, vector3d1.y, nz, 1.0F);
                     }
                     if (this.laserTime == 30) {
-                        this.playSound(SoundEvents.BEACON_ACTIVATE, 2.0F, 1.0F);
+                        this.playSound(ModSounds.SKULL_LORD_LASER_BEGIN.get(), 2.0F, 1.0F);
                         if (this.level.getDifficulty() == Difficulty.HARD){
                             this.spawnMobs();
                         }
@@ -218,7 +219,7 @@ public class SkullLordEntity extends MonsterEntity{
                     if (this.laserTime >= 60) {
                         LaserEntity laserEntity = ModEntityType.LASER.get().create(this.level);
                         if (laserEntity != null) {
-                            this.playSound(SoundEvents.END_PORTAL_SPAWN, 3.0F, 1.0F);
+                            this.playSound(ModSounds.SKULL_LORD_LASER_START.get(), 3.0F, 1.0F);
                             this.setLaserTime(false);
                             laserEntity.setSkullLord(this);
                             laserEntity.setDuration(200);
@@ -402,8 +403,6 @@ public class SkullLordEntity extends MonsterEntity{
 
     public void die(DamageSource cause) {
         super.die(cause);
-        SoundEvent soundevent = SoundEvents.ENDERMAN_DEATH;
-        this.playSound(soundevent, 2.0F, 0.15F);
         for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
             float f11 = (this.random.nextFloat() - 0.5F);
             float f13 = (this.random.nextFloat() - 0.5F);
@@ -459,29 +458,15 @@ public class SkullLordEntity extends MonsterEntity{
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.WITHER_AMBIENT;
+        return ModSounds.SKULL_LORD_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.WITHER_HURT;
-    }
-
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.5F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.5F);
-        }
+        return ModSounds.SKULL_LORD_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
+        return ModSounds.SKULL_LORD_DEATH.get();
     }
 
     public CreatureAttribute getMobType() {
@@ -750,7 +735,7 @@ public class SkullLordEntity extends MonsterEntity{
                         SkullLordEntity.this.shootTime = shoot;
                     }
                     SkullLordEntity.this.level.addFreshEntity(soulSkull);
-                    SkullLordEntity.this.playSound(SoundEvents.WITHER_SHOOT, 1.0F, 1.0F);
+                    SkullLordEntity.this.playSound(ModSounds.SKULL_LORD_SHOOT.get(), 1.0F, 1.0F);
                 }
                 double d2 = SkullLordEntity.this.getTarget().getX() - SkullLordEntity.this.getX();
                 double d1 = SkullLordEntity.this.getTarget().getZ() - SkullLordEntity.this.getZ();
@@ -798,7 +783,7 @@ public class SkullLordEntity extends MonsterEntity{
             Vector3d vector3d = livingentity.getEyePosition(1.0F);
             SkullLordEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, SkullLordEntity.this.isHalfHealth() ? 1.25D : 1.0D);
             SkullLordEntity.this.setIsCharging(true);
-            SkullLordEntity.this.playSound(SoundEvents.ENDERMAN_SCREAM, 1.0F, 0.5F);
+            SkullLordEntity.this.playSound(ModSounds.SKULL_LORD_CHARGE.get(), 1.0F, 1.0F);
         }
 
         public void stop() {

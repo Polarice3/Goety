@@ -66,7 +66,7 @@ public class ConfiguredFeatures {
                 new FancyFoliagePlacer(FeatureSpread.fixed(2),
                         FeatureSpread.fixed(4), 4),
                 new FancyTrunkPlacer(9, 12, 0),
-                new TwoLayerFeature(0, 0, 0,
+                new TwoLayerFeature(1, 0, 1,
                         OptionalInt.of(4)));
     }
 

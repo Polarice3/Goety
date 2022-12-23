@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.DredenMinionEntity;
+import com.Polarice3.Goety.common.entities.ally.StrayMinionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
@@ -59,6 +60,11 @@ public class DredenSpell extends SummonSpells{
                             entity.moveTo(entityLiving.position());
                         }
                     }
+                    if (entity instanceof StrayMinionEntity) {
+                        if (((StrayMinionEntity) entity).getTrueOwner() == entityLiving) {
+                            entity.moveTo(entityLiving.position());
+                        }
+                    }
                 }
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                     worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
@@ -104,6 +110,11 @@ public class DredenSpell extends SummonSpells{
                 for (Entity entity : worldIn.getAllEntities()) {
                     if (entity instanceof DredenMinionEntity) {
                         if (((DredenMinionEntity) entity).getTrueOwner() == entityLiving) {
+                            entity.moveTo(entityLiving.position());
+                        }
+                    }
+                    if (entity instanceof StrayMinionEntity) {
+                        if (((StrayMinionEntity) entity).getTrueOwner() == entityLiving) {
                             entity.moveTo(entityLiving.position());
                         }
                     }

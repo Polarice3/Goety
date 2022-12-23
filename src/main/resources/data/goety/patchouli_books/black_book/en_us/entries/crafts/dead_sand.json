@@ -2,7 +2,6 @@
   "name": "Dead Sands",
   "icon": "goety:dead_sand",
   "category": "goety:crafts",
-  "sortnum": 6,
   "pages": [
     {
       "type": "patchouli:text",

@@ -100,6 +100,19 @@ public class MobUtil {
         return false;
     }
 
+    public static boolean undeadAndLich(LivingEntity pLivingEntity){
+        if (pLivingEntity.isInvertedHealAndHarm() || pLivingEntity.getMobType() == CreatureAttribute.UNDEAD) {
+            return true;
+        } else {
+            if (pLivingEntity instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) pLivingEntity;
+                return LichdomHelper.isLich(player);
+            } else {
+                return false;
+            }
+        }
+    }
+
     public static LootContext.Builder createLootContext(DamageSource pDamageSource, LivingEntity livingEntity) {
         LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)livingEntity.level)).withRandom(livingEntity.getRandom()).withParameter(LootParameters.THIS_ENTITY, livingEntity).withParameter(LootParameters.ORIGIN, livingEntity.position()).withParameter(LootParameters.DAMAGE_SOURCE, pDamageSource).withOptionalParameter(LootParameters.KILLER_ENTITY, pDamageSource.getEntity()).withOptionalParameter(LootParameters.DIRECT_KILLER_ENTITY, pDamageSource.getDirectEntity());
         if (livingEntity.getLastHurtByMob() != null && livingEntity.getLastHurtByMob() instanceof PlayerEntity) {

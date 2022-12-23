@@ -56,10 +56,6 @@ public class CreeperlingMinionEntity extends SummonedEntity implements IChargeab
     }
 
     public void tick() {
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.limitedLifeTicks = 20;
-            this.hurt(DamageSource.STARVE, this.getMaxHealth());
-        }
         if (!this.level.isClientSide) {
             this.setClimbing(this.horizontalCollision);
         }

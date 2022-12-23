@@ -1,0 +1,19 @@
+{
+  "name": "Phantom Servant",
+  "icon": "minecraft:phantom_membrane",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Phantom Servants act pretty much the same as regular wild Phantoms, baring their allegiance towards their summoner. They would follow their master from the skies and will flee from any nearby cats."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:phantom_minion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The Phantoms can also come in different sizes. The spell's Potency dictates how large and strong the summoned Phantom would be."
+    }
+  ]
+}

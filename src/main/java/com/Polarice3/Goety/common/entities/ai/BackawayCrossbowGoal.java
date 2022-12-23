@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ai;
 
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ICrossbowUser;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.EnumSet;
 
-public class BackawayCrossbowGoal<T extends MonsterEntity & IRangedAttackMob & ICrossbowUser> extends Goal {
+public class BackawayCrossbowGoal<T extends CreatureEntity & IRangedAttackMob & ICrossbowUser> extends Goal {
     private final T mob;
     private BackawayCrossbowGoal.CrossbowState crossbowState = BackawayCrossbowGoal.CrossbowState.UNCHARGED;
     private final double speedModifier;
@@ -42,6 +43,11 @@ public class BackawayCrossbowGoal<T extends MonsterEntity & IRangedAttackMob & I
 
     private boolean isValidTarget() {
         return this.mob.getTarget() != null && this.mob.getTarget().isAlive();
+    }
+
+    public void start() {
+        super.start();
+        this.mob.setAggressive(true);
     }
 
     public void stop() {

@@ -9,7 +9,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class UncookedMutatedItem extends FakeFoodItem {
+public class UncookedMutatedItem extends MegaFoodItem {
     public UncookedMutatedItem() {
         super(4, 0.8F);
     }

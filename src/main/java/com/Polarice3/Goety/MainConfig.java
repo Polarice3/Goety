@@ -21,6 +21,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PhantomCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterCost;
@@ -28,6 +29,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulSkullCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FeastCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> TemptingCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> EnderAcidCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingCost;
@@ -35,7 +37,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> PoisonballCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionCost;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
@@ -51,6 +52,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PhantomDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterDuration;
@@ -61,7 +63,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomDuration;
 
@@ -72,6 +73,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PhantomInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterInfamyChance;
@@ -79,6 +81,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulSkullInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FeastInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> TemptingInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> EnderAcidInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
@@ -86,7 +89,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> PoisonballInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SoulShieldInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
@@ -113,6 +115,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCooldown;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PhantomCooldown;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> AnthropodSouls;
@@ -152,6 +155,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkScytheSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchBowSouls;
 
+    public static final ForgeConfigSpec.ConfigValue<Integer> ApostleDamageCap;
+    public static final ForgeConfigSpec.ConfigValue<Integer> VizierDamageCap;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
@@ -184,7 +189,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandStoneSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSky;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDarkSkyNoOcclude;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDryWater;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandQuickSand;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDesiccate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandMobs;
 
@@ -226,6 +231,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> VizierMinion;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UrbhadhachThrall;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InterDimensionalMobs;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> GoldenKingSpawn;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
@@ -264,8 +270,8 @@ public class MainConfig {
                 .define("deadSandDarkSky", false);
         DeadSandDarkSkyNoOcclude = BUILDER.comment("Dark Cloud will be produced if the Dead Sand cannot see the sky, Default: true")
                 .define("deadSandDarkSkyNoOcclude", true);
-        DeadSandDryWater = BUILDER.comment("Dead Sand will dry up surrounding Waters, Default: false")
-                .define("deadSandDryWater", false);
+        DeadSandQuickSand = BUILDER.comment("Dead Sand will convert nearby Water Blocks into Quicksand Blocks, Default: true")
+                .define("deadSandQuicksand", true);
         DeadSandDesiccate = BUILDER.comment("Dead Sands will desiccate mobs, slowly killing them, Default: true")
                 .define("deadSandDesiccate", true);
         DeadSandMobs = BUILDER.comment("Allows special mobs to spawn/converted when there's Dead Sand around, Default: true")
@@ -306,6 +312,8 @@ public class MainConfig {
                 .defineInRange("dredenCost", 16, 0, Integer.MAX_VALUE);
         UndeadWolfCost = BUILDER.comment("Hounding Spell Cost, Default: 2")
                 .defineInRange("undeadWolfCost", 2, 0, Integer.MAX_VALUE);
+        PhantomCost = BUILDER.comment("Phantasm Spell Cost, Default: 16")
+                .defineInRange("phantomCost", 16, 0, Integer.MAX_VALUE);
         WitchGaleCost = BUILDER.comment("Witch's Gale Spell Cost, Default: 15")
                 .defineInRange("crippleCost", 15, 0, Integer.MAX_VALUE);
         SpiderlingCost = BUILDER.comment("Spiderling Spell Cost per second, Default: 2")
@@ -322,6 +330,8 @@ public class MainConfig {
                 .defineInRange("feastCost", 8, 0, Integer.MAX_VALUE);
         TemptingCost = BUILDER.comment("Tempting Spell Cost, Default: 2")
                 .defineInRange("temptingCost", 2, 0, Integer.MAX_VALUE);
+        EnderAcidCost = BUILDER.comment("Ender Acid Breath Spell Cost, Default: 6")
+                .defineInRange("enderAcidBreathCost", 6, 0, Integer.MAX_VALUE);
         DragonFireballCost = BUILDER.comment("Dragon Fireball Spell Cost, Default: 64")
                 .defineInRange("dragonFireballCost", 64, 0, Integer.MAX_VALUE);
         CreeperlingCost = BUILDER.comment("Creeperling Spell Cost per second, Default: 8")
@@ -336,8 +346,6 @@ public class MainConfig {
                 .defineInRange("poisonBallCost", 4, 0, Integer.MAX_VALUE);
         IllusionCost = BUILDER.comment("Illusion Spell Cost, Default: 20")
                 .defineInRange("illusionCost", 20, 0, Integer.MAX_VALUE);
-        SoulShieldCost = BUILDER.comment("Soul Shield Spell Cost, Default: 32")
-                .defineInRange("soulShieldCost", 32, 0, Integer.MAX_VALUE);
         FireBreathCost = BUILDER.comment("Fire Breath Spell Cost per second, Default: 2")
                 .defineInRange("fireBreathCost", 2, 0, Integer.MAX_VALUE);
         FrostBreathCost = BUILDER.comment("Frost Breath Spell Cost per second, Default: 2")
@@ -368,6 +376,8 @@ public class MainConfig {
                 .defineInRange("dredenTime", 60, 0, 72000);
         UndeadWolfDuration = BUILDER.comment("Time to cast Hounding Spell, Default: 20")
                 .defineInRange("undeadWolfTime", 20, 0, 72000);
+        PhantomDuration = BUILDER.comment("Time to cast Phantasm Spell, Default: 60")
+                .defineInRange("phantomTime", 60, 0, 72000);
         WitchGaleDuration = BUILDER.comment("Time to cast Witch's Gale Spell, Default: 20")
                 .defineInRange("crippleTime", 20, 0, 72000);
         SpiderlingDuration = BUILDER.comment("Time to cast Spiderling Spell per second, Default: 10")
@@ -388,8 +398,6 @@ public class MainConfig {
                 .defineInRange("lavaBombTime", 20, 0, 72000);
         IllusionDuration = BUILDER.comment("Time to cast Illusion Spell, Default: 40")
                 .defineInRange("illusionTime", 40, 0, 72000);
-        SoulShieldDuration = BUILDER.comment("Time to cast Soul Shield Spell, Default: 20")
-                .defineInRange("soulShieldTime", 20, 0, 72000);
         IceStormDuration = BUILDER.comment("Time to cast Ice Storm Spell, Default: 60")
                 .defineInRange("iceStormTime", 60, 0, 72000);
         SonicBoomDuration = BUILDER.comment("Time to cast Sonic Boom Spell, Default: 60")
@@ -406,16 +414,22 @@ public class MainConfig {
                 .defineInRange("dredenCooldown", 300, 0, 72000);
         UndeadWolfCooldown = BUILDER.comment("Hounding Spell Cooldown, Default: 30")
                 .defineInRange("undeadWolfCooldown", 30, 0, 72000);
+        PhantomCooldown = BUILDER.comment("Phantasm Spell Cooldown, Default: 300")
+                .defineInRange("phantomCooldown", 300, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Mobs");
         MRabbitMax = BUILDER.comment("Maximum amount of Mutant Rabbits can spawn, Default: 16")
                 .defineInRange("mutatedRabbitMax", 16, 0, 100);
         VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")
                 .define("vizierMinion", false);
-        UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: true")
-                .define("urbhadhachEnthrall", true);
-        FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 4")
-                .defineInRange("fanaticPitchforkChance", 4, 0, Integer.MAX_VALUE);
+        VizierDamageCap = BUILDER.comment("How much maximum Damage a Vizier can attain per hit, Default: 20")
+                .defineInRange("vizierDamageCap", 20, 1, Integer.MAX_VALUE);
+        UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: false")
+                .define("urbhadhachEnthrall", false);
+        ApostleDamageCap = BUILDER.comment("How much maximum Damage an Apostle can attain per hit, Default: 20")
+                .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
+        FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 16")
+                .defineInRange("fanaticPitchforkChance", 16, 0, Integer.MAX_VALUE);
         FanaticWitchBombChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Witch's Bomb, Default: 4")
                 .defineInRange("fanaticWitchBombChance", 4, 0, Integer.MAX_VALUE);
         InterDimensionalMobs = BUILDER.comment("Whether Goety Mobs can spawn in Overworld-like modded dimensions, Default: false")
@@ -424,6 +438,8 @@ public class MainConfig {
                 .defineInRange("dredenSpawnWeight", 20, 0, Integer.MAX_VALUE);
         UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 16")
                 .defineInRange("urbhadhachSpawnWeight", 16, 0, Integer.MAX_VALUE);
+        GoldenKingSpawn = BUILDER.comment("Whether Golden King Fish Mob can spawn, Default: true")
+                .define("goldenKingSpawn", true);
         BUILDER.pop();
         BUILDER.push("Infamy");
         InfamySpawn = BUILDER.comment("Special Illagers Spawning due to Infamy, Default: true")
@@ -482,6 +498,8 @@ public class MainConfig {
                 .defineInRange("dredenInfamyChance", 8, 0, Integer.MAX_VALUE);
         UndeadWolfInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Hounding Spell, Default: 32")
                 .defineInRange("undeadWolfInfamyChance", 32, 0, Integer.MAX_VALUE);
+        PhantomInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Phantasm Spell, Default: 32")
+                .defineInRange("phantomInfamyChance", 32, 0, Integer.MAX_VALUE);
         WitchGaleInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Witch's Gale Spell, Default: 16")
                 .defineInRange("crippleInfamyChance", 16, 0, Integer.MAX_VALUE);
         SpiderlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spiderling Spell per second, Default: 128")
@@ -496,6 +514,8 @@ public class MainConfig {
                 .defineInRange("feastInfamyChance", 8, 0, Integer.MAX_VALUE);
         TemptingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Tempting Spell per second, Default: 0")
                 .defineInRange("temptingInfamyChance", 0, 0, Integer.MAX_VALUE);
+        EnderAcidInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ender Acid Breath Spell, Default: 0")
+                .defineInRange("enderAcidBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
         DragonFireballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Dragon Fireball Spell, Default: 0")
                 .defineInRange("dragonFireballInfamyChance", 0, 0, Integer.MAX_VALUE);
         CreeperlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Creeperling Spell per second, Default: 128")
@@ -510,8 +530,6 @@ public class MainConfig {
                 .defineInRange("poisonBallInfamyChance", 0, 0, Integer.MAX_VALUE);
         IllusionInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Illusion Spell, Default: 1")
                 .defineInRange("illusionInfamyChance", 1, 0, Integer.MAX_VALUE);
-        SoulShieldInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Shield Spell, Default: 0")
-                .defineInRange("soulShieldInfamyChance", 0, 0, Integer.MAX_VALUE);
         FireBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fire Breath Spell, Default: 0")
                 .defineInRange("fireBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
         FrostBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Frost Breath Spell, Default: 0")

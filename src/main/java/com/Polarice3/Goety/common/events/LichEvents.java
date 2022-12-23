@@ -101,7 +101,7 @@ public class LichEvents {
                 }
                 if (burn){
                     if (player.hasEffect(Effects.FIRE_RESISTANCE) && !player.isCreative() && !player.isSpectator()){
-                        player.addEffect(new EffectInstance(Effects.WEAKNESS, 100, 1, false, false));
+                        player.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 100, 1, false, false));
                     } else {
                         player.setSecondsOnFire(8);
                     }

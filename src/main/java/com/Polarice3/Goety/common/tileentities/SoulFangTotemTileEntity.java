@@ -47,10 +47,6 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
     public int range;
     public int activated;
     public int levels;
-    @Nullable
-    public LivingEntity target;
-    @Nullable
-    public UUID targetUuid;
     private UUID ownerUUID;
 
     public SoulFangTotemTileEntity() {
@@ -62,7 +58,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
     }
 
     public World getLevel() {
-        return SoulFangTotemTileEntity.this.level;
+        return this.level;
     }
 
     public Object2IntMap<Enchantment> getEnchantments() {
@@ -71,11 +67,6 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
 
     public void load(BlockState state, CompoundNBT nbt) {
         super.load(state, nbt);
-        if (nbt.hasUUID("Target")) {
-            this.targetUuid = nbt.getUUID("Target");
-        } else {
-            this.targetUuid = null;
-        }
         UUID uuid;
         if (nbt.hasUUID("Owner")) {
             uuid = nbt.getUUID("Owner");
@@ -107,9 +98,6 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
 
     public CompoundNBT save(CompoundNBT compound) {
         super.save(compound);
-        if (this.target != null) {
-            compound.putUUID("Target", this.target.getUUID());
-        }
         if (this.getOwnerId() != null) {
             compound.putUUID("Owner", this.getOwnerId());
         }
@@ -124,23 +112,17 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         return 10.0D + this.enchantments.getOrDefault(ModEnchantments.RANGE.get(), 0);
     }
 
-    private void updateClientTarget() {
-        this.target = this.findExistingTarget();
-    }
-
-    @Nullable
-    public LivingEntity findExistingTarget() {
-        if (this.getTrueOwner() != null) {
+    public boolean hasTargets(){
+        if (this.getTrueOwner() != null && this.level != null){
             int i = this.worldPosition.getX();
             int j = this.worldPosition.getY();
             int k = this.worldPosition.getZ();
-            assert this.level != null;
             for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))){
                 if (livingEntity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) livingEntity;
                     if (MobUtil.playerValidity(player, false)) {
                         if (this.getPlayer() != player) {
-                            return livingEntity;
+                            return true;
                         }
                     }
                 } else {
@@ -148,48 +130,48 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
                         if (livingEntity instanceof IOwned) {
                             IOwned summonedEntity = (IOwned) livingEntity;
                             if (summonedEntity.getTrueOwner() != this.getTrueOwner()) {
-                                return livingEntity;
+                                return true;
                             }
                         } else if (livingEntity instanceof TameableEntity) {
                             TameableEntity tameableEntity = (TameableEntity) livingEntity;
                             if (tameableEntity.getOwner() != this.getTrueOwner()) {
-                                return livingEntity;
+                                return true;
                             }
                         } else {
-                            return livingEntity;
+                            return true;
                         }
                     }
                 }
             }
         }
-        return null;
+        return false;
     }
 
     @Override
     public void tick() {
-        assert this.level != null;
-        int i = this.worldPosition.getX();
-        int j = this.worldPosition.getY();
-        int k = this.worldPosition.getZ();
-        int j1 = this.levels;
-        this.checkBeaconLevel(i, j, k);
-        if (!this.level.isClientSide()) {
-            if (j1 >= 3) {
-                this.serverParticles();
-                this.updateClientTarget();
-                long t = this.level.getGameTime();
-                if (t % 40L == 0L && this.target != null){
-                    this.activated = 20;
-                    this.SpecialEffect();
-                }
-                if (this.activated != 0){
-                    --this.activated;
-                    this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, true), 3);
+        if (this.level != null) {
+            int i = this.worldPosition.getX();
+            int j = this.worldPosition.getY();
+            int k = this.worldPosition.getZ();
+            int j1 = this.levels;
+            this.checkBeaconLevel(i, j, k);
+            if (!this.level.isClientSide()) {
+                if (j1 >= 3) {
+                    this.serverParticles();
+                    long t = this.level.getGameTime();
+                    if (t % 40L == 0L && this.hasTargets()) {
+                        this.activated = 20;
+                        this.SpecialEffect();
+                    }
+                    if (this.activated != 0) {
+                        --this.activated;
+                        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, true), 3);
+                    } else {
+                        this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
+                    }
                 } else {
                     this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
                 }
-            } else {
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(TotemHeadBlock.POWERED, false), 3);
             }
         }
     }
@@ -245,13 +227,12 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
     }
 
     public void SpecialEffect() {
-        if (this.getTrueOwner() != null) {
+        if (this.getTrueOwner() != null && this.level != null) {
             int i = this.worldPosition.getX();
             int j = this.worldPosition.getY();
             int k = this.worldPosition.getZ();
             this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK);
-            assert this.getLevel() != null;
-            for (LivingEntity entity : this.getLevel().getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))) {
+            for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(this.getRange()))) {
                 float f = (float) MathHelper.atan2(entity.getZ() - this.getBlockPos().getZ(), entity.getX() - this.getBlockPos().getX());
                 if (entity instanceof PlayerEntity) {
                     if (this.getPlayer() != entity) {
@@ -287,12 +268,11 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
 
         do {
             BlockPos blockpos1 = blockpos.below();
-            assert this.getLevel() != null;
-            BlockState blockstate = this.getLevel().getBlockState(blockpos1);
-            if (blockstate.isFaceSturdy(this.getLevel(), blockpos1, Direction.UP)) {
-                if (!this.getLevel().isEmptyBlock(blockpos)) {
-                    BlockState blockstate1 = this.getLevel().getBlockState(blockpos);
-                    VoxelShape voxelshape = blockstate1.getCollisionShape(this.getLevel(), blockpos);
+            BlockState blockstate = this.level.getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(this.level, blockpos1, Direction.UP)) {
+                if (!this.level.isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = this.level.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(this.level, blockpos);
                     if (!voxelshape.isEmpty()) {
                         d0 = voxelshape.max(Direction.Axis.Y);
                     }
@@ -306,7 +286,7 @@ public class SoulFangTotemTileEntity extends TileEntity implements ITickableTile
         } while(blockpos.getY() >= MathHelper.floor(PPPosY) - 1);
 
         if (flag) {
-            this.getLevel().addFreshEntity(new FangEntity(this.getLevel(), pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, 0,
+            this.level.addFreshEntity(new FangEntity(this.level, pPosX, (double)blockpos.getY() + d0, pPosZ, pYRot, 0,
                     this.enchantments.getOrDefault(ModEnchantments.POTENCY.get(), 0),
                     this.enchantments.getOrDefault(ModEnchantments.BURNING.get(), 0),
                     this.enchantments.getOrDefault(ModEnchantments.SOUL_EATER.get(), 0) + 1,

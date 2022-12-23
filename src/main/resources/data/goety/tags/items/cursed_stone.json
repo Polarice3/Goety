@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "goety:cursed_stone",
+    "goety:cursed_stone_bricks",
+    "goety:cursed_bricks",
+    "goety:cursed_stone_chiseled",
+    "goety:cursed_tiles"
+  ]
+}

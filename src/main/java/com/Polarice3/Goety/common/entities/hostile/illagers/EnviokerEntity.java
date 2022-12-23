@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
+import com.Polarice3.Goety.common.entities.projectiles.SwordProjectileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.SoundUtil;
 import com.google.common.collect.Maps;
@@ -14,10 +14,12 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.monster.VexEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.*;
@@ -274,7 +276,7 @@ public class EnviokerEntity extends HuntingIllagerEntity {
             if (!super.canUse()) {
                 return false;
             } else {
-                return EnviokerEntity.this.isMagic();
+                return EnviokerEntity.this.isMagic() && EnviokerEntity.this.getMainHandItem().getItem() instanceof SwordItem;
             }
         }
 
@@ -290,14 +292,16 @@ public class EnviokerEntity extends HuntingIllagerEntity {
             LivingEntity livingentity = EnviokerEntity.this.getTarget();
             if (livingentity != null) {
                 if (EnviokerEntity.this.getSensing().canSee(livingentity)) {
-                    double d1 = livingentity.getX() - EnviokerEntity.this.getX();
-                    double d2 = livingentity.getY(0.5D) - EnviokerEntity.this.getY(0.5D);
-                    double d3 = livingentity.getZ() - EnviokerEntity.this.getZ();
-                    SoulBulletEntity soulSkullEntity = new SoulBulletEntity(EnviokerEntity.this.level, EnviokerEntity.this, d1, d2, d3);
-                    soulSkullEntity.setPos(soulSkullEntity.getX(), EnviokerEntity.this.getY(0.5), soulSkullEntity.getZ());
-                    EnviokerEntity.this.level.addFreshEntity(soulSkullEntity);
+                    SwordProjectileEntity swordProjectile = new SwordProjectileEntity(EnviokerEntity.this, EnviokerEntity.this.level, EnviokerEntity.this.getMainHandItem());
+                    double d0 = livingentity.getX() - EnviokerEntity.this.getX();
+                    double d1 = livingentity.getY(0.3333333333333333D) - swordProjectile.getY();
+                    double d2 = livingentity.getZ() - EnviokerEntity.this.getZ();
+                    double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+                    swordProjectile.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                    swordProjectile.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 1.0F);
+                    EnviokerEntity.this.level.addFreshEntity(swordProjectile);
                     if (!EnviokerEntity.this.isSilent()) {
-                        new SoundUtil(EnviokerEntity.this, SoundEvents.SNOWBALL_THROW, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                        new SoundUtil(EnviokerEntity.this, SoundEvents.DROWNED_SHOOT, SoundCategory.HOSTILE, 1.0F, 1.0F);
                     }
                 }
             }

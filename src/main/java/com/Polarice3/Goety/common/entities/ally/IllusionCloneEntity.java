@@ -38,9 +38,6 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
     }
 
     public void tick() {
-        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-            this.remove();
-        }
         for (MobEntity mob: this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(16.0F))) {
             if (this.getTrueOwner() != null){
                 if (mob.getTarget() == this.getTrueOwner()){
@@ -56,11 +53,6 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
             }
         }
         if (!this.level.isClientSide){
-            if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
-                for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                    ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
-                }
-            }
             if (this.getTrueOwner() != null){
                 if (this.getTrueOwner().hurtTime == this.getTrueOwner().hurtDuration - 1){
                     playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
@@ -71,6 +63,16 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
             }
         }
         super.tick();
+    }
+
+    @Override
+    public void lifeSpanDamage() {
+        if (!this.level.isClientSide){
+            for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
+                ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
+            }
+        }
+        this.remove();
     }
 
     protected void registerGoals() {

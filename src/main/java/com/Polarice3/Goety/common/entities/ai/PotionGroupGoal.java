@@ -43,6 +43,11 @@ public class PotionGroupGoal<T extends AbstractCultistEntity> extends Goal {
                 && !this.beldam.isInvisible();
     }
 
+    public void stop() {
+        this.beldam = null;
+        this.mob.getNavigation().stop();
+    }
+
     public void tick() {
         double d0 = this.mob.distanceToSqr(this.beldam.getX(), this.beldam.getY(), this.beldam.getZ());
         boolean flag = this.mob.getSensing().canSee(this.beldam);

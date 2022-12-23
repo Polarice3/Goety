@@ -36,6 +36,7 @@ import com.Polarice3.Goety.common.entities.projectiles.DeadSlimeBallEntity;
 import com.Polarice3.Goety.common.entities.projectiles.DeadTNTEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
+import com.Polarice3.Goety.common.fluid.ModFluids;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.world.features.ConfiguredFeatures;
 import com.Polarice3.Goety.common.world.structures.ConfiguredStructures;
@@ -51,7 +52,6 @@ import net.minecraft.dispenser.*;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -140,6 +140,7 @@ public class Goety {
 
         ModItems.init();
         ModBlocks.init();
+        ModFluids.init();
         ModEffects.init();
         ModSounds.init();
         ModStructures.init();
@@ -155,9 +156,9 @@ public class Goety {
         ModNetwork.init();
 
         CuriosCompat.setup(event);
-        EntitySpawnPlacementRegistry();
 
         event.enqueueWork(() -> {
+            EntitySpawnPlacementRegistry();
             ModStructures.setupStructures();
             DispenserBlock.registerBehavior(ModBlocks.TALL_SKULL_ITEM.get(), new OptionalDispenseBehavior() {
                 protected ItemStack execute(IBlockSource source, ItemStack stack) {
@@ -231,10 +232,6 @@ public class Goety {
         EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityType.DREDEN.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityType.URBHADHACH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.FANATIC.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.ZEALOT.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.DISCIPLE.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.THUG.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, PatrollerEntity::checkPatrollingMonsterSpawnRules);
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
@@ -249,7 +246,9 @@ public class Goety {
         event.put(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ZombieVillagerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZPIGLIN_MINION.get(), ZPiglinMinionEntity.setCustomAttributes().build());
-        event.put(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ZPiglinMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ZPiglinBruteMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.RETURNED.get(), ReturnedEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MALGHAST.get(), MalghastEntity.setCustomAttributes().build());
         event.put(ModEntityType.HOGLORD.get(), HogLordEntity.setCustomAttributes().build());
         event.put(ModEntityType.ENVIOKER.get(), EnviokerEntity.setCustomAttributes().build());
         event.put(ModEntityType.INQUILLAGER.get(), InquillagerEntity.setCustomAttributes().build());
@@ -280,6 +279,7 @@ public class Goety {
         event.put(ModEntityType.DREDEN_MINION.get(), DredenMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.FARMER_MINION.get(), FarmerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfEntity.setCustomAttributes().build());
+        event.put(ModEntityType.PHANTOM_MINION.get(), MonsterEntity.createMonsterAttributes().build());
         event.put(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneEntity.setCustomAttributes().build());
         event.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());

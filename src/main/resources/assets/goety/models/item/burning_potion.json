@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "goety:entity/projectiles/burning_potion"
+    "layer0": "goety:items/burning_potion"
   }
 }

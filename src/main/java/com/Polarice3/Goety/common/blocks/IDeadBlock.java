@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.blocks;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.fluid.ModFluids;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTags;
@@ -92,7 +93,7 @@ public interface IDeadBlock {
                     }
 
                     if (blockState.isSolidRender(pLevel, pPos)) {
-                        dryUpWater(pLevel, pPos);
+                        quickSandSpread(pLevel, pPos);
                         growHauntedCactus(pLevel, pPos, pRandom);
                         growIronFingers(pLevel, pPos);
                         blockSky(pLevel, pPos);
@@ -264,6 +265,7 @@ public interface IDeadBlock {
     default void spreadSandOnly(ServerWorld pLevel, BlockPos pPos, Random pRandom){
         if (pLevel.isAreaLoaded(pPos, 1)) {
             if (MainConfig.DeadSandSpread.get()) {
+                quickSandSpread(pLevel, pPos);
                 BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
                 BlockState blockState = pLevel.getBlockState(blockpos);
                 if (!BlockFinder.isInRain(pLevel, pPos)) {
@@ -322,52 +324,72 @@ public interface IDeadBlock {
         }
     }
 
-    default void dryUpWater(World pLevel, BlockPos pPos) {
-        if (MainConfig.DeadSandDryWater.get()) {
-            if (!BlockFinder.isInRain(pLevel, pPos)) {
-                Queue<Tuple<BlockPos, Integer>> queue = Lists.newLinkedList();
-                queue.add(new Tuple<>(pPos, 0));
-                int i = 0;
+    default void quickSandSelfSpread(World pLevel, BlockPos pPos) {
+        if (MainConfig.DeadSandQuickSand.get()) {
+            if (this.getTotalDeadSands(pLevel, pPos).size() != 0) {
+                for (Direction direction : Direction.values()) {
+                    BlockPos blockpos1 = pPos.relative(direction);
+                    BlockState blockstate = pLevel.getBlockState(blockpos1);
+                    FluidState fluidstate = pLevel.getFluidState(blockpos1);
+                    Material material = blockstate.getMaterial();
+                    if (fluidstate.is(FluidTags.WATER) && fluidstate.isSource()) {
+                        if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
+                            TileEntity tileentity = blockstate.hasTileEntity() ? pLevel.getBlockEntity(blockpos1) : null;
+                            dropResources(blockstate, pLevel, blockpos1, tileentity);
+                            pLevel.setBlockAndUpdate(blockpos1, ModFluids.QUICKSAND_BLOCK.get().defaultBlockState());
+                        } else {
+                            pLevel.setBlockAndUpdate(blockpos1, ModFluids.QUICKSAND_BLOCK.get().defaultBlockState());
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-                while (!queue.isEmpty()) {
-                    Tuple<BlockPos, Integer> tuple = queue.poll();
-                    BlockPos blockpos = tuple.getA();
-                    int j = tuple.getB();
+    default void quickSandSpread(World pLevel, BlockPos pPos) {
+        if (MainConfig.DeadSandQuickSand.get()) {
+            Queue<Tuple<BlockPos, Integer>> queue = Lists.newLinkedList();
+            queue.add(new Tuple<>(pPos, 0));
+            int i = 0;
 
-                    for (Direction direction : Direction.values()) {
-                        BlockPos blockpos1 = blockpos.relative(direction);
-                        BlockState blockstate = pLevel.getBlockState(blockpos1);
-                        FluidState fluidstate = pLevel.getFluidState(blockpos1);
-                        Material material = blockstate.getMaterial();
-                        if (fluidstate.is(FluidTags.WATER)) {
-                            if (blockstate.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler) blockstate.getBlock()).takeLiquid(pLevel, blockpos1, blockstate) != Fluids.EMPTY) {
-                                ++i;
-                                if (j < 6) {
-                                    queue.add(new Tuple<>(blockpos1, j + 1));
-                                }
-                            } else if (blockstate.getBlock() instanceof FlowingFluidBlock) {
-                                pLevel.setBlock(blockpos1, Blocks.AIR.defaultBlockState(), 3);
-                                ++i;
-                                if (j < 6) {
-                                    queue.add(new Tuple<>(blockpos1, j + 1));
-                                }
-                            } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
-                                TileEntity tileentity = blockstate.hasTileEntity() ? pLevel.getBlockEntity(blockpos1) : null;
-                                dropResources(blockstate, pLevel, blockpos1, tileentity);
-                                pLevel.setBlock(blockpos1, Blocks.AIR.defaultBlockState(), 3);
-                                ++i;
-                                if (j < 6) {
-                                    queue.add(new Tuple<>(blockpos1, j + 1));
-                                }
+            while (!queue.isEmpty()) {
+                Tuple<BlockPos, Integer> tuple = queue.poll();
+                BlockPos blockpos = tuple.getA();
+                int j = tuple.getB();
+
+                for (Direction direction : Direction.values()) {
+                    BlockPos blockpos1 = blockpos.relative(direction);
+                    BlockState blockstate = pLevel.getBlockState(blockpos1);
+                    FluidState fluidstate = pLevel.getFluidState(blockpos1);
+                    Material material = blockstate.getMaterial();
+                    if (fluidstate.is(FluidTags.WATER)) {
+                        if (blockstate.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler) blockstate.getBlock()).takeLiquid(pLevel, blockpos1, blockstate) != Fluids.EMPTY) {
+                            pLevel.setBlockAndUpdate(blockpos1, ModFluids.QUICKSAND_BLOCK.get().defaultBlockState());
+                            ++i;
+                            if (j < 6) {
+                                queue.add(new Tuple<>(blockpos1, j + 1));
+                            }
+                        } else if (blockstate.getBlock() instanceof FlowingFluidBlock) {
+                            pLevel.setBlockAndUpdate(blockpos1, ModFluids.QUICKSAND_BLOCK.get().defaultBlockState());
+                            ++i;
+                            if (j < 6) {
+                                queue.add(new Tuple<>(blockpos1, j + 1));
+                            }
+                        } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
+                            TileEntity tileentity = blockstate.hasTileEntity() ? pLevel.getBlockEntity(blockpos1) : null;
+                            dropResources(blockstate, pLevel, blockpos1, tileentity);
+                            pLevel.setBlockAndUpdate(blockpos1, ModFluids.QUICKSAND_BLOCK.get().defaultBlockState());
+                            ++i;
+                            if (j < 6) {
+                                queue.add(new Tuple<>(blockpos1, j + 1));
                             }
                         }
                     }
-
-                    if (i > 64) {
-                        break;
-                    }
                 }
 
+                if (i > 32) {
+                    break;
+                }
             }
         }
     }

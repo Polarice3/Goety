@@ -3,7 +3,6 @@
   "icon": "goety:cursed_kiln",
   "category": "goety:crafts",
   "advancement": "goety:goety/get_crying_obsidian",
-  "sortnum": 9,
   "pages": [
     {
       "type": "patchouli:text",

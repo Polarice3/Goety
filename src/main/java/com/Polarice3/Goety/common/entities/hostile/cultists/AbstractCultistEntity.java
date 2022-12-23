@@ -28,6 +28,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class AbstractCultistEntity extends AbstractRaiderEntity {
     private static final DataParameter<Float> DATA_REINFORCEMENT_CHANCE = EntityDataManager.defineId(AbstractCultistEntity.class, DataSerializers.FLOAT);
@@ -203,6 +204,12 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         } else if (entityIn instanceof AbstractPiglinEntity){
             return this.isAlliedTo(entityIn);
         } else return entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this;
+    }
+
+    public static boolean spawnCultistsRules(EntityType<?> pType, IWorld pLevel, SpawnReason pReason, BlockPos pPos, Random pRandom) {
+        return pLevel.getBrightness(LightType.BLOCK, pPos) <= 8
+                && pLevel.getDifficulty() != Difficulty.PEACEFUL
+                && (pReason == SpawnReason.SPAWNER || pLevel.getBlockState(pPos).isValidSpawn(pLevel, pPos, pType));
     }
 
     @OnlyIn(Dist.CLIENT)

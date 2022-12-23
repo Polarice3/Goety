@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
+import com.Polarice3.Goety.common.entities.ally.StrayMinionEntity;
 import com.Polarice3.Goety.common.entities.neutral.ISpewing;
 import com.Polarice3.Goety.common.entities.projectiles.FrostBallEntity;
 import com.Polarice3.Goety.init.ModEffects;
@@ -112,7 +113,7 @@ public class DredenEntity extends MonsterEntity implements ISpewing, IRangedAtta
     public boolean hurt(DamageSource pSource, float pAmount) {
         if (this.isInvulnerableTo(pSource)) {
             return false;
-        } else if (pSource.getEntity() instanceof StrayEntity) {
+        } else if (pSource.getEntity() instanceof StrayEntity || pSource.getEntity() instanceof StrayMinionEntity) {
             return false;
         } else {
             return super.hurt(pSource, pAmount);

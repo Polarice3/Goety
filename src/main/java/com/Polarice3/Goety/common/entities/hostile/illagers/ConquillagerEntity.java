@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.BackawayCrossbowGoal;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
@@ -163,15 +164,15 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.PILLAGER_AMBIENT;
+        return ModSounds.CONQUILLAGER_AMBIENT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PILLAGER_DEATH;
+        return ModSounds.CONQUILLAGER_DEATH.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.PILLAGER_HURT;
+        return ModSounds.CONQUILLAGER_HURT.get();
     }
 
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
@@ -250,6 +251,6 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
     }
 
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.PILLAGER_CELEBRATE;
+        return ModSounds.CONQUILLAGER_CELEBRATE.get();
     }
 }

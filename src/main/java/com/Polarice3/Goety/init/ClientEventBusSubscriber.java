@@ -53,13 +53,14 @@ public class ClientEventBusSubscriber {
     public static void onClientSetup(FMLClientSetupEvent event){
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHBOMB.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_POTION.get(), BurningPotionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_POTION.get(), (rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.NETHER_METEOR.get(), NetherMeteorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_FIREBALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LAVABALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 3.0F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_DRAGON_FIREBALL.get(), ModDragonFireballRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FROST_BALL.get(), FrostBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEAD_SLIME_BALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SWORD.get(),(rendererManager) -> new SwordProjectileRenderer<>(rendererManager, itemRenderer, 1.25F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCYTHE.get(), ScytheProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
@@ -68,7 +69,6 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEAD_TNT.get(), DeadTNTRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ICE_STORM.get(), IceStormRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_BULLET.get(), SoulBulletRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIKE_GEYSER.get(), SpikeGeyserRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_LIGHT.get(), SoulBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.GLOW_LIGHT.get(), SoulBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_BALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer));
@@ -88,6 +88,8 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonVillagerMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZPIGLIN_MINION.get(), ZPiglinRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ZPiglinRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.RETURNED.get(), ReturnedRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MALGHAST.get(), MalghastRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HOGLORD.get(), HogLordRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ENVIOKER.get(), EnviokerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.INQUILLAGER.get(), InquillagerRenderer::new);
@@ -118,6 +120,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DREDEN_MINION.get(), DredenMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FARMER_MINION.get(), FarmerMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PHANTOM_MINION.get(), PhantomMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionRenderer::new);
@@ -214,6 +217,10 @@ public class ClientEventBusSubscriber {
                     }
                 });
         ItemModelsProperties.register(ModItems.WITCH_BOW.get(), new ResourceLocation("pulling")
+                , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.PITCHFORK.get(), new ResourceLocation("throwing")
+                , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.WARPED_SPEAR.get(), new ResourceLocation("throwing")
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
     }
 

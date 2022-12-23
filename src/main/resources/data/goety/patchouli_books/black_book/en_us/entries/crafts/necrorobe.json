@@ -2,7 +2,6 @@
   "name": "Necro Robes",
   "icon": "goety:necrohelm",
   "category": "goety:crafts",
-  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",

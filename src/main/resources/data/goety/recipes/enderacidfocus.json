@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "csc",
+    "ses",
+    "csc"
+  ],
+  "key":
+  {
+    "e":
+    {
+      "item": "goety:emptycore"
+    },
+    "s":
+    {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    "c":
+    {
+      "item": "minecraft:dragon_breath"
+    }
+  },
+  "result":
+  {
+    "item": "goety:enderacidfocus",
+    "count": 1
+  }
+}

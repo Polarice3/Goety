@@ -87,10 +87,12 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [0, -90, 0]
+			"rotation": [0, -90, 0],
+			"translation": [0, -12, 0]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [0, 90, 0]
+			"rotation": [0, 90, 0],
+			"translation": [0, -12, 0]
 		},
 		"firstperson_righthand": {
 			"rotation": [-5, -90, 0],
@@ -136,7 +138,7 @@
 			"predicate": {
 				"throwing": 1
 			},
-			"model": "item/trident_throwing"
+			"model": "goety:item/pitchfork_throwing"
 		}
 	]
 }

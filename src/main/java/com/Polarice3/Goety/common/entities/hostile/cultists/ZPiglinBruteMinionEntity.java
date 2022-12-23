@@ -28,6 +28,10 @@ public class ZPiglinBruteMinionEntity extends ZPiglinMinionEntity {
                 .add(Attributes.ARMOR, 2.0D);
     }
 
+    public int xpReward(){
+        return 20;
+    }
+
     public CreatureAttribute getMobType() {
         return CreatureAttribute.UNDEAD;
     }

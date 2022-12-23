@@ -389,8 +389,8 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             }
         }
 
-        if (pAmount > 20.0F){
-            return super.hurt(pSource, 20.0F);
+        if (pAmount > (float)MainConfig.VizierDamageCap.get()){
+            return super.hurt(pSource, (float)MainConfig.VizierDamageCap.get());
         } else {
             if (this.isSpellcasting()){
                 return super.hurt(pSource, pAmount/2);

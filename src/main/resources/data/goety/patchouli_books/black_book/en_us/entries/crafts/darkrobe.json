@@ -2,7 +2,6 @@
   "name": "Dark Robes",
   "icon": "goety:darkhelm",
   "category": "goety:crafts",
-  "sortnum": 1,
   "pages": [
     {
       "type": "patchouli:text",

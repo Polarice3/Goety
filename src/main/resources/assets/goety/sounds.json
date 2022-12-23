@@ -19,13 +19,16 @@
   "apostle_hurt": {
     "sounds": [
       {
-        "name": "goety:apostle/hurt1"
+        "name": "goety:apostle/new_hurt_1"
       },
       {
-        "name": "goety:apostle/hurt2"
+        "name": "goety:apostle/new_hurt_2"
       },
       {
-        "name": "goety:apostle/hurt3"
+        "name": "goety:apostle/new_hurt_3"
+      },
+      {
+        "name": "goety:apostle/new_hurt_4"
       }
     ],
     "subtitle": "subtitle.goety.apostle_hurt"
@@ -53,18 +56,31 @@
     "subtitle": "subtitle.goety.apostle_prepare_summon"
   },
   "apostle_cast_spell": {
-  "sounds": [
-    {
-      "name": "goety:apostle/cast1",
-      "volume": 0.75
-    },
-    {
-      "name": "goety:apostle/cast2",
-      "volume": 0.75
-    }
-  ],
-  "subtitle": "subtitle.goety.apostle_cast_spell"
-},
+    "sounds": [
+      {
+        "name": "goety:apostle/cast1",
+        "volume": 0.75
+      },
+      {
+        "name": "goety:apostle/cast2",
+        "volume": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_cast_spell"
+  },
+  "apostle_teleport": {
+    "sounds": [
+      {
+        "name": "mob/endermen/portal",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/endermen/portal2",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_teleport"
+  },
   "apostle_death": {
     "sounds": [
       {
@@ -72,6 +88,450 @@
       }
     ],
     "subtitle": "subtitle.goety.apostle_death"
+  },
+  "skull_lord_ambient": {
+    "sounds": [
+      {
+        "name": "mob/wither/idle1",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/wither/idle2",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/wither/idle3",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/wither/idle4",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_ambient"
+  },
+  "skull_lord_hurt": {
+    "sounds": [
+      {
+        "name": "mob/wither/hurt1",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/wither/hurt2",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/wither/hurt3",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/wither/hurt4",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_hurt"
+  },
+  "skull_lord_charge": {
+    "sounds": [
+      {
+        "name": "mob/endermen/scream1",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/endermen/scream2",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/endermen/scream3",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/endermen/scream4",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_charge"
+  },
+  "skull_lord_shoot": {
+    "sounds": [
+      {
+        "name": "mob/wither/shoot"
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_shoot"
+  },
+  "skull_lord_laser_begin": {
+    "sounds": [
+      {
+        "name": "block/beacon/activate"
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_laser_begin"
+  },
+  "skull_lord_laser_start": {
+    "sounds": [
+      {
+        "name": "block/end_portal/endportal"
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_laser_start"
+  },
+  "skull_lord_death": {
+    "sounds": [
+      {
+        "name": "mob/endermen/death",
+        "pitch": 0.15
+      }
+    ],
+    "subtitle": "subtitle.goety.skull_lord_death"
+  },
+  "tormentor_ambient": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/idle1",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/idle2",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/idle3",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/idle4",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/idle5",
+        "pitch": 0.15
+      }
+    ],
+    "subtitle": "subtitle.goety.tormentor_ambient"
+  },
+  "tormentor_hurt": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/hurt1",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/hurt2",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/hurt3",
+        "pitch": 0.15
+      }
+    ],
+    "subtitle": "subtitle.goety.tormentor_hurt"
+  },
+  "tormentor_charge": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/celebrate1",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/celebrate2",
+        "pitch": 0.15
+      }
+    ],
+    "subtitle": "subtitle.goety.tormentor_charge"
+  },
+  "tormentor_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/celebrate1",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/celebrate2",
+        "pitch": 0.15
+      }
+    ],
+    "subtitle": "subtitle.goety.tormentor_celebrate"
+  },
+  "tormentor_death": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/death1",
+        "pitch": 0.15
+      },
+      {
+        "name": "mob/vindication_illager/death2",
+        "pitch": 0.15
+      }
+    ],
+    "subtitle": "subtitle.goety.tormentor_death"
+  },
+  "inquillager_ambient": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/idle1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/idle2",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/idle3",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/idle4",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/idle5",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitle.goety.inquillager_ambient"
+  },
+  "inquillager_hurt": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/hurt1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/hurt2",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/hurt3",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitle.goety.inquillager_hurt"
+  },
+  "inquillager_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/celebrate1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/celebrate2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitle.goety.inquillager_celebrate"
+  },
+  "inquillager_death": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/death1",
+        "pitch": 1.5
+      },
+      {
+        "name": "mob/vindication_illager/death2",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitle.goety.inquillager_death"
+  },
+  "conquillager_ambient": {
+    "sounds": [
+      {
+        "name": "mob/pillager/idle1",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/idle2",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/idle3",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/idle4",
+        "pitch": 1.25
+      }
+    ],
+    "subtitle": "subtitle.goety.conquillager_ambient"
+  },
+  "conquillager_hurt": {
+    "sounds": [
+      {
+        "name": "mob/pillager/hurt1",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/hurt2",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/hurt3",
+        "pitch": 1.25
+      }
+    ],
+    "subtitle": "subtitle.goety.conquillager_hurt"
+  },
+  "conquillager_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/pillager/celebrate1",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/celebrate2",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/celebrate3",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/pillager/celebrate4",
+        "pitch": 1.25
+      }
+    ],
+    "subtitle": "subtitle.goety.conquillager_celebrate"
+  },
+  "conquillager_death": {
+    "sounds": [
+      {
+        "name": "mob/vindication_illager/death1",
+        "pitch": 1.25
+      },
+      {
+        "name": "mob/vindication_illager/death2",
+        "pitch": 1.25
+      }
+    ],
+    "subtitle": "subtitle.goety.conquillager_death"
+  },
+  "urbhadhach_ambient": {
+    "sounds": [
+      {
+        "name": "mob/polarbear/idle1",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/idle2",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/idle3",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/idle4",
+        "pitch": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_ambient"
+  },
+  "urbhadhach_hurt": {
+    "sounds": [
+      {
+        "name": "mob/polarbear/hurt1",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/hurt2",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/hurt3",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/hurt4",
+        "pitch": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_hurt"
+  },
+  "urbhadhach_roar": {
+    "sounds": [
+      {
+        "name": "mob/polarbear/warning1",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/warning2",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/warning3",
+        "pitch": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_roar"
+  },
+  "urbhadhach_strong_roar": {
+    "sounds": [
+      {
+        "name": "mob/polarbear/warning1",
+        "pitch": 0.05
+      },
+      {
+        "name": "mob/polarbear/warning2",
+        "pitch": 0.05
+      },
+      {
+        "name": "mob/polarbear/warning3",
+        "pitch": 0.05
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_strong_roar"
+  },
+  "urbhadhach_attack": {
+    "sounds": [
+      {
+        "name": "mob/ravager/bite1",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/ravager/bite2",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/ravager/bite3",
+        "pitch": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_attack"
+  },
+  "urbhadhach_step": {
+    "sounds": [
+      {
+        "name": "mob/polarbear/step1"
+      },
+      {
+        "name": "mob/polarbear/step2"
+      },
+      {
+        "name": "mob/polarbear/step3"
+      },
+      {
+        "name": "mob/polarbear/step4"
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_step"
+  },
+  "urbhadhach_death": {
+    "sounds": [
+      {
+        "name": "mob/polarbear/death1",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/death2",
+        "pitch": 0.25
+      },
+      {
+        "name": "mob/polarbear/death3",
+        "pitch": 0.25
+      }
+    ],
+    "subtitle": "subtitle.goety.urbhadhach_death"
   },
   "roar_spell": {
     "sounds": [

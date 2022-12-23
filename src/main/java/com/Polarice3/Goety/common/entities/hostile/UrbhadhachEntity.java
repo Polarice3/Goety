@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
@@ -92,44 +93,24 @@ public class UrbhadhachEntity extends MonsterEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.POLAR_BEAR_AMBIENT;
+        return ModSounds.URBHADHACH_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.POLAR_BEAR_HURT;
+        return ModSounds.URBHADHACH_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return null;
-    }
-
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.25F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.25F);
-        }
-    }
-
-    public void die(DamageSource pCause) {
-        super.die(pCause);
-        SoundEvent soundevent = SoundEvents.POLAR_BEAR_DEATH;
-        this.playSound(soundevent, 1.0F, 0.25F);
+        return ModSounds.URBHADHACH_DEATH.get();
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        this.playSound(SoundEvents.POLAR_BEAR_STEP, 0.15F, 1.0F);
+        this.playSound(ModSounds.URBHADHACH_STEP.get(), 0.15F, 1.0F);
     }
 
     protected void playWarningSound() {
         if (this.warningSoundTicks <= 0) {
-            this.playSound(SoundEvents.POLAR_BEAR_WARNING, 1.0F, 0.25F);
+            this.playSound(ModSounds.URBHADHACH_ROAR.get(), 1.0F, 1.0F);
             this.warningSoundTicks = 40;
         }
     }
@@ -247,12 +228,14 @@ public class UrbhadhachEntity extends MonsterEntity {
                             this.getThrall().getNavigation().moveTo(this, speed);
                         }
                     }
-                    this.getThrall().addEffect(new EffectInstance(Effects.NIGHT_VISION, 20));
+                    if (!this.level.isClientSide) {
+                        this.getThrall().addEffect(new EffectInstance(Effects.NIGHT_VISION, 20));
+                        this.addEffect(new EffectInstance(Effects.INVISIBILITY, 4));
+                    }
                     if (this.tickCount % 100 == 0){
                         this.playSound(SoundEvents.BELL_BLOCK, 2.0F, 0.25F);
                         this.getThrall().playSound(SoundEvents.BELL_RESONATE, 1.0F, 0.5F);
                     }
-                    this.addEffect(new EffectInstance(Effects.INVISIBILITY, 4));
                 } else {
                     this.thrallCooldown = 600;
                     this.setThralling(false);
@@ -395,7 +378,7 @@ public class UrbhadhachEntity extends MonsterEntity {
         boolean flag = pEntity.hurt(DamageSource.mobAttack(this), (int)this.getAttributeValue(Attributes.ATTACK_DAMAGE));
         if (flag) {
             this.level.broadcastEntityEvent(this, (byte)105);
-            this.playSound(SoundEvents.RAVAGER_ATTACK, 1.0F, 0.25F);
+            this.playSound(ModSounds.URBHADHACH_ATTACK.get(), 1.0F, 1.0F);
             if (pEntity instanceof LivingEntity) {
                 LivingEntity livingEntity = (LivingEntity) pEntity;
                 if (this.random.nextFloat() < 0.25F) {
@@ -522,7 +505,7 @@ public class UrbhadhachEntity extends MonsterEntity {
         if (pId == 104) {
             this.roarCooldown = 300;
             this.setRoarTick(20);
-            this.playSound(SoundEvents.POLAR_BEAR_WARNING, 5.0F, 0.05F);
+            this.playSound(ModSounds.URBHADHACH_STRONG_ROAR.get(), 5.0F, 1.0F);
         } else {
             super.handleEntityEvent(pId);
         }

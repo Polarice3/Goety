@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "bbb",
+    "bcb",
+    "bbb"
+  ],
+  "key":
+  {
+    "b":
+    {
+      "tag": "goety:cursed_stone"
+    },
+    "c":
+    {
+      "item": "minecraft:glowstone"
+    }
+  },
+  "result":
+  {
+    "item": "goety:cursed_glow_bricks",
+    "count": 1
+  }
+}

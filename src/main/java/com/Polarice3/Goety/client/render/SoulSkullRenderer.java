@@ -28,11 +28,7 @@ public class SoulSkullRenderer extends EntityRenderer<SoulSkullEntity> {
 
     public void render(SoulSkullEntity pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
-        if (pEntity.isUpgraded()){
-            pMatrixStack.scale(-2.0F, -2.0F, 2.0F);
-        } else {
-            pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
-        }
+        pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
         float f = MathHelper.rotlerp(pEntity.yRotO, pEntity.yRot, pPartialTicks);
         float f1 = MathHelper.lerp(pPartialTicks, pEntity.xRotO, pEntity.xRot);
         IVertexBuilder ivertexbuilder = pBuffer.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));

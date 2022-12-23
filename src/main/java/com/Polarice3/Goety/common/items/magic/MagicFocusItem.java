@@ -6,10 +6,13 @@ import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -18,7 +21,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class MagicFocusItem extends Item{
-    public static final String FOCUS = "Focus";
     public static final String SOULCOST = "Soul Cost";
     public int soulcost;
 
@@ -56,6 +58,7 @@ public class MagicFocusItem extends Item{
                 || stack.getItem() == ModItems.OSSEOUS_FOCUS.get()
                 || stack.getItem() == ModItems.RIGID_FOCUS.get()
                 || stack.getItem() == ModItems.HOUNDING_FOCUS.get()
+                || stack.getItem() == ModItems.PHANTASM_FOCUS.get()
                 || stack.getItem() == ModItems.LAUNCH_FOCUS.get()
                 || stack.getItem() == ModItems.POISONBALL_FOCUS.get()){
             return enchantment == ModEnchantments.POTENCY.get()
@@ -99,11 +102,20 @@ public class MagicFocusItem extends Item{
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        CompoundNBT compound = stack.getOrCreateTag();
-        compound.putString(FOCUS, stack.getItem().getDescriptionId());
+    public void fillItemCategory(ItemGroup pGroup, NonNullList<ItemStack> pItems) {
+        if (this.allowdedIn(pGroup)){
+            ItemStack stack = new ItemStack(this);
+            CompoundNBT compound = stack.getOrCreateTag();
+            compound.putInt(SOULCOST, soulcost);
+            pItems.add(stack);
+        }
+    }
+
+    @Override
+    public void onCraftedBy(ItemStack pStack, World pLevel, PlayerEntity pPlayer) {
+        CompoundNBT compound = pStack.getOrCreateTag();
         compound.putInt(SOULCOST, soulcost);
-        super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+        super.onCraftedBy(pStack, pLevel, pPlayer);
     }
 
     @Override

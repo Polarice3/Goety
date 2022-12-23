@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.LavaballEntity;
+import com.Polarice3.Goety.common.entities.projectiles.ModFireballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
@@ -55,11 +56,27 @@ public class LavaballSpell extends Spells{
                 vector3d.x,
                 vector3d.y,
                 vector3d.z);
+        fireballEntity.setUpgraded(true);
         fireballEntity.setOwner(entityLiving);
         if (entityLiving.isCrouching()){
             fireballEntity.setDangerous(false);
         }
         worldIn.addFreshEntity(fireballEntity);
+        for(int i = 0; i < 2; ++i) {
+            LavaballEntity lavaballEntity = new LavaballEntity(worldIn,
+                    entityLiving.getX() + vector3d.x / 2 + worldIn.random.nextGaussian(),
+                    entityLiving.getEyeY() - 0.2,
+                    entityLiving.getZ() + vector3d.z / 2 + worldIn.random.nextGaussian(),
+                    vector3d.x,
+                    vector3d.y,
+                    vector3d.z);
+            lavaballEntity.setUpgraded(true);
+            lavaballEntity.setOwner(entityLiving);
+            if (entityLiving.isCrouching()){
+                lavaballEntity.setDangerous(false);
+            }
+            worldIn.addFreshEntity(lavaballEntity);
+        }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
         this.IncreaseInfamy(MainConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
     }

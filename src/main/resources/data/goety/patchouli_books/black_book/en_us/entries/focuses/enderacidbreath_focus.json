@@ -1,0 +1,15 @@
+{
+  "name": "Ender Acid Breath Focus",
+  "icon": "goety:enderacidfocus",
+  "category": "goety:focuses",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Through the use of the Ender Dragon's Breath, you are able to spew her acid upon your foes. Be warn, her breath heals the Undead."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:enderacidfocus"
+    }
+  ]
+}

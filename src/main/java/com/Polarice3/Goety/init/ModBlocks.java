@@ -38,6 +38,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> CURSED_BRICK_BLOCK = BLOCKS.register("cursed_bricks", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_STONE_CHISELED_BLOCK = BLOCKS.register("cursed_stone_chiseled", CursedStoneBlock::new);
     public static final RegistryObject<Block> CURSED_TILES_BLOCK = BLOCKS.register("cursed_tiles", CursedStoneBlock::new);
+    public static final RegistryObject<Block> CURSED_GLOW_BRICK_BLOCK = BLOCKS.register("cursed_glow_bricks", CursedGlowBricksBlock::new);
+    public static final RegistryObject<Block> CURSED_GLOW_PILLAR_BLOCK = BLOCKS.register("cursed_glow_pillar", CursedGlowPillarBlock::new);
     public static final RegistryObject<Block> CURSED_CAGE_BLOCK = BLOCKS.register("cursed_cage", CursedCageBlock::new);
     public static final RegistryObject<Block> CURSED_TOTEM_BLOCK = BLOCKS.register("cursed_totem", CursedStoneBlock::new);
     public static final RegistryObject<Block> FANG_TOTEM = BLOCKS.register("fang_totem", FangTotemBlock::new);
@@ -275,6 +277,10 @@ public class ModBlocks {
             () -> new BlockItemBase(CURSED_TILES_SLAB_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_TILES_STAIRS_ITEM = BLOCK_ITEMS.register("cursed_tiles_stairs",
             () -> new BlockItemBase(CURSED_TILES_STAIRS_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_GLOW_BRICK_ITEM = BLOCK_ITEMS.register("cursed_glow_bricks",
+            () -> new BlockItemBase(CURSED_GLOW_BRICK_BLOCK.get()));
+    public static final RegistryObject<Item> CURSED_GLOW_PILLAR_ITEM = BLOCK_ITEMS.register("cursed_glow_pillar",
+            () -> new BlockItemBase(CURSED_GLOW_PILLAR_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_BARS_ITEM = BLOCK_ITEMS.register("cursed_bars",
             () -> new BlockItemBase(CURSED_BARS_BLOCK.get()));
     public static final RegistryObject<Item> CURSED_CAGE_ITEM = BLOCK_ITEMS.register("cursed_cage",

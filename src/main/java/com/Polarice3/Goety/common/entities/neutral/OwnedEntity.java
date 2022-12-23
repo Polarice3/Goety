@@ -4,9 +4,7 @@ import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,6 +18,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorldReader;
@@ -34,15 +33,22 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
     protected static final DataParameter<Boolean> HOSTILE = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
     private final NearestAttackableTargetGoal<PlayerEntity> targetGoal = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true);
+    public boolean limitedLifespan;
+    public int limitedLifeTicks;
 
     protected OwnedEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
         this.reassessGoal();
     }
 
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+    }
+
     public void reassessGoal() {
         if (this.level != null && !this.level.isClientSide) {
-            this.targetSelector.removeGoal(this.targetGoal);
             if (this.getTrueOwner() instanceof MonsterEntity){
                 this.setHostile(true);
             }
@@ -81,6 +87,14 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
                 this.setTarget(target);
             }
         }
+        if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
+            this.lifeSpanDamage();
+        }
+    }
+
+    public void lifeSpanDamage(){
+        this.limitedLifeTicks = 20;
+        this.hurt(DamageSource.STARVE, 1.0F);
     }
 
     public Team getTeam() {
@@ -131,6 +145,14 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
             }
         }
 
+        if (compound.contains("isHostile")){
+            this.setHostile(compound.getBoolean("isHostile"));
+        }
+
+        if (compound.contains("LifeTicks")) {
+            this.setLimitedLife(compound.getInt("LifeTicks"));
+        }
+
         this.reassessGoal();
     }
 
@@ -139,6 +161,17 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
         if (this.getOwnerId() != null) {
             compound.putUUID("Owner", this.getOwnerId());
         }
+        if (this.isHostile()){
+            compound.putBoolean("isHostile", this.isHostile());
+        }
+        if (this.limitedLifespan) {
+            compound.putInt("LifeTicks", this.limitedLifeTicks);
+        }
+    }
+
+    public void setLimitedLife(int limitedLifeTicksIn) {
+        this.limitedLifespan = true;
+        this.limitedLifeTicks = limitedLifeTicksIn;
     }
 
     @Nullable
@@ -175,7 +208,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
         this.targetSelector.addGoal(2, this.targetGoal);
     }
 
-    public boolean getHostile(){
+    public boolean isHostile(){
         return this.entityData.get(HOSTILE);
     }
 
@@ -184,16 +217,20 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
     }
 
     protected int getExperienceReward(PlayerEntity pPlayer) {
-        if (this.getHostile()) {
-            this.xpReward = 5;
+        if (this.isHostile()) {
+            this.xpReward = this.xpReward();
         }
 
         return super.getExperienceReward(pPlayer);
     }
 
+    public int xpReward(){
+        return 5;
+    }
+
     @Override
     protected boolean shouldDespawnInPeaceful() {
-        return this.getHostile();
+        return this.isHostile();
     }
 
     public class OwnerHurtTargetGoal extends TargetGoal {

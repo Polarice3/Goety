@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.client.model;
 
+import com.Polarice3.Goety.common.entities.hostile.cultists.SkeletonVillagerMinionEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -7,6 +8,7 @@ import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShootableItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
@@ -42,6 +44,24 @@ public class SkeletonVillagerModel <T extends OwnedEntity> extends VillagerMinio
                 this.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
             }
         }
+        if (pEntity instanceof SkeletonVillagerMinionEntity){
+            SkeletonVillagerMinionEntity skeletonVillagerMinion = (SkeletonVillagerMinionEntity) pEntity;
+            if (skeletonVillagerMinion.isAggressive()) {
+                if (itemstack.getItem() == Items.CROSSBOW) {
+                    if (skeletonVillagerMinion.getMainArm() == HandSide.RIGHT) {
+                        this.rightArmPose = ArmPose.CROSSBOW_HOLD;
+                        if (skeletonVillagerMinion.isCharging()) {
+                            this.rightArmPose = ArmPose.CROSSBOW_CHARGE;
+                        }
+                    } else {
+                        this.leftArmPose = ArmPose.CROSSBOW_HOLD;
+                        if (skeletonVillagerMinion.isCharging()) {
+                            this.leftArmPose = ArmPose.CROSSBOW_CHARGE;
+                        }
+                    }
+                }
+            }
+        }
 
         super.prepareMobModel(pEntity, pLimbSwing, pLimbSwingAmount, pPartialTick);
     }
@@ -49,7 +69,7 @@ public class SkeletonVillagerModel <T extends OwnedEntity> extends VillagerMinio
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
         ItemStack itemstack = pEntity.getMainHandItem();
-        if (pEntity.isAggressive() && (itemstack.isEmpty() || itemstack.getItem() != Items.BOW)) {
+        if (pEntity.isAggressive() && (!(itemstack.getItem() instanceof ShootableItem))) {
             float f = MathHelper.sin(this.attackTime * (float)Math.PI);
             float f1 = MathHelper.sin((1.0F - (1.0F - this.attackTime) * (1.0F - this.attackTime)) * (float)Math.PI);
             this.rightArm.zRot = 0.0F;

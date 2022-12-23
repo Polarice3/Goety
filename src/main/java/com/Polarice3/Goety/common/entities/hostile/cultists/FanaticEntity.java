@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.entity.item.EnderPearlEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -59,13 +60,15 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
         this.goalSelector.addGoal(2, new PitchforkAttackGoal(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(2, new ThrowBombsGoal(this));
+        this.goalSelector.addGoal(2, new ThrowPearlGoal(this));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D);
+                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.FOLLOW_RANGE, 24.0D);
     }
 
     protected void defineSynchedData() {
@@ -117,6 +120,10 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     public boolean hasBomb(){
         return this.getItemInHand(Hand.OFF_HAND).getItem() == ModItems.WITCHBOMB.get();
+    }
+
+    public boolean hasPearl(){
+        return this.getItemInHand(Hand.OFF_HAND).getItem() == Items.ENDER_PEARL;
     }
 
     @Override
@@ -180,10 +187,65 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         }
     }
 
+    static class ThrowPearlGoal extends Goal{
+        public int bombTimer;
+        public FanaticEntity fanatic;
+
+        public ThrowPearlGoal(FanaticEntity fanatic){
+            this.fanatic = fanatic;
+        }
+
+        @Override
+        public boolean canUse() {
+            if (this.fanatic.getTarget() != null && this.fanatic.hasPearl()){
+                LivingEntity entity = this.fanatic.getTarget();
+                return this.fanatic.distanceTo(entity) >= 12.0F && this.fanatic.canSee(entity);
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.fanatic.getTarget() != null && !this.fanatic.getTarget().isDeadOrDying() && this.fanatic.hasPearl();
+        }
+
+        @Override
+        public void stop() {
+            this.bombTimer = 0;
+            this.fanatic.setAggressive(false);
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+            ++this.bombTimer;
+            LivingEntity livingEntity = this.fanatic.getTarget();
+            assert livingEntity != null;
+            if (this.bombTimer >= 40) {
+                EnderPearlEntity snowballentity = new EnderPearlEntity(this.fanatic.level, this.fanatic);
+                snowballentity.shootFromRotation(this.fanatic, this.fanatic.xRot, this.fanatic.yRot, 0.0F, 1.5F, 1.0F);
+                this.fanatic.playSound(SoundEvents.ENDER_PEARL_THROW, 1.0F, 0.4F / (this.fanatic.getRandom().nextFloat() * 0.4F + 0.8F));
+                this.fanatic.level.addFreshEntity(snowballentity);
+                this.fanatic.setItemInHand(Hand.OFF_HAND, ItemStack.EMPTY);
+                this.bombTimer = 0;
+            } else {
+                double d1 = livingEntity.getX() - this.fanatic.getX();
+                double d2 = livingEntity.getZ() - this.fanatic.getZ();
+                this.fanatic.getNavigation().stop();
+                this.fanatic.setAggressive(true);
+                this.fanatic.getLookControl().setLookAt(livingEntity, 30.0F, 30.0F);
+                this.fanatic.yRot = -((float)MathHelper.atan2(d1, d2)) * (180F / (float)Math.PI);
+                this.fanatic.yBodyRot = this.fanatic.yRot;
+            }
+        }
+
+    }
+
     @OnlyIn(Dist.CLIENT)
     public ArmPose getArmPose() {
         if (this.isAggressive()) {
-            if (!hasBomb()) {
+            if (!hasBomb() && !hasPearl()) {
                 return ArmPose.ATTACKING;
             } else {
                 return ArmPose.BOMB_AND_WEAPON;
@@ -292,6 +354,9 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         }
         if (witchbomb == 0) {
             this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.WITCHBOMB.get()));
+        } else if (this.level.random.nextFloat() <= 0.25F){
+            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.ENDER_PEARL));
+            this.setGuaranteedDrop(EquipmentSlotType.OFFHAND);
         }
     }
 
@@ -315,7 +380,6 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         public boolean canUse() {
             return super.canUse()
                     && this.fanatic.getTarget() != null
-                    && !this.fanatic.getTarget().closerThan(this.fanatic, 5.0F)
                     && this.fanatic.getMainHandItem().getItem() == ModItems.PITCHFORK.get();
         }
 
