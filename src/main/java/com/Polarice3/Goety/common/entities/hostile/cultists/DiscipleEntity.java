@@ -63,21 +63,26 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MAX_HEALTH, 26.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.PILLAGER_AMBIENT;
+        return ModSounds.DISCIPLE_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.PILLAGER_HURT;
+        return ModSounds.DISCIPLE_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PILLAGER_DEATH;
+        return ModSounds.DISCIPLE_DEATH.get();
+    }
+
+    @Override
+    public SoundEvent getCelebrateSound() {
+        return ModSounds.DISCIPLE_CELEBRATE.get();
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
@@ -141,6 +146,19 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
                 }
             }
         }
+    }
+
+    protected float getDamageAfterMagicAbsorb(DamageSource pSource, float pDamage) {
+        pDamage = super.getDamageAfterMagicAbsorb(pSource, pDamage);
+        if (pSource.getEntity() == this) {
+            pDamage = 0.0F;
+        }
+
+        if (pSource.isMagic()) {
+            pDamage = (float)((double)pDamage * 0.15D);
+        }
+
+        return pDamage;
     }
 
     public boolean isFiring(){

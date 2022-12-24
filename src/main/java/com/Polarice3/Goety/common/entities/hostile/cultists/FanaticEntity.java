@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -103,15 +104,15 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.EVOKER_AMBIENT;
+        return ModSounds.FANATIC_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.EVOKER_HURT;
+        return ModSounds.FANATIC_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSounds.FANATIC_DEATH.get();
     }
 
     public boolean canBeLeashed(PlayerEntity player) {
@@ -398,6 +399,6 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.EVOKER_CELEBRATE;
+        return ModSounds.FANATIC_CELEBRATE.get();
     }
 }

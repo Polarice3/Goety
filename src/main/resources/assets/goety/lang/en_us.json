@@ -542,6 +542,32 @@
   "subtitle.goety.conquillager_celebrate": "Conquillager cheers",
   "subtitle.goety.conquillager_death": "Conquillager dies",
 
+  "subtitle.goety.fanatic_ambient": "Fanatic prays",
+  "subtitle.goety.fanatic_hurt": "Fanatic hurts",
+  "subtitle.goety.fanatic_celebrate": "Fanatic cheers",
+  "subtitle.goety.fanatic_death": "Fanatic dies",
+
+  "subtitle.goety.zealot_ambient": "Zealot prays",
+  "subtitle.goety.zealot_hurt": "Zealot hurts",
+  "subtitle.goety.zealot_celebrate": "Zealot cheers",
+  "subtitle.goety.zealot_death": "Zealot dies",
+
+  "subtitle.goety.disciple_ambient": "Disciple murmurs",
+  "subtitle.goety.disciple_hurt": "Disciple hurts",
+  "subtitle.goety.disciple_celebrate": "Disciple cheers",
+  "subtitle.goety.disciple_death": "Disciple dies",
+
+  "subtitle.goety.channeller_ambient": "Channeller channels",
+  "subtitle.goety.channeller_hurt": "Channeller hurts",
+  "subtitle.goety.channeller_celebrate": "Channeller cheers",
+  "subtitle.goety.channeller_death": "Channeller dies",
+
+  "subtitle.goety.thug_ambient": "Thug grunts",
+  "subtitle.goety.thug_hurt": "Thug hurts",
+  "subtitle.goety.thug_step": "Thug steps",
+  "subtitle.goety.thug_celebrate": "Thug cheers",
+  "subtitle.goety.thug_death": "Thug dies",
+
   "subtitle.goety.urbhadhach_ambient": "Urbhadhach groans",
   "subtitle.goety.urbhadhach_hurt": "Urbhadhach hurts",
   "subtitle.goety.urbhadhach_roar": "Urbhadhach roars",

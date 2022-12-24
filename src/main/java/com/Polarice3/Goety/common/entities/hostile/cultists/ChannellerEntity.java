@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.ServerParticleUtil;
 import net.minecraft.block.BlockState;
@@ -67,15 +68,15 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.WANDERING_TRADER_NO;
+        return ModSounds.CHANNELLER_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.EVOKER_HURT;
+        return ModSounds.CHANNELLER_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSounds.CHANNELLER_DEATH.get();
     }
 
     protected void defineSynchedData() {
@@ -328,7 +329,7 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.WANDERING_TRADER_YES;
+        return ModSounds.CHANNELLER_CELEBRATE.get();
     }
 
     protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {

@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.projectiles.LavaballEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

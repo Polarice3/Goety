@@ -1182,47 +1182,49 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void SpellLoot(LootingLevelEvent event){
-        if (event.getEntityLiving() != null) {
-            if (!event.getEntityLiving().level.isClientSide) {
-                int looting = 0;
-                if (event.getDamageSource().getEntity() != null) {
-                    if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
-                        PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
-                        if (player != null) {
-                            Entity spell = event.getDamageSource().getDirectEntity();
-                            if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
-                                if (CuriosFinder.findRing(player).isEnchanted()) {
-                                    looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+        if (event.getDamageSource() != null) {
+            if (event.getEntityLiving() != null) {
+                if (!event.getEntityLiving().level.isClientSide) {
+                    int looting = 0;
+                    if (event.getDamageSource().getEntity() != null) {
+                        if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
+                            if (player != null) {
+                                Entity spell = event.getDamageSource().getDirectEntity();
+                                if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                    if (CuriosFinder.findRing(player).isEnchanted()) {
+                                        looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                    }
                                 }
-                            }
-                            if (spell != null) {
-                                if (spell instanceof FangEntity) {
-                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                if (spell != null) {
+                                    if (spell instanceof FangEntity) {
+                                        event.setLootingLevel(event.getLootingLevel() + looting);
+                                    }
+                                    if (spell instanceof DamagingProjectileEntity) {
+                                        event.setLootingLevel(event.getLootingLevel() + looting);
+                                    }
                                 }
-                                if (spell instanceof DamagingProjectileEntity) {
-                                    event.setLootingLevel(event.getLootingLevel() + looting);
-                                }
-                            }
-                            if (event.getDamageSource() instanceof ModDamageSource) {
-                                ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
-                                if (ModDamageSource.breathAttacks(modDamageSource)) {
-                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                if (event.getDamageSource() instanceof ModDamageSource) {
+                                    ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
+                                    if (ModDamageSource.breathAttacks(modDamageSource)) {
+                                        event.setLootingLevel(event.getLootingLevel() + looting);
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (event.getDamageSource().getEntity() instanceof IOwned) {
-                        IOwned ownedEntity = (IOwned) event.getDamageSource().getEntity();
-                        if (ownedEntity != null) {
-                            if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
-                                PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
-                                if (player != null) {
-                                    if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
-                                        if (CuriosFinder.findRing(player).isEnchanted()) {
-                                            looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                        if (event.getDamageSource().getEntity() instanceof IOwned) {
+                            IOwned ownedEntity = (IOwned) event.getDamageSource().getEntity();
+                            if (ownedEntity != null) {
+                                if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
+                                    PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
+                                    if (player != null) {
+                                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                            if (CuriosFinder.findRing(player).isEnchanted()) {
+                                                looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                            }
                                         }
+                                        event.setLootingLevel(event.getLootingLevel() + looting);
                                     }
-                                    event.setLootingLevel(event.getLootingLevel() + looting);
                                 }
                             }
                         }
@@ -1276,19 +1278,21 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void ExplosionDetonateEvent(ExplosionEvent.Detonate event){
-        if (event.getExplosion().getSourceMob() != null) {
-            if (event.getExplosion().getSourceMob() instanceof ApostleEntity) {
-                event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || (entity == event.getExplosion().getSourceMob()));
-            }
-            if (event.getExplosion().getSourceMob() instanceof OwnedEntity){
-                OwnedEntity sourceMob = (OwnedEntity) event.getExplosion().getSourceMob();
-                if (sourceMob.getTrueOwner() instanceof ApostleEntity){
-                    event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || entity == sourceMob.getTrueOwner());
+        if (event.getExplosion() != null) {
+            if (event.getExplosion().getSourceMob() != null) {
+                if (event.getExplosion().getSourceMob() instanceof ApostleEntity) {
+                    event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || (entity == event.getExplosion().getSourceMob()));
                 }
-            }
-            if (event.getExplosion().getSourceMob() instanceof CreeperlingMinionEntity) {
-                CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getExplosion().getSourceMob();
-                event.getAffectedEntities().removeIf(entity -> entity instanceof LivingEntity && creeperlingMinion.getTrueOwner() == (LivingEntity) entity && RobeArmorFinder.FindFelArmor((LivingEntity) entity));
+                if (event.getExplosion().getSourceMob() instanceof OwnedEntity) {
+                    OwnedEntity sourceMob = (OwnedEntity) event.getExplosion().getSourceMob();
+                    if (sourceMob.getTrueOwner() instanceof ApostleEntity) {
+                        event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || entity == sourceMob.getTrueOwner());
+                    }
+                }
+                if (event.getExplosion().getSourceMob() instanceof CreeperlingMinionEntity) {
+                    CreeperlingMinionEntity creeperlingMinion = (CreeperlingMinionEntity) event.getExplosion().getSourceMob();
+                    event.getAffectedEntities().removeIf(entity -> entity instanceof LivingEntity && creeperlingMinion.getTrueOwner() == (LivingEntity) entity && RobeArmorFinder.FindFelArmor((LivingEntity) entity));
+                }
             }
         }
     }

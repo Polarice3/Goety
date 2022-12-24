@@ -12,7 +12,6 @@ import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.TNTBlock;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.AreaEffectCloudEntity;

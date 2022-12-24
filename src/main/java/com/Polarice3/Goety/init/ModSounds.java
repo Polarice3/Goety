@@ -46,6 +46,32 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> CONQUILLAGER_CELEBRATE = create("conquillager_celebrate");
     public static final RegistryObject<SoundEvent> CONQUILLAGER_DEATH = create("conquillager_death");
 
+    public static final RegistryObject<SoundEvent> FANATIC_AMBIENT = create("fanatic_ambient");
+    public static final RegistryObject<SoundEvent> FANATIC_HURT = create("fanatic_hurt");
+    public static final RegistryObject<SoundEvent> FANATIC_CELEBRATE = create("fanatic_celebrate");
+    public static final RegistryObject<SoundEvent> FANATIC_DEATH = create("fanatic_death");
+
+    public static final RegistryObject<SoundEvent> ZEALOT_AMBIENT = create("zealot_ambient");
+    public static final RegistryObject<SoundEvent> ZEALOT_HURT = create("zealot_hurt");
+    public static final RegistryObject<SoundEvent> ZEALOT_CELEBRATE = create("zealot_celebrate");
+    public static final RegistryObject<SoundEvent> ZEALOT_DEATH = create("zealot_death");
+
+    public static final RegistryObject<SoundEvent> DISCIPLE_AMBIENT = create("disciple_ambient");
+    public static final RegistryObject<SoundEvent> DISCIPLE_HURT = create("disciple_hurt");
+    public static final RegistryObject<SoundEvent> DISCIPLE_CELEBRATE = create("disciple_celebrate");
+    public static final RegistryObject<SoundEvent> DISCIPLE_DEATH = create("disciple_death");
+
+    public static final RegistryObject<SoundEvent> CHANNELLER_AMBIENT = create("channeller_ambient");
+    public static final RegistryObject<SoundEvent> CHANNELLER_HURT = create("channeller_hurt");
+    public static final RegistryObject<SoundEvent> CHANNELLER_CELEBRATE = create("channeller_celebrate");
+    public static final RegistryObject<SoundEvent> CHANNELLER_DEATH = create("channeller_death");
+
+    public static final RegistryObject<SoundEvent> THUG_AMBIENT = create("thug_ambient");
+    public static final RegistryObject<SoundEvent> THUG_HURT = create("thug_hurt");
+    public static final RegistryObject<SoundEvent> THUG_STEP = create("thug_step");
+    public static final RegistryObject<SoundEvent> THUG_CELEBRATE = create("thug_celebrate");
+    public static final RegistryObject<SoundEvent> THUG_DEATH = create("thug_death");
+
     public static final RegistryObject<SoundEvent> URBHADHACH_AMBIENT = create("urbhadhach_ambient");
     public static final RegistryObject<SoundEvent> URBHADHACH_HURT = create("urbhadhach_hurt");
     public static final RegistryObject<SoundEvent> URBHADHACH_ROAR = create("urbhadhach_roar");

@@ -396,15 +396,371 @@
   "conquillager_death": {
     "sounds": [
       {
-        "name": "mob/vindication_illager/death1",
+        "name": "mob/pillager/death1",
         "pitch": 1.25
       },
       {
-        "name": "mob/vindication_illager/death2",
+        "name": "mob/pillager/death2",
         "pitch": 1.25
       }
     ],
     "subtitle": "subtitle.goety.conquillager_death"
+  },
+  "fanatic_ambient": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/idle1",
+        "pitch": 0.85
+      },
+      {
+        "name": "mob/evocation_illager/idle2",
+        "pitch": 0.85
+      },
+      {
+        "name": "mob/evocation_illager/idle3",
+        "pitch": 0.85
+      },
+      {
+        "name": "mob/evocation_illager/idle4",
+        "pitch": 0.85
+      }
+    ],
+    "subtitle": "subtitle.goety.fanatic_ambient"
+  },
+  "fanatic_hurt": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/hurt1",
+        "pitch": 0.85
+      },
+      {
+        "name": "mob/evocation_illager/hurt2",
+        "pitch": 0.85
+      }
+    ],
+    "subtitle": "subtitle.goety.fanatic_hurt"
+  },
+  "fanatic_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/celebrate",
+        "pitch": 0.85
+      }
+    ],
+    "subtitle": "subtitle.goety.fanatic_celebrate"
+  },
+  "fanatic_death": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/death1",
+        "pitch": 0.85
+      },
+      {
+        "name": "mob/evocation_illager/death2",
+        "pitch": 0.85
+      }
+    ],
+    "subtitle": "subtitle.goety.fanatic_death"
+  },
+  "zealot_ambient": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/idle1",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/evocation_illager/idle2",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/evocation_illager/idle3",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/evocation_illager/idle4",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.zealot_ambient"
+  },
+  "zealot_hurt": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/hurt1",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/evocation_illager/hurt2",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.zealot_hurt"
+  },
+  "zealot_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/celebrate",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.zealot_celebrate"
+  },
+  "zealot_death": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/death1",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/evocation_illager/death2",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.zealot_death"
+  },
+  "disciple_ambient": {
+    "sounds": [
+      {
+        "name": "mob/pillager/idle1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/idle2",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/idle3",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/idle4",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.disciple_ambient"
+  },
+  "disciple_hurt": {
+    "sounds": [
+      {
+        "name": "mob/pillager/hurt1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/hurt2",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/hurt3",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.disciple_hurt"
+  },
+  "disciple_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/pillager/celebrate1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/celebrate2",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/celebrate3",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/celebrate4",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.disciple_celebrate"
+  },
+  "disciple_death": {
+    "sounds": [
+      {
+        "name": "mob/pillager/death1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/pillager/death2",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.disciple_death"
+  },
+  "channeller_ambient": {
+    "sounds": [
+      {
+        "name": "mob/wandering_trader/no1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/no2",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/no3",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/no4",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/no5",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.channeller_ambient"
+  },
+  "channeller_hurt": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/hurt1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/hurt2",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.channeller_hurt"
+  },
+  "channeller_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/wandering_trader/yes1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/yes2",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/yes3",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/wandering_trader/yes4",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.channeller_celebrate"
+  },
+  "channeller_death": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/death1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/death2",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.channeller_death"
+  },
+  "thug_ambient": {
+    "sounds": [
+      {
+        "name": "mob/ravager/idle1",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle2",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle3",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle4",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle5",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle6",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle7",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/idle8",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.thug_ambient"
+  },
+  "thug_hurt": {
+    "sounds": [
+      {
+        "name": "mob/ravager/hurt2",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/hurt3",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.thug_hurt"
+  },
+  "thug_step": {
+    "sounds": [
+      {
+        "name": "mob/piglin_brute/step1"
+      },
+      {
+        "name": "mob/piglin_brute/step2"
+      },
+      {
+        "name": "mob/piglin_brute/step3"
+      },
+      {
+        "name": "mob/piglin_brute/step4"
+      },
+      {
+        "name": "mob/piglin_brute/step5"
+      }
+    ],
+    "subtitle": "subtitle.goety.thug_step"
+  },
+  "thug_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/ravager/celebrate1",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/celebrate2",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.thug_celebrate"
+  },
+  "thug_death": {
+    "sounds": [
+      {
+        "name": "mob/ravager/death1",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/death2",
+        "pitch": 1.15
+      },
+      {
+        "name": "mob/ravager/death3",
+        "pitch": 1.15
+      }
+    ],
+    "subtitle": "subtitle.goety.thug_death"
   },
   "urbhadhach_ambient": {
     "sounds": [

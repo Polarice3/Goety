@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.entities.ai;
 
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
 

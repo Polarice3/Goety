@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -87,19 +88,19 @@ public class ThugEntity extends AbstractCultistEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.RAVAGER_AMBIENT;
+        return ModSounds.THUG_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.RAVAGER_HURT;
+        return ModSounds.THUG_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.RAVAGER_DEATH;
+        return ModSounds.THUG_DEATH.get();
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        this.playSound(SoundEvents.PIGLIN_STEP, 0.15F, 1.0F);
+        this.playSound(ModSounds.THUG_STEP.get(), 0.15F, 1.0F);
     }
 
     public boolean canBeLeashed(PlayerEntity player) {
@@ -108,7 +109,7 @@ public class ThugEntity extends AbstractCultistEntity {
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.RAVAGER_CELEBRATE;
+        return ModSounds.THUG_CELEBRATE.get();
     }
 
     public void aiStep() {

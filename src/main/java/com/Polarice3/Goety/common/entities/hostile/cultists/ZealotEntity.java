@@ -4,6 +4,7 @@ import com.Polarice3.Goety.common.entities.ai.ManoeuvrableCrossbowGoal;
 import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -58,15 +59,20 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.EVOKER_AMBIENT;
+        return ModSounds.ZEALOT_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.EVOKER_HURT;
+        return ModSounds.ZEALOT_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSounds.ZEALOT_DEATH.get();
+    }
+
+    @Override
+    public SoundEvent getCelebrateSound() {
+        return ModSounds.ZEALOT_CELEBRATE.get();
     }
 
     @Nullable
