@@ -60,6 +60,9 @@ public class SummonedEntity extends OwnedEntity {
     }
 
     public void checkDespawn() {
+        if (this.isHostile()){
+            super.checkDespawn();
+        }
     }
 
     protected boolean isSunBurnTick() {

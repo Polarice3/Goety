@@ -156,6 +156,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchBowSouls;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> ApostleDamageCap;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ApostleBowDamage;
     public static final ForgeConfigSpec.ConfigValue<Integer> VizierDamageCap;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
@@ -216,6 +217,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CultistSpread;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> WitchConversion;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ApocalypseMode;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
@@ -424,10 +426,10 @@ public class MainConfig {
                 .define("vizierMinion", false);
         VizierDamageCap = BUILDER.comment("How much maximum Damage a Vizier can attain per hit, Default: 20")
                 .defineInRange("vizierDamageCap", 20, 1, Integer.MAX_VALUE);
-        UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: false")
-                .define("urbhadhachEnthrall", false);
         ApostleDamageCap = BUILDER.comment("How much maximum Damage an Apostle can attain per hit, Default: 20")
                 .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
+        ApostleBowDamage = BUILDER.comment("Multiplies Apostle's Bow damage, Default: 4")
+                .defineInRange("apostleBowDamage", 4, 2, Integer.MAX_VALUE);
         FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 16")
                 .defineInRange("fanaticPitchforkChance", 16, 0, Integer.MAX_VALUE);
         FanaticWitchBombChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Witch's Bomb, Default: 4")
@@ -438,6 +440,10 @@ public class MainConfig {
                 .defineInRange("dredenSpawnWeight", 20, 0, Integer.MAX_VALUE);
         UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 16")
                 .defineInRange("urbhadhachSpawnWeight", 16, 0, Integer.MAX_VALUE);
+        UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: false")
+                .define("urbhadhachEnthrall", false);
+        WitchConversion = BUILDER.comment("Whether Witches will convert to Beldams if near Cultists, Default: true")
+                .define("witchConversion", true);
         GoldenKingSpawn = BUILDER.comment("Whether Golden King Fish Mob can spawn, Default: true")
                 .define("goldenKingSpawn", true);
         BUILDER.pop();

@@ -3,6 +3,7 @@ package com.Polarice3.Goety.utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -54,6 +55,10 @@ public class ModDamageSource extends DamageSource {
 
     public static DamageSource sword(Entity pSource, @Nullable Entity pIndirectEntity){
         return (new IndirectEntityDamageSource(source("sword"), pSource, pIndirectEntity)).setProjectile();
+    }
+
+    public static DamageSource notThorns(PlayerEntity pPlayer){
+        return new EntityDamageSource("player", pPlayer).setThorns();
     }
 
     public static boolean breathAttacks(DamageSource source){

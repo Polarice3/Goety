@@ -2,7 +2,7 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.ZPiglinModel;
-import com.Polarice3.Goety.common.entities.hostile.cultists.ZPiglinBruteMinionEntity;
+import com.Polarice3.Goety.common.entities.neutral.ZPiglinBruteMinionEntity;
 import net.minecraft.client.renderer.entity.BipedRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;

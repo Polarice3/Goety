@@ -203,7 +203,9 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else if (entityIn instanceof AbstractPiglinEntity){
             return this.isAlliedTo(entityIn);
-        } else return entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this;
+        } else {
+            return entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() instanceof AbstractCultistEntity;
+        }
     }
 
     public static boolean spawnCultistsRules(EntityType<?> pType, IWorld pLevel, SpawnReason pReason, BlockPos pPos, Random pRandom) {

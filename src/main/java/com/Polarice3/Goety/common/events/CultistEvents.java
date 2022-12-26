@@ -52,15 +52,17 @@ public class CultistEvents {
         LivingEntity livingEntity = event.getEntityLiving();
         if (livingEntity != null){
             if (livingEntity instanceof WitchEntity){
-                WitchEntity witch = (WitchEntity) livingEntity;
-                List<AbstractCultistEntity> list = witch.level.getEntitiesOfClass(AbstractCultistEntity.class, witch.getBoundingBox().inflate(8.0D));
-                if (!witch.level.isClientSide) {
-                    ServerWorld serverWorld = (ServerWorld) witch.level;
-                    if (list.size() >= 5) {
-                        BeldamEntity beldam = witch.convertTo(ModEntityType.BELDAM.get(), true);
-                        if (beldam != null) {
-                            beldam.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(witch.blockPosition()), SpawnReason.CONVERSION, null, null);
-                            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(witch, beldam);
+                if (MainConfig.WitchConversion.get()) {
+                    WitchEntity witch = (WitchEntity) livingEntity;
+                    List<AbstractCultistEntity> list = witch.level.getEntitiesOfClass(AbstractCultistEntity.class, witch.getBoundingBox().inflate(8.0D));
+                    if (!witch.level.isClientSide) {
+                        ServerWorld serverWorld = (ServerWorld) witch.level;
+                        if (list.size() >= 5) {
+                            BeldamEntity beldam = witch.convertTo(ModEntityType.BELDAM.get(), true);
+                            if (beldam != null) {
+                                beldam.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(witch.blockPosition()), SpawnReason.CONVERSION, null, null);
+                                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(witch, beldam);
+                            }
                         }
                     }
                 }

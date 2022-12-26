@@ -4,6 +4,8 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.entities.neutral.ZPiglinBruteMinionEntity;
+import com.Polarice3.Goety.common.entities.neutral.ZPiglinMinionEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FireTornadoEntity;
 import com.Polarice3.Goety.common.entities.projectiles.NetherMeteorEntity;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
@@ -469,10 +471,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     public boolean hurt(DamageSource pSource, float pAmount) {
         LivingEntity livingEntity = this.getTarget();
         if (!this.level.isClientSide) {
-            if (livingEntity != null) {
-                if (pSource.getEntity() == livingEntity) {
-                    ++this.hitTimes;
-                }
+            if (livingEntity != null && pSource.getEntity() instanceof LivingEntity) {
+                ++this.hitTimes;
             }
         }
 
@@ -612,11 +612,13 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
         if (!this.level.isClientSide){
             ServerWorld serverWorld = (ServerWorld) this.level;
-            for (WitchEntity witch : this.level.getEntitiesOfClass(WitchEntity.class, this.getBoundingBox().inflate(8.0D))){
-                BeldamEntity beldam = witch.convertTo(ModEntityType.BELDAM.get(), true);
-                if (beldam != null) {
-                    beldam.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(witch.blockPosition()), SpawnReason.CONVERSION, null, null);
-                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(witch, beldam);
+            if (MainConfig.WitchConversion.get()) {
+                for (WitchEntity witch : this.level.getEntitiesOfClass(WitchEntity.class, this.getBoundingBox().inflate(8.0D))) {
+                    BeldamEntity beldam = witch.convertTo(ModEntityType.BELDAM.get(), true);
+                    if (beldam != null) {
+                        beldam.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(witch.blockPosition()), SpawnReason.CONVERSION, null, null);
+                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert(witch, beldam);
+                    }
                 }
             }
         }
@@ -904,7 +906,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
-        AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, pDistanceFactor * 2);
+        AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, pDistanceFactor * MainConfig.ApostleBowDamage.get());
         if (this.getMainHandItem().getItem() instanceof BowItem) {
             abstractarrowentity = ((BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
         }

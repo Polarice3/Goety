@@ -80,12 +80,12 @@ public class MobUtil {
                 && !(entity instanceof AbstractSkeletonEntity);
     }
 
-    public static boolean validEntity(LivingEntity livingEntity){
-        if (livingEntity instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) livingEntity;
+    public static boolean validEntity(Entity entity){
+        if (entity instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entity;
             return playerValidity(player, false);
         } else {
-            return true;
+            return entity.isAttackable();
         }
     }
 

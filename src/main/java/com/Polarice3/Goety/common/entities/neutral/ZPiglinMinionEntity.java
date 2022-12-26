@@ -1,7 +1,7 @@
-package com.Polarice3.Goety.common.entities.hostile.cultists;
+package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
-import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -30,12 +31,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public class ZPiglinMinionEntity extends OwnedEntity{
+public class ZPiglinMinionEntity extends SummonedEntity {
     private static final UUID SPEED_MODIFIER_ATTACKING_UUID = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 0.05D, AttributeModifier.Operation.ADDITION);
     private int playFirstAngerSoundIn;
 
-    public ZPiglinMinionEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
+    public ZPiglinMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
         this.setPathfindingMalus(PathNodeType.LAVA, 8.0F);
     }
@@ -67,6 +68,9 @@ public class ZPiglinMinionEntity extends OwnedEntity{
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         this.populateDefaultEquipmentSlots(pDifficulty);
         this.populateDefaultEquipmentEnchantments(pDifficulty);
+        if (this.getTrueOwner() instanceof MonsterEntity){
+            this.setWandering(true);
+        }
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
             this.setDropChance(equipmentslottype, 0.0F);
         }

@@ -7,11 +7,14 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.Maps;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -180,8 +183,8 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
         } else {
             this.setAnimation(0);
         }
-        List<LivingEntity> targets = new ArrayList<>();
-        for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.5F))) {
+        List<Entity> targets = new ArrayList<>();
+        for (Entity entity : this.level.getEntitiesOfClass(Entity.class, this.getBoundingBox().inflate(0.5F))) {
             if (this.getTrueOwner() != null) {
                 if (entity != this.getTrueOwner() && !entity.isAlliedTo(this.getTrueOwner()) && !this.getTrueOwner().isAlliedTo(entity)) {
                     targets.add(entity);
@@ -191,21 +194,30 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
             }
         }
         if (!targets.isEmpty()){
-            for (LivingEntity entity: targets){
+            for (Entity entity: targets){
                 if (MobUtil.validEntity(entity)) {
                     float f = this.getDamage();
                     if (this.getTrueOwner() != null) {
-                        f += EnchantmentHelper.getDamageBonus(this.weapon, entity.getMobType());
-                        if (entity.hurt(DamageSource.mobAttack(this.getTrueOwner()), f)) {
-                            if (this.getTrueOwner() instanceof PlayerEntity) {
+                        if (entity instanceof LivingEntity) {
+                            f += EnchantmentHelper.getDamageBonus(this.weapon, ((LivingEntity) entity).getMobType());
+                        }
+                        if (this.getTrueOwner() instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) this.getTrueOwner();
+                            boolean attack = entity.hurt(DamageSource.playerAttack(player), f);
+                            if (entity instanceof EnderDragonEntity){
+                                EnderDragonEntity enderDragonEntity = (EnderDragonEntity) entity;
+                                attack = enderDragonEntity.hurt(ModDamageSource.notThorns(player), f);
+                            }
+                            if (attack && entity instanceof LivingEntity) {
                                 int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER.get(), this.weapon);
                                 int soulEater = MathHelper.clamp(enchantment + 1, 1, 10);
-                                PlayerEntity player = (PlayerEntity) this.getTrueOwner();
                                 SEHelper.increaseSouls(player, MainConfig.DarkScytheSouls.get() * soulEater);
                             }
+                        } else {
+                            entity.hurt(DamageSource.mobAttack(this.getTrueOwner()), f);
                         }
                     } else {
-                        entity.hurt(DamageSource.MAGIC, f);
+                        entity.hurt(DamageSource.GENERIC, f);
                     }
                 }
             }

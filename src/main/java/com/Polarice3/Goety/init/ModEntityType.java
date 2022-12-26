@@ -56,6 +56,12 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "lavaball").toString()));
 
+    public static final RegistryObject<EntityType<GrandLavaballEntity>> GRAND_LAVABALL = ENTITY_TYPES.register("grand_lavaball",
+            () -> EntityType.Builder.<GrandLavaballEntity>of(GrandLavaballEntity::new, EntityClassification.MISC)
+                    .sized(1.0f,1.0f)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "grand_lavaball").toString()));
+
     public static final RegistryObject<EntityType<ModDragonFireballEntity>> MOD_DRAGON_FIREBALL = ENTITY_TYPES.register("dragon_fireball",
             () -> EntityType.Builder.<ModDragonFireballEntity>of(ModDragonFireballEntity::new, EntityClassification.MISC)
                     .sized(1.0F, 1.0F)

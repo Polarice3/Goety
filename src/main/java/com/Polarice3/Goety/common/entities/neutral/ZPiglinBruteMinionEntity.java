@@ -1,4 +1,4 @@
-package com.Polarice3.Goety.common.entities.hostile.cultists;
+package com.Polarice3.Goety.common.entities.neutral;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;

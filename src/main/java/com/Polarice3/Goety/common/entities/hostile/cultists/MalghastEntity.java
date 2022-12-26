@@ -2,8 +2,8 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.common.entities.neutral.OwnedFlyingEntity;
 import com.Polarice3.Goety.common.entities.projectiles.ExplosiveProjectileEntity;
+import com.Polarice3.Goety.common.entities.projectiles.GrandLavaballEntity;
 import com.Polarice3.Goety.common.entities.projectiles.LavaballEntity;
-import com.Polarice3.Goety.common.entities.projectiles.NetherMeteorEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -181,7 +181,7 @@ public class MalghastEntity extends OwnedFlyingEntity {
                     ExplosiveProjectileEntity fireballentity;
 
                     if (this.shotTimes) {
-                        fireballentity = new NetherMeteorEntity(world, this.ghast, d2, d3, d4);
+                        fireballentity = new GrandLavaballEntity(world, this.ghast, d2, d3, d4);
                     } else {
                         fireballentity = new LavaballEntity(world, this.ghast, d2, d3, d4);
                     }

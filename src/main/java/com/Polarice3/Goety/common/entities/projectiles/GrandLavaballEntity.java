@@ -17,19 +17,19 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class NetherMeteorEntity extends ExplosiveProjectileEntity {
-    public float explosionPower = 4.0F;
+public class GrandLavaballEntity extends ExplosiveProjectileEntity{
+    public float explosionPower = 1.0F;
 
-    public NetherMeteorEntity(EntityType<? extends ExplosiveProjectileEntity> type, World world) {
+    public GrandLavaballEntity(EntityType<? extends ExplosiveProjectileEntity> type, World world) {
         super(type, world);
     }
 
-    public NetherMeteorEntity(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
-        super(ModEntityType.NETHER_METEOR.get(), x, y, z, accelX, accelY, accelZ, worldIn);
+    public GrandLavaballEntity(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ) {
+        super(ModEntityType.GRAND_LAVABALL.get(), x, y, z, accelX, accelY, accelZ, worldIn);
     }
 
-    public NetherMeteorEntity(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
-        super(ModEntityType.NETHER_METEOR.get(), shooter, accelX, accelY, accelZ, worldIn);
+    public GrandLavaballEntity(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ) {
+        super(ModEntityType.GRAND_LAVABALL.get(), shooter, accelX, accelY, accelZ, worldIn);
     }
 
     public void tick() {
@@ -38,7 +38,6 @@ public class NetherMeteorEntity extends ExplosiveProjectileEntity {
         double d0 = this.getX() + vector3d.x;
         double d1 = this.getY() + vector3d.y;
         double d2 = this.getZ() + vector3d.z;
-        this.level.addParticle(ParticleTypes.LARGE_SMOKE, d0 + level.random.nextDouble()/2, d1 + 0.5D, d2 + level.random.nextDouble()/2, 0.0D, 0.0D, 0.0D);
         this.level.addParticle(ParticleTypes.FLAME, d0 + level.random.nextDouble()/2, d1 + 0.5D, d2 + level.random.nextDouble()/2, 0.0D, 0.0D, 0.0D);
     }
 

@@ -13,6 +13,7 @@ import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.IAngerable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.BoatEntity;
@@ -202,6 +203,9 @@ public class LichEvents {
                                     }
                                 } else {
                                     ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                    if (event.getEntityLiving() instanceof IAngerable){
+                                        ((IAngerable) event.getEntityLiving()).stopBeingAngry();
+                                    }
                                 }
                             }
                         }
