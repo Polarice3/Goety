@@ -46,6 +46,7 @@ import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -95,6 +96,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -316,21 +318,26 @@ public class ModEvents {
     }
 
     private static final Map<ServerWorld, IllagerSpawner> ILLAGER_SPAWNER_MAP = new HashMap<>();
+    private static final Map<ServerWorld, PilgrimSpawner> PILGRIM_SPAWNER_MAP = new HashMap<>();
     private static final Map<ServerWorld, EffectsEvent> EFFECTS_EVENT_MAP = new HashMap<>();
 
     @SubscribeEvent
     public static void worldLoad(WorldEvent.Load event) {
         if (!event.getWorld().isClientSide() && event.getWorld() instanceof ServerWorld) {
-            ILLAGER_SPAWNER_MAP.put((ServerWorld) event.getWorld(), new IllagerSpawner());
-            EFFECTS_EVENT_MAP.put((ServerWorld) event.getWorld(), new EffectsEvent());
+            ServerWorld serverWorld = (ServerWorld) event.getWorld();
+            ILLAGER_SPAWNER_MAP.put(serverWorld, new IllagerSpawner());
+            PILGRIM_SPAWNER_MAP.put(serverWorld, new PilgrimSpawner());
+            EFFECTS_EVENT_MAP.put(serverWorld, new EffectsEvent());
         }
     }
 
     @SubscribeEvent
     public static void worldUnload(WorldEvent.Unload event) {
         if (!event.getWorld().isClientSide() && event.getWorld() instanceof ServerWorld) {
-            ILLAGER_SPAWNER_MAP.remove(event.getWorld());
-            EFFECTS_EVENT_MAP.remove(event.getWorld());
+            ServerWorld serverWorld = (ServerWorld) event.getWorld();
+            ILLAGER_SPAWNER_MAP.remove(serverWorld);
+            PILGRIM_SPAWNER_MAP.remove(serverWorld);
+            EFFECTS_EVENT_MAP.remove(serverWorld);
         }
     }
 
@@ -339,9 +346,13 @@ public class ModEvents {
         if(!tick.world.isClientSide && tick.world instanceof ServerWorld){
             ServerWorld serverWorld = (ServerWorld)tick.world;
             IllagerSpawner illagerSpawner = ILLAGER_SPAWNER_MAP.get(serverWorld);
+            PilgrimSpawner pilgrimSpawner = PILGRIM_SPAWNER_MAP.get(serverWorld);
             EffectsEvent effectsEvent = EFFECTS_EVENT_MAP.get(serverWorld);
             if (illagerSpawner != null){
                 illagerSpawner.tick(serverWorld);
+            }
+            if (pilgrimSpawner != null){
+                pilgrimSpawner.tick(serverWorld);
             }
             if (effectsEvent != null){
                 effectsEvent.tick(serverWorld);
@@ -447,7 +458,9 @@ public class ModEvents {
                             avoidUndead = Optional.of(livingentity);
                         }
                     }
-                    brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, avoidUndead);
+                    if (avoidUndead.isPresent()) {
+                        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_ZOMBIFIED, avoidUndead);
+                    }
                 }
             }
         }
@@ -945,6 +958,13 @@ public class ModEvents {
                 }
             }
         }
+        if (MainConfig.OwnerAttackCancel.get()){
+            if (victim instanceof IOwned){
+                if (((IOwned) victim).getTrueOwner() == attacker){
+                    event.setCanceled(true);
+                }
+            }
+        }
         if (direct instanceof AbstractArrowEntity){
             AbstractArrowEntity arrowEntity = (AbstractArrowEntity) direct;
             if (arrowEntity.getTags().contains(ConstantPaths.rainArrow()) || arrowEntity.getOwner() instanceof ApostleEntity){
@@ -965,6 +985,17 @@ public class ModEvents {
             if (victim instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) victim;
                 if (PlayerUtil.starAmuletActive(player)){
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void PlayerAttackEvent(AttackEntityEvent event){
+        if (MainConfig.OwnerAttackCancel.get()) {
+            if (event.getTarget() instanceof IOwned){
+                if (((IOwned) event.getTarget()).getTrueOwner() == event.getPlayer()) {
                     event.setCanceled(true);
                 }
             }
@@ -1135,11 +1166,13 @@ public class ModEvents {
                         }
                     }
                     Entity entity = event.getSource().getDirectEntity();
-                    if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity || livingEntity instanceof WitchEntity || livingEntity instanceof ICultist){
-                        LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.TALL_SKULL);
-                        LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
-                        LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
-                        loottable.getRandomItems(ctx).forEach(livingEntity::spawnAtLocation);
+                    if (MainConfig.TallSkullDrops.get()) {
+                        if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity || livingEntity instanceof WitchEntity || livingEntity instanceof ICultist) {
+                            LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.TALL_SKULL);
+                            LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
+                            LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                            loottable.getRandomItems(ctx).forEach(livingEntity::spawnAtLocation);
+                        }
                     }
                     if (entity instanceof FangEntity){
                         if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
@@ -1157,11 +1190,13 @@ public class ModEvents {
                                     if (livingEntity.getType() == EntityType.WITHER_SKELETON) {
                                         livingEntity.spawnAtLocation(new ItemStack(Items.WITHER_SKELETON_SKULL));
                                     }
-                                    if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity){
-                                        livingEntity.spawnAtLocation(new ItemStack(ModBlocks.TALL_SKULL_ITEM.get()));
-                                    }
-                                    if (livingEntity instanceof WitchEntity || livingEntity instanceof ICultist){
-                                        livingEntity.spawnAtLocation(new ItemStack(ModBlocks.TALL_SKULL_ITEM.get()));
+                                    if (MainConfig.TallSkullDrops.get()) {
+                                        if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity) {
+                                            livingEntity.spawnAtLocation(new ItemStack(ModBlocks.TALL_SKULL_ITEM.get()));
+                                        }
+                                        if (livingEntity instanceof WitchEntity || livingEntity instanceof ICultist) {
+                                            livingEntity.spawnAtLocation(new ItemStack(ModBlocks.TALL_SKULL_ITEM.get()));
+                                        }
                                     }
                                 }
                                 if (livingEntity instanceof PlayerEntity) {
@@ -1374,10 +1409,15 @@ public class ModEvents {
         if (event.getPotionEffect().getEffect() == ModEffects.COSMIC.get()){
             World world = event.getEntityLiving().level;
             LivingEntity livingEntity = event.getEntityLiving();
-            if (!world.isClientSide){
+            if (!world.isClientSide) {
                 ServerWorld serverWorld = (ServerWorld) world;
-                for (int i = 0; i < world.random.nextInt(35) + 10; ++i) {
-                    serverWorld.sendParticles(ParticleTypes.DRAGON_BREATH, livingEntity.getRandomX(0.5D), livingEntity.getEyeY(), livingEntity.getRandomZ(0.5D), 0, 0.7F, 0.7F, 0.7F, 0.5F);
+                for (int k = 0; k < 200; ++k) {
+                    float f = world.random.nextFloat() * 4.0F;
+                    float f1 = world.random.nextFloat() * ((float) Math.PI * 2F);
+                    double d1 = (double) (MathHelper.cos(f1) * f);
+                    double d2 = 0.01D + world.random.nextDouble() * 0.5D;
+                    double d3 = (double) (MathHelper.sin(f1) * f);
+                    serverWorld.sendParticles(ParticleTypes.DRAGON_BREATH, (double) livingEntity.blockPosition().getX() + d1 * 0.1D, (double) livingEntity.blockPosition().getY() + 0.3D, (double) livingEntity.blockPosition().getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
                 }
             }
             if (livingEntity instanceof CowEntity){

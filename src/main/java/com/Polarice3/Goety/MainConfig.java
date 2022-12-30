@@ -207,6 +207,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsAttackCreepers;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsMasterImmune;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> OwnerAttackCancel;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> RoyalSpiderMinions;
@@ -218,6 +219,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CultistSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> WitchConversion;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> CultistPilgrimage;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> TallSkullDrops;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ApocalypseMode;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
@@ -444,6 +447,10 @@ public class MainConfig {
                 .define("urbhadhachEnthrall", false);
         WitchConversion = BUILDER.comment("Whether Witches will convert to Beldams if near Cultists, Default: true")
                 .define("witchConversion", true);
+        CultistPilgrimage = BUILDER.comment("Whether Cultists will occasionally spawn within the Nether in groups much akin to Patrols, Default: true")
+                .define("cultistPilgrimage", true);
+        TallSkullDrops = BUILDER.comment("Whether Mobs with Tall Heads(ie. Villagers, Illagers, etc.) will drop Tall Skulls, Default: true")
+                .define("tallSkullDrop", true);
         GoldenKingSpawn = BUILDER.comment("Whether Golden King Fish Mob can spawn, Default: true")
                 .define("goldenKingSpawn", true);
         BUILDER.pop();
@@ -594,14 +601,16 @@ public class MainConfig {
                 .define("murkTreeGen", true);
         BUILDER.pop();
         BUILDER.push("Minions");
-        UndeadTeleport = BUILDER.comment("Whether Undead Minions can teleport to Players, Default: false")
+        UndeadTeleport = BUILDER.comment("Whether Undead Servants can teleport to Players, Default: false")
                 .define("undeadTeleport", false);
-        VexTeleport = BUILDER.comment("Whether Vex Minions can teleport to Players, Default: true")
+        VexTeleport = BUILDER.comment("Whether Vex Servants can teleport to Players, Default: true")
                 .define("vexTeleport", true);
-        MinionsAttackCreepers = BUILDER.comment("Whether Minions can attack Creepers if Mob Griefing Rule is False, Default: true")
+        MinionsAttackCreepers = BUILDER.comment("Whether Servants can attack Creepers if Mob Griefing Rule is False, Default: true")
                 .define("minionAttackCreepers", true);
-        MinionsMasterImmune = BUILDER.comment("Whether Minions or their owner are immune to attacks made by other minions that are summoned by the same owner, Default: true")
+        MinionsMasterImmune = BUILDER.comment("Whether Servants or their owner are immune to attacks made by other servants that are summoned by the same owner, Default: true")
                 .define("minionMasterImmune", true);
+        OwnerAttackCancel = BUILDER.comment("Owners can't attack their servants, Default: true")
+                .define("ownerAttackCancel", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
                 .define("undeadMinionHeal", true);
         TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Fel Helm, Default: true")

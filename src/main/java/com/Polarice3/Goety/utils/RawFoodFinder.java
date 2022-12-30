@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.items.UncookedMutatedItem;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.item.Item;
@@ -12,6 +13,6 @@ public class RawFoodFinder {
     }
 
     public static boolean findMutatedRaw(Item item){
-        return item.is(ModTags.Items.RAW_MUTATED_MEAT);
+        return item.is(ModTags.Items.RAW_MUTATED_MEAT) || item instanceof UncookedMutatedItem;
     }
 }

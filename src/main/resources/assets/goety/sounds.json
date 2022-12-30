@@ -762,6 +762,25 @@
     ],
     "subtitle": "subtitle.goety.thug_death"
   },
+  "cultist_prepare_spell": {
+    "sounds": [
+      {
+        "name": "goety:cultist/prepare_spell1"
+      },
+      {
+        "name": "goety:cultist/prepare_spell2"
+      }
+    ],
+    "subtitle": "subtitle.goety.cultist_prepare_spell"
+  },
+  "cultist_cast_spell": {
+    "sounds": [
+      {
+        "name": "goety:cultist/cast"
+      }
+    ],
+    "subtitle": "subtitle.goety.cultist_cast_spell"
+  },
   "urbhadhach_ambient": {
     "sounds": [
       {

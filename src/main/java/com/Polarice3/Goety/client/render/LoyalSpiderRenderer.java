@@ -15,6 +15,8 @@ import net.minecraft.util.ResourceLocation;
 public class LoyalSpiderRenderer<T extends LoyalSpiderEntity> extends MobRenderer<T, LoyalSpiderModel<T>> {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/loyal_spider.png");
     protected static final ResourceLocation POISON_TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/loyal_spider_poison.png");
+    protected static final ResourceLocation FROST_TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/frost_spider.png");
+    protected static final ResourceLocation FROST_POISON_TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/spiders/frost_poison_spider.png");
 
     public LoyalSpiderRenderer(EntityRendererManager p_i46139_1_) {
         super(p_i46139_1_, new LoyalSpiderModel<>(), 0.8F);
@@ -49,7 +51,13 @@ public class LoyalSpiderRenderer<T extends LoyalSpiderEntity> extends MobRendere
     }
 
     public ResourceLocation getTextureLocation(T entity) {
-        return entity.isPoison() ? POISON_TEXTURE : TEXTURE;
+        if (entity.isFrost() && entity.isPoison()){
+            return FROST_POISON_TEXTURE;
+        } else if (entity.isFrost()){
+            return FROST_TEXTURE;
+        } else {
+            return entity.isPoison() ? POISON_TEXTURE : TEXTURE;
+        }
     }
 
     protected void setupRotations(T pEntityLiving, MatrixStack pMatrixStack, float pAgeInTicks, float pRotationYaw, float pPartialTicks) {

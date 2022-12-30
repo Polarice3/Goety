@@ -27,8 +27,8 @@ public class ModDragonFireballEntity extends DamagingProjectileEntity {
         super(p_i50171_1_, p_i50171_2_);
     }
 
-    public ModDragonFireballEntity(World p_i46775_1_, double p_i46775_2_, double p_i46775_4_, double p_i46775_6_, double p_i46775_8_, double p_i46775_10_, double p_i46775_12_) {
-        super(ModEntityType.MOD_DRAGON_FIREBALL.get(), p_i46775_2_, p_i46775_4_, p_i46775_6_, p_i46775_8_, p_i46775_10_, p_i46775_12_, p_i46775_1_);
+    public ModDragonFireballEntity(World pWorld, double pX, double pY, double pZ, double pAccelX, double pAccelY, double pAccelZ) {
+        super(ModEntityType.MOD_DRAGON_FIREBALL.get(), pX, pY, pZ, pAccelX, pAccelY, pAccelZ, pWorld);
     }
 
     public ModDragonFireballEntity(World p_i46776_1_, LivingEntity p_i46776_2_, double p_i46776_3_, double p_i46776_5_, double p_i46776_7_) {

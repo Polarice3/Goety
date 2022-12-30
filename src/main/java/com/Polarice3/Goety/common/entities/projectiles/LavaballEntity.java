@@ -28,8 +28,8 @@ public class LavaballEntity extends ExplosiveProjectileEntity {
         super(p_i50163_1_, p_i50163_2_);
     }
 
-    public LavaballEntity(World p_i1768_1_, double p_i1768_2_, double p_i1768_4_, double p_i1768_6_, double p_i1768_8_, double p_i1768_10_, double p_i1768_12_) {
-        super(ModEntityType.LAVABALL.get(), p_i1768_2_, p_i1768_4_, p_i1768_6_, p_i1768_8_, p_i1768_10_, p_i1768_12_, p_i1768_1_);
+    public LavaballEntity(World pWorld, double pX, double pY, double pZ, double pAccelX, double pAccelY, double pAccelZ) {
+        super(ModEntityType.LAVABALL.get(), pX, pY, pZ, pAccelX, pAccelY, pAccelZ, pWorld);
     }
 
     public LavaballEntity(World p_i1769_1_, LivingEntity p_i1769_2_, double p_i1769_3_, double p_i1769_5_, double p_i1769_7_) {

@@ -45,8 +45,8 @@ public class DeadBatItem extends Item {
         World world = player.getEntity().level;
         int random = world.random.nextInt(3);
         if (RobeArmorFinder.FindFelSet(player)) {
-            if (target instanceof SpiderEntity) {
-                if (!world.isClientSide && target.isAlive()) {
+            if (target instanceof SpiderEntity && target.isAlive()) {
+                if (!world.isClientSide) {
                     if (random == 0){
                         target.remove();
                         LoyalSpiderEntity tamedSpider = new LoyalSpiderEntity(ModEntityType.TAMED_SPIDER.get(), world);
@@ -62,16 +62,15 @@ public class DeadBatItem extends Item {
                         tamedSpider.setOwnerId(player.getUUID());
                         tamedSpider.setPersistenceRequired();
                         world.addFreshEntity(tamedSpider);
-                        world.playSound(player, tamedSpider.blockPosition(), SoundEvents.GENERIC_EAT, SoundCategory.HOSTILE, 1.0F, 1.0F);
-                        tamedSpider.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
                         world.broadcastEntityEvent(tamedSpider, (byte) 7);
                         stack.shrink(1);
                     } else {
-                        target.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
                         world.broadcastEntityEvent(target, (byte)6);
+                        stack.shrink(1);
                     }
                     return ActionResultType.SUCCESS;
                 }
+                target.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
             } else {
                 return ActionResultType.CONSUME;
             }

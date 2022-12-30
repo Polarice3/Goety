@@ -72,6 +72,9 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> THUG_CELEBRATE = create("thug_celebrate");
     public static final RegistryObject<SoundEvent> THUG_DEATH = create("thug_death");
 
+    public static final RegistryObject<SoundEvent> CULTIST_PREPARE_SPELL = create("cultist_prepare_spell");
+    public static final RegistryObject<SoundEvent> CULTIST_CAST_SPELL = create("cultist_cast_spell");
+
     public static final RegistryObject<SoundEvent> URBHADHACH_AMBIENT = create("urbhadhach_ambient");
     public static final RegistryObject<SoundEvent> URBHADHACH_HURT = create("urbhadhach_hurt");
     public static final RegistryObject<SoundEvent> URBHADHACH_ROAR = create("urbhadhach_roar");

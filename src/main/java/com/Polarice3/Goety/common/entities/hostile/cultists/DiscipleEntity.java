@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.common.entities.neutral.ZPiglinBruteMinionEntity;
 import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
@@ -27,9 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -171,7 +171,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
     @Override
     protected SoundEvent getCastingSoundEvent () {
-        return SoundEvents.EVOKER_CAST_SPELL;
+        return ModSounds.CULTIST_CAST_SPELL.get();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -328,7 +328,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         }
 
         protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.EVOKER_CAST_SPELL;
+            return ModSounds.CULTIST_PREPARE_SPELL.get();
         }
 
         @Override
@@ -375,7 +375,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         }
 
         protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.EVOKER_CAST_SPELL;
+            return ModSounds.CULTIST_PREPARE_SPELL.get();
         }
 
         @Override
@@ -422,7 +422,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         }
 
         protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.EVOKER_CAST_SPELL;
+            return ModSounds.CULTIST_PREPARE_SPELL.get();
         }
 
         @Override
@@ -467,12 +467,61 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
         }
 
         protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.EVOKER_CAST_SPELL;
+            return ModSounds.CULTIST_PREPARE_SPELL.get();
         }
 
         @Override
         protected SpellcastingCultistEntity.SpellType getSpellType() {
             return SpellType.ROAR;
+        }
+    }
+
+    class SacrificeSpellGoal extends SpellcastingCultistEntity.UseSpellGoal {
+        private SacrificeSpellGoal() {
+        }
+
+        @Override
+        public boolean canUse() {
+            return super.canUse()
+                    && DiscipleEntity.this.getHealth() < DiscipleEntity.this.getMaxHealth()/3
+                    && DiscipleEntity.this.getTarget() != null
+                    && DiscipleEntity.this.level.getDifficulty() == Difficulty.HARD
+                    && DiscipleEntity.this.canSee(DiscipleEntity.this.getTarget());
+        }
+
+        protected int getCastingTime() {
+            return 200;
+        }
+
+        protected int getCastingInterval() {
+            return 0;
+        }
+
+        public void castSpell() {
+            DiscipleEntity discipleEntity = DiscipleEntity.this;
+            LivingEntity livingentity = DiscipleEntity.this.getTarget();
+            if (livingentity != null) {
+                BlockPos blockpos = discipleEntity.blockPosition();
+                ZPiglinBruteMinionEntity summonedentity = new ZPiglinBruteMinionEntity(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), discipleEntity.level);
+                summonedentity.moveTo(blockpos, 0.0F, 0.0F);
+                summonedentity.setHostile(true);
+                summonedentity.finalizeSpawn((IServerWorld) DiscipleEntity.this.level, DiscipleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                summonedentity.setTarget(livingentity);
+                summonedentity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE));
+                summonedentity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, Integer.MAX_VALUE));
+                discipleEntity.level.addFreshEntity(summonedentity);
+                discipleEntity.level.explode(discipleEntity, blockpos.getX(), blockpos.getY(), blockpos.getZ(), 2.0F, Explosion.Mode.NONE);
+                discipleEntity.remove();
+            }
+        }
+
+        protected SoundEvent getSpellPrepareSound() {
+            return SoundEvents.ILLUSIONER_PREPARE_BLINDNESS;
+        }
+
+        @Override
+        protected SpellcastingCultistEntity.SpellType getSpellType() {
+            return SpellType.SACRIFICE;
         }
     }
 }

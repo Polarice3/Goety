@@ -15,7 +15,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "minecraft:brewing_stand",
-      "text": "Giving Loyal Spiders certain potions gives them some special attributes. A Poison Potion will turn them smaller and weaker, but will give them the ability to imbue poison upon your foes. A Slow Falling Potion makes them immune to Fall Damage."
+      "text": "Giving Loyal Spiders certain potions gives them some special attributes. A Poison Potion will turn them smaller and weaker, but will give them the ability to imbue poison upon your foes. A Slow Falling Potion makes them immune to Fall Damage. Feeding them with a Cold Heart makes them frosty."
     },
     {
       "type": "patchouli:spotlight",

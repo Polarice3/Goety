@@ -28,8 +28,8 @@ public class ModFireballEntity extends AbstractFireballEntity {
         super(ModEntityType.MOD_FIREBALL.get(), p_i1771_2_, p_i1771_3_, p_i1771_5_, p_i1771_7_, p_i1771_1_);
     }
 
-    public ModFireballEntity(World p_i1772_1_, double p_i1772_2_, double p_i1772_4_, double p_i1772_6_, double p_i1772_8_, double p_i1772_10_, double p_i1772_12_) {
-        super(ModEntityType.MOD_FIREBALL.get(), p_i1772_2_, p_i1772_4_, p_i1772_6_, p_i1772_8_, p_i1772_10_, p_i1772_12_, p_i1772_1_);
+    public ModFireballEntity(World pWorld, double pX, double pY, double pZ, double pAccelX, double pAccelY, double pAccelZ) {
+        super(ModEntityType.MOD_FIREBALL.get(), pX, pY, pZ, pAccelX, pAccelY, pAccelZ, pWorld);
     }
 
     protected void onHitEntity(EntityRayTraceResult pResult) {

@@ -56,12 +56,6 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.OPTIONAL_UUID);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> DATA_COLLAR_COLOR = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.INT);
-    private boolean sitting;
-    public boolean poison;
-    public boolean rideable;
-    public boolean fallImmune;
-    public boolean saddled;
-    public boolean royal;
     protected boolean Jumping;
     protected float jumpPower;
 
@@ -130,7 +124,6 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
             if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
                 if (RobeArmorFinder.FindFelHelm(this.getTrueOwner())) {
                     PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
-                    ItemStack foundStack = GoldTotemFinder.FindTotem(owner);
                     int SoulCost = MainConfig.TamedSpiderHealCost.get();
                     if (RobeArmorFinder.FindLeggings(owner)){
                         int random = this.random.nextInt(2);
@@ -138,24 +131,11 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
                             SoulCost = 0;
                         }
                     }
-                    if (SEHelper.getSEActive(owner)){
-                        if (SEHelper.getSESouls(owner) > MainConfig.TamedSpiderHealCost.get()){
-                            if (this.tickCount % 20 == 0) {
-                                this.heal(1.0F);
-                                Vector3d vector3d = this.getDeltaMovement();
-                                SEHelper.decreaseSESouls(owner, SoulCost);
-                                if (!this.level.isClientSide){
-                                    ServerWorld serverWorld = (ServerWorld) this.level;
-                                    serverWorld.sendParticles(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
-                                    SEHelper.sendSEUpdatePacket(owner);
-                                }
-                            }
-                        }
-                    } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) > 0) {
+                    if (SEHelper.getSoulsAmount(owner, SoulCost)){
                         if (this.tickCount % 20 == 0) {
                             this.heal(1.0F);
                             Vector3d vector3d = this.getDeltaMovement();
-                            GoldTotemItem.decreaseSouls(foundStack, SoulCost);
+                            SEHelper.decreaseSouls(owner, SoulCost);
                             if (!this.level.isClientSide){
                                 ServerWorld serverWorld = (ServerWorld) this.level;
                                 serverWorld.sendParticles(ParticleTypes.SOUL, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
@@ -259,17 +239,12 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         }
         compound.putBoolean("Sitting", this.isSitting());
         compound.putBoolean("Saddled", this.isSaddled());
+        compound.putBoolean("Frost", this.isFrost());
         compound.putBoolean("Royal", this.isRoyal());
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-        this.poison = compound.getBoolean("Poison");
-        this.rideable = compound.getBoolean("Rideable");
-        this.sitting = compound.getBoolean("Sitting");
-        this.fallImmune = compound.getBoolean("FallImmune");
-        this.saddled = compound.getBoolean("Saddled");
-        this.royal = compound.getBoolean("Royal");
         UUID uuid;
         if (compound.hasUUID("Owner")) {
             uuid = compound.getUUID("Owner");
@@ -287,12 +262,13 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         if (compound.contains("CollarColor", 99)) {
             this.setCollarColor(DyeColor.byId(compound.getInt("CollarColor")));
         }
-        this.setSitting(this.sitting);
-        this.setRideable(this.rideable);
-        this.setPoison(this.poison);
-        this.setFallImmune(this.fallImmune);
-        this.setSaddled(this.saddled);
-        this.setRoyal(this.royal);
+        this.setSitting(compound.getBoolean("Sitting"));
+        this.setRideable(compound.getBoolean("Rideable"));
+        this.setPoison(compound.getBoolean("Poison"));
+        this.setFallImmune(compound.getBoolean("FallImmune"));
+        this.setSaddled(compound.getBoolean("Saddled"));
+        this.setFrost(compound.getBoolean("Frost"));
+        this.setRoyal(compound.getBoolean("Royal"));
     }
 
     private boolean getStatusFlag(int mask) {
@@ -342,24 +318,41 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
             if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity)) {
                 pAmount = (pAmount + 1.0F) / 2.0F;
             }
+            if (this.isFrost()){
+                if (ModDamageSource.frostAttacks(pSource)){
+                    pAmount = pAmount / 2.0F;
+                }
+                if (pSource.isFire()){
+                    pAmount = pAmount * 1.5F;
+                }
+            }
 
             return super.hurt(pSource, pAmount);
         }
     }
 
     public boolean doHurtTarget(Entity pEntity) {
-        if (!super.doHurtTarget(pEntity)) {
-            return false;
-        } else {
-            if (pEntity instanceof LivingEntity && this.isPoison()) {
-                if (this.isRoyal()){
-                    ((LivingEntity)pEntity).addEffect(new EffectInstance(Effects.POISON, 400, 1));
-                } else {
-                    ((LivingEntity)pEntity).addEffect(new EffectInstance(Effects.POISON, 200));
+        if (super.doHurtTarget(pEntity)) {
+            if (pEntity instanceof LivingEntity) {
+                if (this.isPoison()) {
+                    if (this.isRoyal()) {
+                        ((LivingEntity) pEntity).addEffect(new EffectInstance(Effects.POISON, 400, 1));
+                    } else {
+                        ((LivingEntity) pEntity).addEffect(new EffectInstance(Effects.POISON, 200));
+                    }
+                }
+                if (this.isFrost()) {
+                    if (this.isRoyal()) {
+                        ((LivingEntity) pEntity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 400, 1));
+                    } else {
+                        ((LivingEntity) pEntity).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200));
+                    }
                 }
             }
 
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -403,6 +396,13 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
             net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
             return event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW;
+        }
+        if (this.isFrost()){
+            if (potioneffectIn.getEffect() == Effects.MOVEMENT_SLOWDOWN) {
+                net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
+                net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
+                return event.getResult() == net.minecraftforge.eventbus.api.Event.Result.ALLOW;
+            }
         }
         return super.canBeAffected(potioneffectIn);
     }
@@ -528,6 +528,14 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         this.setStatusFlag(16, royal);
     }
 
+    public boolean isFrost(){
+        return this.getStatusFlag(32);
+    }
+
+    public void setFrost(boolean frost){
+        this.setStatusFlag(32, frost);
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
@@ -545,6 +553,9 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         }
         if (this.isPoison() || partner.isPoison()){
             loyalSpiderEntity.setPoison(true);
+        }
+        if (this.isFrost() || partner.isFrost()){
+            loyalSpiderEntity.setFrost(true);
         }
         if (this.isRoyal() || partner.isRoyal()){
             loyalSpiderEntity.setRoyal(true);
@@ -680,6 +691,19 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
                 return ActionResultType.PASS;
             }
         }
+        if (item == ModItems.COLD_HEART.get()){
+            if (!this.isFrost()) {
+                this.playSound(SoundEvents.GENERIC_DRINK, 1.0F, 1.0F);
+                this.setFrost(true);
+                this.playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 1.0F, 1.0F);
+                if (!pPlayer.abilities.instabuild) {
+                    itemstack.shrink(1);
+                }
+                return ActionResultType.SUCCESS;
+            } else {
+                return ActionResultType.PASS;
+            }
+        }
         if (item instanceof DyeItem) {
             DyeColor dyecolor = ((DyeItem) item).getDyeColor();
             if (dyecolor != this.getCollarColor()) {
@@ -704,7 +728,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
                 return ActionResultType.PASS;
             }
         }
-        if (this.isRideable() && this.isSaddled() && !pPlayer.isCrouching() && pPlayer.getMainHandItem().getItem() == Items.AIR){
+        if (this.isRideable() && this.isSaddled() && !pPlayer.isCrouching() && pPlayer.getMainHandItem().isEmpty()){
             this.doPlayerRide(pPlayer);
             this.setSitting(false);
         } else {

@@ -11,27 +11,43 @@ import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Random;
 
 public class AbstractCultistEntity extends AbstractRaiderEntity {
     private static final DataParameter<Float> DATA_REINFORCEMENT_CHANCE = EntityDataManager.defineId(AbstractCultistEntity.class, DataSerializers.FLOAT);
+    private BlockPos pilgrimTarget;
+    private boolean pilgrimLeader;
+    private boolean pilgrimage;
 
     protected AbstractCultistEntity(EntityType<? extends AbstractRaiderEntity> type, World worldIn) {
         super(type, worldIn);
@@ -43,6 +59,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(4, new PilgrimGoal<>(this, 0.7D, 0.595D));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
@@ -56,6 +73,80 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_REINFORCEMENT_CHANCE, 0.0F);
+    }
+
+    public void addAdditionalSaveData(CompoundNBT pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        if (this.pilgrimTarget != null) {
+            pCompound.put("PilgrimTarget", NBTUtil.writeBlockPos(this.pilgrimTarget));
+        }
+
+        pCompound.putBoolean("PilgrimLeader", this.pilgrimLeader);
+        pCompound.putBoolean("Pilgrimage", this.pilgrimage);
+    }
+
+    public void readAdditionalSaveData(CompoundNBT pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        if (pCompound.contains("PilgrimTarget")) {
+            this.pilgrimTarget = NBTUtil.readBlockPos(pCompound.getCompound("PilgrimTarget"));
+        }
+
+        this.pilgrimLeader = pCompound.getBoolean("PilgrimLeader");
+        this.pilgrimage = pCompound.getBoolean("Pilgrimage");
+    }
+
+    public boolean canBePilgrimLeader() {
+        return this.getEntity() instanceof ICultist;
+    }
+
+    public boolean removeWhenFarAway(double pDistanceToClosestPlayer) {
+        return !this.pilgrimage || pDistanceToClosestPlayer > 16384.0D;
+    }
+
+    public void setPilgrimTarget(BlockPos p_213631_1_) {
+        this.pilgrimTarget = p_213631_1_;
+        this.pilgrimage = true;
+    }
+
+    public BlockPos getPilgrimTarget() {
+        return this.pilgrimTarget;
+    }
+
+    public boolean hasPilgrimTarget() {
+        return this.pilgrimTarget != null;
+    }
+
+    public void setPilgrimLeader(boolean pIsLeader) {
+        this.pilgrimLeader = pIsLeader;
+        this.pilgrimage = true;
+    }
+
+    public boolean isPilgrimLeader() {
+        return this.pilgrimLeader;
+    }
+
+    public boolean canJoinPilgrimage() {
+        return this.canChangeDimensions();
+    }
+
+    public void findNewPilgrimTarget() {
+        BlockPos blockPos = this.blockPosition().offset(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
+        if (this.level instanceof ServerWorld){
+            blockPos = ((ServerWorld)this.level).getChunkSource().getGenerator().findNearestMapFeature((ServerWorld)this.level, Structure.NETHER_BRIDGE, this.blockPosition(), 100, false);
+            if (blockPos == null){
+                blockPos = this.blockPosition().offset(-500 + this.random.nextInt(1000), 0, -500 + this.random.nextInt(1000));
+            }
+        }
+        this.pilgrimTarget = blockPos;
+        this.pilgrimage = true;
+    }
+
+    protected boolean isOnPilgrimage() {
+        return this.pilgrimage;
+    }
+
+    protected void setOnPilgrimage(boolean p_226541_1_) {
+        this.pilgrimage = p_226541_1_;
     }
 
     @Override
@@ -155,7 +246,22 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
                 this.setReinforcementChance(this.getReinforcementChance() +(float) (this.random.nextDouble() * 0.25D + 0.5D));
             }
         }
+
+        if (reason == SpawnReason.EVENT && worldIn.dimensionType().hasCeiling()){
+            this.pilgrimage = true;
+        }
+
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    }
+
+    public static ItemStack getBanner() {
+        ItemStack itemstack = new ItemStack(Items.RED_BANNER);
+        CompoundNBT compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
+        ListNBT listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.CROSS, DyeColor.YELLOW).addPattern(BannerPattern.TRIANGLE_BOTTOM, DyeColor.RED).addPattern(BannerPattern.TRIANGLE_TOP, DyeColor.RED).addPattern(BannerPattern.STRIPE_MIDDLE, DyeColor.YELLOW).addPattern(BannerPattern.STRIPE_CENTER, DyeColor.RED).addPattern(BannerPattern.STRIPE_CENTER, DyeColor.YELLOW).addPattern(BannerPattern.STRAIGHT_CROSS, DyeColor.RED).addPattern(BannerPattern.BORDER, DyeColor.RED).addPattern(BannerPattern.RHOMBUS_MIDDLE, DyeColor.RED).addPattern(BannerPattern.CIRCLE_MIDDLE, DyeColor.YELLOW).toListTag();
+        compoundnbt.put("Patterns", listnbt);
+        itemstack.hideTooltipPart(ItemStack.TooltipDisplayFlags.ADDITIONAL);
+        itemstack.setHoverName((new TranslationTextComponent("block.goety.cultist_banner")));
+        return itemstack;
     }
 
     protected void randomizeReinforcementsChance() {
@@ -212,6 +318,83 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         return pLevel.getBrightness(LightType.BLOCK, pPos) <= 8
                 && pLevel.getDifficulty() != Difficulty.PEACEFUL
                 && (pReason == SpawnReason.SPAWNER || pLevel.getBlockState(pPos).isValidSpawn(pLevel, pPos, pType));
+    }
+
+    public static class PilgrimGoal<T extends AbstractCultistEntity> extends Goal {
+        private final T mob;
+        private final double speedModifier;
+        private final double leaderSpeedModifier;
+        private long cooldownUntil;
+
+        public PilgrimGoal(T p_i50070_1_, double p_i50070_2_, double p_i50070_4_) {
+            this.mob = p_i50070_1_;
+            this.speedModifier = p_i50070_2_;
+            this.leaderSpeedModifier = p_i50070_4_;
+            this.cooldownUntil = -1L;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        public boolean canUse() {
+            boolean flag = this.mob.level.getGameTime() < this.cooldownUntil;
+            return this.mob.isOnPilgrimage() && this.mob.getTarget() == null && !this.mob.isVehicle() && this.mob.hasPilgrimTarget() && !flag && this.mob.level.dimension() == World.NETHER;
+        }
+
+        public void start() {
+        }
+
+        public void stop() {
+        }
+
+        public void tick() {
+            boolean flag = this.mob.isPilgrimLeader();
+            PathNavigator pathnavigator = this.mob.getNavigation();
+            if (pathnavigator.isDone()) {
+                List<AbstractCultistEntity> list = this.findPilgrims();
+                if (this.mob.isOnPilgrimage() && list.isEmpty()) {
+                    this.mob.setOnPilgrimage(false);
+                } else if (flag && this.mob.getPilgrimTarget().closerThan(this.mob.position(), 10.0D)) {
+                    this.mob.findNewPilgrimTarget();
+                } else {
+                    Vector3d vector3d = Vector3d.atBottomCenterOf(this.mob.getPilgrimTarget());
+                    Vector3d vector3d1 = this.mob.position();
+                    Vector3d vector3d2 = vector3d1.subtract(vector3d);
+                    vector3d = vector3d2.yRot(90.0F).scale(0.4D).add(vector3d);
+                    Vector3d vector3d3 = vector3d.subtract(vector3d1).normalize().scale(10.0D).add(vector3d1);
+                    BlockPos blockpos = new BlockPos(vector3d3);
+                    if (this.mob.level instanceof ServerWorld){
+                        blockpos = ((ServerWorld)this.mob.level).getChunkSource().getGenerator().findNearestMapFeature((ServerWorld)this.mob.level, Structure.NETHER_BRIDGE, blockpos, 100, false);
+                    } else {
+                        blockpos = this.mob.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos);
+                    }
+                    if (blockpos != null) {
+                        if (!pathnavigator.moveTo((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ(), flag ? this.leaderSpeedModifier : this.speedModifier)) {
+                            this.moveRandomly();
+                            this.cooldownUntil = this.mob.level.getGameTime() + 200L;
+                        } else if (flag) {
+                            for (AbstractCultistEntity patrollerentity : list) {
+                                patrollerentity.setPilgrimTarget(blockpos);
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private List<AbstractCultistEntity> findPilgrims() {
+            return this.mob.level.getEntitiesOfClass(AbstractCultistEntity.class, this.mob.getBoundingBox().inflate(16.0D), (p_226543_1_) -> {
+                return p_226543_1_.canJoinPilgrimage() && !p_226543_1_.is(this.mob);
+            });
+        }
+
+        private boolean moveRandomly() {
+            Random random = this.mob.getRandom();
+            BlockPos blockpos = ((ServerWorld)this.mob.level).getChunkSource().getGenerator().findNearestMapFeature((ServerWorld)this.mob.level, Structure.NETHER_BRIDGE, this.mob.blockPosition(), 100, false);
+            if (blockpos == null){
+                blockpos = this.mob.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, this.mob.blockPosition().offset(-8 + random.nextInt(16), 0, -8 + random.nextInt(16)));
+            }
+            return this.mob.getNavigation().moveTo((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), this.speedModifier);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

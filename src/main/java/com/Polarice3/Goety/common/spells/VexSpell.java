@@ -3,19 +3,18 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
+import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
@@ -57,30 +56,44 @@ public class VexSpell extends SummonSpells {
                 }
                 this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
             }
-            for (int i1 = 0; i1 < 3; ++i1) {
-                BlockPos blockpos = entityLiving.blockPosition();
-                FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
-                vexentity.setOwnerId(entityLiving.getUUID());
-                vexentity.moveTo(blockpos, 0.0F, 0.0F);
-                vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                vexentity.setBoundOrigin(blockpos);
-                if (MainConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
-                    vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                } else {
-                    vexentity.setLimitedLife(1);
-                    vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
+            if (entityLiving.isCrouching()) {
+                for (Entity entity : worldIn.getAllEntities()) {
+                    if (entity instanceof FriendlyVexEntity) {
+                        if (((FriendlyVexEntity) entity).getTrueOwner() == entityLiving) {
+                            entity.kill();
+                        }
+                    }
                 }
-                if (enchantment > 0){
-                    Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(vexentity.getMainHandItem());
-                    map.putIfAbsent(Enchantments.SHARPNESS, enchantment);
-                    EnchantmentHelper.setEnchantments(map, vexentity.getMainHandItem());
-                    vexentity.setItemSlot(EquipmentSlotType.MAINHAND, vexentity.getMainHandItem());
+                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                    worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                 }
-                this.SummonSap(entityLiving, vexentity);
-                worldIn.addFreshEntity(vexentity);
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            } else {
+                for (int i1 = 0; i1 < 3; ++i1) {
+                    BlockPos blockpos = entityLiving.blockPosition();
+                    FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
+                    vexentity.setOwnerId(entityLiving.getUUID());
+                    vexentity.moveTo(blockpos, 0.0F, 0.0F);
+                    vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                    vexentity.setBoundOrigin(blockpos);
+                    if (MainConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
+                        vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
+                    } else {
+                        vexentity.setLimitedLife(1);
+                        vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
+                    }
+                    if (enchantment > 0) {
+                        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(vexentity.getMainHandItem());
+                        map.putIfAbsent(Enchantments.SHARPNESS, enchantment);
+                        EnchantmentHelper.setEnchantments(map, vexentity.getMainHandItem());
+                        vexentity.setItemSlot(EquipmentSlotType.MAINHAND, vexentity.getMainHandItem());
+                    }
+                    this.SummonSap(entityLiving, vexentity);
+                    worldIn.addFreshEntity(vexentity);
+                }
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                this.SummonDown(entityLiving);
             }
-            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            this.SummonDown(entityLiving);
         }
     }
 
@@ -96,30 +109,44 @@ public class VexSpell extends SummonSpells {
                 }
                 this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
             }
-            for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
-                BlockPos blockpos = entityLiving.blockPosition();
-                FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
-                vexentity.setOwnerId(entityLiving.getUUID());
-                vexentity.moveTo(blockpos, 0.0F, 0.0F);
-                vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                vexentity.setBoundOrigin(blockpos);
-                if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
-                    vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                } else {
-                    vexentity.setLimitedLife(1);
-                    vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
+            if (entityLiving.isCrouching()) {
+                for (Entity entity : worldIn.getAllEntities()) {
+                    if (entity instanceof FriendlyVexEntity) {
+                        if (((FriendlyVexEntity) entity).getTrueOwner() == entityLiving) {
+                            entity.kill();
+                        }
+                    }
                 }
-                if (enchantment > 0){
-                    Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(vexentity.getMainHandItem());
-                    map.putIfAbsent(Enchantments.SHARPNESS, enchantment);
-                    EnchantmentHelper.setEnchantments(map, vexentity.getMainHandItem());
-                    vexentity.setItemSlot(EquipmentSlotType.MAINHAND, vexentity.getMainHandItem());
+                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                    worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                 }
-                this.SummonSap(entityLiving, vexentity);
-                worldIn.addFreshEntity(vexentity);
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            } else {
+                for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
+                    BlockPos blockpos = entityLiving.blockPosition();
+                    FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
+                    vexentity.setOwnerId(entityLiving.getUUID());
+                    vexentity.moveTo(blockpos, 0.0F, 0.0F);
+                    vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                    vexentity.setBoundOrigin(blockpos);
+                    if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
+                        vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
+                    } else {
+                        vexentity.setLimitedLife(1);
+                        vexentity.addEffect(new EffectInstance(Effects.WITHER, 800, 1));
+                    }
+                    if (enchantment > 0){
+                        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(vexentity.getMainHandItem());
+                        map.putIfAbsent(Enchantments.SHARPNESS, enchantment);
+                        EnchantmentHelper.setEnchantments(map, vexentity.getMainHandItem());
+                        vexentity.setItemSlot(EquipmentSlotType.MAINHAND, vexentity.getMainHandItem());
+                    }
+                    this.SummonSap(entityLiving, vexentity);
+                    worldIn.addFreshEntity(vexentity);
+                }
+                this.SummonDown(entityLiving);
+                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }
-            this.SummonDown(entityLiving);
-            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         }
     }
 

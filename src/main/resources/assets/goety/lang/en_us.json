@@ -568,6 +568,9 @@
   "subtitle.goety.thug_celebrate": "Thug cheers",
   "subtitle.goety.thug_death": "Thug dies",
 
+  "subtitle.goety.cultist_prepare_spell": "Cultist beseeches",
+  "subtitle.goety.cultist_cast_spell": "Cultist casts spell",
+
   "subtitle.goety.urbhadhach_ambient": "Urbhadhach groans",
   "subtitle.goety.urbhadhach_hurt": "Urbhadhach hurts",
   "subtitle.goety.urbhadhach_roar": "Urbhadhach roars",

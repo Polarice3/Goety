@@ -131,7 +131,8 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
         ZOMBIE(2, 0.1D, 0.1D, 0.8D),
         ROAR(3, 0.8D, 0.3D, 0.8D),
         TORNADO(4, 1.0D, 0.1D, 0.1D),
-        SKELETON(5, 0.5D, 0.5D, 0.5D);
+        SKELETON(5, 0.5D, 0.5D, 0.5D),
+        SACRIFICE(6, 0.1D, 0.1D, 0.1D);
 
         private final int id;
         private final double[] particleSpeed;

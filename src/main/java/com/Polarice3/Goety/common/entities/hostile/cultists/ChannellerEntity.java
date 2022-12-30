@@ -229,13 +229,15 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
                 List<MobEntity> list = this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(64.0D, 8.0D, 64.0D));
                 if (!list.isEmpty()) {
                     for (MobEntity mob : list) {
-                        if (mob instanceof MonsterEntity && !(mob instanceof CreeperEntity) && !(mob instanceof ChannellerEntity)) {
-                            this.setAlly(mob);
-                        }
-                        if (mob instanceof OwnedEntity) {
-                            OwnedEntity ownedEntity = (OwnedEntity) mob;
-                            if (ownedEntity.getTrueOwner() instanceof AbstractCultistEntity) {
+                        if (mob.canChangeDimensions() && this.canSee(mob)) {
+                            if (mob instanceof MonsterEntity && !(mob instanceof CreeperEntity) && !(mob instanceof ChannellerEntity)) {
                                 this.setAlly(mob);
+                            }
+                            if (mob instanceof OwnedEntity) {
+                                OwnedEntity ownedEntity = (OwnedEntity) mob;
+                                if (ownedEntity.getTrueOwner() instanceof AbstractCultistEntity) {
+                                    this.setAlly(mob);
+                                }
                             }
                         }
                     }

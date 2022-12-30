@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class ZPiglinBruteMinionEntity extends ZPiglinMinionEntity {
+    public boolean summonExplosion;
 
     public ZPiglinBruteMinionEntity(EntityType<? extends ZPiglinMinionEntity> type, World worldIn) {
         super(type, worldIn);
@@ -28,6 +29,16 @@ public class ZPiglinBruteMinionEntity extends ZPiglinMinionEntity {
                 .add(Attributes.ARMOR, 2.0D);
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.summonExplosion){
+            if (this.tickCount % 20 == 0){
+                this.summonExplosion = false;
+            }
+        }
+    }
+
     public int xpReward(){
         return 20;
     }
@@ -36,11 +47,22 @@ public class ZPiglinBruteMinionEntity extends ZPiglinMinionEntity {
         return CreatureAttribute.UNDEAD;
     }
 
+    @Override
+    public boolean ignoreExplosion() {
+        if (summonExplosion){
+            return true;
+        }
+        return super.ignoreExplosion();
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         this.populateDefaultEquipmentSlots(pDifficulty);
         this.populateDefaultEquipmentEnchantments(pDifficulty);
+        if (pReason == SpawnReason.MOB_SUMMONED){
+            this.summonExplosion = true;
+        }
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
             this.setDropChance(equipmentslottype, 0.0F);
         }
