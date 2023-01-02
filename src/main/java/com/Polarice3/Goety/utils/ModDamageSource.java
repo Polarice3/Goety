@@ -70,7 +70,8 @@ public class ModDamageSource extends DamageSource {
     }
 
     public static boolean frostAttacks(DamageSource source){
-        return source.getMsgId().contains("frost") || source.getMsgId().contains("Frost");
+        return source.getMsgId().contains("frost") || source.getMsgId().contains("Frost") || source.getMsgId().contains("ice")
+                || source.getMsgId().contains("Ice") || source.getMsgId().contains("freeze") || source.getMsgId().contains("Freeze");
     }
 
     public static String source(String source){

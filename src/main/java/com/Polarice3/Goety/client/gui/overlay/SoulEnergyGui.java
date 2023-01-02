@@ -13,6 +13,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Gui and implementation based of codes from @baileyholl
+ */
 public class SoulEnergyGui extends AbstractGui {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy.png");
     private final Minecraft minecraft;

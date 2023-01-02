@@ -83,6 +83,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> URBHADHACH_STEP = create("urbhadhach_step");
     public static final RegistryObject<SoundEvent> URBHADHACH_DEATH = create("urbhadhach_death");
 
+    public static final RegistryObject<SoundEvent> EVIL_LAUGH = create("evil_laugh");
     public static final RegistryObject<SoundEvent> ROAR_SPELL = create("roar_spell");
     public static final RegistryObject<SoundEvent> FIRE_BREATH = create("fire_breath");
     public static final RegistryObject<SoundEvent> SONIC_CHARGE = create("sonic_charge");

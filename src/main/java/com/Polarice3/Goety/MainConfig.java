@@ -6,6 +6,9 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.io.File;
 
+/**
+ * Learned how to add Config from codes by @AlexModGuy
+ */
 public class MainConfig {
 
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();

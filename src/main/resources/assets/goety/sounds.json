@@ -908,6 +908,14 @@
     ],
     "subtitle": "subtitle.goety.urbhadhach_death"
   },
+  "evil_laugh": {
+    "sounds": [
+      {
+        "name": "goety:cultist/evil_laugh"
+      }
+    ],
+    "subtitle": "subtitle.goety.evil_laugh"
+  },
   "roar_spell": {
     "sounds": [
       {

@@ -11,6 +11,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Spewing Spells Codes based of codes from @TeamTwilight
+ */
 public abstract class SpewingSpell extends ChargingSpells{
 
     @Override

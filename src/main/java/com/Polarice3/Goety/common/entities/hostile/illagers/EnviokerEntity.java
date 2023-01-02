@@ -210,8 +210,8 @@ public class EnviokerEntity extends HuntingIllagerEntity {
                     float fleft = f + 0.4F;
                     float fright = f - 0.4F;
                     this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(f) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(f) * d2, d0, d1, f, l);
-                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fleft) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fleft) * d2, d0, d1, f, l);
-                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fright) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fright) * d2, d0, d1, f, l);
+                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fleft) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fleft) * d2, d0, d1, fleft, l);
+                    this.createSpellEntity(EnviokerEntity.this.getX() + (double)MathHelper.cos(fright) * d2, EnviokerEntity.this.getZ() + (double)MathHelper.sin(fright) * d2, d0, d1, fright, l);
                 }
             }
 

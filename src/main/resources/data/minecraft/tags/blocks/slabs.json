@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "goety:cursed_stone_slab",
+    "goety:cursed_stone_bricks_slab",
+    "goety:cursed_bricks_slab",
+    "goety:cursed_tiles_slab",
+    "goety:dead_sandstone_slab",
+    "goety:dead_sandstone_cut_slab",
+    "goety:dead_sandstone_smooth_slab",
+    "goety:remnant_rock_slab",
+    "goety:remnant_stone_slab",
+    "goety:remnant_smooth_stone_slab",
+    "goety:remnant_bricks_slab"
+  ]
+}

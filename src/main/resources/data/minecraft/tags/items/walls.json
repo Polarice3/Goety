@@ -4,6 +4,8 @@
     "goety:cursed_stone_bricks_wall",
     "goety:cursed_bricks_wall",
     "goety:grave_bricks_wall",
-    "goety:dead_sandstone_wall"
+    "goety:dead_sandstone_wall",
+    "goety:remnant_rock_wall",
+    "goety:remnant_bricks_wall"
   ]
 }

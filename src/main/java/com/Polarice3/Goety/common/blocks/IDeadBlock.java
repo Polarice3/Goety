@@ -306,24 +306,6 @@ public interface IDeadBlock {
         }
     }
 
-    default void spreadHaunt(ServerWorld pLevel, BlockPos pPos, Random pRandom){
-        if (pLevel.isLoaded(pPos)) {
-            if (MainConfig.DeadSandSpread.get()) {
-                BlockPos blockpos = pPos.offset(pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1, pRandom.nextInt(3) - 1);
-                BlockState blockState = pLevel.getBlockState(blockpos);
-                if (BlockFinder.NotDeadSandImmune(blockState)) {
-                    if (blockState.is(BlockTags.LOGS)) {
-                        pLevel.destroyBlock(blockpos, false);
-                        pLevel.setBlockAndUpdate(blockpos, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState.getValue(RotatedPillarBlock.AXIS)));
-                    }
-                    if (blockState.getBlock() instanceof LeavesBlock) {
-                        pLevel.removeBlock(blockpos, false);
-                    }
-                }
-            }
-        }
-    }
-
     default void quickSandSelfSpread(World pLevel, BlockPos pPos) {
         if (MainConfig.DeadSandQuickSand.get()) {
             if (this.getTotalDeadSands(pLevel, pPos).size() != 0) {

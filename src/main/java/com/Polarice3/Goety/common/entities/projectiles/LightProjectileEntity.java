@@ -16,6 +16,9 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+/**
+ * Light Projectile based of codes from @baileyholl
+ */
 public abstract class LightProjectileEntity extends ArrowEntity {
     public LightProjectileEntity(EntityType<? extends LightProjectileEntity> p_i50147_1_, World p_i50147_2_) {
         super(p_i50147_1_, p_i50147_2_);

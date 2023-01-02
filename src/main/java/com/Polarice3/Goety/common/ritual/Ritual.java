@@ -28,6 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Ritual Codes based from @klikli-dev
+ */
 public abstract class Ritual {
 
     public static final int PEDESTAL_RANGE = 8;

@@ -74,13 +74,25 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
     public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
-    public static final RegistryObject<Block> REMNANT_BLOCK = BLOCKS.register("dried_remnant_block",
-            () -> new Block(AbstractBlock.Properties.of(Material.WOOL, MaterialColor.COLOR_PURPLE).strength(0.8F).sound(SoundType.WOOL)));
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
     public static final RegistryObject<Block> HAUNTED_BUSH = BLOCKS.register("haunted_bush", HauntedBushBlock::new);
     public static final RegistryObject<Block> IRON_FINGER = BLOCKS.register("iron_finger", IronFingerBlock::new);
+
+    //Remnant
+    public static final RegistryObject<Block> REMNANT_BLOCK = BLOCKS.register("remnant_block",
+            () -> new Block(AbstractBlock.Properties.of(Material.SAND, MaterialColor.TERRACOTTA_PURPLE).strength(0.6F).sound(SoundType.GRAVEL)));
+    public static final RegistryObject<Block> REMNANT_ROCK = BLOCKS.register("remnant_rock",
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE).requiresCorrectToolForDrops().strength(2.0F, 6.0F)));
+    public static final RegistryObject<Block> REMNANT_STONE = BLOCKS.register("remnant_stone",
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> REMNANT_SMOOTH_STONE = BLOCKS.register("remnant_smooth_stone",
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+    public static final RegistryObject<Block> REMNANT_BRICKS = BLOCKS.register("remnant_bricks",
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).sound(SoundType.NETHER_BRICKS)));
+    public static final RegistryObject<Block> REMNANT_CHISELED_BRICKS = BLOCKS.register("remnant_chiseled_bricks",
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE).requiresCorrectToolForDrops().strength(2.0F, 6.0F).sound(SoundType.NETHER_BRICKS)));
 
     //Haunted
     public static final RegistryObject<Block> HAUNTED_PLANKS = BLOCKS.register("haunted_planks",
@@ -200,21 +212,40 @@ public class ModBlocks {
                     .harvestLevel(0)
                     .harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> DEAD_SANDSTONE_SLAB_BLOCK = BLOCKS.register("dead_sandstone_slab",
-            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE)
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE)
                     .strength(2.0F, 6.0F)
                     .harvestLevel(0)
                     .harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> DEAD_SANDSTONE_CUT_SLAB_BLOCK = BLOCKS.register("dead_sandstone_cut_slab",
-            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE)
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE)
                     .strength(2.0F, 6.0F)
                     .harvestLevel(0)
                     .harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> DEAD_SANDSTONE_SMOOTH_SLAB_BLOCK = BLOCKS.register("dead_sandstone_smooth_slab",
-            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE)
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE)
                     .strength(2.0F, 6.0F)
                     .harvestLevel(0)
                     .harvestTool(ToolType.PICKAXE)));
-
+    public static final RegistryObject<Block> REMNANT_ROCK_SLAB_BLOCK = BLOCKS.register("remnant_rock_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+                    .strength(2.0F, 6.0F)
+                    .harvestLevel(0)
+                    .harvestTool(ToolType.PICKAXE)));
+    public static final RegistryObject<Block> REMNANT_STONE_SLAB_BLOCK = BLOCKS.register("remnant_stone_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+                    .strength(2.0F, 6.0F)
+                    .harvestLevel(0)
+                    .harvestTool(ToolType.PICKAXE)));
+    public static final RegistryObject<Block> REMNANT_SMOOTH_STONE_SLAB_BLOCK = BLOCKS.register("remnant_smooth_stone_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+                    .strength(2.0F, 6.0F)
+                    .harvestLevel(0)
+                    .harvestTool(ToolType.PICKAXE)));
+    public static final RegistryObject<Block> REMNANT_BRICKS_SLAB_BLOCK = BLOCKS.register("remnant_bricks_slab",
+            () -> new SlabBlock(AbstractBlock.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_PURPLE)
+                    .strength(2.0F, 6.0F)
+                    .harvestLevel(0)
+                    .harvestTool(ToolType.PICKAXE)));
 
     //Stairs
     public static final RegistryObject<Block> CURSED_STONE_STAIRS_BLOCK = BLOCKS.register("cursed_stone_stairs",
@@ -229,6 +260,12 @@ public class ModBlocks {
             () -> new StairsBlock(DEAD_SANDSTONE.get().defaultBlockState(), AbstractBlock.Properties.copy(DEAD_SANDSTONE.get())));
     public static final RegistryObject<Block> DEAD_SANDSTONE_SMOOTH_STAIRS_BLOCK = BLOCKS.register("dead_sandstone_smooth_stairs",
             () -> new StairsBlock(DEAD_SANDSTONE_SMOOTH.get().defaultBlockState(), AbstractBlock.Properties.copy(DEAD_SANDSTONE_SMOOTH.get())));
+    public static final RegistryObject<Block> REMNANT_ROCK_STAIRS_BLOCK = BLOCKS.register("remnant_rock_stairs",
+            () -> new StairsBlock(REMNANT_ROCK.get().defaultBlockState(), AbstractBlock.Properties.copy(REMNANT_ROCK.get())));
+    public static final RegistryObject<Block> REMNANT_STONE_STAIRS_BLOCK = BLOCKS.register("remnant_stone_stairs",
+            () -> new StairsBlock(REMNANT_STONE.get().defaultBlockState(), AbstractBlock.Properties.copy(REMNANT_STONE.get())));
+    public static final RegistryObject<Block> REMNANT_BRICKS_STAIRS_BLOCK = BLOCKS.register("remnant_bricks_stairs",
+            () -> new StairsBlock(REMNANT_BRICKS.get().defaultBlockState(), AbstractBlock.Properties.copy(REMNANT_BRICKS.get())));
     //Walls
     public static final RegistryObject<Block> CURSED_BRICK_WALL_BLOCK = BLOCKS.register("cursed_bricks_wall",
             () -> new WallBlock(AbstractBlock.Properties.copy(CURSED_BRICK_BLOCK.get())));
@@ -237,6 +274,10 @@ public class ModBlocks {
             () -> new WallBlock(AbstractBlock.Properties.copy(CURSED_STONE_BRICK_BLOCK.get())));
     public static final RegistryObject<Block> DEAD_SANDSTONE_WALL_BLOCK = BLOCKS.register("dead_sandstone_wall",
             () -> new WallBlock(AbstractBlock.Properties.copy(DEAD_SANDSTONE.get())));
+    public static final RegistryObject<Block> REMNANT_ROCK_WALL_BLOCK = BLOCKS.register("remnant_rock_wall",
+            () -> new WallBlock(AbstractBlock.Properties.copy(REMNANT_ROCK.get())));
+    public static final RegistryObject<Block> REMNANT_BRICKS_WALL_BLOCK = BLOCKS.register("remnant_bricks_wall",
+            () -> new WallBlock(AbstractBlock.Properties.copy(REMNANT_BRICKS.get())));
     //Panes
     public static final RegistryObject<Block> CURSED_BARS_BLOCK = BLOCKS.register("cursed_bars",
             () -> new PaneBlock(AbstractBlock.Properties.of(Material.METAL, MaterialColor.NONE)
@@ -365,8 +406,38 @@ public class ModBlocks {
             () -> new BlockItemBase(FROST_BLOCK.get()));
     public static final RegistryObject<Item> FORBIDDEN_GRASS_BLOCK_ITEM = BLOCK_ITEMS.register("forbidden_grass",
             () -> new BlockItemBase(FORBIDDEN_GRASS.get()));
-    public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("dried_remnant_block",
+
+    //RemnantItems
+    public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("remnant_block",
             () -> new BlockItemBase(REMNANT_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_ROCK_ITEM = BLOCK_ITEMS.register("remnant_rock",
+            () -> new BlockItemBase(REMNANT_ROCK.get()));
+    public static final RegistryObject<Item> REMNANT_ROCK_SLAB_ITEM = BLOCK_ITEMS.register("remnant_rock_slab",
+            () -> new BlockItemBase(REMNANT_ROCK_SLAB_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_ROCK_STAIRS_ITEM = BLOCK_ITEMS.register("remnant_rock_stairs",
+            () -> new BlockItemBase(REMNANT_ROCK_STAIRS_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_ROCK_WALL_ITEM = BLOCK_ITEMS.register("remnant_rock_wall",
+            () -> new BlockItemBase(REMNANT_ROCK_WALL_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_STONE_ITEM = BLOCK_ITEMS.register("remnant_stone",
+            () -> new BlockItemBase(REMNANT_STONE.get()));
+    public static final RegistryObject<Item> REMNANT_STONE_SLAB_ITEM = BLOCK_ITEMS.register("remnant_stone_slab",
+            () -> new BlockItemBase(REMNANT_STONE_SLAB_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_STONE_STAIRS_ITEM = BLOCK_ITEMS.register("remnant_stone_stairs",
+            () -> new BlockItemBase(REMNANT_STONE_STAIRS_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_SMOOTH_STONE_ITEM = BLOCK_ITEMS.register("remnant_smooth_stone",
+            () -> new BlockItemBase(REMNANT_SMOOTH_STONE.get()));
+    public static final RegistryObject<Item> REMNANT_SMOOTH_STONE_SLAB_ITEM = BLOCK_ITEMS.register("remnant_smooth_stone_slab",
+            () -> new BlockItemBase(REMNANT_SMOOTH_STONE_SLAB_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_BRICKS_ITEM = BLOCK_ITEMS.register("remnant_bricks",
+            () -> new BlockItemBase(REMNANT_BRICKS.get()));
+    public static final RegistryObject<Item> REMNANT_BRICKS_SLAB_ITEM = BLOCK_ITEMS.register("remnant_bricks_slab",
+            () -> new BlockItemBase(REMNANT_BRICKS_SLAB_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_BRICKS_STAIRS_ITEM = BLOCK_ITEMS.register("remnant_bricks_stairs",
+            () -> new BlockItemBase(REMNANT_BRICKS_STAIRS_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_BRICKS_WALL_ITEM = BLOCK_ITEMS.register("remnant_bricks_wall",
+            () -> new BlockItemBase(REMNANT_BRICKS_WALL_BLOCK.get()));
+    public static final RegistryObject<Item> REMNANT_CHISELED_BRICKS_ITEM = BLOCK_ITEMS.register("remnant_chiseled_bricks",
+            () -> new BlockItemBase(REMNANT_CHISELED_BRICKS.get()));
 
     //HauntedItems
     public static final RegistryObject<Item> HAUNTED_PLANKS_ITEM = BLOCK_ITEMS.register("haunted_planks",

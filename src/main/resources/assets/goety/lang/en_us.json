@@ -370,7 +370,22 @@
   "block.goety.dead_sandstone_wall": "Dead Sandstone Wall",
   "block.goety.dead_pile": "Dead Sand Pile",
   "block.goety.dead_block": "Desiccated Block",
-  "block.goety.dried_remnant_block": "Remnant Block",
+
+  "block.goety.remnant_block": "Remnant Dust Block",
+  "block.goety.remnant_rock": "Remnant Rock",
+  "block.goety.remnant_rock_slab": "Remnant Rock Slab",
+  "block.goety.remnant_rock_stairs": "Remnant Rock Stairs",
+  "block.goety.remnant_rock_wall": "Remnant Rock Wall",
+  "block.goety.remnant_stone": "Remnant Stone",
+  "block.goety.remnant_stone_slab": "Remnant Stone Slab",
+  "block.goety.remnant_stone_stairs": "Remnant Stone Stairs",
+  "block.goety.remnant_smooth_stone": "Remnant Smooth Stone",
+  "block.goety.remnant_smooth_stone_slab": "Remnant Smooth Stone Slab",
+  "block.goety.remnant_bricks": "Remnant Bricks",
+  "block.goety.remnant_bricks_slab": "Remnant Bricks Slab",
+  "block.goety.remnant_bricks_stairs": "Remnant Bricks Stairs",
+  "block.goety.remnant_bricks_wall": "Remnant Bricks Wall",
+  "block.goety.remnant_chiseled_bricks": "Remnant Chiseled Bricks",
 
   "block.goety.quicksand": "Quicksand",
 
@@ -579,6 +594,7 @@
   "subtitle.goety.urbhadhach_step": "Urbhadhach prowls",
   "subtitle.goety.urbhadhach_death": "Urbhadhach dies",
 
+  "subtitle.goety.evil_laugh": "Evil Laugh",
   "subtitle.goety.roar_spell": "Loud Roar",
   "subtitle.goety.fire_breath": "Breathing Flames",
   "subtitle.goety.corrupt_explosion": "Sandy Explosion",

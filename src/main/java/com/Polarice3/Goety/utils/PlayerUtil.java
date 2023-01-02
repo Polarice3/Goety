@@ -8,6 +8,9 @@ import net.minecraftforge.common.ForgeMod;
 
 import java.util.UUID;
 
+/**
+ * Step Height based of codes from @Lothrazar
+ */
 public class PlayerUtil {
     protected static final UUID REACH_UUID = UUID.fromString("e7d3f68d-4ac0-4117-8294-0b16d16135ff");
     private static final AttributeModifier REACH_MODIFIER = new AttributeModifier(REACH_UUID, "SpearReach", 4.0D, AttributeModifier.Operation.ADDITION);

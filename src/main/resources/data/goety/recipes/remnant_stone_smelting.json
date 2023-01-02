@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "goety:remnant_rock"
+  },
+  "result": "goety:remnant_stone",
+  "experience": 1.0,
+  "cookingtime": 200
+}

@@ -26,6 +26,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
+/**
+ * Integration of Curios based of compatibility codes from @Ellpeck & @DenisMasterHerobrine
+ */
 public class CuriosIntegration implements ICompatable {
 
     private static final Map<Item, String> TYPES = ImmutableMap.<Item, String>builder()

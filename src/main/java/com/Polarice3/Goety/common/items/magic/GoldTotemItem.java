@@ -24,6 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Learned how to make Gold Totem gain Soul Energy from codes by @Ipsis
+ */
 public class GoldTotemItem extends Item {
     public static final String SOULSAMOUNT = "Souls";
     public static final int MAXSOULS = MainConfig.MaxSouls.get();

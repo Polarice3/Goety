@@ -36,7 +36,11 @@ import java.util.Random;
 
 public class MalghastEntity extends OwnedFlyingEntity {
     private static final DataParameter<Boolean> DATA_IS_CHARGING = EntityDataManager.defineId(MalghastEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> DATA_SWELL_DIR = EntityDataManager.defineId(MalghastEntity.class, DataSerializers.INT);
     private float explosionPower = 1.0F;
+    private int oldSwell;
+    private int swell;
+    private int maxSwell = 15;
 
     public MalghastEntity(EntityType<? extends OwnedFlyingEntity> p_i48578_1_, World p_i48578_2_) {
         super(p_i48578_1_, p_i48578_2_);
@@ -51,6 +55,34 @@ public class MalghastEntity extends OwnedFlyingEntity {
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
     }
 
+    public void tick() {
+        if (this.isAlive()) {
+            this.oldSwell = this.swell;
+            if (this.isCharging()) {
+                this.setSwellDir(1);
+            } else {
+                this.setSwellDir(-1);
+            }
+
+            int i = this.getSwellDir();
+
+            this.swell += i;
+            if (this.swell < 0) {
+                this.swell = 0;
+            }
+
+            if (this.swell >= this.maxSwell) {
+                this.swell = this.maxSwell;
+            }
+        }
+        super.tick();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getSwelling(float pPartialTicks) {
+        return MathHelper.lerp(pPartialTicks, (float)this.oldSwell, (float)this.swell) / (float)(this.maxSwell - 2);
+    }
+
     @OnlyIn(Dist.CLIENT)
     public boolean isCharging() {
         return this.entityData.get(DATA_IS_CHARGING);
@@ -58,6 +90,14 @@ public class MalghastEntity extends OwnedFlyingEntity {
 
     public void setCharging(boolean pAttacking) {
         this.entityData.set(DATA_IS_CHARGING, pAttacking);
+    }
+
+    public int getSwellDir() {
+        return this.entityData.get(DATA_SWELL_DIR);
+    }
+
+    public void setSwellDir(int pState) {
+        this.entityData.set(DATA_SWELL_DIR, pState);
     }
 
     public float getExplosionPower() {
@@ -81,6 +121,7 @@ public class MalghastEntity extends OwnedFlyingEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_IS_CHARGING, false);
+        this.entityData.define(DATA_SWELL_DIR, -1);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {

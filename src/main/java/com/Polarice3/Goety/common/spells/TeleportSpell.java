@@ -18,7 +18,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-
+/**
+ * Teleport Codes from @Lothrazer
+ */
 public class TeleportSpell extends InstantCastSpells{
 
     @Override

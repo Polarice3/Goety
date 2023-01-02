@@ -250,7 +250,7 @@ public class ReturnedEntity extends SpellcastingCultistEntity implements ICultis
         }
 
         protected SoundEvent getSpellPrepareSound() {
-            return SoundEvents.BLAZE_BURN;
+            return ModSounds.EVIL_LAUGH.get();
         }
 
         @Override

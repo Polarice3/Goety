@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "goety:blocks/remnant_smooth_stone",
+    "side": "goety:blocks/remnant_smooth_stone_slab"
+  }
+}

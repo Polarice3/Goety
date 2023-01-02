@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "goety:blocks/remnant_bricks",
+    "top": "goety:blocks/remnant_bricks",
+    "side": "goety:blocks/remnant_bricks"
+  }
+}

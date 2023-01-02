@@ -10,6 +10,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
+/**
+ * Learned you could use this method for better projectile accuracy from codes by @Yunus1903
+ */
 public class FireballSpell extends InstantCastSpells{
 
     @Override

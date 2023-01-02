@@ -113,11 +113,16 @@ public class SpiderlingMinionEntity extends SummonedEntity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if (this.isUpgraded()){
-            return false;
+        if (this.isUpgraded() && !pSource.isBypassMagic() && !pSource.isBypassInvul()){
+            return super.hurt(pSource, 1);
         } else {
             return super.hurt(pSource, pAmount);
         }
+    }
+
+    public void lifeSpanDamage(){
+        this.limitedLifeTicks = 20;
+        this.hurt(DamageSource.STARVE, this.getMaxHealth());
     }
 
     public boolean canBeAffected(EffectInstance potioneffectIn) {

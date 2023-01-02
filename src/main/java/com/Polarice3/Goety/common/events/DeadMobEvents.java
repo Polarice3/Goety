@@ -10,11 +10,9 @@ import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.MarcireEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -200,20 +198,6 @@ public class DeadMobEvents {
         }
         if (killed instanceof IDeadMob){
             LivingEntity deadMob = (LivingEntity) killed;
-            if (event.getSource().getEntity() != null && event.getSource().getEntity() instanceof LivingEntity){
-                LivingEntity killer = (LivingEntity) event.getSource().getEntity();
-                LootTable loottable = killer.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS);
-                LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), deadMob);
-                LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
-                loottable.getRandomItems(ctx).forEach(deadMob::spawnAtLocation);
-                if (deadMob instanceof MarcireEntity){
-                    float chance = 0.025F;
-                    chance += (float) EnchantmentHelper.getMobLooting(killer)/100;
-                    if (deadMob.getRandom().nextFloat() < chance){
-                        deadMob.spawnAtLocation(new ItemStack(ModItems.FORBIDDEN_FRAGMENT.get()));
-                    }
-                }
-            }
             BlockState blockstate = ModBlocks.DEAD_PILE.get().defaultBlockState();
             if (deadMob.level.random.nextFloat() <= 0.25F){
                 if (deadMob.getMaxHealth() >= 20.0F) {
@@ -262,6 +246,21 @@ public class DeadMobEvents {
                     if (itemEntity.getItem().getItem().getFoodProperties().getEffects().isEmpty()) {
                         itemEntity.setItem(new ItemStack(Items.ROTTEN_FLESH));
                     }
+                }
+            }
+        }
+        if (living instanceof IDeadMob){
+            if (living.level.getServer() != null) {
+                if (living instanceof MarcireEntity) {
+                    LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS_2);
+                    LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
+                    LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                    loottable.getRandomItems(ctx).forEach(loot -> ItemHelper.itemEntityDrop(living, loot));
+                } else {
+                    LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS);
+                    LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
+                    LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                    loottable.getRandomItems(ctx).forEach(loot -> ItemHelper.itemEntityDrop(living, loot));
                 }
             }
         }

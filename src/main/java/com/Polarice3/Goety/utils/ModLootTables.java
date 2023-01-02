@@ -17,6 +17,7 @@ public class ModLootTables {
     public static final ResourceLocation RUINED_RITUAL = register("chests/ruined_ritual");
     public static final ResourceLocation RUINED_RITUAL_BARREL = register("chests/ruined_ritual_barrel");
     public static final ResourceLocation DEAD_MOBS = register("entities/dead_mobs");
+    public static final ResourceLocation DEAD_MOBS_2 = register("entities/dead_mobs_2");
     public static final ResourceLocation TALL_SKULL = register("entities/tall_skull_mobs");
     public static final ResourceLocation CULTISTS = register("entities/cultist_extra");
 

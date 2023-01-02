@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "goety:cursed_stone_stairs",
+    "goety:cursed_stone_bricks_stairs",
+    "goety:cursed_bricks_stairs",
+    "goety:cursed_tiles_stairs",
+    "goety:dead_sandstone_stairs",
+    "goety:dead_sandstone_smooth_stairs",
+    "goety:remnant_rock_stairs",
+    "goety:remnant_stone_stairs",
+    "goety:remnant_bricks_stairs"
+  ]
+}

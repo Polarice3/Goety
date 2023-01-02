@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Tiny Spiders that have the same attributes as their bigger and more aggressive cousins with significantly less health and size. When summoned wearing the Fel Helm, they will be invulnerable, but they would still perish after a couple of seconds."
+      "text": "Tiny Spiders that have the same attributes as their bigger and more aggressive cousins with significantly less health and size. When summoned wearing the Fel Helm, they will only take 0.5 Hearts of damage from any non void source, but they would still perish after a couple of seconds."
     },
     {
       "type": "patchouli:entity",

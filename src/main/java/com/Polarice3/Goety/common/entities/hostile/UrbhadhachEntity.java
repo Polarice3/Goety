@@ -23,6 +23,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -195,7 +197,7 @@ public class UrbhadhachEntity extends MonsterEntity {
             if (this.getLastHurtByMob() == null
                     && this.lastHurtByPlayer == null
                     && !this.isUnderWater()
-                    && this.thrallCooldown == 0
+                    && this.thrallCooldown <= 0
                     && (!this.level.isDay() || this.level.isRainingAt(this.blockPosition()))) {
                 this.setThralling(true);
             }
@@ -214,10 +216,7 @@ public class UrbhadhachEntity extends MonsterEntity {
             }
             if (this.getThrall() != null) {
                 if (this.getThrall().distanceToSqr(this) > 16 && !this.getThrall().isUnderWater()) {
-                    this.navigation.stop();
-                    this.noActionTime = 0;
-                    this.getLookControl().setLookAt(this.getThrall().getX(), this.getThrall().getY(), this.getThrall().getZ());
-                    if (this.getThrall().isSleeping()){
+                    if (this.getThrall().isSleeping()) {
                         this.getThrall().stopSleeping();
                     } else {
                         float speed = 0.5F;
@@ -225,14 +224,17 @@ public class UrbhadhachEntity extends MonsterEntity {
                             if (this.getThrall().getAttributeValue(Attributes.MOVEMENT_SPEED) < 0.5F) {
                                 speed = 1.0F;
                             }
-                            this.getThrall().getNavigation().moveTo(this, speed);
+                            this.getThrall().getNavigation().moveTo(this.pathToUrbhadhach(this.getThrall()), speed);
+                        } else {
+                            this.thrallCooldown = 600;
+                            this.setThralling(false);
                         }
                     }
                     if (!this.level.isClientSide) {
                         this.getThrall().addEffect(new EffectInstance(Effects.NIGHT_VISION, 20));
                         this.addEffect(new EffectInstance(Effects.INVISIBILITY, 4));
                     }
-                    if (this.tickCount % 100 == 0){
+                    if (this.tickCount % 100 == 0) {
                         this.playSound(SoundEvents.BELL_BLOCK, 2.0F, 0.25F);
                         this.getThrall().playSound(SoundEvents.BELL_RESONATE, 1.0F, 0.5F);
                     }
@@ -329,6 +331,11 @@ public class UrbhadhachEntity extends MonsterEntity {
                 this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 20, 1, false, false));
             }
         }
+    }
+
+    public Path pathToUrbhadhach(AgeableEntity ageableEntity){
+        PathNavigator pathNavigator = ageableEntity.getNavigation();
+        return pathNavigator.createPath(this, 0);
     }
 
     public void tick() {
@@ -493,11 +500,6 @@ public class UrbhadhachEntity extends MonsterEntity {
     @OnlyIn(Dist.CLIENT)
     public float getStandingAnimationScale(float p_189795_1_) {
         return MathHelper.lerp(p_189795_1_, this.clientSideStandAnimationO, this.clientSideStandAnimation) / 6.0F;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public int getHealTime(){
-        return healTime;
     }
 
     @OnlyIn(Dist.CLIENT)

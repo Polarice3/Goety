@@ -46,7 +46,6 @@ import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -1084,13 +1083,6 @@ public class ModEvents {
                         }
                     }
                 }
-                if (killed instanceof BeldamEntity){
-                    BeldamEntity beldam = (BeldamEntity) killed;
-                    LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.CULTISTS);
-                    LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), beldam);
-                    LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
-                    loottable.getRandomItems(ctx).forEach(beldam::spawnAtLocation);
-                }
             }
         }
         if (killed instanceof SkeletonEntity){
@@ -1287,6 +1279,17 @@ public class ModEvents {
     public static void DropEvents(LivingDropsEvent event){
         if (event.getEntityLiving() != null) {
             LivingEntity living = event.getEntityLiving();
+            if (living instanceof RavagerEntity){
+                event.getDrops().add(ItemHelper.itemEntityDrop(living, new ItemStack(ModItems.SAVAGETOOTH.get(), living.level.random.nextInt(2))));
+            }
+            if (living instanceof BeldamEntity){
+                if (living.level.getServer() != null) {
+                    LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.CULTISTS);
+                    LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
+                    LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                    loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(living, loot)));
+                }
+            }
         }
     }
 

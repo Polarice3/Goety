@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "goety:dried_remnant_block"
+          "name": "goety:remnant_block"
         }
       ],
       "conditions": [

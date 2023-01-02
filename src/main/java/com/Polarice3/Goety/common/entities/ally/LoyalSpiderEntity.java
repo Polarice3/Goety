@@ -7,13 +7,13 @@ import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.enchantment.FrostWalkerEnchantment;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -446,6 +446,13 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
     @Nullable
     public Entity getControllingPassenger() {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+    }
+
+    protected void onChangedBlock(BlockPos pPos) {
+        super.onChangedBlock(pPos);
+        if (this.isFrost()){
+            FrostWalkerEnchantment.onEntityMoved(this, this.level, pPos, 2);
+        }
     }
 
     public void levelBonus() {

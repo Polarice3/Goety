@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "goety:block/remnant_bricks_slab"
+    },
+    "type=double": {
+      "model": "goety:block/remnant_bricks"
+    },
+    "type=top": {
+      "model": "goety:block/remnant_bricks_slab_top"
+    }
+  }
+}

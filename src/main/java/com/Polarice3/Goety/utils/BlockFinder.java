@@ -202,12 +202,7 @@ public class BlockFinder {
     public static boolean isDeadBlock(World pLevel, BlockPos pPos){
         BlockState blockState = pLevel.getBlockState(pPos.below());
         if (blockState.getFluidState().isEmpty()) {
-            for (int j1 = 0; j1 < 4; ++j1) {
-                BlockState blockState2 = pLevel.getBlockState(pPos.below(j1));
-                if (blockState2.getBlock() instanceof IDeadBlock) {
-                    return true;
-                }
-            }
+            return blockState.getBlock() instanceof IDeadBlock;
         }
         return false;
     }

@@ -73,11 +73,11 @@ public class FangEntity extends Entity {
     }
 
     public boolean isTotemSpawned() {
-        return this.entityData.get(ABSORBING);
+        return this.entityData.get(TOTEM);
     }
 
     public void setTotemSpawned(boolean totemSpawned) {
-        this.entityData.set(ABSORBING, totemSpawned);
+        this.entityData.set(TOTEM, totemSpawned);
     }
 
     public int getSoulEater(){
@@ -112,6 +112,9 @@ public class FangEntity extends Entity {
         if (pCompound.contains("SoulEater")){
             this.soulEater = pCompound.getInt("SoulEater");
         }
+        if (pCompound.contains("Absorbing")){
+            this.setAbsorbing(pCompound.getBoolean("Absorbing"));
+        }
         if (pCompound.hasUUID("Owner")) {
             this.ownerUUID = pCompound.getUUID("Owner");
         }
@@ -124,6 +127,9 @@ public class FangEntity extends Entity {
             pCompound.putInt("Damage", this.damage);
             pCompound.putInt("Burning", this.burning);
             pCompound.putInt("SoulEater", this.soulEater);
+        }
+        if (this.isAbsorbing()){
+            pCompound.putBoolean("Absorbing", this.isAbsorbing());
         }
         if (this.ownerUUID != null) {
             pCompound.putUUID("Owner", this.ownerUUID);

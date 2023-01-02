@@ -3,17 +3,16 @@ package com.Polarice3.Goety.common.spells;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 public class FangSpell extends Spells{
@@ -32,14 +31,20 @@ public class FangSpell extends Spells{
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
-        RayTraceResult rayTraceResult = rayTrace(worldIn, playerEntity, RayTraceContext.FluidMode.NONE);
+        int range = 16;
+        if (WandUtil.enchantedFocus(playerEntity)){
+            range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
+        }
+        RayTraceResult rayTraceResult = rayTrace(worldIn, playerEntity, range, 1.0D);
         Vector3d vector3d = rayTraceResult.getLocation();
         double d0 = Math.min(vector3d.y, entityLiving.getY());
         double d1 = Math.max(vector3d.y, entityLiving.getY()) + 1.0D;
         float f = (float) MathHelper.atan2(vector3d.z - entityLiving.getZ(), vector3d.x - entityLiving.getX());
-        int range = 16;
-        if (WandUtil.enchantedFocus(playerEntity)){
-            range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
+        if (rayTraceResult instanceof EntityRayTraceResult){
+            Entity target = ((EntityRayTraceResult) rayTraceResult).getEntity();
+            d0 = Math.min(target.getY(), entityLiving.getY());
+            d1 = Math.max(target.getY(), entityLiving.getY()) + 1.0D;
+            f = (float)MathHelper.atan2(target.getZ() - entityLiving.getZ(), target.getX() - entityLiving.getX());
         }
         if (!playerEntity.isCrouching()) {
             for (int l = 0; l < range; ++l) {
@@ -63,14 +68,20 @@ public class FangSpell extends Spells{
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving){
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
-        RayTraceResult rayTraceResult = rayTrace(worldIn, playerEntity, RayTraceContext.FluidMode.NONE);
+        int range = 16;
+        if (WandUtil.enchantedFocus(playerEntity)){
+            range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
+        }
+        RayTraceResult rayTraceResult = rayTrace(worldIn, playerEntity, range, 1.0D);
         Vector3d vector3d = rayTraceResult.getLocation();
         double d0 = Math.min(vector3d.y, entityLiving.getY());
         double d1 = Math.max(vector3d.y, entityLiving.getY()) + 1.0D;
         float f = (float) MathHelper.atan2(vector3d.z - entityLiving.getZ(), vector3d.x - entityLiving.getX());
-        int range = 16;
-        if (WandUtil.enchantedFocus(playerEntity)){
-            range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
+        if (rayTraceResult instanceof EntityRayTraceResult){
+            Entity target = ((EntityRayTraceResult) rayTraceResult).getEntity();
+            d0 = Math.min(target.getY(), entityLiving.getY());
+            d1 = Math.max(target.getY(), entityLiving.getY()) + 1.0D;
+            f = (float)MathHelper.atan2(target.getZ() - entityLiving.getZ(), target.getX() - entityLiving.getX());
         }
         if (!playerEntity.isCrouching()) {
             for(int l = 0; l < range; ++l) {
@@ -104,21 +115,6 @@ public class FangSpell extends Spells{
         }
         this.IncreaseInfamy(MainConfig.FangInfamyChance.get(), (PlayerEntity) entityLiving);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-    }
-
-    protected static BlockRayTraceResult rayTrace(World worldIn, PlayerEntity player, RayTraceContext.FluidMode fluidMode) {
-        float f = player.xRot;
-        float f1 = player.yRot;
-        Vector3d vector3d = player.getEyePosition(1.0F);
-        float f2 = MathHelper.cos(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
-        float f3 = MathHelper.sin(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
-        float f4 = -MathHelper.cos(-f * ((float)Math.PI / 180F));
-        float f5 = MathHelper.sin(-f * ((float)Math.PI / 180F));
-        float f6 = f3 * f4;
-        float f7 = f2 * f4;
-        double d0 = player.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();
-        Vector3d vector3d1 = vector3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
-        return worldIn.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
     }
 
 }

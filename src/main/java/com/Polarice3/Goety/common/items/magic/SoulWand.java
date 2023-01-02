@@ -2,14 +2,12 @@ package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.ally.UndeadWolfEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
 import com.Polarice3.Goety.common.spells.*;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,6 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Learned item capabilities from codes made by @vemerion & @MrCrayfish
+ */
 public class SoulWand extends Item{
     private static final String SOULUSE = "Soul Use";
     private static final String CASTTIME = "Cast Time";
@@ -399,10 +400,7 @@ public class SoulWand extends Item{
     }
 
     public void MagicResults(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        ItemStack foundStack;
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
-        foundStack = GoldTotemFinder.FindTotem(playerEntity);
-        ISoulEnergy soulEnergy = SEHelper.getCapability(playerEntity);
         if (!worldIn.isClientSide) {
             ServerWorld serverWorld = (ServerWorld) worldIn;
             if (this.getSpell(stack) != null) {
@@ -413,34 +411,7 @@ public class SoulWand extends Item{
                     } else {
                         this.getSpell(stack).WandResult(serverWorld, entityLiving);
                     }
-                } else if (SEHelper.getSEActive(playerEntity)) {
-                    if (soulEnergy.getSoulEnergy() >= SoulUse(entityLiving, stack)) {
-                        boolean spent = true;
-                        int random = worldIn.random.nextInt(4);
-                        if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell) {
-                            if (random != 0) {
-                                spent = false;
-                            }
-                        }
-                        if (spent){
-                            soulEnergy.decreaseSE(SoulUse(entityLiving, stack));
-                            SEHelper.sendSEUpdatePacket(playerEntity);
-                            if (MainConfig.VillagerHateSpells.get() > 0) {
-                                for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))) {
-                                    villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
-                                }
-                            }
-                        }
-                        assert stack.getTag() != null;
-                        if (stack.getItem() instanceof SoulStaff){
-                            this.getSpell(stack).StaffResult(serverWorld, entityLiving);
-                        } else {
-                            this.getSpell(stack).WandResult(serverWorld, entityLiving);
-                        }
-                    } else {
-                        worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                    }
-                } else if (!foundStack.isEmpty() && GoldTotemItem.currentSouls(foundStack) >= SoulUse(entityLiving, stack)) {
+                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(entityLiving, stack))) {
                     boolean spent = true;
                     int random = worldIn.random.nextInt(4);
                     if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell) {
@@ -449,7 +420,8 @@ public class SoulWand extends Item{
                         }
                     }
                     if (spent){
-                        GoldTotemItem.decreaseSouls(foundStack, SoulUse(entityLiving, stack));
+                        SEHelper.decreaseSouls(playerEntity, SoulUse(entityLiving, stack));
+                        SEHelper.sendSEUpdatePacket(playerEntity);
                         if (MainConfig.VillagerHateSpells.get() > 0) {
                             for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))) {
                                 villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
@@ -476,18 +448,11 @@ public class SoulWand extends Item{
                         SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
                         spewingSpell.showWandBreath(entityLiving);
                     }
-                } else if (SEHelper.getSEActive(playerEntity)) {
-                    if (soulEnergy.getSoulEnergy() < SoulUse(entityLiving, stack)) {
-                        this.failParticles(worldIn, entityLiving);
-                    } else if (this.getSpell(stack) instanceof SpewingSpell){
-                        SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
-                        spewingSpell.showWandBreath(entityLiving);
-                    }
-                } else if (foundStack.isEmpty() || GoldTotemItem.currentSouls(foundStack) < SoulUse(entityLiving, stack)) {
-                    this.failParticles(worldIn, entityLiving);
-                } else if (this.getSpell(stack) instanceof SpewingSpell){
+                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(entityLiving, stack))) {
                     SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
                     spewingSpell.showWandBreath(entityLiving);
+                } else {
+                    this.failParticles(worldIn, entityLiving);
                 }
             } else {
                 this.failParticles(worldIn, entityLiving);
