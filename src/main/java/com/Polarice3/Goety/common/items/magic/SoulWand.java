@@ -449,8 +449,10 @@ public class SoulWand extends Item{
                         spewingSpell.showWandBreath(entityLiving);
                     }
                 } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(entityLiving, stack))) {
-                    SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
-                    spewingSpell.showWandBreath(entityLiving);
+                    if (this.getSpell(stack) instanceof SpewingSpell){
+                        SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
+                        spewingSpell.showWandBreath(entityLiving);
+                    }
                 } else {
                     this.failParticles(worldIn, entityLiving);
                 }
