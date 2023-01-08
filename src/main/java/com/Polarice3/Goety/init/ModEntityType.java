@@ -179,7 +179,7 @@ public class ModEntityType {
 
     public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
-                    .sized(1.0f,1.0f)
+                    .sized(1.0F,1.0F)
                     .clientTrackingRange(4)
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchgale").toString()));
@@ -457,6 +457,12 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "zombie_minion").toString()));
 
+    public static final RegistryObject<EntityType<DrownedMinionEntity>> DROWNED_MINION = ENTITY_TYPES.register("drowned_minion",
+            () -> EntityType.Builder.of(DrownedMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "drowned_minion").toString()));
+
     public static final RegistryObject<EntityType<SkeletonMinionEntity>> SKELETON_MINION = ENTITY_TYPES.register("skeleton_minion",
             () -> EntityType.Builder.of(SkeletonMinionEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.99F)
@@ -504,6 +510,19 @@ public class ModEntityType {
                     .sized(0.4F, 0.2F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "creeperling_minion").toString()));
+
+    public static final RegistryObject<EntityType<FelFlyEntity>> FEL_FLY = ENTITY_TYPES.register("fel_fly",
+            () -> EntityType.Builder.of(FelFlyEntity::new, EntityClassification.MONSTER)
+                    .sized(0.45F, 0.3F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "fel_fly").toString()));
+
+    public static final RegistryObject<EntityType<RottreantEntity>> ROT_TREE = ENTITY_TYPES.register("rottreant",
+            () -> EntityType.Builder.of(RottreantEntity::new, EntityClassification.MONSTER)
+                    .fireImmune()
+                    .sized(1.4F, 2.7F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "rottreant").toString()));
 
     public static final RegistryObject<EntityType<LoyalSpiderEntity>> TAMED_SPIDER = ENTITY_TYPES.register("tamed_spider",
             () -> EntityType.Builder.of(LoyalSpiderEntity::new, EntityClassification.MONSTER)

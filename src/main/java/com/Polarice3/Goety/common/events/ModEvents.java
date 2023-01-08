@@ -604,32 +604,17 @@ public class ModEvents {
             }
         }
         if (RobeArmorFinder.FindFelHelm(player)) {
-            boolean blind = false;
-            if (!world.isClientSide && world.isDay()) {
-                float f = player.getBrightness();
-                BlockPos blockpos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).above() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                if (f > 0.5F && world.canSeeSky(blockpos)) {
-                    blind = true;
-                }
-            }
             if (!LichdomHelper.isLich(player)) {
                 if (!world.isClientSide) {
-                    if (blind) {
-                        if (player.hasEffect(Effects.NIGHT_VISION)){
-                            player.removeEffect(Effects.NIGHT_VISION);
-                        }
-                        player.addEffect(new EffectInstance(Effects.BLINDNESS, 40, 0, false, false));
-                    } else {
-                        if (player.hasEffect(Effects.BLINDNESS)){
-                            player.removeEffect(Effects.BLINDNESS);
-                        }
-                        player.addEffect(new EffectInstance(Effects.NIGHT_VISION, 210, 0, false, false));
-                    }
+                    player.addEffect(new EffectInstance(ModEffects.FEL_VISION.get(), 20, 0, false, false));
                 }
             }
         }
-        if (RobeArmorFinder.FindFelArmor(player)){
+        if (RobeArmorFinder.FindFelHelm(player) && RobeArmorFinder.FindLeggings(player)){
             BlockFinder.WebMovement(player);
+        }
+        if (RobeArmorFinder.FindFelArmor(player)){
+            BlockFinder.BushMovement(player);
         }
         IInfamy infamy = InfamyHelper.getCapability(player);
         int i = infamy.getInfamy();
@@ -950,17 +935,24 @@ public class ModEvents {
                 event.setCanceled(true);
             }
         }
+        if (RobeArmorFinder.FindFelArmor(victim)){
+            if (event.getSource() == DamageSource.SWEET_BERRY_BUSH){
+                event.setCanceled(true);
+            }
+        }
         if (MainConfig.MinionsMasterImmune.get()){
-            if (attacker instanceof OwnedEntity){
-                if (((OwnedEntity) attacker).getTrueOwner() == victim){
+            if (attacker instanceof IOwned){
+                if (((IOwned) attacker).getTrueOwner() == victim){
                     event.setCanceled(true);
                 }
             }
         }
         if (MainConfig.OwnerAttackCancel.get()){
-            if (victim instanceof IOwned){
-                if (((IOwned) victim).getTrueOwner() == attacker){
-                    event.setCanceled(true);
+            if (attacker != null) {
+                if (victim instanceof IOwned) {
+                    if (((IOwned) victim).getTrueOwner() == attacker) {
+                        event.setCanceled(true);
+                    }
                 }
             }
         }
@@ -1013,8 +1005,8 @@ public class ModEvents {
             }
         }
 
-        if (event.getSource().getEntity() instanceof OwnedEntity){
-            OwnedEntity summonedEntity = (OwnedEntity) event.getSource().getEntity();
+        if (event.getSource().getEntity() instanceof IOwned){
+            IOwned summonedEntity = (IOwned) event.getSource().getEntity();
             if (summonedEntity.getTrueOwner() != null){
                 if (summonedEntity.getTrueOwner() == entity){
                     event.setCanceled(true);
@@ -1354,6 +1346,38 @@ public class ModEvents {
         AbstractArrowEntity arrowEntity = event.getArrow();
         if (event.getArrow().getTags().contains(ConstantPaths.rainArrow())){
             arrowEntity.remove();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEffectRemoval(PotionEvent.PotionRemoveEvent event){
+        if (event.getEntityLiving() != null && event.getPotion() != null) {
+            if (!event.getEntityLiving().level.isClientSide) {
+                if (event.getPotion() == ModEffects.FEL_VISION.get()) {
+                    if (event.getEntityLiving().hasEffect(Effects.NIGHT_VISION)) {
+                        event.getEntityLiving().removeEffect(Effects.NIGHT_VISION);
+                    }
+                    if (event.getEntityLiving().hasEffect(Effects.BLINDNESS)) {
+                        event.getEntityLiving().removeEffect(Effects.BLINDNESS);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEffectExpired(PotionEvent.PotionExpiryEvent event){
+        if (event.getEntityLiving() != null && event.getPotionEffect() != null) {
+            if (!event.getEntityLiving().level.isClientSide) {
+                if (event.getPotionEffect().getEffect() == ModEffects.FEL_VISION.get()) {
+                    if (event.getEntityLiving().hasEffect(Effects.NIGHT_VISION)) {
+                        event.getEntityLiving().removeEffect(Effects.NIGHT_VISION);
+                    }
+                    if (event.getEntityLiving().hasEffect(Effects.BLINDNESS)) {
+                        event.getEntityLiving().removeEffect(Effects.BLINDNESS);
+                    }
+                }
+            }
         }
     }
 

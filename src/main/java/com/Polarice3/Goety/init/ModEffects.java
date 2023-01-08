@@ -52,4 +52,6 @@ public class ModEffects {
             SoulHungerEffect::new);
     public static final RegistryObject<Effect> NECROPOWER = EFFECTS.register("necropower",
             NecroPowerEffect::new);
+    public static final RegistryObject<Effect> FEL_VISION = EFFECTS.register("fel_vision",
+            FelVisionEffect::new);
 }

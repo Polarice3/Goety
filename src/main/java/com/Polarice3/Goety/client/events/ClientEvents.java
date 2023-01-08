@@ -1,9 +1,12 @@
 package com.Polarice3.Goety.client.events;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.client.audio.FelFlySound;
 import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
+import com.Polarice3.Goety.common.entities.ally.FelFlyEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
@@ -11,14 +14,20 @@ import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandKeyPacket;
+import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModKeybindings;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.SEHelper;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
@@ -38,6 +47,9 @@ public class ClientEvents {
             Minecraft minecraft = Minecraft.getInstance();
             if (entity instanceof LocustEntity){
                 minecraft.getSoundManager().queueTickingSound(new LocustSound((LocustEntity) entity));
+            }
+            if (entity instanceof FelFlyEntity){
+                minecraft.getSoundManager().queueTickingSound(new FelFlySound((FelFlyEntity) entity));
             }
         }
     }
@@ -71,12 +83,36 @@ public class ClientEvents {
     @SubscribeEvent
     public static void renderSoulEnergyHUD(final RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
-
-        final PlayerEntity player = Minecraft.getInstance().player;
+        Minecraft minecraft = Minecraft.getInstance();
+        final PlayerEntity player = minecraft.player;
 
         if (player != null) {
             if (SEHelper.getSoulsContainer(player)){
                 new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack(), event.getPartialTicks());
+            }
+            RayTraceResult hitResult = minecraft.hitResult;
+            FontRenderer fontRenderer = minecraft.font;
+            if (minecraft.level != null) {
+                if (hitResult instanceof BlockRayTraceResult) {
+                    BlockRayTraceResult blockRayTraceResult = ((BlockRayTraceResult) hitResult);
+                    TileEntity tileEntity = minecraft.level.getBlockEntity(blockRayTraceResult.getBlockPos());
+                    if (tileEntity instanceof ArcaTileEntity) {
+                        ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
+                        if (arcaTile.getPlayer() == player && SEHelper.getSEActive(player) && player.isCrouching()) {
+                            RenderSystem.pushMatrix();
+                            RenderSystem.translatef((float)(minecraft.getWindow().getGuiScaledWidth() / 2), (float)(minecraft.getWindow().getGuiScaledHeight() - 68), 0.0F);
+                            RenderSystem.enableBlend();
+                            RenderSystem.defaultBlendFunc();
+                            int SoulEnergy = SEHelper.getSESouls(player);
+                            int SoulEnergyTotal = MainConfig.MaxArcaSouls.get();
+                            String s = "" + SoulEnergy + "/" + "" + SoulEnergyTotal;
+                            int l = fontRenderer.width(s);
+                            fontRenderer.drawShadow(event.getMatrixStack(), s, (float)(-l / 2), -4.0F, 0xFFFFFF);
+                            RenderSystem.disableBlend();
+                            RenderSystem.popMatrix();
+                        }
+                    }
+                }
             }
         }
     }

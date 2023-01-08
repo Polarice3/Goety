@@ -908,6 +908,154 @@
     ],
     "subtitle": "subtitle.goety.urbhadhach_death"
   },
+  "fel_fly_loop": {
+    "sounds": [
+      {
+        "name": "mob/bee/loop1",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/loop2",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/loop3",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/loop4",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/loop5",
+        "pitch": 2.0
+      }
+    ],
+    "subtitle": "subtitle.goety.fel_fly_loop"
+  },
+  "fel_fly_hurt": {
+    "sounds": [
+      {
+        "name": "mob/bee/hurt1",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/hurt2",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/hurt3",
+        "pitch": 2.0
+      }
+    ],
+    "subtitle": "subtitle.goety.fel_fly_hurt"
+  },
+  "fel_fly_death": {
+    "sounds": [
+      {
+        "name": "mob/bee/death1",
+        "pitch": 2.0
+      },
+      {
+        "name": "mob/bee/death2",
+        "pitch": 2.0
+      }
+    ],
+    "subtitle": "subtitle.goety.fel_fly_death"
+  },
+  "rot_tree_ambient": {
+    "sounds": [
+      {
+        "name": "goety:rot_tree/idle1"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_ambient"
+  },
+  "rot_tree_hurt": {
+    "sounds": [
+      {
+        "name": "goety:rot_tree/hurt1"
+      },
+      {
+        "name": "goety:rot_tree/hurt2"
+      },
+      {
+        "name": "goety:rot_tree/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_hurt"
+  },
+  "rot_tree_heavyhurt": {
+    "sounds": [
+      {
+        "name": "goety:rot_tree/heavyhurt1"
+      },
+      {
+        "name": "goety:rot_tree/heavyhurt2"
+      },
+      {
+        "name": "goety:rot_tree/heavyhurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_heavyhurt"
+  },
+  "rot_tree_attack": {
+    "sounds": [
+      {
+        "name": "goety:rot_tree/attack"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_attack"
+  },
+  "rot_tree_repair": {
+    "sounds": [
+      {
+        "name": "block/barrel/close"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_repair"
+  },
+  "rot_tree_step": {
+    "sounds": [
+      {
+        "name": "goety:rot_tree/step1"
+      },
+      {
+        "name": "goety:rot_tree/step2"
+      },
+      {
+        "name": "goety:rot_tree/step3"
+      },
+      {
+        "name": "goety:rot_tree/step4"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_step"
+  },
+  "rot_tree_death": {
+    "sounds": [
+      {
+        "name": "mob/zombie/woodbreak"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_death"
+  },
+  "rot_tree_enter": {
+    "sounds": [
+      {
+        "name": "block/beehive/enter"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_enter"
+  },
+  "rot_tree_exit": {
+    "sounds": [
+      {
+        "name": "block/beehive/exit"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_exit"
+  },
   "evil_laugh": {
     "sounds": [
       {

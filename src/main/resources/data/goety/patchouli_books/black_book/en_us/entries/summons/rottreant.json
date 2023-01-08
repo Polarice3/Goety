@@ -1,0 +1,81 @@
+{
+  "name": "Rottreants",
+  "icon": "goety:murk_leaves",
+  "category": "goety:summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A powerful servant fitting for a Fel Mage. A Rottreant is a mighty creature made from the fire-immune wood that will smash a number of foes with its mighty branch arms."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To create a Rottreant, one must wear the Fel Robe, arrange a couple of blocks shown in the next pages, and then right click on the Rotten Pumpkin with an Animalis Core."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [ " R " ],
+          [ "WLW" ],
+          [ " W " ],
+          [ " 0 " ]
+        ],
+        "mapping": {
+          "R": "goety:rotten_pumpkin[facing=east]",
+          "W": "goety:haunted_log",
+          "L": "goety:cursed_stone"
+        },
+        "symmetrical": true
+      },
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [ " R " ],
+          [ "WLW" ],
+          [ " W " ],
+          [ " 0 " ]
+        ],
+        "mapping": {
+          "R": "goety:rotten_pumpkin[facing=east]",
+          "W": "goety:murk_log",
+          "L": "goety:murk_leaves"
+        },
+        "symmetrical": true
+      },
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:multiblock",
+      "multiblock": {
+        "pattern": [
+          [ " R " ],
+          [ "WLW" ],
+          [ " W " ],
+          [ " 0 " ]
+        ],
+        "mapping": {
+          "R": "goety:rotten_pumpkin[facing=east]",
+          "W": "goety:gloom_log",
+          "L": "goety:gloom_leaves"
+        },
+        "symmetrical": true
+      },
+      "enable_visualize": false
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A Haunted Rottreant is slower than its counterparts, but has more armor and deals more damage due to its stone covered body. When a Rottreant takes damage, there's a chance they will spawn a Fel Fly, which will attack their foes. After a while a Fel Fly will return to its Rottreant, burrowing back and healing it. Rottreants take half damage from arrows."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The Rottreant can be commanded into Following, Wandering or Staying mode when right clicked with a wand/staff. When in Staying mode, they will be immobile but they will slowly heal back their health when in direct sunlight or standing on growable blocks like Grass Blocks. They will also heal when in rain. They can also be healed by right clicking on them with their corresponding wood."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Rottreants move faster if its creator wears Fel Boots. Rottreants also have a higher chance of spawning a Fel Fly and can spawn Spiderlings if its creator wears Fel Robes. Mobs trying to attack the Rottreant's Creator will focus on the Rottreant, making them suitable distractions."
+    }
+  ]
+}

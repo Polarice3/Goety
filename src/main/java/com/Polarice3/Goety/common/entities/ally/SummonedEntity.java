@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,8 +51,9 @@ public class SummonedEntity extends OwnedEntity {
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.5D, 10.0F, 2.0F));
+        this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F));
         this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
     public void aiStep() {

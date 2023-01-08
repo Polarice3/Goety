@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "rrr",
+    "rpr",
+    "rrr"
+  ],
+  "key":
+  {
+    "p":
+    {
+      "item": "minecraft:carved_pumpkin"
+    },
+    "r":
+    {
+      "item": "minecraft:rotten_flesh"
+    }
+  },
+  "result":
+  {
+    "item": "goety:rotten_pumpkin",
+    "count": 1
+  }
+}

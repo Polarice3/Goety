@@ -12,7 +12,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -23,6 +22,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -41,6 +41,9 @@ public class ZombieMinionEntity extends SummonedEntity {
     private static final UUID SPEED_MODIFIER_BABY_UUID = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
     private static final AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(SPEED_MODIFIER_BABY_UUID, "Baby speed boost", 0.5D, AttributeModifier.Operation.MULTIPLY_BASE);
     private static final DataParameter<Boolean> DATA_BABY_ID = EntityDataManager.defineId(ZombieMinionEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> DATA_DROWNED_CONVERSION_ID = EntityDataManager.defineId(ZombieMinionEntity.class, DataSerializers.BOOLEAN);
+    private int inWaterTime;
+    private int conversionTime;
 
     public ZombieMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -53,7 +56,6 @@ public class ZombieMinionEntity extends SummonedEntity {
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(4, new CreatureZombieAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(8, new WanderGoal(this, 1.0D, 10));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
@@ -71,6 +73,11 @@ public class ZombieMinionEntity extends SummonedEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.getEntityData().define(DATA_BABY_ID, false);
+        this.getEntityData().define(DATA_DROWNED_CONVERSION_ID, false);
+    }
+
+    public boolean isUnderWaterConverting() {
+        return this.getEntityData().get(DATA_DROWNED_CONVERSION_ID);
     }
 
     public boolean isBaby() {
@@ -100,11 +107,17 @@ public class ZombieMinionEntity extends SummonedEntity {
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putBoolean("IsBaby", this.isBaby());
+        pCompound.putInt("InWaterTime", this.isInWater() ? this.inWaterTime : -1);
+        pCompound.putInt("DrownedConversionTime", this.isUnderWaterConverting() ? this.conversionTime : -1);
     }
 
     public void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.setBaby(pCompound.getBoolean("IsBaby"));
+        this.inWaterTime = pCompound.getInt("InWaterTime");
+        if (pCompound.contains("DrownedConversionTime", 99) && pCompound.getInt("DrownedConversionTime") > -1) {
+            this.startUnderWaterConversion(pCompound.getInt("DrownedConversionTime"));
+        }
     }
 
     protected float getStandingEyeHeight(Pose pPose, EntitySize pSize) {
@@ -137,6 +150,33 @@ public class ZombieMinionEntity extends SummonedEntity {
 
     public CreatureAttribute getMobType() {
         return CreatureAttribute.UNDEAD;
+    }
+
+    protected boolean convertsInWater() {
+        return true;
+    }
+
+    public void tick() {
+        if (!this.level.isClientSide && this.isAlive() && !this.isNoAi()) {
+            if (this.isUnderWaterConverting()) {
+                --this.conversionTime;
+
+                if (this.conversionTime < 0 && net.minecraftforge.event.ForgeEventFactory.canLivingConvert(this, ModEntityType.ZOMBIE_MINION.get(), (timer) -> this.conversionTime = timer)) {
+                    this.doUnderWaterConversion();
+                }
+            } else if (this.convertsInWater()) {
+                if (this.isEyeInFluid(FluidTags.WATER)) {
+                    ++this.inWaterTime;
+                    if (this.inWaterTime >= 600) {
+                        this.startUnderWaterConversion(300);
+                    }
+                } else {
+                    this.inWaterTime = -1;
+                }
+            }
+        }
+
+        super.tick();
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
@@ -205,6 +245,31 @@ public class ZombieMinionEntity extends SummonedEntity {
         super.die(pCause);
     }
 
+    private void startUnderWaterConversion(int p_204704_1_) {
+        this.conversionTime = p_204704_1_;
+        this.getEntityData().set(DATA_DROWNED_CONVERSION_ID, true);
+    }
+
+    protected void doUnderWaterConversion() {
+        this.convertToZombieType(ModEntityType.DROWNED_MINION.get());
+        if (!this.isSilent()) {
+            this.level.levelEvent((PlayerEntity)null, 1040, this.blockPosition(), 0);
+        }
+
+    }
+
+    protected void convertToZombieType(EntityType<? extends ZombieMinionEntity> p_234341_1_) {
+        ZombieMinionEntity zombieentity = this.convertTo(p_234341_1_, true);
+        if (zombieentity != null) {
+            zombieentity.handleAttributes(zombieentity.level.getCurrentDifficultyAt(zombieentity.blockPosition()).getSpecialMultiplier());
+            if (this.getTrueOwner() != null) {
+                zombieentity.setTrueOwner(this.getTrueOwner());
+            }
+            net.minecraftforge.event.ForgeEventFactory.onLivingConvert(this, zombieentity);
+        }
+
+    }
+
     public ActionResultType mobInteract(PlayerEntity pPlayer, Hand p_230254_2_) {
         if (!this.level.isClientSide){
             ItemStack itemstack = pPlayer.getItemInHand(p_230254_2_);
@@ -243,6 +308,23 @@ public class ZombieMinionEntity extends SummonedEntity {
                     return ActionResultType.CONSUME;
                 }
                 if (item instanceof AxeItem) {
+                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+                    this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
+                    this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
+                    this.spawnAtLocation(itemstack2);
+                    for (int i = 0; i < 7; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    if (!pPlayer.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    EntityFinder.sendEntityUpdatePacket(pPlayer, this);
+                    return ActionResultType.CONSUME;
+                }
+                if (item instanceof TridentItem && this instanceof DrownedMinionEntity){
                     this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
                     this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
                     this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);

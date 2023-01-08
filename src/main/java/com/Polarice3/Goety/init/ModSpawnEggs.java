@@ -91,6 +91,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = ITEMS.register("zombie_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.ZOMBIE_MINION, 0x192927, 0x737885, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> DROWNED_MINION_SPAWN_EGG = ITEMS.register("drowned_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.DROWNED_MINION, 0x182d37, 0x2f8209, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> FARMER_MINION_SPAWN_EGG = ITEMS.register("farmer_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.FARMER_MINION, 0x5e4236, 0xdbc549, new Item.Properties().tab(Goety.TAB)));
 
@@ -103,6 +106,12 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> DREDEN_MINION_SPAWN_EGG = ITEMS.register("dreden_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DREDEN_MINION, 0x4288ae, 0x182022, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> ZPIGLIN_MINION_SPAWN_EGG = ITEMS.register("zpiglin_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.ZPIGLIN_MINION, 0x594036, 0xf5da2a, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> ZPIGLIN_BRUTE_MINION_SPAWN_EGG = ITEMS.register("zpiglin_brute_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.ZPIGLIN_BRUTE_MINION, 0x1c1c1c, 0xf5da2a, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> UNDEAD_WOLF_SPAWN_EGG = ITEMS.register("undead_wolf_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.UNDEAD_WOLF_MINION, 0xbdbdbd, 0x832527, new Item.Properties().tab(Goety.TAB)));
 
@@ -111,6 +120,9 @@ public class ModSpawnEggs {
 
     public static final RegistryObject<ModSpawnEggItem> CREEPERLING_MINION_SPAWN_EGG = ITEMS.register("creeperling_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.CREEPERLING_MINION, 0x1c4c15, 0x000000, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> FEL_FLY_SPAWN_EGG = ITEMS.register("fel_fly_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.FEL_FLY, 0x242415, 0x3f4223, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> HUSKARL_SPAWN_EGG = ITEMS.register("huskarl_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.HUSKARL, 0x61a8ad, 0x446466, new Item.Properties().tab(Goety.TAB)));

@@ -71,7 +71,7 @@ public class ModItems {
     public static final RegistryObject<Item> CURSED_INGOT = ITEMS.register("cursed_ingot", ItemBase::new);
     public static final RegistryObject<Item> SAVAGETOOTH = ITEMS.register("savagetooth", ItemBase::new);
     public static final RegistryObject<Item> EMPTYCORE = ITEMS.register("emptycore", ItemBase::new);
-    public static final RegistryObject<Item> ANIMALIS_CORE = ITEMS.register("animaliscore", ItemBase::new);
+    public static final RegistryObject<Item> ANIMALIS_CORE = ITEMS.register("animaliscore", AnimalisCoreItem::new);
     public static final RegistryObject<Item> HUNGER_CORE = ITEMS.register("hunger_core", ItemBase::new);
     public static final RegistryObject<Item> WIND_CORE = ITEMS.register("wind_core", ItemBase::new);
     public static final RegistryObject<Item> COLD_SHARD = ITEMS.register("cold_shard", ItemBase::new);

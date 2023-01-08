@@ -103,7 +103,27 @@ public class BlockFinder {
                         blockpos$mutable.set(i, j, k);
                         BlockState blockstate = livingEntity.level.getBlockState(blockpos$mutable);
                         if (blockstate.getBlock() instanceof WebBlock){
-                            livingEntity.makeStuckInBlock(blockstate, new Vector3d(1.5D, 1.05D, 1.5D));
+                            livingEntity.makeStuckInBlock(blockstate, Vector3d.ZERO);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void BushMovement(LivingEntity livingEntity){
+        AxisAlignedBB axisalignedbb = livingEntity.getBoundingBox();
+        BlockPos blockpos = new BlockPos(axisalignedbb.minX + 0.001D, axisalignedbb.minY + 0.001D, axisalignedbb.minZ + 0.001D);
+        BlockPos blockpos1 = new BlockPos(axisalignedbb.maxX - 0.001D, axisalignedbb.maxY - 0.001D, axisalignedbb.maxZ - 0.001D);
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+        if (livingEntity.level.hasChunksAt(blockpos, blockpos1)) {
+            for(int i = blockpos.getX(); i <= blockpos1.getX(); ++i) {
+                for(int j = blockpos.getY(); j <= blockpos1.getY(); ++j) {
+                    for(int k = blockpos.getZ(); k <= blockpos1.getZ(); ++k) {
+                        blockpos$mutable.set(i, j, k);
+                        BlockState blockstate = livingEntity.level.getBlockState(blockpos$mutable);
+                        if (blockstate.getBlock() instanceof SweetBerryBushBlock){
+                            livingEntity.makeStuckInBlock(blockstate, Vector3d.ZERO);
                         }
                     }
                 }

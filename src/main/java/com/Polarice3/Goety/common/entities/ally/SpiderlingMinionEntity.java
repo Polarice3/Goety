@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -121,8 +122,17 @@ public class SpiderlingMinionEntity extends SummonedEntity {
     }
 
     public void lifeSpanDamage(){
-        this.limitedLifeTicks = 20;
-        this.hurt(DamageSource.STARVE, this.getMaxHealth());
+        if (this.getTrueOwner() instanceof RottreantEntity && this.getTrueOwner().isAlive() && !this.getTrueOwner().isDeadOrDying()){
+            this.getNavigation().moveTo(this.getTrueOwner(), 1.25F);
+            if (this.getBoundingBox().inflate(0.25F).intersects(this.getTrueOwner().getBoundingBox())){
+                this.playSound(ModSounds.ROT_TREE_ENTER.get(), 1.0F, 1.0F);
+                this.heal(this.getHealth());
+                this.remove();
+            }
+        } else {
+            this.limitedLifeTicks = 20;
+            this.hurt(DamageSource.STARVE, this.getMaxHealth());
+        }
     }
 
     public boolean canBeAffected(EffectInstance potioneffectIn) {

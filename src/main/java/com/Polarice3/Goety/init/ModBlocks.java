@@ -79,6 +79,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
     public static final RegistryObject<Block> HAUNTED_BUSH = BLOCKS.register("haunted_bush", HauntedBushBlock::new);
     public static final RegistryObject<Block> IRON_FINGER = BLOCKS.register("iron_finger", IronFingerBlock::new);
+    public static final RegistryObject<Block> ROTTEN_PUMPKIN = BLOCKS.register("rotten_pumpkin", RottenPumpkinBlock::new);
 
     //Remnant
     public static final RegistryObject<Block> REMNANT_BLOCK = BLOCKS.register("remnant_block",
@@ -406,6 +407,8 @@ public class ModBlocks {
             () -> new BlockItemBase(FROST_BLOCK.get()));
     public static final RegistryObject<Item> FORBIDDEN_GRASS_BLOCK_ITEM = BLOCK_ITEMS.register("forbidden_grass",
             () -> new BlockItemBase(FORBIDDEN_GRASS.get()));
+    public static final RegistryObject<Item> ROTTEN_PUMPKIN_BLOCK_ITEM = BLOCK_ITEMS.register("rotten_pumpkin",
+            () -> new BlockItemBase(ROTTEN_PUMPKIN.get()));
 
     //RemnantItems
     public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("remnant_block",

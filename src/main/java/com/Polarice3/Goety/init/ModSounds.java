@@ -83,6 +83,20 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> URBHADHACH_STEP = create("urbhadhach_step");
     public static final RegistryObject<SoundEvent> URBHADHACH_DEATH = create("urbhadhach_death");
 
+    public static final RegistryObject<SoundEvent> FEL_FLY_LOOP = create("fel_fly_loop");
+    public static final RegistryObject<SoundEvent> FEL_FLY_HURT = create("fel_fly_hurt");
+    public static final RegistryObject<SoundEvent> FEL_FLY_DEATH = create("fel_fly_death");
+
+    public static final RegistryObject<SoundEvent> ROT_TREE_AMBIENT = create("rot_tree_ambient");
+    public static final RegistryObject<SoundEvent> ROT_TREE_ATTACK = create("rot_tree_attack");
+    public static final RegistryObject<SoundEvent> ROT_TREE_HURT = create("rot_tree_hurt");
+    public static final RegistryObject<SoundEvent> ROT_TREE_HEAVY_HURT = create("rot_tree_heavyhurt");
+    public static final RegistryObject<SoundEvent> ROT_TREE_REPAIR = create("rot_tree_repair");
+    public static final RegistryObject<SoundEvent> ROT_TREE_STEP = create("rot_tree_step");
+    public static final RegistryObject<SoundEvent> ROT_TREE_DEATH = create("rot_tree_death");
+    public static final RegistryObject<SoundEvent> ROT_TREE_ENTER = create("rot_tree_enter");
+    public static final RegistryObject<SoundEvent> ROT_TREE_EXIT = create("rot_tree_exit");
+
     public static final RegistryObject<SoundEvent> EVIL_LAUGH = create("evil_laugh");
     public static final RegistryObject<SoundEvent> ROAR_SPELL = create("roar_spell");
     public static final RegistryObject<SoundEvent> FIRE_BREATH = create("fire_breath");

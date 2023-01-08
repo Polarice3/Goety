@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ally.RottreantEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.ally.UndeadWolfEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
@@ -139,6 +140,9 @@ public class SoulWand extends Item{
                     summonedEntity.kill();
                 } else {
                     if (summonedEntity.getMobType() == CreatureAttribute.UNDEAD && !(summonedEntity instanceof UndeadWolfEntity)) {
+                        summonedEntity.updateMoveMode(player);
+                    }
+                    if (summonedEntity instanceof RottreantEntity){
                         summonedEntity.updateMoveMode(player);
                     }
                 }

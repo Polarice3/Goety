@@ -255,12 +255,12 @@ public class DeadMobEvents {
                     LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS_2);
                     LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
                     LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
-                    loottable.getRandomItems(ctx).forEach(loot -> ItemHelper.itemEntityDrop(living, loot));
+                    loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(living, loot)));
                 } else {
                     LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS);
                     LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
                     LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
-                    loottable.getRandomItems(ctx).forEach(loot -> ItemHelper.itemEntityDrop(living, loot));
+                    loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(living, loot)));
                 }
             }
         }

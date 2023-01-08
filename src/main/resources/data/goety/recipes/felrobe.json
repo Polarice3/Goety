@@ -12,7 +12,7 @@
       "tag": "minecraft:leaves"
     },
     {
-      "tag": "minecraft:leaves"
+      "item": "minecraft:sweet_berries"
     },
     {
       "tag": "forge:gems/lapis"
