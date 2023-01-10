@@ -24,7 +24,7 @@
       "type": "patchouli:spotlight",
       "item": "minecraft:enchanted_book",
       "title": "Radius",
-      "text": "Increases the radius of your spells, this generally means any explosive spells has a higher explosive radius."
+      "text": "Increases the radius of your spells, this generally means any explosive spells has a higher explosive radius. For certain spells, radius allows spells to more accurately find the nearest enemy to hit."
     },
     {
       "type": "patchouli:spotlight",

@@ -73,6 +73,7 @@ public class MagicFocusItem extends Item{
         if (stack.getItem() == ModItems.BITING_FOCUS.get()) {
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.RANGE.get()
+                    || enchantment == ModEnchantments.RADIUS.get()
                     || enchantment == ModEnchantments.BURNING.get()
                     || enchantment == ModEnchantments.ABSORB.get();
         }

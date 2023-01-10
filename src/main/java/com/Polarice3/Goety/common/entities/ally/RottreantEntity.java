@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.ally;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.ModLootTables;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
@@ -53,15 +54,15 @@ public class RottreantEntity extends SummonedEntity{
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(4, new RotAttackGoal(this));
         this.goalSelector.addGoal(8, new WanderGoal(this, 1.0D, 10));
-        this.goalSelector.addGoal(9, new RotLook(this, PlayerEntity.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(10, new RotLook(this, MobEntity.class, 8.0F));
+        this.goalSelector.addGoal(9, new RotLookGoal(this, PlayerEntity.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(10, new RotLookGoal(this, MobEntity.class, 8.0F));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 50.0D)
+                .add(Attributes.MAX_HEALTH, 75.0D)
                 .add(Attributes.ARMOR, 0.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
@@ -72,6 +73,10 @@ public class RottreantEntity extends SummonedEntity{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_WOOD_TYPE, 0);
+    }
+
+    protected int decreaseAirSupply(int pAir) {
+        return pAir;
     }
 
     public int getIntWoodType() {
@@ -120,6 +125,17 @@ public class RottreantEntity extends SummonedEntity{
         return ModSounds.ROT_TREE_DEATH.get();
     }
 
+    protected ResourceLocation getDefaultLootTable() {
+        switch (this.getWoodType()){
+            case MURK:
+                return ModLootTables.ROTTREANT_MURK;
+            case GLOOM:
+                return ModLootTables.ROTTREANT_GLOOM;
+            default:
+                return ModLootTables.ROTTREANT_HAUNTED;
+        }
+    }
+
     @Override
     public boolean hurt(@Nonnull DamageSource source, float amount) {
         boolean felChance = this.level.random.nextFloat() <= 0.25F;
@@ -127,6 +143,13 @@ public class RottreantEntity extends SummonedEntity{
         if (RobeArmorFinder.FindFelArmor(this.getTrueOwner())){
             felChance = this.level.random.nextBoolean();
             spiderChance = this.level.random.nextBoolean();
+        }
+        if (this.getHealth() < this.getMaxHealth()/2){
+            felChance = this.level.random.nextFloat() <= 0.75F;
+            if (this.isStaying()){
+                this.setStaying(false);
+                this.setWandering(false);
+            }
         }
         if (source.getDirectEntity() instanceof AbstractArrowEntity || this.isStaying()){
             amount /= 2.0F;
@@ -191,6 +214,12 @@ public class RottreantEntity extends SummonedEntity{
         }
     }
 
+    public void knockback(float p_233627_1_, double p_233627_2_, double p_233627_4_) {
+        if (!this.isStaying()){
+            super.knockback(p_233627_1_, p_233627_2_, p_233627_4_);
+        }
+    }
+
     public void aiStep() {
         super.aiStep();
         if (this.getTrueOwner() != null && !this.isStaying()){
@@ -203,8 +232,50 @@ public class RottreantEntity extends SummonedEntity{
                 this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 0, false, false, false));
             }
         }
-        if (this.isStaying() && !this.isAggressive()){
+        if (this.isStaying()){
             this.setDeltaMovement(0, this.getDeltaMovement().y(), 0);
+            if (!this.level.isClientSide) {
+                if (this.getTarget() != null) {
+/*                    if (this.tickCount % 100 == 0){
+                        if (this.level.random.nextFloat() <= 0.25F && this.getTarget().distanceTo(this) <= 4.0F){
+                            RootTrapEntity rootTrap = new RootTrapEntity(this.level, BlockFinder.fangSpawnPosition(this.getTarget()), 1, this);
+                            this.level.addFreshEntity(rootTrap);
+                        }
+                    }*/
+                    if (this.tickCount % 20 == 0){
+                        if (this.level.random.nextBoolean()) {
+                            FelFlyEntity felFly = ModEntityType.FEL_FLY.get().create(this.level);
+                            if (felFly != null) {
+                                felFly.setPos(this.getX(), this.getY(), this.getZ());
+                                felFly.setTrueOwner(this);
+                                if (this.getTarget() != null) {
+                                    felFly.setTarget(this.getTarget());
+                                }
+                                felFly.setLimitedLife(200);
+                                this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
+                                this.level.addFreshEntity(felFly);
+                            }
+                        }
+                    }
+                    if (this.tickCount % 25 == 0){
+                        if (this.getTrueOwner() != null && RobeArmorFinder.FindFelArmor(this.getTrueOwner())) {
+                            if (this.level.random.nextBoolean()){
+                                SpiderlingMinionEntity spiderlingMinion = ModEntityType.SPIDERLING_MINION.get().create(this.level);
+                                if (spiderlingMinion != null){
+                                    spiderlingMinion.setPos(this.getX(), this.getY(), this.getZ());
+                                    spiderlingMinion.setTrueOwner(this);
+                                    if (this.getTarget() != null) {
+                                        spiderlingMinion.setTarget(this.getTarget());
+                                    }
+                                    spiderlingMinion.setLimitedLife(200);
+                                    this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
+                                    this.level.addFreshEntity(spiderlingMinion);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         if (this.getWoodType() == RotTreeWoodType.HAUNTED){
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(8.0F);
@@ -223,12 +294,17 @@ public class RottreantEntity extends SummonedEntity{
         }
         if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable)) && this.isStaying()){
             if (this.tickCount % 100 == 0){
-                this.heal(1.0F);
-                this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                if (this.getHealth() < this.getMaxHealth()){
+                    this.heal(5.0F);
+                    this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                }
             }
         } else if (this.level.isRainingAt(this.blockPosition())){
             if (this.tickCount % 100 == 0){
-                this.heal(1.0F);
+                if (this.getHealth() < this.getMaxHealth()){
+                    this.heal(5.0F);
+                    this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                }
             }
         }
 
@@ -285,17 +361,31 @@ public class RottreantEntity extends SummonedEntity{
         return RottreantEntity.Cracks.byFraction(this.getHealth() / this.getMaxHealth());
     }
 
-    static class RotLook extends LookAtGoal{
+    static class RotLookGoal extends LookAtGoal{
         public RottreantEntity rottreantEntity;
 
-        public RotLook(RottreantEntity p_i1631_1_, Class<? extends LivingEntity> p_i1631_2_, float p_i1631_3_) {
+        public RotLookGoal(RottreantEntity p_i1631_1_, Class<? extends LivingEntity> p_i1631_2_, float p_i1631_3_) {
             super(p_i1631_1_, p_i1631_2_, p_i1631_3_);
             this.rottreantEntity = p_i1631_1_;
         }
 
-        public RotLook(RottreantEntity p_i1632_1_, Class<? extends LivingEntity> p_i1632_2_, float p_i1632_3_, float p_i1632_4_) {
+        public RotLookGoal(RottreantEntity p_i1632_1_, Class<? extends LivingEntity> p_i1632_2_, float p_i1632_3_, float p_i1632_4_) {
             super(p_i1632_1_, p_i1632_2_, p_i1632_3_, p_i1632_4_);
             this.rottreantEntity = p_i1632_1_;
+        }
+
+        @Override
+        public boolean canUse() {
+            return super.canUse() && !this.rottreantEntity.isStaying();
+        }
+    }
+
+    static class RotAttackGoal extends MeleeAttackGoal{
+        public RottreantEntity rottreantEntity;
+
+        public RotAttackGoal(RottreantEntity p_i1631_1_) {
+            super(p_i1631_1_, 1.0D, false);
+            this.rottreantEntity = p_i1631_1_;
         }
 
         @Override

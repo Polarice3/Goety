@@ -13,8 +13,10 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
     private final ModelRenderer rotTree;
     private final ModelRenderer body;
     private final ModelRenderer head;
-    private final ModelRenderer leftArm;
     private final ModelRenderer rightArm;
+    private final ModelRenderer leftArm;
+    private final ModelRenderer upperBody;
+    private final ModelRenderer lowerBody;
     private final ModelRenderer rightLeg;
     private final ModelRenderer leftLeg;
     private final ModelRenderer root;
@@ -27,9 +29,13 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         rotTree = new ModelRenderer(this);
         rotTree.setPos(0.0F, -7.0F, 0.0F);
 
+        upperBody = new ModelRenderer(this);
+        upperBody.setPos(0.0F, 17.0F, 0.0F);
+        rotTree.addChild(upperBody);
+
         body = new ModelRenderer(this);
-        body.setPos(0.0F, 3.0F, 0.0F);
-        rotTree.addChild(body);
+        body.setPos(0.0F, -14.0F, 0.0F);
+        upperBody.addChild(body);
         body.texOffs(0, 50).addBox(-4.5F, 5.0F, -3.0F, 9.0F, 3.0F, 4.0F, 0.5F, false);
         body.texOffs(0, 58).addBox(-6.5F, 9.0F, -3.0F, 13.0F, 4.0F, 6.0F, 0.5F, false);
 
@@ -58,8 +64,8 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         body_r2.texOffs(0, 17).addBox(-9.0F, -7.0F, -8.5F, 18.0F, 8.0F, 11.0F, 0.0F, false);
 
         head = new ModelRenderer(this);
-        head.setPos(0.0F, -3.0F, -6.0F);
-        rotTree.addChild(head);
+        head.setPos(0.0F, -20.0F, -6.0F);
+        upperBody.addChild(head);
         head.texOffs(0, 0).addBox(-4.0F, -8.0F, -5.5F, 8.0F, 8.0F, 8.0F, 0.0F, false);
         head.texOffs(0, 81).addBox(-4.0F, -8.0F, -5.5F, 8.0F, 8.0F, 8.0F, 0.25F, false);
 
@@ -81,27 +87,32 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         setRotationAngle(cube_r4, 0.0F, -0.2618F, 0.0F);
         cube_r4.texOffs(104, 0).addBox(-1.0F, -6.0F, -6.0F, 0.0F, 12.0F, 12.0F, 0.0F, false);
 
-        leftArm = new ModelRenderer(this);
-        leftArm.setPos(8.0F, -2.0F, -4.0F);
-        rotTree.addChild(leftArm);
-        leftArm.texOffs(59, 24).addBox(1.0F, 3.5F, -1.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
-        leftArm.texOffs(53, 41).addBox(1.0F, -4.5F, -2.0F, 6.0F, 8.0F, 6.0F, 0.0F, false);
-        leftArm.texOffs(53, 57).addBox(-1.0F, 14.5F, -3.0F, 8.0F, 12.0F, 8.0F, 0.0F, false);
-        leftArm.texOffs(78, 41).addBox(1.0F, -4.5F, -2.0F, 6.0F, 8.0F, 6.0F, 0.5F, false);
-        leftArm.texOffs(85, 57).addBox(-1.0F, 14.5F, -4.0F, 8.0F, 12.0F, 8.0F, 0.5F, false);
-
         rightArm = new ModelRenderer(this);
-        rightArm.setPos(-8.0F, -2.0F, -4.0F);
-        rotTree.addChild(rightArm);
+        rightArm.setPos(-8.0F, -19.0F, -4.0F);
+        upperBody.addChild(rightArm);
         rightArm.texOffs(59, 24).addBox(-5.0F, 3.5F, -2.0F, 4.0F, 12.0F, 4.0F, 0.0F, true);
         rightArm.texOffs(53, 41).addBox(-6.0F, -4.5F, -3.0F, 6.0F, 8.0F, 6.0F, 0.0F, true);
         rightArm.texOffs(78, 41).addBox(-6.0F, -4.5F, -3.0F, 6.0F, 8.0F, 6.0F, 0.5F, true);
         rightArm.texOffs(53, 57).addBox(-7.0F, 14.5F, -4.0F, 8.0F, 12.0F, 8.0F, 0.0F, true);
         rightArm.texOffs(85, 57).addBox(-7.0F, 14.5F, -4.0F, 8.0F, 12.0F, 8.0F, 0.5F, true);
 
+        leftArm = new ModelRenderer(this);
+        leftArm.setPos(8.0F, -19.0F, -4.0F);
+        upperBody.addChild(leftArm);
+        leftArm.texOffs(59, 24).addBox(1.0F, 3.5F, -1.0F, 4.0F, 12.0F, 4.0F, 0.0F, false);
+        leftArm.texOffs(53, 41).addBox(1.0F, -4.5F, -2.0F, 6.0F, 8.0F, 6.0F, 0.0F, false);
+        leftArm.texOffs(53, 57).addBox(-1.0F, 14.5F, -3.0F, 8.0F, 12.0F, 8.0F, 0.0F, false);
+        leftArm.texOffs(78, 41).addBox(1.0F, -4.5F, -2.0F, 6.0F, 8.0F, 6.0F, 0.5F, false);
+        leftArm.texOffs(85, 57).addBox(-1.0F, 14.5F, -3.0F, 8.0F, 12.0F, 8.0F, 0.5F, false);
+
+        lowerBody = new ModelRenderer(this);
+        lowerBody.setPos(0.0F, 0.0F, 0.0F);
+        rotTree.addChild(lowerBody);
+
+
         rightLeg = new ModelRenderer(this);
         rightLeg.setPos(-4.0F, 16.0F, 0.0F);
-        rotTree.addChild(rightLeg);
+        lowerBody.addChild(rightLeg);
         rightLeg.texOffs(37, 0).addBox(-2.5F, -2.0F, -1.0F, 4.0F, 8.0F, 3.0F, 0.0F, false);
         rightLeg.texOffs(52, 0).addBox(-3.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 0.5F, true);
         rightLeg.texOffs(108, 41).addBox(-3.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 1.0F, true);
@@ -113,7 +124,7 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
 
         leftLeg = new ModelRenderer(this);
         leftLeg.setPos(4.0F, 16.0F, 0.0F);
-        rotTree.addChild(leftLeg);
+        lowerBody.addChild(leftLeg);
         leftLeg.texOffs(37, 0).addBox(-1.5F, -2.0F, -1.0F, 4.0F, 8.0F, 3.0F, 0.0F, true);
         leftLeg.texOffs(52, 0).addBox(-2.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 0.5F, false);
         leftLeg.texOffs(108, 41).addBox(-2.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 1.0F, false);
@@ -144,7 +155,7 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         if (f < 1.0F) {
             f = 1.0F;
         }
-        boolean isTree = pEntity.isStaying() && !pEntity.isAggressive();
+        boolean isTree = pEntity.isStaying();
         if (isTree){
             this.rightArm.xRot = 0.0F;
             this.leftArm.xRot = 0.0F;
@@ -158,6 +169,7 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
             this.setupAttackAnimation(pEntity);
             ModelHelper.bobArms(this.rightArm, this.leftArm, pAgeInTicks);
         }
+        this.upperBody.xRot = 0.0F;
         this.rightArm.yRot = 0.0F;
         this.leftArm.yRot = 0.0F;
         this.root.visible = isTree;

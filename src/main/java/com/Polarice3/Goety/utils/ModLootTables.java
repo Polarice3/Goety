@@ -20,6 +20,9 @@ public class ModLootTables {
     public static final ResourceLocation DEAD_MOBS_2 = register("entities/dead_mobs_2");
     public static final ResourceLocation TALL_SKULL = register("entities/tall_skull_mobs");
     public static final ResourceLocation CULTISTS = register("entities/cultist_extra");
+    public static final ResourceLocation ROTTREANT_HAUNTED = register("entities/rottreant_haunted");
+    public static final ResourceLocation ROTTREANT_MURK = register("entities/rottreant_murk");
+    public static final ResourceLocation ROTTREANT_GLOOM = register("entities/rottreant_gloom");
 
     private static ResourceLocation register(String pId) {
         return register(Goety.location(pId));

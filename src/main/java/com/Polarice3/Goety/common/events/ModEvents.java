@@ -605,9 +605,11 @@ public class ModEvents {
         }
         if (RobeArmorFinder.FindFelHelm(player)) {
             if (!LichdomHelper.isLich(player)) {
-                if (!world.isClientSide) {
-                    player.addEffect(new EffectInstance(ModEffects.FEL_VISION.get(), 20, 0, false, false));
-                }
+                player.addEffect(new EffectInstance(ModEffects.FEL_VISION.get(), 100, 0, false, false, false));
+            }
+        } else {
+            if (player.hasEffect(ModEffects.FEL_VISION.get())){
+                player.removeEffect(ModEffects.FEL_VISION.get());
             }
         }
         if (RobeArmorFinder.FindFelHelm(player) && RobeArmorFinder.FindLeggings(player)){
@@ -678,8 +680,8 @@ public class ModEvents {
             if (RobeArmorFinder.FindFelBootsofWander(player)){
                 Vector3d vector3d = player.getDeltaMovement();
                 if (!player.isCrouching()) {
-                    if (event.getDistance() >= 1.27F) {
-                        double jump = MathHelper.sqrt(event.getDistance())/2;
+                    if (event.getDistance() >= 2.0F) {
+                        double jump = MathHelper.sqrt(event.getDistance())/2.0D;
                         player.setDeltaMovement(vector3d.x, jump, vector3d.z);
                         player.hurtMarked = true;
                         player.playSound(SoundEvents.SLIME_BLOCK_FALL, 0.5F, 1.0F);
@@ -1357,9 +1359,6 @@ public class ModEvents {
                     if (event.getEntityLiving().hasEffect(Effects.NIGHT_VISION)) {
                         event.getEntityLiving().removeEffect(Effects.NIGHT_VISION);
                     }
-                    if (event.getEntityLiving().hasEffect(Effects.BLINDNESS)) {
-                        event.getEntityLiving().removeEffect(Effects.BLINDNESS);
-                    }
                 }
             }
         }
@@ -1372,9 +1371,6 @@ public class ModEvents {
                 if (event.getPotionEffect().getEffect() == ModEffects.FEL_VISION.get()) {
                     if (event.getEntityLiving().hasEffect(Effects.NIGHT_VISION)) {
                         event.getEntityLiving().removeEffect(Effects.NIGHT_VISION);
-                    }
-                    if (event.getEntityLiving().hasEffect(Effects.BLINDNESS)) {
-                        event.getEntityLiving().removeEffect(Effects.BLINDNESS);
                     }
                 }
             }

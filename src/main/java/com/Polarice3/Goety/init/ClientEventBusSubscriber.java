@@ -75,6 +75,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_BALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FANG.get(), FangRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIKE.get(), SpikeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ROOTS.get(), RootsTrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHGALE.get(), WitchGaleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADO.get(), FireTornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CHANNELLER.get(), ChannellerRenderer::new);

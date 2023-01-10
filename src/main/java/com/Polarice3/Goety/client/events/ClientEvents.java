@@ -25,10 +25,12 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -113,6 +115,17 @@ public class ClientEvents {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void fogDensityEvent(EntityViewRenderEvent.FogDensity event){
+        PlayerEntity player = Minecraft.getInstance().player;
+        if (player != null){
+            if (player.hasEffect(ModEffects.FEL_VISION.get()) && !player.hasEffect(Effects.NIGHT_VISION)){
+                event.setDensity(event.getDensity() * 2);
+                event.setCanceled(true);
             }
         }
     }

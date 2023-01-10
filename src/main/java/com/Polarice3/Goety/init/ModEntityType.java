@@ -177,6 +177,13 @@ public class ModEntityType {
                     .updateInterval(2)
                     .build(new ResourceLocation(Goety.MOD_ID, "spike").toString()));
 
+    public static final RegistryObject<EntityType<RootTrapEntity>> ROOTS = ENTITY_TYPES.register("roots",
+            () -> EntityType.Builder.<RootTrapEntity>of(RootTrapEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "roots").toString()));
+
     public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
                     .sized(1.0F,1.0F)

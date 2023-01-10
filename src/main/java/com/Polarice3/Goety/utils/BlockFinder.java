@@ -7,6 +7,7 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -186,6 +187,36 @@ public class BlockFinder {
         } else {
             return livingEntity.getY();
         }
+    }
+
+    public static BlockPos fangSpawnPosition(Entity entity) {
+        BlockPos blockpos = entity.blockPosition();
+        boolean flag = false;
+        double d0 = 0.0D;
+
+        do {
+            BlockPos blockpos1 = blockpos.below();
+            BlockState blockstate = entity.level.getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(entity.level, blockpos1, Direction.UP)) {
+                if (!entity.level.isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = entity.level.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(entity.level, blockpos);
+                    if (!voxelshape.isEmpty()) {
+                        d0 = voxelshape.max(Direction.Axis.Y);
+                    }
+                }
+
+                flag = true;
+                break;
+            }
+
+            blockpos = blockpos.below();
+        } while(blockpos.getY() >= MathHelper.floor(blockpos.getY()) - 1);
+
+        if (flag) {
+            return new BlockPos(blockpos.getX(), blockpos.getY() + d0, blockpos.getZ());
+        }
+        return blockpos;
     }
 
     public static boolean isEmptyBlock(IBlockReader pLevel, BlockPos pPos, BlockState pBlockState, FluidState pFluidState, EntityType<?> pEntityType) {
