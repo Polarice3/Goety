@@ -184,6 +184,13 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "roots").toString()));
 
+    public static final RegistryObject<EntityType<GhostFireEntity>> GHOST_FIRE = ENTITY_TYPES.register("ghost_fire",
+            () -> EntityType.Builder.<GhostFireEntity>of(GhostFireEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.8F, 1.0F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "ghost_fire").toString()));
+
     public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
                     .sized(1.0F,1.0F)
@@ -363,6 +370,12 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "dreden").toString()));
 
+    public static final RegistryObject<EntityType<WraithEntity>> WRAITH = ENTITY_TYPES.register("wraith",
+            () -> EntityType.Builder.of(WraithEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "wraith").toString()));
+
     public static final RegistryObject<EntityType<UrbhadhachEntity>> URBHADHACH = ENTITY_TYPES.register("urbhadhach",
             () -> EntityType.Builder.of(UrbhadhachEntity::new, EntityClassification.MONSTER)
                     .sized(1.4F, 1.4F)
@@ -487,6 +500,12 @@ public class ModEntityType {
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "dreden_minion").toString()));
+
+    public static final RegistryObject<EntityType<WraithMinionEntity>> WRAITH_MINION = ENTITY_TYPES.register("wraith_minion",
+            () -> EntityType.Builder.of(WraithMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "wraith_minion").toString()));
 
     public static final RegistryObject<EntityType<FarmerMinionEntity>> FARMER_MINION = ENTITY_TYPES.register("farmer_minion",
             () -> EntityType.Builder.of(FarmerMinionEntity::new, EntityClassification.MONSTER)

@@ -76,6 +76,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FANG.get(), FangRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIKE.get(), SpikeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ROOTS.get(), RootsTrapRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.GHOST_FIRE.get(), GhostFireRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHGALE.get(), WitchGaleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADO.get(), FireTornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CHANNELLER.get(), ChannellerRenderer::new);
@@ -100,6 +101,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HUSKARL.get(), HuskarlRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SHADE.get(), ShadeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DREDEN.get(), DredenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WRAITH.get(), WraithRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.URBHADHACH.get(), UrbhadhachRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BOOMER.get(), BoomerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DUNE_SPIDER.get(), DuneSpiderRenderer::new);
@@ -121,6 +123,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_MINION.get(), SkeletonMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STRAY_MINION.get(), SkeletonMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DREDEN_MINION.get(), DredenMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WRAITH_MINION.get(), WraithMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FARMER_MINION.get(), FarmerMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PHANTOM_MINION.get(), PhantomMinionRenderer::new);

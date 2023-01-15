@@ -12,6 +12,7 @@ import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
+import com.Polarice3.Goety.common.network.packets.client.CStopAttackPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
 import com.Polarice3.Goety.common.network.packets.client.CWandKeyPacket;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
@@ -212,6 +213,9 @@ public class ClientEvents {
         }
         if (ModKeybindings.keyBindings[2].isDown() && MINECRAFT.isWindowActive()){
             ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CBagKeyPacket());
+        }
+        if (ModKeybindings.keyBindings[3].isDown() && MINECRAFT.isWindowActive()){
+            ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CStopAttackPacket());
         }
     }
 

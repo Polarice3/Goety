@@ -31,10 +31,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.TormentorEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
-import com.Polarice3.Goety.common.entities.projectiles.BurningPotionEntity;
-import com.Polarice3.Goety.common.entities.projectiles.DeadSlimeBallEntity;
-import com.Polarice3.Goety.common.entities.projectiles.DeadTNTEntity;
-import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
+import com.Polarice3.Goety.common.entities.projectiles.*;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.fluid.ModFluids;
 import com.Polarice3.Goety.common.network.ModNetwork;
@@ -101,6 +98,7 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 @Mod("goety")
 public class Goety {
@@ -210,6 +208,28 @@ public class Goety {
                     return pStack;
                 }
             });
+            DispenserBlock.registerBehavior(ModItems.FROST_CHARGE.get(), new DefaultDispenseItemBehavior() {
+
+                public ItemStack execute(IBlockSource pSource, ItemStack pStack) {
+                    Direction direction = pSource.getBlockState().getValue(DispenserBlock.FACING);
+                    IPosition iposition = DispenserBlock.getDispensePosition(pSource);
+                    double d0 = iposition.x() + (double)((float)direction.getStepX() * 0.3F);
+                    double d1 = iposition.y() + (double)((float)direction.getStepY() * 0.3F);
+                    double d2 = iposition.z() + (double)((float)direction.getStepZ() * 0.3F);
+                    World world = pSource.getLevel();
+                    Random random = world.random;
+                    double d3 = random.nextGaussian() * 0.05D + (double)direction.getStepX();
+                    double d4 = random.nextGaussian() * 0.05D + (double)direction.getStepY();
+                    double d5 = random.nextGaussian() * 0.05D + (double)direction.getStepZ();
+                    world.addFreshEntity(new FrostBallEntity(world, d0, d1, d2, d3, d4, d5));
+                    pStack.shrink(1);
+                    return pStack;
+                }
+
+                protected void playSound(IBlockSource pSource) {
+                    pSource.getLevel().levelEvent(1018, pSource.getPos(), 0);
+                }
+            });
             AxeItem.STRIPABLES = Maps.newHashMap(AxeItem.STRIPABLES);
             AxeItem.STRIPABLES.put(ModBlocks.HAUNTED_LOG.get(), ModBlocks.STRIPPED_HAUNTED_LOG.get());
             AxeItem.STRIPABLES.put(ModBlocks.HAUNTED_WOOD.get(), ModBlocks.STRIPPED_HAUNTED_WOOD.get());
@@ -230,7 +250,8 @@ public class Goety {
 
     public static void EntitySpawnPlacementRegistry() {
         EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.DREDEN.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.DREDEN.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, OwnedEntity::checkHostileSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.WRAITH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, OwnedEntity::checkHostileSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityType.URBHADHACH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
     }
 
@@ -257,6 +278,7 @@ public class Goety {
         event.put(ModEntityType.HUSKARL.get(), HuskarlEntity.setCustomAttributes().build());
         event.put(ModEntityType.SHADE.get(), ShadeEntity.setCustomAttributes().build());
         event.put(ModEntityType.DREDEN.get(), DredenEntity.setCustomAttributes().build());
+        event.put(ModEntityType.WRAITH.get(), WraithEntity.setCustomAttributes().build());
         event.put(ModEntityType.URBHADHACH.get(), UrbhadhachEntity.setCustomAttributes().build());
         event.put(ModEntityType.BOOMER.get(), BoomerEntity.setCustomAttributes().build());
         event.put(ModEntityType.DUNE_SPIDER.get(), DuneSpiderEntity.setCustomAttributes().build());
@@ -278,6 +300,7 @@ public class Goety {
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.STRAY_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.DREDEN_MINION.get(), DredenMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.WRAITH_MINION.get(), WraithMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.FARMER_MINION.get(), FarmerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfEntity.setCustomAttributes().build());
         event.put(ModEntityType.PHANTOM_MINION.get(), MonsterEntity.createMonsterAttributes().build());

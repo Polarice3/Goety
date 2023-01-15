@@ -76,6 +76,10 @@
     {
       "type": "patchouli:text",
       "text": "Rottreants move faster if its creator wears Fel Boots. Rottreants also have a higher chance of spawning a Fel Fly and can spawn Spiderlings if its creator wears Fel Robes. Mobs trying to attack the Rottreant's Creator will focus on the Rottreant, making them suitable distractions."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Right clicking it with a Mycelium Block allows the Rottreant to grow mushrooms on not only its surroundings but also on itself. Shearing it will yield those mushrooms, but will have a chance of dropping them during combat. The mushrooms growing from it unfortunately makes them more sustainable to damage."
     }
   ]
 }

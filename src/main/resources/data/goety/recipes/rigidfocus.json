@@ -13,7 +13,7 @@
   "duration": 10,
   "ingredients": [
     {
-      "item": "goety:cold_shard"
+      "item": "goety:frost_charge"
     },
     {
       "item": "goety:darkfabric"
@@ -31,7 +31,7 @@
       "item": "goety:darkfabric"
     },
     {
-      "item": "minecraft:snow_block"
+      "item": "goety:ectoplasm"
     },
     {
       "item": "goety:darkfabric"

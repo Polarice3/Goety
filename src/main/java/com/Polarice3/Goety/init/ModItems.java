@@ -88,6 +88,7 @@ public class ModItems {
     public static final RegistryObject<Item> FORBIDDEN_PIECE = ITEMS.register("forbidden_piece", ItemBase::new);
     public static final RegistryObject<Item> BURNING_TUSK = ITEMS.register("burning_tusk", ItemBase::new);
     public static final RegistryObject<Item> LAPIS_STRING = ITEMS.register("lapis_string", ItemBase::new);
+    public static final RegistryObject<Item> ECTOPLASM = ITEMS.register("ectoplasm", ItemBase::new);
 
     //Curios
     public static final RegistryObject<GoldTotemItem> GOLDTOTEM = ITEMS.register("goldtotem", GoldTotemItem::new);
@@ -104,6 +105,7 @@ public class ModItems {
     public static final RegistryObject<Item> ROTTING_FOCUS = ITEMS.register("rottingfocus", () -> new MagicFocusItem(MainConfig.ZombieCost.get()));
     public static final RegistryObject<Item> OSSEOUS_FOCUS = ITEMS.register("osseousfocus", () -> new MagicFocusItem(MainConfig.SkeletonCost.get()));
     public static final RegistryObject<Item> RIGID_FOCUS = ITEMS.register("rigidfocus", () -> new MagicFocusItem(MainConfig.DredenCost.get()));
+    public static final RegistryObject<Item> SPOOKY_FOCUS = ITEMS.register("spookyfocus", () -> new MagicFocusItem(MainConfig.WraithCost.get()));
     public static final RegistryObject<Item> WITCHGALE_FOCUS = ITEMS.register("witchgalefocus", () -> new MagicFocusItem(MainConfig.WitchGaleCost.get()));
     public static final RegistryObject<Item> SPIDERLING_FOCUS = ITEMS.register("spiderlingfocus", () -> new MagicFocusItem(MainConfig.SpiderlingCost.get()));
     public static final RegistryObject<Item> BRAINEATER_FOCUS = ITEMS.register("braineaterfocus", () -> new MagicFocusItem(MainConfig.BrainEaterCost.get()));
@@ -146,6 +148,7 @@ public class ModItems {
     public static final RegistryObject<Item> SOULWAND = ITEMS.register("soulwand", SoulWand::new);
     public static final RegistryObject<Item> SOULSTAFF = ITEMS.register("soulstaff", SoulStaff::new);
     public static final RegistryObject<Item> CORRUPTSTAFF = ITEMS.register("corrupt_staff", CorruptStaff::new);
+    public static final RegistryObject<Item> FROST_CHARGE = ITEMS.register("frost_charge", FrostChargeItem::new);
 
     //Armors
     public static final RegistryObject<Item> DARKHELM = ITEMS.register("darkhelm", () ->

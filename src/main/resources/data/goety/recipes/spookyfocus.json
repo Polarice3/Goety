@@ -1,0 +1,43 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:osseousfocus"
+  },
+  "craftType": "necroturgy",
+  "entity_to_sacrifice": {
+    "tag": "goety:shade",
+    "display_name": "entity.goety.shade"
+  },
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "item": "goety:magicfabric"
+    },
+    {
+      "tag": "forge:bones"
+    },
+    {
+      "item": "goety:darkfabric"
+    }
+  ],
+  "result": {
+    "item": "goety:spookyfocus"
+  }
+}

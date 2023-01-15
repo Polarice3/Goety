@@ -97,9 +97,24 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> ROT_TREE_ENTER = create("rot_tree_enter");
     public static final RegistryObject<SoundEvent> ROT_TREE_EXIT = create("rot_tree_exit");
 
+    public static final RegistryObject<SoundEvent> DREDEN_AMBIENT = create("dreden_ambient");
+    public static final RegistryObject<SoundEvent> DREDEN_HURT = create("dreden_hurt");
+    public static final RegistryObject<SoundEvent> DREDEN_SHOOT = create("dreden_shoot");
+    public static final RegistryObject<SoundEvent> DREDEN_DEATH = create("dreden_death");
+
+    public static final RegistryObject<SoundEvent> WRAITH_AMBIENT = create("wraith_ambient");
+    public static final RegistryObject<SoundEvent> WRAITH_HURT = create("wraith_hurt");
+    public static final RegistryObject<SoundEvent> WRAITH_ATTACK = create("wraith_attack");
+    public static final RegistryObject<SoundEvent> WRAITH_FIRE = create("wraith_fire");
+    public static final RegistryObject<SoundEvent> WRAITH_TELEPORT = create("wraith_teleport");
+    public static final RegistryObject<SoundEvent> WRAITH_DEATH = create("wraith_death");
+
     public static final RegistryObject<SoundEvent> EVIL_LAUGH = create("evil_laugh");
     public static final RegistryObject<SoundEvent> ROAR_SPELL = create("roar_spell");
     public static final RegistryObject<SoundEvent> FIRE_BREATH = create("fire_breath");
+    public static final RegistryObject<SoundEvent> PREPARE_SPELL = create("prepare_spell");
+    public static final RegistryObject<SoundEvent> CAST_SPELL = create("cast_spell");
+    public static final RegistryObject<SoundEvent> SUMMON_SPELL = create("summon_spell");
     public static final RegistryObject<SoundEvent> SONIC_CHARGE = create("sonic_charge");
     public static final RegistryObject<SoundEvent> FIRE_TORNADO_AMBIENT = create("fire_tornado_ambient");
     public static final RegistryObject<SoundEvent> CORRUPT_EXPLOSION = create("corrupt_explosion");

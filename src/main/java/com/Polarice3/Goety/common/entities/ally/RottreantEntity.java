@@ -1,12 +1,14 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.common.entities.projectiles.RootTrapEntity;
 import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.ModLootTables;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -19,9 +21,7 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -46,6 +46,8 @@ import java.util.stream.Stream;
 
 public class RottreantEntity extends SummonedEntity{
     private static final DataParameter<Integer> DATA_WOOD_TYPE = EntityDataManager.defineId(RottreantEntity.class, DataSerializers.INT);
+    private static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(RottreantEntity.class, DataSerializers.BYTE);
+    public int mushroomGrow;
 
     public RottreantEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);
@@ -73,6 +75,7 @@ public class RottreantEntity extends SummonedEntity{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_WOOD_TYPE, 0);
+        this.entityData.define(FLAGS, (byte)0);
     }
 
     protected int decreaseAirSupply(int pAir) {
@@ -95,14 +98,52 @@ public class RottreantEntity extends SummonedEntity{
         this.entityData.set(DATA_WOOD_TYPE, pType);
     }
 
+    private boolean getFlag(int mask) {
+        int i = this.entityData.get(FLAGS);
+        return (i & mask) != 0;
+    }
+
+    private void setFlags(int mask, boolean value) {
+        int i = this.entityData.get(FLAGS);
+        if (value) {
+            i = i | mask;
+        } else {
+            i = i & ~mask;
+        }
+
+        this.entityData.set(FLAGS, (byte)(i & 255));
+    }
+
+    public boolean isMycelium() {
+        return this.getFlag(1);
+    }
+
+    public void setMycelium(boolean mycelium) {
+        this.setFlags(1, mycelium);
+    }
+
+    public boolean isReadyHarvest(){
+        return this.getFlag(2);
+    }
+
+    public void setReadyHarvest(boolean harvest){
+        this.setFlags(2, harvest);
+    }
+
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
+        pCompound.putInt("MushroomGrow", this.mushroomGrow);
         pCompound.putInt("WoodType", this.getIntWoodType());
+        pCompound.putBoolean("Mycelium", this.isMycelium());
+        pCompound.putBoolean("ReadyHarvest", this.isReadyHarvest());
     }
 
     public void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
+        this.mushroomGrow = pCompound.getInt("MushroomGrow");
         this.setIntWoodType(pCompound.getInt("WoodType"));
+        this.setMycelium(pCompound.getBoolean("Mycelium"));
+        this.setReadyHarvest(pCompound.getBoolean("ReadyHarvest"));
     }
 
     public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
@@ -140,9 +181,11 @@ public class RottreantEntity extends SummonedEntity{
     public boolean hurt(@Nonnull DamageSource source, float amount) {
         boolean felChance = this.level.random.nextFloat() <= 0.25F;
         boolean spiderChance = false;
-        if (RobeArmorFinder.FindFelArmor(this.getTrueOwner())){
-            felChance = this.level.random.nextBoolean();
-            spiderChance = this.level.random.nextBoolean();
+        if (this.getTrueOwner() != null) {
+            if (RobeArmorFinder.FindFelArmor(this.getTrueOwner())) {
+                felChance = this.level.random.nextBoolean();
+                spiderChance = this.level.random.nextBoolean();
+            }
         }
         if (this.getHealth() < this.getMaxHealth()/2){
             felChance = this.level.random.nextFloat() <= 0.75F;
@@ -154,14 +197,17 @@ public class RottreantEntity extends SummonedEntity{
         if (source.getDirectEntity() instanceof AbstractArrowEntity || this.isStaying()){
             amount /= 2.0F;
         }
-        if (source.getDirectEntity() instanceof LivingEntity
-                && source instanceof EntityDamageSource
-                && (source.getMsgId().equals("mob") || source.getMsgId().equals("player"))){
+        if (ModDamageSource.physicalAttacks(source)){
             LivingEntity livingEntity = (LivingEntity) source.getDirectEntity();
-            if (livingEntity.getMainHandItem() != ItemStack.EMPTY && livingEntity.getMainHandItem().getItem() instanceof AxeItem){
-                amount *= 2.0F;
-                felChance = true;
-                this.playSound(ModSounds.ROT_TREE_HEAVY_HURT.get(), 1.0F, 1.0F);
+            if (livingEntity != null) {
+                if (livingEntity.getMainHandItem() != ItemStack.EMPTY && livingEntity.getMainHandItem().getItem() instanceof AxeItem) {
+                    amount *= 2.0F;
+                    felChance = true;
+                    this.playSound(ModSounds.ROT_TREE_HEAVY_HURT.get(), 1.0F, 1.0F);
+                    if (this.isReadyHarvest()) {
+                        this.harvestMushrooms();
+                    }
+                }
             }
         }
         if (felChance){
@@ -188,6 +234,11 @@ public class RottreantEntity extends SummonedEntity{
                 spiderlingMinion.setLimitedLife(200);
                 this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
                 this.level.addFreshEntity(spiderlingMinion);
+            }
+        }
+        if (this.level.random.nextFloat() <= 0.25F){
+            if (this.isReadyHarvest()){
+                this.harvestMushrooms();
             }
         }
         return super.hurt(source, amount);
@@ -232,16 +283,62 @@ public class RottreantEntity extends SummonedEntity{
                 this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 0, false, false, false));
             }
         }
+        if (this.isMycelium()){
+            this.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 100, 0, false, false, false));
+            if (!this.isReadyHarvest()) {
+                ++this.mushroomGrow;
+                if (this.mushroomGrow >= TickUtil.ticksToMinutes(5)) {
+                    this.setReadyHarvest(true);
+                    this.mushroomGrow = 0;
+                    this.playSound(SoundEvents.ROOTS_PLACE, 1.0F, 1.0F);
+                    if (this.level.isClientSide) {
+                        this.addParticlesAroundSelf(ParticleTypes.MYCELIUM);
+                    }
+                }
+            }
+            if (this.level.random.nextInt(25) == 0 && this.tickCount % TickUtil.ticksToSeconds(30) == 0) {
+                int i = 5;
+                int j = 4;
+                BlockPos pPos = this.blockPosition();
+                BlockState blockState = Blocks.RED_MUSHROOM.defaultBlockState();
+                if (this.level.random.nextBoolean()) {
+                    blockState = Blocks.BROWN_MUSHROOM.defaultBlockState();
+                }
+
+                for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-j, -1, -j), pPos.offset(j, 1, j))) {
+                    if (this.level.getBlockState(blockpos).is(blockState.getBlock())) {
+                        --i;
+                        if (i <= 0) {
+                            return;
+                        }
+                    }
+                }
+
+                BlockPos blockpos1 = pPos.offset(this.level.random.nextInt(3) - 1, this.level.random.nextInt(2) - this.level.random.nextInt(2), this.level.random.nextInt(3) - 1);
+
+                for (int k = 0; k < 4; ++k) {
+                    if (this.level.isEmptyBlock(blockpos1) && blockState.canSurvive(this.level, blockpos1)) {
+                        pPos = blockpos1;
+                    }
+
+                    blockpos1 = pPos.offset(this.level.random.nextInt(3) - 1, this.level.random.nextInt(2) - this.level.random.nextInt(2), this.level.random.nextInt(3) - 1);
+                }
+
+                if (this.level.isEmptyBlock(blockpos1) && blockState.canSurvive(this.level, blockpos1)) {
+                    this.level.setBlock(blockpos1, blockState, 2);
+                }
+            }
+        }
         if (this.isStaying()){
             this.setDeltaMovement(0, this.getDeltaMovement().y(), 0);
             if (!this.level.isClientSide) {
                 if (this.getTarget() != null) {
-/*                    if (this.tickCount % 100 == 0){
-                        if (this.level.random.nextFloat() <= 0.25F && this.getTarget().distanceTo(this) <= 4.0F){
+                    if (this.tickCount % 100 == 0){
+                        if (this.level.random.nextFloat() <= 0.25F && this.getTarget().distanceTo(this) <= 16.0F){
                             RootTrapEntity rootTrap = new RootTrapEntity(this.level, BlockFinder.fangSpawnPosition(this.getTarget()), 1, this);
                             this.level.addFreshEntity(rootTrap);
                         }
-                    }*/
+                    }
                     if (this.tickCount % 20 == 0){
                         if (this.level.random.nextBoolean()) {
                             FelFlyEntity felFly = ModEntityType.FEL_FLY.get().create(this.level);
@@ -310,6 +407,9 @@ public class RottreantEntity extends SummonedEntity{
 
     }
 
+    public void stayingPosition() {
+    }
+
     @OnlyIn(Dist.CLIENT)
     protected void addParticlesAroundSelf(IParticleData pParticleData) {
         for(int i = 0; i < 5; ++i) {
@@ -350,7 +450,33 @@ public class RottreantEntity extends SummonedEntity{
                 return ActionResultType.sidedSuccess(this.level.isClientSide);
             }
         }
+        if (item instanceof ShearsItem){
+            if (this.isReadyHarvest()){
+                this.harvestMushrooms();
+                this.playSound(SoundEvents.MOOSHROOM_SHEAR, 1.0F, 1.0F);
+                ItemHelper.hurtAndBreak(itemstack, 1, pPlayer);
+                return ActionResultType.sidedSuccess(this.level.isClientSide);
+            }
+        }
+        if (item == Items.MYCELIUM){
+            if (!this.isMycelium()){
+                this.setMycelium(true);
+                this.playSound(SoundEvents.GRASS_BREAK, 1.0F, 1.0F);
+                if (!pPlayer.abilities.instabuild) {
+                    itemstack.shrink(1);
+                }
+                return ActionResultType.sidedSuccess(this.level.isClientSide);
+            }
+        }
         return ActionResultType.PASS;
+    }
+
+    public void harvestMushrooms(){
+        this.setReadyHarvest(false);
+        for(int i = 0; i < 2; ++i) {
+            this.spawnAtLocation(new ItemStack(Items.RED_MUSHROOM), 0.5F);
+            this.spawnAtLocation(new ItemStack(Items.BROWN_MUSHROOM), 0.5F);
+        }
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {

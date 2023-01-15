@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.client.model;
 
-import com.Polarice3.Goety.common.entities.neutral.ISpewing;
+import com.Polarice3.Goety.common.entities.neutral.AbstractDredenEntity;
+import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -10,14 +11,14 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class DredenModel<T extends LivingEntity> extends SegmentedModel<T> {
+public class AbstractWraithModel<T extends LivingEntity> extends SegmentedModel<T> {
     private final ModelRenderer Ghost;
     private final ModelRenderer head;
     private final ModelRenderer RightArm;
     private final ModelRenderer LeftArm;
     private final ModelRenderer body;
 
-    public DredenModel() {
+    public AbstractWraithModel() {
         texWidth = 64;
         texHeight = 64;
 
@@ -58,7 +59,7 @@ public class DredenModel<T extends LivingEntity> extends SegmentedModel<T> {
         ModelRenderer robe = new ModelRenderer(this);
         robe.setPos(0.0F, 0.0F, 0.0F);
         LeftArm.addChild(robe);
-        robe.texOffs(0, 33).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, false);
+        robe.texOffs(0, 33).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, true);
 
         body = new ModelRenderer(this);
         body.setPos(0.0F, -24.0F, 0.0F);
@@ -78,11 +79,31 @@ public class DredenModel<T extends LivingEntity> extends SegmentedModel<T> {
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-        float f = ageInTicks * 0.0025F;
+    public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
+        float f = pAgeInTicks * 0.0025F;
         this.Ghost.y = MathHelper.sin(f * 40.0F) + 24.0F;
-        if (entity instanceof ISpewing){
-            animateArms(this.LeftArm, this.RightArm, ((ISpewing) entity).isSpewing(), this.attackTime, ageInTicks);
+        this.body.xRot = 0.1745F + MathHelper.cos(pLimbSwing * 0.6662F) * 0.31F * pLimbSwingAmount;
+        this.body.xRot += MathHelper.cos(pAgeInTicks * 0.09F) * 0.1F + 0.1F;
+        if (pEntity instanceof AbstractWraithEntity){
+            AbstractWraithEntity wraith = (AbstractWraithEntity) pEntity;
+            this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+            this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
+            if (wraith.isFiring()){
+                float f7 = MathHelper.sin(((float)(wraith.firingTick - 20) - wraith.firingTick2) / 20.0F * (float)Math.PI * 0.25F);
+                if (f7 > 0){
+                    f7 *= -1;
+                }
+                this.head.xRot = (((float)Math.PI) * f7) + 0.5F;
+                this.RightArm.xRot = ((float)Math.PI) * f7;
+                this.LeftArm.xRot = ((float)Math.PI) * f7;
+            } else {
+                if (pEntity instanceof AbstractDredenEntity){
+                    animateArms(this.LeftArm, this.RightArm, ((AbstractDredenEntity) pEntity).isSpewing(), this.attackTime, pAgeInTicks);
+                } else {
+                    this.RightArm.xRot = 0.0F;
+                    this.LeftArm.xRot = 0.0F;
+                }
+            }
         }
     }
 

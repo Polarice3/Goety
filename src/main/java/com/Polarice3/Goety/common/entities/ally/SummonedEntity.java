@@ -10,6 +10,9 @@ import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
@@ -31,18 +34,21 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class SummonedEntity extends OwnedEntity {
     protected static final DataParameter<Byte> SUMMONED_FLAGS = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BYTE);
+    private static final UUID SPEED_MODIFIER_UUID = UUID.fromString("9c47949c-b896-4802-8e8a-f08c50791a8a");
+    private static final AttributeModifier SPEED_MODIFIER = new AttributeModifier(SPEED_MODIFIER_UUID, "Staying speed penalty", -1.0D, AttributeModifier.Operation.ADDITION);
     public boolean upgraded;
 
     protected SummonedEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
@@ -54,11 +60,6 @@ public class SummonedEntity extends OwnedEntity {
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F));
         this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-    }
-
-    public void aiStep() {
-        this.updateSwingTime();
-        super.aiStep();
     }
 
     public void checkDespawn() {
@@ -89,23 +90,22 @@ public class SummonedEntity extends OwnedEntity {
 
     public void tick(){
         super.tick();
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (this.isStaying()){
-            boolean docile = this.getLastHurtByMob() == null || this.getLastHurtByMob().isDeadOrDying();
-            if (this.getTrueOwner() != null) {
-                if (this.getTrueOwner().getLastHurtByMob() != null && !this.getTrueOwner().getLastHurtByMob().isDeadOrDying()) {
-                    if (this.distanceTo(this.getTrueOwner()) <= 8.0F) {
-                        docile = false;
-                    }
-                }
+            if (this.navigation.getPath() != null) {
+                this.navigation.stop();
             }
-            if (docile){
-                this.setTarget(null);
-                if (this.navigation.getPath() != null) {
-                    this.navigation.stop();
-                }
+            if (modifiableattributeinstance != null && this.getAttribute(Attributes.MOVEMENT_SPEED) != null) {
+                modifiableattributeinstance.removeModifier(SPEED_MODIFIER);
+                modifiableattributeinstance.addTransientModifier(SPEED_MODIFIER);
             }
+            this.stayingPosition();
             if (this.isWandering()) {
                 this.setWandering(false);
+            }
+        } else {
+            if (modifiableattributeinstance != null && modifiableattributeinstance.hasModifier(SPEED_MODIFIER)) {
+                modifiableattributeinstance.removeModifier(SPEED_MODIFIER);
             }
         }
         if (this.isWandering()){
@@ -174,16 +174,28 @@ public class SummonedEntity extends OwnedEntity {
         }
     }
 
+    public void stayingPosition(){
+        if (this.getTarget() != null){
+            this.getLookControl().setLookAt(this.getTarget(), this.getMaxHeadYRot(), this.getMaxHeadXRot());
+            double d2 = this.getTarget().getX() - this.getX();
+            double d1 = this.getTarget().getZ() - this.getZ();
+            this.yRot = -((float) MathHelper.atan2(d2, d1)) * (180F / (float) Math.PI);
+            this.yBodyRot = this.yRot;
+        }
+    }
+
     protected boolean isSunSensitive() {
         return false;
     }
 
-    public boolean hurt(@Nonnull DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         if (MainConfig.MinionsMasterImmune.get()) {
             if (source.getEntity() instanceof SummonedEntity) {
                 SummonedEntity summoned = (SummonedEntity) source.getEntity();
-                if (summoned.getTrueOwner() == this.getTrueOwner()) {
-                    return false;
+                if (!summoned.isHostile() && !this.isHostile()) {
+                    if (summoned.getTrueOwner() == this.getTrueOwner() && this.getTrueOwner() != null) {
+                        return false;
+                    }
                 }
             }
         }
@@ -437,7 +449,7 @@ public class SummonedEntity extends OwnedEntity {
         }
     }
 
-    class WanderGoal extends WaterAvoidingRandomWalkingGoal{
+    public class WanderGoal extends WaterAvoidingRandomWalkingGoal{
 
         public WanderGoal(CreatureEntity p_i47301_1_, double p_i47301_2_) {
             this(p_i47301_1_, p_i47301_2_, 0.001F);

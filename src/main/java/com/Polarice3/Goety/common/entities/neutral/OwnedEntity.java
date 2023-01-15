@@ -7,7 +7,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -21,14 +21,13 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.*;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 public class OwnedEntity extends CreatureEntity implements IOwned{
@@ -40,7 +39,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
 
     protected OwnedEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
-        this.reassessGoal();
+        this.checkHostility();
     }
 
     protected void registerGoals() {
@@ -49,19 +48,30 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
     }
 
-    public void reassessGoal() {
+    public void checkHostility() {
         if (this.level != null && !this.level.isClientSide) {
-            if (this.getTrueOwner() instanceof MonsterEntity){
+            if (this.getTrueOwner() instanceof IMob){
+                this.setHostile(true);
+            }
+            if (this.getEntity() instanceof IMob){
                 this.setHostile(true);
             }
         }
+    }
+
+    public void aiStep() {
+        this.updateSwingTime();
+        if (this.isHostile()){
+            this.updateNoActionTime();
+        }
+        super.aiStep();
     }
 
     public void tick(){
         super.tick();
         if (this.getTarget() instanceof OwnedEntity){
             OwnedEntity ownedEntity = (OwnedEntity) this.getTarget();
-            if (ownedEntity.getTrueOwner() == this.getTrueOwner()){
+            if (ownedEntity.getTrueOwner() == this.getTrueOwner() && this.getTrueOwner() != null){
                 this.setTarget(null);
                 if (this.getLastHurtByMob() == ownedEntity){
                     this.setLastHurtByMob(null);
@@ -85,13 +95,22 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
         for (OwnedEntity target : this.level.getEntitiesOfClass(OwnedEntity.class, this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE)))) {
             if (target.getTrueOwner() != this.getTrueOwner()
                     && this.getTrueOwner() != target.getTrueOwner()
-                    && target.getTarget() == this.getTrueOwner()){
+                    && target.getTarget() == this.getTrueOwner()
+                    && this.getTrueOwner() != null){
                 this.setTarget(target);
             }
         }
         if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
             this.lifeSpanDamage();
         }
+    }
+
+    protected void updateNoActionTime() {
+        float f = this.getBrightness();
+        if (f > 0.5F) {
+            this.noActionTime += 2;
+        }
+
     }
 
     public void lifeSpanDamage(){
@@ -118,7 +137,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
             }
             return livingentity.isAlliedTo(entityIn);
         }
-        if (entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() == this.getTrueOwner()){
+        if (entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() != null && ((OwnedEntity) entityIn).getTrueOwner() == this.getTrueOwner() && this.getTrueOwner() != null){
             return true;
         }
         return super.isAlliedTo(entityIn);
@@ -155,7 +174,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
             this.setLimitedLife(compound.getInt("LifeTicks"));
         }
 
-        this.reassessGoal();
+        this.checkHostility();
     }
 
     public void addAdditionalSaveData(CompoundNBT compound) {
@@ -179,7 +198,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-        this.reassessGoal();
+        this.checkHostility();
         return pSpawnData;
     }
 
@@ -233,6 +252,19 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
     @Override
     protected boolean shouldDespawnInPeaceful() {
         return this.isHostile();
+    }
+
+    public static boolean checkHostileSpawnRules(EntityType<? extends OwnedEntity> pType, IServerWorld pLevel, SpawnReason pReason, BlockPos pPos, Random pRandom) {
+        return pLevel.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(pLevel, pPos, pRandom) && checkMobSpawnRules(pType, pLevel, pReason, pPos, pRandom);
+    }
+
+    public static boolean isDarkEnoughToSpawn(IServerWorld pLevel, BlockPos pPos, Random pRandom) {
+        if (pLevel.getBrightness(LightType.SKY, pPos) > pRandom.nextInt(32)) {
+            return false;
+        } else {
+            int i = pLevel.getLevel().isThundering() ? pLevel.getMaxLocalRawBrightness(pPos, 10) : pLevel.getMaxLocalRawBrightness(pPos);
+            return i <= pRandom.nextInt(8);
+        }
     }
 
     public class OwnerHurtTargetGoal extends TargetGoal {

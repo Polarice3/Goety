@@ -310,7 +310,7 @@ public class UrbhadhachEntity extends MonsterEntity {
                 }
                 this.roarCooldown = 300;
                 this.setRoarTick(20);
-                this.handleEntityEvent((byte) 104);
+                this.level.broadcastEntityEvent(this, (byte) 104);
             }
         }
 

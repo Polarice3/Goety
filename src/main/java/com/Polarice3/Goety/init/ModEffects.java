@@ -45,6 +45,12 @@ public class ModEffects {
             () -> new ModEffect(EffectType.BENEFICIAL, 9643043)
                     .addAttributeModifier(Attributes.ATTACK_DAMAGE, "f033b086-8a5e-44f2-8655-888dd700691c",
                             1.0D, AttributeModifier.Operation.ADDITION));
+    public static final RegistryObject<Effect> TRAPPED = EFFECTS.register("trapped",
+            () -> new ModEffect(EffectType.HARMFUL, 0)
+                    .addAttributeModifier(Attributes.MOVEMENT_SPEED, "5b6594a7-03c7-47b4-bacb-16fbb661219d",
+                            -0.5D, AttributeModifier.Operation.MULTIPLY_TOTAL)
+                    .addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, "cea84175-df3e-42dc-b4d2-22b4a4c2c6c6",
+                            1.0F, AttributeModifier.Operation.ADDITION));
 
     public static final RegistryObject<Effect> DESICCATE = EFFECTS.register("desiccate",
             DesiccateEffect::new);

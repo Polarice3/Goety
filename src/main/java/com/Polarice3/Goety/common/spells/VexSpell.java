@@ -43,31 +43,33 @@ public class VexSpell extends SummonSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
-    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
-        if (!worldIn.isClientSide()) {
-            int enchantment = 0;
-            int duration = 1;
-            if (entityLiving instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) entityLiving;
-                if (WandUtil.enchantedFocus(player)){
-                    enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
-                    duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
-                }
-                this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
+    public void commonResult(ServerWorld worldIn, LivingEntity entityLiving){
+        if (entityLiving instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entityLiving;
+            if (WandUtil.enchantedFocus(player)){
+                enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            if (entityLiving.isCrouching()) {
-                for (Entity entity : worldIn.getAllEntities()) {
-                    if (entity instanceof FriendlyVexEntity) {
-                        if (((FriendlyVexEntity) entity).getTrueOwner() == entityLiving) {
-                            entity.kill();
-                        }
+            this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
+        }
+        if (entityLiving.isCrouching()) {
+            for (Entity entity : worldIn.getAllEntities()) {
+                if (entity instanceof FriendlyVexEntity) {
+                    if (((FriendlyVexEntity) entity).getTrueOwner() == entityLiving) {
+                        entity.kill();
                     }
                 }
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            } else {
+            }
+            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+            }
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        }
+    }
+
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
+        this.commonResult(worldIn, entityLiving);
+        if (!entityLiving.isCrouching()) {
                 for (int i1 = 0; i1 < 3; ++i1) {
                     BlockPos blockpos = entityLiving.blockPosition();
                     FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
@@ -93,34 +95,11 @@ public class VexSpell extends SummonSpells {
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 this.SummonDown(entityLiving);
             }
-        }
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide()) {
-            int enchantment = 0;
-            int duration = 1;
-            if (entityLiving instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) entityLiving;
-                if (WandUtil.enchantedFocus(player)){
-                    enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
-                    duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
-                }
-                this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
-            }
-            if (entityLiving.isCrouching()) {
-                for (Entity entity : worldIn.getAllEntities()) {
-                    if (entity instanceof FriendlyVexEntity) {
-                        if (((FriendlyVexEntity) entity).getTrueOwner() == entityLiving) {
-                            entity.kill();
-                        }
-                    }
-                }
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            } else {
+        this.commonResult(worldIn, entityLiving);
+        if (!entityLiving.isCrouching()) {
                 for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
                     BlockPos blockpos = entityLiving.blockPosition();
                     FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
@@ -146,7 +125,6 @@ public class VexSpell extends SummonSpells {
                 this.SummonDown(entityLiving);
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }
-        }
     }
 
     public int VexLimit(LivingEntity entityLiving){

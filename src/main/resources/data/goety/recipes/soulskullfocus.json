@@ -12,7 +12,10 @@
       "item": "minecraft:skeleton_skull"
     },
     {
-      "tag": "minecraft:soul_fire_base_blocks"
+      "item": "goety:ectoplasm"
+    },
+    {
+      "item": "goety:ectoplasm"
     },
     {
       "item": "minecraft:skeleton_skull"

@@ -39,7 +39,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
 
     public TormentorEntity(EntityType<? extends AbstractIllagerEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
-        this.moveControl = new MobUtil.MoveHelperController(this);
+        this.moveControl = new MobUtil.MinionMovementController(this);
         this.xpReward = 6;
     }
 

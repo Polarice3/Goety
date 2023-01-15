@@ -106,6 +106,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> DREDEN_MINION_SPAWN_EGG = ITEMS.register("dreden_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DREDEN_MINION, 0x4288ae, 0x182022, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> WRAITH_MINION_SPAWN_EGG = ITEMS.register("wraith_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.WRAITH_MINION, 0x0e0d36, 0x2586d9, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> ZPIGLIN_MINION_SPAWN_EGG = ITEMS.register("zpiglin_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.ZPIGLIN_MINION, 0x594036, 0xf5da2a, new Item.Properties().tab(Goety.TAB)));
 
@@ -132,6 +135,9 @@ public class ModSpawnEggs {
 
     public static final RegistryObject<ModSpawnEggItem> DREDEN_SPAWN_EGG = ITEMS.register("dreden_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DREDEN, 0x3f6170, 0x7bb8d4, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> WRAITH_SPAWN_EGG = ITEMS.register("wraith_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.WRAITH, 0x16215c, 0x82d8f8, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> URBHADHACH_SPAWN_EGG = ITEMS.register("urbhadhach_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.URBHADHACH, 0x484848, 0x1c302f, new Item.Properties().tab(Goety.TAB)));

@@ -39,15 +39,15 @@ public abstract class Spells {
         }
     }
 
-    protected static RayTraceResult rayTrace(World worldIn, LivingEntity livingEntity, int range, double radius) {
-        if (entityResult(worldIn, livingEntity, range, radius) == null){
-            return blockResult(worldIn, livingEntity);
+    protected RayTraceResult rayTrace(World worldIn, LivingEntity livingEntity, int range, double radius) {
+        if (this.entityResult(worldIn, livingEntity, range, radius) == null){
+            return this.blockResult(worldIn, livingEntity, range);
         } else {
-            return entityResult(worldIn, livingEntity, range, radius);
+            return this.entityResult(worldIn, livingEntity, range, radius);
         }
     }
 
-    protected static BlockRayTraceResult blockResult(World worldIn, LivingEntity livingEntity) {
+    protected BlockRayTraceResult blockResult(World worldIn, LivingEntity livingEntity, double range) {
         float f = livingEntity.xRot;
         float f1 = livingEntity.yRot;
         Vector3d vector3d = livingEntity.getEyePosition(1.0F);
@@ -57,12 +57,11 @@ public abstract class Spells {
         float f5 = MathHelper.sin(-f * ((float)Math.PI / 180F));
         float f6 = f3 * f4;
         float f7 = f2 * f4;
-        double d0 = livingEntity.getAttribute(net.minecraftforge.common.ForgeMod.REACH_DISTANCE.get()).getValue();
-        Vector3d vector3d1 = vector3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
+        Vector3d vector3d1 = vector3d.add((double)f6 * range, (double)f5 * range, (double)f7 * range);
         return worldIn.clip(new RayTraceContext(vector3d, vector3d1, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, livingEntity));
     }
 
-    protected static EntityRayTraceResult entityResult(World worldIn, LivingEntity livingEntity, int range, double radius){
+    protected EntityRayTraceResult entityResult(World worldIn, LivingEntity livingEntity, int range, double radius){
         Vector3d srcVec = livingEntity.getEyePosition(1.0F);
         Vector3d lookVec = livingEntity.getViewVector(1.0F);
         Vector3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);

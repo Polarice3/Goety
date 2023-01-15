@@ -12,6 +12,7 @@ public class RobeModel<T extends LivingEntity> extends BipedModel<T> {
     public final ModelRenderer Helmet_r1;
     public final ModelRenderer Helmet_r2;
     public final ModelRenderer Mask;
+    public final ModelRenderer Crown;
     public final ModelRenderer Body;
     public final ModelRenderer RightArm;
     public final ModelRenderer Pauldron;
@@ -38,7 +39,7 @@ public class RobeModel<T extends LivingEntity> extends BipedModel<T> {
         hat = new ModelRenderer(this);
         hat.setPos(0.0F, -4.0F, 0.0F);
         darkrobe.addChild(hat);
-        hat.texOffs(0, 32).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, 1.0F, false);
+        hat.texOffs(0, 32).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.75F, false);
 
         Helmet_r1 = new ModelRenderer(this);
         Helmet_r1.setPos(0.0F, 0.8995F, 7.1213F);
@@ -51,6 +52,11 @@ public class RobeModel<T extends LivingEntity> extends BipedModel<T> {
         hat.addChild(Helmet_r2);
         setRotationAngle(Helmet_r2, -0.3927F, 0.0F, 0.0F);
         Helmet_r2.texOffs(24, 32).addBox(-3.0F, -2.5F, -1.0F, 6.0F, 5.0F, 2.0F, 1.0F, false);
+
+        Crown = new ModelRenderer(this);
+        Crown.setPos(0.0F, 0.0F, 0.0F);
+        hat.addChild(Crown);
+        Crown.texOffs(0, 116).addBox(-4.0F, -6.0F, -4.0F, 8.0F, 4.0F, 8.0F, 0.9F, false);
 
         Mask = new ModelRenderer(this);
         Mask.setPos(0.0F, 0.0F, 0.0F);

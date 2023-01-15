@@ -10,7 +10,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.GameRules;
@@ -20,22 +19,26 @@ import java.util.function.Predicate;
 public class AllyTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 
     public AllyTargetGoal(MobEntity ownedEntity, Class<T> pClass) {
-        super(ownedEntity, pClass, 5, false, false, predicate(ownedEntity));
+        super(ownedEntity, pClass, 5, true, false, predicate(ownedEntity));
+    }
+
+    public AllyTargetGoal(MobEntity ownedEntity, Class<T> pClass, boolean pMustSee, boolean pMustReach) {
+        super(ownedEntity, pClass, 5, pMustSee, pMustReach, predicate(ownedEntity));
     }
 
     public static Predicate<LivingEntity> predicate(LivingEntity livingEntity){
         if (livingEntity instanceof IOwned){
             IOwned ownedEntity = (IOwned) livingEntity;
-            if (ownedEntity.getTrueOwner() instanceof MonsterEntity){
+            if (ownedEntity.getTrueOwner() instanceof IMob || ownedEntity instanceof IMob){
                 return (entity) -> entity instanceof PlayerEntity
-                        && !(entity instanceof IOwned && ((IOwned) entity).getTrueOwner() == ownedEntity.getTrueOwner());
+                        && !(entity instanceof IOwned && ((IOwned) entity).getTrueOwner() == ownedEntity.getTrueOwner() && ownedEntity.getTrueOwner() != null);
             } else {
                 return (entity) ->
                         entity instanceof IMob
                                 && !(entity instanceof CreeperEntity && entity.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
                                 && !(entity instanceof SpiderEntity && ownedEntity.getTrueOwner() != null && RobeArmorFinder.FindFelHelm(ownedEntity.getTrueOwner()))
                                 && !(entity.getMobType() == CreatureAttribute.UNDEAD && ownedEntity.getTrueOwner() != null && ownedEntity.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) ownedEntity.getTrueOwner()) && MainConfig.LichUndeadFriends.get())
-                                && !(entity instanceof IOwned && ((IOwned) entity).getTrueOwner() == ownedEntity.getTrueOwner());
+                                && !(entity instanceof IOwned && ((IOwned) entity).getTrueOwner() == ownedEntity.getTrueOwner() && ownedEntity.getTrueOwner() != null);
             }
         } else {
             return null;

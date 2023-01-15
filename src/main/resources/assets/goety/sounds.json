@@ -1056,6 +1056,134 @@
     ],
     "subtitle": "subtitle.goety.rot_tree_exit"
   },
+  "dreden_ambient": {
+    "sounds": [
+      {
+        "name": "goety:dreden/idle1"
+      },
+      {
+        "name": "goety:dreden/idle2"
+      },
+      {
+        "name": "goety:dreden/idle3"
+      }
+    ],
+    "subtitle": "subtitle.goety.dreden_ambient"
+  },
+  "dreden_hurt": {
+    "sounds": [
+      {
+        "name": "goety:dreden/hurt1"
+      },
+      {
+        "name": "goety:dreden/hurt2"
+      },
+      {
+        "name": "goety:dreden/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.dreden_hurt"
+  },
+  "dreden_shoot": {
+    "sounds": [
+      {
+        "name": "goety:dreden/shoot1"
+      },
+      {
+        "name": "goety:dreden/shoot2"
+      },
+      {
+        "name": "goety:dreden/shoot3"
+      }
+    ],
+    "subtitle": "subtitle.goety.dreden_shoot"
+  },
+  "dreden_death": {
+    "sounds": [
+      {
+        "name": "goety:dreden/death1"
+      },
+      {
+        "name": "goety:dreden/death2"
+      }
+    ],
+    "subtitle": "subtitle.goety.dreden_death"
+  },
+  "wraith_ambient": {
+    "sounds": [
+      {
+        "name": "goety:wraith/idle1"
+      },
+      {
+        "name": "goety:wraith/idle2"
+      },
+      {
+        "name": "goety:wraith/idle3"
+      },
+      {
+        "name": "goety:wraith/idle4"
+      },
+      {
+        "name": "goety:wraith/idle5"
+      },
+      {
+        "name": "goety:wraith/idle6"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_ambient"
+  },
+  "wraith_hurt": {
+    "sounds": [
+      {
+        "name": "goety:wraith/hurt1"
+      },
+      {
+        "name": "goety:wraith/hurt2"
+      },
+      {
+        "name": "goety:wraith/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_hurt"
+  },
+  "wraith_attack": {
+    "sounds": [
+      {
+        "name": "goety:wraith/attack"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_attack"
+  },
+  "wraith_fire": {
+    "sounds": [
+      {
+        "name": "goety:wraith/fire"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_fire"
+  },
+  "wraith_teleport": {
+    "sounds": [
+      {
+        "name": "goety:wraith/teleport1"
+      },
+      {
+        "name": "goety:wraith/teleport2"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_teleport"
+  },
+  "wraith_death": {
+    "sounds": [
+      {
+        "name": "goety:wraith/death1"
+      },
+      {
+        "name": "goety:wraith/death2"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_death"
+  },
   "evil_laugh": {
     "sounds": [
       {
@@ -1087,6 +1215,42 @@
       }
     ],
     "subtitle": "subtitle.goety.sonic_charge"
+  },
+  "prepare_spell": {
+    "sounds": [
+      {
+        "name": "goety:spell/prepare_spell1"
+      },
+      {
+        "name": "goety:spell/prepare_spell2"
+      }
+    ],
+    "subtitle": "subtitle.goety.prepare_spell"
+  },
+  "cast_spell": {
+    "sounds": [
+      {
+        "name": "goety:spell/cast_spell1"
+      },
+      {
+        "name": "goety:spell/cast_spell2"
+      }
+    ],
+    "subtitle": "subtitle.goety.cast_spell"
+  },
+  "summon_spell": {
+    "sounds": [
+      {
+        "name": "goety:spell/summon_spell1"
+      },
+      {
+        "name": "goety:spell/summon_spell2"
+      },
+      {
+        "name": "goety:spell/summon_spell3"
+      }
+    ],
+    "subtitle": "subtitle.goety.summon_spell"
   },
   "fire_tornado_ambient": {
     "sounds": [

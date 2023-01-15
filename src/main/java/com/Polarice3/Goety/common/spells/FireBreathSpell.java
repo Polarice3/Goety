@@ -40,12 +40,13 @@ public class FireBreathSpell extends SpewingSpell{
             }
             this.IncreaseInfamy(MainConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        Entity target = getTarget(entityLiving, range + 15, 1.0F);
         if (!worldIn.isClientSide) {
-            if (target != null) {
-                if (!target.fireImmune()) {
-                    target.setSecondsOnFire(5 * burning);
-                    target.hurt(ModDamageSource.fireBreath(entityLiving), 2.0F + enchantment);
+            for (Entity target : getTarget(entityLiving, range + 15)) {
+                if (target != null) {
+                    if (!target.fireImmune()) {
+                        target.setSecondsOnFire(5 * burning);
+                        target.hurt(ModDamageSource.fireBreath(entityLiving), 2.0F + enchantment);
+                    }
                 }
             }
         }
@@ -66,12 +67,13 @@ public class FireBreathSpell extends SpewingSpell{
             }
             this.IncreaseInfamy(MainConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        Entity target = getTarget(entityLiving, range + 18, 2.0F);
         if (!worldIn.isClientSide) {
-            if (target != null) {
-                if (!target.fireImmune()) {
-                    target.setSecondsOnFire(8 * burning);
-                    target.hurt(ModDamageSource.fireBreath(entityLiving), 4.0F + enchantment);
+            for (Entity target : getTarget(entityLiving, range + 18)) {
+                if (target != null) {
+                    if (!target.fireImmune()) {
+                        target.setSecondsOnFire(8 * burning);
+                        target.hurt(ModDamageSource.fireBreath(entityLiving), 4.0F + enchantment);
+                    }
                 }
             }
         }

@@ -1,18 +1,18 @@
 package com.Polarice3.Goety.common.entities.ai;
 
 import com.Polarice3.Goety.common.entities.neutral.ISpewing;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
 
+/**
+ * Spewing Attack Goal Codes based of codes from @TeamTwilight
+ */
 public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
     private final T attacker;
     private LivingEntity attackTarget;
@@ -72,9 +72,10 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
 
         int duration = this.maxDuration - this.durationLeft;
         if (duration > 5) {
-            Entity target = getTargets();
-            if (target != null) {
-                this.attacker.doSpewing(target);
+            for (Entity entity : MobUtil.getTargets(this.attacker, this.spewingRange)) {
+                if (entity != null) {
+                    this.attacker.doSpewing(entity);
+                }
             }
         }
     }
@@ -84,40 +85,6 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
         this.durationLeft = 0;
         this.attackTarget = null;
         this.attacker.setSpewing(false);
-    }
-
-    private Entity getTargets() {
-        Entity target = null;
-        double range = this.spewingRange;
-        Vector3d srcVec = new Vector3d(this.attacker.getX(), this.attacker.getY() + 0.25, this.attacker.getZ());
-        Vector3d lookVec = this.attacker.getViewVector(1.0F);
-        Vector3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
-        float size = 1.0F;
-        List<Entity> possibleTargets = this.attacker.level.getEntities(this.attacker, this.attacker.getBoundingBox().expandTowards(lookVec.x * range, lookVec.y * range, lookVec.z * range).inflate(size, size, size));
-        double hitDist = 0;
-
-        for (Entity entity : possibleTargets) {
-            if (entity.isPickable() && entity != this.attacker) {
-                float borderSize = entity.getPickRadius();
-                AxisAlignedBB collisionBB = entity.getBoundingBox().inflate(borderSize, borderSize, borderSize);
-                Optional<Vector3d> interceptPos = collisionBB.clip(srcVec, destVec);
-
-                if (collisionBB.contains(srcVec)) {
-                    if (0.0D <= hitDist) {
-                        target = entity;
-                        hitDist = 0.0D;
-                    }
-                } else if (interceptPos.isPresent()) {
-                    double possibleDist = srcVec.distanceTo(interceptPos.get());
-
-                    if (possibleDist < hitDist || hitDist == 0.0D) {
-                        target = entity;
-                        hitDist = possibleDist;
-                    }
-                }
-            }
-        }
-        return target;
     }
 
     public void rotateAttacker(double x, double y, double z, float pDeltaYaw, float pDeltaPitch) {

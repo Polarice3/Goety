@@ -27,6 +27,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -36,6 +37,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class MobUtil {
@@ -123,8 +127,8 @@ public class MobUtil {
         return lootcontext$builder;
     }
 
-    public static class MoveHelperController extends MovementController {
-        public MoveHelperController(MobEntity mob) {
+    public static class MinionMovementController extends MovementController {
+        public MinionMovementController(MobEntity mob) {
             super(mob);
         }
 
@@ -148,6 +152,39 @@ public class MobUtil {
                     this.mob.yBodyRot = this.mob.yRot;
                 }
 
+            }
+        }
+    }
+
+    public static class WraithMoveController extends MovementController {
+        public WraithMoveController(MobEntity mob) {
+            super(mob);
+        }
+
+        public void tick() {
+            if (this.mob.isNoGravity()) {
+                if (this.operation == Action.MOVE_TO) {
+                    Vector3d vector3d = new Vector3d(this.wantedX - this.mob.getX(), this.wantedY - this.mob.getY(), this.wantedZ - this.mob.getZ());
+                    double d0 = vector3d.length();
+                    if (d0 < this.mob.getBoundingBox().getSize()) {
+                        this.operation = Action.WAIT;
+                        this.mob.setDeltaMovement(this.mob.getDeltaMovement().scale(0.5D));
+                    } else {
+                        this.mob.setDeltaMovement(this.mob.getDeltaMovement().add(vector3d.scale(this.speedModifier * 0.05D / d0)));
+                        if (this.mob.getTarget() == null) {
+                            Vector3d vector3d1 = this.mob.getDeltaMovement();
+                            this.mob.yRot = -((float) MathHelper.atan2(vector3d1.x, vector3d1.z)) * (180F / (float) Math.PI);
+                        } else {
+                            double d2 = this.mob.getTarget().getX() - this.mob.getX();
+                            double d1 = this.mob.getTarget().getZ() - this.mob.getZ();
+                            this.mob.yRot = -((float) MathHelper.atan2(d2, d1)) * (180F / (float) Math.PI);
+                        }
+                        this.mob.yBodyRot = this.mob.yRot;
+                    }
+
+                }
+            } else {
+                super.tick();
             }
         }
     }
@@ -284,6 +321,43 @@ public class MobUtil {
 
     public static boolean healthIsHalved(LivingEntity livingEntity){
         return livingEntity.getHealth() <= livingEntity.getMaxHealth()/2;
+    }
+
+    public static List<Entity> getTargets(LivingEntity pSource, double pRange) {
+        List<Entity> list = new ArrayList<>();
+        double vectorY = pSource.getY();
+        if (pSource instanceof PlayerEntity){
+            vectorY = pSource.getEyeY();
+        }
+        Vector3d source = new Vector3d(pSource.getX(), vectorY, pSource.getZ());
+        Vector3d lookVec = pSource.getViewVector(1.0F);
+        Vector3d end = source.add(lookVec.x * pRange, lookVec.y * pRange, lookVec.z * pRange);
+        float size = 3.0F;
+        List<Entity> entities = pSource.level.getEntities(pSource, pSource.getBoundingBox().expandTowards(lookVec.x * pRange, lookVec.y * pRange, lookVec.z * pRange).inflate(size));
+        double hitDist = 0.0D;
+
+        for (Entity entity : entities) {
+            if (entity.isPickable() && entity != pSource) {
+                float borderSize = entity.getPickRadius();
+                AxisAlignedBB collisionBB = entity.getBoundingBox().inflate(borderSize);
+                Optional<Vector3d> interceptPos = collisionBB.clip(source, end);
+
+                if (collisionBB.contains(source)) {
+                    if (0.0D <= hitDist) {
+                        list.add(entity);
+                        hitDist = 0.0D;
+                    }
+                } else if (interceptPos.isPresent()) {
+                    double possibleDist = source.distanceTo(interceptPos.get());
+
+                    if (possibleDist < hitDist || hitDist == 0.0D) {
+                        list.add(entity);
+                        hitDist = possibleDist;
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     @Nullable

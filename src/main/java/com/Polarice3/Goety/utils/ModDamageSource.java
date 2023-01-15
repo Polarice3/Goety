@@ -13,8 +13,9 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class ModDamageSource extends DamageSource {
-    public static final DamageSource DESICCATE = (new ModDamageSource(source("desiccate"))).bypassArmor().setMagic();
-    public static final DamageSource FROST = (new ModDamageSource(source("frost"))).setMagic();
+    public static final DamageSource DESICCATE = new ModDamageSource(source("desiccate")).bypassArmor().setMagic();
+    public static final DamageSource FROST = new ModDamageSource(source("frost")).setMagic();
+    public static final DamageSource ROOTS = new ModDamageSource(source("roots"));
 
     public ModDamageSource(String pMessageId) {
         super(pMessageId);
@@ -61,6 +62,14 @@ public class ModDamageSource extends DamageSource {
         return new EntityDamageSource("player", pPlayer).setThorns();
     }
 
+    public static DamageSource roots(Entity pSource, @Nullable Entity pIndirectEntity){
+        return (new IndirectEntityDamageSource(source("indirectRoots"), pSource, pIndirectEntity));
+    }
+
+    public static DamageSource magicFire(Entity pSource, @Nullable Entity pIndirectEntity){
+        return (new IndirectEntityDamageSource(source("magicFire"), pSource, pIndirectEntity)).bypassArmor().setIsFire();
+    }
+
     public static boolean breathAttacks(DamageSource source){
         return source.getMsgId().contains("breath");
     }
@@ -72,6 +81,24 @@ public class ModDamageSource extends DamageSource {
     public static boolean frostAttacks(DamageSource source){
         return source.getMsgId().contains("frost") || source.getMsgId().contains("Frost") || source.getMsgId().contains("ice")
                 || source.getMsgId().contains("Ice") || source.getMsgId().contains("freeze") || source.getMsgId().contains("Freeze");
+    }
+
+    public static boolean physicalAttacks(DamageSource source){
+        return source.getDirectEntity() != null && source.getDirectEntity() instanceof LivingEntity
+                && source instanceof EntityDamageSource
+                && (source.getMsgId().equals("mob") || source.getMsgId().equals("player"));
+    }
+
+    public static boolean rootAttacks(DamageSource source){
+        return source.getMsgId().equals(source("indirectRoots")) || source.getMsgId().equals(source("roots"));
+    }
+
+    public static boolean magicFireAttacks(DamageSource source){
+        return source.getMsgId().equals(source("magicFire"));
+    }
+
+    public static boolean noKnockBackAttacks(DamageSource source){
+        return rootAttacks(source) || magicFireAttacks(source);
     }
 
     public static String source(String source){

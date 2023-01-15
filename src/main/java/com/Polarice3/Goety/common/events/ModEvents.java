@@ -76,6 +76,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -87,6 +88,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.raid.Raid;
 import net.minecraft.world.server.ServerWorld;
@@ -281,9 +283,10 @@ public class ModEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void spawnEntities(BiomeLoadingEvent event){
+    public static void naturalSpawnEntities(BiomeLoadingEvent event){
         if (event.getName() != null) {
             Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
+            RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
             if (biome != null) {
                 if (MainConfig.GoldenKingSpawn.get()) {
                     if (biome.getBiomeCategory() == Biome.Category.OCEAN) {
@@ -291,11 +294,16 @@ public class ModEvents {
                     }
                 }
                 boolean flag = false;
+                boolean flag2 = false;
                 if (MainConfig.InterDimensionalMobs.get()){
                     flag = true;
+                    flag2 = true;
                 } else {
                     if (BlockFinder.biomeIsInOverworld(event.getName())) {
                         flag = true;
+                    }
+                    if (BlockFinder.biomeIsInVanillaDim(event.getName())){
+                        flag2 = true;
                     }
                 }
                 if (flag){
@@ -309,6 +317,23 @@ public class ModEvents {
                             event.getSpawns().getSpawner(EntityClassification.MONSTER)
                                     .add(new MobSpawnInfo.Spawners(ModEntityType.URBHADHACH.get(),
                                             MainConfig.UrbhadhachSpawnWeight.get(), 1, 1));
+                        }
+                    }
+                }
+                if (flag2){
+                    if (biome.getBiomeCategory() != Biome.Category.MUSHROOM && biome.getBiomeCategory() != Biome.Category.NONE
+                            && biome.getBiomeCategory() != Biome.Category.THEEND && biome.getBiomeCategory() != Biome.Category.NETHER){
+                        if (MainConfig.WraithSpawnWeight.get() > 0){
+                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                    .add(new MobSpawnInfo.Spawners(ModEntityType.WRAITH.get(),
+                                            MainConfig.WraithSpawnWeight.get(), 1, 1));
+                        }
+                    } else if (biomeRegistryKey == Biomes.SOUL_SAND_VALLEY){
+                        if (MainConfig.WraithSpawnWeight.get() > 0){
+                            event.getSpawns().getSpawner(EntityClassification.MONSTER)
+                                    .add(new MobSpawnInfo.Spawners(ModEntityType.WRAITH.get(),
+                                            2, 1, 1));
+                            event.getSpawns().addMobCharge(ModEntityType.WRAITH.get(), 0.7D, 0.15D);
                         }
                     }
                 }
@@ -394,7 +419,6 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void SpecialSpawnEvents(LivingSpawnEvent.CheckSpawn event){
-        World world = event.getEntityLiving().level;
         if (event.getEntityLiving() instanceof AbstractCultistEntity){
             if (AbstractCultistEntity.spawnCultistsRules(event.getEntityLiving().getType(), event.getWorld(), event.getSpawnReason(), event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
                 event.setResult(Event.Result.ALLOW);
@@ -517,7 +541,7 @@ public class ModEvents {
                         }
                     }
                 }
-                if (summonedEntity instanceof AbstractSMEntity){
+                if (summonedEntity instanceof AbstractSMEntity || summonedEntity instanceof AbstractWraithEntity){
                     ++skeletons;
                     if (MainConfig.SkeletonLimit.get() < skeletons){
                         if (summonedEntity.tickCount % 20 == 0){
@@ -1037,6 +1061,17 @@ public class ModEvents {
                 if (undead){
                     event.modifyVisibility(0.2);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void KnockBackEvents(LivingKnockBackEvent event){
+        LivingEntity knocked = event.getEntityLiving();
+        DamageSource lastDamage = knocked.getLastDamageSource();
+        if (lastDamage != null) {
+            if (ModDamageSource.noKnockBackAttacks(lastDamage)){
+                event.setCanceled(true);
             }
         }
     }

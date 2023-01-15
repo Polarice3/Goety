@@ -10,9 +10,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.server.ServerWorld;
 
 public abstract class SummonSpells extends Spells{
     private final EntityPredicate summonCountTargeting = (new EntityPredicate()).range(64.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
+    public int enchantment = 0;
+    public int duration = 1;
 
     public abstract int SummonDownDuration();
 
@@ -27,6 +30,8 @@ public abstract class SummonSpells extends Spells{
     public boolean SummonMastery(LivingEntity entityLiving){
         return RobeArmorFinder.FindLeggings(entityLiving);
     }
+
+    public abstract void commonResult(ServerWorld worldIn, LivingEntity entityLiving);
 
     public void SummonSap(LivingEntity owner, LivingEntity summonedEntity){
         if (owner != null && summonedEntity != null) {

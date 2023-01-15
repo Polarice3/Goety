@@ -37,31 +37,33 @@ public class PhantomSpell extends SummonSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
-    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide()) {
-            int enchantment = 0;
-            int duration = 1;
-            if (entityLiving instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) entityLiving;
-                if (WandUtil.enchantedFocus(player)){
-                    enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
-                    duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
-                }
-                this.IncreaseInfamy(MainConfig.PhantomInfamyChance.get(), (PlayerEntity) entityLiving);
+    public void commonResult(ServerWorld worldIn, LivingEntity entityLiving){
+        if (entityLiving instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) entityLiving;
+            if (WandUtil.enchantedFocus(player)){
+                enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            if (entityLiving.isCrouching()) {
-                for (Entity entity : worldIn.getAllEntities()) {
-                    if (entity instanceof PhantomMinionEntity) {
-                        if (((PhantomMinionEntity) entity).getTrueOwner() == entityLiving) {
-                            entity.moveTo(entityLiving.position());
-                        }
+            this.IncreaseInfamy(MainConfig.PhantomInfamyChance.get(), (PlayerEntity) entityLiving);
+        }
+        if (entityLiving.isCrouching()) {
+            for (Entity entity : worldIn.getAllEntities()) {
+                if (entity instanceof PhantomMinionEntity) {
+                    if (((PhantomMinionEntity) entity).getTrueOwner() == entityLiving) {
+                        entity.moveTo(entityLiving.position());
                     }
                 }
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            } else {
+            }
+            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+            }
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        }
+    }
+
+    public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
+        this.commonResult(worldIn, entityLiving);
+        if (!entityLiving.isCrouching()) {
                 PhantomMinionEntity summonedentity = new PhantomMinionEntity(ModEntityType.PHANTOM_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
@@ -80,34 +82,11 @@ public class PhantomSpell extends SummonSpells {
                 this.SummonDown(entityLiving);
 
             }
-        }
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide()) {
-            int enchantment = 0;
-            int duration = 1;
-            if (entityLiving instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) entityLiving;
-                if (WandUtil.enchantedFocus(player)){
-                    enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
-                    duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
-                }
-                this.IncreaseInfamy(MainConfig.PhantomInfamyChance.get(), (PlayerEntity) entityLiving);
-            }
-            if (entityLiving.isCrouching()) {
-                for (Entity entity : worldIn.getAllEntities()) {
-                    if (entity instanceof PhantomMinionEntity) {
-                        if (((PhantomMinionEntity) entity).getTrueOwner() == entityLiving) {
-                            entity.moveTo(entityLiving.position());
-                        }
-                    }
-                }
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-            } else {
+        this.commonResult(worldIn, entityLiving);
+        if (!entityLiving.isCrouching()) {
                 for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
                     PhantomMinionEntity summonedentity = new PhantomMinionEntity(ModEntityType.PHANTOM_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());
@@ -127,6 +106,5 @@ public class PhantomSpell extends SummonSpells {
                 this.SummonDown(entityLiving);
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }
-        }
     }
 }

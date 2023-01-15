@@ -31,8 +31,7 @@ public class RootsTrapRenderer extends EntityRenderer<RootTrapEntity> {
             pMatrixStack.pushPose();
             pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F - pEntity.yRot));
             pMatrixStack.scale(-f1, -f1, f1);
-            float f2 = 0.03125F;
-            pMatrixStack.translate(0.0D, -0.8D, 0.0D);
+            pMatrixStack.translate(0.0D, -0.75D, 0.0D);
             pMatrixStack.scale(0.5F, 0.5F, 0.5F);
             this.model.setupAnim(pEntity, f, 0.0F, pPartialTicks/10, pEntity.yRot, pEntity.xRot);
             IVertexBuilder ivertexbuilder = pBuffer.getBuffer(this.model.renderType(TEXTURE_LOCATION));

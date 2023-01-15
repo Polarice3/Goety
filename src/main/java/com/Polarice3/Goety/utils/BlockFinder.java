@@ -267,6 +267,12 @@ public class BlockFinder {
         return BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.OVERWORLD);
     }
 
+    public static boolean biomeIsInVanillaDim(ResourceLocation resourceLocation){
+        RegistryKey<Biome> biomeRegistryKey = RegistryKey.create(ForgeRegistries.Keys.BIOMES, resourceLocation);
+        return biomeIsInOverworld(resourceLocation) || BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)
+                || BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.END);
+    }
+
     public static boolean createBarrel(IServerWorld pLevel, MutableBoundingBox pBounds, Random pRandom, BlockPos pPos, ResourceLocation pResourceLocation, @Nullable BlockState pState) {
         if (pBounds.isInside(pPos) && !pLevel.getBlockState(pPos).is(Blocks.BARREL)) {
             pLevel.setBlock(pPos, pState != null ? pState: Blocks.BARREL.defaultBlockState(), 2);

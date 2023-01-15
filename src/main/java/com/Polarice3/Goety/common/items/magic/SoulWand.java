@@ -322,6 +322,9 @@ public class SoulWand extends Item{
             } else if (spell.contains("enderacid")) {
                 this.setSpellConditions(new AcidBreathSpell(), itemStack);
                 this.setSpell(29, itemStack);
+            } else if (spell.contains("spooky")) {
+                this.setSpellConditions(new WraithSpell(), itemStack);
+                this.setSpell(30, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

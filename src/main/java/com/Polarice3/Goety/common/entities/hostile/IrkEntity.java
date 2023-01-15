@@ -44,7 +44,7 @@ public class IrkEntity extends MonsterEntity {
         this.xpReward = 3;
         this.shootTime = 0;
         this.navigation = this.createNavigation(p_i50190_2_);
-        this.moveControl = new MobUtil.MoveHelperController(this);
+        this.moveControl = new MobUtil.MinionMovementController(this);
     }
 
     public void move(MoverType typeIn, Vector3d pos) {

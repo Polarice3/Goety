@@ -78,7 +78,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     public VizierEntity(EntityType<? extends VizierEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveControl = new MobUtil.MoveHelperController(this);
+        this.moveControl = new MobUtil.MinionMovementController(this);
         this.xpReward = 50;
         if (this.level.isClientSide){
             Goety.PROXY.addBoss(this);

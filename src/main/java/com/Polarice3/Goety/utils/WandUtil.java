@@ -2,6 +2,7 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
+import com.Polarice3.Goety.common.entities.projectiles.GhostFireEntity;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -13,6 +14,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.World;
 
 import java.util.Map;
 
@@ -103,6 +105,54 @@ public class WandUtil {
             livingEntity.level.addFreshEntity(fangEntity);
         }
 
+    }
+
+    public static void spawnGhostFires(World world, BlockPos pPos, LivingEntity livingEntity){
+        BlockPos blockPos2 = pPos.west();
+        BlockPos blockPos3 = pPos.east();
+        GhostFireEntity ghostFire1 = new GhostFireEntity(world, pPos, livingEntity);
+        world.addFreshEntity(ghostFire1);
+        GhostFireEntity ghostFire2 = new GhostFireEntity(world, blockPos2, livingEntity);
+        world.addFreshEntity(ghostFire2);
+        GhostFireEntity ghostFire3 = new GhostFireEntity(world, blockPos3, livingEntity);
+        world.addFreshEntity(ghostFire3);
+        GhostFireEntity ghostFire4 = new GhostFireEntity(world, pPos.north(), livingEntity);
+        world.addFreshEntity(ghostFire4);
+        GhostFireEntity ghostFire5 = new GhostFireEntity(world, pPos.south(), livingEntity);
+        world.addFreshEntity(ghostFire5);
+        GhostFireEntity ghostFire6 = new GhostFireEntity(world, blockPos2.north(), livingEntity);
+        world.addFreshEntity(ghostFire6);
+        GhostFireEntity ghostFire7 = new GhostFireEntity(world, blockPos2.south(), livingEntity);
+        world.addFreshEntity(ghostFire7);
+        GhostFireEntity ghostFire8 = new GhostFireEntity(world, blockPos3.north(), livingEntity);
+        world.addFreshEntity(ghostFire8);
+        GhostFireEntity ghostFire9 = new GhostFireEntity(world, blockPos3.south(), livingEntity);
+        world.addFreshEntity(ghostFire9);
+    }
+
+    public static void spawnCrossGhostFires(World world, BlockPos pPos, LivingEntity livingEntity){
+        BlockPos blockPos2 = pPos.west();
+        BlockPos blockPos3 = pPos.east();
+        BlockPos blockPos4 = pPos.north();
+        BlockPos blockPos5 = pPos.south();
+        GhostFireEntity ghostFire1 = new GhostFireEntity(world, pPos, livingEntity);
+        world.addFreshEntity(ghostFire1);
+        GhostFireEntity ghostFire2 = new GhostFireEntity(world, blockPos2, livingEntity);
+        world.addFreshEntity(ghostFire2);
+        GhostFireEntity ghostFire3 = new GhostFireEntity(world, blockPos3, livingEntity);
+        world.addFreshEntity(ghostFire3);
+        GhostFireEntity ghostFire4 = new GhostFireEntity(world, blockPos4, livingEntity);
+        world.addFreshEntity(ghostFire4);
+        GhostFireEntity ghostFire5 = new GhostFireEntity(world, blockPos5, livingEntity);
+        world.addFreshEntity(ghostFire5);
+        GhostFireEntity ghostFire6 = new GhostFireEntity(world, blockPos4.north(), livingEntity);
+        world.addFreshEntity(ghostFire6);
+        GhostFireEntity ghostFire7 = new GhostFireEntity(world, blockPos5.south(), livingEntity);
+        world.addFreshEntity(ghostFire7);
+        GhostFireEntity ghostFire8 = new GhostFireEntity(world, blockPos2.west(), livingEntity);
+        world.addFreshEntity(ghostFire8);
+        GhostFireEntity ghostFire9 = new GhostFireEntity(world, blockPos3.east(), livingEntity);
+        world.addFreshEntity(ghostFire9);
     }
 
 }

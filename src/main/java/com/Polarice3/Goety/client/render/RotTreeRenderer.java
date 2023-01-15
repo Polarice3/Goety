@@ -3,6 +3,8 @@ package com.Polarice3.Goety.client.render;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.RotTreeModel;
 import com.Polarice3.Goety.client.render.layers.RotTreeCracksLayer;
+import com.Polarice3.Goety.client.render.layers.RottreantMushroomLayer;
+import com.Polarice3.Goety.client.render.layers.RottreantMyceliumLayer;
 import com.Polarice3.Goety.common.entities.ally.RottreantEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -16,6 +18,8 @@ public class RotTreeRenderer extends MobRenderer<RottreantEntity, RotTreeModel> 
     public RotTreeRenderer(EntityRendererManager p_i46133_1_) {
         super(p_i46133_1_, new RotTreeModel(), 0.7F);
         this.addLayer(new RotTreeCracksLayer(this));
+        this.addLayer(new RottreantMyceliumLayer(this));
+        this.addLayer(new RottreantMushroomLayer(this));
     }
 
     public ResourceLocation getTextureLocation(RottreantEntity pEntity) {

@@ -40,16 +40,17 @@ public class AcidBreathSpell extends SpewingSpell{
             }
             this.IncreaseInfamy(MainConfig.EnderAcidInfamyChance.get(), player);
         }
-        Entity target = getTarget(entityLiving, range + 15, 1.0F);
         if (!worldIn.isClientSide) {
-            if (target != null) {
-                if (target instanceof LivingEntity) {
-                    LivingEntity livingTarget = (LivingEntity) target;
-                    if (livingTarget.canBeAffected(new EffectInstance(Effects.HARM))) {
-                        if (livingTarget.isInvertedHealAndHarm()) {
-                            livingTarget.heal((float) (3 << enchantment));
-                        } else {
-                            livingTarget.hurt(DamageSource.indirectMagic(entityLiving, entityLiving), (float) (3 << enchantment));
+            for (Entity target : getTarget(entityLiving, range + 15)) {
+                if (target != null) {
+                    if (target instanceof LivingEntity) {
+                        LivingEntity livingTarget = (LivingEntity) target;
+                        if (livingTarget.canBeAffected(new EffectInstance(Effects.HARM))) {
+                            if (livingTarget.isInvertedHealAndHarm()) {
+                                livingTarget.heal((float) (3 << enchantment));
+                            } else {
+                                livingTarget.hurt(DamageSource.indirectMagic(entityLiving, entityLiving), (float) (3 << enchantment));
+                            }
                         }
                     }
                 }
@@ -70,16 +71,17 @@ public class AcidBreathSpell extends SpewingSpell{
             }
             this.IncreaseInfamy(MainConfig.EnderAcidInfamyChance.get(), player);
         }
-        Entity target = getTarget(entityLiving, range + 18, 2.0F);
         if (!worldIn.isClientSide) {
-            if (target != null) {
-                if (target instanceof LivingEntity) {
-                    LivingEntity livingTarget = (LivingEntity) target;
-                    if (livingTarget.canBeAffected(new EffectInstance(Effects.HARM))) {
-                        if (livingTarget.isInvertedHealAndHarm()) {
-                            livingTarget.heal((float) (3 << enchantment));
-                        } else {
-                            livingTarget.hurt(DamageSource.indirectMagic(entityLiving, entityLiving), (float) (3 << enchantment));
+            for (Entity target : getTarget(entityLiving, range + 18)) {
+                if (target != null) {
+                    if (target instanceof LivingEntity) {
+                        LivingEntity livingTarget = (LivingEntity) target;
+                        if (livingTarget.canBeAffected(new EffectInstance(Effects.HARM))) {
+                            if (livingTarget.isInvertedHealAndHarm()) {
+                                livingTarget.heal((float) (3 << enchantment));
+                            } else {
+                                livingTarget.hurt(DamageSource.indirectMagic(entityLiving, entityLiving), (float) (3 << enchantment));
+                            }
                         }
                     }
                 }

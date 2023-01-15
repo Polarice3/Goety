@@ -63,7 +63,7 @@ public class SkullLordEntity extends MonsterEntity{
         super(p_i50190_1_, p_i50190_2_);
         this.navigation = this.createNavigation(p_i50190_2_);
         this.shootTime = 0;
-        this.moveControl = new MobUtil.MoveHelperController(this);
+        this.moveControl = new MobUtil.MinionMovementController(this);
         this.hitTimes = 0;
         this.xpReward = 10;
     }

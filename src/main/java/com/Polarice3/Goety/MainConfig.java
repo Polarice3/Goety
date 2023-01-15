@@ -25,6 +25,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> PhantomCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WraithCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterCost;
@@ -56,6 +57,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> PhantomDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WraithDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterDuration;
@@ -77,6 +79,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> PhantomInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WraithInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterInfamyChance;
@@ -119,6 +122,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfCooldown;
     public static final ForgeConfigSpec.ConfigValue<Integer> PhantomCooldown;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WraithCooldown;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> AnthropodSouls;
@@ -181,7 +185,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSeperation;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenSpawnWeight;
-
+    public static final ForgeConfigSpec.ConfigValue<Integer> WraithSpawnWeight;
     public static final ForgeConfigSpec.ConfigValue<Integer> UrbhadhachSpawnWeight;
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
@@ -322,6 +326,8 @@ public class MainConfig {
                 .defineInRange("undeadWolfCost", 2, 0, Integer.MAX_VALUE);
         PhantomCost = BUILDER.comment("Phantasm Spell Cost, Default: 16")
                 .defineInRange("phantomCost", 16, 0, Integer.MAX_VALUE);
+        WraithCost = BUILDER.comment("Spooky Spell Cost, Default: 24")
+                .defineInRange("wraithCost", 24, 0, Integer.MAX_VALUE);
         WitchGaleCost = BUILDER.comment("Witch's Gale Spell Cost, Default: 15")
                 .defineInRange("crippleCost", 15, 0, Integer.MAX_VALUE);
         SpiderlingCost = BUILDER.comment("Spiderling Spell Cost per second, Default: 2")
@@ -386,6 +392,8 @@ public class MainConfig {
                 .defineInRange("undeadWolfTime", 20, 0, 72000);
         PhantomDuration = BUILDER.comment("Time to cast Phantasm Spell, Default: 60")
                 .defineInRange("phantomTime", 60, 0, 72000);
+        WraithDuration = BUILDER.comment("Time to cast Wraith Spell, Default: 60")
+                .defineInRange("wraithTime", 60, 0, 72000);
         WitchGaleDuration = BUILDER.comment("Time to cast Witch's Gale Spell, Default: 20")
                 .defineInRange("crippleTime", 20, 0, 72000);
         SpiderlingDuration = BUILDER.comment("Time to cast Spiderling Spell per second, Default: 10")
@@ -424,6 +432,8 @@ public class MainConfig {
                 .defineInRange("undeadWolfCooldown", 30, 0, 72000);
         PhantomCooldown = BUILDER.comment("Phantasm Spell Cooldown, Default: 300")
                 .defineInRange("phantomCooldown", 300, 0, 72000);
+        WraithCooldown = BUILDER.comment("Spooky Spell Cooldown, Default: 300")
+                .defineInRange("wraithCooldown", 300, 0, 72000);
         BUILDER.pop();
         BUILDER.push("Mobs");
         MRabbitMax = BUILDER.comment("Maximum amount of Mutant Rabbits can spawn, Default: 16")
@@ -444,6 +454,8 @@ public class MainConfig {
                 .define("interDimensionalMobs", false);
         DredenSpawnWeight = BUILDER.comment("Spawn Weight for Dreden, Default: 20")
                 .defineInRange("dredenSpawnWeight", 20, 0, Integer.MAX_VALUE);
+        WraithSpawnWeight = BUILDER.comment("Spawn Weight for Wraith, Default: 10")
+                .defineInRange("wraithSpawnWeight", 10, 0, Integer.MAX_VALUE);
         UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 16")
                 .defineInRange("urbhadhachSpawnWeight", 16, 0, Integer.MAX_VALUE);
         UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: false")
@@ -516,6 +528,8 @@ public class MainConfig {
                 .defineInRange("undeadWolfInfamyChance", 32, 0, Integer.MAX_VALUE);
         PhantomInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Phantasm Spell, Default: 32")
                 .defineInRange("phantomInfamyChance", 32, 0, Integer.MAX_VALUE);
+        WraithInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spooky Spell, Default: 32")
+                .defineInRange("wraithChance", 32, 0, Integer.MAX_VALUE);
         WitchGaleInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Witch's Gale Spell, Default: 16")
                 .defineInRange("crippleInfamyChance", 16, 0, Integer.MAX_VALUE);
         SpiderlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spiderling Spell per second, Default: 128")

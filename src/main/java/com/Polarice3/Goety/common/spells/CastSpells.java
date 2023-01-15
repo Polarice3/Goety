@@ -69,6 +69,8 @@ public class CastSpells {
                 return new DredenSpell();
             case 29:
                 return new AcidBreathSpell();
+            case 30:
+                return new WraithSpell();
             default:
                 return null;
         }

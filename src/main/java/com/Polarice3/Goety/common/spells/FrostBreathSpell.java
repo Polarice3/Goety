@@ -42,13 +42,14 @@ public class FrostBreathSpell extends SpewingSpell{
             }
             this.IncreaseInfamy(MainConfig.FrostBreathInfamyChance.get(), player);
         }
-        Entity target = getTarget(entityLiving, range + 15, 1.0F);
         if (!worldIn.isClientSide) {
-            if (target != null) {
-                if (target instanceof LivingEntity) {
-                    LivingEntity livingTarget = (LivingEntity) target;
-                    if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 1.0F + enchantment)){
-                        livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
+            for (Entity target : getTarget(entityLiving, range + 15)) {
+                if (target != null) {
+                    if (target instanceof LivingEntity) {
+                        LivingEntity livingTarget = (LivingEntity) target;
+                        if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 1.0F + enchantment)) {
+                            livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
+                        }
                     }
                 }
             }
@@ -70,13 +71,14 @@ public class FrostBreathSpell extends SpewingSpell{
             }
             this.IncreaseInfamy(MainConfig.FrostBreathInfamyChance.get(), player);
         }
-        Entity target = getTarget(entityLiving, range + 18, 2.0F);
         if (!worldIn.isClientSide) {
-            if (target != null) {
-                if (target instanceof LivingEntity) {
-                    LivingEntity livingTarget = (LivingEntity) target;
-                    if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 2.0F + enchantment)){
-                        livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
+            for (Entity target : getTarget(entityLiving, range + 18)) {
+                if (target != null) {
+                    if (target instanceof LivingEntity) {
+                        LivingEntity livingTarget = (LivingEntity) target;
+                        if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 2.0F + enchantment)) {
+                            livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
+                        }
                     }
                 }
             }
