@@ -2,12 +2,11 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.AbstractWraithModel;
-import com.Polarice3.Goety.common.entities.hostile.DredenEntity;
+import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
-public class DredenRenderer extends MobRenderer<DredenEntity, AbstractWraithModel<DredenEntity>> {
+public class DredenRenderer extends AbstractWraithRenderer {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/dreden.png");
 
     public DredenRenderer(EntityRendererManager renderManagerIn){
@@ -15,7 +14,7 @@ public class DredenRenderer extends MobRenderer<DredenEntity, AbstractWraithMode
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DredenEntity entity) {
+    public ResourceLocation getTextureLocation(AbstractWraithEntity entity) {
         return TEXTURE;
     }
 }

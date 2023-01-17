@@ -89,6 +89,10 @@ public class GhostFireEntity extends GroundProjectileEntity {
         pCompound.putInt("Animation", this.getAnimation());
     }
 
+    public float getBrightness() {
+        return 1.0F;
+    }
+
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
@@ -189,6 +193,9 @@ public class GhostFireEntity extends GroundProjectileEntity {
         LivingEntity livingentity = this.getOwner();
         int burning = 0;
         float damage = 4.0F;
+        if (this.tickCount >= 14){
+            damage = 2.0F;
+        }
         if (target.isAlive() && !target.isInvulnerable() && target != livingentity) {
             if (livingentity == null) {
                 target.hurt(DamageSource.IN_FIRE, damage);
@@ -208,6 +215,9 @@ public class GhostFireEntity extends GroundProjectileEntity {
                 } else {
                     if (livingentity.getAttribute(Attributes.ATTACK_DAMAGE) != null){
                         damage = (float) livingentity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+                        if (this.tickCount >= 14){
+                            damage /= 2.0F;
+                        }
                     }
                     if (livingentity instanceof AbstractWraithEntity){
                         AbstractWraithEntity wraith = (AbstractWraithEntity) livingentity;

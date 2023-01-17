@@ -250,9 +250,9 @@ public class Goety {
 
     public static void EntitySpawnPlacementRegistry() {
         EntitySpawnPlacementRegistry.register(ModEntityType.SACRED_FISH.get(), EntitySpawnPlacementRegistry.PlacementType.IN_WATER, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AbstractFishEntity::checkFishSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.DREDEN.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, OwnedEntity::checkHostileSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.DREDEN.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, OwnedEntity::checkFrostSpawnRules);
         EntitySpawnPlacementRegistry.register(ModEntityType.WRAITH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, OwnedEntity::checkHostileSpawnRules);
-        EntitySpawnPlacementRegistry.register(ModEntityType.URBHADHACH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MonsterEntity::checkMonsterSpawnRules);
+        EntitySpawnPlacementRegistry.register(ModEntityType.URBHADHACH.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, OwnedEntity::checkFrostSpawnRules);
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {

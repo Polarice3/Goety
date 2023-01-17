@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.EnumSet;
 
@@ -65,6 +66,18 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
     public void tick() {
         if (this.durationLeft > 0) {
             --this.durationLeft;
+        }
+
+        if (this.attackTarget != null) {
+            Vector3d vector3d = new Vector3d(this.attackTarget.getX() - this.spewX, (this.attackTarget.getY() + this.attackTarget.getEyeHeight()) - this.spewY, this.attackTarget.getZ() - this.spewZ);
+
+            vector3d = vector3d.normalize();
+
+            double speed = 0.25D;
+
+            this.spewX += vector3d.x * speed;
+            this.spewY += vector3d.y * speed;
+            this.spewZ += vector3d.z * speed;
         }
 
         this.attacker.getLookControl().setLookAt(spewX, spewY, spewZ, 100.0F, 100.0F);

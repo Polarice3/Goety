@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
@@ -265,6 +266,15 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
             int i = pLevel.getLevel().isThundering() ? pLevel.getMaxLocalRawBrightness(pPos, 10) : pLevel.getMaxLocalRawBrightness(pPos);
             return i <= pRandom.nextInt(8);
         }
+    }
+
+    public static boolean checkFrostSpawnRules(EntityType<? extends MobEntity> pType, IServerWorld pLevel, SpawnReason pReason, BlockPos pPos, Random pRandom) {
+        return pLevel.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(pLevel, pPos, pRandom) && checkSpawner(pType, pLevel, pReason, pPos, pRandom);
+    }
+
+    public static boolean checkSpawner(EntityType<? extends MobEntity> pType, IWorld pLevel, SpawnReason pReason, BlockPos pPos, Random pRandom) {
+        BlockPos blockpos = pPos.below();
+        return pReason == SpawnReason.SPAWNER || pLevel.getBlockState(blockpos).isValidSpawn(pLevel, blockpos, pType) || pLevel.getBlockState(blockpos).getBlock() == Blocks.SNOW;
     }
 
     public class OwnerHurtTargetGoal extends TargetGoal {

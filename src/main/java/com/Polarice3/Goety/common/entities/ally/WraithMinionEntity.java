@@ -58,14 +58,16 @@ public class WraithMinionEntity extends AbstractWraithEntity {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
             if (!this.isInterested()) {
-                if (itemstack.isEmpty() || itemstack == ItemStack.EMPTY) {
+                ActionResultType actionresulttype = super.mobInteract(pPlayer, pHand);
+                if (!actionresulttype.consumesAction() && (itemstack.isEmpty() || itemstack == ItemStack.EMPTY)) {
                     this.setIsInterested(true);
                     this.interestTime = 40;
                     this.level.broadcastEntityEvent(this, (byte) 102);
                     this.playSound(ModSounds.WRAITH_AMBIENT.get(), 1.0F, 2.0F);
                     this.heal(1.0F);
-                    return ActionResultType.sidedSuccess(this.level.isClientSide);
+                    return ActionResultType.SUCCESS;
                 }
+                return actionresulttype;
             }
         }
         return ActionResultType.PASS;

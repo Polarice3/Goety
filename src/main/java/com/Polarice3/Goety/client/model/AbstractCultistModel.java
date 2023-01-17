@@ -212,6 +212,19 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                     this.rightArm.zRot = 2.3561945F;
                     this.rightArm.yRot = 0.0F;
                 }
+            case TORCH_AND_WEAPON:
+                if (!entityIn.getMainHandItem().isEmpty() && !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)) {
+                    if (entityIn.getMainArm() == HandSide.RIGHT) {
+                        ModelHelper.swingWeaponDown(this.rightArm, this.leftArm, entityIn, this.attackTime, ageInTicks);
+                    } else {
+                        ModelHelper.swingWeaponDown(this.leftArm, this.rightArm, entityIn, this.attackTime, ageInTicks);
+                    }
+                }
+                if (entityIn.getMainArm() == HandSide.RIGHT){
+                    this.leftArm.xRot = -(2.0F + MathHelper.cos(ageInTicks * 0.09F) * 0.15F);
+                } else {
+                    this.rightArm.xRot = -(2.0F + MathHelper.cos(ageInTicks * 0.09F) * 0.15F);
+                }
         }
 
         if (this.leftArmPose == ArmPose.THROW_SPEAR) {

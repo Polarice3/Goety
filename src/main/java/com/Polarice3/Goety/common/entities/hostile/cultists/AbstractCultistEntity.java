@@ -59,6 +59,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new FindTargetGoal(this, 10.0F));
         this.goalSelector.addGoal(4, new PilgrimGoal<>(this, 0.7D, 0.595D));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 15.0F));
@@ -397,6 +398,63 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         }
     }
 
+    public class FindTargetGoal extends Goal {
+        private final AbstractCultistEntity mob;
+        private final float hostileRadiusSqr;
+        public final EntityPredicate shoutTargeting = (new EntityPredicate()).range(8.0D).allowNonAttackable().allowInvulnerable().allowSameTeam().allowUnseeable().ignoreInvisibilityTesting();
+
+        public FindTargetGoal(AbstractCultistEntity p_i50573_2_, float p_i50573_3_) {
+            this.mob = p_i50573_2_;
+            this.hostileRadiusSqr = p_i50573_3_ * p_i50573_3_;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        public boolean canUse() {
+            LivingEntity livingentity = this.mob.getLastHurtByMob();
+            return this.mob.isOnPilgrimage() && this.mob.getTarget() != null && !this.mob.isAggressive() && (livingentity == null || livingentity.getType() != EntityType.PLAYER);
+        }
+
+        public void start() {
+            super.start();
+            this.mob.getNavigation().stop();
+
+            for(AbstractCultistEntity cultist : this.mob.level.getNearbyEntities(AbstractCultistEntity.class, this.shoutTargeting, this.mob, this.mob.getBoundingBox().inflate(8.0D, 8.0D, 8.0D))) {
+                cultist.setTarget(this.mob.getTarget());
+            }
+
+        }
+
+        public void stop() {
+            super.stop();
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null) {
+                for(AbstractCultistEntity cultist : this.mob.level.getNearbyEntities(AbstractCultistEntity.class, this.shoutTargeting, this.mob, this.mob.getBoundingBox().inflate(8.0D, 8.0D, 8.0D))) {
+                    cultist.setTarget(livingentity);
+                    cultist.setAggressive(true);
+                }
+
+                this.mob.setAggressive(true);
+            }
+
+        }
+
+        public void tick() {
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null) {
+                if (this.mob.distanceToSqr(livingentity) > (double)this.hostileRadiusSqr) {
+                    this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+                    if (this.mob.random.nextInt(50) == 0) {
+                        this.mob.playAmbientSound();
+                    }
+                } else {
+                    this.mob.setAggressive(true);
+                }
+
+                super.tick();
+            }
+        }
+    }
+
     @OnlyIn(Dist.CLIENT)
     public static enum ArmPose {
         CROSSED,
@@ -404,6 +462,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         SPELLCASTING,
         SPELL_AND_WEAPON,
         BOW_AND_ARROW,
+        TORCH_AND_WEAPON,
         CROSSBOW_HOLD,
         CROSSBOW_CHARGE,
         BOMB_AND_WEAPON,

@@ -184,6 +184,8 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_DOOR.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_SAPLING.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.MURK_SAPLING.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GRAND_TORCH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WALL_GRAND_TORCH.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_LEAVES.get(), RenderType.cutoutMipped());
         RenderTypeLookup.setRenderLayer(ModBlocks.MURK_LEAVES.get(), RenderType.cutoutMipped());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);

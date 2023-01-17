@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "c",
+    "i",
+    "w"
+  ],
+  "key":
+  {
+    "c":
+    {
+      "tag": "minecraft:coals"
+    },
+    "i":
+    {
+      "tag": "forge:nuggets/iron"
+    },
+    "w":
+    {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result":
+  {
+    "item": "goety:grand_torch",
+    "count": 1
+  }
+}

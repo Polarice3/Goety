@@ -460,6 +460,9 @@
   "block.goety.stripped_murk_log": "Stripped Murk Log",
   "block.goety.stripped_murk_wood": "Stripped Murk Wood",
 
+  "block.goety.grand_torch": "Grand Torch",
+  "block.goety.wall_grand_torch": "Wall Grand Torch",
+
   "block.goety.iron_finger": "Iron Finger",
   "block.goety.temp_web": "Magic Cobweb",
   "block.goety.dark_cloud": "Dark Cloud",

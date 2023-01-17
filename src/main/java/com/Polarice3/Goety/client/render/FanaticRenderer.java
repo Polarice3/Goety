@@ -29,4 +29,9 @@ public class FanaticRenderer extends AbstractCultistRenderer<FanaticEntity>{
     public ResourceLocation getTextureLocation(FanaticEntity entity) {
         return entity.getResourceLocation();
     }
+
+    @Override
+    protected boolean isShaking(FanaticEntity p_230495_1_) {
+        return p_230495_1_.isAggressive() || p_230495_1_.getTarget() != null;
+    }
 }

@@ -13,6 +13,7 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -74,6 +75,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
     public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
+    public static final RegistryObject<Block> GRAND_TORCH = BLOCKS.register("grand_torch", () -> new BigTorchBlock(ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_GRAND_TORCH = BLOCKS.register("wall_grand_torch", () -> new WallBigTorchBlock(ParticleTypes.FLAME));
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -409,6 +412,8 @@ public class ModBlocks {
             () -> new BlockItemBase(FORBIDDEN_GRASS.get()));
     public static final RegistryObject<Item> ROTTEN_PUMPKIN_BLOCK_ITEM = BLOCK_ITEMS.register("rotten_pumpkin",
             () -> new BlockItemBase(ROTTEN_PUMPKIN.get()));
+    public static final RegistryObject<Item> GRAND_TORCH_ITEM = BLOCK_ITEMS.register("grand_torch",
+            () -> new WallOrFloorItem(ModBlocks.GRAND_TORCH.get(), WALL_GRAND_TORCH.get(), (new Item.Properties()).tab(Goety.TAB)));
 
     //RemnantItems
     public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("remnant_block",

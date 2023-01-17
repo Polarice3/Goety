@@ -66,7 +66,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 30.0D)
+                .add(Attributes.MAX_HEALTH, 25.0D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
@@ -171,6 +171,18 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
         return false;
     }
 
+    public double getFollowRange(){
+        return this.getAttributeValue(Attributes.FOLLOW_RANGE);
+    }
+
+    public float getFloatFollowRange(){
+        return (float) this.getFollowRange();
+    }
+
+    public float halfFollowRange(){
+        return this.getFloatFollowRange()/2.0F;
+    }
+
     @Override
     public void tick() {
         this.setNoGravity(this.isUnderWater());
@@ -230,8 +242,9 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
             } else {
                 this.teleportTime = 20;
             }
-            if (this.getTarget() != null) {
-                if (this.getTarget().distanceToSqr(this) >= MathHelper.square(4.0F)) {
+            if (this.getTarget() != null && this.getSensing().canSee(this.getTarget())) {
+                if (this.getTarget().distanceToSqr(this) >= MathHelper.square(4.0F)
+                    && this.getTarget().distanceToSqr(this) < MathHelper.square(this.halfFollowRange())) {
                     ++this.fireTick;
                     if (this.fireTick > 0) {
                         this.enableFiring();
@@ -258,7 +271,8 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
                         this.fireTick = 0;
                     }
                     this.disableFiring();
-                    if (this.teleportCooldown == 0 && !this.isStaying()) {
+                    if (this.teleportCooldown == 0 && !this.isStaying()
+                    && this.getTarget().distanceToSqr(this) <= MathHelper.square(4.0F)) {
                         this.setIsTeleporting(true);
                     } else {
                         this.setIsTeleporting(false);
@@ -295,7 +309,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
     public void runAway(){
         if (this.getTarget() != null && !this.isStaying()) {
             Vector3d vector3d2 = null;
-            if (this.getTarget().distanceToSqr(this) > MathHelper.square(16.0F)){
+            if (this.getTarget().distanceToSqr(this) > MathHelper.square(this.halfFollowRange())){
                 vector3d2 = this.getTarget().position();
             } else if (this.getTarget().distanceToSqr(this) <= MathHelper.square(8.0F)){
                 vector3d2 = RandomPositionGenerator.getPosAvoid(this, 16, 7, this.getTarget().position());
@@ -303,7 +317,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
             if (vector3d2 != null) {
                 Path path = this.getNavigation().createPath(vector3d2.x, vector3d2.y, vector3d2.z, 0);
                 if (path != null) {
-                    this.getNavigation().moveTo(path, 1.5F);
+                    this.getNavigation().moveTo(path, 1.25F);
                 }
             }
         }
@@ -312,8 +326,8 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
     protected void teleport() {
         if (!this.level.isClientSide() && this.isAlive()) {
             for(int i = 0; i < 128; ++i) {
-                double d3 = this.getX() + (this.getRandom().nextDouble() - 0.5D) * 32.0D;
-                double d5 = this.getZ() + (this.getRandom().nextDouble() - 0.5D) * 32.0D;
+                double d3 = this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getFollowRange();
+                double d5 = this.getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getFollowRange();
                 BlockPos blockPos = new BlockPos(d3, this.getY(), d5);
                 double d4 = this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockPos).getY();
                 BlockPos blockPos1 = new BlockPos(d3, d4, d5);

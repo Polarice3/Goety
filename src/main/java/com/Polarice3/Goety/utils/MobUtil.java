@@ -323,6 +323,9 @@ public class MobUtil {
         return livingEntity.getHealth() <= livingEntity.getMaxHealth()/2;
     }
 
+    /**
+     * Target Codes based of codes from @TeamTwilight
+     */
     public static List<Entity> getTargets(LivingEntity pSource, double pRange) {
         List<Entity> list = new ArrayList<>();
         double vectorY = pSource.getY();
@@ -331,9 +334,10 @@ public class MobUtil {
         }
         Vector3d source = new Vector3d(pSource.getX(), vectorY, pSource.getZ());
         Vector3d lookVec = pSource.getViewVector(1.0F);
-        Vector3d end = source.add(lookVec.x * pRange, lookVec.y * pRange, lookVec.z * pRange);
+        Vector3d rangeVec = new Vector3d(lookVec.x * pRange, lookVec.y * pRange, lookVec.z * pRange);
+        Vector3d end = source.add(rangeVec);
         float size = 3.0F;
-        List<Entity> entities = pSource.level.getEntities(pSource, pSource.getBoundingBox().expandTowards(lookVec.x * pRange, lookVec.y * pRange, lookVec.z * pRange).inflate(size));
+        List<Entity> entities = pSource.level.getEntities(pSource, pSource.getBoundingBox().expandTowards(rangeVec).inflate(size));
         double hitDist = 0.0D;
 
         for (Entity entity : entities) {

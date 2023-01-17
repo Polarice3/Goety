@@ -5,6 +5,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
+import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
@@ -45,6 +46,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         map.put(2, Goety.location("textures/entity/cultist/fanatic/fanatic_2.png"));
         map.put(3, Goety.location("textures/entity/cultist/fanatic/fanatic_3.png"));
         map.put(4, Goety.location("textures/entity/cultist/fanatic/fanatic_4.png"));
+        map.put(5, Goety.location("textures/entity/cultist/fanatic/fanatic_5.png"));
     });
 
     public FanaticEntity(EntityType<? extends FanaticEntity> type, World worldIn) {
@@ -52,7 +54,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     }
 
     public ResourceLocation getResourceLocation() {
-        return TEXTURE_BY_TYPE.getOrDefault(this.getOutfitType(), TEXTURE_BY_TYPE.get(0));
+        return TEXTURE_BY_TYPE.getOrDefault(this.getOutfitType(), TEXTURE_BY_TYPE.get(5));
     }
 
     protected void registerGoals() {
@@ -125,6 +127,10 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     public boolean hasPearl(){
         return this.getItemInHand(Hand.OFF_HAND).getItem() == Items.ENDER_PEARL;
+    }
+
+    public boolean hasGrandTorch(){
+        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModBlocks.GRAND_TORCH_ITEM.get();
     }
 
     @Override
@@ -246,10 +252,10 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     @OnlyIn(Dist.CLIENT)
     public ArmPose getArmPose() {
         if (this.isAggressive()) {
-            if (!hasBomb() && !hasPearl()) {
+            if (!hasBomb() && !hasPearl() && !hasGrandTorch()) {
                 return ArmPose.ATTACKING;
             } else {
-                return ArmPose.BOMB_AND_WEAPON;
+                return this.hasGrandTorch() ? ArmPose.TORCH_AND_WEAPON : ArmPose.BOMB_AND_WEAPON;
             }
         } else {
             return ArmPose.CROSSED;
@@ -356,8 +362,12 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
         if (witchbomb == 0) {
             this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.WITCHBOMB.get()));
         } else if (this.level.random.nextFloat() <= 0.25F){
-            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.ENDER_PEARL));
-            this.setGuaranteedDrop(EquipmentSlotType.OFFHAND);
+            if (this.level.random.nextBoolean()) {
+                this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.ENDER_PEARL));
+                this.setGuaranteedDrop(EquipmentSlotType.OFFHAND);
+            } else {
+                this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModBlocks.GRAND_TORCH_ITEM.get()));
+            }
         }
     }
 

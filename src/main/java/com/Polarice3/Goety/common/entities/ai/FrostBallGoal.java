@@ -10,7 +10,7 @@ public class FrostBallGoal extends RangedAttackGoal {
     public float distance;
 
     public FrostBallGoal(IRangedAttackMob entity, float distance) {
-        super(entity, 1.0D,  20, 40, 20.0F);
+        super(entity, 1.0D,  20, 20, 20.0F);
         this.ghost = entity;
         this.distance = distance;
     }

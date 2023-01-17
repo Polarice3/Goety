@@ -19,4 +19,9 @@ public class ZombieMinionRenderer extends BipedRenderer<ZombieMinionEntity, Zomb
     public ResourceLocation getTextureLocation(ZombieMinionEntity entity) {
         return TEXTURE;
     }
+
+    @Override
+    protected boolean isShaking(ZombieMinionEntity p_230495_1_) {
+        return p_230495_1_.isUnderWaterConverting();
+    }
 }

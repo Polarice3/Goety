@@ -9,6 +9,7 @@ import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -29,6 +30,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class AbstractDredenEntity extends AbstractWraithEntity implements ISpewing, IRangedAttackMob {
     protected static final DataParameter<Boolean> SPEWING = EntityDataManager.defineId(AbstractDredenEntity.class, DataSerializers.BOOLEAN);
@@ -41,7 +44,7 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
         super.registerGoals();
         this.goalSelector.addGoal(4, new FrostBallGoal(this, 10.0F));
         this.goalSelector.addGoal(4, new SpewingAttackGoal<>(this, 20.0F, 20, 0.025F));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.25D, true));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
@@ -143,6 +146,12 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
                 serverWorld.sendParticles(ParticleTypes.CLOUD, this.getRandomX(0.5D), this.getY() + 0.5D, this.getRandomZ(0.5D), 1, (0.5D - this.random.nextDouble()) * 0.15D, (double) 0.01F, (0.5D - this.random.nextDouble()) * 0.15D, (0.5D - this.random.nextDouble()) * 0.15D);
                 if (this.level.getBiome(new BlockPos(f, 0, h)).getTemperature(new BlockPos(f, g, h)) > 1.0F && this.level.isDay()) {
                     this.addEffect(new EffectInstance(Effects.WEAKNESS, 20, 1));
+                } else {
+                    if (this.isOnFire()){
+                        if (this.tickCount % 50 == 0){
+                            this.clearFire();
+                        }
+                    }
                 }
                 if (this.level.isRainingAt(this.blockPosition()) && this.level.getBiome(this.blockPosition()).shouldSnow(this.level, this.blockPosition())){
                     this.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 20, 1, false, false));
@@ -157,6 +166,44 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
 
     @Override
     public void attackAI() {
+        if (!this.level.isClientSide){
+            if (this.isTeleporting()) {
+                --this.teleportTime;
+                if (this.teleportTime <= 2){
+                    this.prevX = this.getX();
+                    this.prevY = this.getY();
+                    this.prevZ = this.getZ();
+                }
+                if (this.teleportTime <= 0){
+                    this.teleport();
+                }
+            } else {
+                this.teleportTime = 20;
+            }
+        } else {
+            if (this.isTeleporting()) {
+                --this.teleportTime;
+                int i = 16;
+
+                for(int j = 0; j < i; ++j) {
+                    double d0 = (double)j / (i - 1);
+                    float f = (this.random.nextFloat() - 0.5F) * 0.2F;
+                    float f1 = (this.random.nextFloat() - 0.5F) * 0.2F;
+                    float f2 = (this.random.nextFloat() - 0.5F) * 0.2F;
+                    double d1 = MathHelper.lerp(d0, this.xo, this.getX()) + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
+                    double d2 = MathHelper.lerp(d0, this.yo, this.getY()) + this.random.nextDouble() * (double)this.getBbHeight();
+                    double d3 = MathHelper.lerp(d0, this.zo, this.getZ()) + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
+                    this.level.addParticle(ParticleTypes.CLOUD, d1, d2, d3, (double)f, (double)f1, (double)f2);
+                }
+                if (this.teleportTime <= 2){
+                    this.prevX = this.getX();
+                    this.prevY = this.getY();
+                    this.prevZ = this.getZ();
+                }
+            } else {
+                this.teleportTime = 20;
+            }
+        }
     }
 
     @Override
@@ -175,16 +222,64 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
             LivingEntity livingEntity = (LivingEntity) target;
             if (livingEntity.hurt(ModDamageSource.frostBreath(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE))){
                 if (!livingEntity.hasEffect(Effects.MOVEMENT_SLOWDOWN)) {
-                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100));
+                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 300));
                 } else {
-                    if (this.random.nextFloat() <= 0.01F) {
-                        EffectsUtil.amplifyEffect(livingEntity, Effects.MOVEMENT_SLOWDOWN, 100);
+                    if (this.random.nextFloat() <= 0.025F) {
+                        EffectsUtil.amplifyEffect(livingEntity, Effects.MOVEMENT_SLOWDOWN, 300);
                     } else {
-                        EffectsUtil.resetDuration(livingEntity, Effects.MOVEMENT_SLOWDOWN, 100);
+                        EffectsUtil.resetDuration(livingEntity, Effects.MOVEMENT_SLOWDOWN, 300);
                     }
                 }
             }
         }
+    }
+
+    public boolean doHurtTarget(Entity pEntity) {
+        float f = (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        float f1 = (float)this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+        if (pEntity instanceof LivingEntity) {
+            f += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity)pEntity).getMobType());
+            f1 += (float)EnchantmentHelper.getKnockbackBonus(this);
+        }
+
+        boolean flag = pEntity.hurt(ModDamageSource.directFrost(this), f);
+        if (flag) {
+            if (f1 > 0.0F && pEntity instanceof LivingEntity) {
+                ((LivingEntity)pEntity).knockback(f1 * 0.5F, (double)MathHelper.sin(this.yRot * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(this.yRot * ((float)Math.PI / 180F))));
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
+            }
+
+            this.doEnchantDamageEffects(this, pEntity);
+            this.setLastHurtMob(pEntity);
+        }
+
+        return flag;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void handleEntityEvent(byte pId) {
+        if (pId == 100){
+            int i = 16;
+
+            for(int j = 0; j < i; ++j) {
+                double d0 = (double)j / (i - 1);
+                float f = (this.random.nextFloat() - 0.5F) * 0.2F;
+                float f1 = (this.random.nextFloat() - 0.5F) * 0.2F;
+                float f2 = (this.random.nextFloat() - 0.5F) * 0.2F;
+                double d1 = MathHelper.lerp(d0, this.xo, this.getX()) + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
+                double d2 = MathHelper.lerp(d0, this.yo, this.getY()) + this.random.nextDouble() * (double)this.getBbHeight();
+                double d3 = MathHelper.lerp(d0, this.zo, this.getZ()) + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
+                this.level.addParticle(ParticleTypes.POOF, d1, d2, d3, (double)f, (double)f1, (double)f2);
+            }
+        } else if (pId == 101){
+            if (!this.isSilent()) {
+                this.level.playSound(null, this.prevX, this.prevY, this.prevZ, ModSounds.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
+                this.playSound(ModSounds.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
+            }
+        } else {
+            super.handleEntityEvent(pId);
+        }
+
     }
 
     @Override

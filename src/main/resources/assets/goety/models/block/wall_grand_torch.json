@@ -1,0 +1,6 @@
+{
+  "parent": "goety:block/template_big_torch_wall",
+  "textures": {
+    "torch": "goety:blocks/grand_torch"
+  }
+}

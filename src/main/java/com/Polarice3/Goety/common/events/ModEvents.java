@@ -892,15 +892,6 @@ public class ModEvents {
                 }
             }
         }
-        if (event.getSource().getDirectEntity() instanceof FangEntity){
-            FangEntity fangEntity = (FangEntity) event.getSource().getDirectEntity();
-            if (fangEntity.getOwner() instanceof PlayerEntity) {
-                PlayerEntity player = (PlayerEntity) fangEntity.getOwner();
-                if (fangEntity.isAbsorbing()) {
-                    player.heal(event.getAmount());
-                }
-            }
-        }
         if (event.getSource().getDirectEntity() instanceof LivingEntity){
             LivingEntity livingAttacker = (LivingEntity) event.getSource().getDirectEntity();
             if (livingAttacker.getMainHandItem().getItem() instanceof TieredItem){
@@ -982,6 +973,18 @@ public class ModEvents {
                 }
             }
         }
+        if (direct instanceof LivingEntity && ModDamageSource.physicalAttacks(event.getSource())){
+            float chance = 0.0F;
+            LivingEntity livingEntity = (LivingEntity) direct;
+            if (livingEntity.getMainHandItem().getItem() == ModBlocks.GRAND_TORCH_ITEM.get()){
+                chance += 0.5F;
+            } else if (livingEntity.getOffhandItem().getItem() == ModBlocks.GRAND_TORCH_ITEM.get()){
+                chance += 0.25F;
+            }
+            if (livingEntity.level.random.nextFloat() <= chance){
+                victim.setSecondsOnFire(5);
+            }
+        }
         if (direct instanceof AbstractArrowEntity){
             AbstractArrowEntity arrowEntity = (AbstractArrowEntity) direct;
             if (arrowEntity.getTags().contains(ConstantPaths.rainArrow()) || arrowEntity.getOwner() instanceof ApostleEntity){
@@ -1038,6 +1041,20 @@ public class ModEvents {
                     event.setCanceled(true);
                 }
             }
+        }
+
+        if (event.getSource().getDirectEntity() instanceof FangEntity){
+            FangEntity fangEntity = (FangEntity) event.getSource().getDirectEntity();
+            if (fangEntity.getOwner() instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) fangEntity.getOwner();
+                if (fangEntity.isAbsorbing()) {
+                    player.heal(event.getAmount());
+                }
+            }
+        }
+
+        if (event.getSource().getDirectEntity() instanceof AbstractDredenEntity){
+            ((AbstractDredenEntity) event.getSource().getDirectEntity()).heal(event.getAmount());
         }
     }
 
