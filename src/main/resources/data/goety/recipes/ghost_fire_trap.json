@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "bfb",
+    "ehe",
+    "crc"
+  ],
+  "key":
+  {
+    "b":
+    {
+      "item": "goety:cursed_bars"
+    },
+    "f":
+    {
+      "item": "minecraft:fire_charge"
+    },
+    "e":
+    {
+      "item": "goety:ectoplasm"
+    },
+    "h":
+    {
+      "item": "goety:hunger_core"
+    },
+    "c":
+    {
+      "item": "goety:cursed_stone_chiseled"
+    },
+    "r":
+    {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result":
+  {
+    "item": "goety:ghost_fire_trap",
+    "count": 1
+  }
+}

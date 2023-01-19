@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "goety:blocks/ghost_fire_trap_top",
+    "bottom": "goety:blocks/ghost_fire_trap_bottom",
+    "side": "goety:blocks/ghost_fire_trap_side_powered"
+  }
+}

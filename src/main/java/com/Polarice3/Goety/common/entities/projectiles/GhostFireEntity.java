@@ -7,6 +7,7 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
@@ -38,8 +39,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
+
 public class GhostFireEntity extends GroundProjectileEntity {
     private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(GhostFireEntity.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> SOUL_EATING = EntityDataManager.defineId(GhostFireEntity.class, DataSerializers.BOOLEAN);
 
     public GhostFireEntity(EntityType<? extends Entity> p_i50170_1_, World p_i50170_2_) {
         super(p_i50170_1_, p_i50170_2_);
@@ -47,16 +51,22 @@ public class GhostFireEntity extends GroundProjectileEntity {
         this.lifeTicks = 80;
     }
 
-    public GhostFireEntity(World world, double pPosX, double pPosY, double pPosZ, LivingEntity owner) {
+    public GhostFireEntity(World world, double pPosX, double pPosY, double pPosZ, @Nullable LivingEntity owner) {
         this(ModEntityType.GHOST_FIRE.get(), world);
         this.setOwner(owner);
         this.setPos(pPosX, pPosY, pPosZ);
     }
 
-    public GhostFireEntity(World world, BlockPos blockPos, LivingEntity owner) {
+    public GhostFireEntity(World world, BlockPos blockPos, @Nullable LivingEntity owner) {
         this(ModEntityType.GHOST_FIRE.get(), world);
         this.setOwner(owner);
         this.setPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public GhostFireEntity(World world, Vector3d vector3d, @Nullable LivingEntity owner) {
+        this(ModEntityType.GHOST_FIRE.get(), world);
+        this.setOwner(owner);
+        this.setPos(vector3d.x(), vector3d.y(), vector3d.z());
     }
 
     public ResourceLocation getResourceLocation() {
@@ -67,6 +77,7 @@ public class GhostFireEntity extends GroundProjectileEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_TYPE_ID, 0);
+        this.entityData.define(SOUL_EATING, false);
     }
 
     public int getAnimation() {
@@ -77,16 +88,26 @@ public class GhostFireEntity extends GroundProjectileEntity {
         this.entityData.set(DATA_TYPE_ID, pType);
     }
 
+    public boolean isSoulEating(){
+        return this.entityData.get(SOUL_EATING);
+    }
+
+    public void setSoulEating(boolean soulEating){
+        this.entityData.set(SOUL_EATING, soulEating);
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundNBT pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.setAnimation(pCompound.getInt("Animation"));
+        this.setSoulEating(pCompound.getBoolean("soulEating"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putInt("Animation", this.getAnimation());
+        pCompound.putBoolean("soulEating", this.isSoulEating());
     }
 
     public float getBrightness() {
@@ -119,7 +140,6 @@ public class GhostFireEntity extends GroundProjectileEntity {
             if (!this.isNoGravity()) {
                 this.moveDownToGround();
             }
-
             if (!this.sentTrapEvent) {
                 this.level.broadcastEntityEvent(this, (byte)4);
                 this.sentTrapEvent = true;
@@ -133,13 +153,7 @@ public class GhostFireEntity extends GroundProjectileEntity {
 
             if (this.tickCount >= 12){
                 for(LivingEntity livingentity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox())) {
-                    if (this.getOwner() != null && this.getOwner() instanceof IMob){
-                        if (!(livingentity instanceof IMob)){
-                            this.dealDamageTo(livingentity);
-                        }
-                    } else {
-                        this.dealDamageTo(livingentity);
-                    }
+                    this.dealDamageTo(livingentity);
                 }
             }
 
@@ -190,42 +204,53 @@ public class GhostFireEntity extends GroundProjectileEntity {
     }
 
     private void dealDamageTo(LivingEntity target) {
-        LivingEntity livingentity = this.getOwner();
+        LivingEntity owner = this.getOwner();
         int burning = 0;
         float damage = 4.0F;
         if (this.tickCount >= 14){
             damage = 2.0F;
         }
-        if (target.isAlive() && !target.isInvulnerable() && target != livingentity) {
-            if (livingentity == null) {
+        if (target.isAlive() && !target.isInvulnerable() && target != owner) {
+            if (target.fireImmune()){
+                return;
+            }
+            if (owner == null) {
                 target.hurt(DamageSource.IN_FIRE, damage);
             } else {
-                if (target.isAlliedTo(livingentity)){
+                if (target.isAlliedTo(owner)){
                     return;
                 }
-                if (livingentity.isAlliedTo(target)) {
+                if (owner.isAlliedTo(target)) {
                     return;
                 }
-                if (livingentity instanceof PlayerEntity){
-                    PlayerEntity player = (PlayerEntity) livingentity;
+                if (owner instanceof IMob && target instanceof IMob){
+                    return;
+                }
+                if (owner instanceof PlayerEntity){
+                    PlayerEntity player = (PlayerEntity) owner;
                     if (WandUtil.enchantedFocus(player)) {
                         damage += WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                         burning += WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                     }
                 } else {
-                    if (livingentity.getAttribute(Attributes.ATTACK_DAMAGE) != null){
-                        damage = (float) livingentity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+                    if (owner.getAttribute(Attributes.ATTACK_DAMAGE) != null){
+                        damage = (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE);
                         if (this.tickCount >= 14){
                             damage /= 2.0F;
                         }
                     }
-                    if (livingentity instanceof AbstractWraithEntity){
-                        AbstractWraithEntity wraith = (AbstractWraithEntity) livingentity;
+                    if (owner instanceof AbstractWraithEntity){
+                        AbstractWraithEntity wraith = (AbstractWraithEntity) owner;
                         burning = wraith.getBurningLevel();
                     }
                 }
-                if (target.hurt(ModDamageSource.magicFire(this, livingentity), damage)){
+                if (target.hurt(ModDamageSource.magicFire(this, owner), damage)){
                     target.setSecondsOnFire(5 * burning);
+                    if (owner instanceof PlayerEntity) {
+                        if (this.isSoulEating()) {
+                            SEHelper.increaseSouls((PlayerEntity) owner, 1);
+                        }
+                    }
                 }
             }
         }

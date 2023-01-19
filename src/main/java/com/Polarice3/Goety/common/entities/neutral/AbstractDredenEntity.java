@@ -165,24 +165,10 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
     }
 
     @Override
-    public void attackAI() {
-        if (!this.level.isClientSide){
+    public void teleportAI(){
+        super.teleportAI();
+        if (this.level.isClientSide){
             if (this.isTeleporting()) {
-                --this.teleportTime;
-                if (this.teleportTime <= 2){
-                    this.prevX = this.getX();
-                    this.prevY = this.getY();
-                    this.prevZ = this.getZ();
-                }
-                if (this.teleportTime <= 0){
-                    this.teleport();
-                }
-            } else {
-                this.teleportTime = 20;
-            }
-        } else {
-            if (this.isTeleporting()) {
-                --this.teleportTime;
                 int i = 16;
 
                 for(int j = 0; j < i; ++j) {
@@ -195,15 +181,12 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
                     double d3 = MathHelper.lerp(d0, this.zo, this.getZ()) + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
                     this.level.addParticle(ParticleTypes.CLOUD, d1, d2, d3, (double)f, (double)f1, (double)f2);
                 }
-                if (this.teleportTime <= 2){
-                    this.prevX = this.getX();
-                    this.prevY = this.getY();
-                    this.prevZ = this.getZ();
-                }
-            } else {
-                this.teleportTime = 20;
             }
         }
+    }
+
+    @Override
+    public void attackAI(){
     }
 
     @Override

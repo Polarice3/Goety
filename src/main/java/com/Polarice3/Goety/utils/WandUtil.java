@@ -14,6 +14,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.Map;
@@ -130,29 +131,40 @@ public class WandUtil {
         world.addFreshEntity(ghostFire9);
     }
 
-    public static void spawnCrossGhostFires(World world, BlockPos pPos, LivingEntity livingEntity){
-        BlockPos blockPos2 = pPos.west();
-        BlockPos blockPos3 = pPos.east();
-        BlockPos blockPos4 = pPos.north();
-        BlockPos blockPos5 = pPos.south();
+    public static void spawnGhostFires(World world, Vector3d pPos, LivingEntity livingEntity){
+        Vector3d vector3d = Vector3dUtil.west(pPos);
+        Vector3d vector3d1 = Vector3dUtil.east(pPos);
         GhostFireEntity ghostFire1 = new GhostFireEntity(world, pPos, livingEntity);
         world.addFreshEntity(ghostFire1);
-        GhostFireEntity ghostFire2 = new GhostFireEntity(world, blockPos2, livingEntity);
+        GhostFireEntity ghostFire2 = new GhostFireEntity(world, vector3d, livingEntity);
         world.addFreshEntity(ghostFire2);
-        GhostFireEntity ghostFire3 = new GhostFireEntity(world, blockPos3, livingEntity);
+        GhostFireEntity ghostFire3 = new GhostFireEntity(world, vector3d1, livingEntity);
         world.addFreshEntity(ghostFire3);
-        GhostFireEntity ghostFire4 = new GhostFireEntity(world, blockPos4, livingEntity);
+        GhostFireEntity ghostFire4 = new GhostFireEntity(world, Vector3dUtil.north(pPos), livingEntity);
         world.addFreshEntity(ghostFire4);
-        GhostFireEntity ghostFire5 = new GhostFireEntity(world, blockPos5, livingEntity);
+        GhostFireEntity ghostFire5 = new GhostFireEntity(world, Vector3dUtil.south(pPos), livingEntity);
         world.addFreshEntity(ghostFire5);
-        GhostFireEntity ghostFire6 = new GhostFireEntity(world, blockPos4.north(), livingEntity);
+        GhostFireEntity ghostFire6 = new GhostFireEntity(world, Vector3dUtil.north(vector3d), livingEntity);
         world.addFreshEntity(ghostFire6);
-        GhostFireEntity ghostFire7 = new GhostFireEntity(world, blockPos5.south(), livingEntity);
+        GhostFireEntity ghostFire7 = new GhostFireEntity(world, Vector3dUtil.south(vector3d), livingEntity);
         world.addFreshEntity(ghostFire7);
-        GhostFireEntity ghostFire8 = new GhostFireEntity(world, blockPos2.west(), livingEntity);
+        GhostFireEntity ghostFire8 = new GhostFireEntity(world, Vector3dUtil.north(vector3d1), livingEntity);
         world.addFreshEntity(ghostFire8);
-        GhostFireEntity ghostFire9 = new GhostFireEntity(world, blockPos3.east(), livingEntity);
+        GhostFireEntity ghostFire9 = new GhostFireEntity(world, Vector3dUtil.south(vector3d1), livingEntity);
         world.addFreshEntity(ghostFire9);
+    }
+
+    public static void spawnCrossGhostFires(World world, Vector3d pPos, LivingEntity livingEntity){
+        GhostFireEntity ghostFire1 = new GhostFireEntity(world, pPos, livingEntity);
+        world.addFreshEntity(ghostFire1);
+        GhostFireEntity ghostFire2 = new GhostFireEntity(world, Vector3dUtil.west(pPos), livingEntity);
+        world.addFreshEntity(ghostFire2);
+        GhostFireEntity ghostFire3 = new GhostFireEntity(world, Vector3dUtil.east(pPos), livingEntity);
+        world.addFreshEntity(ghostFire3);
+        GhostFireEntity ghostFire4 = new GhostFireEntity(world, Vector3dUtil.north(pPos), livingEntity);
+        world.addFreshEntity(ghostFire4);
+        GhostFireEntity ghostFire5 = new GhostFireEntity(world, Vector3dUtil.south(pPos), livingEntity);
+        world.addFreshEntity(ghostFire5);
     }
 
 }

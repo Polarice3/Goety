@@ -63,4 +63,7 @@ public class ModParticleTypes {
 
     public static final RegistryObject<BasicParticleType> WHITE_EFFECT = PARTICLE_TYPES.register("white_effect",
             () -> new BasicParticleType(false));
+
+    public static final RegistryObject<BasicParticleType> WRAITH = PARTICLE_TYPES.register("wraith",
+            () -> new BasicParticleType(false));
 }

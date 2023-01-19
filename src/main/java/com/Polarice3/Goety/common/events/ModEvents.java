@@ -45,6 +45,7 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -61,6 +62,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
@@ -758,7 +760,7 @@ public class ModEvents {
                         mob.setTarget(mob.getLastHurtByMob());
                     }
                     if (RobeArmorFinder.FindNecroSet(target) && RobeArmorFinder.FindNecroBootsofWander(target)){
-                        boolean undead = mob.getMobType() == CreatureAttribute.UNDEAD && mob.getMaxHealth() < 50.0F && !(mob instanceof OwnedEntity) && !(mob instanceof BoneLordEntity);
+                        boolean undead = mob.getMobType() == CreatureAttribute.UNDEAD && mob.getMaxHealth() < 50.0F && !(mob instanceof OwnedEntity && !(mob instanceof IMob)) && !(mob instanceof BoneLordEntity);
                         if (undead){
                             if (mob.getLastHurtByMob() != target){
                                 mob.setTarget(null);
@@ -985,6 +987,20 @@ public class ModEvents {
                 victim.setSecondsOnFire(5);
             }
         }
+        if (event.getSource() instanceof NoKnockBackDamageSource){
+            NoKnockBackDamageSource damageSource = (NoKnockBackDamageSource) event.getSource();
+            if (damageSource.getOwner() != null) {
+                if (damageSource.getOwner() instanceof LivingEntity) {
+                    victim.setLastHurtByMob((LivingEntity) damageSource.getOwner());
+                }
+                if (damageSource.getOwner() instanceof PlayerEntity) {
+                    victim.setLastHurtByPlayer((PlayerEntity) damageSource.getOwner());
+                }
+                if (damageSource.getOwner() instanceof ServerPlayerEntity) {
+                    CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayerEntity) damageSource.getOwner(), victim, event.getSource(), event.getAmount(), event.getAmount(), false);
+                }
+            }
+        }
         if (direct instanceof AbstractArrowEntity){
             AbstractArrowEntity arrowEntity = (AbstractArrowEntity) direct;
             if (arrowEntity.getTags().contains(ConstantPaths.rainArrow()) || arrowEntity.getOwner() instanceof ApostleEntity){
@@ -1063,7 +1079,7 @@ public class ModEvents {
         LivingEntity entity = event.getEntityLiving();
         if (event.getLookingEntity() instanceof LivingEntity){
             LivingEntity looker = (LivingEntity) event.getLookingEntity();
-            boolean undead = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F && !(looker instanceof OwnedEntity) && !(looker instanceof BoneLordEntity);
+            boolean undead = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F && !(looker instanceof OwnedEntity && !(looker instanceof IMob)) && !(looker instanceof BoneLordEntity);
             if (RobeArmorFinder.FindNecroHelm(entity)){
                 if (undead){
                     event.modifyVisibility(0.5);
@@ -1087,7 +1103,7 @@ public class ModEvents {
         LivingEntity knocked = event.getEntityLiving();
         DamageSource lastDamage = knocked.getLastDamageSource();
         if (lastDamage != null) {
-            if (ModDamageSource.noKnockBackAttacks(lastDamage)){
+            if (lastDamage instanceof NoKnockBackDamageSource){
                 event.setCanceled(true);
             }
         }
@@ -1273,6 +1289,40 @@ public class ModEvents {
             if (event.getEntityLiving() != null) {
                 if (!event.getEntityLiving().level.isClientSide) {
                     int looting = 0;
+                    if (event.getDamageSource() instanceof NoKnockBackDamageSource){
+                        NoKnockBackDamageSource damageSource = (NoKnockBackDamageSource) event.getDamageSource();
+                        if (damageSource.getOwner() != null){
+                            if (damageSource.getOwner() instanceof PlayerEntity) {
+                                PlayerEntity player = (PlayerEntity) damageSource.getOwner();
+                                if (player != null) {
+                                    if (EnchantmentHelper.getMobLooting(player) != 0){
+                                        looting = EnchantmentHelper.getMobLooting(player);
+                                    } else if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                        if (CuriosFinder.findRing(player).isEnchanted()) {
+                                            looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                        }
+                                    }
+                                    event.setLootingLevel(event.getLootingLevel() + looting);
+                                }
+                            }
+                            if (damageSource.getOwner() instanceof IOwned) {
+                                IOwned ownedEntity = (IOwned) damageSource.getOwner();
+                                if (ownedEntity != null) {
+                                    if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
+                                        PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
+                                        if (player != null) {
+                                            if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                                if (CuriosFinder.findRing(player).isEnchanted()) {
+                                                    looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                                }
+                                            }
+                                            event.setLootingLevel(event.getLootingLevel() + looting);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if (event.getDamageSource().getEntity() != null) {
                         if (event.getDamageSource().getEntity() instanceof PlayerEntity) {
                             PlayerEntity player = (PlayerEntity) event.getDamageSource().getEntity();
@@ -1283,18 +1333,20 @@ public class ModEvents {
                                         looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
                                     }
                                 }
-                                if (spell != null) {
-                                    if (spell instanceof FangEntity) {
-                                        event.setLootingLevel(event.getLootingLevel() + looting);
+                                if (looting > EnchantmentHelper.getMobLooting(player)) {
+                                    if (spell != null) {
+                                        if (spell instanceof FangEntity) {
+                                            event.setLootingLevel(event.getLootingLevel() + looting);
+                                        }
+                                        if (spell instanceof DamagingProjectileEntity) {
+                                            event.setLootingLevel(event.getLootingLevel() + looting);
+                                        }
                                     }
-                                    if (spell instanceof DamagingProjectileEntity) {
-                                        event.setLootingLevel(event.getLootingLevel() + looting);
-                                    }
-                                }
-                                if (event.getDamageSource() instanceof ModDamageSource) {
-                                    ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
-                                    if (ModDamageSource.breathAttacks(modDamageSource)) {
-                                        event.setLootingLevel(event.getLootingLevel() + looting);
+                                    if (event.getDamageSource() instanceof ModDamageSource) {
+                                        ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
+                                        if (ModDamageSource.breathAttacks(modDamageSource)) {
+                                            event.setLootingLevel(event.getLootingLevel() + looting);
+                                        }
                                     }
                                 }
                             }
@@ -1302,15 +1354,19 @@ public class ModEvents {
                         if (event.getDamageSource().getEntity() instanceof IOwned) {
                             IOwned ownedEntity = (IOwned) event.getDamageSource().getEntity();
                             if (ownedEntity != null) {
-                                if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
-                                    PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
-                                    if (player != null) {
-                                        if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
-                                            if (CuriosFinder.findRing(player).isEnchanted()) {
-                                                looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                if (ownedEntity instanceof LivingEntity) {
+                                    if (ownedEntity.getTrueOwner() instanceof PlayerEntity) {
+                                        PlayerEntity player = (PlayerEntity) ownedEntity.getTrueOwner();
+                                        if (player != null) {
+                                            if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
+                                                if (CuriosFinder.findRing(player).isEnchanted()) {
+                                                    looting = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player));
+                                                }
+                                            }
+                                            if (looting > EnchantmentHelper.getMobLooting((LivingEntity) ownedEntity)) {
+                                                event.setLootingLevel(event.getLootingLevel() + looting);
                                             }
                                         }
-                                        event.setLootingLevel(event.getLootingLevel() + looting);
                                     }
                                 }
                             }

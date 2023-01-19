@@ -33,7 +33,7 @@ public class GhostFireRenderer extends EntityRenderer<GhostFireEntity> {
             pMatrixStack.pushPose();
             pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F - pEntity.yRot));
             pMatrixStack.scale(-f1, -1.25F, f1);
-            pMatrixStack.translate(0.0D, -1.5D, 0.0D);
+            pMatrixStack.translate(0.0D, -1.45D, 0.0D);
             IVertexBuilder ivertexbuilder = bufferIn.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));
             this.model.setupAnim(pEntity, 0.0F, 0.0F, pPartialTicks/10, 0, 0);
             this.model.renderToBuffer(pMatrixStack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.15F);

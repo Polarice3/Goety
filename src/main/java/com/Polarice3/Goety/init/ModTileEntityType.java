@@ -70,6 +70,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<ForbiddenGrassTileEntity>> FORBIDDEN_GRASS = TILEENTITY_TYPES.register("forbidden_grass",
             () -> TileEntityType.Builder.of(ForbiddenGrassTileEntity::new, ModBlocks.FORBIDDEN_GRASS.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<GhostFireTrapTileEntity>> GHOST_FIRE_TRAP = TILEENTITY_TYPES.register("ghost_fire_trap",
+            () -> TileEntityType.Builder.of(GhostFireTrapTileEntity::new, ModBlocks.GHOST_FIRE_TRAP_BLOCK.get()).build(null));
+
     public static final RegistryObject<TileEntityType<ModSignTileEntity>> SIGN_TILE_ENTITIES = TILEENTITY_TYPES.register("sign",
             () -> TileEntityType.Builder.of(ModSignTileEntity::new,
                     ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get(),

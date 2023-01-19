@@ -525,9 +525,11 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         if (!this.level.isClientSide() && this.isAlive() && !this.isSettingupSecond() && !this.isCasting()) {
             for(int i = 0; i < 128; ++i) {
                 double d3 = this.getX() + (this.getRandom().nextDouble() - 0.5D) * 32.0D;
+                double d4 = this.getY();
+                if (this.getTarget() != null){
+                    d4 = this.getTarget().getY();
+                }
                 double d5 = this.getZ() + (this.getRandom().nextDouble() - 0.5D) * 32.0D;
-                BlockPos blockPos = new BlockPos(d3, this.getY(), d5);
-                double d4 = this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockPos).getY();
                 if (this.randomTeleport(d3, d4, d5, false)) {
                     this.teleportHits();
                     this.resetHitTime();

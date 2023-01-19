@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "goety:block/ghost_fire_trap"
+    },
+    "powered=true": {
+      "model": "goety:block/ghost_fire_trap_powered"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Ghost Fire Trap",
+  "icon": "goety:ghost_fire_trap",
+  "category": "goety:crafts",
+  "advancement": "goety:goety/kill_a_wraith",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With the ectoplasm dropped by those Wraiths, you are able to harness their mystical unflames into a machine that will burn any living creature on it. The Hunger core will also caused the unflames to sap Soul Energy and give it to the block's placer when burning the creature above."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety:ghost_fire_trap",
+      "text": "The machine will activate with a redstone signal. The fire doesn't hurt the placer."
+    }
+  ]
+}

@@ -63,11 +63,11 @@ public class ModDamageSource extends DamageSource {
     }
 
     public static DamageSource roots(Entity pSource, @Nullable Entity pIndirectEntity){
-        return (new IndirectEntityDamageSource(source("indirectRoots"), pSource, pIndirectEntity));
+        return (new NoKnockBackDamageSource(source("indirectRoots"), pSource, pIndirectEntity));
     }
 
     public static DamageSource magicFire(Entity pSource, @Nullable Entity pIndirectEntity){
-        return new IndirectEntityDamageSource(source("magicFire"), pSource, pIndirectEntity).bypassArmor().setIsFire();
+        return new NoKnockBackDamageSource(source("magicFire"), pSource, pIndirectEntity).bypassArmor().setIsFire();
     }
 
     public static boolean breathAttacks(DamageSource source){

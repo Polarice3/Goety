@@ -77,6 +77,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
     public static final RegistryObject<Block> GRAND_TORCH = BLOCKS.register("grand_torch", () -> new BigTorchBlock(ParticleTypes.FLAME));
     public static final RegistryObject<Block> WALL_GRAND_TORCH = BLOCKS.register("wall_grand_torch", () -> new WallBigTorchBlock(ParticleTypes.FLAME));
+    public static final RegistryObject<Block> GHOST_FIRE_TRAP_BLOCK = BLOCKS.register("ghost_fire_trap", GhostFireTrapBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -414,6 +415,8 @@ public class ModBlocks {
             () -> new BlockItemBase(ROTTEN_PUMPKIN.get()));
     public static final RegistryObject<Item> GRAND_TORCH_ITEM = BLOCK_ITEMS.register("grand_torch",
             () -> new WallOrFloorItem(ModBlocks.GRAND_TORCH.get(), WALL_GRAND_TORCH.get(), (new Item.Properties()).tab(Goety.TAB)));
+    public static final RegistryObject<Item> GHOST_FIRE_TRAP_ITEM = BLOCK_ITEMS.register("ghost_fire_trap",
+            () -> new BlockItemBase(GHOST_FIRE_TRAP_BLOCK.get()));
 
     //RemnantItems
     public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("remnant_block",

@@ -16,14 +16,14 @@ import net.minecraft.world.GameRules;
 
 import java.util.function.Predicate;
 
-public class AllyTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
+public class AllyTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<MobEntity> {
 
-    public AllyTargetGoal(MobEntity ownedEntity, Class<T> pClass) {
-        super(ownedEntity, pClass, 5, true, false, predicate(ownedEntity));
+    public AllyTargetGoal(MobEntity ownedEntity) {
+        super(ownedEntity, MobEntity.class, 5, true, false, predicate(ownedEntity));
     }
 
-    public AllyTargetGoal(MobEntity ownedEntity, Class<T> pClass, boolean pMustSee, boolean pMustReach) {
-        super(ownedEntity, pClass, 5, pMustSee, pMustReach, predicate(ownedEntity));
+    public AllyTargetGoal(MobEntity ownedEntity, boolean pMustSee, boolean pMustReach) {
+        super(ownedEntity, MobEntity.class, 5, pMustSee, pMustReach, predicate(ownedEntity));
     }
 
     public static Predicate<LivingEntity> predicate(LivingEntity livingEntity){

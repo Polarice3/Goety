@@ -58,8 +58,12 @@ public class SummonedEntity extends OwnedEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F));
-        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelectGoal();
+    }
+
+    public void targetSelectGoal(){
+        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this));
     }
 
     public void checkDespawn() {

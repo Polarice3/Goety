@@ -158,6 +158,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_LIGHT.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GLOW_LIGHT.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FORBIDDEN_GRASS.get(), ModTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GHOST_FIRE_TRAP.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_KILN.get(), CursedKilnTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
@@ -265,6 +266,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.GLOW_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.WRAITH.get(), WraithParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
         particles.register(ModParticleTypes.SOUL_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);
         particles.register(ModParticleTypes.GLOW_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);

@@ -454,8 +454,8 @@ public class MainConfig {
                 .define("interDimensionalMobs", false);
         DredenSpawnWeight = BUILDER.comment("Spawn Weight for Dreden, Default: 20")
                 .defineInRange("dredenSpawnWeight", 20, 0, Integer.MAX_VALUE);
-        WraithSpawnWeight = BUILDER.comment("Spawn Weight for Wraith, Default: 10")
-                .defineInRange("wraithSpawnWeight", 10, 0, Integer.MAX_VALUE);
+        WraithSpawnWeight = BUILDER.comment("Spawn Weight for Wraith, Default: 20")
+                .defineInRange("wraithSpawnWeight", 20, 0, Integer.MAX_VALUE);
         UrbhadhachSpawnWeight = BUILDER.comment("Spawn Weight for Urbhadhach, Default: 16")
                 .defineInRange("urbhadhachSpawnWeight", 16, 0, Integer.MAX_VALUE);
         UrbhadhachThrall = BUILDER.comment("Whether Urbhadhachs try to enthrall baby mobs to it, Default: false")

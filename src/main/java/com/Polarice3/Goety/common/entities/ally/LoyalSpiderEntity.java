@@ -152,7 +152,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new SitGoal(this));
-        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, MobEntity.class));
+        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));
