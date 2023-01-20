@@ -230,7 +230,7 @@ public class SoulWand extends Item{
     }
 
     public void ChangeFocus(ItemStack itemStack){
-        if (!getFocus(itemStack).isEmpty() && getFocus(itemStack) != null && getFocus(itemStack).getTag() != null) {
+        if (!getFocus(itemStack).isEmpty() && getFocus(itemStack) != null) {
             String spell = getFocus(itemStack).getDescriptionId();
             if (spell.contains("vexing")) {
                 this.setSpellConditions(new VexSpell(), itemStack);

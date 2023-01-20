@@ -30,6 +30,7 @@ public class CraftItemRitual extends Ritual{
         }
 
         ItemStack result = this.recipe.getResultItem().copy();
+        result.onCraftedBy(world, castingPlayer, 1);
         IItemHandler handler = tileEntity.itemStackHandler.orElseThrow(RuntimeException::new);
         handler.insertItem(0, result.split(1), false);
     }
