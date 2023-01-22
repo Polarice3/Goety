@@ -127,7 +127,7 @@ public class GhostFireEntity extends GroundProjectileEntity {
                     this.setAnimation(13);
                 }
                 --this.lifeTicks;
-                if (this.lifeTicks <= 70) {
+                if (this.tickCount >= 10) {
                     for(int i = 0; i < 3; ++i) {
                         this.level.addParticle(ParticleTypes.SMOKE, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.0D, 0.0D);
                     }
@@ -144,11 +144,10 @@ public class GhostFireEntity extends GroundProjectileEntity {
                 this.level.broadcastEntityEvent(this, (byte)4);
                 this.sentTrapEvent = true;
             }
-            if (this.tickCount == 8) {
-                if (!this.playSound) {
-                    this.level.broadcastEntityEvent(this, (byte) 5);
-                    this.playSound = true;
-                }
+
+            if (!this.playSound) {
+                this.level.broadcastEntityEvent(this, (byte) 5);
+                this.playSound = true;
             }
 
             if (this.tickCount >= 12){

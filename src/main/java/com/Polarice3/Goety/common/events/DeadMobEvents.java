@@ -203,7 +203,7 @@ public class DeadMobEvents {
                 if (deadMob.getMaxHealth() >= 20.0F) {
                     for (int l = 0; l < 4; ++l) {
                         int i = MathHelper.floor(deadMob.getX() + (double) ((float) (l % 2 * 2 - 1) * 0.25F));
-                        int j = MathHelper.floor(deadMob.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, deadMob.blockPosition()).getY());
+                        int j = MathHelper.floor(deadMob.getY());
                         int k = MathHelper.floor(deadMob.getZ() + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
                         BlockPos blockpos = new BlockPos(i, j, k);
                         if (deadMob.level.getBlockState(blockpos).getBlock() == ModBlocks.DEAD_PILE.get()){

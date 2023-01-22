@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -97,7 +98,7 @@ public class RootTrapEntity extends GroundProjectileEntity {
     public void handleEntityEvent(byte pId) {
         super.handleEntityEvent(pId);
         if (pId == 5) {
-            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.GRASS_BREAK, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.2F + 0.85F, false);
+            this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.ROT_TREE_ROOTS.get(), this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.2F + 0.85F, false);
             int i = MathHelper.floor(this.getX());
             int j = MathHelper.floor(this.getY() - (double)0.2F);
             int k = MathHelper.floor(this.getZ());

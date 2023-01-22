@@ -3,7 +3,7 @@ package com.Polarice3.Goety.common.entities.ally;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
-import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
@@ -152,7 +152,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         super.registerGoals();
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(0, new SitGoal(this));
-        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this));
+        this.targetSelector.addGoal(1, new SummonTargetGoal<>(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(3, new LeapAtTargetGoal(this, 0.4F));

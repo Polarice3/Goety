@@ -31,9 +31,11 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,7 +69,7 @@ public class RottreantEntity extends SummonedEntity{
                 .add(Attributes.MAX_HEALTH, 75.0D)
                 .add(Attributes.ARMOR, 0.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 6.0D)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
     }
@@ -273,9 +275,10 @@ public class RottreantEntity extends SummonedEntity{
 
     public void aiStep() {
         super.aiStep();
+        boolean felArmor = this.getTrueOwner() != null && RobeArmorFinder.FindFelArmor(this.getTrueOwner());
         if (this.getTrueOwner() != null && !this.isStaying()){
             for (MobEntity mobEntity : this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(16))){
-                if (mobEntity.getTarget() != null && mobEntity.getTarget() == this.getTrueOwner()){
+                if (mobEntity.getTarget() != null && mobEntity.getTarget() == this.getTrueOwner() && mobEntity.getTarget().isAlive()){
                     mobEntity.setTarget(this);
                 }
             }
@@ -287,7 +290,8 @@ public class RottreantEntity extends SummonedEntity{
             this.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 100, 0, false, false, false));
             if (!this.isReadyHarvest()) {
                 ++this.mushroomGrow;
-                if (this.mushroomGrow >= TickUtil.ticksToMinutes(5)) {
+                int minutes = felArmor ? 2 : 5;
+                if (this.mushroomGrow >= TickUtil.ticksToMinutes(minutes)) {
                     this.setReadyHarvest(true);
                     this.mushroomGrow = 0;
                     this.playSound(SoundEvents.ROOTS_PLACE, 1.0F, 1.0F);
@@ -332,7 +336,7 @@ public class RottreantEntity extends SummonedEntity{
         if (this.isStaying()){
             this.setDeltaMovement(0, this.getDeltaMovement().y(), 0);
             if (!this.level.isClientSide) {
-                if (this.getTarget() != null) {
+                if (this.getTarget() != null && this.getTarget().isAlive()) {
                     if (this.tickCount % 100 == 0){
                         if (this.level.random.nextFloat() <= 0.25F && this.getTarget().distanceTo(this) <= 16.0F){
                             RootTrapEntity rootTrap = new RootTrapEntity(this.level, BlockFinder.fangSpawnPosition(this.getTarget()), 1, this);
@@ -355,7 +359,7 @@ public class RottreantEntity extends SummonedEntity{
                         }
                     }
                     if (this.tickCount % 25 == 0){
-                        if (this.getTrueOwner() != null && RobeArmorFinder.FindFelArmor(this.getTrueOwner())) {
+                        if (felArmor) {
                             if (this.level.random.nextBoolean()){
                                 SpiderlingMinionEntity spiderlingMinion = ModEntityType.SPIDERLING_MINION.get().create(this.level);
                                 if (spiderlingMinion != null){
@@ -389,22 +393,40 @@ public class RottreantEntity extends SummonedEntity{
                 this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, blockstate).setPos(pos), this.getX() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), this.getY() + 0.1D, this.getZ() + ((double)this.random.nextFloat() - 0.5D) * (double)this.getBbWidth(), 4.0D * ((double)this.random.nextFloat() - 0.5D), 0.5D, ((double)this.random.nextFloat() - 0.5D) * 4.0D);
             }
         }
+        float healAmount = felArmor ? 5.0F : 2.0F;
         if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable)) && this.isStaying()){
             if (this.tickCount % 100 == 0){
                 if (this.getHealth() < this.getMaxHealth()){
-                    this.heal(5.0F);
+                    this.heal(healAmount);
                     this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
                 }
             }
-        } else if (this.level.isRainingAt(this.blockPosition())){
+        } else if (this.level.isRainingAt(this.blockPosition()) || isNearWater(this.level, this.blockPosition())){
             if (this.tickCount % 100 == 0){
                 if (this.getHealth() < this.getMaxHealth()){
-                    this.heal(5.0F);
+                    this.heal(healAmount);
+                    this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                }
+            }
+        } else if (this.isInWater() || this.isUnderWater()){
+            if (this.tickCount % 300 == 0){
+                if (this.getHealth() < this.getMaxHealth()){
+                    this.heal(healAmount);
                     this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
                 }
             }
         }
 
+    }
+
+    private static boolean isNearWater(IWorldReader pLevel, BlockPos pPos) {
+        for(BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-4, 0, -4), pPos.offset(4, 1, 4))) {
+            if (pLevel.getFluidState(blockpos).is(FluidTags.WATER)) {
+                return true;
+            }
+        }
+
+        return net.minecraftforge.common.FarmlandWaterManager.hasBlockWaterTicket(pLevel, pPos);
     }
 
     public void stayingPosition() {
@@ -443,6 +465,21 @@ public class RottreantEntity extends SummonedEntity{
             } else {
                 float f1 = 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
                 this.playSound(ModSounds.ROT_TREE_REPAIR.get(), 1.0F, f1);
+                if (!pPlayer.abilities.instabuild) {
+                    itemstack.shrink(1);
+                }
+
+                return ActionResultType.sidedSuccess(this.level.isClientSide);
+            }
+        }
+        if (item == Items.ROTTEN_FLESH) {
+            float f = this.getHealth();
+            this.heal(1.0F);
+            if (this.getHealth() == f) {
+                return ActionResultType.PASS;
+            } else {
+                float f1 = 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F;
+                this.playSound(ModSounds.ROT_TREE_ROT_REPAIR.get(), 1.0F, f1);
                 if (!pPlayer.abilities.instabuild) {
                     itemstack.shrink(1);
                 }

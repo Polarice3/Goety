@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedFlyingEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -260,8 +260,8 @@ public class PhantomMinionEntity extends OwnedFlyingEntity {
 
     class TargetingGoal extends Goal {
         private final PhantomMinionEntity phantom;
-        private final EntityPredicate attackTargeting = (new EntityPredicate()).range(64.0D).selector(AllyTargetGoal.predicate(PhantomMinionEntity.this));
-        private final EntityPredicate selector = new EntityPredicate().selector(AllyTargetGoal.predicate(PhantomMinionEntity.this));
+        private final EntityPredicate attackTargeting = (new EntityPredicate()).range(64.0D).selector(SummonTargetGoal.predicate(PhantomMinionEntity.this));
+        private final EntityPredicate selector = new EntityPredicate().selector(SummonTargetGoal.predicate(PhantomMinionEntity.this));
         private int nextScanTick = 20;
 
         private TargetingGoal(PhantomMinionEntity phantom) {

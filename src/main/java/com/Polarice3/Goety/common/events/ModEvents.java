@@ -581,9 +581,9 @@ public class ModEvents {
         if (RobeArmorFinder.FindNecroBootsofWander(player)){
             BlockPos blockPos = new BlockPos(player.getX(), player.getBoundingBox().minY - 0.5000001D, player.getZ());
             BlockState blockState = player.level.getBlockState(blockPos);
-            if (blockState.is(BlockTags.SOUL_SPEED_BLOCKS)) {
+            if (blockState.is(BlockTags.SOUL_SPEED_BLOCKS) && !player.isSpectator()) {
                 if (blockState.getBlock().getSpeedFactor() <= 0.4F && !EnchantmentHelper.hasSoulSpeed(player)) {
-                    player.setDeltaMovement(player.getDeltaMovement().x * 1.4, player.getDeltaMovement().y, player.getDeltaMovement().z * 1.4);
+                    player.setDeltaMovement(player.getDeltaMovement().multiply(1.5F, 1.0F, 1.5F));
                 }
             }
         }

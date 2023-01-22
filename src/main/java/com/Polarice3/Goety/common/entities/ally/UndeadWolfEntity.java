@@ -147,6 +147,7 @@ public class UndeadWolfEntity extends SummonedEntity{
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         if (this.isUpgraded()){
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20.0D);
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4.0D);
             this.setHealth(20.0F);
         }
         return pSpawnData;

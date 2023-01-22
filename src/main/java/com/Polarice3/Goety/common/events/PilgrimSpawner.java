@@ -132,18 +132,18 @@ public class PilgrimSpawner {
                         break;
                 }
             } else {
-                int random = pRandom.nextInt(16);
+                int random = pRandom.nextInt(32);
                 switch (random) {
                     case 9:
                         cultist = ModEntityType.FANATIC.get().create(pLevel);
                         break;
-                    case 12:
+                    case 18:
                         cultist = ModEntityType.DISCIPLE.get().create(pLevel);
                         break;
-                    case 14:
+                    case 24:
                         cultist = ModEntityType.BELDAM.get().create(pLevel);
                         break;
-                    case 15:
+                    case 31:
                         cultist = ModEntityType.CHANNELLER.get().create(pLevel);
                         break;
                 }

@@ -256,7 +256,7 @@ public class MainConfig {
                 .defineInRange("maxArcaSouls", 100000, 10, Integer.MAX_VALUE);
         SoulRepair = BUILDER.comment("Certain Items repair themselves using Soul Energy, Default: true")
                 .define("soulRepair", true);
-        TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy, Default: true")
+        TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy and its in Curio Slot or inventory, Default: true")
                 .define("totemUndying", true);
         ArcaUndying = BUILDER.comment("Arca will save the Player if past Totem Maximum Soul Count, Default: true")
                 .define("arcaUndying", true);

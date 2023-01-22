@@ -15,7 +15,10 @@ import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.SEntityStatusPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -145,6 +148,19 @@ public class SoulEnergyEvent {
                     }
                 }
             }
+            if (!(victim instanceof PlayerEntity) || !MainConfig.TotemUndying.get()) {
+                if (victim.getMainHandItem().getItem() instanceof GoldTotemItem){
+                    ItemStack itemStack = victim.getMainHandItem();
+                    if (revive(itemStack, victim)) {
+                        event.setCanceled(true);
+                    }
+                } else if (victim.getOffhandItem().getItem() instanceof GoldTotemItem) {
+                    ItemStack itemStack = victim.getOffhandItem();
+                    if (revive(itemStack, victim)) {
+                        event.setCanceled(true);
+                    }
+                }
+            }
         }
 
         if (killed instanceof PlayerEntity){
@@ -197,6 +213,35 @@ public class SoulEnergyEvent {
             }
         }
 
+    }
+
+    public static boolean revive(ItemStack itemStack, LivingEntity victim){
+        if (!itemStack.isEmpty()) {
+            if (itemStack.getTag() != null) {
+                if (itemStack.getTag().getInt(GoldTotemItem.SOULSAMOUNT) == GoldTotemItem.MAXSOULS) {
+                    if (!victim.level.isClientSide) {
+                        victim.setHealth(1.0F);
+                        victim.removeAllEffects();
+                        victim.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
+                        victim.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
+                        victim.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                        if (victim instanceof PlayerEntity) {
+                            ModNetwork.sendTo((PlayerEntity) victim, new TotemDeathPacket(victim.getUUID()));
+                        } else {
+                            ServerWorld serverWorld = (ServerWorld) victim.level;
+                            serverWorld.getChunkSource().broadcast(victim, new SEntityStatusPacket(victim, (byte)35));
+                        }
+                        GoldTotemItem.setSoulsamount(itemStack, 0);
+                        if (victim instanceof MobEntity){
+                            itemStack.shrink(1);
+                            victim.spawnAtLocation(new ItemStack(ModItems.SPENTTOTEM.get()));
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

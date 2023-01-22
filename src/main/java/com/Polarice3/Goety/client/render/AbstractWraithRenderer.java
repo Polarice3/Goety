@@ -1,15 +1,15 @@
 package com.Polarice3.Goety.client.render;
 
-import com.Polarice3.Goety.client.model.AbstractWraithModel;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class AbstractWraithRenderer extends MobRenderer<AbstractWraithEntity, AbstractWraithModel<AbstractWraithEntity>> {
+public abstract class AbstractWraithRenderer extends MobRenderer<AbstractWraithEntity, SegmentedModel<AbstractWraithEntity>> {
 
-    public AbstractWraithRenderer(EntityRendererManager p_i50961_1_, AbstractWraithModel<AbstractWraithEntity> p_i50961_2_, float p_i50961_3_) {
+    public AbstractWraithRenderer(EntityRendererManager p_i50961_1_, SegmentedModel<AbstractWraithEntity> p_i50961_2_, float p_i50961_3_) {
         super(p_i50961_1_, p_i50961_2_, p_i50961_3_);
     }
 

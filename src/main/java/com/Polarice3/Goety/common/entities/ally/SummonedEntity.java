@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.ItemHelper;
@@ -63,7 +63,7 @@ public class SummonedEntity extends OwnedEntity {
     }
 
     public void targetSelectGoal(){
-        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this));
+        this.targetSelector.addGoal(1, new SummonTargetGoal<>(this));
     }
 
     public void checkDespawn() {

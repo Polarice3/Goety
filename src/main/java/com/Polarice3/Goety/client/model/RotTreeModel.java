@@ -11,16 +11,20 @@ import net.minecraft.util.math.MathHelper;
 
 public class RotTreeModel extends SegmentedModel<RottreantEntity> {
     private final ModelRenderer rotTree;
+    private final ModelRenderer upperBody;
     private final ModelRenderer body;
     private final ModelRenderer head;
     private final ModelRenderer rightArm;
     private final ModelRenderer leftArm;
-    private final ModelRenderer upperBody;
     private final ModelRenderer lowerBody;
     private final ModelRenderer rightLeg;
-    private final ModelRenderer leftLeg;
     private final ModelRenderer root;
+    private final ModelRenderer rightLeg2;
+    private final ModelRenderer root3;
+    private final ModelRenderer leftLeg;
     private final ModelRenderer root2;
+    private final ModelRenderer leftLeg2;
+    private final ModelRenderer root4;
 
     public RotTreeModel() {
         texWidth = 128;
@@ -29,15 +33,17 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         rotTree = new ModelRenderer(this);
         rotTree.setPos(0.0F, -7.0F, 0.0F);
 
+
         upperBody = new ModelRenderer(this);
         upperBody.setPos(0.0F, 17.0F, 0.0F);
         rotTree.addChild(upperBody);
+
 
         body = new ModelRenderer(this);
         body.setPos(0.0F, -14.0F, 0.0F);
         upperBody.addChild(body);
         body.texOffs(0, 50).addBox(-4.5F, 5.0F, -3.0F, 9.0F, 3.0F, 4.0F, 0.5F, false);
-        body.texOffs(0, 58).addBox(-6.5F, 9.0F, -3.0F, 13.0F, 4.0F, 6.0F, 0.5F, false);
+        body.texOffs(0, 58).addBox(-6.5F, 9.0F, -3.0F, 13.0F, 4.0F, 6.0F, 1.0F, false);
 
         ModelRenderer cube_r1 = new ModelRenderer(this);
         cube_r1.setPos(4.0F, -7.39F, 6.2485F);
@@ -111,7 +117,7 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
 
 
         rightLeg = new ModelRenderer(this);
-        rightLeg.setPos(-4.0F, 16.0F, 0.0F);
+        rightLeg.setPos(-4.0F, 16.0F, -4.0F);
         lowerBody.addChild(rightLeg);
         rightLeg.texOffs(37, 0).addBox(-2.5F, -2.0F, -1.0F, 4.0F, 8.0F, 3.0F, 0.0F, false);
         rightLeg.texOffs(52, 0).addBox(-3.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 0.5F, true);
@@ -122,8 +128,20 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         rightLeg.addChild(root);
         root.texOffs(100, 0).addBox(-4.0F, 13.0F, -3.0F, 7.0F, 1.0F, 7.0F, 0.5F, true);
 
+        rightLeg2 = new ModelRenderer(this);
+        rightLeg2.setPos(-4.0F, 16.0F, 3.0F);
+        lowerBody.addChild(rightLeg2);
+        rightLeg2.texOffs(37, 0).addBox(-2.5F, -2.0F, -1.0F, 4.0F, 8.0F, 3.0F, 0.0F, false);
+        rightLeg2.texOffs(52, 0).addBox(-3.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 0.5F, true);
+        rightLeg2.texOffs(108, 41).addBox(-3.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 1.0F, true);
+
+        root3 = new ModelRenderer(this);
+        root3.setPos(0.0F, 2.0F, 0.0F);
+        rightLeg2.addChild(root3);
+        root3.texOffs(100, 0).addBox(-4.0F, 13.0F, -3.0F, 7.0F, 1.0F, 7.0F, 0.5F, true);
+
         leftLeg = new ModelRenderer(this);
-        leftLeg.setPos(4.0F, 16.0F, 0.0F);
+        leftLeg.setPos(4.0F, 16.0F, -5.0F);
         lowerBody.addChild(leftLeg);
         leftLeg.texOffs(37, 0).addBox(-1.5F, -2.0F, -1.0F, 4.0F, 8.0F, 3.0F, 0.0F, true);
         leftLeg.texOffs(52, 0).addBox(-2.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 0.5F, false);
@@ -133,6 +151,18 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         root2.setPos(2.0F, 2.0F, 0.0F);
         leftLeg.addChild(root2);
         root2.texOffs(100, 0).addBox(-5.0F, 13.0F, -3.0F, 7.0F, 1.0F, 7.0F, 0.5F, true);
+
+        leftLeg2 = new ModelRenderer(this);
+        leftLeg2.setPos(4.0F, 16.0F, 3.0F);
+        lowerBody.addChild(leftLeg2);
+        leftLeg2.texOffs(37, 0).addBox(-1.5F, -2.0F, -1.0F, 4.0F, 8.0F, 3.0F, 0.0F, true);
+        leftLeg2.texOffs(52, 0).addBox(-2.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 0.5F, false);
+        leftLeg2.texOffs(108, 41).addBox(-2.0F, 5.0F, -2.0F, 5.0F, 10.0F, 5.0F, 1.0F, false);
+
+        root4 = new ModelRenderer(this);
+        root4.setPos(2.0F, 2.0F, 0.0F);
+        leftLeg2.addChild(root4);
+        root4.texOffs(100, 0).addBox(-5.0F, 13.0F, -3.0F, 7.0F, 1.0F, 7.0F, 0.5F, true);
     }
 
     @Override
@@ -143,6 +173,8 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         this.body.yRot = 0.0F;
         this.rightLeg.xRot = -1.5F * MathHelper.triangleWave(pLimbSwing, 13.0F) * pLimbSwingAmount;
         this.leftLeg.xRot = 1.5F * MathHelper.triangleWave(pLimbSwing, 13.0F) * pLimbSwingAmount;
+        this.rightLeg2.xRot = 1.5F * MathHelper.triangleWave(pLimbSwing, 13.0F) * pLimbSwingAmount;
+        this.leftLeg2.xRot = -1.5F * MathHelper.triangleWave(pLimbSwing, 13.0F) * pLimbSwingAmount;
         this.rightLeg.yRot = 0.0F;
         this.leftLeg.yRot = 0.0F;
         float f = 1.0F;
@@ -174,6 +206,8 @@ public class RotTreeModel extends SegmentedModel<RottreantEntity> {
         this.leftArm.yRot = 0.0F;
         this.root.visible = isTree;
         this.root2.visible = isTree;
+        this.root3.visible = isTree;
+        this.root4.visible = isTree;
     }
 
     protected HandSide getAttackArm(RottreantEntity pEntity) {

@@ -1015,6 +1015,37 @@
     ],
     "subtitle": "subtitle.goety.rot_tree_repair"
   },
+  "rot_tree_rot_repair": {
+    "sounds": [
+      {
+        "name": "mob/slime/big1"
+      },
+      {
+        "name": "mob/slime/big2"
+      },
+      {
+        "name": "mob/slime/big3"
+      },
+      {
+        "name": "mob/slime/big4"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_rot_repair"
+  },
+  "rot_tree_roots": {
+    "sounds": [
+      {
+        "name": "goety:rot_tree/roots1"
+      },
+      {
+        "name": "goety:rot_tree/roots2"
+      },
+      {
+        "name": "goety:rot_tree/roots3"
+      }
+    ],
+    "subtitle": "subtitle.goety.rot_tree_roots"
+  },
   "rot_tree_step": {
     "sounds": [
       {

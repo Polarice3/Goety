@@ -247,6 +247,7 @@
   "item.goety.soulstaff": "Dark Staff",
   "item.goety.corrupt_staff": "Corrupting Staff",
   "item.goety.goldtotem": "Totem of Souls",
+  "item.goety.spenttotem": "Spent Totem of Souls",
 
   "item.goety.cold_shard": "Cold Shard",
   "item.goety.cold_heart": "Cold Heart",
@@ -629,6 +630,7 @@
   "subtitle.goety.rot_tree_heavyhurt": "Rottreant gets axed",
   "subtitle.goety.rot_tree_attack": "Rottreant smashes",
   "subtitle.goety.rot_tree_repair": "Rottreant repaired",
+  "subtitle.goety.rot_tree_roots": "Rottreant summons roots",
   "subtitle.goety.rot_tree_step": "Rottreant steps",
   "subtitle.goety.rot_tree_death": "Rottreant dies",
   "subtitle.goety.rot_tree_enter": "Creature enters Rottreant",

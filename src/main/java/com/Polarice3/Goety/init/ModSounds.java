@@ -92,6 +92,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> ROT_TREE_HURT = create("rot_tree_hurt");
     public static final RegistryObject<SoundEvent> ROT_TREE_HEAVY_HURT = create("rot_tree_heavyhurt");
     public static final RegistryObject<SoundEvent> ROT_TREE_REPAIR = create("rot_tree_repair");
+    public static final RegistryObject<SoundEvent> ROT_TREE_ROT_REPAIR = create("rot_tree_rot_repair");
+    public static final RegistryObject<SoundEvent> ROT_TREE_ROOTS = create("rot_tree_roots");
     public static final RegistryObject<SoundEvent> ROT_TREE_STEP = create("rot_tree_step");
     public static final RegistryObject<SoundEvent> ROT_TREE_DEATH = create("rot_tree_death");
     public static final RegistryObject<SoundEvent> ROT_TREE_ENTER = create("rot_tree_enter");

@@ -160,6 +160,9 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
                 }
             }
         }
+        if (this.isOnFire()){
+            abstractarrowentity.setSecondsOnFire(100);
+        }
         return abstractarrowentity;
     }
 

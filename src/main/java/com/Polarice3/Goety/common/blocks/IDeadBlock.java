@@ -121,7 +121,7 @@ public interface IDeadBlock {
                         BlockState blockState2 = pLevel.getBlockState(pPos.above());
 
                         if (BlockFinder.ActivateDeadSand(blockState2)) {
-                            if (BlockFinder.NotDeadSandImmune(blockState1)) {
+                            if (BlockFinder.NotDeadSandImmune(blockState2)) {
                                 if (blockState1.is(BlockTags.LOGS) && blockState1.getBlock() != ModBlocks.HAUNTED_LOG.get()) {
                                     pLevel.destroyBlock(blockpos1, false);
                                     pLevel.setBlockAndUpdate(blockpos1, ModBlocks.HAUNTED_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, blockState1.getValue(RotatedPillarBlock.AXIS)));

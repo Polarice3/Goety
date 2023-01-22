@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.villager.VillagerType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -249,6 +250,11 @@ public class MobUtil {
                             cultist = ModEntityType.BELDAM.get().create(pLevel);
                         }
                     }
+                    if (villager.getVillagerData().getType() == VillagerType.SWAMP){
+                        if (pLevel.random.nextFloat() <= 0.25F){
+                            cultist = EntityType.WITCH.create(pLevel);
+                        }
+                    }
                     if (cultist != null) {
                         cultist.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.yRot, villager.xRot);
                         cultist.finalizeSpawn(pLevel, pLevel.getCurrentDifficultyAt(cultist.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
@@ -276,6 +282,12 @@ public class MobUtil {
                         }
                         if (profession == VillagerProfession.SHEPHERD || profession == VillagerProfession.FARMER) {
                             cultist.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.PITCHFORK.get()));
+                        }
+                        if (profession != VillagerProfession.BUTCHER && cultist instanceof FanaticEntity){
+                            FanaticEntity fanatic = (FanaticEntity) cultist;
+                            if (villager.getVillagerData().getType() == VillagerType.SWAMP){
+                                fanatic.setOutfitType(5);
+                            }
                         }
                         cultist.setPersistenceRequired();
                         cultist.addTag(ConstantPaths.revealedCultist());
@@ -364,50 +376,4 @@ public class MobUtil {
         return list;
     }
 
-    @Nullable
-    public static <T extends MobEntity> T ownedConversion(LivingEntity owner, MobEntity killed, EntityType<T> p_233656_1_, boolean p_233656_2_) {
-        if (killed.removed) {
-            return (T)null;
-        } else {
-            T t = p_233656_1_.create(killed.level);
-            t.copyPosition(killed);
-            t.setBaby(killed.isBaby());
-            t.setNoAi(killed.isNoAi());
-            if (killed.hasCustomName()) {
-                t.setCustomName(killed.getCustomName());
-                t.setCustomNameVisible(killed.isCustomNameVisible());
-            }
-
-            if (killed.isPersistenceRequired()) {
-                t.setPersistenceRequired();
-            }
-
-            t.setInvulnerable(killed.isInvulnerable());
-            if (p_233656_2_) {
-                t.setCanPickUpLoot(killed.canPickUpLoot());
-
-                for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
-                    ItemStack itemstack = killed.getItemBySlot(equipmentslottype);
-                    if (!itemstack.isEmpty()) {
-                        t.setItemSlot(equipmentslottype, itemstack.copy());
-                        itemstack.setCount(0);
-                    }
-                }
-            }
-            if (killed instanceof OwnedEntity){
-                OwnedEntity ownedEntity = (OwnedEntity) killed;
-                ownedEntity.setTrueOwner(owner);
-            }
-
-            killed.level.addFreshEntity(t);
-            if (killed.isPassenger()) {
-                Entity entity = killed.getVehicle();
-                killed.stopRiding();
-                t.startRiding(entity, true);
-            }
-
-            killed.remove();
-            return t;
-        }
-    }
 }

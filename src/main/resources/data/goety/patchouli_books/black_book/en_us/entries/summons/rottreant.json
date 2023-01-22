@@ -71,7 +71,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The Rottreant can be commanded into Following, Wandering or Staying mode when right clicked with a wand/staff. When in Staying mode, they will be immobile but they will slowly heal back their health when in direct sunlight or standing on growable blocks like Grass Blocks. They will also heal when in rain. They can also be healed by right clicking on them with their corresponding wood."
+      "text": "The Rottreant can be commanded into Following, Wandering or Staying mode when right clicked with a wand/staff. When in Staying mode, they will be immobile but they will slowly heal back their health when in direct sunlight or standing on growable blocks like Grass Blocks. They will heal better if their creator dons a Fel Robe. They will also heal when in rain. They can also be healed by right clicking on them with their corresponding wood or with Rotten Flesh for a lower amount of health."
     },
     {
       "type": "patchouli:text",
@@ -79,7 +79,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Right clicking it with a Mycelium Block allows the Rottreant to grow mushrooms on not only its surroundings but also on itself. Shearing it will yield those mushrooms, but will have a chance of dropping them during combat. The mushrooms growing from it unfortunately makes them more sustainable to damage."
+      "text": "Right clicking it with a Mycelium Block allows the Rottreant to grow mushrooms on not only its surroundings but also on itself. Shearing it will yield those mushrooms, but will have a chance of dropping them during combat. The time for the mushrooms to grow on the Rottreant is reduced when its maker wears a Fel Robe. The mushrooms growing from it unfortunately makes them more sustainable to damage."
     }
   ]
 }

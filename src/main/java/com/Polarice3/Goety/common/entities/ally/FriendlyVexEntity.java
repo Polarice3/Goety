@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.MinionFollowGoal;
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
 import net.minecraft.entity.EntityType;
@@ -53,7 +53,7 @@ public class FriendlyVexEntity extends MinionEntity {
         this.goalSelector.addGoal(8, new MoveRandomGoal());
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this));
+        this.targetSelector.addGoal(1, new SummonTargetGoal<>(this));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {

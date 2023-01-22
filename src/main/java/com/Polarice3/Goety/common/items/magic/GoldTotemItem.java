@@ -117,15 +117,10 @@ public class GoldTotemItem extends Item {
             if (itemStack.getTag() != null) {
                 if (MainConfig.TotemUndying.get()) {
                     return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
-                } else {
-                    return false;
                 }
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
     public static int currentSouls(ItemStack itemStack){

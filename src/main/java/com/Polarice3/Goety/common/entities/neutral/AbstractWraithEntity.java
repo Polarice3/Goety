@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.entities.ai.AllyTargetGoal;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.FloatSwimGoal;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.hostile.WraithEntity;
@@ -18,6 +18,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -63,10 +64,11 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
         this.goalSelector.addGoal(1, new FloatSwimGoal(this));
         this.goalSelector.addGoal(9, new WraithLookGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new WraithLookGoal(this, MobEntity.class, 8.0F));
+        this.goalSelector.addGoal(10, new WraithLookRandomlyGoal(this));
     }
 
     public void targetSelectGoal(){
-        this.targetSelector.addGoal(1, new AllyTargetGoal<>(this, false, false));
+        this.targetSelector.addGoal(1, new SummonTargetGoal<>(this, false, false));
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
@@ -269,14 +271,14 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
                     if ((this.getTarget().distanceToSqr(this) >= MathHelper.square(4.0F) || this.isStaying())
                             && this.getTarget().distanceToSqr(this) < MathHelper.square(this.halfFollowRange())) {
                         ++this.fireTick;
+                        this.getNavigation().stop();
+                        this.getLookControl().setLookAt(this.getTarget(), 100.0F, this.getMaxHeadXRot());
+                        double d2 = this.getTarget().getX() - this.getX();
+                        double d1 = this.getTarget().getZ() - this.getZ();
+                        this.yRot = -((float) MathHelper.atan2(d2, d1)) * (180F / (float) Math.PI);
+                        this.yBodyRot = this.yRot;
                         if (this.fireTick > 10) {
                             this.startFiring();
-                            this.getLookControl().setLookAt(this.getTarget(), 500.0F, this.getMaxHeadXRot());
-                            this.getNavigation().stop();
-                            double d2 = this.getTarget().getX() - this.getX();
-                            double d1 = this.getTarget().getZ() - this.getZ();
-                            this.yRot = -((float) MathHelper.atan2(d2, d1)) * (180F / (float) Math.PI);
-                            this.yBodyRot = this.yRot;
                         } else {
                             this.movement();
                             this.stopFiring();
@@ -461,6 +463,19 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
         public WraithLookGoal(AbstractWraithEntity p_i1632_1_, Class<? extends LivingEntity> p_i1632_2_, float p_i1632_3_, float p_i1632_4_) {
             super(p_i1632_1_, p_i1632_2_, p_i1632_3_, p_i1632_4_);
             this.wraith = p_i1632_1_;
+        }
+
+        public boolean canUse() {
+            return super.canUse() && this.wraith.fireTick < 0 && this.wraith.getTarget() == null;
+        }
+    }
+
+    public static class WraithLookRandomlyGoal extends LookRandomlyGoal {
+        public AbstractWraithEntity wraith;
+
+        public WraithLookRandomlyGoal(AbstractWraithEntity p_i1631_1_) {
+            super(p_i1631_1_);
+            this.wraith = p_i1631_1_;
         }
 
         public boolean canUse() {

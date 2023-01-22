@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.client.model.AbstractWraithModel;
+import com.Polarice3.Goety.client.model.WraithModel;
 import com.Polarice3.Goety.client.render.layers.WraithBandsLayer;
 import com.Polarice3.Goety.client.render.layers.WraithGlowLayer;
 import com.Polarice3.Goety.client.render.layers.WraithSecretLayer;
@@ -13,8 +13,8 @@ public class WraithMinionRenderer extends AbstractWraithRenderer {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/wraith.png");
 
     public WraithMinionRenderer(EntityRendererManager renderManagerIn){
-        super(renderManagerIn, new AbstractWraithModel<>(), 0.5F);
-        this.addLayer(new WraithGlowLayer<>(this));
+        super(renderManagerIn, new WraithModel<>(), 0.5F);
+        this.addLayer(new WraithGlowLayer(this));
         this.addLayer(new WraithBandsLayer(this));
         this.addLayer(new WraithSecretLayer(this));
     }
