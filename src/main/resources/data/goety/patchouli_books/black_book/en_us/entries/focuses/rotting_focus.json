@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The true first step to Necroturgy is to summon and command a Zombie. With this focus, you are well on your way of becoming a true Necroturge."
+      "text": "The true first step to Necroturgy is to summon and command a Zombie. Zombies comes in multiple variants, and the focus allows you to summon a variant depending on location and environment where the spell is casted."
     },
     {
       "type": "goety:ritual",

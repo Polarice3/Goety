@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class UndeadWolfRenderer extends MobRenderer<UndeadWolfEntity, UndeadWolfModel<UndeadWolfEntity>> {
-    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/undead_wolf.png");
+    protected static final ResourceLocation TEXTURE = Goety.location("textures/entity/servants/undead_wolf.png");
 
     public UndeadWolfRenderer(EntityRendererManager p_i47187_1_) {
         super(p_i47187_1_, new UndeadWolfModel<>(), 0.5F);

@@ -12,7 +12,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class StrayMinionBandsLayer<T extends MobEntity & IRangedAttackMob, M extends SkeletonModel<T>> extends LayerRenderer<T, M> {
-    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID, "textures/entity/stray_minion_bands.png");
+    private static final ResourceLocation TEXTURES = Goety.location("textures/entity/servants/stray_minion_bands.png");
     private final SkeletonModel<T> layerModel = new SkeletonModel<>(0.25F, true);
 
     public StrayMinionBandsLayer(IEntityRenderer<T, M> p_i50919_1_) {

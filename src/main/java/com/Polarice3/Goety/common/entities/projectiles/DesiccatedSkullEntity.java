@@ -30,12 +30,12 @@ public class DesiccatedSkullEntity extends ExplosiveProjectileEntity {
     }
 
     public DesiccatedSkullEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_, double p_i1794_7_) {
-        super(ModEntityType.DESICCATEDSKULL.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
+        super(ModEntityType.DESICCATED_SKULL.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
     }
 
     @OnlyIn(Dist.CLIENT)
     public DesiccatedSkullEntity(World p_i1795_1_, double p_i1795_2_, double p_i1795_4_, double p_i1795_6_, double p_i1795_8_, double p_i1795_10_, double p_i1795_12_) {
-        super(ModEntityType.DESICCATEDSKULL.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_, p_i1795_12_, p_i1795_1_);
+        super(ModEntityType.DESICCATED_SKULL.get(), p_i1795_2_, p_i1795_4_, p_i1795_6_, p_i1795_8_, p_i1795_10_, p_i1795_12_, p_i1795_1_);
     }
 
     public void tick() {

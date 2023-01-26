@@ -91,6 +91,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> ZOMBIE_MINION_SPAWN_EGG = ITEMS.register("zombie_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.ZOMBIE_MINION, 0x192927, 0x737885, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> HUSK_MINION_SPAWN_EGG = ITEMS.register("husk_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.HUSK_MINION, 0x322921, 0x64492a, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> DROWNED_MINION_SPAWN_EGG = ITEMS.register("drowned_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DROWNED_MINION, 0x182d37, 0x2f8209, new Item.Properties().tab(Goety.TAB)));
 

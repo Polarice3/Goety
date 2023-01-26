@@ -75,6 +75,11 @@ public class MagicFocusItem extends Item{
                     || enchantment == ModEnchantments.DURATION.get()
                     || enchantment == ModEnchantments.RANGE.get();
         }
+        if (stack.getItem() == ModItems.ICEOLOGY_FOCUS.get()){
+            return enchantment == ModEnchantments.POTENCY.get()
+                    || enchantment == ModEnchantments.RANGE.get()
+                    || enchantment == ModEnchantments.RADIUS.get();
+        }
         if (stack.getItem() == ModItems.BITING_FOCUS.get()) {
             return enchantment == ModEnchantments.POTENCY.get()
                     || enchantment == ModEnchantments.RANGE.get()

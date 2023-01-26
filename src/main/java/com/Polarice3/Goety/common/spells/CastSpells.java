@@ -71,6 +71,8 @@ public class CastSpells {
                 return new AcidBreathSpell();
             case 30:
                 return new WraithSpell();
+            case 31:
+                return new IceChunkSpell();
             default:
                 return null;
         }

@@ -45,6 +45,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulLightCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> GlowLightCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IceChunkCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LaunchCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomCost;
@@ -68,6 +69,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> BreathingDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> LavaballDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IceChunkDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomDuration;
 
@@ -97,6 +99,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathInfamyChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IceChunkInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> LaunchInfamyChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomInfamyChance;
@@ -192,6 +195,7 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SpecialBossBar;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> BossMusic;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandStoneSpread;
@@ -248,6 +252,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> FancierApostleDeath;
+
     static {
         BUILDER.push("General");
         MaxSouls = BUILDER.comment("Totem Maximum Soul Count and Threshold to save the Player, Default: 10000")
@@ -272,6 +278,8 @@ public class MainConfig {
                 .define("apocalypseMode", false);
         SpecialBossBar = BUILDER.comment("Bosses from the Mod has custom looking Boss Bars. Default: true")
                 .define("specialBossBar", true);
+        BossMusic = BUILDER.comment("Bosses from the Mod has custom Music Playing. Default: true")
+                .define("bossMusic", true);
         BUILDER.pop();
         BUILDER.push("Blocks");
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
@@ -368,6 +376,8 @@ public class MainConfig {
                 .defineInRange("soulLightCost", 2, 0, Integer.MAX_VALUE);
         GlowLightCost = BUILDER.comment("Glow Light Spell Cost, Default: 4")
                 .defineInRange("glowLightCost", 4, 0, Integer.MAX_VALUE);
+        IceChunkCost = BUILDER.comment("Ice Chunk Spell Cost, Default: 16")
+                .defineInRange("iceChunkCost", 16, 0, Integer.MAX_VALUE);
         IceStormCost = BUILDER.comment("Ice Storm Spell Cost, Default: 16")
                 .defineInRange("iceStormCost", 16, 0, Integer.MAX_VALUE);
         LaunchCost = BUILDER.comment("Launch Spell Cost, Default: 4")
@@ -414,6 +424,8 @@ public class MainConfig {
                 .defineInRange("lavaBombTime", 20, 0, 72000);
         IllusionDuration = BUILDER.comment("Time to cast Illusion Spell, Default: 40")
                 .defineInRange("illusionTime", 40, 0, 72000);
+        IceChunkDuration = BUILDER.comment("Time to cast Ice Chunk Spell, Default: 40")
+                .defineInRange("iceChunkTime", 40, 0, 72000);
         IceStormDuration = BUILDER.comment("Time to cast Ice Storm Spell, Default: 60")
                 .defineInRange("iceStormTime", 60, 0, 72000);
         SonicBoomDuration = BUILDER.comment("Time to cast Sonic Boom Spell, Default: 60")
@@ -446,6 +458,8 @@ public class MainConfig {
                 .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
         ApostleBowDamage = BUILDER.comment("Multiplies Apostle's Bow damage, Default: 4")
                 .defineInRange("apostleBowDamage", 4, 2, Integer.MAX_VALUE);
+        FancierApostleDeath = BUILDER.comment("Gives Apostle an even more fancier death animation, Default: false")
+                .define("fancierApostleDeath", false);
         FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 16")
                 .defineInRange("fanaticPitchforkChance", 16, 0, Integer.MAX_VALUE);
         FanaticWitchBombChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Witch's Bomb, Default: 4")
@@ -564,6 +578,8 @@ public class MainConfig {
                 .defineInRange("fireBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
         FrostBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Frost Breath Spell, Default: 0")
                 .defineInRange("frostBreathInfamyChance", 0, 0, Integer.MAX_VALUE);
+        IceChunkInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Chunk Spell, Default: 2")
+                .defineInRange("iceChunkInfamyChance", 2, 0, Integer.MAX_VALUE);
         IceStormInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Storm Spell, Default: 8")
                 .defineInRange("iceStormInfamyChance", 8, 0, Integer.MAX_VALUE);
         LaunchInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Launch Spell, Default: 0")
@@ -693,7 +709,7 @@ public class MainConfig {
         CultistSpread = BUILDER.comment("Whether Villagers are able to become secret Cultists, Default: true")
                 .define("cultistSpread", true);
         BUILDER.pop();
-        BUILDER.push("Spoilers");
+        BUILDER.push("Lich");
         LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 1")
                 .defineInRange("lichHealCost", 1, 0, Integer.MAX_VALUE);
         LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Fel Helm will no longer give Blindness during day, Default: true")

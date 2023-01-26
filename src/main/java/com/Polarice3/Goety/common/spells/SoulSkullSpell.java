@@ -32,7 +32,7 @@ public class SoulSkullSpell extends InstantCastSpells {
                 vector3d.x,
                 vector3d.y,
                 vector3d.z);
-        if (entityLiving.isCrouching()){
+        if (isShifting(entityLiving)){
             soulSkullEntity.setDangerous(true);
         }
         soulSkullEntity.setOwner(entityLiving);
@@ -51,7 +51,7 @@ public class SoulSkullSpell extends InstantCastSpells {
                 vector3d.x,
                 vector3d.y,
                 vector3d.z);
-        if (entityLiving.isCrouching()){
+        if (isShifting(entityLiving)){
             soulSkullEntity.setDangerous(true);
         }
         soulSkullEntity.setOwner(entityLiving);
@@ -64,7 +64,7 @@ public class SoulSkullSpell extends InstantCastSpells {
                     vector3d.x,
                     vector3d.y,
                     vector3d.z);
-            if (entityLiving.isCrouching()){
+            if (isShifting(entityLiving)){
                 soulSkullEntity1.setDangerous(true);
             }
             soulSkullEntity1.setOwner(entityLiving);

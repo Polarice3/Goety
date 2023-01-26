@@ -4,7 +4,6 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
-import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
@@ -37,7 +36,6 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

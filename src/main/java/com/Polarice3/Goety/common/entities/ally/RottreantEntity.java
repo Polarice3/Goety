@@ -291,7 +291,7 @@ public class RottreantEntity extends SummonedEntity{
             if (!this.isReadyHarvest()) {
                 ++this.mushroomGrow;
                 int minutes = felArmor ? 2 : 5;
-                if (this.mushroomGrow >= TickUtil.ticksToMinutes(minutes)) {
+                if (this.mushroomGrow >= ModMathHelper.ticksToMinutes(minutes)) {
                     this.setReadyHarvest(true);
                     this.mushroomGrow = 0;
                     this.playSound(SoundEvents.ROOTS_PLACE, 1.0F, 1.0F);
@@ -300,7 +300,7 @@ public class RottreantEntity extends SummonedEntity{
                     }
                 }
             }
-            if (this.level.random.nextInt(25) == 0 && this.tickCount % TickUtil.ticksToSeconds(30) == 0) {
+            if (this.level.random.nextInt(25) == 0 && this.tickCount % ModMathHelper.ticksToSeconds(30) == 0) {
                 int i = 5;
                 int j = 4;
                 BlockPos pPos = this.blockPosition();
@@ -420,13 +420,16 @@ public class RottreantEntity extends SummonedEntity{
     }
 
     private static boolean isNearWater(IWorldReader pLevel, BlockPos pPos) {
-        for(BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-4, 0, -4), pPos.offset(4, 1, 4))) {
-            if (pLevel.getFluidState(blockpos).is(FluidTags.WATER)) {
-                return true;
+        if (!pLevel.isClientSide()) {
+            for (BlockPos blockpos : BlockPos.betweenClosed(pPos.offset(-4, 0, -4), pPos.offset(4, 1, 4))) {
+                if (pLevel.getFluidState(blockpos).is(FluidTags.WATER)) {
+                    return true;
+                }
             }
-        }
 
-        return net.minecraftforge.common.FarmlandWaterManager.hasBlockWaterTicket(pLevel, pPos);
+            return net.minecraftforge.common.FarmlandWaterManager.hasBlockWaterTicket(pLevel, pPos);
+        }
+        return false;
     }
 
     public void stayingPosition() {

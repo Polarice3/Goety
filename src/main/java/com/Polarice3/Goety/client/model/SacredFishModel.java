@@ -28,17 +28,17 @@ public class SacredFishModel extends SegmentedModel<SacredFishEntity> {
 		body_front.texOffs(22, 21).addBox(-1.0F, -2.5F, -2.75F, 2.0F, 2.0F, 3.0F, 0.0F, false);
 
 		body_back = new ModelRenderer(this);
-		body_back.setPos(0.0F, 1.5F, 9.25F);
+		body_back.setPos(0.0F, 1.5F, 5.25F);
 		body_front.addChild(body_back);
-		body_back.texOffs(0, 13).addBox(-1.5F, -2.5F, -4.0F, 3.0F, 5.0F, 8.0F, 0.0F, false);
+		body_back.texOffs(0, 13).addBox(-1.5F, -2.5F, 0.0F, 3.0F, 5.0F, 8.0F, 0.0F, false);
 
 		dorsal_back = new ModelRenderer(this);
-		dorsal_back.setPos(0.0F, 1.0F, -4.0F);
+		dorsal_back.setPos(0.0F, 1.0F, 0.0F);
 		body_back.addChild(dorsal_back);
 		dorsal_back.texOffs(2, 3).addBox(0.0F, -5.5F, 0.0F, 0.0F, 2.0F, 3.0F, 0.0F, false);
 
 		tailfin = new ModelRenderer(this);
-		tailfin.setPos(0.0F, 6.0F, 4.0F);
+		tailfin.setPos(0.0F, 6.0F, 8.0F);
 		body_back.addChild(tailfin);
 		tailfin.texOffs(20, 10).addBox(0.0F, -8.5F, 0.0F, 0.0F, 5.0F, 6.0F, 0.0F, false);
 
@@ -48,9 +48,9 @@ public class SacredFishModel extends SegmentedModel<SacredFishEntity> {
 		dorsal_front.texOffs(4, 2).addBox(0.0F, -1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 0.0F, false);
 
 		head = new ModelRenderer(this);
-		head.setPos(0.0F, 1.0F, -4.25F);
+		head.setPos(0.0F, 1.0F, -2.25F);
 		body_front.addChild(head);
-		head.texOffs(22, 0).addBox(-1.0F, -2.0F, -1.5F, 2.0F, 4.0F, 3.0F, 0.0F, false);
+		head.texOffs(22, 0).addBox(-1.0F, -2.0F, -3.5F, 2.0F, 4.0F, 3.0F, 0.0F, false);
 
 		leftFin = new ModelRenderer(this);
 		leftFin.setPos(2.3191F, 3.5736F, -1.75F);

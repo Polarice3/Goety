@@ -2,6 +2,7 @@ package com.Polarice3.Goety.client.model;
 
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.items.equipment.PitchforkItem;
+import com.Polarice3.Goety.utils.ModMathHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -125,8 +126,8 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
             this.leftLeg.zRot = 0.0F;
         }
 
-        AbstractCultistEntity.ArmPose abstractprotectorentity$armpose = entityIn.getArmPose();
-        switch (abstractprotectorentity$armpose){
+        AbstractCultistEntity.ArmPose armPose = entityIn.getArmPose();
+        switch (armPose){
             case CROSSED:
                 this.rightArm.xRot = 0;
                 this.leftArm.xRot = 0;
@@ -191,6 +192,11 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                 this.rightArm.yRot = 0.0F;
                 this.leftArm.yRot = 0.0F;
                 break;
+            case PRAYING:
+                this.rightArm.xRot = ModMathHelper.modelDegrees(125);
+                this.leftArm.xRot = ModMathHelper.modelDegrees(125);
+                this.head.xRot = ModMathHelper.modelDegrees(30);
+                break;
             case SPELL_AND_WEAPON:
                 if (!entityIn.getMainHandItem().isEmpty()) {
                     if (entityIn.getMainArm() == HandSide.RIGHT) {
@@ -212,6 +218,7 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                     this.rightArm.zRot = 2.3561945F;
                     this.rightArm.yRot = 0.0F;
                 }
+                break;
             case TORCH_AND_WEAPON:
                 if (!entityIn.getMainHandItem().isEmpty() && !(entityIn.getMainHandItem().getItem() instanceof ShootableItem)) {
                     if (entityIn.getMainArm() == HandSide.RIGHT) {
@@ -225,6 +232,25 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
                 } else {
                     this.rightArm.xRot = -(2.0F + MathHelper.cos(ageInTicks * 0.09F) * 0.15F);
                 }
+                break;
+            case DYING:
+                if (entityIn.isDeadOrDying()){
+                    this.rightArm.z = 0.0F;
+                    this.rightArm.x = -5.0F;
+                    this.leftArm.z = 0.0F;
+                    this.leftArm.x = 5.0F;
+                    this.rightArm.xRot = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+                    this.leftArm.xRot = -MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+                    this.rightArm.zRot = 2.3561945F;
+                    this.leftArm.zRot = -2.3561945F;
+                    this.rightLeg.xRot = 0.0F;
+                    this.rightLeg.yRot = 0.0F;
+                    this.rightLeg.zRot = 0.0F;
+                    this.leftLeg.xRot = 0.0F;
+                    this.leftLeg.yRot = 0.0F;
+                    this.leftLeg.zRot = 0.0F;
+                    this.head.xRot = -ModMathHelper.modelDegrees(25.0F);
+                }
         }
 
         if (this.leftArmPose == ArmPose.THROW_SPEAR) {
@@ -237,7 +263,7 @@ public class AbstractCultistModel<T extends AbstractCultistEntity> extends Biped
             this.rightArm.yRot = 0.0F;
         }
 
-        boolean flag = abstractprotectorentity$armpose == AbstractCultistEntity.ArmPose.CROSSED;
+        boolean flag = armPose == AbstractCultistEntity.ArmPose.CROSSED;
         this.arms.visible = flag;
         this.leftArm.visible = !flag;
         this.rightArm.visible = !flag;

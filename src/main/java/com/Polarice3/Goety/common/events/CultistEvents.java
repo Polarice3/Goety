@@ -96,7 +96,7 @@ public class CultistEvents {
                                 }
                             }
                             if (villager.tickCount % 100 == 0) {
-                                List<VillagerEntity> villagerEntities = serverWorld.getEntitiesOfClass(VillagerEntity.class, villager.getBoundingBox().inflate(32));
+                                List<VillagerEntity> villagerEntities = serverWorld.getEntitiesOfClass(VillagerEntity.class, villager.getBoundingBox().inflate(32.0D, 10.0D, 32.0D));
                                 List<VillagerEntity> regular = new ArrayList<>();
                                 for (VillagerEntity villagerEntity : villagerEntities) {
                                     if (!villagerEntity.getTags().contains(ConstantPaths.secretCultist())) {

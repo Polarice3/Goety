@@ -27,6 +27,10 @@ public abstract class Spells {
 
     public abstract void StaffResult(ServerWorld worldIn, LivingEntity entityLiving);
 
+    public boolean isShifting(LivingEntity entityLiving){
+        return entityLiving.isCrouching() || entityLiving.isShiftKeyDown();
+    }
+
     public void IncreaseInfamy(int random, PlayerEntity player){
         if (MainConfig.InfamySpell.get()){
             if (random != 0) {

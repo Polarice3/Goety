@@ -2,6 +2,8 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.common.entities.ally.DrownedMinionEntity;
+import com.Polarice3.Goety.common.entities.ally.HuskMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -19,7 +21,9 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 
 public class ZombieSpell extends SummonSpells{
@@ -49,7 +53,7 @@ public class ZombieSpell extends SummonSpells{
             }
             this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        if (entityLiving.isCrouching()) {
+        if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof ZombieMinionEntity) {
                     if (((ZombieMinionEntity) entity).getTrueOwner() == entityLiving) {
@@ -66,35 +70,57 @@ public class ZombieSpell extends SummonSpells{
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
-                ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
-                summonedentity.setOwnerId(entityLiving.getUUID());
-                summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                summonedentity.setPersistenceRequired();
-                summonedentity.setUpgraded(this.NecroPower(entityLiving));
-                if (enchantment > 0){
-                    int boost = MathHelper.clamp(enchantment - 1, 0, 10);
-                    summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost, false, false));
-                }
-                this.SummonSap(entityLiving, summonedentity);
-                worldIn.addFreshEntity(summonedentity);
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                this.SummonDown(entityLiving);
+        if (!isShifting(entityLiving)) {
+            ZombieMinionEntity summonedentity;
+            BlockPos blockPos = BlockFinder.SummonRadius(entityLiving, worldIn);
+            if (entityLiving.isUnderWater()){
+                blockPos = BlockFinder.SummonWaterRadius(entityLiving, worldIn);
             }
+            if (entityLiving.isUnderWater() && worldIn.isWaterAt(blockPos)){
+                summonedentity = new DrownedMinionEntity(ModEntityType.DROWNED_MINION.get(), worldIn);
+            } else if (worldIn.getBiome(blockPos).getBiomeCategory() == Biome.Category.DESERT && worldIn.canSeeSky(blockPos)){
+                summonedentity = new HuskMinionEntity(ModEntityType.HUSK_MINION.get(), worldIn);
+            } else {
+                summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
+            }
+            summonedentity.setOwnerId(entityLiving.getUUID());
+            summonedentity.moveTo(blockPos, 0.0F, 0.0F);
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+            summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
+            summonedentity.setPersistenceRequired();
+            summonedentity.setUpgraded(this.NecroPower(entityLiving));
+            if (enchantment > 0){
+                int boost = MathHelper.clamp(enchantment - 1, 0, 10);
+                summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost, false, false));
+            }
+            this.SummonSap(entityLiving, summonedentity);
+            worldIn.addFreshEntity(summonedentity);
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+            }
+            this.SummonDown(entityLiving);
+        }
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
             for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
-                ZombieMinionEntity summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
+                ZombieMinionEntity summonedentity;
+                BlockPos blockPos = BlockFinder.SummonRadius(entityLiving, worldIn);
+                if (entityLiving.isUnderWater()){
+                    blockPos = BlockFinder.SummonWaterRadius(entityLiving, worldIn);
+                }
+                if (entityLiving.isUnderWater() && worldIn.isWaterAt(blockPos)){
+                    summonedentity = new DrownedMinionEntity(ModEntityType.DROWNED_MINION.get(), worldIn);
+                } else if (worldIn.getBiome(blockPos).getBiomeCategory() == Biome.Category.DESERT && worldIn.canSeeSky(blockPos)){
+                    summonedentity = new HuskMinionEntity(ModEntityType.HUSK_MINION.get(), worldIn);
+                } else {
+                    summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
+                }
                 summonedentity.setOwnerId(entityLiving.getUUID());
-                summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+                summonedentity.moveTo(blockPos, 0.0F, 0.0F);
                 summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                 summonedentity.setPersistenceRequired();

@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.model.SkeletonModel;
 import net.minecraft.util.ResourceLocation;
 
 public class SkeletonMinionRenderer extends BipedRenderer<AbstractSMEntity, SkeletonModel<AbstractSMEntity>> {
-    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID, "textures/entity/skeletonminion.png");
+    private static final ResourceLocation TEXTURES = new ResourceLocation(Goety.MOD_ID, "textures/entity/servants/skeleton_minion.png");
     private static final ResourceLocation STRAY = new ResourceLocation("textures/entity/skeleton/stray.png");
 
     public SkeletonMinionRenderer(EntityRendererManager renderManagerIn) {

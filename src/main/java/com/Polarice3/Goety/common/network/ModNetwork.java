@@ -8,6 +8,7 @@ import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsUpdatePacket;
 import com.Polarice3.Goety.common.network.packets.client.*;
 import com.Polarice3.Goety.common.network.packets.server.SChangeFocusPacket;
 import com.Polarice3.Goety.common.network.packets.server.SOpenItemPacket;
+import com.Polarice3.Goety.common.network.packets.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.common.network.packets.server.TotemDeathPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -39,12 +40,15 @@ public class ModNetwork {
         INSTANCE.registerMessage(nextID(), SOpenItemPacket.class, SOpenItemPacket::encode, SOpenItemPacket::decode, SOpenItemPacket::consume);
         INSTANCE.registerMessage(nextID(), SChangeFocusPacket.class, SChangeFocusPacket::encode, SChangeFocusPacket::decode, SChangeFocusPacket::consume);
         INSTANCE.registerMessage(nextID(), TotemDeathPacket.class, TotemDeathPacket::encode, TotemDeathPacket::decode, TotemDeathPacket::consume);
+        INSTANCE.registerMessage(nextID(), SPlayPlayerSoundPacket.class, SPlayPlayerSoundPacket::encode, SPlayPlayerSoundPacket::decode, SPlayPlayerSoundPacket::consume);
         INSTANCE.registerMessage(nextID(), CWandKeyPacket.class, CWandKeyPacket::encode, CWandKeyPacket::decode, CWandKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CBagKeyPacket.class, CBagKeyPacket::encode, CBagKeyPacket::decode, CBagKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CWandAndBagKeyPacket.class, CWandAndBagKeyPacket::encode, CWandAndBagKeyPacket::decode, CWandAndBagKeyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CStopAttackPacket.class, CStopAttackPacket::encode, CStopAttackPacket::decode, CStopAttackPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CSoulEnergyPacket.class, CSoulEnergyPacket::encode, CSoulEnergyPacket::decode, CSoulEnergyPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         INSTANCE.registerMessage(nextID(), CScytheStrikePacket.class, CScytheStrikePacket::encode, CScytheStrikePacket::decode, CScytheStrikePacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(nextID(), CLichKissPacket.class, CLichKissPacket::encode, CLichKissPacket::decode, CLichKissPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        INSTANCE.registerMessage(nextID(), CMagnetPacket.class, CMagnetPacket::encode, CMagnetPacket::decode, CMagnetPacket::consume, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static <MSG> void sendTo(PlayerEntity player, MSG msg) {

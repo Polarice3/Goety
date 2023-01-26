@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -33,10 +34,12 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -190,6 +193,13 @@ public class SummonedEntity extends OwnedEntity {
 
     protected boolean isSunSensitive() {
         return false;
+    }
+
+    public void die(DamageSource pCause) {
+        if (!this.level.isClientSide && this.hasCustomName() && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayerEntity) {
+            this.getTrueOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
+        }
+        super.die(pCause);
     }
 
     public boolean hurt(DamageSource source, float amount) {
@@ -465,7 +475,7 @@ public class SummonedEntity extends OwnedEntity {
 
         public boolean canUse() {
             if (super.canUse()){
-                return !SummonedEntity.this.isStaying() || SummonedEntity.this.getTrueOwner() == null;
+                return !SummonedEntity.this.isStaying() || SummonedEntity.this.getTrueOwner() == null || SummonedEntity.this.getNavigation() instanceof SwimmerPathNavigator;
             } else {
                 return false;
             }

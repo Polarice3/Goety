@@ -49,7 +49,7 @@ public class UndeadWolfSpell extends SummonSpells{
             }
             this.IncreaseInfamy(MainConfig.UndeadWolfInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        if (entityLiving.isCrouching()) {
+        if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof UndeadWolfEntity) {
                     if (((UndeadWolfEntity) entity).getTrueOwner() == entityLiving) {
@@ -66,7 +66,7 @@ public class UndeadWolfSpell extends SummonSpells{
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 UndeadWolfEntity summonedentity = new UndeadWolfEntity(ModEntityType.UNDEAD_WOLF_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
@@ -90,7 +90,7 @@ public class UndeadWolfSpell extends SummonSpells{
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
                     UndeadWolfEntity summonedentity = new UndeadWolfEntity(ModEntityType.UNDEAD_WOLF_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());

@@ -6,10 +6,7 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.utils.LichdomHelper;
-import com.Polarice3.Goety.utils.ModDamageSource;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
-import com.Polarice3.Goety.utils.SEHelper;
+import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
@@ -260,11 +257,14 @@ public class LichEvents {
                 }
             }
         }
-        if (event.getSource().getEntity() instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) event.getSource().getEntity();
+        if (event.getSource().getDirectEntity() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) event.getSource().getDirectEntity();
             if (LichdomHelper.isLich(player)){
                 if (player.getMainHandItem().isEmpty() && event.getEntityLiving() != player){
                     event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
+                }
+                if (event.getEntityLiving().getMobType() != CreatureAttribute.UNDEAD){
+                    event.getEntityLiving().addEffect(new EffectInstance(Effects.WITHER, ModMathHelper.ticksToSeconds(5)));
                 }
             }
         }

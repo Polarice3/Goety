@@ -52,7 +52,7 @@ public class VexSpell extends SummonSpells {
             }
             this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        if (entityLiving.isCrouching()) {
+        if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof FriendlyVexEntity) {
                     if (((FriendlyVexEntity) entity).getTrueOwner() == entityLiving) {
@@ -69,7 +69,7 @@ public class VexSpell extends SummonSpells {
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 for (int i1 = 0; i1 < 3; ++i1) {
                     BlockPos blockpos = entityLiving.blockPosition();
                     FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);
@@ -99,7 +99,7 @@ public class VexSpell extends SummonSpells {
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 for (int i1 = 0; i1 < 3 + worldIn.random.nextInt(3); ++i1) {
                     BlockPos blockpos = entityLiving.blockPosition();
                     FriendlyVexEntity vexentity = new FriendlyVexEntity(ModEntityType.FRIENDLY_VEX.get(), worldIn);

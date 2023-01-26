@@ -24,9 +24,4 @@ public class DredenEntity extends AbstractDredenEntity implements IMob {
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
-
-    @Override
-    public int xpReward() {
-        return 10;
-    }
 }

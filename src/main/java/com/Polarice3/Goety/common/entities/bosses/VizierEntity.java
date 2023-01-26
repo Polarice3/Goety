@@ -75,6 +75,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
     public double xCloak;
     public double yCloak;
     public double zCloak;
+    public int deathTime = 0;
 
     public VizierEntity(EntityType<? extends VizierEntity> type, World worldIn) {
         super(type, worldIn);
@@ -333,6 +334,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                 ally.hurt(DamageSource.STARVE, 200.0F);
             }
         }
+
         if (cause.getEntity() != null) {
             if (cause.getEntity() instanceof PlayerEntity){
                 PlayerEntity player = (PlayerEntity) cause.getEntity();
@@ -342,8 +344,22 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                 }
             }
         }
-
         super.die(cause);
+    }
+
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 12) {
+            this.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
+            this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            for (int p = 0; p < 32; ++p) {
+                double d0 = (double)this.getX() + this.level.random.nextDouble();
+                double d1 = (double)this.getY() + this.level.random.nextDouble();
+                double d2 = (double)this.getZ() + this.level.random.nextDouble();
+                this.level.addParticle(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+            }
+            this.remove();
+        }
     }
 
     protected boolean shouldDespawnInPeaceful() {

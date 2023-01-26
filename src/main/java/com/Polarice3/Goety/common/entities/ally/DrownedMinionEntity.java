@@ -1,24 +1,22 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.utils.ItemHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
+import net.minecraft.block.LeavesBlock;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.pathfinding.*;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
@@ -50,9 +48,11 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new GoToWaterGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new FollowOwnerWaterGoal(this, 1.0D, 10.0F, 2.0F));
         this.goalSelector.addGoal(2, new TridentAttackGoal(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(5, new GoToBeachGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new SwimUpGoal(this, 1.0D, this.level.getSeaLevel()));
+        this.goalSelector.addGoal(7, new WaterWanderGoal(this));
     }
 
     protected SoundEvent getAmbientSound() {
@@ -79,12 +79,21 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
         return !this.isSwimming();
     }
 
+    protected boolean convertsInWater() {
+        return false;
+    }
+
+    public boolean checkSpawnObstruction(IWorldReader pLevel) {
+        return pLevel.isUnobstructed(this);
+    }
+
     private boolean wantsToSwim() {
         if (this.searchingForLand) {
             return true;
+        } else if (this.getTarget() != null && this.getTarget().isInWater()) {
+            return true;
         } else {
-            LivingEntity livingentity = this.getTarget();
-            return livingentity != null && livingentity.isInWater();
+            return this.getTrueOwner() != null && this.getTrueOwner().isInWater();
         }
     }
 
@@ -151,7 +160,7 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
 
         public boolean canUse() {
             if (this.drowned.getTrueOwner() != null){
-                if (!this.drowned.getTrueOwner().isUnderWater()){
+                if (this.drowned.getTrueOwner().isUnderWater()){
                     return false;
                 }
             } else if (this.drowned.level.isDay()) {
@@ -251,8 +260,11 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
 
         public void tick() {
             LivingEntity livingentity = this.drowned.getTarget();
+            LivingEntity owner = this.drowned.getTrueOwner();
             if (this.drowned.wantsToSwim() && this.drowned.isInWater()) {
                 if (livingentity != null && livingentity.getY() > this.drowned.getY() || this.drowned.searchingForLand) {
+                    this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, 0.002D, 0.0D));
+                } else if (owner != null && owner.getY() > this.drowned.getY()){
                     this.drowned.setDeltaMovement(this.drowned.getDeltaMovement().add(0.0D, 0.002D, 0.0D));
                 }
 
@@ -298,7 +310,7 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
 
         public boolean canUse() {
             if (this.drowned.getTrueOwner() != null){
-                if (!this.drowned.getTrueOwner().isUnderWater()){
+                if (this.drowned.getTrueOwner().isUnderWater()){
                     return false;
                 }
             } else if (this.drowned.level.isDay()) {
@@ -356,6 +368,162 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
             super.stop();
             this.drowned.stopUsingItem();
             this.drowned.setAggressive(false);
+        }
+    }
+
+    public static class FollowOwnerWaterGoal extends Goal {
+        protected final SummonedEntity summonedEntity;
+        private LivingEntity owner;
+        private final IWorldReader level;
+        private final double followSpeed;
+        private Path path;
+        private double pathedTargetX;
+        private double pathedTargetY;
+        private double pathedTargetZ;
+        private int ticksUntilNextPathRecalculation;
+        private final PathNavigator navigation;
+        private final float maxDist;
+        private final float minDist;
+
+        public FollowOwnerWaterGoal(SummonedEntity summonedEntity, double speed, float minDist, float maxDist) {
+            this.summonedEntity = summonedEntity;
+            this.level = summonedEntity.level;
+            this.followSpeed = speed;
+            this.navigation = summonedEntity.getNavigation();
+            this.minDist = minDist;
+            this.maxDist = maxDist;
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        public boolean canUse() {
+            LivingEntity livingentity = this.summonedEntity.getTrueOwner();
+            if (livingentity == null) {
+                return false;
+            } else if (livingentity.isSpectator()) {
+                return false;
+            } else if (this.summonedEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
+                return false;
+            } else if (this.summonedEntity.isWandering() || this.summonedEntity.isStaying()) {
+                return false;
+            } else if (this.summonedEntity.getTarget() != null) {
+                return false;
+            } else {
+                this.owner = livingentity;
+                if (!livingentity.isAlive()) {
+                    return false;
+                } else {
+                    this.path = this.summonedEntity.getNavigation().createPath(livingentity, 0);
+                    if (this.path != null) {
+                        return true;
+                    }
+                }
+                return true;
+            }
+        }
+
+        public boolean canContinueToUse() {
+            if (this.navigation.isDone()) {
+                return false;
+            } else if (this.summonedEntity.getTarget() != null){
+                return false;
+            } else {
+                return !(this.summonedEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));
+            }
+        }
+
+        public void start() {
+            this.summonedEntity.getNavigation().moveTo(this.path, this.followSpeed);
+            this.ticksUntilNextPathRecalculation = 0;
+        }
+
+        public void stop() {
+            this.owner = null;
+            this.navigation.stop();
+        }
+
+        public void tick() {
+            this.summonedEntity.getLookControl().setLookAt(this.owner, 30.0F, 30.0F);
+            double d0 = this.summonedEntity.distanceToSqr(this.owner.getX(), this.owner.getY(), this.owner.getZ());
+            this.ticksUntilNextPathRecalculation = Math.max(this.ticksUntilNextPathRecalculation - 1, 0);
+            if (this.ticksUntilNextPathRecalculation <= 0 && (this.pathedTargetX == 0.0D && this.pathedTargetY == 0.0D && this.pathedTargetZ == 0.0D || this.owner.distanceToSqr(this.pathedTargetX, this.pathedTargetY, this.pathedTargetZ) >= 1.0D || this.summonedEntity.getRandom().nextFloat() < 0.05F)) {
+                this.pathedTargetX = this.owner.getX();
+                this.pathedTargetY = this.owner.getY();
+                this.pathedTargetZ = this.owner.getZ();
+                this.ticksUntilNextPathRecalculation = 4 + this.summonedEntity.getRandom().nextInt(7);
+                if (d0 > 144.0D && MainConfig.UndeadTeleport.get()){
+                    this.tryToTeleportNearEntity();
+                }
+                if (d0 > 1024.0D) {
+                    this.ticksUntilNextPathRecalculation += 10;
+                } else if (d0 > 256.0D) {
+                    this.ticksUntilNextPathRecalculation += 5;
+                }
+
+                if (!this.summonedEntity.getNavigation().moveTo(this.owner, this.followSpeed)) {
+                    this.ticksUntilNextPathRecalculation += 15;
+                }
+            }
+        }
+
+        private void tryToTeleportNearEntity() {
+            BlockPos blockpos = this.owner.blockPosition();
+
+            for(int i = 0; i < 10; ++i) {
+                int j = this.getRandomNumber(-3, 3);
+                int k = this.getRandomNumber(-1, 1);
+                int l = this.getRandomNumber(-3, 3);
+                boolean flag = this.tryToTeleportToLocation(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
+                if (flag) {
+                    return;
+                }
+            }
+
+        }
+
+        private boolean tryToTeleportToLocation(int x, int y, int z) {
+            if (Math.abs((double)x - this.owner.getX()) < 2.0D && Math.abs((double)z - this.owner.getZ()) < 2.0D) {
+                return false;
+            } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
+                return false;
+            } else {
+                this.summonedEntity.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.summonedEntity.yRot, this.summonedEntity.xRot);
+                this.navigation.stop();
+                return true;
+            }
+        }
+
+        private boolean isTeleportFriendlyBlock(BlockPos pos) {
+            PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(this.level, pos.mutable());
+            if (pathnodetype != PathNodeType.WALKABLE) {
+                return false;
+            } else {
+                BlockState blockstate = this.level.getBlockState(pos.below());
+                if (blockstate.getBlock() instanceof LeavesBlock) {
+                    return false;
+                } else {
+                    BlockPos blockpos = pos.subtract(this.summonedEntity.blockPosition());
+                    return this.level.noCollision(this.summonedEntity, this.summonedEntity.getBoundingBox().move(blockpos));
+                }
+            }
+        }
+
+        private int getRandomNumber(int min, int max) {
+            return this.summonedEntity.getRandom().nextInt(max - min + 1) + min;
+        }
+    }
+
+    public class WaterWanderGoal extends RandomWalkingGoal {
+
+        public WaterWanderGoal(CreatureEntity p_i47301_1_) {
+            super(p_i47301_1_, 1.0D);
+        }
+
+        public boolean canUse() {
+            if (super.canUse()){
+                return !DrownedMinionEntity.this.isStaying() || DrownedMinionEntity.this.getTrueOwner() == null;
+            } else {
+                return false;
+            }
         }
     }
 

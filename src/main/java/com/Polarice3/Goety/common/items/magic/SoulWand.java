@@ -136,7 +136,7 @@ public class SoulWand extends Item{
         if (target instanceof SummonedEntity){
             SummonedEntity summonedEntity = (SummonedEntity) target;
             if (summonedEntity.getTrueOwner() == player){
-                if (player.isCrouching()){
+                if (player.isShiftKeyDown() || player.isCrouching()){
                     summonedEntity.kill();
                 } else {
                     if (summonedEntity.getMobType() == CreatureAttribute.UNDEAD && !(summonedEntity instanceof UndeadWolfEntity)) {
@@ -325,6 +325,9 @@ public class SoulWand extends Item{
             } else if (spell.contains("spooky")) {
                 this.setSpellConditions(new WraithSpell(), itemStack);
                 this.setSpell(30, itemStack);
+            } else if (spell.contains("iceology")) {
+                this.setSpellConditions(new IceChunkSpell(), itemStack);
+                this.setSpell(31, itemStack);
             }
         } else {
             this.setSpellConditions(null, itemStack);

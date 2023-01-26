@@ -13,6 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.BarrelTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -189,6 +190,53 @@ public class BlockFinder {
         }
     }
 
+    public static double spawnWaterY(LivingEntity livingEntity, BlockPos blockPos) {
+        BlockPos blockpos = blockPos;
+        boolean flag = false;
+        double d0 = 0.0D;
+
+        do {
+            BlockPos blockpos1 = blockpos.below();
+            FluidState fluidState = livingEntity.level.getFluidState(blockpos);
+            BlockState blockstate = livingEntity.level.getBlockState(blockpos1);
+            if (fluidState.is(FluidTags.WATER)) {
+                if (!livingEntity.level.isWaterAt(blockpos)) {
+                    BlockState blockstate1 = livingEntity.level.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(livingEntity.level, blockpos);
+                    if (!voxelshape.isEmpty()) {
+                        d0 = voxelshape.max(Direction.Axis.Y);
+                    }
+                }
+
+                flag = true;
+                break;
+            } else if (blockstate.isFaceSturdy(livingEntity.level, blockpos1, Direction.UP)) {
+                if (!livingEntity.level.isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = livingEntity.level.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(livingEntity.level, blockpos);
+                    if (!voxelshape.isEmpty()) {
+                        d0 = voxelshape.max(Direction.Axis.Y);
+                    }
+                }
+
+                flag = true;
+                break;
+            }
+
+            blockpos = blockpos.below();
+        } while(blockpos.getY() >= MathHelper.floor(livingEntity.getY()) - 1);
+
+        if (flag) {
+            if (!(blockpos.getY() + d0 > livingEntity.getY() + 5)) {
+                return blockpos.getY() + d0;
+            } else {
+                return livingEntity.getY();
+            }
+        } else {
+            return livingEntity.getY();
+        }
+    }
+
     public static BlockPos fangSpawnPosition(Entity entity) {
         BlockPos blockpos = entity.blockPosition();
         boolean flag = false;
@@ -219,13 +267,21 @@ public class BlockFinder {
         return blockpos;
     }
 
-    public static boolean isEmptyBlock(IBlockReader pLevel, BlockPos pPos, BlockState pBlockState, FluidState pFluidState, EntityType<?> pEntityType) {
-        if (pBlockState.isCollisionShapeFullBlock(pLevel, pPos)) {
-            return false;
-        } else if (!pFluidState.isEmpty()) {
-            return false;
+    public static boolean isEmptyBlock(IBlockReader pLevel, BlockPos pPos, BlockState pBlockState, FluidState pFluidState, EntityType<?> pEntityType, boolean pWater) {
+        if (pWater){
+            if (pBlockState.isCollisionShapeFullBlock(pLevel, pPos)) {
+                return false;
+            } else {
+                return !pEntityType.isBlockDangerous(pBlockState) || pFluidState.isEmpty();
+            }
         } else {
-            return !pEntityType.isBlockDangerous(pBlockState);
+            if (pBlockState.isCollisionShapeFullBlock(pLevel, pPos)) {
+                return false;
+            } else if (!pFluidState.isEmpty()) {
+                return false;
+            } else {
+                return !pEntityType.isBlockDangerous(pBlockState);
+            }
         }
     }
 
@@ -235,10 +291,23 @@ public class BlockFinder {
         blockpos$mutable.setY((int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()));
         blockpos$mutable.setZ(blockpos$mutable.getZ() + world.random.nextInt(5) - world.random.nextInt(5));
         if (hasChunksAt(livingEntity)
-                && isEmptyBlock(world, blockpos$mutable, world.getBlockState(blockpos$mutable), world.getFluidState(blockpos$mutable), ModEntityType.ZOMBIE_MINION.get())){
+                && isEmptyBlock(world, blockpos$mutable, world.getBlockState(blockpos$mutable), world.getFluidState(blockpos$mutable), ModEntityType.ZOMBIE_MINION.get(), false)){
             return blockpos$mutable;
         } else {
             return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()), 0);
+        }
+    }
+
+    public static BlockPos SummonWaterRadius(LivingEntity livingEntity, World world){
+        BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
+        blockpos$mutable.setX(blockpos$mutable.getX() + world.random.nextInt(5) - world.random.nextInt(5));
+        blockpos$mutable.setY((int) BlockFinder.spawnWaterY(livingEntity, livingEntity.blockPosition()));
+        blockpos$mutable.setZ(blockpos$mutable.getZ() + world.random.nextInt(5) - world.random.nextInt(5));
+        if (hasChunksAt(livingEntity)
+                && isEmptyBlock(world, blockpos$mutable, world.getBlockState(blockpos$mutable), world.getFluidState(blockpos$mutable), ModEntityType.ZOMBIE_MINION.get(), true)){
+            return blockpos$mutable;
+        } else {
+            return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.spawnWaterY(livingEntity, livingEntity.blockPosition()), 0);
         }
     }
 
@@ -299,6 +368,22 @@ public class BlockFinder {
         } else {
             return false;
         }
+    }
+
+    public static BlockPos findBlockRadius(BlockPos oPos, int pX, int pY, int pZ){
+        BlockPos blockPos = oPos;
+        for (int j1 = -pX; j1 < pX; ++j1) {
+            for (int k1 = -pY; k1 <= pY; ++k1) {
+                for (int l1 = -pZ; l1 < pZ; ++l1) {
+                    blockPos = oPos.offset(j1, k1, l1);
+                }
+            }
+        }
+        return blockPos;
+    }
+
+    public static BlockState findBlock(World world, BlockPos oPos, int pX, int pY, int pZ){
+        return world.getBlockState(findBlockRadius(oPos, pX, pY, pZ));
     }
 
 }

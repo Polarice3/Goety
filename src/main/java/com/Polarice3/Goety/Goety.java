@@ -296,6 +296,7 @@ public class Goety {
         event.put(ModEntityType.FRIENDLY_VEX.get(), FriendlyVexEntity.setCustomAttributes().build());
         event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.HUSK_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.DROWNED_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.STRAY_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());

@@ -113,9 +113,11 @@ public class ZPiglinMinionEntity extends SummonedEntity {
                 if (!(livingEntity instanceof ZombifiedPiglinEntity) && !livingEntity.isAlliedTo(this)){
                     for (ZombifiedPiglinEntity zombifiedPiglin : this.level.getEntitiesOfClass(ZombifiedPiglinEntity.class, this.getBoundingBox().inflate(10))){
                         if (zombifiedPiglin.getTarget() != livingEntity) {
-                            zombifiedPiglin.startPersistentAngerTimer();
-                            zombifiedPiglin.setPersistentAngerTarget(livingEntity.getUUID());
-                            zombifiedPiglin.setTarget(livingEntity);
+                            if (zombifiedPiglin.canAttack(livingEntity)) {
+                                zombifiedPiglin.startPersistentAngerTimer();
+                                zombifiedPiglin.setPersistentAngerTarget(livingEntity.getUUID());
+                                zombifiedPiglin.setTarget(livingEntity);
+                            }
                         }
                     }
                 }

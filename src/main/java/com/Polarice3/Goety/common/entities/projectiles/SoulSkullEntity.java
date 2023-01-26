@@ -36,11 +36,11 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
     }
 
     public SoulSkullEntity(World p_i1794_1_, LivingEntity p_i1794_2_, double p_i1794_3_, double p_i1794_5_, double p_i1794_7_) {
-        super(ModEntityType.SOULSKULL.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
+        super(ModEntityType.SOUL_SKULL.get(), p_i1794_2_, p_i1794_3_, p_i1794_5_, p_i1794_7_, p_i1794_1_);
     }
 
     public SoulSkullEntity(World pWorld, double pX, double pY, double pZ, double pAccelX, double pAccelY, double pAccelZ) {
-        super(ModEntityType.SOULSKULL.get(), pX, pY, pZ, pAccelX, pAccelY, pAccelZ, pWorld);
+        super(ModEntityType.SOUL_SKULL.get(), pX, pY, pZ, pAccelX, pAccelY, pAccelZ, pWorld);
     }
 
     protected float getInertia() {

@@ -20,6 +20,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> APOSTLE_PREPARE_SUMMON = create("apostle_prepare_summon");
     public static final RegistryObject<SoundEvent> APOSTLE_CAST_SPELL = create("apostle_cast_spell");
     public static final RegistryObject<SoundEvent> APOSTLE_TELEPORT = create("apostle_teleport");
+    public static final RegistryObject<SoundEvent> APOSTLE_PREDEATH = create("apostle_predeath");
     public static final RegistryObject<SoundEvent> APOSTLE_DEATH = create("apostle_death");
 
     public static final RegistryObject<SoundEvent> SKULL_LORD_AMBIENT = create("skull_lord_ambient");
@@ -111,15 +112,26 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> WRAITH_TELEPORT = create("wraith_teleport");
     public static final RegistryObject<SoundEvent> WRAITH_DEATH = create("wraith_death");
 
+    public static final RegistryObject<SoundEvent> ICE_CHUNK_IDLE = create("ice_chunk_idle");
+    public static final RegistryObject<SoundEvent> ICE_CHUNK_SUMMON = create("ice_chunk_summon");
+    public static final RegistryObject<SoundEvent> ICE_CHUNK_HIT = create("ice_chunk_hit");
+
     public static final RegistryObject<SoundEvent> EVIL_LAUGH = create("evil_laugh");
     public static final RegistryObject<SoundEvent> ROAR_SPELL = create("roar_spell");
     public static final RegistryObject<SoundEvent> FIRE_BREATH = create("fire_breath");
     public static final RegistryObject<SoundEvent> PREPARE_SPELL = create("prepare_spell");
     public static final RegistryObject<SoundEvent> CAST_SPELL = create("cast_spell");
     public static final RegistryObject<SoundEvent> SUMMON_SPELL = create("summon_spell");
+    public static final RegistryObject<SoundEvent> SOUL_EAT = create("soul_eat");
     public static final RegistryObject<SoundEvent> SONIC_CHARGE = create("sonic_charge");
     public static final RegistryObject<SoundEvent> FIRE_TORNADO_AMBIENT = create("fire_tornado_ambient");
     public static final RegistryObject<SoundEvent> CORRUPT_EXPLOSION = create("corrupt_explosion");
+
+    public static final RegistryObject<SoundEvent> APOSTLE_THEME = create("apostle_theme");
+    public static final RegistryObject<SoundEvent> APOSTLE_THEME_POST = create("apostle_theme_post");
+    public static final RegistryObject<SoundEvent> VIZIER_THEME = create("vizier_theme");
+
+    public static final RegistryObject<SoundEvent> BOSS_POST = create("boss_post");
 
     static RegistryObject<SoundEvent> create(String name) {
         SoundEvent event = new SoundEvent(Goety.location(name));

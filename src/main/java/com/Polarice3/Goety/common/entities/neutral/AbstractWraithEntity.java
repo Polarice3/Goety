@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.ai.FloatSwimGoal;
+import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.hostile.WraithEntity;
 import com.Polarice3.Goety.init.ModEffects;
@@ -188,6 +188,11 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
 
     public float halfFollowRange(){
         return this.getFloatFollowRange()/2.0F;
+    }
+
+    @Override
+    public int xpReward() {
+        return 10;
     }
 
     @Override

@@ -46,7 +46,7 @@ public class PedestalBlock extends ContainerBlock implements IForgeBlock {
             ItemStack heldItem = player.getItemInHand(hand);
             PedestalTileEntity bowl = (PedestalTileEntity) world.getBlockEntity(pos);
             bowl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, hit.getDirection()).ifPresent(handler -> {
-                if (!player.isShiftKeyDown()) {
+                if (!player.isShiftKeyDown() && !player.isCrouching()) {
                     ItemStack itemStack = handler.getStackInSlot(0);
                     if (itemStack.isEmpty()) {
                         player.setItemInHand(hand, handler.insertItem(0, heldItem, false));

@@ -37,7 +37,7 @@ public class LavaballSpell extends Spells{
                 vector3d.y,
                 vector3d.z);
         fireballEntity.setOwner(entityLiving);
-        if (entityLiving.isCrouching()){
+        if (isShifting(entityLiving)){
             fireballEntity.setDangerous(false);
         }
         worldIn.addFreshEntity(fireballEntity);
@@ -57,7 +57,7 @@ public class LavaballSpell extends Spells{
                 vector3d.z);
         fireballEntity.setUpgraded(true);
         fireballEntity.setOwner(entityLiving);
-        if (entityLiving.isCrouching()){
+        if (isShifting(entityLiving)){
             fireballEntity.setDangerous(false);
         }
         worldIn.addFreshEntity(fireballEntity);
@@ -71,7 +71,7 @@ public class LavaballSpell extends Spells{
                     vector3d.z);
             lavaballEntity.setUpgraded(true);
             lavaballEntity.setOwner(entityLiving);
-            if (entityLiving.isCrouching()){
+            if (isShifting(entityLiving)){
                 lavaballEntity.setDangerous(false);
             }
             worldIn.addFreshEntity(lavaballEntity);

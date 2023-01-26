@@ -460,6 +460,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         CROSSED,
         ATTACKING,
         SPELLCASTING,
+        PRAYING,
         SPELL_AND_WEAPON,
         BOW_AND_ARROW,
         TORCH_AND_WEAPON,
@@ -467,6 +468,7 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
         CROSSBOW_CHARGE,
         BOMB_AND_WEAPON,
         THROW_SPEAR,
+        DYING,
         NEUTRAL;
     }
 }

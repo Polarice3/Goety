@@ -48,7 +48,7 @@ public class FangSpell extends Spells{
             d1 = Math.max(target.getY(), entityLiving.getY()) + 1.0D;
             f = (float)MathHelper.atan2(target.getZ() - entityLiving.getZ(), target.getX() - entityLiving.getX());
         }
-        if (!playerEntity.isCrouching()) {
+        if (!isShifting(entityLiving)) {
             for (int l = 0; l < range; ++l) {
                 double d2 = 1.25D * (double) (l + 1);
                 WandUtil.spawnFangs(entityLiving, entityLiving.getX() + (double) MathHelper.cos(f) * d2, entityLiving.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, l);
@@ -87,7 +87,7 @@ public class FangSpell extends Spells{
             d1 = Math.max(target.getY(), entityLiving.getY()) + 1.0D;
             f = (float)MathHelper.atan2(target.getZ() - entityLiving.getZ(), target.getX() - entityLiving.getX());
         }
-        if (!playerEntity.isCrouching()) {
+        if (!isShifting(entityLiving)) {
             for(int l = 0; l < range; ++l) {
                 double d2 = 1.25D * (double)(l + 1);
                 float fleft = f + 0.4F;

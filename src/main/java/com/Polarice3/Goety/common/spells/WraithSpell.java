@@ -51,7 +51,7 @@ public class WraithSpell extends SummonSpells{
             }
             this.IncreaseInfamy(MainConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        if (entityLiving.isCrouching()) {
+        if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof WraithMinionEntity) {
                     if (((WraithMinionEntity) entity).getTrueOwner() == entityLiving) {
@@ -68,7 +68,7 @@ public class WraithSpell extends SummonSpells{
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching())  {
+        if (!isShifting(entityLiving))  {
                 WraithMinionEntity summonedentity = new WraithMinionEntity(ModEntityType.WRAITH_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
@@ -96,7 +96,7 @@ public class WraithSpell extends SummonSpells{
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
                     WraithMinionEntity summonedentity = new WraithMinionEntity(ModEntityType.WRAITH_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());

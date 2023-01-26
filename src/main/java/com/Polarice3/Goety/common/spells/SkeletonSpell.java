@@ -2,7 +2,9 @@ package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.common.entities.ally.AbstractSMEntity;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
+import com.Polarice3.Goety.common.entities.ally.StrayMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -17,6 +19,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 
 public class SkeletonSpell extends SummonSpells{
@@ -46,7 +50,7 @@ public class SkeletonSpell extends SummonSpells{
             }
             this.IncreaseInfamy(MainConfig.SkeletonInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        if (entityLiving.isCrouching()) {
+        if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof SkeletonMinionEntity) {
                     if (((SkeletonMinionEntity) entity).getTrueOwner() == entityLiving) {
@@ -63,46 +67,54 @@ public class SkeletonSpell extends SummonSpells{
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
-                SkeletonMinionEntity summonedentity = new SkeletonMinionEntity(ModEntityType.SKELETON_MINION.get(), worldIn);
-                summonedentity.setOwnerId(entityLiving.getUUID());
-                summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                summonedentity.setPersistenceRequired();
-                summonedentity.setUpgraded(this.NecroPower(entityLiving));
-                summonedentity.setArrowPower(enchantment);
-                this.SummonSap(entityLiving, summonedentity);
-                worldIn.addFreshEntity(summonedentity);
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                this.SummonDown(entityLiving);
-
+        if (!isShifting(entityLiving)) {
+            BlockPos blockPos = BlockFinder.SummonRadius(entityLiving, worldIn);
+            AbstractSMEntity summonedentity = new SkeletonMinionEntity(ModEntityType.SKELETON_MINION.get(), worldIn);
+            if (worldIn.getBiome(blockPos).getBiomeCategory() == Biome.Category.ICY && worldIn.canSeeSky(blockPos)){
+                summonedentity = new StrayMinionEntity(ModEntityType.STRAY_MINION.get(), worldIn);
             }
+            summonedentity.setOwnerId(entityLiving.getUUID());
+            summonedentity.moveTo(blockPos, 0.0F, 0.0F);
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+            summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
+            summonedentity.setPersistenceRequired();
+            summonedentity.setUpgraded(this.NecroPower(entityLiving));
+            summonedentity.setArrowPower(enchantment);
+            this.SummonSap(entityLiving, summonedentity);
+            worldIn.addFreshEntity(summonedentity);
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+            }
+            this.SummonDown(entityLiving);
+
+        }
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
-                for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
-                    SkeletonMinionEntity summonedentity = new SkeletonMinionEntity(ModEntityType.SKELETON_MINION.get(), worldIn);
-                    summonedentity.setOwnerId(entityLiving.getUUID());
-                    summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                    summonedentity.setPersistenceRequired();
-                    summonedentity.setUpgraded(this.NecroPower(entityLiving));
-                    summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                    summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                    summonedentity.setArrowPower(enchantment);
-                    this.SummonSap(entityLiving, summonedentity);
-                    worldIn.addFreshEntity(summonedentity);
-                    for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                        worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                    }
+        if (!isShifting(entityLiving)) {
+            for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
+                BlockPos blockPos = BlockFinder.SummonRadius(entityLiving, worldIn);
+                AbstractSMEntity summonedentity = new SkeletonMinionEntity(ModEntityType.SKELETON_MINION.get(), worldIn);
+                if (worldIn.getBiome(blockPos).getBiomeCategory() == Biome.Category.ICY && worldIn.canSeeSky(blockPos)){
+                    summonedentity = new StrayMinionEntity(ModEntityType.STRAY_MINION.get(), worldIn);
                 }
-                this.SummonDown(entityLiving);
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                summonedentity.setOwnerId(entityLiving.getUUID());
+                summonedentity.moveTo(blockPos, 0.0F, 0.0F);
+                summonedentity.setPersistenceRequired();
+                summonedentity.setUpgraded(this.NecroPower(entityLiving));
+                summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
+                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+                summonedentity.setArrowPower(enchantment);
+                this.SummonSap(entityLiving, summonedentity);
+                worldIn.addFreshEntity(summonedentity);
+                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                    worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+                }
             }
+            this.SummonDown(entityLiving);
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+        }
     }
 }

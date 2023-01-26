@@ -15,7 +15,6 @@ import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ai.TargetHostileOwnedGoal;
 import com.Polarice3.Goety.common.entities.ally.*;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
-import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.BoneLordEntity;
 import com.Polarice3.Goety.common.entities.hostile.DredenEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
@@ -25,10 +24,8 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ICultist;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
-import com.Polarice3.Goety.common.entities.hostile.illagers.ConquillagerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity;
-import com.Polarice3.Goety.common.entities.hostile.illagers.InquillagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
@@ -64,7 +61,6 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -431,6 +427,15 @@ public class ModEvents {
                 event.getEntityLiving().addTag(ConstantPaths.structureMob());
             }
         }
+        if (event.getEntityLiving() instanceof SacredFishEntity){
+            if (event.getSpawnReason() == SpawnReason.NATURAL || event.getSpawnReason() == SpawnReason.CHUNK_GENERATION){
+                if (event.getWorld().getRandom().nextFloat() <= 0.025F){
+                    event.setResult(Event.Result.ALLOW);
+                } else {
+                    event.setResult(Event.Result.DENY);
+                }
+            }
+        }
     }
 
     @SubscribeEvent
@@ -705,7 +710,7 @@ public class ModEvents {
             }
             if (RobeArmorFinder.FindFelBootsofWander(player)){
                 Vector3d vector3d = player.getDeltaMovement();
-                if (!player.isCrouching()) {
+                if (!player.isShiftKeyDown() && !player.isCrouching()) {
                     if (event.getDistance() >= 2.0F) {
                         double jump = MathHelper.sqrt(event.getDistance())/2.0D;
                         player.setDeltaMovement(vector3d.x, jump, vector3d.z);
@@ -817,24 +822,26 @@ public class ModEvents {
         Entity attacker = event.getSource().getEntity();
         if (victim.hasEffect(ModEffects.CURSED.get())){
             EffectInstance effectInstance = victim.getEffect(ModEffects.CURSED.get());
-            assert effectInstance != null;
-            int i = effectInstance.getAmplifier() + 1;
-            event.setAmount(event.getAmount() * (1.0F + i));
+            if (effectInstance != null) {
+                int i = effectInstance.getAmplifier() + 1;
+                event.setAmount(event.getAmount() * (1.0F + i));
+            }
         }
         if (victim.hasEffect(ModEffects.SAPPED.get())){
             EffectInstance effectInstance = victim.getEffect(ModEffects.SAPPED.get());
-            assert effectInstance != null;
-            int i = effectInstance.getAmplifier();
-            float j = 1.2F + ((float)(i/10) * 2);
-            float f = event.getAmount() * j;
-            event.setAmount(f);
+            if (effectInstance != null) {
+                int i = effectInstance.getAmplifier() / 10;
+                float j = 1.2F + ((float) i * 2);
+                float f = event.getAmount() * j;
+                event.setAmount(f);
+            }
         }
         if (RobeArmorFinder.FindFelArmor(victim)){
             if (event.getSource().isExplosion()){
-                event.setAmount((float) (event.getAmount()/1.5));
+                event.setAmount((float) (event.getAmount() / 1.5F));
             }
             if (event.getSource().isFire()){
-                event.setAmount((float) (event.getAmount() * 1.5));
+                event.setAmount((float) (event.getAmount() * 1.5F));
             }
         }
         for (EquipmentSlotType equipmentSlotType: EquipmentSlotType.values()){
@@ -848,13 +855,13 @@ public class ModEvents {
                             switch (equipmentSlotType){
                                 case HEAD:
                                 case FEET:
-                                    damage = damage - 0.1F;
+                                    damage -= 0.1F;
                                     break;
                                 case CHEST:
-                                    damage = damage - 0.5F;
+                                    damage -= 0.5F;
                                     break;
                                 case LEGS:
-                                    damage = damage - 0.3F;
+                                    damage -= 0.3F;
                                     break;
                             }
                             event.setAmount(event.getAmount() * damage);
@@ -865,10 +872,10 @@ public class ModEvents {
                                 case HEAD:
                                 case LEGS:
                                 case FEET:
-                                    damage = damage - 0.1F;
+                                    damage -= 0.1F;
                                     break;
                                 case CHEST:
-                                    damage = damage - 0.2F;
+                                    damage -= 0.2F;
                                     break;
                             }
                             event.setAmount(event.getAmount() * damage);
@@ -927,12 +934,9 @@ public class ModEvents {
                 }
             }
         }
-        if (event.getSource() instanceof ModDamageSource) {
-            ModDamageSource modDamageSource = (ModDamageSource) event.getSource();
-            if (ModDamageSource.frostAttacks(modDamageSource)){
-                if (MobUtil.extraFrostDamage(victim)){
-                    event.setAmount(event.getAmount() * 2);
-                }
+        if (ModDamageSource.frostAttacks(event.getSource())){
+            if (MobUtil.extraFrostDamage(victim)){
+                event.setAmount(event.getAmount() * 2);
             }
         }
     }
@@ -1172,29 +1176,14 @@ public class ModEvents {
             }
         }
         if (killed instanceof AbstractIllagerEntity){
+            AbstractIllagerEntity illager = (AbstractIllagerEntity) killed;
             if (killer instanceof PlayerEntity || killer instanceof IOwned) {
-                if (killed instanceof PillagerEntity) {
-                    if (killed.level.random.nextFloat() <= 0.25F || ((PillagerEntity) killed).isPatrolLeader()) {
-                        InfamyHelper.addInfamy(killer, MainConfig.PillagerInfamy.get());
+                if (illager instanceof PillagerEntity) {
+                    if (illager.level.random.nextFloat() <= 0.25F || illager.isPatrolLeader()) {
+                        InfamyHelper.addInfamy(killer, InfamyHelper.getInfamyGiven(illager));
                     }
-                } else if (killed instanceof VindicatorEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.VindicatorInfamy.get());
-                } else if (killed instanceof EvokerEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.EvokerInfamy.get());
-                } else if (killed instanceof IllusionerEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.IllusionerInfamy.get());
-                } else if (killed instanceof EnviokerEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.EnviokerInfamy.get());
-                } else if (killed instanceof InquillagerEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.InquillagerInfamy.get());
-                } else if (killed instanceof ConquillagerEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.ConquillagerInfamy.get());
-                } else if (killed instanceof VizierEntity) {
-                    InfamyHelper.addInfamy(killer, MainConfig.VizierInfamy.get());
-                } else if (((AbstractIllagerEntity) killed).getMaxHealth() >= 50.0F) {
-                    InfamyHelper.addInfamy(killer, MainConfig.PowerfulInfamy.get());
                 } else {
-                    InfamyHelper.addInfamy(killer, MainConfig.OtherInfamy.get());
+                    InfamyHelper.addInfamy(killer, InfamyHelper.getInfamyGiven(illager));
                 }
             }
         }
@@ -1206,7 +1195,7 @@ public class ModEvents {
             if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)){
                 if (killed instanceof LivingEntity){
                     LivingEntity livingEntity = (LivingEntity) killed;
-                    if (player.getMainHandItem().getItem() instanceof AxeItem && event.getSource().getDirectEntity() == player) {
+                    if (player.getMainHandItem().getItem() instanceof AxeItem && ModDamageSource.physicalAttacks(event.getSource())) {
                         if (livingEntity.getMobType() != CreatureAttribute.UNDEAD) {
                             if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof SpellcastingIllagerEntity || livingEntity instanceof ChannellerEntity || livingEntity instanceof PlayerEntity) {
                                 if (r1 - looting <= 0) {
@@ -1335,18 +1324,12 @@ public class ModEvents {
                                 }
                                 if (looting > EnchantmentHelper.getMobLooting(player)) {
                                     if (spell != null) {
-                                        if (spell instanceof FangEntity) {
-                                            event.setLootingLevel(event.getLootingLevel() + looting);
-                                        }
-                                        if (spell instanceof DamagingProjectileEntity) {
+                                        if (!(spell instanceof LivingEntity)) {
                                             event.setLootingLevel(event.getLootingLevel() + looting);
                                         }
                                     }
-                                    if (event.getDamageSource() instanceof ModDamageSource) {
-                                        ModDamageSource modDamageSource = (ModDamageSource) event.getDamageSource();
-                                        if (ModDamageSource.breathAttacks(modDamageSource)) {
-                                            event.setLootingLevel(event.getLootingLevel() + looting);
-                                        }
+                                    if (ModDamageSource.breathAttacks(event.getDamageSource())) {
+                                        event.setLootingLevel(event.getLootingLevel() + looting);
                                     }
                                 }
                             }

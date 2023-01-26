@@ -68,7 +68,7 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
 
     public void tick() {
         super.tick();
-        if (this.level.isClientSide && this.isSpellcasting()) {
+        if (this.level.isClientSide && this.isSpellcasting() && this.isAlive()) {
             SpellType SpellcastingCultistEntity$spelltype = this.getSpellType();
             double d0 = SpellcastingCultistEntity$spelltype.particleSpeed[0];
             double d1 = SpellcastingCultistEntity$spelltype.particleSpeed[1];

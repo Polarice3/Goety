@@ -13,6 +13,14 @@
     },
     {
       "type": "patchouli:text",
+      "text": "Attempting to summon a Skeleton Servant in a cold tundra exposed to the skies will yield a Stray Servant instead."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:stray_minion"
+    },
+    {
+      "type": "patchouli:text",
       "text": "Skeleton Servants can accept any Armor but only Swords/Bows meaning they can either be range or melee attackers."
     }
   ]

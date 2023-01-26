@@ -2,26 +2,27 @@ package com.Polarice3.Goety.client.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.client.audio.BossLoopMusic;
 import com.Polarice3.Goety.client.audio.FelFlySound;
 import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.common.entities.ally.FelFlyEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
+import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
-import com.Polarice3.Goety.common.network.packets.client.CBagKeyPacket;
-import com.Polarice3.Goety.common.network.packets.client.CStopAttackPacket;
-import com.Polarice3.Goety.common.network.packets.client.CWandAndBagKeyPacket;
-import com.Polarice3.Goety.common.network.packets.client.CWandKeyPacket;
+import com.Polarice3.Goety.common.network.packets.client.*;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModKeybindings;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -30,6 +31,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
@@ -48,11 +50,24 @@ public class ClientEvents {
         Entity entity = event.getEntity();
         if (event.getWorld() instanceof ClientWorld){
             Minecraft minecraft = Minecraft.getInstance();
+            SoundHandler soundHandler = minecraft.getSoundManager();
             if (entity instanceof LocustEntity){
-                minecraft.getSoundManager().queueTickingSound(new LocustSound((LocustEntity) entity));
+                soundHandler.queueTickingSound(new LocustSound((LocustEntity) entity));
             }
             if (entity instanceof FelFlyEntity){
-                minecraft.getSoundManager().queueTickingSound(new FelFlySound((FelFlyEntity) entity));
+                soundHandler.queueTickingSound(new FelFlySound((FelFlyEntity) entity));
+            }
+            if (MainConfig.BossMusic.get()) {
+                if (entity instanceof ApostleEntity && !((ApostleEntity) entity).isNoAi()) {
+                    minecraft.getMusicManager().stopPlaying();
+                    minecraft.gui.setNowPlaying(new TranslationTextComponent("goety.apostle_theme"));
+                    soundHandler.play(new BossLoopMusic(ModSounds.APOSTLE_THEME.get(), (ApostleEntity) entity));
+                }
+                if (entity instanceof VizierEntity && !((VizierEntity) entity).isNoAi()) {
+                    minecraft.getMusicManager().stopPlaying();
+                    minecraft.gui.setNowPlaying(new TranslationTextComponent("goety.vizier_theme"));
+                    soundHandler.play(new BossLoopMusic(ModSounds.VIZIER_THEME.get(), (VizierEntity) entity));
+                }
             }
         }
     }
@@ -101,7 +116,7 @@ public class ClientEvents {
                     TileEntity tileEntity = minecraft.level.getBlockEntity(blockRayTraceResult.getBlockPos());
                     if (tileEntity instanceof ArcaTileEntity) {
                         ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
-                        if (arcaTile.getPlayer() == player && SEHelper.getSEActive(player) && player.isCrouching()) {
+                        if (arcaTile.getPlayer() == player && SEHelper.getSEActive(player) && (player.isShiftKeyDown() || player.isCrouching())) {
                             RenderSystem.pushMatrix();
                             RenderSystem.translatef((float)(minecraft.getWindow().getGuiScaledWidth() / 2), (float)(minecraft.getWindow().getGuiScaledHeight() - 68), 0.0F);
                             RenderSystem.enableBlend();
@@ -216,6 +231,12 @@ public class ClientEvents {
         }
         if (ModKeybindings.keyBindings[3].isDown() && MINECRAFT.isWindowActive()){
             ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CStopAttackPacket());
+        }
+        if (ModKeybindings.keyBindings[4].isDown() && MINECRAFT.isWindowActive()){
+            ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CLichKissPacket());
+        }
+        if (ModKeybindings.keyBindings[5].isDown() && MINECRAFT.isWindowActive()){
+            ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CMagnetPacket());
         }
     }
 

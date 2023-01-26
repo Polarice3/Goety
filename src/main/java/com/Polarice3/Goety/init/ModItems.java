@@ -125,6 +125,7 @@ public class ModItems {
     public static final RegistryObject<Item> FROSTBREATH_FOCUS = ITEMS.register("frostbreathfocus", () -> new MagicFocusItem(MainConfig.FrostBreathCost.get()));
     public static final RegistryObject<Item> SOULLIGHT_FOCUS = ITEMS.register("soullightfocus", () -> new MagicFocusItem(MainConfig.SoulLightCost.get()));
     public static final RegistryObject<Item> GLOWLIGHT_FOCUS = ITEMS.register("glowlightfocus", () -> new MagicFocusItem(MainConfig.GlowLightCost.get()));
+    public static final RegistryObject<Item> ICEOLOGY_FOCUS = ITEMS.register("iceologyfocus", () -> new MagicFocusItem(MainConfig.IceChunkCost.get()));
     public static final RegistryObject<Item> ICESTORM_FOCUS = ITEMS.register("icestormfocus", () -> new MagicFocusItem(MainConfig.IceStormCost.get()));
     public static final RegistryObject<Item> HOUNDING_FOCUS = ITEMS.register("houndingfocus", () -> new MagicFocusItem(MainConfig.UndeadWolfCost.get()));
     public static final RegistryObject<Item> PHANTASM_FOCUS = ITEMS.register("phantasmfocus", () -> new MagicFocusItem(MainConfig.PhantomCost.get()));

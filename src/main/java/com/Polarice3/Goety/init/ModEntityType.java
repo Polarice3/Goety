@@ -106,14 +106,14 @@ public class ModEntityType {
                     .updateInterval(20)
                     .build(new ResourceLocation(Goety.MOD_ID, "pitchfork").toString()));
 
-    public static final RegistryObject<EntityType<SoulSkullEntity>> SOULSKULL = ENTITY_TYPES.register("soulskull",
+    public static final RegistryObject<EntityType<SoulSkullEntity>> SOUL_SKULL = ENTITY_TYPES.register("soulskull",
             () -> EntityType.Builder.<SoulSkullEntity>of(SoulSkullEntity::new, EntityClassification.MISC)
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "soulskull").toString()));
 
-    public static final RegistryObject<EntityType<DesiccatedSkullEntity>> DESICCATEDSKULL = ENTITY_TYPES.register("corruptskull",
+    public static final RegistryObject<EntityType<DesiccatedSkullEntity>> DESICCATED_SKULL = ENTITY_TYPES.register("corruptskull",
             () -> EntityType.Builder.<DesiccatedSkullEntity>of(DesiccatedSkullEntity::new, EntityClassification.MISC)
                     .sized(0.3125F, 0.3125F)
                     .clientTrackingRange(4)
@@ -190,6 +190,14 @@ public class ModEntityType {
                     .sized(0.8F, 1.0F)
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "ghost_fire").toString()));
+
+    public static final RegistryObject<EntityType<IceChunkEntity>> ICE_CHUNK = ENTITY_TYPES.register("ice_chunk",
+            () -> EntityType.Builder.<IceChunkEntity>of(IceChunkEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 1.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "ice_chunk").toString()));
 
     public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
@@ -476,6 +484,12 @@ public class ModEntityType {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "zombie_minion").toString()));
+
+    public static final RegistryObject<EntityType<HuskMinionEntity>> HUSK_MINION = ENTITY_TYPES.register("husk_minion",
+            () -> EntityType.Builder.of(HuskMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "drowned_minion").toString()));
 
     public static final RegistryObject<EntityType<DrownedMinionEntity>> DROWNED_MINION = ENTITY_TYPES.register("drowned_minion",
             () -> EntityType.Builder.of(DrownedMinionEntity::new, EntityClassification.MONSTER)

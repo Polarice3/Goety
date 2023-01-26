@@ -19,6 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -75,6 +76,36 @@ public class SEHelper {
         }
     }
 
+    public static int getSoulGiven(LivingEntity victim){
+        if (victim != null){
+            boolean flag = victim instanceof OwnedEntity && !(victim instanceof IMob);
+            if (!flag) {
+                if (victim.getMobType() == CreatureAttribute.UNDEAD) {
+                    return MainConfig.UndeadSouls.get();
+                } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
+                    return MainConfig.AnthropodSouls.get();
+                } else if (victim instanceof AbstractRaiderEntity) {
+                    return MainConfig.IllagerSouls.get();
+                } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
+                    return MainConfig.VillagerSouls.get();
+                } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
+                    return MainConfig.PiglinSouls.get();
+                } else if (victim instanceof EnderDragonEntity) {
+                    return MainConfig.EnderDragonSouls.get();
+                } else if (victim instanceof PlayerEntity) {
+                    return MainConfig.PlayerSouls.get();
+                } else if (MinecoloniesLoaded.MINECOLONIES.isLoaded()
+                        && victim.getType().getDescriptionId().contains("minecolonies")
+                        && victim.getType().getCategory() != EntityClassification.MISC){
+                    return MainConfig.VillagerSouls.get();
+                } else {
+                    return MainConfig.DefaultSouls.get();
+                }
+            }
+        }
+        return 0;
+    }
+
     public static void rawHandleKill(LivingEntity killer, LivingEntity victim, int soulEater) {
         PlayerEntity player = null;
         if (killer instanceof PlayerEntity){
@@ -86,29 +117,7 @@ public class SEHelper {
             }
         }
         if (player != null) {
-            if (!(victim instanceof OwnedEntity)) {
-                if (victim.getMobType() == CreatureAttribute.UNDEAD) {
-                    increaseSouls(player, MainConfig.UndeadSouls.get() * soulEater);
-                } else if (victim.getMobType() == CreatureAttribute.ARTHROPOD) {
-                    increaseSouls(player, MainConfig.AnthropodSouls.get() * soulEater);
-                } else if (victim instanceof AbstractRaiderEntity) {
-                    increaseSouls(player, MainConfig.IllagerSouls.get() * soulEater);
-                } else if (victim instanceof VillagerEntity && !victim.isBaby()) {
-                    increaseSouls(player, MainConfig.VillagerSouls.get() * soulEater);
-                } else if (victim instanceof AbstractPiglinEntity || victim instanceof TameableEntity || victim instanceof MutatedEntity) {
-                    increaseSouls(player, MainConfig.PiglinSouls.get() * soulEater);
-                } else if (victim instanceof EnderDragonEntity) {
-                    increaseSouls(player, MainConfig.EnderDragonSouls.get() * soulEater);
-                } else if (victim instanceof PlayerEntity) {
-                    increaseSouls(player, MainConfig.PlayerSouls.get() * soulEater);
-                } else if (MinecoloniesLoaded.MINECOLONIES.isLoaded()
-                        && victim.getType().getDescriptionId().contains("minecolonies")
-                        && victim.getType().getCategory() != EntityClassification.MISC){
-                    increaseSouls(player, MainConfig.VillagerSouls.get() * soulEater);
-                } else {
-                    increaseSouls(player, MainConfig.DefaultSouls.get() * soulEater);
-                }
-            }
+            increaseSouls(player, getSoulGiven(victim) * soulEater);
         }
     }
 

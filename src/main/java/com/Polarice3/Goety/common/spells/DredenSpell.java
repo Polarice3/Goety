@@ -50,7 +50,7 @@ public class DredenSpell extends SummonSpells{
             }
             this.IncreaseInfamy(MainConfig.DredenInfamyChance.get(), (PlayerEntity) entityLiving);
         }
-        if (entityLiving.isCrouching()) {
+        if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof DredenMinionEntity) {
                     if (((DredenMinionEntity) entity).getTrueOwner() == entityLiving) {
@@ -72,7 +72,7 @@ public class DredenSpell extends SummonSpells{
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 DredenMinionEntity summonedentity = new DredenMinionEntity(ModEntityType.DREDEN_MINION.get(), worldIn);
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
@@ -97,7 +97,7 @@ public class DredenSpell extends SummonSpells{
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
-        if (!entityLiving.isCrouching()) {
+        if (!isShifting(entityLiving)) {
                 for (int i1 = 0; i1 < 2 + entityLiving.level.random.nextInt(4); ++i1) {
                     DredenMinionEntity summonedentity = new DredenMinionEntity(ModEntityType.DREDEN_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());

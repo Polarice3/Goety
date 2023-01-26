@@ -243,7 +243,7 @@ public class FarmerMinionEntity extends SummonedEntity {
                     EntityFinder.sendEntityUpdatePacket(pPlayer, this);
                     return ActionResultType.CONSUME;
                 }
-                if (pPlayer.isCrouching()){
+                if (pPlayer.isShiftKeyDown() || pPlayer.isCrouching()){
                     if (!this.inventory.isEmpty()) {
                         InventoryHelper.dropContents(this.level, pPlayer, this.inventory);
                         EntityFinder.sendEntityUpdatePacket(pPlayer, this);

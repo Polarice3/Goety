@@ -56,7 +56,7 @@ public class ArcaBlock extends ContainerBlock implements IForgeBlock {
                     ArcaTileEntity arcaTileEntity = (ArcaTileEntity) tileEntity;
                     if (arcaTileEntity.getPlayer() == pPlayer) {
                         ISoulEnergy soulEnergy = SEHelper.getCapability(arcaTileEntity.getPlayer());
-                        if (!pPlayer.isCrouching()){
+                        if (!pPlayer.isShiftKeyDown() && !pPlayer.isCrouching()){
                             if (soulEnergy.getArcaBlock() == null){
                                 soulEnergy.setArcaBlock(arcaTileEntity.getBlockPos());
                                 soulEnergy.setArcaBlockDimension(pLevel.dimension());

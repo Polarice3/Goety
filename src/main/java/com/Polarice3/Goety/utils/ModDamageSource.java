@@ -70,6 +70,10 @@ public class ModDamageSource extends DamageSource {
         return new NoKnockBackDamageSource(source("magicFire"), pSource, pIndirectEntity).bypassArmor().setIsFire();
     }
 
+    public static DamageSource soulLeech(@Nullable Entity pSource, @Nullable Entity pIndirectEntity){
+        return new NoKnockBackDamageSource(source("soulLeech"), pSource, pIndirectEntity).setMagic();
+    }
+
     public static boolean breathAttacks(DamageSource source){
         return source.getMsgId().contains("breath");
     }
@@ -89,16 +93,12 @@ public class ModDamageSource extends DamageSource {
                 && (source.getMsgId().equals("mob") || source.getMsgId().equals("player"));
     }
 
-    public static boolean rootAttacks(DamageSource source){
+    public static boolean isRoots(DamageSource source){
         return source.getMsgId().equals(source("indirectRoots")) || source.getMsgId().equals(source("roots"));
     }
 
-    public static boolean magicFireAttacks(DamageSource source){
+    public static boolean isMagicFire(DamageSource source){
         return source.getMsgId().equals(source("magicFire"));
-    }
-
-    public static boolean noKnockBackAttacks(DamageSource source){
-        return rootAttacks(source) || magicFireAttacks(source);
     }
 
     public static String source(String source){

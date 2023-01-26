@@ -81,6 +81,14 @@
     ],
     "subtitle": "subtitle.goety.apostle_teleport"
   },
+  "apostle_predeath": {
+    "sounds": [
+      {
+        "name": "goety:apostle/predeath"
+      }
+    ],
+    "subtitle": "subtitle.goety.apostle_predeath"
+  },
   "apostle_death": {
     "sounds": [
       {
@@ -269,23 +277,19 @@
   "inquillager_ambient": {
     "sounds": [
       {
-        "name": "mob/vindication_illager/idle1",
+        "name": "goety:inquillager/idle1",
         "pitch": 1.5
       },
       {
-        "name": "mob/vindication_illager/idle2",
+        "name": "goety:inquillager/idle2",
         "pitch": 1.5
       },
       {
-        "name": "mob/vindication_illager/idle3",
+        "name": "goety:inquillager/idle3",
         "pitch": 1.5
       },
       {
-        "name": "mob/vindication_illager/idle4",
-        "pitch": 1.5
-      },
-      {
-        "name": "mob/vindication_illager/idle5",
+        "name": "goety:inquillager/idle4",
         "pitch": 1.5
       }
     ],
@@ -337,19 +341,27 @@
   "conquillager_ambient": {
     "sounds": [
       {
-        "name": "mob/pillager/idle1",
+        "name": "goety:conquillager/idle1",
         "pitch": 1.25
       },
       {
-        "name": "mob/pillager/idle2",
+        "name": "goety:conquillager/idle2",
         "pitch": 1.25
       },
       {
-        "name": "mob/pillager/idle3",
+        "name": "goety:conquillager/idle3",
         "pitch": 1.25
       },
       {
-        "name": "mob/pillager/idle4",
+        "name": "goety:conquillager/idle4",
+        "pitch": 1.25
+      },
+      {
+        "name": "goety:conquillager/idle5",
+        "pitch": 1.25
+      },
+      {
+        "name": "goety:conquillager/idle6",
         "pitch": 1.25
       }
     ],
@@ -358,15 +370,19 @@
   "conquillager_hurt": {
     "sounds": [
       {
-        "name": "mob/pillager/hurt1",
+        "name": "goety:conquillager/hurt1",
         "pitch": 1.25
       },
       {
-        "name": "mob/pillager/hurt2",
+        "name": "goety:conquillager/hurt2",
         "pitch": 1.25
       },
       {
-        "name": "mob/pillager/hurt3",
+        "name": "goety:conquillager/hurt3",
+        "pitch": 1.25
+      },
+      {
+        "name": "goety:conquillager/hurt4",
         "pitch": 1.25
       }
     ],
@@ -396,11 +412,15 @@
   "conquillager_death": {
     "sounds": [
       {
-        "name": "mob/pillager/death1",
+        "name": "goety:conquillager/death1",
         "pitch": 1.25
       },
       {
-        "name": "mob/pillager/death2",
+        "name": "goety:conquillager/death2",
+        "pitch": 1.25
+      },
+      {
+        "name": "goety:conquillager/death3",
         "pitch": 1.25
       }
     ],
@@ -1215,6 +1235,30 @@
     ],
     "subtitle": "subtitle.goety.wraith_death"
   },
+  "ice_chunk_idle": {
+    "sounds": [
+      {
+        "name": "goety:ice/idle"
+      }
+    ],
+    "subtitle": "subtitle.goety.ice_chunk_idle"
+  },
+  "ice_chunk_summon": {
+    "sounds": [
+      {
+        "name": "goety:ice/summon"
+      }
+    ],
+    "subtitle": "subtitle.goety.ice_chunk_summon"
+  },
+  "ice_chunk_hit": {
+    "sounds": [
+      {
+        "name": "goety:ice/hit"
+      }
+    ],
+    "subtitle": "subtitle.goety.ice_chunk_hit"
+  },
   "evil_laugh": {
     "sounds": [
       {
@@ -1283,6 +1327,20 @@
     ],
     "subtitle": "subtitle.goety.summon_spell"
   },
+  "soul_eat": {
+    "sounds": [
+      {
+        "name": "goety:spell/soul_eat1"
+      },
+      {
+        "name": "goety:spell/soul_eat2"
+      },
+      {
+        "name": "goety:spell/soul_eat3"
+      }
+    ],
+    "subtitle": "subtitle.goety.soul_eat"
+  },
   "fire_tornado_ambient": {
     "sounds": [
       {
@@ -1298,5 +1356,33 @@
       }
     ],
     "subtitle": "subtitle.goety.corrupt_explosion"
+  },
+  "apostle_theme": {
+    "sounds": [
+      {
+        "name": "goety:music/apostle_theme"
+      }
+    ]
+  },
+  "apostle_theme_post": {
+    "sounds": [
+      {
+        "name": "goety:music/apostle_theme_post"
+      }
+    ]
+  },
+  "vizier_theme": {
+    "sounds": [
+      {
+        "name": "goety:music/vizier_theme"
+      }
+    ]
+  },
+  "boss_post": {
+    "sounds": [
+      {
+        "name": "goety:music/boss_post"
+      }
+    ]
   }
 }

@@ -78,6 +78,7 @@
   "entity.goety.friendly_vex":"Vex",
   "entity.goety.friendly_scorch":"Scorch",
   "entity.goety.zombie_minion":"Zombie Servant",
+  "entity.goety.husk_minion":"Husk Servant",
   "entity.goety.drowned_minion":"Drowned Servant",
   "entity.goety.farmer_minion":"Zombie Farmer Servant",
   "entity.goety.skeleton_minion":"Skeleton Servant",
@@ -124,6 +125,7 @@
   "entity.goety.roots":"Rotten Roots",
   "entity.goety.frost_ball":"Frost Ball",
   "entity.goety.ghost_fire":"Ghost Fire",
+  "entity.goety.ice_chunk":"Ice Chunk",
   "entity.goety.witchgale":"Witch's Gale",
   "entity.goety.fire_tornado":"Flaming Tornado",
 
@@ -171,6 +173,7 @@
   "item.goety.scorch_spawn_egg": "Scorch Spawn Egg",
   "item.goety.sentinel_spawn_egg": "Sentinel Spawn Egg",
   "item.goety.zombie_minion_spawn_egg": "Zombie Servant Spawn Egg",
+  "item.goety.husk_minion_spawn_egg": "Husk Servant Spawn Egg",
   "item.goety.drowned_minion_spawn_egg": "Drowned Servant Spawn Egg",
   "item.goety.farmer_minion_spawn_egg": "Zombie Farmer Servant Spawn Egg",
   "item.goety.skeleton_minion_spawn_egg": "Skeleton Servant Spawn Egg",
@@ -286,6 +289,7 @@
   "item.goety.frostbreathfocus": "Frost Breath Focus",
   "item.goety.soullightfocus": "Soul Light Focus",
   "item.goety.glowlightfocus": "Glow Light Focus",
+  "item.goety.iceologyfocus": "Iceology Focus",
   "item.goety.icestormfocus": "Ice Storm Focus",
   "item.goety.houndingfocus": "Hounding Focus",
   "item.goety.phantasmfocus": "Phantasm Focus",
@@ -520,6 +524,8 @@
   "key.goety.wandandbag": "Open Bag with Wand",
   "key.goety.bag": "Open Focus Bag",
   "key.goety.ceaseFire": "Cease Fire",
+  "key.goety.magnet": "Lich Magnet",
+  "key.goety.lichKiss": "Lich Kiss",
 
   "text.goety.swap": "Swap",
   "text.goety.insert": "Insert",
@@ -558,6 +564,7 @@
   "subtitle.goety.apostle_prepare_summon": "Apostle summons",
   "subtitle.goety.apostle_cast_spell": "Apostle casts spell",
   "subtitle.goety.apostle_teleport": "Apostle vanishes",
+  "subtitle.goety.apostle_predeath": "Apostle screams",
   "subtitle.goety.apostle_death": "Apostle perishes",
 
   "subtitle.goety.skull_lord_ambient": "Skull Lord murmurs",
@@ -648,6 +655,10 @@
   "subtitle.goety.wraith_teleport": "Wraith teleports",
   "subtitle.goety.wraith_death": "Wraith dies",
 
+  "subtitle.goety.ice_chunk_idle": "Ice Chunk floating",
+  "subtitle.goety.ice_chunk_summon": "Ice Chunk summoned",
+  "subtitle.goety.ice_chunk_hit": "Ice Chunk hits",
+
   "subtitle.goety.evil_laugh": "Evil Laugh",
   "subtitle.goety.roar_spell": "Loud Roar",
   "subtitle.goety.fire_breath": "Breathing Flames",
@@ -658,6 +669,9 @@
   "subtitles.goety.sonic_charge": "Sonic charges",
   "subtitles.goety.sonic_boom": "Sonic booms",
   "subtitle.goety.fire_tornado_ambient": "Flaming Tornado",
+
+  "goety.apostle_theme": "Minecraft Dungeons - Ghast",
+  "goety.vizier_theme": "Minecraft Dungeons - Evoker",
 
   "container.goety.pithos": "Pithos",
 
@@ -803,6 +817,8 @@
   "death.attack.goety.sword.item": "%1$s was sliced by %2$s with %3$s",
   "death.attack.goety.magicFire": "%1$s was immolated by %2$s",
   "death.attack.goety.magicFire.item": "%1$s was immolated by %2$s with %3$s",
+  "death.attack.goety.soulLeech": "%1$s soul was sucked by %2$s",
+  "death.attack.goety.soulLeech.item": "%1$s soul was sucked by %2$s with %3$s",
   "death.attack.goety.roots": "%1$s was ripped apart",
   "death.attack.goety.roots.player": "%1$s was ripped apart whilst trying to escape %2$s",
   "death.attack.goety.indirectRoots": "%1$s was ripped apart by %2$s",

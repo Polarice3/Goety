@@ -65,8 +65,8 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCYTHE.get(), ScytheProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOULSKULL.get(), SoulSkullRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DESICCATEDSKULL.get(), CorruptSkullRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_SKULL.get(), SoulSkullRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DESICCATED_SKULL.get(), CorruptSkullRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEAD_TNT.get(), DeadTNTRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ICE_STORM.get(), IceStormRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SOUL_BULLET.get(), SoulBulletRenderer::new);
@@ -77,6 +77,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SPIKE.get(), SpikeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ROOTS.get(), RootsTrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.GHOST_FIRE.get(), GhostFireRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ICE_CHUNK.get(), IceChunkRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCHGALE.get(), WitchGaleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRETORNADO.get(), FireTornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CHANNELLER.get(), ChannellerRenderer::new);
@@ -119,6 +120,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FRIENDLY_VEX.get(), FriendlyVexRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HUSK_MINION.get(), HuskMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DROWNED_MINION.get(), DrownedMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_MINION.get(), SkeletonMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STRAY_MINION.get(), SkeletonMinionRenderer::new);
@@ -266,6 +268,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.PLAGUE_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.BULLET_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.GLOW_EFFECT.get(), SpellParticle.Factory::new);
+        particles.register(ModParticleTypes.LEECH.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.WRAITH.get(), WraithParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
         particles.register(ModParticleTypes.SOUL_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);

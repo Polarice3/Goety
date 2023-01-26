@@ -140,6 +140,7 @@ public class PoisonBallEntity extends ProjectileItemEntity {
 
     @Override
     protected void defineSynchedData() {
+        super.defineSynchedData();
         this.entityData.define(DATA_UPGRADED, false);
     }
 
