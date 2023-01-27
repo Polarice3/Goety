@@ -120,7 +120,7 @@ public class ApostleRenderer extends AbstractCultistRenderer<ApostleEntity>{
     @Nullable
     protected RenderType getRenderType(ApostleEntity p_230496_1_, boolean p_230496_2_, boolean p_230496_3_, boolean p_230496_4_) {
         if (p_230496_1_.deathTime > 0){
-            float f1 = MainConfig.FancierApostleDeath.get() ? 300.0F : 20.0F;
+            float f1 = MainConfig.FancierApostleDeath.get() ? 300.0F : 30.0F;
             float f2 = (float)p_230496_1_.deathTime / f1;
             return RenderType.dragonExplosionAlpha(EXPLODE, f2);
         } else {

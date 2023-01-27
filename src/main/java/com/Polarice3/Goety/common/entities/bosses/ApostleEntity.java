@@ -320,7 +320,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.die(this.deathBlow);
                 this.playSound(this.getTrueDeathSound(), 5.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
-            if (this.deathTime >= 20) {
+            if (this.deathTime >= 30) {
                 this.remove();
             }
         }

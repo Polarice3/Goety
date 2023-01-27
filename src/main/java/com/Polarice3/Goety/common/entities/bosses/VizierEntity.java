@@ -349,14 +349,18 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     protected void tickDeath() {
         ++this.deathTime;
-        if (this.deathTime == 12) {
+        if (this.deathTime == 30) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
-            this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            for (int p = 0; p < 32; ++p) {
-                double d0 = (double)this.getX() + this.level.random.nextDouble();
-                double d1 = (double)this.getY() + this.level.random.nextDouble();
-                double d2 = (double)this.getZ() + this.level.random.nextDouble();
-                this.level.addParticle(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+            if (!this.level.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                serverWorld.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
+                for (int p = 0; p < 32; ++p) {
+                    double d0 = (double)this.getX() + this.level.random.nextDouble();
+                    double d1 = (double)this.getY() + this.level.random.nextDouble();
+                    double d2 = (double)this.getZ() + this.level.random.nextDouble();
+                    this.level.addParticle(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
+                    serverWorld.sendParticles(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 0.5F);
+                }
             }
             this.remove();
         }

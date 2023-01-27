@@ -158,8 +158,10 @@ public class VizierModel extends SegmentedModel<VizierEntity> implements IHasArm
             this.leftArm.yRot = 0.0F;
         }
 
-        if (entityIn.deathTime > 0){
+        if (entityIn.deathTime > 0 && entityIn.isDeadOrDying()){
             this.body.yRot += ageInTicks;
+        } else {
+            this.body.yRot = 0.0F;
         }
 
         boolean flag = abstractillagerentity$armpose == AbstractIllagerEntity.ArmPose.CROSSED;

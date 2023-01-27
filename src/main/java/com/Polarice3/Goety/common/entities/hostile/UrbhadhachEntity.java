@@ -224,7 +224,9 @@ public class UrbhadhachEntity extends MonsterEntity {
                             if (this.getThrall().getAttributeValue(Attributes.MOVEMENT_SPEED) < 0.5F) {
                                 speed = 1.0F;
                             }
-                            this.getThrall().getNavigation().moveTo(this.pathToUrbhadhach(this.getThrall()), speed);
+                            if (this.pathToUrbhadhach(this.getThrall()) != null) {
+                                this.getThrall().getNavigation().moveTo(this.pathToUrbhadhach(this.getThrall()), speed);
+                            }
                         } else {
                             this.thrallCooldown = 600;
                             this.setThralling(false);
