@@ -204,6 +204,14 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
         return false;
     }
 
+    protected boolean canHitEntity(Entity pEntity) {
+        if (this.getOwner() != null && this.getOwner().isAlliedTo(pEntity)){
+            return false;
+        } else {
+            return super.canHitEntity(pEntity);
+        }
+    }
+
     @Override
     public void setExplosionPower(float pExplosionPower) {
         this.explosionPower = pExplosionPower;

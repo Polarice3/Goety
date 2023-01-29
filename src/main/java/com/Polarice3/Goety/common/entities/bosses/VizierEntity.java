@@ -102,7 +102,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                     double d2 = this.random.nextGaussian() * 0.02D;
                     this.level.addParticle(ModParticleTypes.CONFUSED.get(), this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
                 }
-                this.playSound(SoundEvents.ILLUSIONER_AMBIENT, 1.0F, 0.5F);
+                this.playSound(ModSounds.VIZIER_CONFUSE.get(), 1.0F, 1.0F);
             }
             if (j1 <= 0) {
                 for(int i = 0; i < 5; ++i) {
@@ -111,7 +111,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                     double d2 = this.random.nextGaussian() * 0.02D;
                     this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
                 }
-                this.playSound(SoundEvents.VILLAGER_NO, 1.0F, 0.5F);
+                this.playSound(ModSounds.VIZIER_RAGE.get(), 1.0F, 1.0F);
             }
             this.setInvulnerableTicks(j1);
         }
@@ -270,30 +270,16 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         this.entityData.define(CONFUSED, 0);
     }
 
-    public void playAmbientSound() {
-        SoundEvent soundevent = this.getAmbientSound();
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.75F);
-        }
-    }
-
-    protected void playHurtSound(DamageSource pSource) {
-        SoundEvent soundevent = this.getHurtSound(pSource);
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.0F, 0.75F);
-        }
-    }
-
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.EVOKER_AMBIENT;
+        return ModSounds.VIZIER_AMBIENT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.EVOKER_DEATH;
+        return ModSounds.VIZIER_DEATH.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.EVOKER_HURT;
+        return ModSounds.VIZIER_HURT.get();
     }
 
     public int getInvulnerableTicks() {
@@ -324,7 +310,13 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         this.setInvulnerableTicks(40);
     }
 
+    @Override
+    public boolean canBeLeader() {
+        return false;
+    }
+
     public void die(DamageSource cause) {
+        this.playSound(ModSounds.VIZIER_SCREAM.get(), 4.0F, 1.0F);
         if (!MainConfig.VizierMinion.get()) {
             for (IrkEntity ally : VizierEntity.this.level.getEntitiesOfClass(IrkEntity.class, VizierEntity.this.getBoundingBox().inflate(64.0D), field_213690_b)) {
                 ally.hurt(DamageSource.STARVE, 200.0F);
@@ -349,7 +341,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     protected void tickDeath() {
         ++this.deathTime;
-        if (this.deathTime == 30) {
+        if (this.deathTime == 40) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
             if (!this.level.isClientSide){
                 ServerWorld serverWorld = (ServerWorld) this.level;
@@ -549,7 +541,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     @Override
     public SoundEvent getCelebrateSound() {
-        return SoundEvents.EVOKER_CELEBRATE;
+        return ModSounds.VIZIER_CELEBRATE.get();
     }
 
     @Override
@@ -666,7 +658,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             }
             if (i >= 2) {
                 VizierEntity.this.playSound(SoundEvents.EVOKER_PREPARE_SUMMON, 1.0F, 1.0F);
-                VizierEntity.this.playSound(SoundEvents.EVOKER_CELEBRATE, 1.0F, 0.75F);
+                VizierEntity.this.playSound(ModSounds.VIZIER_CELEBRATE.get(), 1.0F, 1.0F);
                 VizierEntity.this.setSpellcasting(true);
             } else {
                 VizierEntity.this.setCastTimes(0);
@@ -734,7 +726,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             Vector3d vector3d = livingentity.position();
             VizierEntity.this.moveControl.setWantedPosition(vector3d.x, vector3d.y, vector3d.z, 1.0D);
             VizierEntity.this.setCharging(true);
-            VizierEntity.this.playSound(SoundEvents.EVOKER_CELEBRATE, 1.0F, 0.75F);
+            VizierEntity.this.playSound(ModSounds.VIZIER_CELEBRATE.get(), 1.0F, 1.0F);
         }
 
         public void stop() {

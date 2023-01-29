@@ -5,7 +5,6 @@ import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -164,13 +163,13 @@ public class GhostFireEntity extends GroundProjectileEntity {
 
             if (this.getOwner() != null){
                 if (this.getOwner() instanceof MobEntity){
-                    if (this.getOwner().hurtTime > 0 && this.lifeTicks > 75 && !this.getOwner().isDeadOrDying()){
+                    if (this.getOwner().hurtTime > 0 && this.tickCount < 10 && !this.getOwner().isDeadOrDying()){
                         this.lifeTicks = 12;
                     }
                 }
             }
 
-            if (this.isInLava() || this.isInWaterOrBubble() || (MobUtil.isInRain(this) && this.level.random.nextFloat() < 0.2F)){
+            if (this.isInLava() || this.isInWaterOrBubble()){
                 this.level.broadcastEntityEvent(this, (byte)6);
                 this.remove();
             }

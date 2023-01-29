@@ -15,7 +15,7 @@
       "tag": "forge:bones"
     },
     {
-      "tag": "forge:bones"
+      "item": "goety:ectoplasm"
     },
     {
       "tag": "forge:gems/lapis"
@@ -27,7 +27,7 @@
       "item": "minecraft:dragon_breath"
     },
     {
-      "item": "minecraft:diamond"
+      "item": "goety:ectoplasm"
     },
     {
       "item": "goety:savagetooth"

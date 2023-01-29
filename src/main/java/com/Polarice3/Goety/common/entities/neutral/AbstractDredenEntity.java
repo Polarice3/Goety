@@ -8,7 +8,6 @@ import com.Polarice3.Goety.common.entities.projectiles.FrostBallEntity;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
-import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -87,10 +86,7 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
     }
 
     protected SoundEvent getStepSound() {
-        return null;
-    }
-
-    protected void playStepSound(BlockPos pPos, BlockState pBlock) {
+        return ModSounds.DREDEN_FLY.get();
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {

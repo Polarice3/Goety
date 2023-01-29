@@ -1,9 +1,12 @@
 package com.Polarice3.Goety.common.tileentities;
 
+import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -87,6 +90,9 @@ public class ForbiddenGrassTileEntity extends TileEntity implements ITickableTil
                                         MobEntity mob = (MobEntity) entity;
                                         mob.setPos(above.getX() + 0.5F, above.getY(), above.getZ() + 0.5F);
                                         if (this.getLevel().noCollision(mob.getBoundingBox().inflate(0.5F, 0, 0.5F))) {
+                                            if (this.getLevel().getBlockState(this.getBlockPos().below()).is(ModTags.Blocks.DEAD_SANDS) && mob instanceof MonsterEntity){
+                                                MobUtil.deadSandConvert(mob, true);
+                                            }
                                             mob.finalizeSpawn(this.getLevel(), this.getLevel().getCurrentDifficultyAt(this.worldPosition), SpawnReason.SPAWNER, null, null);
                                             this.getLevel().addFreshEntity(mob);
                                         }

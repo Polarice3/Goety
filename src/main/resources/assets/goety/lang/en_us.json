@@ -645,15 +645,24 @@
 
   "subtitle.goety.dreden_ambient": "Dreden dreads",
   "subtitle.goety.dreden_hurt": "Dreden hurts",
+  "subtitle.goety.dreden_fly": "Dreden floats",
   "subtitle.goety.dreden_shoot": "Dreden shoots",
   "subtitle.goety.dreden_death": "Dreden dies",
 
   "subtitle.goety.wraith_ambient": "Wraith haunts",
   "subtitle.goety.wraith_hurt": "Wraith hurts",
+  "subtitle.goety.wraith_fly": "Wraith floats",
   "subtitle.goety.wraith_attack": "Wraith attacks",
   "subtitle.goety.wraith_fire": "Ghost Fire burns",
   "subtitle.goety.wraith_teleport": "Wraith teleports",
   "subtitle.goety.wraith_death": "Wraith dies",
+
+  "subtitle.goety.vizier_ambient": "Vizier vizies",
+  "subtitle.goety.vizier_hurt": "Vizier hurts",
+  "subtitle.goety.vizier_confuse": "Vizier confuzzles",
+  "subtitle.goety.vizier_rage": "Vizier attacks",
+  "subtitle.goety.vizier_celebrate": "Vizier laughs",
+  "subtitle.goety.vizier_death": "Vizier freakin dies",
 
   "subtitle.goety.ice_chunk_idle": "Ice Chunk floating",
   "subtitle.goety.ice_chunk_summon": "Ice Chunk summoned",

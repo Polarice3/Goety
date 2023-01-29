@@ -1135,6 +1135,20 @@
     ],
     "subtitle": "subtitle.goety.dreden_hurt"
   },
+  "dreden_fly": {
+    "sounds": [
+      {
+        "name": "goety:dreden/fly1"
+      },
+      {
+        "name": "goety:dreden/fly2"
+      },
+      {
+        "name": "goety:dreden/fly3"
+      }
+    ],
+    "subtitle": "subtitle.goety.dreden_fly"
+  },
   "dreden_shoot": {
     "sounds": [
       {
@@ -1197,6 +1211,26 @@
     ],
     "subtitle": "subtitle.goety.wraith_hurt"
   },
+  "wraith_fly": {
+    "sounds": [
+      {
+        "name": "goety:wraith/fly1"
+      },
+      {
+        "name": "goety:wraith/fly2"
+      },
+      {
+        "name": "goety:wraith/fly3"
+      },
+      {
+        "name": "goety:wraith/fly4"
+      },
+      {
+        "name": "goety:wraith/fly5"
+      }
+    ],
+    "subtitle": "subtitle.goety.wraith_fly"
+  },
   "wraith_attack": {
     "sounds": [
       {
@@ -1234,6 +1268,107 @@
       }
     ],
     "subtitle": "subtitle.goety.wraith_death"
+  },
+  "vizier_ambient": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/idle1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/idle2",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/idle3",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/idle4",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.vizier_ambient"
+  },
+  "vizier_hurt": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/hurt1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/hurt2",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.vizier_hurt"
+  },
+  "vizier_confuse": {
+    "sounds": [
+      {
+        "name": "mob/illusion_illager/idle1",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/illusion_illager/idle2",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/illusion_illager/idle3",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/illusion_illager/idle4",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitle.goety.vizier_confuse"
+  },
+  "vizier_rage": {
+    "sounds": [
+      {
+        "name": "mob/villager/no1",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/villager/no2",
+        "pitch": 0.5
+      },
+      {
+        "name": "mob/villager/no3",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitle.goety.vizier_rage"
+  },
+  "vizier_celebrate": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/celebrate",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.vizier_celebrate"
+  },
+  "vizier_scream": {
+    "sounds": [
+      {
+        "name": "goety:vizier/death"
+      }
+    ]
+  },
+  "vizier_death": {
+    "sounds": [
+      {
+        "name": "mob/evocation_illager/death1",
+        "pitch": 0.75
+      },
+      {
+        "name": "mob/evocation_illager/death2",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitle.goety.vizier_death"
   },
   "ice_chunk_idle": {
     "sounds": [

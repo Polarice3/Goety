@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractFireballEntity;
@@ -56,6 +57,14 @@ public abstract class ExplosiveProjectileEntity extends AbstractFireballEntity {
             this.setExplosionPower(pCompound.getFloat("ExplosionPower"));
         }
 
+    }
+
+    protected boolean canHitEntity(Entity pEntity) {
+        if (this.getOwner() != null && pEntity == this.getOwner()){
+            return false;
+        } else {
+            return super.canHitEntity(pEntity);
+        }
     }
 
 }

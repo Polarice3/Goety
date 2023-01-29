@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The Dark Scythe is a powerful weapon capable of hitting multiple beings per hit. Not only does it hit hard, but the wielder gains Soul Energy with each hit. If the wielder's attack recharge meter is full, the scythe will hit beings at a higher radius though it will take quite a while for the meter to recover."
+      "text": "The Dark Scythe is a powerful weapon capable of hitting multiple beings per hit. Not only does it hit hard, but the wielder gains Soul Energy with each hit. If the wielder's attack recharge meter is full, the scythe will hit beings at a higher radius though it will take quite a while for the meter to recover which can be mitigated if the wielder doesn't hold anything offhand."
     },
     {
       "type": "goety:ritual",

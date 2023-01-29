@@ -16,6 +16,7 @@ import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -53,7 +54,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -854,7 +854,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             int l = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
                             BlockPos.Mutable blockpos$mutable = this.blockPosition().mutable().move(k, 0, l);
                             blockpos$mutable.setX(blockpos$mutable.getX() + r.nextInt(5) - r.nextInt(5));
-                            blockpos$mutable.setY(this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
+                            blockpos$mutable.setY((int) BlockFinder.moveDownToGround(this));
                             blockpos$mutable.setZ(blockpos$mutable.getZ() + r.nextInt(5) - r.nextInt(5));
                             OwnedEntity summonedentity;
                             if (!this.isSecondPhase()) {
@@ -880,7 +880,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             int l = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
                             BlockPos.Mutable blockpos$mutable = this.blockPosition().mutable().move(k, 0, l);
                             blockpos$mutable.setX(blockpos$mutable.getX() + r.nextInt(5) - r.nextInt(5));
-                            blockpos$mutable.setY(this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
+                            blockpos$mutable.setY((int) BlockFinder.moveDownToGround(this));
                             blockpos$mutable.setZ(blockpos$mutable.getZ() + r.nextInt(5) - r.nextInt(5));
                             ZPiglinMinionEntity summonedentity = new ZPiglinMinionEntity(ModEntityType.ZPIGLIN_MINION.get(), this.level);
                             summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
@@ -1179,7 +1179,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                                 int l = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
                                 BlockPos.Mutable blockpos$mutable = ApostleEntity.this.blockPosition().mutable().move(k, 0, l);
                                 blockpos$mutable.setX(blockpos$mutable.getX() + r.nextInt(5) - r.nextInt(5));
-                                blockpos$mutable.setY(ApostleEntity.this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
+                                blockpos$mutable.setY((int) BlockFinder.moveDownToGround(ApostleEntity.this));
                                 blockpos$mutable.setZ(blockpos$mutable.getZ() + r.nextInt(5) - r.nextInt(5));
                                 ZPiglinMinionEntity summonedentity = new ZPiglinMinionEntity(ModEntityType.ZPIGLIN_MINION.get(), ApostleEntity.this.level);
                                 summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
@@ -1226,7 +1226,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                                 int l = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
                                 BlockPos.Mutable blockpos$mutable = ApostleEntity.this.blockPosition().mutable().move(k, 0, l);
                                 blockpos$mutable.setX(blockpos$mutable.getX() + r.nextInt(5) - r.nextInt(5));
-                                blockpos$mutable.setY(ApostleEntity.this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
+                                blockpos$mutable.setY((int) BlockFinder.moveDownToGround(ApostleEntity.this));
                                 blockpos$mutable.setZ(blockpos$mutable.getZ() + r.nextInt(5) - r.nextInt(5));
                                 ZPiglinBruteMinionEntity summonedentity = new ZPiglinBruteMinionEntity(ModEntityType.ZPIGLIN_BRUTE_MINION.get(), ApostleEntity.this.level);
                                 summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
@@ -1362,7 +1362,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             int l = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
                             BlockPos.Mutable blockpos$mutable = ApostleEntity.this.blockPosition().mutable().move(k, 0, l);
                             blockpos$mutable.setX(blockpos$mutable.getX() + r.nextInt(5) - r.nextInt(5));
-                            blockpos$mutable.setY(ApostleEntity.this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY() + 3);
+                            blockpos$mutable.setY((int) BlockFinder.moveDownToGround(ApostleEntity.this) + 3);
                             blockpos$mutable.setZ(blockpos$mutable.getZ() + r.nextInt(5) - r.nextInt(5));
                             MalghastEntity summonedentity = new MalghastEntity(ModEntityType.MALGHAST.get(), ApostleEntity.this.level);
                             if (serverWorld.noCollision(summonedentity, summonedentity.getBoundingBox().move(blockpos$mutable).inflate(0.5F)) && summonedentity.distanceToSqr(ApostleEntity.this) <= MathHelper.square(32.0F)){
@@ -1404,7 +1404,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             int l = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
                             BlockPos.Mutable blockpos$mutable = ApostleEntity.this.blockPosition().mutable().move(k, 0, l);
                             blockpos$mutable.setX(blockpos$mutable.getX() + r.nextInt(5) - r.nextInt(5));
-                            blockpos$mutable.setY(ApostleEntity.this.level.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, blockpos$mutable).getY());
+                            blockpos$mutable.setY((int) BlockFinder.moveDownToGround(ApostleEntity.this));
                             blockpos$mutable.setZ(blockpos$mutable.getZ() + r.nextInt(5) - r.nextInt(5));
                             SkeletonVillagerMinionEntity summonedentity = new SkeletonVillagerMinionEntity(ModEntityType.SKELETON_VILLAGER_MINION.get(), ApostleEntity.this.level);
                             summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);

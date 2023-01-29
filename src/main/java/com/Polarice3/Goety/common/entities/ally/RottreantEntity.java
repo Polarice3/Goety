@@ -394,14 +394,25 @@ public class RottreantEntity extends SummonedEntity{
             }
         }
         float healAmount = felArmor ? 5.0F : 2.0F;
-        if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable)) && this.isStaying()){
-            if (this.tickCount % 100 == 0){
-                if (this.getHealth() < this.getMaxHealth()){
-                    this.heal(healAmount);
-                    this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+        if (this.isStaying()) {
+            if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable))) {
+                if (this.tickCount % 100 == 0) {
+                    if (this.getHealth() < this.getMaxHealth()) {
+                        this.heal(healAmount);
+                        this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                    }
+                }
+            } else if (isNearWater(this.level, this.blockPosition())) {
+                if (this.tickCount % 100 == 0) {
+                    if (this.getHealth() < this.getMaxHealth()) {
+                        this.heal(healAmount);
+                        this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                    }
                 }
             }
-        } else if (this.level.isRainingAt(this.blockPosition()) || isNearWater(this.level, this.blockPosition())){
+        }
+
+        if (this.level.isRainingAt(this.blockPosition())){
             if (this.tickCount % 100 == 0){
                 if (this.getHealth() < this.getMaxHealth()){
                     this.heal(healAmount);

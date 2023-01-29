@@ -54,7 +54,7 @@ public class SummonedEntity extends OwnedEntity {
     private static final AttributeModifier SPEED_MODIFIER = new AttributeModifier(SPEED_MODIFIER_UUID, "Staying speed penalty", -1.0D, AttributeModifier.Operation.ADDITION);
     public boolean upgraded;
 
-    protected SummonedEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
+    protected SummonedEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -344,17 +344,17 @@ public class SummonedEntity extends OwnedEntity {
         private final double followSpeed;
         private final PathNavigator navigation;
         private int timeToRecalcPath;
-        private final float maxDist;
-        private final float minDist;
+        private final float stopDistance;
+        private final float startDistance;
         private float oldWaterCost;
 
-        public FollowOwnerGoal(SummonedEntity summonedEntity, double speed, float minDist, float maxDist) {
+        public FollowOwnerGoal(SummonedEntity summonedEntity, double speed, float startDistance, float stopDistance) {
             this.summonedEntity = summonedEntity;
             this.level = summonedEntity.level;
             this.followSpeed = speed;
             this.navigation = summonedEntity.getNavigation();
-            this.minDist = minDist;
-            this.maxDist = maxDist;
+            this.startDistance = startDistance;
+            this.stopDistance = stopDistance;
             this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
             if (!(summonedEntity.getNavigation() instanceof GroundPathNavigator) && !(summonedEntity.getNavigation() instanceof FlyingPathNavigator)) {
                 throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
@@ -367,7 +367,7 @@ public class SummonedEntity extends OwnedEntity {
                 return false;
             } else if (livingentity.isSpectator()) {
                 return false;
-            } else if (this.summonedEntity.distanceToSqr(livingentity) < (double)(this.minDist * this.minDist)) {
+            } else if (this.summonedEntity.distanceToSqr(livingentity) < (double)(MathHelper.square(this.startDistance))) {
                 return false;
             } else if (this.summonedEntity.isWandering() || this.summonedEntity.isStaying()) {
                 return false;
@@ -385,7 +385,7 @@ public class SummonedEntity extends OwnedEntity {
             } else if (this.summonedEntity.getTarget() != null){
                 return false;
             } else {
-                return !(this.summonedEntity.distanceToSqr(this.owner) <= (double)(this.maxDist * this.maxDist));
+                return !(this.summonedEntity.distanceToSqr(this.owner) <= (double)(MathHelper.square(this.stopDistance)));
             }
         }
 
@@ -402,16 +402,18 @@ public class SummonedEntity extends OwnedEntity {
         }
 
         public void tick() {
-            this.summonedEntity.getLookControl().setLookAt(this.owner, 10.0F, (float)this.summonedEntity.getMaxHeadXRot());
-            if (--this.timeToRecalcPath <= 0) {
-                this.timeToRecalcPath = 10;
-                if (!this.summonedEntity.isLeashed() && !this.summonedEntity.isPassenger()) {
-                    if (this.summonedEntity.distanceToSqr(this.owner) >= 144.0D && MainConfig.UndeadTeleport.get()) {
-                        this.tryToTeleportNearEntity();
-                    } else {
-                        this.navigation.moveTo(this.owner, this.followSpeed);
-                    }
+            if (this.owner != null) {
+                this.summonedEntity.getLookControl().setLookAt(this.owner, 10.0F, (float) this.summonedEntity.getMaxHeadXRot());
+                if (--this.timeToRecalcPath <= 0) {
+                    this.timeToRecalcPath = 10;
+                    if (!this.summonedEntity.isLeashed() && !this.summonedEntity.isPassenger()) {
+                        if (this.summonedEntity.distanceToSqr(this.owner) >= 144.0D && MainConfig.UndeadTeleport.get()) {
+                            this.tryToTeleportNearEntity();
+                        } else {
+                            this.navigation.moveTo(this.owner, this.followSpeed);
+                        }
 
+                    }
                 }
             }
         }

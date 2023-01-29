@@ -41,6 +41,8 @@ public class PilgrimSpawner {
                     int j = pLevel.players().size();
                     if (j < 1) {
                         return 0;
+                    } else if (random.nextInt(5) != 0) {
+                        return 0;
                     } else {
                         PlayerEntity playerentity = pLevel.players().get(random.nextInt(j));
                         if (playerentity.isSpectator()) {
@@ -51,8 +53,8 @@ public class PilgrimSpawner {
                             int m = i + random.nextInt(16);
                             int n = k + random.nextInt(16);
                             float f = ModEntityType.FANATIC.get().getWidth();
-                            int d0 = (int) MathHelper.clamp((double)m, (double)i + (double)f, (double)i + 16.0D - (double)f);
-                            int d1 = (int) MathHelper.clamp((double)n, (double)k + (double)f, (double)k + 16.0D - (double)f);
+                            int d0 = (int) MathHelper.clamp((double)m, (double)i + (double)f, (double)i + 32.0D - (double)f);
+                            int d1 = (int) MathHelper.clamp((double)n, (double)k + (double)f, (double)k + 32.0D - (double)f);
                             BlockPos blockpos = getTopNonCollidingPos(pLevel, ModEntityType.FANATIC.get(), d0, d1);
                             if (!pLevel.hasChunksAt(blockpos.getX() - 10, blockpos.getY() - 10, blockpos.getZ() - 10, blockpos.getX() + 10, blockpos.getY() + 10, blockpos.getZ() + 10)) {
                                 return 0;

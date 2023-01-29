@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.client.model;
 
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
+import com.Polarice3.Goety.utils.ModMathHelper;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -23,7 +24,6 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
 
         Ghost = new ModelRenderer(this);
         Ghost.setPos(0.0F, 24.0F, 0.0F);
-
 
         head = new ModelRenderer(this);
         head.setPos(0.0F, -24.0F, 0.0F);
@@ -94,7 +94,15 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
                 this.RightArm.zRot = -((float)Math.PI) * f7;
                 this.LeftArm.zRot = ((float)Math.PI) * f7;
             } else {
-                this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
+                float degrees;
+                if (wraith.getLookControl().isHasWanted()){
+                    degrees = 0.0F;
+                } else if (pEntity.getDeltaMovement().x != 0 || pEntity.getDeltaMovement().z != 0){
+                    degrees = ModMathHelper.modelDegrees(7.5F);
+                } else {
+                    degrees = ModMathHelper.modelDegrees(17.5F);
+                }
+                this.head.xRot = pHeadPitch * ((float)Math.PI / 180F) + degrees;
                 animateArms(this.LeftArm, this.RightArm, 0, pAgeInTicks);
             }
         } else {

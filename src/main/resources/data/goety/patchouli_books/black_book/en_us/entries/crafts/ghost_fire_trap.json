@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "With the ectoplasm dropped by those Wraiths, you are able to harness their mystical unflames into a machine that will burn any living creature on it. The Hunger core will also caused the unflames to sap Soul Energy and give it to the block's placer when burning the creature above."
+      "text": "With the ectoplasm dropped by those Wraiths, you are able to harness their mystical unflames into a machine that will burn any living creature on it. The unflames seems to sap Soul Energy when burning the creature above, the Activated Emerald allows the energy to transfer towards the block's placer."
     },
     {
       "type": "patchouli:crafting",

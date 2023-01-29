@@ -155,8 +155,8 @@ public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeable
 
             List<BlockState> result = new ArrayList<>();
             Iterable<BlockPos> blocksToCheck = BlockPos.betweenClosed(
-                    this.blockPosition().offset(-explosionRadius, -explosionRadius, -explosionRadius),
-                    this.blockPosition().offset(explosionRadius, explosionRadius, explosionRadius));
+                    this.blockPosition().offset(-explosionRadius, -1.0F, -explosionRadius),
+                    this.blockPosition().offset(explosionRadius, 1.0F, explosionRadius));
 
             for (BlockPos blockToCheck : blocksToCheck) {
                 BlockState blockState = this.level.getBlockState(blockToCheck);

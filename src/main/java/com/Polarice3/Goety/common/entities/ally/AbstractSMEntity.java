@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
+import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
@@ -231,39 +232,41 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
                     }
                     return ActionResultType.CONSUME;
                 }
-                if (item instanceof SwordItem) {
-                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
-                    this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
-                    this.spawnAtLocation(itemstack2);
-                    for (int i = 0; i < 7; ++i) {
-                        double d0 = this.random.nextGaussian() * 0.02D;
-                        double d1 = this.random.nextGaussian() * 0.02D;
-                        double d2 = this.random.nextGaussian() * 0.02D;
-                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                if (!(pPlayer.getOffhandItem().getItem() instanceof SoulWand)) {
+                    if (item instanceof SwordItem) {
+                        this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+                        this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
+                        this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
+                        this.spawnAtLocation(itemstack2);
+                        for (int i = 0; i < 7; ++i) {
+                            double d0 = this.random.nextGaussian() * 0.02D;
+                            double d1 = this.random.nextGaussian() * 0.02D;
+                            double d2 = this.random.nextGaussian() * 0.02D;
+                            this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                        }
+                        if (!pPlayer.abilities.instabuild) {
+                            itemstack.shrink(1);
+                        }
+                        EntityFinder.sendEntityUpdatePacket(pPlayer, this);
+                        return ActionResultType.CONSUME;
                     }
-                    if (!pPlayer.abilities.instabuild) {
-                        itemstack.shrink(1);
+                    if (item instanceof BowItem) {
+                        this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+                        this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
+                        this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
+                        this.spawnAtLocation(itemstack2);
+                        for (int i = 0; i < 7; ++i) {
+                            double d0 = this.random.nextGaussian() * 0.02D;
+                            double d1 = this.random.nextGaussian() * 0.02D;
+                            double d2 = this.random.nextGaussian() * 0.02D;
+                            this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                        }
+                        if (!pPlayer.abilities.instabuild) {
+                            itemstack.shrink(1);
+                        }
+                        EntityFinder.sendEntityUpdatePacket(pPlayer, this);
+                        return ActionResultType.CONSUME;
                     }
-                    EntityFinder.sendEntityUpdatePacket(pPlayer, this);
-                    return ActionResultType.CONSUME;
-                }
-                if (item instanceof BowItem) {
-                    this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
-                    this.setItemSlot(EquipmentSlotType.MAINHAND, itemstack.copy());
-                    this.setGuaranteedDrop(EquipmentSlotType.MAINHAND);
-                    this.spawnAtLocation(itemstack2);
-                    for (int i = 0; i < 7; ++i) {
-                        double d0 = this.random.nextGaussian() * 0.02D;
-                        double d1 = this.random.nextGaussian() * 0.02D;
-                        double d2 = this.random.nextGaussian() * 0.02D;
-                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
-                    }
-                    if (!pPlayer.abilities.instabuild) {
-                        itemstack.shrink(1);
-                    }
-                    EntityFinder.sendEntityUpdatePacket(pPlayer, this);
-                    return ActionResultType.CONSUME;
                 }
                 if (item instanceof ArmorItem) {
                     ItemStack helmet = this.getItemBySlot(EquipmentSlotType.HEAD);

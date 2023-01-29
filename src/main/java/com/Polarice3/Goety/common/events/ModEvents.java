@@ -31,10 +31,7 @@ import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
 import com.Polarice3.Goety.common.items.ModItemTiers;
 import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
-import com.Polarice3.Goety.common.items.equipment.DarkScytheItem;
-import com.Polarice3.Goety.common.items.equipment.DeathScytheItem;
-import com.Polarice3.Goety.common.items.equipment.FrostScytheItem;
-import com.Polarice3.Goety.common.items.equipment.WarpedSpearItem;
+import com.Polarice3.Goety.common.items.equipment.*;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -44,6 +41,7 @@ import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -53,6 +51,7 @@ import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.*;
@@ -159,7 +158,7 @@ public class ModEvents {
         }
         if (entity instanceof GolemEntity && !(entity instanceof IMob)){
             GolemEntity golemEntity = (GolemEntity) entity;
-            golemEntity.goalSelector.addGoal(3, new TargetHostileOwnedGoal<>(golemEntity, OwnedEntity.class));
+            golemEntity.targetSelector.addGoal(3, new TargetHostileOwnedGoal<>(golemEntity, OwnedEntity.class));
         }
         if (entity instanceof StormEntity){
             if (!entity.level.isClientSide){
@@ -507,6 +506,23 @@ public class ModEvents {
                 }
                 player.playSound(SoundEvents.ELDER_GUARDIAN_CURSE, 1.0F, 1.0F);
                 event.setCanceled(true);
+            }
+        }
+        if (player.getMainHandItem().getItem() instanceof PhilosophersMaceItem){
+            if (event.getState() == Blocks.NETHER_GOLD_ORE.defaultBlockState()){
+                if (!player.level.isClientSide) {
+                    if (player.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && !player.level.restoringBlockSnapshots) {
+                        ItemStack itemStack = new ItemStack(Items.NETHER_GOLD_ORE);
+                        double d0 = (double) (player.level.random.nextFloat() * 0.5F) + 0.25D;
+                        double d1 = (double) (player.level.random.nextFloat() * 0.5F) + 0.25D;
+                        double d2 = (double) (player.level.random.nextFloat() * 0.5F) + 0.25D;
+                        ItemEntity itementity = new ItemEntity(player.level, (double) event.getPos().getX() + d0, (double) event.getPos().getY() + d1, (double) event.getPos().getZ() + d2, itemStack);
+                        itementity.setDefaultPickUpDelay();
+                        player.level.addFreshEntity(itementity);
+                    }
+                    player.level.setBlockAndUpdate(event.getPos(), Blocks.AIR.defaultBlockState());
+                    event.setCanceled(true);
+                }
             }
         }
     }

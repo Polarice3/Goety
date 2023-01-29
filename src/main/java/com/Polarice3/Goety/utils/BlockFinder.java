@@ -12,6 +12,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.BarrelTileEntity;
@@ -19,10 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
@@ -153,6 +152,28 @@ public class BlockFinder {
         World world = livingEntity.level;
         BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
         return world.hasChunksAt(blockpos$mutable.getX() - 10, blockpos$mutable.getY() - 10, blockpos$mutable.getZ() - 10, blockpos$mutable.getX() + 10, blockpos$mutable.getY() + 10, blockpos$mutable.getZ() + 10);
+    }
+
+    public static double moveDownToGround(LivingEntity entity) {
+        RayTraceResult rayTrace = rayTrace(entity);
+        if (rayTrace.getType() == RayTraceResult.Type.BLOCK) {
+            BlockRayTraceResult hitResult = (BlockRayTraceResult) rayTrace;
+            if (hitResult.getDirection() == Direction.UP) {
+                BlockState hitBlock = entity.level.getBlockState(hitResult.getBlockPos());
+                if (hitBlock.getBlock() instanceof SlabBlock && hitBlock.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM) {
+                    return hitResult.getBlockPos().getY() + 1.0625F - 0.5F;
+                } else {
+                    return hitResult.getBlockPos().getY() + 1.0625F;
+                }
+            }
+        }
+        return entity.getY();
+    }
+
+    private static RayTraceResult rayTrace(LivingEntity entity) {
+        Vector3d startPos = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
+        Vector3d endPos = new Vector3d(entity.getX(), 0, entity.getZ());
+        return entity.level.clip(new RayTraceContext(startPos, endPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
     }
 
     public static double spawnY(LivingEntity livingEntity, BlockPos blockPos) {
@@ -288,13 +309,13 @@ public class BlockFinder {
     public static BlockPos SummonRadius(LivingEntity livingEntity, World world){
         BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
         blockpos$mutable.setX(blockpos$mutable.getX() + world.random.nextInt(5) - world.random.nextInt(5));
-        blockpos$mutable.setY((int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()));
+        blockpos$mutable.setY((int) BlockFinder.moveDownToGround(livingEntity));
         blockpos$mutable.setZ(blockpos$mutable.getZ() + world.random.nextInt(5) - world.random.nextInt(5));
         if (hasChunksAt(livingEntity)
                 && isEmptyBlock(world, blockpos$mutable, world.getBlockState(blockpos$mutable), world.getFluidState(blockpos$mutable), ModEntityType.ZOMBIE_MINION.get(), false)){
             return blockpos$mutable;
         } else {
-            return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.spawnY(livingEntity, livingEntity.blockPosition()), 0);
+            return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.moveDownToGround(livingEntity), 0);
         }
     }
 

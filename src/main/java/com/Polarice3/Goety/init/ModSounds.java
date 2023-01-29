@@ -102,15 +102,25 @@ public class ModSounds {
 
     public static final RegistryObject<SoundEvent> DREDEN_AMBIENT = create("dreden_ambient");
     public static final RegistryObject<SoundEvent> DREDEN_HURT = create("dreden_hurt");
+    public static final RegistryObject<SoundEvent> DREDEN_FLY = create("dreden_fly");
     public static final RegistryObject<SoundEvent> DREDEN_SHOOT = create("dreden_shoot");
     public static final RegistryObject<SoundEvent> DREDEN_DEATH = create("dreden_death");
 
     public static final RegistryObject<SoundEvent> WRAITH_AMBIENT = create("wraith_ambient");
     public static final RegistryObject<SoundEvent> WRAITH_HURT = create("wraith_hurt");
+    public static final RegistryObject<SoundEvent> WRAITH_FLY = create("wraith_fly");
     public static final RegistryObject<SoundEvent> WRAITH_ATTACK = create("wraith_attack");
     public static final RegistryObject<SoundEvent> WRAITH_FIRE = create("wraith_fire");
     public static final RegistryObject<SoundEvent> WRAITH_TELEPORT = create("wraith_teleport");
     public static final RegistryObject<SoundEvent> WRAITH_DEATH = create("wraith_death");
+
+    public static final RegistryObject<SoundEvent> VIZIER_AMBIENT = create("vizier_ambient");
+    public static final RegistryObject<SoundEvent> VIZIER_HURT = create("vizier_hurt");
+    public static final RegistryObject<SoundEvent> VIZIER_CONFUSE = create("vizier_confuse");
+    public static final RegistryObject<SoundEvent> VIZIER_RAGE = create("vizier_rage");
+    public static final RegistryObject<SoundEvent> VIZIER_CELEBRATE = create("vizier_celebrate");
+    public static final RegistryObject<SoundEvent> VIZIER_SCREAM = create("vizier_scream");
+    public static final RegistryObject<SoundEvent> VIZIER_DEATH = create("vizier_death");
 
     public static final RegistryObject<SoundEvent> ICE_CHUNK_IDLE = create("ice_chunk_idle");
     public static final RegistryObject<SoundEvent> ICE_CHUNK_SUMMON = create("ice_chunk_summon");

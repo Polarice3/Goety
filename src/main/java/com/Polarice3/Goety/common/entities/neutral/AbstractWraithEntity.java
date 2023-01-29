@@ -160,10 +160,11 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
     }
 
     protected SoundEvent getStepSound() {
-        return null;
+        return ModSounds.WRAITH_FLY.get();
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
+        this.playSound(this.getStepSound(), 0.5F, 1.0F);
     }
 
     public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
