@@ -34,9 +34,10 @@ public class DarkScytheItem extends TieredItem implements IVanishable {
     public DarkScytheItem(IItemTier itemTier) {
         super(itemTier, new Properties().durability(itemTier.getUses()).tab(Goety.TAB));
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        this.initialDamage = 4.5F + itemTier.getAttackDamageBonus();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", initialDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-3.4F, AttributeModifier.Operation.ADDITION));
+        this.initialDamage = MainConfig.ScytheBaseDamage.get().floatValue() + itemTier.getAttackDamageBonus();
+        double attackSpeed = 4.0D - MainConfig.ScytheAttackSpeed.get();
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", initialDamage - 1.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -attackSpeed, AttributeModifier.Operation.ADDITION));
         this.scytheAttributes = builder.build();
     }
 

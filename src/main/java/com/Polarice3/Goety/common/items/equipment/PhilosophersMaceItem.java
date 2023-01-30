@@ -28,9 +28,9 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
     private final Multimap<Attribute, AttributeModifier> maceAttributes;
 
     public PhilosophersMaceItem() {
-        super(new Properties().durability(128).tab(Goety.TAB).fireResistant());
+        super(new Properties().durability(MainConfig.PhilosophersMaceDurability.get()).tab(Goety.TAB).fireResistant());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 8.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", MainConfig.PhilosophersMaceDamage.get() - 1.0D, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-2.4F, AttributeModifier.Operation.ADDITION));
         this.maceAttributes = builder.build();
     }

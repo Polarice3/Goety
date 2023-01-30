@@ -193,6 +193,21 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Double> CreeperlingExplosionRadius;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> ScytheBaseDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> ScytheAttackSpeed;
+    public static final ForgeConfigSpec.ConfigValue<Double> DeathScytheDamage;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DeathScytheDurability;
+    public static final ForgeConfigSpec.ConfigValue<Integer> DeathScytheEnchantability;
+
+    public static final ForgeConfigSpec.ConfigValue<Double> FrostTierDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> FrostTierMiningSpeed;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FrostTierDurability;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FrostTierLevel;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FrostTierEnchantability;
+
+    public static final ForgeConfigSpec.ConfigValue<Double> PhilosophersMaceDamage;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PhilosophersMaceDurability;
+
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SpecialBossBar;
     public static final ForgeConfigSpec.ConfigValue<Boolean> BossMusic;
@@ -686,6 +701,32 @@ public class MainConfig {
                 .defineInRange("witchBowSouls", 25, 1, Integer.MAX_VALUE);
         ItemsRepairAmount = BUILDER.comment("Amount of Souls needed to repair certain Equipments per second, Default: 5")
                 .defineInRange("darkArmoredRobeRepairSouls", 5, 1, Integer.MAX_VALUE);
+        BUILDER.pop();
+        BUILDER.push("Tools & Weapons");
+        ScytheBaseDamage = BUILDER.comment("How much base damage Scythes deals, the damage added depends on material the scythe is made off (ie. Iron = 2.0), Default: 5.5")
+                .defineInRange("scytheBaseDamage", 5.5, 1.0, Double.MAX_VALUE);
+        ScytheAttackSpeed = BUILDER.comment("How fast it takes to fully swing a Scythe with item offhand and not wearing Grave Gloves. The lower the number the slower it takes to recharge, Default: 0.6")
+                .defineInRange("scytheAttackSpeed", 0.6, 0.0, Double.MAX_VALUE);
+        DeathScytheDamage = BUILDER.comment("How much damage Death Scythe deals, the configured number is added to Scythe Base Damage, Default: 4.0")
+                .defineInRange("deathScytheDamage", 4.0, 1.0, Double.MAX_VALUE);
+        DeathScytheDurability = BUILDER.comment("How many uses before Death Scythe breaks, Default: 444")
+                .defineInRange("deathScytheDurability", 444, 1, Integer.MAX_VALUE);
+        DeathScytheEnchantability = BUILDER.comment("Define the Enchantability for Death Scythe, higher number the better, Default: 22")
+                .defineInRange("deathScytheEnchantability", 22, 1, Integer.MAX_VALUE);
+        PhilosophersMaceDamage = BUILDER.comment("How much damage Philosopher's Mace deals, Default: 9.0")
+                .defineInRange("philosophersMaceDamage", 9.0, 1.0, Double.MAX_VALUE);
+        PhilosophersMaceDurability = BUILDER.comment("How many uses before the Philosopher's Mace breaks, Default: 128")
+                .defineInRange("philosophersMaceDurability", 128, 1, Integer.MAX_VALUE);
+        FrostTierDamage = BUILDER.comment("How much damage Frost items deals, for swords the damage defined is added by 4.0 so by default, a Frost Sword would deal 6.5 Damage, Default: 2.5")
+                .defineInRange("frostTierDamage", 2.5, 1.0, Double.MAX_VALUE);
+        FrostTierMiningSpeed = BUILDER.comment("How fast Frost Items destroy blocks, higher number the faster (Hint: Iron has 6.0 Mining Speed), Default: 7.0")
+                .defineInRange("frostTierMiningSpeed", 7.0, 1.0, Double.MAX_VALUE);
+        FrostTierDurability = BUILDER.comment("How many uses before a Frost Item breaks, Default: 1000")
+                .defineInRange("frostTierDurability", 1000, 1, Integer.MAX_VALUE);
+        FrostTierLevel = BUILDER.comment("Define the Mining Level for Frost Tools (0 = Wood/Gold, 1 = Stone, 2 = Iron, 3 = Diamond, 4 = Netherite, 5+ = Above Netherite), Default: 3")
+                .defineInRange("frostTierLevel", 3, 0, Integer.MAX_VALUE);
+        FrostTierEnchantability = BUILDER.comment("Define the Enchantability for Frost Items, higher number the better, Default: 20")
+                .defineInRange("frostTierEnchantability", 20, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Enchantments");
         MaxSoulEaterLevel = BUILDER.comment("Soul Eater Maximum Enchantment Level, Default: 5")
