@@ -76,6 +76,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -1018,6 +1019,19 @@ public class ModEvents {
                 }
                 if (damageSource.getOwner() instanceof ServerPlayerEntity) {
                     CriteriaTriggers.PLAYER_HURT_ENTITY.trigger((ServerPlayerEntity) damageSource.getOwner(), victim, event.getSource(), event.getAmount(), event.getAmount(), false);
+                }
+            }
+        }
+        if (victim instanceof WitchEntity){
+            double d0 = victim.getAttributeValue(Attributes.FOLLOW_RANGE);
+            AxisAlignedBB axisalignedbb = AxisAlignedBB.unitCubeFromLowerCorner(victim.position()).inflate(d0, 10.0D, d0);
+            List<MobEntity> list = victim.level.getLoadedEntitiesOfClass(MobEntity.class, axisalignedbb);
+
+            for (MobEntity mob : list){
+                if (victim.getLastHurtByMob() != null && !mob.isAlliedTo(victim.getLastHurtByMob()) && !victim.isAlliedTo(victim.getLastHurtByMob())) {
+                    if (mob instanceof AbstractCultistEntity) {
+                        mob.setTarget(victim.getLastHurtByMob());
+                    }
                 }
             }
         }

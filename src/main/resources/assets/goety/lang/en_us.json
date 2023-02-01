@@ -538,6 +538,8 @@
   "info.goety.soulitems.focuscost": "\u00A7bOriginal Cost: %d\u00A7b",
   "info.goety.items.dark_scroll.desc": "\u00A75Must be used within a Woodland Mansion.\u00A75",
   "info.goety.items.dark_scroll.failure": "You are not within a Woodland Mansion!",
+  "info.goety.items.rottreant.robe": "You must wear Fel Robes!",
+  "info.goety.items.rottreant.souls": "You must have %s amount of Soul Energy!",
   "info.goety.items.forbidden_scroll": "\u00A75The Secrets to Immortality...\u00A75",
   "info.goety.infamy.amount": "You have %d Infamy amongst the Illagers",
   "info.goety.research.nether": "You have transcribed the book of the Cultists!",

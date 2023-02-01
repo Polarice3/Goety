@@ -35,6 +35,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
@@ -184,7 +185,7 @@ public class DeadMobEvents {
     public static void DeathEvents(LivingDeathEvent event){
         Entity killed = event.getEntity();
         World world = killed.getCommandSenderWorld();
-        if (MainConfig.DeadSandSpread.get()) {
+        if (MainConfig.DeadSandSpread.get() && world.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             if (ModDamageSource.desiccateAttacks(event.getSource()) && MobUtil.nonDesiccateExplodeEntities(killed)){
                 ExplosionUtil.deadSandExplode(world, killed, killed.getX(), killed.getY(), killed.getZ(), 1.0F, DeadSandExplosion.Mode.SPREAD);
             }

@@ -155,6 +155,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadMinionHealCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> TamedSpiderHealCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RottreantAnimateCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RottreantBugLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
     public static final ForgeConfigSpec.ConfigValue<Integer> InfamyThreshold;
 
@@ -669,6 +671,8 @@ public class MainConfig {
                 .defineInRange("undeadMinionHealCost", 1, 0, Integer.MAX_VALUE);
         TamedSpiderHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Loyal Spider to heal, Default: 1")
                 .defineInRange("loyalSpiderHealCost", 1, 0, Integer.MAX_VALUE);
+        RottreantAnimateCost = BUILDER.comment("How much Soul Energy it cost to animate a Rottreant, Default: 50")
+                .defineInRange("rottreantAnimateCost", 50, 0, Integer.MAX_VALUE);
         WandVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a wand, without instantly dying, around the player, Default: 8")
                 .defineInRange("wandVexLimit", 8, 1, Integer.MAX_VALUE);
         StaffVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a staff, without instantly dying, around the player, Default: 16")
@@ -677,8 +681,10 @@ public class MainConfig {
                 .defineInRange("zombieLimit", 32, 1, Integer.MAX_VALUE);
         SkeletonLimit = BUILDER.comment("Number of Skeleton Servants that can exist around the player without instantly dying, Default: 32")
                 .defineInRange("skeletonLimit", 32, 1, Integer.MAX_VALUE);
-        UndeadWolfLimit = BUILDER.comment("Number of Zombie Wolf that can exist around the player without instantly dying, Default: 32")
-                .defineInRange("zombieWolfLimit", 32, 1, Integer.MAX_VALUE);
+        UndeadWolfLimit = BUILDER.comment("Number of Undead Wolf that can exist around the player without instantly dying, Default: 32")
+                .defineInRange("undeadWolfLimit", 32, 1, Integer.MAX_VALUE);
+        RottreantBugLimit = BUILDER.comment("Number of Fel Flies and Spiderlings a Rottreant can summon, Default: 8")
+                .defineInRange("rottreantBugLimit", 8, 1, Integer.MAX_VALUE);
         CreeperlingExplosionRadius = BUILDER.comment("The radius of a Creeperling's Explosion when not powered, Default: 1.25")
                 .defineInRange("creeperlingExplosionRadius", 1.25, 0.0, Double.MAX_VALUE);
         SoulSkullZombie = BUILDER.comment("Zombies killed by Soul Skull converts into a Servant, Default: true")

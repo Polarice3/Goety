@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -44,7 +45,7 @@ public class DesiccatedSkullEntity extends ExplosiveProjectileEntity {
         if (this.getOwner() instanceof IDeadMob) {
             if (this.tickCount % age == 0) {
                 if (!this.level.isClientSide) {
-                    DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
+                    DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner()) && MainConfig.DeadSandSpread.get() ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
                     ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), this.isDangerous() ? 1.75F : 1.0F, explosion$mode);
                     this.remove();
                 }

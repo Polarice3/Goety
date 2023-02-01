@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.RootTrapEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -42,6 +43,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -49,6 +51,7 @@ import java.util.stream.Stream;
 public class RottreantEntity extends SummonedEntity{
     private static final DataParameter<Integer> DATA_WOOD_TYPE = EntityDataManager.defineId(RottreantEntity.class, DataSerializers.INT);
     private static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(RottreantEntity.class, DataSerializers.BYTE);
+    public List<SummonedEntity> summoned = new ArrayList<>();
     public int mushroomGrow;
 
     public RottreantEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
@@ -179,6 +182,10 @@ public class RottreantEntity extends SummonedEntity{
         }
     }
 
+    public boolean summonLimit(){
+        return this.summoned.size() < MainConfig.RottreantBugLimit.get();
+    }
+
     @Override
     public boolean hurt(@Nonnull DamageSource source, float amount) {
         boolean felChance = this.level.random.nextFloat() <= 0.25F;
@@ -212,30 +219,32 @@ public class RottreantEntity extends SummonedEntity{
                 }
             }
         }
-        if (felChance){
-            FelFlyEntity felFly = ModEntityType.FEL_FLY.get().create(this.level);
-            if (felFly != null){
-                felFly.setPos(this.getX(), this.getY(), this.getZ());
-                felFly.setTrueOwner(this);
-                if (source.getEntity() != null && source.getEntity() instanceof LivingEntity && source.getEntity() != this.getTrueOwner() && source.getEntity() != this){
-                    felFly.setTarget((LivingEntity) source.getEntity());
+        if (this.summonLimit()) {
+            if (felChance) {
+                FelFlyEntity felFly = ModEntityType.FEL_FLY.get().create(this.level);
+                if (felFly != null) {
+                    felFly.setPos(this.getX(), this.getY(), this.getZ());
+                    felFly.setTrueOwner(this);
+                    if (source.getEntity() != null && source.getEntity() instanceof LivingEntity && source.getEntity() != this.getTrueOwner() && source.getEntity() != this) {
+                        felFly.setTarget((LivingEntity) source.getEntity());
+                    }
+                    felFly.setLimitedLife(200);
+                    this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
+                    this.level.addFreshEntity(felFly);
                 }
-                felFly.setLimitedLife(200);
-                this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
-                this.level.addFreshEntity(felFly);
             }
-        }
-        if (spiderChance){
-            SpiderlingMinionEntity spiderlingMinion = ModEntityType.SPIDERLING_MINION.get().create(this.level);
-            if (spiderlingMinion != null){
-                spiderlingMinion.setPos(this.getX(), this.getY(), this.getZ());
-                spiderlingMinion.setTrueOwner(this);
-                if (source.getEntity() != null && source.getEntity() instanceof LivingEntity && source.getEntity() != this.getTrueOwner() && source.getEntity() != this){
-                    spiderlingMinion.setTarget((LivingEntity) source.getEntity());
+            if (spiderChance) {
+                SpiderlingMinionEntity spiderlingMinion = ModEntityType.SPIDERLING_MINION.get().create(this.level);
+                if (spiderlingMinion != null) {
+                    spiderlingMinion.setPos(this.getX(), this.getY(), this.getZ());
+                    spiderlingMinion.setTrueOwner(this);
+                    if (source.getEntity() != null && source.getEntity() instanceof LivingEntity && source.getEntity() != this.getTrueOwner() && source.getEntity() != this) {
+                        spiderlingMinion.setTarget((LivingEntity) source.getEntity());
+                    }
+                    spiderlingMinion.setLimitedLife(200);
+                    this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
+                    this.level.addFreshEntity(spiderlingMinion);
                 }
-                spiderlingMinion.setLimitedLife(200);
-                this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
-                this.level.addFreshEntity(spiderlingMinion);
             }
         }
         if (this.level.random.nextFloat() <= 0.25F){
@@ -333,6 +342,14 @@ public class RottreantEntity extends SummonedEntity{
                 }
             }
         }
+        for (SummonedEntity summonedEntity : this.level.getEntitiesOfClass(SummonedEntity.class, this.getBoundingBox().inflate(16))){
+            if (summonedEntity.getTrueOwner() == this && !summonedEntity.isDeadOrDying() && !summonedEntity.removed && !this.summoned.contains(summonedEntity)){
+                this.summoned.add(summonedEntity);
+            }
+        }
+        if (!this.summoned.isEmpty()) {
+            this.summoned.removeIf(summonedEntity -> summonedEntity.removed || summonedEntity.isDeadOrDying() || !summonedEntity.isAlive());
+        }
         if (this.isStaying()){
             this.setDeltaMovement(0, this.getDeltaMovement().y(), 0);
             if (!this.level.isClientSide) {
@@ -343,34 +360,36 @@ public class RottreantEntity extends SummonedEntity{
                             this.level.addFreshEntity(rootTrap);
                         }
                     }
-                    if (this.tickCount % 20 == 0){
-                        if (this.level.random.nextBoolean()) {
-                            FelFlyEntity felFly = ModEntityType.FEL_FLY.get().create(this.level);
-                            if (felFly != null) {
-                                felFly.setPos(this.getX(), this.getY(), this.getZ());
-                                felFly.setTrueOwner(this);
-                                if (this.getTarget() != null) {
-                                    felFly.setTarget(this.getTarget());
+                    if (this.summonLimit()) {
+                        if (this.tickCount % 20 == 0) {
+                            if (this.level.random.nextBoolean()) {
+                                FelFlyEntity felFly = ModEntityType.FEL_FLY.get().create(this.level);
+                                if (felFly != null) {
+                                    felFly.setPos(this.getX(), this.getY(), this.getZ());
+                                    felFly.setTrueOwner(this);
+                                    if (this.getTarget() != null) {
+                                        felFly.setTarget(this.getTarget());
+                                    }
+                                    felFly.setLimitedLife(200);
+                                    this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
+                                    this.level.addFreshEntity(felFly);
                                 }
-                                felFly.setLimitedLife(200);
-                                this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
-                                this.level.addFreshEntity(felFly);
                             }
                         }
-                    }
-                    if (this.tickCount % 25 == 0){
-                        if (felArmor) {
-                            if (this.level.random.nextBoolean()){
-                                SpiderlingMinionEntity spiderlingMinion = ModEntityType.SPIDERLING_MINION.get().create(this.level);
-                                if (spiderlingMinion != null){
-                                    spiderlingMinion.setPos(this.getX(), this.getY(), this.getZ());
-                                    spiderlingMinion.setTrueOwner(this);
-                                    if (this.getTarget() != null) {
-                                        spiderlingMinion.setTarget(this.getTarget());
+                        if (this.tickCount % 25 == 0) {
+                            if (felArmor) {
+                                if (this.level.random.nextBoolean()) {
+                                    SpiderlingMinionEntity spiderlingMinion = ModEntityType.SPIDERLING_MINION.get().create(this.level);
+                                    if (spiderlingMinion != null) {
+                                        spiderlingMinion.setPos(this.getX(), this.getY(), this.getZ());
+                                        spiderlingMinion.setTrueOwner(this);
+                                        if (this.getTarget() != null) {
+                                            spiderlingMinion.setTarget(this.getTarget());
+                                        }
+                                        spiderlingMinion.setLimitedLife(200);
+                                        this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
+                                        this.level.addFreshEntity(spiderlingMinion);
                                     }
-                                    spiderlingMinion.setLimitedLife(200);
-                                    this.playSound(ModSounds.ROT_TREE_EXIT.get(), 1.0F, 1.0F);
-                                    this.level.addFreshEntity(spiderlingMinion);
                                 }
                             }
                         }
@@ -394,33 +413,30 @@ public class RottreantEntity extends SummonedEntity{
             }
         }
         float healAmount = felArmor ? 5.0F : 2.0F;
-        if (this.isStaying()) {
-            if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable))) {
-                if (this.tickCount % 100 == 0) {
-                    if (this.getHealth() < this.getMaxHealth()) {
-                        this.heal(healAmount);
-                        this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
-                    }
-                }
-            } else if (isNearWater(this.level, this.blockPosition())) {
-                if (this.tickCount % 100 == 0) {
-                    if (this.getHealth() < this.getMaxHealth()) {
-                        this.heal(healAmount);
-                        this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
-                    }
+        int time = this.isStaying() ? ModMathHelper.ticksToSeconds(5) : ModMathHelper.ticksToSeconds(15);
+        if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable))) {
+            if (this.tickCount % time == 0) {
+                if (this.getHealth() < this.getMaxHealth()) {
+                    this.heal(healAmount);
+                    this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
                 }
             }
-        }
-
-        if (this.level.isRainingAt(this.blockPosition())){
-            if (this.tickCount % 100 == 0){
+        } else if (this.level.isRainingAt(this.blockPosition())){
+            if (this.tickCount % time == 0){
                 if (this.getHealth() < this.getMaxHealth()){
                     this.heal(healAmount);
                     this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
                 }
             }
+        } else if (isNearWater(this.level, this.blockPosition())) {
+            if (this.tickCount % time == 0) {
+                if (this.getHealth() < this.getMaxHealth()) {
+                    this.heal(healAmount);
+                    this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+                }
+            }
         } else if (this.isInWater() || this.isUnderWater()){
-            if (this.tickCount % 300 == 0){
+            if (this.tickCount % ModMathHelper.ticksToSeconds(15) == 0){
                 if (this.getHealth() < this.getMaxHealth()){
                     this.heal(healAmount);
                     this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
@@ -484,6 +500,21 @@ public class RottreantEntity extends SummonedEntity{
                 }
 
                 return ActionResultType.sidedSuccess(this.level.isClientSide);
+            }
+        }
+        if (item instanceof BoneMealItem){
+            if (this.isMycelium()){
+                if (!this.isReadyHarvest()) {
+                    this.mushroomGrow -= ModMathHelper.ticksToMinutes(1);
+                    if (this.level.isClientSide) {
+                        this.addParticlesAroundSelf(ParticleTypes.MYCELIUM);
+                    }
+                    if (!pPlayer.abilities.instabuild) {
+                        itemstack.shrink(1);
+                    }
+
+                    return ActionResultType.sidedSuccess(this.level.isClientSide);
+                }
             }
         }
         if (item == Items.ROTTEN_FLESH) {

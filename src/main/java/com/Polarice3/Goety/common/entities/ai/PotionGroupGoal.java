@@ -21,7 +21,7 @@ public class PotionGroupGoal<T extends AbstractCultistEntity> extends Goal {
 
     @Override
     public boolean canUse() {
-        List<BeldamEntity> beldams = this.mob.level.getEntitiesOfClass(BeldamEntity.class, this.mob.getBoundingBox().inflate(8.0F, 4.0F, 8.0F));
+        List<BeldamEntity> beldams = this.mob.level.getLoadedEntitiesOfClass(BeldamEntity.class, this.mob.getBoundingBox().inflate(8.0F, 4.0F, 8.0F));
         for (BeldamEntity beldamEntity : beldams){
             if (beldamEntity.isAlive() && !beldamEntity.isDeadOrDying() && !beldamEntity.isInvisible()){
                 this.beldam = beldamEntity;
@@ -49,7 +49,7 @@ public class PotionGroupGoal<T extends AbstractCultistEntity> extends Goal {
 
     public void tick() {
         double d0 = this.mob.distanceToSqr(this.beldam.getX(), this.beldam.getY(), this.beldam.getZ());
-        boolean flag = this.mob.getSensing().canSee(this.beldam);
+        boolean flag = this.mob.getSensing().canSee(this.beldam) && this.beldam != null;
 
         if (flag && d0 > MathHelper.square(3)) {
             this.mob.getNavigation().moveTo(this.beldam, this.speedModifier);

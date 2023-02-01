@@ -63,6 +63,7 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
         this.healRaidersGoal = new TargetExpiringGoal<>(this, AbstractRaiderEntity.class, true,
                 (raider) -> raider instanceof AbstractRaiderEntity
                         && ((AbstractRaiderEntity) raider).getTarget() != null
+                        && ((AbstractRaiderEntity) raider).getTarget().isAlive()
                         && raider.distanceToSqr(((AbstractRaiderEntity) raider).getTarget()) >= 36.0D
                         && !(raider instanceof WitchEntity)
                         && !(raider instanceof BeldamEntity));

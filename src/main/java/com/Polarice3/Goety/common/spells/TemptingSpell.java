@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.spells;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,9 +30,10 @@ public class TemptingSpell extends ChargingSpells{
         int i = (int) entityLiving.getX();
         int j = (int) entityLiving.getY();
         int k = (int) entityLiving.getZ();
+        float speed = RobeArmorFinder.FindFelBootsofWander(entityLiving) ? 1.75F : 1.25F;
         for (AnimalEntity entity : worldIn.getEntitiesOfClass(AnimalEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(8.0D))) {
             if(!entity.hasPassenger(entityLiving)) {
-                entity.getNavigation().moveTo(entityLiving, 1.25F);
+                entity.getNavigation().moveTo(entityLiving, speed);
             }
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
@@ -44,9 +46,10 @@ public class TemptingSpell extends ChargingSpells{
         int i = (int) entityLiving.getX();
         int j = (int) entityLiving.getY();
         int k = (int) entityLiving.getZ();
+        float speed = RobeArmorFinder.FindFelBootsofWander(entityLiving) ? 1.75F : 1.25F;
         for (AnimalEntity entity : worldIn.getEntitiesOfClass(AnimalEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(16.0D))) {
             if(!entity.hasPassenger(entityLiving)) {
-                entity.getNavigation().moveTo(entityLiving, 1.75F);
+                entity.getNavigation().moveTo(entityLiving, speed);
             }
         }
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {

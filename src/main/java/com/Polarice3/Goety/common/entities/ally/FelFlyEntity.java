@@ -170,12 +170,12 @@ public class FelFlyEntity extends SummonedEntity implements IFlyingAnimal {
     }
 
     public void lifeSpanDamage(){
-        if (this.getTrueOwner() instanceof RottreantEntity && this.getTrueOwner().isAlive() && !this.getTrueOwner().isDeadOrDying()){
+        if (this.getTrueOwner() != null && this.getTrueOwner() instanceof RottreantEntity && this.getTrueOwner().isAlive() && !this.getTrueOwner().isDeadOrDying()){
             this.getNavigation().moveTo(this.getTrueOwner(), 1.25F);
             this.setTarget(null);
             if (this.getBoundingBox().inflate(0.25F).intersects(this.getTrueOwner().getBoundingBox())){
                 this.playSound(ModSounds.ROT_TREE_ENTER.get(), 1.0F, 1.0F);
-                this.heal(this.getHealth());
+                this.getTrueOwner().heal(this.getHealth() / 2);
                 this.remove();
             }
         } else {

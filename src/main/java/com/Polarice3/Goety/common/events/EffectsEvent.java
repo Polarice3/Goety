@@ -16,6 +16,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.Objects;
@@ -141,7 +142,8 @@ public class EffectsEvent {
         if (infected.tickCount % i == 0 && level.random.nextBoolean()) {
             if (infected.hurt(ModDamageSource.DESICCATE, 2.0F)){
                 if (a > 2){
-                    ExplosionUtil.deadSandExplode(level, infected, infected.getX(), infected.getY(), infected.getZ(), 1.0F, DeadSandExplosion.Mode.SPREAD);
+                    DeadSandExplosion.Mode mode = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.DeadSandSpread.get() ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
+                    ExplosionUtil.deadSandExplode(level, infected, infected.getX(), infected.getY(), infected.getZ(), 1.0F, mode);
                 }
             }
         }

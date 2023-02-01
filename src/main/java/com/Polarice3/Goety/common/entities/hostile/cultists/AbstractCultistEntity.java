@@ -6,6 +6,7 @@ import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.monster.WitchEntity;
@@ -26,6 +27,7 @@ import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -236,7 +238,22 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
                 }
             }
         }
+        this.alertWitches();
         return super.hurt(pSource, pAmount);
+    }
+
+    protected void alertWitches(){
+        double d0 = this.getAttributeValue(Attributes.FOLLOW_RANGE);
+        AxisAlignedBB axisalignedbb = AxisAlignedBB.unitCubeFromLowerCorner(this.position()).inflate(d0, 10.0D, d0);
+        List<MobEntity> list = this.level.getLoadedEntitiesOfClass(MobEntity.class, axisalignedbb);
+
+        for (MobEntity mob : list){
+            if (this.getLastHurtByMob() != null && !(this.getLastHurtByMob() instanceof AbstractRaiderEntity) && !mob.isAlliedTo(this.getLastHurtByMob()) && !this.isAlliedTo(this.getLastHurtByMob())) {
+                if (mob instanceof WitchEntity) {
+                    mob.setTarget(this.getLastHurtByMob());
+                }
+            }
+        }
     }
 
     @Nullable

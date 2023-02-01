@@ -1,10 +1,12 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ally.RottreantEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
+import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,6 +22,7 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.CachedBlockInfo;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.function.Predicate;
@@ -45,16 +48,37 @@ public class AnimalisCoreItem extends Item {
         BlockState blockstate = world.getBlockState(blockpos);
         PlayerEntity player = pContext.getPlayer();
         if (player != null){
-            if (RobeArmorFinder.FindFelArmor(player)){
-                if (blockstate.getBlock() == ModBlocks.ROTTEN_PUMPKIN.get()){
-                    if (this.trySpawnRotTree(world, blockpos, player)){
-                        pContext.getItemInHand().shrink(1);
-                        return ActionResultType.CONSUME;
+            if (blockstate.getBlock() == ModBlocks.ROTTEN_PUMPKIN.get()){
+                if (getPattern(world, blockpos, player)){
+                    if (RobeArmorFinder.FindFelArmor(player)) {
+                        if (SEHelper.getSoulsAmount(player, MainConfig.RottreantAnimateCost.get())) {
+                            if (this.trySpawnRotTree(world, blockpos, player)) {
+                                SEHelper.decreaseSouls(player, MainConfig.RottreantAnimateCost.get());
+                                return ActionResultType.CONSUME;
+                            }
+                        } else {
+                            player.displayClientMessage(new TranslationTextComponent("info.goety.items.rottreant.souls", MainConfig.RottreantAnimateCost.get()), true);
+                        }
+                    } else {
+                        player.displayClientMessage(new TranslationTextComponent("info.goety.items.rottreant.robe"), true);
                     }
                 }
             }
         }
         return ActionResultType.PASS;
+    }
+
+    private boolean getPattern(World pLevel, BlockPos pPos, LivingEntity pEntity){
+        BlockPattern.PatternHelper hauntedPattern = this.getOrCreateHauntedRotTree().find(pLevel, pPos);
+        BlockPattern.PatternHelper murkPattern = this.getOrCreateMurkRotTree().find(pLevel, pPos);
+        BlockPattern.PatternHelper gloomPattern = this.getOrCreateGloomRotTree().find(pLevel, pPos);
+        if (hauntedPattern != null) {
+            return true;
+        }
+        if (murkPattern != null) {
+            return true;
+        }
+        return gloomPattern != null;
     }
 
     private boolean trySpawnRotTree(World pLevel, BlockPos pPos, LivingEntity pEntity) {

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.DeadSandExplosion;
@@ -237,11 +238,8 @@ public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeable
             float f = this.isPowered() ? 2.0F : 1.0F;
             float explosion = (int) (this.explosionRadius * f);
             this.dead = true;
-            if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
-                ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), explosion, DeadSandExplosion.Mode.SPREAD);
-            } else {
-                ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), explosion, DeadSandExplosion.Mode.NONE);
-            }
+            DeadSandExplosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) && MainConfig.DeadSandSpread.get() ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
+            ExplosionUtil.deadSandExplode(this.level, this, this.getX(), this.getY(), this.getZ(), explosion, explosion$mode);
             this.remove();
             this.spawnLingeringCloud();
         }
