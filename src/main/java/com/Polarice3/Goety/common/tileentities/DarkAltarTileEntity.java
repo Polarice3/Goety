@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
@@ -8,6 +9,7 @@ import com.Polarice3.Goety.common.blocks.DarkAltarBlock;
 import com.Polarice3.Goety.common.ritual.Ritual;
 import com.Polarice3.Goety.common.ritual.RitualStructures;
 import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -183,9 +185,11 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
                                 this.currentTime);
 
+                        boolean villager = recipe.getActivationItem().test(new ItemStack(ModItems.FILLED_ILL_CAGE.get()));
+
                         if (!recipe.getRitual()
                                 .consumeAdditionalIngredients(this.level, this.worldPosition, this.remainingAdditionalIngredients,
-                                        this.currentTime, this.consumedIngredients)) {
+                                        this.currentTime, this.consumedIngredients, villager)) {
                             this.stopRitual(false);
                             return;
                         }
@@ -266,11 +270,15 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                             } else if (ritualRecipe.getCraftType().contains("lich")){
                                 CompoundNBT playerData = player.getPersistentData();
                                 CompoundNBT data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
-                                if (data.getBoolean(ConstantPaths.readScroll())){
-                                    this.startRitual(player, activationItem, ritualRecipe);
+                                if (MainConfig.LichScrollRequirement.get()) {
+                                    if (data.getBoolean(ConstantPaths.readScroll())) {
+                                        this.startRitual(player, activationItem, ritualRecipe);
+                                    } else {
+                                        player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.fail"), true);
+                                        return false;
+                                    }
                                 } else {
-                                    player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.fail"), true);
-                                    return false;
+                                    this.startRitual(player, activationItem, ritualRecipe);
                                 }
                             } else {
                                 this.startRitual(player, activationItem, ritualRecipe);

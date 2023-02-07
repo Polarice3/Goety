@@ -25,6 +25,18 @@ public class ConstantPaths {
         return Goety.location("ruined_ritual");
     }
 
+    public static ResourceLocation getCrimsonShrine(){
+        return Goety.location("crimson_shrine");
+    }
+
+    public static ResourceLocation getWarpedShrine(){
+        return Goety.location("warped_shrine");
+    }
+
+    public static ResourceLocation getValleyShrine(){
+        return Goety.location("valley_shrine");
+    }
+
     public static String readNetherBook(){
         return "goety:readNetherBook";
     }

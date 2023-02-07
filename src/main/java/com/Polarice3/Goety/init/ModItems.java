@@ -48,6 +48,8 @@ public class ModItems {
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
     public static final RegistryObject<Item> DEAD_SLIME_BALL = ITEMS.register("dead_slime_ball", DeadSlimeBallItem::new);
     public static final RegistryObject<Item> FORBIDDEN_SCROLL = ITEMS.register("forbidden_scroll", ForbiddenScrollItem::new);
+    public static final RegistryObject<Item> EMPTY_ILL_CAGE = ITEMS.register("empty_ill_cage", EmptyIllCageItem::new);
+    public static final RegistryObject<Item> FILLED_ILL_CAGE = ITEMS.register("filled_ill_cage", FilledIllCageItem::new);
     public static final RegistryObject<Item> SACRED_FISH_BUCKET = ITEMS.register("sacred_fish_bucket", () -> new FishBucketItem(ModEntityType.SACRED_FISH,() -> Fluids.WATER, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_MISC)));
     public static final RegistryObject<Item> QUICKSAND_BUCKET = ITEMS.register("quicksand_bucket", () -> new BucketItem(() -> ModFluids.QUICKSAND_SOURCE.get(), (new Item.Properties()).stacksTo(1).tab(Goety.TAB)));
 

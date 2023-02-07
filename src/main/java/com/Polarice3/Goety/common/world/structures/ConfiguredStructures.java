@@ -19,6 +19,9 @@ public class ConfiguredStructures {
     public static StructureFeature<?, ?> CONFIGURED_DECREPIT_FORT = ModStructures.DECREPIT_FORT.get().configured(NoFeatureConfig.NONE);
     public static final StructureFeature<RuinedRitualFeature, ? extends Structure<RuinedRitualFeature>> RUINED_RITUAL_STANDARD = ModStructures.RUINED_RITUAL.get().configured(new RuinedRitualFeature(RuinedRitualStructure.Location.STANDARD));
     public static final StructureFeature<RuinedRitualFeature, ? extends Structure<RuinedRitualFeature>> RUINED_RITUAL_JUNGLE = ModStructures.RUINED_RITUAL.get().configured(new RuinedRitualFeature(RuinedRitualStructure.Location.JUNGLE));
+    public static StructureFeature<?, ?> CONFIGURED_CRIMSON_SHRINE = ModStructures.CRIMSON_SHRINE.get().configured(NoFeatureConfig.NONE);
+    public static StructureFeature<?, ?> CONFIGURED_WARPED_SHRINE = ModStructures.WARPED_SHRINE.get().configured(NoFeatureConfig.NONE);
+    public static StructureFeature<?, ?> CONFIGURED_VALLEY_SHRINE = ModStructures.VALLEY_SHRINE.get().configured(NoFeatureConfig.NONE);
 
     public static void registerConfiguredStructures() {
         Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
@@ -36,5 +39,11 @@ public class ConfiguredStructures {
         FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.RUINED_RITUAL.get(), RUINED_RITUAL_STANDARD);
         Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "ruined_ritual_jungle"), RUINED_RITUAL_JUNGLE);
         FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.RUINED_RITUAL.get(), RUINED_RITUAL_JUNGLE);
+        Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_crimson_shrine"), CONFIGURED_CRIMSON_SHRINE);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.CRIMSON_SHRINE.get(), CONFIGURED_CRIMSON_SHRINE);
+        Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_warped_shrine"), CONFIGURED_WARPED_SHRINE);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.WARPED_SHRINE.get(), CONFIGURED_WARPED_SHRINE);
+        Registry.register(registry, new ResourceLocation(Goety.MOD_ID, "configured_valley_shrine"), CONFIGURED_VALLEY_SHRINE);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(ModStructures.VALLEY_SHRINE.get(), CONFIGURED_VALLEY_SHRINE);
     }
 }

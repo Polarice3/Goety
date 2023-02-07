@@ -29,6 +29,7 @@ import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity
 import com.Polarice3.Goety.common.entities.neutral.*;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.utilities.StormEntity;
+import com.Polarice3.Goety.common.items.GrandTorchItem;
 import com.Polarice3.Goety.common.items.ModItemTiers;
 import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
 import com.Polarice3.Goety.common.items.equipment.*;
@@ -417,9 +418,24 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void SpecialSpawnEvents(LivingSpawnEvent.CheckSpawn event){
+        BlockPos blockPos = new BlockPos(event.getX(), event.getY(), event.getZ());
         if (event.getEntityLiving() instanceof AbstractCultistEntity){
-            if (AbstractCultistEntity.spawnCultistsRules(event.getEntityLiving().getType(), event.getWorld(), event.getSpawnReason(), event.getEntityLiving().blockPosition(), event.getWorld().getRandom())){
+            boolean spawnRule = AbstractCultistEntity.spawnCultistsRules(event.getEntityLiving().getType(), event.getWorld(), event.getSpawnReason(), blockPos, event.getWorld().getRandom());
+            if (spawnRule){
                 event.setResult(Event.Result.ALLOW);
+            } else {
+                if (event.getSpawnReason() == SpawnReason.NATURAL){
+                    BlockFinder.moveDownToGround(event.getEntityLiving());
+                    if (event.getWorld().getBlockState(event.getEntityLiving().blockPosition().below()).isAir()){
+                        event.setResult(Event.Result.DENY);
+                    } else if (!event.getWorld().getFluidState(event.getEntityLiving().blockPosition().below()).isEmpty()){
+                        event.setResult(Event.Result.DENY);
+                    } else {
+                        event.setResult(Event.Result.ALLOW);
+                    }
+                } else {
+                    event.setResult(Event.Result.DENY);
+                }
             }
         }
         if (event.getEntityLiving() instanceof SpellcastingIllagerEntity || event.getEntityLiving() instanceof WitchEntity){
@@ -999,9 +1015,9 @@ public class ModEvents {
         if (direct instanceof LivingEntity && ModDamageSource.physicalAttacks(event.getSource())){
             float chance = 0.0F;
             LivingEntity livingEntity = (LivingEntity) direct;
-            if (livingEntity.getMainHandItem().getItem() == ModBlocks.GRAND_TORCH_ITEM.get()){
+            if (livingEntity.getMainHandItem().getItem() instanceof GrandTorchItem){
                 chance += 0.5F;
-            } else if (livingEntity.getOffhandItem().getItem() == ModBlocks.GRAND_TORCH_ITEM.get()){
+            } else if (livingEntity.getOffhandItem().getItem() instanceof GrandTorchItem){
                 chance += 0.25F;
             }
             if (livingEntity.level.random.nextFloat() <= chance){
@@ -1239,14 +1255,6 @@ public class ModEvents {
                         }
                     }
                     Entity entity = event.getSource().getDirectEntity();
-                    if (MainConfig.TallSkullDrops.get()) {
-                        if (livingEntity instanceof AbstractVillagerEntity || livingEntity instanceof AbstractIllagerEntity || livingEntity instanceof WitchEntity || livingEntity instanceof ICultist) {
-                            LootTable loottable = player.level.getServer().getLootTables().get(ModLootTables.TALL_SKULL);
-                            LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
-                            LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
-                            loottable.getRandomItems(ctx).forEach(livingEntity::spawnAtLocation);
-                        }
-                    }
                     if (entity instanceof FangEntity){
                         if (CuriosFinder.findRing(player).getItem() == ModItems.RING_OF_WANT.get()) {
                             if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WANTING.get(), CuriosFinder.findRing(player)) >= 3) {
@@ -1405,6 +1413,16 @@ public class ModEvents {
                     loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(living, loot)));
                 }
             }
+            if (MainConfig.TallSkullDrops.get()) {
+                if (living instanceof AbstractVillagerEntity || living instanceof AbstractIllagerEntity || living instanceof WitchEntity || living instanceof ICultist) {
+                    if (living.level.getServer() != null) {
+                        LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.TALL_SKULL);
+                        LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
+                        LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
+                        loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(living, loot)));
+                    }
+                }
+            }
         }
     }
 
@@ -1555,7 +1573,7 @@ public class ModEvents {
             LivingEntity livingEntity = event.getEntityLiving();
             if (!world.isClientSide) {
                 ServerWorld serverWorld = (ServerWorld) world;
-                for (int k = 0; k < 200; ++k) {
+                for (int k = 0; k < 50; ++k) {
                     float f = world.random.nextFloat() * 4.0F;
                     float f1 = world.random.nextFloat() * ((float) Math.PI * 2F);
                     double d1 = (double) (MathHelper.cos(f1) * f);

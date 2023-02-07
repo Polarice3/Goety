@@ -1,10 +1,9 @@
 package com.Polarice3.Goety.common.blocks;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
@@ -24,14 +23,8 @@ public class BigTorchBlock extends Block {
     protected static final VoxelShape AABB = Block.box(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected final IParticleData flameParticle;
 
-    public BigTorchBlock(IParticleData pFlameParticle) {
-        super(Properties.of(Material.DECORATION)
-                .noCollission()
-                .instabreak()
-                .lightLevel((p_235470_0_) -> {
-                    return 14;
-                })
-                .sound(SoundType.WOOD));
+    public BigTorchBlock(AbstractBlock.Properties pProperties, IParticleData pFlameParticle) {
+        super(pProperties);
         this.flameParticle = pFlameParticle;
     }
 

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "goety:block/wall_grand_soul_torch"
+    },
+    "facing=north": {
+      "model": "goety:block/wall_grand_soul_torch",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "goety:block/wall_grand_soul_torch",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "goety:block/wall_grand_soul_torch",
+      "y": 180
+    }
+  }
+}

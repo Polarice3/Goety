@@ -161,6 +161,7 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GLOW_LIGHT.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FORBIDDEN_GRASS.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GHOST_FIRE_TRAP.get(), ModTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CULT_STATUE.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_KILN.get(), CursedKilnTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
@@ -189,6 +190,8 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.MURK_SAPLING.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.GRAND_TORCH.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.WALL_GRAND_TORCH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.GRAND_SOUL_TORCH.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.WALL_GRAND_SOUL_TORCH.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.GLOOM_LEAVES.get(), RenderType.cutoutMipped());
         RenderTypeLookup.setRenderLayer(ModBlocks.MURK_LEAVES.get(), RenderType.cutoutMipped());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);

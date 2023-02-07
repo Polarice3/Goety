@@ -28,6 +28,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
@@ -35,6 +36,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class BlockFinder {
 
@@ -405,6 +407,81 @@ public class BlockFinder {
 
     public static BlockState findBlock(World world, BlockPos oPos, int pX, int pY, int pZ){
         return world.getBlockState(findBlockRadius(oPos, pX, pY, pZ));
+    }
+
+    /**
+     * Ripped from TelepathicGrunt's RepurposedStructure codes.
+     */
+    public static BlockPos getHighestLand(ChunkGenerator chunkGenerator, MutableBoundingBox boundingBox, boolean canBeOnLiquid) {
+        BlockPos.Mutable mutable = new BlockPos.Mutable().set(
+                boundingBox.getCenter().getX(),
+                chunkGenerator.getGenDepth() - 20,
+                boundingBox.getCenter().getZ());
+
+        IBlockReader blockView = chunkGenerator.getBaseColumn(mutable.getX(), mutable.getZ());
+        BlockState currentBlockstate;
+        while (mutable.getY() > chunkGenerator.getSeaLevel()) {
+            currentBlockstate = blockView.getBlockState(mutable);
+            if (!currentBlockstate.canOcclude()) {
+                mutable.move(Direction.DOWN);
+                continue;
+            }
+            else if (blockView.getBlockState(mutable.offset(0, 3, 0)).getMaterial() == Material.AIR && (canBeOnLiquid ? !currentBlockstate.isAir() : currentBlockstate.canOcclude())) {
+                return mutable;
+            }
+            mutable.move(Direction.DOWN);
+        }
+
+        return mutable;
+    }
+
+    /**
+     * Ripped from izofar's Bygone-Nether codes.
+     */
+    private static final Predicate<Block> isAir = (block) -> block == Blocks.AIR || block == Blocks.CAVE_AIR;
+
+    public static boolean verticalSpace(ChunkGenerator chunkGenerator, int x, int z, int min, int max, int height) {
+        IBlockReader columnOfBlocks = chunkGenerator.getBaseColumn(x, z);
+        BlockPos.Mutable currentPos = new BlockPos.Mutable(x, max, z);
+
+        int height_tracked = 0;
+        while(currentPos.getY() >= min && height_tracked < height){
+            if(isAir.test(columnOfBlocks.getBlockState(currentPos).getBlock())) {
+                height_tracked++;
+            } else {
+                height_tracked = 0;
+            }
+            currentPos.move(Direction.DOWN);
+        }
+        return height_tracked == height;
+    }
+
+    public static boolean isLavaLake(ChunkGenerator chunkGenerator, int x, int z) {
+        IBlockReader columnOfBlocks = chunkGenerator.getBaseColumn(x, z);
+        BlockPos.Mutable currentPos = new BlockPos.Mutable(x, 31, z);
+
+        boolean isLake = true;
+
+        if(columnOfBlocks.getBlockState(currentPos).getBlock() != Blocks.LAVA) {
+            isLake = false;
+        } else while(currentPos.getY() < 70) {
+            currentPos.move(Direction.UP);
+            isLake = isLake && (isAir.test(columnOfBlocks.getBlockState(currentPos).getBlock()));
+        }
+        return isLake;
+    }
+
+    public static boolean isBuried(ChunkGenerator chunkGenerator, int x, int z, int min, int max) {
+        IBlockReader columnOfBlocks = chunkGenerator.getBaseColumn(x, z);
+        BlockPos.Mutable currentPos = new BlockPos.Mutable(x, min, z);
+
+        boolean found = false;
+        while(currentPos.getY() < max){
+            if (isAir.test(columnOfBlocks.getBlockState(currentPos.above()).getBlock()) && !isAir.test(columnOfBlocks.getBlockState(currentPos).getBlock()))
+                found = true;
+            currentPos.move(Direction.UP);
+        }
+        return !found;
     }
 
 }

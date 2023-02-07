@@ -16,6 +16,15 @@ public class ModLootTables {
     public static final ResourceLocation DECREPIT_TOMB = register("chests/decrepit_tomb");
     public static final ResourceLocation RUINED_RITUAL = register("chests/ruined_ritual");
     public static final ResourceLocation RUINED_RITUAL_BARREL = register("chests/ruined_ritual_barrel");
+    public static final ResourceLocation CRIMSON_SHRINE_TREASURE = register("chests/crimson_shrine_treasure");
+    public static final ResourceLocation WARPED_SHRINE_BARREL = register("chests/warped_shrine_barrel");
+    public static final ResourceLocation VALLEY_SHRINE_BARREL = register("chests/valley_shrine_barrel");
+    public static final ResourceLocation VALLEY_SHRINE_BARREL_MILK = register("chests/valley_shrine_barrel_milk");
+    public static final ResourceLocation VALLEY_SHRINE_BARREL_BLAZE = register("chests/valley_shrine_barrel_blaze");
+    public static final ResourceLocation VALLEY_SHRINE_BONE_CHEST = register("chests/valley_shrine_bone_chest");
+    public static final ResourceLocation VALLEY_SHRINE_WEAPONS = register("chests/valley_shrine_weapons");
+    public static final ResourceLocation VALLEY_SHRINE_TREASURE = register("chests/valley_shrine_treasure");
+
     public static final ResourceLocation DEAD_MOBS = register("entities/dead_mobs");
     public static final ResourceLocation DEAD_MOBS_2 = register("entities/dead_mobs_2");
     public static final ResourceLocation TALL_SKULL = register("entities/tall_skull_mobs");

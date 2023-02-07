@@ -60,6 +60,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
@@ -403,6 +404,22 @@ public class Goety {
                         event.getGeneration().getFeatures(GenerationStage.Decoration.SURFACE_STRUCTURES).add(() -> ConfiguredFeatures.MURK_TREE);
                     }
                 }
+            } else if (BiomeDictionary.hasType(biomeRegistryKey, BiomeDictionary.Type.NETHER)){
+                if (MainConfig.CrimsonShrineGen.get()) {
+                    if (biomeRegistryKey == Biomes.CRIMSON_FOREST) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_CRIMSON_SHRINE);
+                    }
+                }
+                if (MainConfig.WarpedShrineGen.get()) {
+                    if (biomeRegistryKey == Biomes.WARPED_FOREST) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_WARPED_SHRINE);
+                    }
+                }
+                if (MainConfig.ValleyShrineGen.get()) {
+                    if (biomeRegistryKey == Biomes.SOUL_SAND_VALLEY) {
+                        event.getGeneration().getStructures().add(() -> ConfiguredStructures.CONFIGURED_VALLEY_SHRINE);
+                    }
+                }
             }
         }
     }
@@ -427,11 +444,10 @@ public class Goety {
                 return;
             }
 
-            if (!serverWorld.dimension().equals(World.OVERWORLD)){
-                return;
-            }
-
             Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
+            tempMap.putIfAbsent(ModStructures.CRIMSON_SHRINE.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.CRIMSON_SHRINE.get()));
+            tempMap.putIfAbsent(ModStructures.WARPED_SHRINE.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.WARPED_SHRINE.get()));
+            tempMap.putIfAbsent(ModStructures.VALLEY_SHRINE.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.VALLEY_SHRINE.get()));
             tempMap.putIfAbsent(ModStructures.DARK_MANOR.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.DARK_MANOR.get()));
             tempMap.putIfAbsent(ModStructures.PORTAL_OUTPOST.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.PORTAL_OUTPOST.get()));
             tempMap.putIfAbsent(ModStructures.CURSED_GRAVEYARD.get(), DimensionStructuresSettings.DEFAULTS.get(ModStructures.CURSED_GRAVEYARD.get()));

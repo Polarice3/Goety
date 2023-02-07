@@ -28,6 +28,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -164,7 +165,9 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        this.playSound(this.getStepSound(), 0.5F, 1.0F);
+        if (this.getStepSound() != null) {
+            this.playSound(this.getStepSound(), 0.5F, 1.0F);
+        }
     }
 
     public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
@@ -198,8 +201,12 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
 
     @Override
     public void tick() {
-        this.setNoGravity(this.isUnderWater());
+        this.setGravity();
         super.tick();
+    }
+
+    public void setGravity(){
+        this.setNoGravity(this.isUnderWater());
     }
 
     public void aiStep() {
@@ -226,7 +233,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
         }
 
         Vector3d vector3d = this.getDeltaMovement();
-        if (!this.onGround && vector3d.y < 0.0D) {
+        if (!this.onGround && vector3d.y < 0.0D && !this.isNoGravity()) {
             this.setDeltaMovement(vector3d.multiply(1.0D, 0.6D, 1.0D));
         }
 
@@ -291,11 +298,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
                         }
                         if (this.fireTick > 20) {
                             this.fireTick = -30;
-                            if (this.level.random.nextFloat() <= 0.05F) {
-                                WandUtil.spawnCrossGhostFires(this.level, this.getTarget().position(), this);
-                            } else {
-                                WandUtil.spawnGhostFires(this.level, this.getTarget().position(), this);
-                            }
+                            this.magicFire(this.getTarget());
                         }
                     } else {
                         if (this.fireTick > 0) {
@@ -331,6 +334,14 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
         }
     }
 
+    public void magicFire(LivingEntity livingEntity){
+        if (this.level.random.nextFloat() <= 0.05F) {
+            WandUtil.spawnCrossGhostFires(this.level, livingEntity.position(), this);
+        } else {
+            WandUtil.spawnGhostFires(this.level, livingEntity.position(), this);
+        }
+    }
+
     public void movement(){
         if (this.getTarget() != null && !this.isStaying()) {
             Vector3d vector3d2 = null;
@@ -354,7 +365,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
                     double d4 = this.getTarget().getY();
                     double d5 = this.getTarget().getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getFollowRange();
                     BlockPos blockPos1 = new BlockPos(d3, d4, d5);
-                    if (!(this.level.canSeeSky(blockPos1) && this.level.isDay())) {
+                    if (!(this.level.canSeeSky(blockPos1) && this.level.isDay() && !(this.fireImmune() || this.hasEffect(Effects.FIRE_RESISTANCE)))) {
                         AbstractWraithEntity wraith = new WraithEntity(ModEntityType.WRAITH.get(), this.level);
                         wraith.setPos(d3, d4, d5);
                         wraith.getLookControl().setLookAt(this.getTarget(), 100.0F, 100.0F);

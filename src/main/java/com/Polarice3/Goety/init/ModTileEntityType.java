@@ -73,6 +73,9 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<GhostFireTrapTileEntity>> GHOST_FIRE_TRAP = TILEENTITY_TYPES.register("ghost_fire_trap",
             () -> TileEntityType.Builder.of(GhostFireTrapTileEntity::new, ModBlocks.GHOST_FIRE_TRAP_BLOCK.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<CultStatueTileEntity>> CULT_STATUE = TILEENTITY_TYPES.register("cult_statue",
+            () -> TileEntityType.Builder.of(CultStatueTileEntity::new, ModBlocks.CULT_STATUE.get()).build(null));
+
     public static final RegistryObject<TileEntityType<ModSignTileEntity>> SIGN_TILE_ENTITIES = TILEENTITY_TYPES.register("sign",
             () -> TileEntityType.Builder.of(ModSignTileEntity::new,
                     ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get(),

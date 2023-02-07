@@ -114,7 +114,7 @@ public class SpiderlingMinionEntity extends SummonedEntity {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if (this.isUpgraded() && !pSource.isBypassMagic() && !pSource.isBypassInvul()){
+        if (this.isUpgraded() && !pSource.isBypassMagic() && !pSource.isBypassInvul() && !pSource.isExplosion() && !pSource.isFire()){
             return super.hurt(pSource, 1);
         } else {
             return super.hurt(pSource, pAmount);

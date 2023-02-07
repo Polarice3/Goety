@@ -31,6 +31,11 @@ public class CultistArmoredRobeArmor extends ArmorItem {
         model.Body.visible = armorSlot == EquipmentSlotType.CHEST;
         model.RightArm.visible = armorSlot == EquipmentSlotType.CHEST;
         model.LeftArm.visible = armorSlot == EquipmentSlotType.CHEST;
+        model.Pants.visible = armorSlot == EquipmentSlotType.LEGS;
+        model.RightLeg.visible = armorSlot == EquipmentSlotType.LEGS;
+        model.LeftLeg.visible = armorSlot == EquipmentSlotType.LEGS;
+        model.RightFeet.visible = false;
+        model.LeftFeet.visible = false;
 
         model.young = _default.young;
         model.crouching = _default.crouching;

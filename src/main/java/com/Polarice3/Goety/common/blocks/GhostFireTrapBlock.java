@@ -45,7 +45,7 @@ public class GhostFireTrapBlock extends ContainerBlock {
     public void neighborChanged(BlockState pState, World pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         boolean flag = pLevel.hasNeighborSignal(pPos) || pLevel.hasNeighborSignal(pPos.above());
         boolean flag1 = pState.getValue(TRIGGERED);
-        if (flag && !flag1) {
+        if (flag && !flag1 && !pLevel.getBlockState(pPos.above()).isSolidRender(pLevel, pPos.above())) {
             TileEntity tileentity = pLevel.getBlockEntity(pPos);
             if (tileentity instanceof GhostFireTrapTileEntity) {
                 GhostFireTrapTileEntity ghostFireTrapTile = (GhostFireTrapTileEntity) tileentity;

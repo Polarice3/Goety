@@ -101,6 +101,15 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
                 this.setTarget(target);
             }
         }
+        if (this.isHostile() && !(this.getEntity() instanceof IMob)){
+            if (this.getTarget() instanceof IMob){
+                if (this.getLastHurtByMob() != this.getTarget()){
+                    this.setTarget(null);
+                } else {
+                    this.setLastHurtByMob(this.getTarget());
+                }
+            }
+        }
         if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
             this.lifeSpanDamage();
         }

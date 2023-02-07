@@ -188,6 +188,12 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DecrepitFortSeperation;
     public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSpacing;
     public static final ForgeConfigSpec.ConfigValue<Integer> RuinedRitualSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CrimsonShrineSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CrimsonShrineSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WarpedShrineSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WarpedShrineSeperation;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ValleyShrineSpacing;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ValleyShrineSeperation;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> DredenSpawnWeight;
     public static final ForgeConfigSpec.ConfigValue<Integer> WraithSpawnWeight;
@@ -258,6 +264,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> SalvagedFortGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DecrepitFortGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> RuinedRitualGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> CrimsonShrineGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> WarpedShrineGen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ValleyShrineGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> GloomTreeGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MurkTreeGen;
 
@@ -268,6 +277,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichScrollRequirement;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> FancierApostleDeath;
 
@@ -641,6 +651,24 @@ public class MainConfig {
                 .defineInRange("ruinedRitualSpacing", 45, 0, Integer.MAX_VALUE);
         RuinedRitualSeperation = BUILDER.comment("Separation for Ruined Rituals, Default: 10")
                 .defineInRange("ruinedRitualSeparation", 10, 0, Integer.MAX_VALUE);
+        CrimsonShrineGen = BUILDER.comment("Crimson Shrine Generates in the World, Default: true")
+                .define("crimsonShrineGen", true);
+        CrimsonShrineSpacing = BUILDER.comment("Spacing for Crimson Shrines, Default: 32")
+                .defineInRange("crimsonShrineSpacing", 32, 0, Integer.MAX_VALUE);
+        CrimsonShrineSeperation = BUILDER.comment("Separation for Crimson Shrines, Default: 10")
+                .defineInRange("crimsonShrineSeparation", 10, 0, Integer.MAX_VALUE);
+        WarpedShrineGen = BUILDER.comment("Warped Shrine Generates in the World, Default: true")
+                .define("warpedShrineGen", true);
+        WarpedShrineSpacing = BUILDER.comment("Spacing for Warped Shrines, Default: 32")
+                .defineInRange("warpedShrineSpacing", 32, 0, Integer.MAX_VALUE);
+        WarpedShrineSeperation = BUILDER.comment("Separation for Warped Shrines, Default: 10")
+                .defineInRange("warpedShrineSeparation", 10, 0, Integer.MAX_VALUE);
+        ValleyShrineGen = BUILDER.comment("Valley Shrine Generates in the World, Default: true")
+                .define("valleyShrineGen", true);
+        ValleyShrineSpacing = BUILDER.comment("Spacing for Valley Shrines, Default: 32")
+                .defineInRange("valleyShrineSpacing", 32, 0, Integer.MAX_VALUE);
+        ValleyShrineSeperation = BUILDER.comment("Separation for Valley Shrines, Default: 10")
+                .defineInRange("valleyShrineSeparation", 10, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("World Generation");
         TotemGen = BUILDER.comment("Totems Generates in the World, Default: true")
@@ -671,8 +699,8 @@ public class MainConfig {
                 .defineInRange("undeadMinionHealCost", 1, 0, Integer.MAX_VALUE);
         TamedSpiderHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Loyal Spider to heal, Default: 1")
                 .defineInRange("loyalSpiderHealCost", 1, 0, Integer.MAX_VALUE);
-        RottreantAnimateCost = BUILDER.comment("How much Soul Energy it cost to animate a Rottreant, Default: 50")
-                .defineInRange("rottreantAnimateCost", 50, 0, Integer.MAX_VALUE);
+        RottreantAnimateCost = BUILDER.comment("How much Soul Energy it cost to animate a Rottreant, Default: 200")
+                .defineInRange("rottreantAnimateCost", 200, 0, Integer.MAX_VALUE);
         WandVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a wand, without instantly dying, around the player, Default: 8")
                 .defineInRange("wandVexLimit", 8, 1, Integer.MAX_VALUE);
         StaffVexLimit = BUILDER.comment("Number of Vex Minions that can be spawn with a staff, without instantly dying, around the player, Default: 16")
@@ -765,6 +793,8 @@ public class MainConfig {
                 .define("lichUndeadFriendly", true);
         LichPowerfulFoes = BUILDER.comment("If Lich Undead Friendly is set to true, Only undead that have lower than 50 Hearts are friendly, Default: true")
                 .define("lichPowerfulHostile", true);
+        LichScrollRequirement = BUILDER.comment("Whether the player needs to read a Forbidden Scroll to start the Potion of Transformation ritual, Default: true")
+                .define("lichScrollRequirement", true);
         BUILDER.pop();
         BUILDER.push("Misc");
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")

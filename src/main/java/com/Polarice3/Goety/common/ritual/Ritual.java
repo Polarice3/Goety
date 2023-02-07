@@ -6,6 +6,7 @@ import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import com.Polarice3.Goety.common.tileentities.PedestalTileEntity;
+import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
@@ -87,6 +88,12 @@ public abstract class Ritual {
 
     public void finish(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
                        PlayerEntity castingPlayer, ItemStack activationItem) {
+        if (activationItem.getItem() == ModItems.FILLED_ILL_CAGE.get()){
+            world.playSound(null, darkAltarPos, SoundEvents.VILLAGER_DEATH, SoundCategory.BLOCKS, 1.2F,
+                    0.5f);
+            world.playSound(null, darkAltarPos, SoundEvents.CHAIN_BREAK, SoundCategory.BLOCKS, 1.5F,
+                    1.0f);
+        }
         world.playSound(null, darkAltarPos, SoundEvents.BEACON_POWER_SELECT, SoundCategory.BLOCKS, 0.7f,
                 0.7f);
     }
@@ -114,7 +121,7 @@ public abstract class Ritual {
 
     public boolean consumeAdditionalIngredients(World world, BlockPos darkAltarPos,
                                                 List<Ingredient> remainingAdditionalIngredients, int time,
-                                                List<ItemStack> consumedIngredients) {
+                                                List<ItemStack> consumedIngredients, boolean villager) {
         if (remainingAdditionalIngredients.isEmpty())
             return true;
 
@@ -131,7 +138,7 @@ public abstract class Ritual {
              it.hasNext() && consumed < ingredientsToConsume; consumed++) {
             Ingredient ingredient = it.next();
             if (this.consumeAdditionalIngredient(world, darkAltarPos, pedestals, ingredient,
-                    consumedIngredients)) {
+                    consumedIngredients, villager)) {
                 it.remove();
             } else {
                 return false;
@@ -142,7 +149,7 @@ public abstract class Ritual {
 
     public boolean consumeAdditionalIngredient(World world, BlockPos darkAltarPos,
                                                List<PedestalTileEntity> pedestals,
-                                               Ingredient ingredient, List<ItemStack> consumedIngredients) {
+                                               Ingredient ingredient, List<ItemStack> consumedIngredients, boolean villager) {
         for (PedestalTileEntity pedestal : pedestals) {
             if (pedestal.itemStackHandler.map(handler -> {
                 ItemStack stack = handler.extractItem(0, 1, true);
@@ -152,6 +159,9 @@ public abstract class Ritual {
                     consumedIngredients.add(extracted);
                     ((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, pedestal.getBlockPos().getX() + 0.5D, pedestal.getBlockPos().getY() + 1.5D, pedestal.getBlockPos().getZ() + 0.5D, 1, 0, 0, 0, 0);
 
+                    if (villager){
+                        world.playSound(null, darkAltarPos, SoundEvents.VILLAGER_HURT, SoundCategory.BLOCKS, 1.2F, (world.random.nextFloat() - world.random.nextFloat()) * 0.2F + 1.0F);
+                    }
                     world.playSound(null, pedestal.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundCategory.BLOCKS,
                             0.7f, 0.7f);
                     return true;
@@ -226,11 +236,6 @@ public abstract class Ritual {
             }
         }
         return result;
-    }
-
-    public void prepareLivingEntityForSpawn(LivingEntity livingEntity, World world, BlockPos darkAltarPos,
-                                            DarkAltarTileEntity tileEntity, PlayerEntity castingPlayer) {
-        this.prepareLivingEntityForSpawn(livingEntity, world, darkAltarPos, tileEntity, castingPlayer, true);
     }
 
     public void prepareLivingEntityForSpawn(LivingEntity livingEntity, World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,

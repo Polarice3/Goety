@@ -2,10 +2,7 @@ package com.Polarice3.Goety.common.blocks;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -32,8 +29,8 @@ public class WallBigTorchBlock extends BigTorchBlock{
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
     private static final Map<Direction, VoxelShape> AABBS = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.box(5.5D, 0.0D, 11.0D, 10.5D, 16.0D, 16.0D), Direction.SOUTH, Block.box(5.5D, 0.0D, 0.0D, 10.5D, 16.0D, 5.0D), Direction.WEST, Block.box(11.0D, 0.0D, 5.5D, 16.0D, 16.0D, 10.5D), Direction.EAST, Block.box(0.0D, 0.0D, 5.5D, 5.0D, 16.0D, 10.5D)));
 
-    public WallBigTorchBlock(IParticleData p_i241193_2_) {
-        super(p_i241193_2_);
+    public WallBigTorchBlock(AbstractBlock.Properties pProperties, IParticleData p_i241193_2_) {
+        super(pProperties, p_i241193_2_);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
@@ -84,7 +81,7 @@ public class WallBigTorchBlock extends BigTorchBlock{
     public void animateTick(BlockState pState, World pLevel, BlockPos pPos, Random pRand) {
         Direction direction = pState.getValue(FACING);
         double d0 = (double)pPos.getX() + 0.5D;
-        double d1 = (double)pPos.getY() + 0.9D;
+        double d1 = (double)pPos.getY() + 0.7D;
         double d2 = (double)pPos.getZ() + 0.5D;
         double d3 = 0.22D;
         double d4 = 0.22D;

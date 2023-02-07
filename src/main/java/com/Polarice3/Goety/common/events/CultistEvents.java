@@ -13,8 +13,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
@@ -150,12 +152,27 @@ public class CultistEvents {
                         if (MobUtil.getWitnesses(villager)) {
                             if (villager.getRandom().nextFloat() <= 0.25F) {
                                 MobUtil.revealCultist(serverWorld, villager);
+                                if (!(attacker instanceof IMob)){
+                                    calmIronGolems(serverWorld, (LivingEntity) attacker);
+                                }
                             }
                         } else {
                             MobUtil.revealCultist(serverWorld, villager);
+                            if (!(attacker instanceof IMob)){
+                                calmIronGolems(serverWorld, (LivingEntity) attacker);
+                            }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public static void calmIronGolems(World world, LivingEntity livingEntity){
+        for (IronGolemEntity ironGolem : world.getEntitiesOfClass(IronGolemEntity.class, livingEntity.getBoundingBox().inflate(16.0D))){
+            if (ironGolem.isAngryAt(livingEntity) || ironGolem.getTarget() == livingEntity){
+                ironGolem.setTarget(null);
+                ironGolem.stopBeingAngry();
             }
         }
     }
@@ -172,6 +189,7 @@ public class CultistEvents {
                     for (VillagerEntity villager : world.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
                         villager.getGossips().add(player.getUUID(), GossipType.MINOR_POSITIVE, 25);
                     }
+                    calmIronGolems(world, player);
                 }
             }
         }

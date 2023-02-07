@@ -326,6 +326,8 @@
 
   "item.goety.brain": "Brain",
   "item.goety.soul_transfer": "Transfer Gem",
+  "item.goety.empty_ill_cage": "Empty Ill Cage",
+  "item.goety.filled_ill_cage": "Filled Ill Cage",
   "item.goety.haunted_boat": "Haunted Boat",
   "item.goety.gloom_boat": "Gloomy Boat",
   "item.goety.murk_boat": "Murky Boat",
@@ -376,6 +378,7 @@
   "block.goety.pedestal": "Pedestal",
   "block.goety.soul_absorber": "Soul Absorber",
   "block.goety.ghost_fire_trap": "Ghost Fire Trap",
+  "block.goety.cult_statue": "Nether Shrine Statue",
 
   "block.goety.frost_block": "Block of Frost Metal",
 
@@ -468,6 +471,8 @@
 
   "block.goety.grand_torch": "Grand Torch",
   "block.goety.wall_grand_torch": "Wall Grand Torch",
+  "block.goety.grand_soul_torch": "Grand Soul Torch",
+  "block.goety.wall_grand_soul_torch": "Wall Grand Soul Torch",
 
   "block.goety.iron_finger": "Iron Finger",
   "block.goety.temp_web": "Magic Cobweb",
@@ -559,6 +564,7 @@
   "tooltip.goety.arcaZ": "Z: ",
   "tooltip.goety.arcaPlayer": "Owner: ",
   "tooltip.goety.arca_not_bound": "Has yet to be bound to an Arca.",
+  "tooltip.goety.cage": "Prisoner: ",
 
   "subtitle.goety.apostle_ambient": "Apostle mutters",
   "subtitle.goety.apostle_hurt": "Apostle hurts",
@@ -644,6 +650,10 @@
   "subtitle.goety.rot_tree_death": "Rottreant dies",
   "subtitle.goety.rot_tree_enter": "Creature enters Rottreant",
   "subtitle.goety.rot_tree_exit": "Creature leaves Rottreant",
+
+  "subtitle.goety.huskarl_ambient": "Huskarl groans",
+  "subtitle.goety.huskarl_hurt": "Huskarl hurts",
+  "subtitle.goety.huskarl_death": "Huskarl dies",
 
   "subtitle.goety.dreden_ambient": "Dreden dreads",
   "subtitle.goety.dreden_hurt": "Dreden hurts",

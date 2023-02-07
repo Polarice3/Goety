@@ -35,8 +35,8 @@ import java.util.Random;
 
 public class PortalOutpostStructure extends Structure<NoFeatureConfig> {
     private static final List<MobSpawnInfo.Spawners> ENEMIES = ImmutableList.of(
-            new MobSpawnInfo.Spawners(ModEntityType.FANATIC.get(), 4, 1, 1),
-            new MobSpawnInfo.Spawners(ModEntityType.ZEALOT.get(), 4, 1, 1),
+            new MobSpawnInfo.Spawners(ModEntityType.FANATIC.get(), 20, 1, 1),
+            new MobSpawnInfo.Spawners(ModEntityType.ZEALOT.get(), 20, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.DISCIPLE.get(), 1, 1, 1),
             new MobSpawnInfo.Spawners(EntityType.WITCH, 1, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.BELDAM.get(), 1, 1, 1));

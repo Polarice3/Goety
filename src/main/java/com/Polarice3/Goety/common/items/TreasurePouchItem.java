@@ -33,7 +33,9 @@ public class TreasurePouchItem extends ItemBase {
         }
         int i = enchantment.getMaxLevel();
         ItemStack itemstack2 = EnchantedBookItem.createForEnchantment(new EnchantmentData(enchantment, i));
-        playerIn.addItem(itemstack2);
+        if (!playerIn.addItem(itemstack2)) {
+            playerIn.drop(itemstack2, false);
+        }
         playerIn.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
         itemstack.shrink(1);
         return ActionResult.pass(playerIn.getItemInHand(handIn));

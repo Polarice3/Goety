@@ -156,8 +156,10 @@ public class FelFlyEntity extends SummonedEntity implements IFlyingAnimal {
             return false;
         } else {
             if (pSource.getEntity() != null && pSource.getEntity() instanceof MobEntity) {
-                if (this.level.random.nextFloat() > 0.33F) {
-                    return !pSource.isExplosion() && !pSource.isBypassArmor() && !pSource.isBypassInvul();
+                if (!pSource.isExplosion() && !pSource.isBypassArmor() && !pSource.isBypassInvul()){
+                    return super.hurt(pSource, pAmount) && this.level.random.nextFloat() > 0.33F;
+                } else {
+                    return super.hurt(pSource, pAmount);
                 }
             }
 

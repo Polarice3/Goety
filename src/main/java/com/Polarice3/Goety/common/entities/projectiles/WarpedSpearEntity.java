@@ -68,7 +68,7 @@ public class WarpedSpearEntity extends AbstractArrowEntity {
         }
 
         Entity entity = this.getOwner();
-        if ((this.dealtDamage || this.isNoPhysics()) && entity != null) {
+        if (entity != null && (this.distanceTo(entity) > 32.0F || this.dealtDamage || this.isNoPhysics())) {
             int i = 3;
             if (!this.shouldReturnToThrower()) {
                 if (!this.level.isClientSide && this.pickup == PickupStatus.ALLOWED) {

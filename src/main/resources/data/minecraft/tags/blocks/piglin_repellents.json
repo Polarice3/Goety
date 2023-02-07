@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "goety:soul_light"
+    "goety:soul_light",
+    "goety:grand_soul_torch",
+    "goety:wall_grand_soul_torch"
   ]
 }

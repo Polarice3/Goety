@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "goety:items/rallying_horn"
+    "layer0": "goety:items/filled_ill_cage"
   }
 }

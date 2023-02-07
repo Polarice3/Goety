@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -55,15 +56,15 @@ public class HuskarlEntity extends ZombieEntity {
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ZOMBIE_AMBIENT;
+        return ModSounds.HUSKARL_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.HUSK_HURT;
+        return ModSounds.HUSKARL_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.HUSK_DEATH;
+        return ModSounds.HUSKARL_DEATH.get();
     }
 
     protected SoundEvent getStepSound() {

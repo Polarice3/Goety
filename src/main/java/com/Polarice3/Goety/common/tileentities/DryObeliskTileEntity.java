@@ -2,10 +2,7 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.blocks.DeadSandBlock;
-import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.blocks.ObeliskBlock;
-import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
+import com.Polarice3.Goety.common.blocks.*;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -91,9 +88,9 @@ public class DryObeliskTileEntity extends TileEntity implements ITickableTileEnt
             }
             if (this.activated != 0){
                 --this.activated;
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ObeliskBlock.POWERED, true), 3);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(DryObeliskBlock.POWERED, true), 3);
             } else {
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ObeliskBlock.POWERED, false), 3);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(DryObeliskBlock.POWERED, false), 3);
             }
         }
     }

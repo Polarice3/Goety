@@ -541,20 +541,16 @@
   "disciple_ambient": {
     "sounds": [
       {
-        "name": "mob/pillager/idle1",
-        "pitch": 0.75
+        "name": "goety:disciple/idle1"
       },
       {
-        "name": "mob/pillager/idle2",
-        "pitch": 0.75
+        "name": "goety:disciple/idle2"
       },
       {
-        "name": "mob/pillager/idle3",
-        "pitch": 0.75
+        "name": "goety:disciple/idle3"
       },
       {
-        "name": "mob/pillager/idle4",
-        "pitch": 0.75
+        "name": "goety:disciple/idle4"
       }
     ],
     "subtitle": "subtitle.goety.disciple_ambient"
@@ -562,16 +558,13 @@
   "disciple_hurt": {
     "sounds": [
       {
-        "name": "mob/pillager/hurt1",
-        "pitch": 0.75
+        "name": "goety:disciple/hurt1"
       },
       {
-        "name": "mob/pillager/hurt2",
-        "pitch": 0.75
+        "name": "goety:disciple/hurt2"
       },
       {
-        "name": "mob/pillager/hurt3",
-        "pitch": 0.75
+        "name": "goety:disciple/hurt3"
       }
     ],
     "subtitle": "subtitle.goety.disciple_hurt"
@@ -579,20 +572,7 @@
   "disciple_celebrate": {
     "sounds": [
       {
-        "name": "mob/pillager/celebrate1",
-        "pitch": 0.75
-      },
-      {
-        "name": "mob/pillager/celebrate2",
-        "pitch": 0.75
-      },
-      {
-        "name": "mob/pillager/celebrate3",
-        "pitch": 0.75
-      },
-      {
-        "name": "mob/pillager/celebrate4",
-        "pitch": 0.75
+        "name": "goety:disciple/celebrate"
       }
     ],
     "subtitle": "subtitle.goety.disciple_celebrate"
@@ -600,12 +580,13 @@
   "disciple_death": {
     "sounds": [
       {
-        "name": "mob/pillager/death1",
-        "pitch": 0.75
+        "name": "goety:disciple/death1"
       },
       {
-        "name": "mob/pillager/death2",
-        "pitch": 0.75
+        "name": "goety:disciple/death2"
+      },
+      {
+        "name": "goety:disciple/death3"
       }
     ],
     "subtitle": "subtitle.goety.disciple_death"
@@ -685,36 +666,16 @@
   "thug_ambient": {
     "sounds": [
       {
-        "name": "mob/ravager/idle1",
-        "pitch": 1.15
+        "name": "goety:thug/idle1"
       },
       {
-        "name": "mob/ravager/idle2",
-        "pitch": 1.15
+        "name": "goety:thug/idle2"
       },
       {
-        "name": "mob/ravager/idle3",
-        "pitch": 1.15
+        "name": "goety:thug/idle3"
       },
       {
-        "name": "mob/ravager/idle4",
-        "pitch": 1.15
-      },
-      {
-        "name": "mob/ravager/idle5",
-        "pitch": 1.15
-      },
-      {
-        "name": "mob/ravager/idle6",
-        "pitch": 1.15
-      },
-      {
-        "name": "mob/ravager/idle7",
-        "pitch": 1.15
-      },
-      {
-        "name": "mob/ravager/idle8",
-        "pitch": 1.15
+        "name": "goety:thug/idle4"
       }
     ],
     "subtitle": "subtitle.goety.thug_ambient"
@@ -722,12 +683,13 @@
   "thug_hurt": {
     "sounds": [
       {
-        "name": "mob/ravager/hurt2",
-        "pitch": 1.15
+        "name": "goety:thug/hurt1"
       },
       {
-        "name": "mob/ravager/hurt3",
-        "pitch": 1.15
+        "name": "goety:thug/hurt2"
+      },
+      {
+        "name": "goety:thug/hurt3"
       }
     ],
     "subtitle": "subtitle.goety.thug_hurt"
@@ -768,16 +730,13 @@
   "thug_death": {
     "sounds": [
       {
-        "name": "mob/ravager/death1",
-        "pitch": 1.15
+        "name": "goety:thug/death1"
       },
       {
-        "name": "mob/ravager/death2",
-        "pitch": 1.15
+        "name": "goety:thug/death2"
       },
       {
-        "name": "mob/ravager/death3",
-        "pitch": 1.15
+        "name": "goety:thug/death3"
       }
     ],
     "subtitle": "subtitle.goety.thug_death"
@@ -1106,6 +1065,48 @@
       }
     ],
     "subtitle": "subtitle.goety.rot_tree_exit"
+  },
+  "huskarl_ambient": {
+    "sounds": [
+      {
+        "name": "goety:huskarl/idle1"
+      },
+      {
+        "name": "goety:huskarl/idle2"
+      },
+      {
+        "name": "goety:huskarl/idle3"
+      }
+    ],
+    "subtitle": "subtitle.goety.huskarl_ambient"
+  },
+  "huskarl_hurt": {
+    "sounds": [
+      {
+        "name": "goety:huskarl/hurt1"
+      },
+      {
+        "name": "goety:huskarl/hurt2"
+      },
+      {
+        "name": "goety:huskarl/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.huskarl_hurt"
+  },
+  "huskarl_death": {
+    "sounds": [
+      {
+        "name": "goety:huskarl/death1"
+      },
+      {
+        "name": "goety:huskarl/death2"
+      },
+      {
+        "name": "goety:huskarl/death3"
+      }
+    ],
+    "subtitle": "subtitle.goety.huskarl_death"
   },
   "dreden_ambient": {
     "sounds": [

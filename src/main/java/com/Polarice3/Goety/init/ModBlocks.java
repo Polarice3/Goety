@@ -3,6 +3,7 @@ package com.Polarice3.Goety.init;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.render.tileentities.ModItemTERenderer;
 import com.Polarice3.Goety.common.blocks.*;
+import com.Polarice3.Goety.common.items.GrandTorchItem;
 import com.Polarice3.Goety.common.items.SoulFangTotemItem;
 import com.Polarice3.Goety.common.items.TallSkullItem;
 import com.Polarice3.Goety.common.world.features.trees.GloomTree;
@@ -75,9 +76,36 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
     public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
     public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
-    public static final RegistryObject<Block> GRAND_TORCH = BLOCKS.register("grand_torch", () -> new BigTorchBlock(ParticleTypes.FLAME));
-    public static final RegistryObject<Block> WALL_GRAND_TORCH = BLOCKS.register("wall_grand_torch", () -> new WallBigTorchBlock(ParticleTypes.FLAME));
+    public static final RegistryObject<Block> GRAND_TORCH = BLOCKS.register("grand_torch", () -> new BigTorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
+            .noCollission()
+            .instabreak()
+            .lightLevel((p_235470_0_) -> {
+                return 14;
+            })
+            .sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> WALL_GRAND_TORCH = BLOCKS.register("wall_grand_torch", () -> new WallBigTorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
+            .noCollission()
+            .instabreak()
+            .lightLevel((p_235470_0_) -> {
+                return 14;
+            })
+            .sound(SoundType.WOOD), ParticleTypes.FLAME));
+    public static final RegistryObject<Block> GRAND_SOUL_TORCH = BLOCKS.register("grand_soul_torch", () -> new BigTorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
+            .noCollission()
+            .instabreak()
+            .lightLevel((p_235470_0_) -> {
+                return 10;
+            })
+            .sound(SoundType.WOOD), ParticleTypes.SOUL_FIRE_FLAME));
+    public static final RegistryObject<Block> WALL_GRAND_SOUL_TORCH = BLOCKS.register("wall_grand_soul_torch", () -> new WallBigTorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
+            .noCollission()
+            .instabreak()
+            .lightLevel((p_235470_0_) -> {
+                return 10;
+            })
+            .sound(SoundType.WOOD), ParticleTypes.FLAME));
     public static final RegistryObject<Block> GHOST_FIRE_TRAP_BLOCK = BLOCKS.register("ghost_fire_trap", GhostFireTrapBlock::new);
+    public static final RegistryObject<Block> CULT_STATUE = BLOCKS.register("cult_statue", CultStatueBlock::new);
 
     //Plants
     public static final RegistryObject<Block> HAUNTED_CACTUS = BLOCKS.register("haunted_cactus", HauntedCactusBlock::new);
@@ -414,9 +442,13 @@ public class ModBlocks {
     public static final RegistryObject<Item> ROTTEN_PUMPKIN_BLOCK_ITEM = BLOCK_ITEMS.register("rotten_pumpkin",
             () -> new BlockItemBase(ROTTEN_PUMPKIN.get()));
     public static final RegistryObject<Item> GRAND_TORCH_ITEM = BLOCK_ITEMS.register("grand_torch",
-            () -> new WallOrFloorItem(ModBlocks.GRAND_TORCH.get(), WALL_GRAND_TORCH.get(), (new Item.Properties()).tab(Goety.TAB)));
+            () -> new GrandTorchItem(ModBlocks.GRAND_TORCH.get(), WALL_GRAND_TORCH.get()));
+    public static final RegistryObject<Item> GRAND_SOUL_TORCH_ITEM = BLOCK_ITEMS.register("grand_soul_torch",
+            () -> new GrandTorchItem(ModBlocks.GRAND_SOUL_TORCH.get(), WALL_GRAND_SOUL_TORCH.get()));
     public static final RegistryObject<Item> GHOST_FIRE_TRAP_ITEM = BLOCK_ITEMS.register("ghost_fire_trap",
             () -> new BlockItemBase(GHOST_FIRE_TRAP_BLOCK.get()));
+    public static final RegistryObject<Item> CULT_STATUE_ITEM = BLOCK_ITEMS.register("cult_statue",
+            () -> new BlockItemBase(CULT_STATUE.get()));
 
     //RemnantItems
     public static final RegistryObject<Item> REMNANT_BLOCK_ITEM = BLOCK_ITEMS.register("remnant_block",

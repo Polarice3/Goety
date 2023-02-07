@@ -11,6 +11,9 @@ public class IModPieceType {
     public static IStructurePieceType DARK_MANOR_PIECE = registerStructurePiece(ConstantPaths.getDarkManor(), DarkManorPiece::new);
     public static IStructurePieceType PORTAL_OUTPOST_PIECE = registerStructurePiece(ConstantPaths.getPortalOutpost(), PortalOutpostPiece::new);
     public static IStructurePieceType RUINED_RITUAL_PIECE = registerStructurePiece(ConstantPaths.getRuinedRitual(), RuinedRitualPiece::new);
+    public static IStructurePieceType CRIMSON_SHRINE_PIECE = registerStructurePiece(ConstantPaths.getCrimsonShrine(), CrimsonShrinePiece::new);
+    public static IStructurePieceType WARPED_SHRINE_PIECE = registerStructurePiece(ConstantPaths.getWarpedShrine(), WarpedShrinePiece::new);
+    public static IStructurePieceType VALLEY_SHRINE_PIECE = registerStructurePiece(ConstantPaths.getValleyShrine(), ValleyShrinePiece::new);
 
     private static <T extends IStructurePieceType> T registerStructurePiece(ResourceLocation key, T type) {
         return Registry.register(Registry.STRUCTURE_PIECE, key, type);

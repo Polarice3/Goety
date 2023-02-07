@@ -11,7 +11,7 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -67,7 +67,7 @@ public class ZPiglinMinionEntity extends SummonedEntity {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         this.populateDefaultEquipmentSlots(pDifficulty);
         this.populateDefaultEquipmentEnchantments(pDifficulty);
-        if (this.getTrueOwner() instanceof MonsterEntity){
+        if (this.getTrueOwner() instanceof IMob || this.isHostile()){
             this.setWandering(true);
         }
         for(EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {

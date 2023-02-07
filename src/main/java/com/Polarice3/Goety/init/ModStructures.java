@@ -26,6 +26,9 @@ public class ModStructures {
     public static final RegistryObject<Structure<NoFeatureConfig>> CURSED_GRAVEYARD = STRUCTURES.register("cursed_graveyard", () -> (new CursedGraveyardStructure(NoFeatureConfig.CODEC)));
     public static final RegistryObject<Structure<NoFeatureConfig>> SALVAGED_FORT = STRUCTURES.register("salvaged_fort", SalvagedFortStructure::new);
     public static final RegistryObject<Structure<NoFeatureConfig>> DECREPIT_FORT = STRUCTURES.register("decrepit_fort", DecrepitFortStructure::new);
+    public static final RegistryObject<Structure<NoFeatureConfig>> CRIMSON_SHRINE = STRUCTURES.register("crimson_shrine", CrimsonShrineStructure::new);
+    public static final RegistryObject<Structure<NoFeatureConfig>> WARPED_SHRINE = STRUCTURES.register("warped_shrine", WarpedShrineStructure::new);
+    public static final RegistryObject<Structure<NoFeatureConfig>> VALLEY_SHRINE = STRUCTURES.register("valley_shrine", ValleyShrineStructure::new);
     public static final RegistryObject<Structure<RuinedRitualFeature>> RUINED_RITUAL = STRUCTURES.register("ruined_ritual",() -> (new RuinedRitualStructure(RuinedRitualFeature.CODEC)));
 
     public static void init(){
@@ -69,14 +72,28 @@ public class ModStructures {
                         MainConfig.RuinedRitualSeperation.get(),
                         1432101234),
                 true);
+        setupMapSpacingAndLand(
+                CRIMSON_SHRINE.get(),
+                new StructureSeparationSettings(MainConfig.CrimsonShrineSpacing.get(),
+                        MainConfig.CrimsonShrineSeperation.get(),
+                        1321010123),
+                true);
+        setupMapSpacingAndLand(
+                WARPED_SHRINE.get(),
+                new StructureSeparationSettings(MainConfig.WarpedShrineSpacing.get(),
+                        MainConfig.WarpedShrineSeperation.get(),
+                        1210101012),
+                true);
+        setupMapSpacingAndLand(
+                VALLEY_SHRINE.get(),
+                new StructureSeparationSettings(MainConfig.ValleyShrineSpacing.get(),
+                        MainConfig.ValleyShrineSeperation.get(),
+                        1101010101),
+                true);
 
     }
 
-    public static <F extends Structure<?>> void setupMapSpacingAndLand(
-            F structure,
-            StructureSeparationSettings structureSeparationSettings,
-            boolean transformSurroundingLand)
-    {
+    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings, boolean transformSurroundingLand) {
         Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 
         if(transformSurroundingLand){
@@ -100,8 +117,7 @@ public class ModStructures {
                 Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(structureMap);
                 tempMap.put(structure, structureSeparationSettings);
                 settings.getValue().structureSettings().structureConfig = tempMap;
-            }
-            else{
+            } else {
                 structureMap.put(structure, structureSeparationSettings);
             }
         });

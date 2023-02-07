@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "ici",
+    " w ",
+    " s "
+  ],
+  "key":
+  {
+    "c":
+    {
+      "tag": "minecraft:coals"
+    },
+    "i":
+    {
+      "tag": "forge:nuggets/iron"
+    },
+    "w":
+    {
+      "tag": "minecraft:planks"
+    },
+    "s":
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    }
+  },
+  "result":
+  {
+    "item": "goety:grand_soul_torch",
+    "count": 1
+  }
+}

@@ -201,7 +201,7 @@ public class GhostFireEntity extends GroundProjectileEntity {
         return entity.level.clip(new RayTraceContext(startPos, endPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
     }
 
-    private void dealDamageTo(LivingEntity target) {
+    public void dealDamageTo(LivingEntity target) {
         LivingEntity owner = this.getOwner();
         int burning = 0;
         float damage = 4.0F;

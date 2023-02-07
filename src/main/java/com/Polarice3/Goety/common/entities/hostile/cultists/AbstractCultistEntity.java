@@ -23,6 +23,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -45,13 +47,13 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
-public class AbstractCultistEntity extends AbstractRaiderEntity {
+public abstract class AbstractCultistEntity extends AbstractRaiderEntity {
     private static final DataParameter<Float> DATA_REINFORCEMENT_CHANCE = EntityDataManager.defineId(AbstractCultistEntity.class, DataSerializers.FLOAT);
     private BlockPos pilgrimTarget;
     private boolean pilgrimLeader;
     private boolean pilgrimage;
 
-    protected AbstractCultistEntity(EntityType<? extends AbstractRaiderEntity> type, World worldIn) {
+    protected AbstractCultistEntity(EntityType<? extends AbstractCultistEntity> type, World worldIn) {
         super(type, worldIn);
         this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 16.0F);
         this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, -1.0F);
@@ -265,8 +267,12 @@ public class AbstractCultistEntity extends AbstractRaiderEntity {
             }
         }
 
-        if (reason == SpawnReason.EVENT && worldIn.dimensionType().hasCeiling()){
+        if (reason == SpawnReason.EVENT && worldIn.getLevel().dimension() == World.NETHER){
             this.pilgrimage = true;
+        }
+
+        if ((reason == SpawnReason.NATURAL || reason == SpawnReason.STRUCTURE) && worldIn.getLevel().dimension() == World.NETHER){
+            this.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
         }
 
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
