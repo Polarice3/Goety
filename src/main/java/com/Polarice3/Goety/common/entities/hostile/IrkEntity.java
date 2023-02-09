@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.SoulBulletEntity;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.BlockState;
@@ -437,7 +437,7 @@ public class IrkEntity extends MonsterEntity {
                         }
                     }
                 }
-                if (this.summonedEntity.distanceToSqr(this.owner) > 144.0 && MainConfig.VexTeleport.get()){
+                if (this.summonedEntity.distanceToSqr(this.owner) > 144.0 && SpellConfig.VexTeleport.get()){
                     this.tryToTeleportNearEntity();
                 }
             }

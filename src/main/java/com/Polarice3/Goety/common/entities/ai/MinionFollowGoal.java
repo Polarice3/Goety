@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ai;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -99,7 +99,7 @@ public class MinionFollowGoal extends Goal {
                     }
                 }
             }
-            if (this.summonedEntity.distanceToSqr(this.owner) > 144.0 && MainConfig.VexTeleport.get()){
+            if (this.summonedEntity.distanceToSqr(this.owner) > 144.0 && SpellConfig.VexTeleport.get()){
                 this.tryToTeleportNearEntity();
             }
         }

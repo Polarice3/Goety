@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.enchantments;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 
@@ -18,6 +18,6 @@ public class DurationEnchantment extends FocusEnchantments{
     }
 
     public int getMaxLevel() {
-        return MainConfig.MaxDurationLevel.get();
+        return SpellConfig.MaxDurationLevel.get();
     }
 }

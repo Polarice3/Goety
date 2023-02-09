@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,12 +14,12 @@ import net.minecraft.world.server.ServerWorld;
 public class FeastSpell extends ChargingSpells {
 
     public int SoulCost() {
-        return MainConfig.FeastCost.get();
+        return SpellConfig.FeastCost.get();
     }
 
     @Override
     public int Cooldown() {
-        return MainConfig.FeastDuration.get();
+        return SpellConfig.FeastDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -39,7 +39,7 @@ public class FeastSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(MainConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving){
@@ -63,7 +63,7 @@ public class FeastSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(MainConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 }

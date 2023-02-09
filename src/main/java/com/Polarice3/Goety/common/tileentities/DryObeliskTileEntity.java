@@ -2,7 +2,10 @@ package com.Polarice3.Goety.common.tileentities;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.blocks.*;
+import com.Polarice3.Goety.common.blocks.DeadSandBlock;
+import com.Polarice3.Goety.common.blocks.DryObeliskBlock;
+import com.Polarice3.Goety.common.blocks.IDeadBlock;
+import com.Polarice3.Goety.common.blocks.TotemHeadBlock;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

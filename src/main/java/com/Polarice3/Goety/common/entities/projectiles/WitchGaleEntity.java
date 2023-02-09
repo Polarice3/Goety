@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -93,6 +94,7 @@ public class WitchGaleEntity extends DamagingProjectileEntity {
         } else {
             this.remove();
         }
+        float damage = SpellConfig.WitchGaleDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
         int enchantment = 0;
         int duration = 1;
         if (this.getTrueOwner() instanceof PlayerEntity){
@@ -117,7 +119,7 @@ public class WitchGaleEntity extends DamagingProjectileEntity {
                 if (MobUtil.validEntity(livingEntity) && livingEntity != this.getTrueOwner()) {
                     if (!this.level.isClientSide) {
                         if (this.isUpgraded()) {
-                            livingEntity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 2.0F + enchantment);
+                            livingEntity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), damage + enchantment);
                         }
                         livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 200 * duration, enchantment));
                         livingEntity.addEffect(new EffectInstance(Effects.WEAKNESS, 200 * duration, enchantment));

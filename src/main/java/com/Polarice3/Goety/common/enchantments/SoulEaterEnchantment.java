@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.enchantments;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -19,7 +19,7 @@ public class SoulEaterEnchantment extends Enchantment {
     }
 
     public int getMaxLevel() {
-        return MainConfig.MaxSoulEaterLevel.get();
+        return SpellConfig.MaxSoulEaterLevel.get();
     }
 
     public boolean checkCompatibility(Enchantment pEnch) {

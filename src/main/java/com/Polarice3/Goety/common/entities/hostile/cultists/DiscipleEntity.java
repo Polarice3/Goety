@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.neutral.ZPiglinBruteMinionEntity;
 import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -38,7 +39,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class DiscipleEntity extends SpellcastingCultistEntity implements ICultist{
+public class DiscipleEntity extends SpellcastingCultistEntity implements ICultist {
     private int f;
     private int cooldown;
     private int spellcycle;
@@ -63,9 +64,13 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 26.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.DiscipleHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected SoundEvent getAmbientSound() {

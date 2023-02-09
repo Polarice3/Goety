@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "fgf",
+    "flf"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:occultfabric"
+    },
+    "g":
+    {
+      "item": "minecraft:leather"
+    },
+    "l":
+    {
+      "item": "goety:lapis_string"
+    }
+  },
+  "result":
+  {
+    "item": "goety:illusionhelm",
+    "count": 1
+  }
+}

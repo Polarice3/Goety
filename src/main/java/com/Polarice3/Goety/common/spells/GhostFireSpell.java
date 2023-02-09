@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.Vector3dUtil;
@@ -20,11 +20,11 @@ import net.minecraft.world.server.ServerWorld;
 public class GhostFireSpell extends Spells{
 
     public int SoulCost() {
-        return MainConfig.WraithCost.get();
+        return SpellConfig.WraithCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.WraithDuration.get();
+        return SpellConfig.WraithDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -40,7 +40,7 @@ public class GhostFireSpell extends Spells{
                 range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
                 radius += WandUtil.getLevels(ModEnchantments.RADIUS.get(), playerEntity);
             }
-            this.IncreaseInfamy(MainConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         RayTraceResult rayTraceResult = this.rayTrace(worldIn, entityLiving, range, radius);
         if (rayTraceResult instanceof EntityRayTraceResult){
@@ -63,7 +63,7 @@ public class GhostFireSpell extends Spells{
                 range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
                 radius += WandUtil.getLevels(ModEnchantments.RADIUS.get(), playerEntity);
             }
-            this.IncreaseInfamy(MainConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         RayTraceResult rayTraceResult = this.rayTrace(worldIn, entityLiving, range, radius);
         if (rayTraceResult instanceof EntityRayTraceResult){

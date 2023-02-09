@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.ModFireballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +17,7 @@ public class FireballSpell extends InstantCastSpells{
 
     @Override
     public int SoulCost() {
-        return MainConfig.FireballCost.get();
+        return SpellConfig.FireballCost.get();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class FireballSpell extends InstantCastSpells{
         smallFireballEntity.setOwner(entityLiving);
         worldIn.addFreshEntity(smallFireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -65,6 +65,6 @@ public class FireballSpell extends InstantCastSpells{
             worldIn.addFreshEntity(smallFireballEntity2);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

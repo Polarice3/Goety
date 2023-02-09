@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ModDamageSource;
@@ -15,10 +15,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.server.ServerWorld;
 
 public class FireBreathSpell extends SpewingSpell{
+    public float damage = SpellConfig.FireBreathDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
 
     @Override
     public int SoulCost() {
-        return MainConfig.FireBreathCost.get();
+        return SpellConfig.FireBreathCost.get();
     }
 
     @Override
@@ -38,14 +39,14 @@ public class FireBreathSpell extends SpewingSpell{
                 burning += WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 15)) {
                 if (target != null) {
                     if (!target.fireImmune()) {
                         target.setSecondsOnFire(5 * burning);
-                        target.hurt(ModDamageSource.fireBreath(entityLiving), 2.0F + enchantment);
+                        target.hurt(ModDamageSource.fireBreath(entityLiving), damage + enchantment);
                     }
                 }
             }
@@ -65,14 +66,14 @@ public class FireBreathSpell extends SpewingSpell{
                 burning += WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 18)) {
                 if (target != null) {
                     if (!target.fireImmune()) {
                         target.setSecondsOnFire(8 * burning);
-                        target.hurt(ModDamageSource.fireBreath(entityLiving), 4.0F + enchantment);
+                        target.hurt(ModDamageSource.fireBreath(entityLiving), (damage * 2) + enchantment);
                     }
                 }
             }

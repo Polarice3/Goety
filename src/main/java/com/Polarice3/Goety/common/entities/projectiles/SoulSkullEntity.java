@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.ZombieMinionEntity;
@@ -11,6 +11,7 @@ import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -80,6 +81,7 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
             Entity owner = this.getOwner();
             boolean flag;
             boolean flag2;
+            float damage = SpellConfig.SoulSkullDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
             float enchantment = 0;
             int flaming = 0;
             if (owner instanceof LivingEntity) {
@@ -91,8 +93,13 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
                         enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                         flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                     }
+                } else if (livingentity instanceof MobEntity){
+                    MobEntity mob = (MobEntity) livingentity;
+                    if (mob.getAttribute(Attributes.ATTACK_DAMAGE) != null){
+                        damage = (float) mob.getAttributeValue(Attributes.ATTACK_DAMAGE);
+                    }
                 }
-                flag = target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
+                flag = target.hurt(DamageSource.indirectMagic(this, livingentity), damage + enchantment);
                 flag2 = RobeArmorFinder.FindNecroSet(livingentity);
                 if (livingentity instanceof SkullLordEntity){
                     if (target instanceof BoneLordEntity){
@@ -107,12 +114,12 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
                         }
                     } else {
                         livingentity.heal(1.0F);
-                        if (MainConfig.SoulSkullZombie.get()) {
+                        if (SpellConfig.SoulSkullZombie.get()) {
                             if (target instanceof ZombieEntity) {
                                 if (flag2) {
                                     ZombieMinionEntity summonedentity = ((ZombieEntity) target).convertTo(ModEntityType.ZOMBIE_MINION.get(), false);
                                     if (summonedentity != null) {
-                                        if (MainConfig.SoulSkullMinionWander.get()) {
+                                        if (SpellConfig.SoulSkullMinionWander.get()) {
                                             summonedentity.setWandering(true);
                                         }
                                         summonedentity.setTrueOwner(livingentity);
@@ -128,12 +135,12 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
                                 }
                             }
                         }
-                        if (MainConfig.SoulSkullSkeleton.get()) {
+                        if (SpellConfig.SoulSkullSkeleton.get()) {
                             if (target instanceof SkeletonEntity) {
                                 if (flag2) {
                                     SkeletonMinionEntity summonedentity = ((SkeletonEntity) target).convertTo(ModEntityType.SKELETON_MINION.get(), false);
                                     if (summonedentity != null) {
-                                        if (MainConfig.SoulSkullMinionWander.get()) {
+                                        if (SpellConfig.SoulSkullMinionWander.get()) {
                                             summonedentity.setWandering(true);
                                         }
                                         summonedentity.setTrueOwner(livingentity);
@@ -152,7 +159,7 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
                     }
                 }
             } else {
-                target.hurt(DamageSource.MAGIC, 6.0F);
+                target.hurt(DamageSource.MAGIC, damage);
             }
         }
     }

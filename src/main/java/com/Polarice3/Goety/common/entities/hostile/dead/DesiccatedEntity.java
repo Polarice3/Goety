@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.entity.*;
@@ -27,10 +29,11 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class DesiccatedEntity extends AbstractSkeletonEntity implements IDeadMob {
+public class DesiccatedEntity extends AbstractSkeletonEntity implements IDeadMob, ICustomAttributes {
 
     public DesiccatedEntity(EntityType<? extends AbstractSkeletonEntity> p_i48555_1_, World p_i48555_2_) {
         super(p_i48555_1_, p_i48555_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48555_1_, this);
     }
 
     protected void registerGoals() {
@@ -44,9 +47,14 @@ public class DesiccatedEntity extends AbstractSkeletonEntity implements IDeadMob
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, MobConfig.DesiccatedHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.DesiccatedDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected SoundEvent getAmbientSound() {

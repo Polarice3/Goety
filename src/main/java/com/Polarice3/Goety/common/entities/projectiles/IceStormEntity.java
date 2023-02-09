@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -97,6 +98,7 @@ public class IceStormEntity extends DamagingProjectileEntity {
             if (livingEntity != this.getTrueOwner() && livingEntity != this.getOwner()) {
                 int duration = 1;
                 boolean flag;
+                float damage = SpellConfig.IceStormDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
                 if (this.getTrueOwner() != null) {
                     float enchantment = 0;
                     if (this.getTrueOwner() instanceof PlayerEntity) {
@@ -106,9 +108,9 @@ public class IceStormEntity extends DamagingProjectileEntity {
                             duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                         }
                     }
-                    flag = livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getTrueOwner()), 1.0F + enchantment);
+                    flag = livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getTrueOwner()), damage + enchantment);
                 } else {
-                    flag = livingEntity.hurt(ModDamageSource.FROST, 1.0F);
+                    flag = livingEntity.hurt(ModDamageSource.FROST, damage);
                 }
                 if (!this.level.isClientSide) {
                     if (flag){

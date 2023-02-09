@@ -225,7 +225,7 @@ public class SoulWand extends Item{
     public void useParticles(World worldIn, PlayerEntity playerIn){
         for (int i = 0; i < playerIn.level.random.nextInt(35) + 10; ++i) {
             double d = worldIn.random.nextGaussian() * 0.2D;
-            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, playerIn.getX(), playerIn.getEyeY(), playerIn.getZ(), d, d, d);
+            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, playerIn.getX(), playerIn.getBoundingBox().maxY + 0.5D, playerIn.getZ(), d, d, d);
         }
     }
 

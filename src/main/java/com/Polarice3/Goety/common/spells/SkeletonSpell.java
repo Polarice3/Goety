@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.AbstractSMEntity;
 import com.Polarice3.Goety.common.entities.ally.SkeletonMinionEntity;
@@ -26,15 +26,15 @@ import net.minecraft.world.server.ServerWorld;
 public class SkeletonSpell extends SummonSpells{
 
     public int SoulCost() {
-        return MainConfig.SkeletonCost.get();
+        return SpellConfig.SkeletonCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.SkeletonDuration.get();
+        return SpellConfig.SkeletonDuration.get();
     }
 
     public int SummonDownDuration() {
-        return MainConfig.SkeletonCooldown.get();
+        return SpellConfig.SkeletonCooldown.get();
     }
 
     public SoundEvent CastingSound() {
@@ -48,7 +48,7 @@ public class SkeletonSpell extends SummonSpells{
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.SkeletonInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.SkeletonInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
@@ -75,11 +75,11 @@ public class SkeletonSpell extends SummonSpells{
             }
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(blockPos, 0.0F, 0.0F);
-            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(this.NecroPower(entityLiving));
             summonedentity.setArrowPower(enchantment);
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             this.SummonSap(entityLiving, summonedentity);
             worldIn.addFreshEntity(summonedentity);
             worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
@@ -105,8 +105,8 @@ public class SkeletonSpell extends SummonSpells{
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setArrowPower(enchantment);
+                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 this.SummonSap(entityLiving, summonedentity);
                 worldIn.addFreshEntity(summonedentity);
                 for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
@@ -79,7 +79,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
                         spiderEntity.setTarget(this.getTarget());
                     }
                 } else {
-                    if (MainConfig.RoyalSpiderMinions.get()) {
+                    if (SpellConfig.RoyalSpiderMinions.get()) {
                         spiderEntity.getLookControl().setLookAt(this, 10.0F, (float) spiderEntity.getMaxHeadXRot());
                         if (spiderEntity.distanceTo(this) > 2.0F) {
                             spiderEntity.getNavigation().moveTo(this, 1.0F);
@@ -120,11 +120,11 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         if (this.isRideable()){
             this.maxUpStep = 1.0F;
         }
-        if (MainConfig.TamedSpiderHeal.get() && this.getHealth() < this.getMaxHealth()){
+        if (SpellConfig.TamedSpiderHeal.get() && this.getHealth() < this.getMaxHealth()){
             if (this.getTrueOwner() != null && this.getTrueOwner() instanceof PlayerEntity) {
                 if (RobeArmorFinder.FindFelHelm(this.getTrueOwner())) {
                     PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
-                    int SoulCost = MainConfig.TamedSpiderHealCost.get();
+                    int SoulCost = SpellConfig.TamedSpiderHealCost.get();
                     if (RobeArmorFinder.FindLeggings(owner)){
                         int random = this.random.nextInt(2);
                         if (random == 0){

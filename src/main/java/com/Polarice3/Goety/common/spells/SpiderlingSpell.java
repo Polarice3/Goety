@@ -1,13 +1,16 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.SpiderlingMinionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -19,11 +22,11 @@ public class SpiderlingSpell extends ChargingSpells{
 
     @Override
     public int Cooldown() {
-        return MainConfig.SpiderlingDuration.get();
+        return SpellConfig.SpiderlingDuration.get();
     }
 
     public int SoulCost() {
-        return MainConfig.SpiderlingCost.get();
+        return SpellConfig.SpiderlingCost.get();
     }
 
     public SoundEvent CastingSound() {
@@ -46,8 +49,9 @@ public class SpiderlingSpell extends ChargingSpells{
                 }
                 summonedentity.setLimitedLife(180 * duration);
             }
-            this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
         }
+        summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
         worldIn.addFreshEntity(summonedentity);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
@@ -69,8 +73,9 @@ public class SpiderlingSpell extends ChargingSpells{
                     }
                     summonedentity.setLimitedLife(180 * duration);
                 }
-                this.IncreaseInfamy(MainConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
+                this.IncreaseInfamy(SpellConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
             }
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             worldIn.addFreshEntity(summonedentity);
         }
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);

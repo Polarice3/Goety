@@ -104,6 +104,16 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> HUSKARL_HURT = create("huskarl_hurt");
     public static final RegistryObject<SoundEvent> HUSKARL_DEATH = create("huskarl_death");
 
+    public static final RegistryObject<SoundEvent> FALLEN_AMBIENT = create("fallen_ambient");
+    public static final RegistryObject<SoundEvent> FALLEN_HURT = create("fallen_hurt");
+    public static final RegistryObject<SoundEvent> FALLEN_ANGRY = create("fallen_angry");
+    public static final RegistryObject<SoundEvent> FALLEN_DEATH = create("fallen_death");
+
+    public static final RegistryObject<SoundEvent> MARCIRE_AMBIENT = create("marcire_ambient");
+    public static final RegistryObject<SoundEvent> MARCIRE_HURT = create("marcire_hurt");
+    public static final RegistryObject<SoundEvent> MARCIRE_ANGRY = create("marcire_angry");
+    public static final RegistryObject<SoundEvent> MARCIRE_DEATH = create("marcire_death");
+
     public static final RegistryObject<SoundEvent> DREDEN_AMBIENT = create("dreden_ambient");
     public static final RegistryObject<SoundEvent> DREDEN_HURT = create("dreden_hurt");
     public static final RegistryObject<SoundEvent> DREDEN_FLY = create("dreden_fly");
@@ -118,13 +128,11 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> WRAITH_TELEPORT = create("wraith_teleport");
     public static final RegistryObject<SoundEvent> WRAITH_DEATH = create("wraith_death");
 
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_AMBIENT = create("pit_wraith_ambient");
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_HURT = create("pit_wraith_hurt");
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_FLY = create("pit_wraith_fly");
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_ATTACK = create("pit_wraith_attack");
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_TELEPORT_IN = create("pit_wraith_teleport_in");
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_TELEPORT_OUT = create("pit_wraith_teleport_out");
-    public static final RegistryObject<SoundEvent> PIT_WRAITH_DEATH = create("pit_wraith_death");
+    public static final RegistryObject<SoundEvent> HOGLORD_AMBIENT = create("hoglord_ambient");
+    public static final RegistryObject<SoundEvent> HOGLORD_HURT = create("hoglord_hurt");
+    public static final RegistryObject<SoundEvent> HOGLORD_RAGE = create("hoglord_rage");
+    public static final RegistryObject<SoundEvent> HOGLORD_SUMMON = create("hoglord_summon");
+    public static final RegistryObject<SoundEvent> HOGLORD_DEATH = create("hoglord_death");
 
     public static final RegistryObject<SoundEvent> VIZIER_AMBIENT = create("vizier_ambient");
     public static final RegistryObject<SoundEvent> VIZIER_HURT = create("vizier_hurt");

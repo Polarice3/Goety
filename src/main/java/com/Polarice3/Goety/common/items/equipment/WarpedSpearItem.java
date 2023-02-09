@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.items.equipment;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.projectiles.WarpedSpearEntity;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -28,9 +29,9 @@ public class WarpedSpearItem extends Item implements IVanishable {
     private final Multimap<Attribute, AttributeModifier> warpedspearattributes;
 
     public WarpedSpearItem() {
-        super(new Properties().durability(250).tab(Goety.TAB).fireResistant());
+        super(new Properties().durability(MainConfig.WarpedSpearDurability.get()).tab(Goety.TAB).fireResistant());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 9.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", MainConfig.WarpedSpearDamage.get() - 1.0D, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-2.9F, AttributeModifier.Operation.ADDITION));
         this.warpedspearattributes = builder.build();
     }
@@ -103,7 +104,7 @@ public class WarpedSpearItem extends Item implements IVanishable {
     }
 
     public int getEnchantmentValue() {
-        return 1;
+        return MainConfig.WarpedSpearEnchantability.get();
     }
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {

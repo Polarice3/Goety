@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.DrownedMinionEntity;
 import com.Polarice3.Goety.common.entities.ally.HuskMinionEntity;
@@ -29,15 +29,15 @@ import net.minecraft.world.server.ServerWorld;
 public class ZombieSpell extends SummonSpells{
 
     public int SoulCost() {
-        return MainConfig.ZombieCost.get();
+        return SpellConfig.ZombieCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.ZombieDuration.get();
+        return SpellConfig.ZombieDuration.get();
     }
 
     public int SummonDownDuration() {
-        return MainConfig.ZombieCooldown.get();
+        return SpellConfig.ZombieCooldown.get();
     }
 
     public SoundEvent CastingSound() {
@@ -51,7 +51,7 @@ public class ZombieSpell extends SummonSpells{
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
@@ -85,10 +85,10 @@ public class ZombieSpell extends SummonSpells{
             }
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(blockPos, 0.0F, 0.0F);
-            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(this.NecroPower(entityLiving));
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             if (enchantment > 0){
                 int boost = MathHelper.clamp(enchantment - 1, 0, 10);
                 summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost, false, false));
@@ -121,10 +121,10 @@ public class ZombieSpell extends SummonSpells{
                 }
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(blockPos, 0.0F, 0.0F);
-                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
+                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                 if (enchantment > 0){
                     int boost = MathHelper.clamp(enchantment - 1, 0, 10);
                     summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost, false, false));

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -49,7 +49,7 @@ public class CreeperlingMinionEntity extends SummonedEntity implements IChargeab
     private int oldSwell;
     private int swell;
     private int maxSwell = 15;
-    private double explosionRadius = MainConfig.CreeperlingExplosionRadius.get();
+    private double explosionRadius = SpellConfig.CreeperlingExplosionRadius.get();
 
     public CreeperlingMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
         super(type, worldIn);

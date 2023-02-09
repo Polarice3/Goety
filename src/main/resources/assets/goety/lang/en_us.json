@@ -217,6 +217,10 @@
   "item.goety.felarmoredhelm": "Fel Battle Helm",
   "item.goety.felarmoredrobe": "Fel Battle Robe",
   "item.goety.felbootsofwander": "Fel Boots of Wander",
+  "item.goety.illusionhelm": "Illusive Helm",
+  "item.goety.illusionrobe": "Illusive Robe",
+  "item.goety.illusionleggings": "Illusive Leggings",
+  "item.goety.illusionbootsofwander": "Illusive Boots of Wander",
   "item.goety.cultisthelm": "Cultist Helm",
   "item.goety.cultistrobe": "Cultist Robe",
   "item.goety.cultistarmoredhelm": "Cultist Battle Helm",
@@ -310,6 +314,7 @@
 
   "item.goety.darkfabric": "Dark Fabric",
   "item.goety.magicfabric": "Magic Fabric",
+  "item.goety.occultfabric": "Occult Fabric",
   "item.goety.nether_book": "Liber Barathrum",
   "item.goety.nether_book_translated": "Liber Barathrum - Translated",
   "item.goety.deadbat": "Carrion Bat",
@@ -655,6 +660,16 @@
   "subtitle.goety.huskarl_hurt": "Huskarl hurts",
   "subtitle.goety.huskarl_death": "Huskarl dies",
 
+  "subtitle.goety.fallen_ambient": "Fallen groans",
+  "subtitle.goety.fallen_angry": "Fallen growls",
+  "subtitle.goety.fallen_hurt": "Fallen hurts",
+  "subtitle.goety.fallen_death": "Fallen dies",
+
+  "subtitle.goety.marcire_ambient": "Marcire groans",
+  "subtitle.goety.marcire_angry": "Marcire growls",
+  "subtitle.goety.marcire_hurt": "Marcire hurts",
+  "subtitle.goety.marcire_death": "Marcire dies",
+
   "subtitle.goety.dreden_ambient": "Dreden dreads",
   "subtitle.goety.dreden_hurt": "Dreden hurts",
   "subtitle.goety.dreden_fly": "Dreden floats",
@@ -668,6 +683,12 @@
   "subtitle.goety.wraith_fire": "Ghost Fire burns",
   "subtitle.goety.wraith_teleport": "Wraith teleports",
   "subtitle.goety.wraith_death": "Wraith dies",
+
+  "subtitle.goety.hoglord_ambient": "Hoglord growls",
+  "subtitle.goety.hoglord_hurt": "Hoglord hurts",
+  "subtitle.goety.hoglord_rage": "Hoglord rages",
+  "subtitle.goety.hoglord_summon": "Hoglord calls",
+  "subtitle.goety.hoglord_death": "Hoglord dies",
 
   "subtitle.goety.vizier_ambient": "Vizier vizies",
   "subtitle.goety.vizier_hurt": "Vizier hurts",

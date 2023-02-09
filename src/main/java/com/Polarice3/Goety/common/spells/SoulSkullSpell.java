@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +14,7 @@ public class SoulSkullSpell extends InstantCastSpells {
 
     @Override
     public int SoulCost() {
-        return MainConfig.SoulSkullCost.get();
+        return SpellConfig.SoulSkullCost.get();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SoulSkullSpell extends InstantCastSpells {
         soulSkullEntity.setOwner(entityLiving);
         worldIn.addFreshEntity(soulSkullEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.SoulSkullInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.SoulSkullInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -71,6 +71,6 @@ public class SoulSkullSpell extends InstantCastSpells {
             worldIn.addFreshEntity(soulSkullEntity1);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.SoulSkullInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.SoulSkullInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

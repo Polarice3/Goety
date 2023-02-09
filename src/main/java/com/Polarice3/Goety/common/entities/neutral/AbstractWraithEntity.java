@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.FloatSwimGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
@@ -38,7 +40,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class AbstractWraithEntity extends SummonedEntity {
+public abstract class AbstractWraithEntity extends SummonedEntity implements ICustomAttributes{
     private static final DataParameter<Integer> BURNING_LEVEL = EntityDataManager.defineId(AbstractWraithEntity.class, DataSerializers.INT);
     private static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(AbstractWraithEntity.class, DataSerializers.BYTE);
     public int fireTick;
@@ -52,6 +54,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
 
     public AbstractWraithEntity(EntityType<? extends SummonedEntity> p_i48553_1_, World p_i48553_2_) {
         super(p_i48553_1_, p_i48553_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48553_1_, this);
         this.moveControl = new MobUtil.WraithMoveController(this);
         this.maxUpStep = 1.0F;
         this.fireTick = 0;
@@ -74,10 +77,14 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 25.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.WraithHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.WraithDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {
@@ -313,8 +320,10 @@ public abstract class AbstractWraithEntity extends SummonedEntity {
                         }
                     }
                 } else {
-                    if (!this.isStaying()) {
-                        this.setIsTeleporting(true);
+                    if (MainConfig.WraithAggressiveTeleport.get()) {
+                        if (!this.isStaying()) {
+                            this.setIsTeleporting(true);
+                        }
                     }
                 }
             } else {

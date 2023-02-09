@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.enchantments;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import net.minecraft.inventory.EquipmentSlotType;
 
 public class RangeEnchantment extends FocusEnchantments{
@@ -17,6 +17,6 @@ public class RangeEnchantment extends FocusEnchantments{
     }
 
     public int getMaxLevel() {
-        return MainConfig.MaxRangeLevel.get();
+        return SpellConfig.MaxRangeLevel.get();
     }
 }

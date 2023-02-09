@@ -9,13 +9,17 @@
   "duration": 10,
   "ingredients": [
     {
-      "item": "minecraft:fermented_spider_eye"
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:weakness\"}"
     },
     {
       "item": "goety:poisonballfocus"
     },
     {
-      "item": "minecraft:sugar"
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:slowness\"}"
     },
     {
       "item": "minecraft:nether_wart"

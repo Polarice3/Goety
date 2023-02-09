@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -20,7 +20,7 @@ public class AcidBreathSpell extends SpewingSpell{
 
     @Override
     public int SoulCost() {
-        return MainConfig.EnderAcidCost.get();
+        return SpellConfig.EnderAcidCost.get();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class AcidBreathSpell extends SpewingSpell{
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.EnderAcidInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.EnderAcidInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 15)) {
@@ -69,7 +69,7 @@ public class AcidBreathSpell extends SpewingSpell{
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.EnderAcidInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.EnderAcidInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 18)) {

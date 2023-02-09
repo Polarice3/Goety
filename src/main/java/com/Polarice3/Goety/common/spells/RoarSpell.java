@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -20,13 +20,14 @@ import java.util.function.Predicate;
 
 public class RoarSpell extends Spells {
     private static final Predicate<Entity> field_213690_b = Entity::isAlive;
+    public float damage = SpellConfig.RoarDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
 
     public int SoulCost() {
-        return MainConfig.RoarCost.get();
+        return SpellConfig.RoarCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.RoarDuration.get();
+        return SpellConfig.RoarDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -44,11 +45,11 @@ public class RoarSpell extends Spells {
                 radius = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player);
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
-            this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.RoarInfamyChance.get(), player);
         }
         for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(4.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
-                entity.hurt(DamageSource.mobAttack(entityLiving), 3.0F + enchantment);
+                entity.hurt(DamageSource.mobAttack(entityLiving), damage + enchantment);
                 if (flaming){
                     entity.setSecondsOnFire(30);
                 }
@@ -86,11 +87,11 @@ public class RoarSpell extends Spells {
                 radius = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player);
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
-            this.IncreaseInfamy(MainConfig.RoarInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.RoarInfamyChance.get(), player);
         }
         for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(8.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
-                entity.hurt(DamageSource.mobAttack(entityLiving), 6.0F + enchantment);
+                entity.hurt(DamageSource.mobAttack(entityLiving), (damage * 2) + enchantment);
                 if (flaming){
                     entity.setSecondsOnFire(60);
                 }

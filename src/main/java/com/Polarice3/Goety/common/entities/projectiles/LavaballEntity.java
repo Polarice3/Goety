@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -63,6 +64,7 @@ public class LavaballEntity extends ExplosiveProjectileEntity {
         if (!this.level.isClientSide) {
             Entity entity = pResult.getEntity();
             Entity entity1 = this.getOwner();
+            float damage = 6.0F;
             float enchantment = 0;
             int flaming = 0;
             if (entity1 instanceof PlayerEntity){
@@ -71,8 +73,9 @@ public class LavaballEntity extends ExplosiveProjectileEntity {
                     enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                     flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                 }
+                damage = SpellConfig.LavaballDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
             }
-            entity.hurt(ModDamageSource.modFireball(this.getOwner(), this.level), 6.0F + enchantment);
+            entity.hurt(ModDamageSource.modFireball(this.getOwner(), this.level), damage + enchantment);
 
             if (flaming != 0){
                 entity.setSecondsOnFire(5 + flaming);

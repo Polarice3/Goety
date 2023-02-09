@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.DeadSandExplosion;
 import com.Polarice3.Goety.utils.ExplosionUtil;
@@ -39,7 +41,7 @@ import java.util.List;
         value = Dist.CLIENT,
         _interface = IChargeableMob.class
 )
-public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeableMob {
+public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeableMob, ICustomAttributes {
     private static final DataParameter<Integer> DATA_SWELL_DIR = EntityDataManager.defineId(BoomerEntity.class, DataSerializers.INT);
     private static final DataParameter<Boolean> DATA_IS_POWERED = EntityDataManager.defineId(BoomerEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_IS_IGNITED = EntityDataManager.defineId(BoomerEntity.class, DataSerializers.BOOLEAN);
@@ -50,6 +52,7 @@ public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeable
 
     public BoomerEntity(EntityType<? extends BoomerEntity> p_i50213_1_, World p_i50213_2_) {
         super(p_i50213_1_, p_i50213_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i50213_1_, this);
     }
 
     protected void registerGoals() {
@@ -66,10 +69,14 @@ public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeable
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.BoomerHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 16.0F)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.25F)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected ResourceLocation getDefaultLootTable() {

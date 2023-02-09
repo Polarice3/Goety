@@ -4,6 +4,7 @@ import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
@@ -31,7 +32,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-public class OwnedEntity extends CreatureEntity implements IOwned{
+public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttributes{
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
     protected static final DataParameter<Boolean> HOSTILE = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
     private final NearestAttackableTargetGoal<PlayerEntity> targetGoal = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true);
@@ -40,6 +41,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
 
     protected OwnedEntity(EntityType<? extends OwnedEntity> type, World worldIn) {
         super(type, worldIn);
+        ICustomAttributes.applyAttributesForEntity(type, this);
         this.checkHostility();
     }
 
@@ -47,6 +49,10 @@ public class OwnedEntity extends CreatureEntity implements IOwned{
         super.registerGoals();
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return null;
     }
 
     public void checkHostility() {

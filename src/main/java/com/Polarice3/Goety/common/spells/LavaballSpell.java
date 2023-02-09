@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.LavaballEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,11 +14,11 @@ public class LavaballSpell extends Spells{
 
     @Override
     public int SoulCost() {
-        return MainConfig.LavaballCost.get();
+        return SpellConfig.LavaballCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.LavaballDuration.get();
+        return SpellConfig.LavaballDuration.get();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LavaballSpell extends Spells{
         }
         worldIn.addFreshEntity(fireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -77,6 +77,6 @@ public class LavaballSpell extends Spells{
             worldIn.addFreshEntity(lavaballEntity);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

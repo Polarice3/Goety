@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.PhantomMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -22,15 +22,15 @@ import net.minecraft.world.server.ServerWorld;
 public class PhantomSpell extends SummonSpells {
 
     public int SoulCost() {
-        return MainConfig.PhantomCost.get();
+        return SpellConfig.PhantomCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.PhantomDuration.get();
+        return SpellConfig.PhantomDuration.get();
     }
 
     public int SummonDownDuration() {
-        return MainConfig.PhantomCooldown.get();
+        return SpellConfig.PhantomCooldown.get();
     }
 
     public SoundEvent CastingSound() {
@@ -44,7 +44,7 @@ public class PhantomSpell extends SummonSpells {
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.PhantomInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.PhantomInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {

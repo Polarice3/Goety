@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.armors.ModArmorMaterial;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
@@ -575,7 +576,7 @@ public class ModEvents {
             if (summonedEntity.getTrueOwner() == player){
                 if (summonedEntity instanceof ZombieMinionEntity){
                     ++zombies;
-                    if (MainConfig.ZombieLimit.get() < zombies){
+                    if (SpellConfig.ZombieLimit.get() < zombies){
                         if (summonedEntity.tickCount % 20 == 0){
                             summonedEntity.hurt(DamageSource.STARVE, 5.0F);
                         }
@@ -583,7 +584,7 @@ public class ModEvents {
                 }
                 if (summonedEntity instanceof AbstractSMEntity || summonedEntity instanceof AbstractWraithEntity){
                     ++skeletons;
-                    if (MainConfig.SkeletonLimit.get() < skeletons){
+                    if (SpellConfig.SkeletonLimit.get() < skeletons){
                         if (summonedEntity.tickCount % 20 == 0){
                             summonedEntity.hurt(DamageSource.STARVE, 5.0F);
                         }
@@ -591,7 +592,7 @@ public class ModEvents {
                 }
                 if (summonedEntity instanceof UndeadWolfEntity){
                     ++wolves;
-                    if (MainConfig.UndeadWolfLimit.get() < wolves){
+                    if (SpellConfig.UndeadWolfLimit.get() < wolves){
                         if (summonedEntity.tickCount % 20 == 0){
                             summonedEntity.hurt(DamageSource.STARVE, 5.0F);
                         }
@@ -996,14 +997,14 @@ public class ModEvents {
                 event.setCanceled(true);
             }
         }
-        if (MainConfig.MinionsMasterImmune.get()){
+        if (SpellConfig.MinionsMasterImmune.get()){
             if (attacker instanceof IOwned){
                 if (((IOwned) attacker).getTrueOwner() == victim){
                     event.setCanceled(true);
                 }
             }
         }
-        if (MainConfig.OwnerAttackCancel.get()){
+        if (SpellConfig.OwnerAttackCancel.get()){
             if (attacker != null) {
                 if (victim instanceof IOwned) {
                     if (((IOwned) victim).getTrueOwner() == attacker) {
@@ -1079,7 +1080,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void PlayerAttackEvent(AttackEntityEvent event){
-        if (MainConfig.OwnerAttackCancel.get()) {
+        if (SpellConfig.OwnerAttackCancel.get()) {
             if (event.getTarget() instanceof IOwned){
                 if (((IOwned) event.getTarget()).getTrueOwner() == event.getPlayer()) {
                     event.setCanceled(true);
@@ -1142,6 +1143,20 @@ public class ModEvents {
             }
             if (RobeArmorFinder.FindNecroBootsofWander(entity)){
                 if (undead){
+                    event.modifyVisibility(0.2);
+                }
+            }
+            if (entity.isInvisible()){
+                if (RobeArmorFinder.FindIllusionHelm(entity)){
+                    event.modifyVisibility(0.1);
+                }
+                if (RobeArmorFinder.FindIllusionArmor(entity)){
+                    event.modifyVisibility(0.4);
+                }
+                if (RobeArmorFinder.FindIllusionLeggings(entity)){
+                    event.modifyVisibility(0.3);
+                }
+                if (RobeArmorFinder.FindIllusionBootsofWander(entity)){
                     event.modifyVisibility(0.2);
                 }
             }
@@ -1525,6 +1540,11 @@ public class ModEvents {
         }
         if (event.getPotionEffect().getEffect() == ModEffects.SAPPED.get()){
             if (event.getEntityLiving().hasEffect(ModEffects.CURSED.get())){
+                event.setResult(Event.Result.DENY);
+            }
+        }
+        if (event.getPotionEffect().getEffect() == Effects.BLINDNESS){
+            if (RobeArmorFinder.FindIllusionHelm(event.getEntityLiving())){
                 event.setResult(Event.Result.DENY);
             }
         }

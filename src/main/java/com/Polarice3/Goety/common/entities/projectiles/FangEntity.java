@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -175,9 +176,10 @@ public class FangEntity extends Entity {
 
     private void dealDamageTo(LivingEntity target) {
         LivingEntity livingentity = this.getOwner();
+        float baseDamage = SpellConfig.FangDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
         if (target.isAlive() && !target.isInvulnerable() && target != livingentity) {
             if (livingentity == null) {
-                target.hurt(DamageSource.MAGIC, 6.0F);
+                target.hurt(DamageSource.MAGIC, baseDamage);
             } else {
                 if (target.isAlliedTo(livingentity)){
                     return;
@@ -188,7 +190,7 @@ public class FangEntity extends Entity {
                 if (livingentity instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) livingentity;
                     if (this.isTotemSpawned()){
-                        target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + damage);
+                        target.hurt(DamageSource.indirectMagic(this, livingentity), baseDamage + damage);
                         if (burning > 0){
                             target.setSecondsOnFire(5 * burning);
                         }
@@ -199,13 +201,13 @@ public class FangEntity extends Entity {
                             enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                             burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                         }
-                        target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F + enchantment);
+                        target.hurt(DamageSource.indirectMagic(this, livingentity), baseDamage + enchantment);
                         if (burning > 0){
                             target.setSecondsOnFire(5 * burning);
                         }
                     }
                 } else {
-                    target.hurt(DamageSource.indirectMagic(this, livingentity), 6.0F);
+                    target.hurt(DamageSource.indirectMagic(this, livingentity), baseDamage);
                 }
             }
         }

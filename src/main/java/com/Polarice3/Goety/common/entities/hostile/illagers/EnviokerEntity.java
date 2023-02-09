@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SwordProjectileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.SoundUtil;
@@ -38,10 +40,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class EnviokerEntity extends HuntingIllagerEntity {
+public class EnviokerEntity extends HuntingIllagerEntity implements ICustomAttributes {
 
     public EnviokerEntity(EntityType<? extends EnviokerEntity> p_i50207_1_, World p_i50207_2_) {
         super(p_i50207_1_, p_i50207_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i50207_1_, this);
         this.xpReward = 20;
     }
 
@@ -57,9 +60,13 @@ public class EnviokerEntity extends HuntingIllagerEntity {
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MAX_HEALTH, 24.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.EnviokerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, 5.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.EnviokerDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {

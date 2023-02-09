@@ -1,20 +1,16 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
-import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.entities.ai.FarmingGoal;
 import com.Polarice3.Goety.utils.EntityFinder;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryHelper;
@@ -23,10 +19,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.HopperTileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -36,10 +33,10 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FarmerMinionEntity extends SummonedEntity {
+public class FarmerMinionEntity extends ZombieMinionEntity {
     public final Inventory inventory = new Inventory(8);
 
-    public FarmerMinionEntity(EntityType<? extends SummonedEntity> type, World worldIn) {
+    public FarmerMinionEntity(EntityType<? extends ZombieMinionEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -50,21 +47,10 @@ public class FarmerMinionEntity extends SummonedEntity {
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new FarmingGoal<>(this));
         this.goalSelector.addGoal(3, new TakeSeedGoal(this));
-        this.goalSelector.addGoal(4, new CreatureZombieAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 10));
         this.goalSelector.addGoal(9, new LookAtGoal(this, PlayerEntity.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtGoal(this, MobEntity.class, 8.0F));
-    }
-
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
-                .add(Attributes.ARMOR, 2.0D);
     }
 
     @Override
@@ -152,46 +138,7 @@ public class FarmerMinionEntity extends SummonedEntity {
             }
 
         }
-        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayerEntity) {
-            this.getTrueOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
-        }
         super.die(pCause);
-    }
-
-    public boolean doHurtTarget(Entity entityIn) {
-        boolean flag = super.doHurtTarget(entityIn);
-        if (flag) {
-            float f = this.level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            if (this.getMainHandItem().isEmpty() && this.isOnFire() && this.random.nextFloat() < f * 0.3F) {
-                entityIn.setSecondsOnFire(2 * (int)f);
-            }
-        }
-
-        return flag;
-    }
-
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.ZOMBIE_AMBIENT;
-    }
-
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.ZOMBIE_HURT;
-    }
-
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.ZOMBIE_DEATH;
-    }
-
-    protected SoundEvent getStepSound() {
-        return SoundEvents.ZOMBIE_STEP;
-    }
-
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(this.getStepSound(), 0.15F, 1.0F);
-    }
-
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.UNDEAD;
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {

@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -47,7 +49,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UrbhadhachEntity extends MonsterEntity {
+public class UrbhadhachEntity extends MonsterEntity implements ICustomAttributes {
     private static final DataParameter<Boolean> DATA_STANDING_ID = EntityDataManager.defineId(UrbhadhachEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_THRALLING_ID = EntityDataManager.defineId(UrbhadhachEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> DATA_ROAR_ID = EntityDataManager.defineId(UrbhadhachEntity.class, DataSerializers.INT);
@@ -61,6 +63,7 @@ public class UrbhadhachEntity extends MonsterEntity {
 
     public UrbhadhachEntity(EntityType<? extends MonsterEntity> p_i48553_1_, World p_i48553_2_) {
         super(p_i48553_1_, p_i48553_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48553_1_, this);
         this.maxUpStep = 1.0F;
         this.xpReward = 10;
         this.moveControl = new MoveHelperController(this);
@@ -83,11 +86,15 @@ public class UrbhadhachEntity extends MonsterEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 32.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.UrbhadhachHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 20.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.UrbhadhachDamage.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.25D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public CreatureAttribute getMobType() {

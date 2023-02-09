@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -450,7 +450,7 @@ public class DrownedMinionEntity extends ZombieMinionEntity implements IRangedAt
                 this.pathedTargetY = this.owner.getY();
                 this.pathedTargetZ = this.owner.getZ();
                 this.ticksUntilNextPathRecalculation = 4 + this.summonedEntity.getRandom().nextInt(7);
-                if (d0 > 144.0D && MainConfig.UndeadTeleport.get()){
+                if (d0 > 144.0D && SpellConfig.UndeadTeleport.get()){
                     this.tryToTeleportNearEntity();
                 }
                 if (d0 > 1024.0D) {

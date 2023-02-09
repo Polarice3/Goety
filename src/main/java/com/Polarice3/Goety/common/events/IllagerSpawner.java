@@ -156,7 +156,7 @@ public class IllagerSpawner {
                                                 blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
                                             }
                                         }
-                                        if (j1 >= MainConfig.InfamyThreshold.get() * 12) {
+                                        if (j1 >= MainConfig.InfamyThreshold.get() * 12 && MainConfig.InfamyBadOmen.get()) {
                                             if (!playerentity.hasEffect(Effects.BAD_OMEN)) {
                                                 playerentity.addEffect(new EffectInstance(Effects.BAD_OMEN, 120000, 0, false, false));
                                             }
@@ -485,11 +485,6 @@ public class IllagerSpawner {
 
                         blockpos$mutable.setX(blockpos$mutable.getX() + random.nextInt(5) - random.nextInt(5));
                         blockpos$mutable.setZ(blockpos$mutable.getZ() + random.nextInt(5) - random.nextInt(5));
-                    }
-                }
-                if (j1 >= MainConfig.InfamyThreshold.get() * 12) {
-                    if (!playerentity.hasEffect(Effects.BAD_OMEN)) {
-                        playerentity.addEffect(new EffectInstance(Effects.BAD_OMEN, 120000, 0, false, false));
                     }
                 }
                 this.ticksUntilSpawn += MainConfig.InfamySpawnFreq.get();

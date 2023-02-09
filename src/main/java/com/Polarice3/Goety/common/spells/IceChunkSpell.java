@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.IceChunkEntity;
 import com.Polarice3.Goety.init.ModSounds;
@@ -19,11 +19,11 @@ import net.minecraft.world.server.ServerWorld;
 public class IceChunkSpell extends Spells{
 
     public int SoulCost() {
-        return MainConfig.IceChunkCost.get();
+        return SpellConfig.IceChunkCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.IceChunkDuration.get();
+        return SpellConfig.IceChunkDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -41,7 +41,7 @@ public class IceChunkSpell extends Spells{
                 radius += WandUtil.getLevels(ModEnchantments.RADIUS.get(), playerEntity);
                 damage += WandUtil.getLevels(ModEnchantments.POTENCY.get(), playerEntity);
             }
-            this.IncreaseInfamy(MainConfig.IceChunkInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.IceChunkInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         RayTraceResult rayTraceResult = this.rayTrace(worldIn, entityLiving, range, radius);
         if (rayTraceResult instanceof EntityRayTraceResult){

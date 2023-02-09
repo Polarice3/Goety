@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.block.BlockState;
@@ -32,11 +34,12 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Objects;
 
-public class DuneSpiderEntity extends MonsterEntity implements IDeadMob {
+public class DuneSpiderEntity extends MonsterEntity implements IDeadMob, ICustomAttributes {
     private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(DuneSpiderEntity.class, DataSerializers.BYTE);
 
     public DuneSpiderEntity(EntityType<? extends DuneSpiderEntity> p_i50214_1_, World p_i50214_2_) {
         super(p_i50214_1_, p_i50214_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i50214_1_, this);
     }
 
     protected void registerGoals() {
@@ -51,10 +54,14 @@ public class DuneSpiderEntity extends MonsterEntity implements IDeadMob {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 16.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.DuneSpiderHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.DuneSpiderDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public double getPassengersRidingOffset() {

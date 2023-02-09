@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
@@ -43,7 +44,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
+public class ChannellerEntity extends AbstractCultistEntity implements ICultist {
     private static final DataParameter<Boolean> IS_PRAYING = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Optional<UUID>> ALLY_UUID = EntityDataManager.defineId(ChannellerEntity.class, DataSerializers.OPTIONAL_UUID);
     private int prayingTick;
@@ -63,8 +64,12 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist{
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 32.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.ChannellerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected SoundEvent getAmbientSound() {

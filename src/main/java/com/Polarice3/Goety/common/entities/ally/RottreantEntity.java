@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.RootTrapEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
@@ -48,7 +49,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class RottreantEntity extends SummonedEntity{
+public class RottreantEntity extends SummonedEntity {
     private static final DataParameter<Integer> DATA_WOOD_TYPE = EntityDataManager.defineId(RottreantEntity.class, DataSerializers.INT);
     private static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(RottreantEntity.class, DataSerializers.BYTE);
     public List<SummonedEntity> summoned = new ArrayList<>();
@@ -69,12 +70,16 @@ public class RottreantEntity extends SummonedEntity{
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 75.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.RottreantHealth.get())
                 .add(Attributes.ARMOR, 0.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.RottreantDamage.get())
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {
@@ -183,7 +188,7 @@ public class RottreantEntity extends SummonedEntity{
     }
 
     public boolean summonLimit(){
-        return this.summoned.size() < MainConfig.RottreantBugLimit.get();
+        return this.summoned.size() < SpellConfig.RottreantBugLimit.get();
     }
 
     @Override

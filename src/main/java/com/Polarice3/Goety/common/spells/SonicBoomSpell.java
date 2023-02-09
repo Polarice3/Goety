@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -19,11 +19,11 @@ import java.util.List;
 public class SonicBoomSpell extends Spells{
 
     public int SoulCost() {
-        return MainConfig.SonicBoomCost.get();
+        return SpellConfig.SonicBoomCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.SonicBoomDuration.get();
+        return SpellConfig.SonicBoomDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -43,7 +43,8 @@ public class SonicBoomSpell extends Spells{
             if (!worldIn.isClientSide) {
                 if (target instanceof LivingEntity) {
                     LivingEntity target1 = (LivingEntity) target;
-                    target1.hurt(ModDamageSource.sonicBoom(entityLiving), 10.0F);
+                    float damage = SpellConfig.SonicBoomDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
+                    target1.hurt(ModDamageSource.sonicBoom(entityLiving), damage);
                     double d0 = target1.getX() - entityLiving.getX();
                     double d1 = target1.getZ() - entityLiving.getZ();
                     double d2 = Math.max(d0 * d0 + d1 * d1, 0.001D);
@@ -51,7 +52,7 @@ public class SonicBoomSpell extends Spells{
                 }
             }
         }
-        this.IncreaseInfamy(MainConfig.SonicBoomInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.SonicBoomInfamyChance.get(), (PlayerEntity) entityLiving);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), ModSounds.ROAR_SPELL.get(), SoundCategory.NEUTRAL, 3.0F, 0.25F);
     }
 

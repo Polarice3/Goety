@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -39,6 +40,7 @@ public class ModFireballEntity extends AbstractFireballEntity {
             if (!entity.fireImmune()) {
                 Entity entity1 = this.getOwner();
                 float enchantment = 0;
+                float damage = 5.0F;
                 int flaming = 0;
                 if (entity1 instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) entity1;
@@ -46,10 +48,11 @@ public class ModFireballEntity extends AbstractFireballEntity {
                         enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                         flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                     }
+                    damage = SpellConfig.FireballDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
                 }
                 int i = entity.getRemainingFireTicks() + flaming;
                 entity.setSecondsOnFire(5 + flaming);
-                boolean flag = entity.hurt(DamageSource.fireball(this, entity1), 5.0F + enchantment);
+                boolean flag = entity.hurt(DamageSource.fireball(this, entity1), damage + enchantment);
                 if (!flag) {
                     entity.setRemainingFireTicks(i);
                 } else if (entity1 instanceof LivingEntity) {

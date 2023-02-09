@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.IceStormEntity;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -15,11 +15,11 @@ import net.minecraft.world.server.ServerWorld;
 public class IceStormSpell extends Spells{
 
     public int SoulCost() {
-        return MainConfig.IceStormCost.get();
+        return SpellConfig.IceStormCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.IceStormDuration.get();
+        return SpellConfig.IceStormDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -41,7 +41,7 @@ public class IceStormSpell extends Spells{
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.IceStormInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.IceStormInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         iceStormEntity.setTotallife(60 * enchantment);
         iceStormEntity.setOwner(entityLiving);
@@ -65,7 +65,7 @@ public class IceStormSpell extends Spells{
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.IceStormInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.IceStormInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         iceStormEntity.setTotallife(120 * enchantment);
         iceStormEntity.setOwner(entityLiving);

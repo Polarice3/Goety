@@ -16,7 +16,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,7 +26,6 @@ import java.util.UUID;
 public class WanderBootsArmor extends ArmorItem {
     private static final UUID BOOTS_UUID = UUID.fromString("f46dd333-63a3-4c3b-a5d3-065de1e226cd");
     private static final AttributeModifier BOOTS_SPEED_MODIFIER = new AttributeModifier(BOOTS_UUID, "Wander Boots Speed bonus", 0.15D, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    private static final String COOL = "Cool";
     private final Multimap<Attribute, AttributeModifier> bootsModifier;
 
     public WanderBootsArmor(IArmorMaterial pMaterial, EquipmentSlotType pSlot, Properties pProperties) {
@@ -46,16 +44,10 @@ public class WanderBootsArmor extends ArmorItem {
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
         if (MainConfig.SoulRepair.get()) {
-            if (stack.getTag() == null) {
-                CompoundNBT compound = stack.getOrCreateTag();
-                compound.putInt(COOL, 0);
-            }
-            if (stack.isDamaged()) {
+            if (stack.isDamaged()){
                 if (SEHelper.getSoulsContainer(player)){
                     if (SEHelper.getSoulsAmount(player, MainConfig.DarkArmoredRobeRepairAmount.get())){
-                        stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
-                        if (stack.getTag().getInt(COOL) > 20) {
-                            stack.getTag().putInt(COOL, 0);
+                        if (player.tickCount % 20 == 0) {
                             stack.setDamageValue(stack.getDamageValue() - 1);
                             SEHelper.decreaseSouls(player, MainConfig.DarkArmoredRobeRepairAmount.get());
                         }

@@ -1,8 +1,10 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.BackawayCrossbowGoal;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Lists;
@@ -41,11 +43,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbowUser {
+public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbowUser, ICustomAttributes {
     private static final DataParameter<Boolean> IS_CHARGING_CROSSBOW = EntityDataManager.defineId(ConquillagerEntity.class, DataSerializers.BOOLEAN);
 
     public ConquillagerEntity(EntityType<? extends ConquillagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48556_1_, this);
         this.xpReward = 20;
     }
 
@@ -58,9 +61,13 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MAX_HEALTH, 24.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.ConquillagerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ATTACK_DAMAGE, 5.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public void tick() {

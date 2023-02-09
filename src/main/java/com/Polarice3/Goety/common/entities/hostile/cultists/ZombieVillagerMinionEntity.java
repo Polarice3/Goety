@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.google.common.collect.Maps;
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
-public class ZombieVillagerMinionEntity extends OwnedEntity{
+public class ZombieVillagerMinionEntity extends OwnedEntity {
     private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(ZombieVillagerMinionEntity.class, DataSerializers.INT);
     public static final Map<Integer, ResourceLocation> TEXTURE_BY_TYPE = Util.make(Maps.newHashMap(), (map) -> {
         map.put(0, Goety.location("textures/entity/cultist/zombie/zombie_0.png"));
@@ -66,10 +67,15 @@ public class ZombieVillagerMinionEntity extends OwnedEntity{
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, MobConfig.ZombieVillagerServantHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.ZombieVillagerServantDamage.get())
                 .add(Attributes.ARMOR, 2.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {

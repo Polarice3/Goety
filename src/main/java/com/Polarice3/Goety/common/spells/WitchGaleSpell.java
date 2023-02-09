@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.WitchGaleEntity;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -18,11 +18,11 @@ import java.util.Random;
 public class WitchGaleSpell extends Spells{
 
     public int SoulCost() {
-        return MainConfig.WitchGaleCost.get();
+        return SpellConfig.WitchGaleCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.WitchGaleDuration.get();
+        return SpellConfig.WitchGaleDuration.get();
     }
 
     public SoundEvent CastingSound() {
@@ -36,7 +36,7 @@ public class WitchGaleSpell extends Spells{
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         Random random = worldIn.random;
@@ -61,7 +61,7 @@ public class WitchGaleSpell extends Spells{
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         Random random = worldIn.random;

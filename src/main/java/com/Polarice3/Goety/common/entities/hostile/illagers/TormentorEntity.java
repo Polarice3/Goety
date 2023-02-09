@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
@@ -29,7 +31,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class TormentorEntity extends AbstractIllagerEntity {
+public class TormentorEntity extends AbstractIllagerEntity implements ICustomAttributes {
     protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(TormentorEntity.class, DataSerializers.BYTE);
     private MobEntity owner;
     @Nullable
@@ -39,6 +41,7 @@ public class TormentorEntity extends AbstractIllagerEntity {
 
     public TormentorEntity(EntityType<? extends AbstractIllagerEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i50190_1_, this);
         this.moveControl = new MobUtil.MinionMovementController(this);
         this.xpReward = 6;
     }
@@ -62,8 +65,12 @@ public class TormentorEntity extends AbstractIllagerEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 24.0D)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D);
+                .add(Attributes.MAX_HEALTH, MobConfig.TormentorHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.TormentorDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public void tick() {

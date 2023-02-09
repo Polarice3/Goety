@@ -2,10 +2,12 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractRaiderEntity;
@@ -47,7 +49,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
 
-public abstract class AbstractCultistEntity extends AbstractRaiderEntity {
+public abstract class AbstractCultistEntity extends AbstractRaiderEntity implements ICustomAttributes {
     private static final DataParameter<Float> DATA_REINFORCEMENT_CHANCE = EntityDataManager.defineId(AbstractCultistEntity.class, DataSerializers.FLOAT);
     private BlockPos pilgrimTarget;
     private boolean pilgrimLeader;
@@ -55,6 +57,7 @@ public abstract class AbstractCultistEntity extends AbstractRaiderEntity {
 
     protected AbstractCultistEntity(EntityType<? extends AbstractCultistEntity> type, World worldIn) {
         super(type, worldIn);
+        ICustomAttributes.applyAttributesForEntity(type, this);
         this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 16.0F);
         this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, -1.0F);
         this.getNavigation().setCanFloat(true);
@@ -72,6 +75,10 @@ public abstract class AbstractCultistEntity extends AbstractRaiderEntity {
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.projectiles.BurningPotionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -46,7 +47,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class BeldamEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultist {
+public class BeldamEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultist{
     private static final UUID SPEED_MODIFIER_DRINKING_UUID = UUID.fromString("5e3d9fa2-5930-4763-8b2e-778024f4a3a0");
     private static final AttributeModifier SPEED_MODIFIER_DRINKING = new AttributeModifier(SPEED_MODIFIER_DRINKING_UUID, "Drinking speed penalty", -0.25D, AttributeModifier.Operation.ADDITION);
     private static final DataParameter<Boolean> DATA_USING_ITEM = EntityDataManager.defineId(BeldamEntity.class, DataSerializers.BOOLEAN);
@@ -105,8 +106,12 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 26.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.BeldamHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     @Nullable

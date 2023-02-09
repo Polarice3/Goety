@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.SoulLightEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.SoundCategory;
@@ -12,7 +12,7 @@ public class SoulLightSpell extends InstantCastSpells{
 
     @Override
     public int SoulCost() {
-        return MainConfig.SoulLightCost.get();
+        return SpellConfig.SoulLightCost.get();
     }
 
     @Override

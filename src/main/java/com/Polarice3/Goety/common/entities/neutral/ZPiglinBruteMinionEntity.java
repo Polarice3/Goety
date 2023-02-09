@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.MobConfig;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -22,11 +23,15 @@ public class ZPiglinBruteMinionEntity extends ZPiglinMinionEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 50.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.ZPiglinBruteServantHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, 7.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.ZPiglinBruteServantDamage.get())
                 .add(Attributes.ARMOR, 2.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     @Override

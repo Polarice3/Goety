@@ -1,9 +1,12 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.DesiccatedSkullEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -27,11 +30,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAttackMob {
+public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAttackMob, ICustomAttributes {
     private final EntityPredicate entityPredicate = (new EntityPredicate()).range(8).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
 
     public MarcireEntity(EntityType<? extends MonsterEntity> p_i48555_1_, World p_i48555_2_) {
         super(p_i48555_1_, p_i48555_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48555_1_, this);
     }
 
     protected void registerGoals() {
@@ -46,9 +50,14 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, MobConfig.MarcireHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public void tick() {
@@ -86,15 +95,19 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.WITHER_SKELETON_AMBIENT;
+        if (this.getTarget() != null){
+            return ModSounds.MARCIRE_ANGRY.get();
+        } else {
+            return ModSounds.MARCIRE_AMBIENT.get();
+        }
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.WITHER_SKELETON_HURT;
+        return ModSounds.MARCIRE_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.WITHER_SKELETON_DEATH;
+        return ModSounds.MARCIRE_DEATH.get();
     }
 
     protected SoundEvent getStepSound() {

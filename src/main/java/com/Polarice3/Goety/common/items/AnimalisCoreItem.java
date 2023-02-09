@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.items;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.ally.RottreantEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -51,13 +51,13 @@ public class AnimalisCoreItem extends Item {
             if (blockstate.getBlock() == ModBlocks.ROTTEN_PUMPKIN.get()){
                 if (getPattern(world, blockpos, player)){
                     if (RobeArmorFinder.FindFelArmor(player)) {
-                        if (SEHelper.getSoulsAmount(player, MainConfig.RottreantAnimateCost.get())) {
+                        if (SEHelper.getSoulsAmount(player, SpellConfig.RottreantAnimateCost.get())) {
                             if (this.trySpawnRotTree(world, blockpos, player)) {
-                                SEHelper.decreaseSouls(player, MainConfig.RottreantAnimateCost.get());
+                                SEHelper.decreaseSouls(player, SpellConfig.RottreantAnimateCost.get());
                                 return ActionResultType.CONSUME;
                             }
                         } else {
-                            player.displayClientMessage(new TranslationTextComponent("info.goety.items.rottreant.souls", MainConfig.RottreantAnimateCost.get()), true);
+                            player.displayClientMessage(new TranslationTextComponent("info.goety.items.rottreant.souls", SpellConfig.RottreantAnimateCost.get()), true);
                         }
                     } else {
                         player.displayClientMessage(new TranslationTextComponent("info.goety.items.rottreant.robe"), true);

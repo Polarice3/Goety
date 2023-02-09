@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.enchantments;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.enchantment.LootBonusEnchantment;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -11,7 +11,7 @@ public class LootingEnchantment extends LootBonusEnchantment {
     }
 
     public int getMaxLevel() {
-        return MainConfig.MaxWantingLevel.get();
+        return SpellConfig.MaxWantingLevel.get();
     }
 
     public boolean isAllowedOnBooks() {

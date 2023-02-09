@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.FriendlyVexEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -28,15 +28,15 @@ public class VexSpell extends SummonSpells {
     private final EntityPredicate vexCountTargeting = (new EntityPredicate()).range(16.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
 
     public int SoulCost() {
-        return MainConfig.VexCost.get();
+        return SpellConfig.VexCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.VexDuration.get();
+        return SpellConfig.VexDuration.get();
     }
 
     public int SummonDownDuration() {
-        return MainConfig.VexCooldown.get();
+        return SpellConfig.VexCooldown.get();
     }
 
     public SoundEvent CastingSound() {
@@ -50,7 +50,7 @@ public class VexSpell extends SummonSpells {
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            this.IncreaseInfamy(MainConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.VexInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
@@ -77,7 +77,7 @@ public class VexSpell extends SummonSpells {
                     vexentity.moveTo(blockpos, 0.0F, 0.0F);
                     vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                     vexentity.setBoundOrigin(blockpos);
-                    if (MainConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
+                    if (SpellConfig.WandVexLimit.get() > VexLimit(entityLiving)) {
                         vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                     } else {
                         vexentity.setLimitedLife(1);
@@ -107,7 +107,7 @@ public class VexSpell extends SummonSpells {
                     vexentity.moveTo(blockpos, 0.0F, 0.0F);
                     vexentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                     vexentity.setBoundOrigin(blockpos);
-                    if (MainConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
+                    if (SpellConfig.StaffVexLimit.get() > VexLimit(entityLiving)) {
                         vexentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                     } else {
                         vexentity.setLimitedLife(1);

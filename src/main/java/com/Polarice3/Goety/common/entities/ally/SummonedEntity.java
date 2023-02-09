@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModItems;
@@ -133,17 +133,17 @@ public class SummonedEntity extends OwnedEntity {
             }
             if (this.getMobType() == CreatureAttribute.UNDEAD) {
                 if (!this.isOnFire()) {
-                    if (MainConfig.UndeadMinionHeal.get() && this.getHealth() < this.getMaxHealth()) {
+                    if (SpellConfig.UndeadMinionHeal.get() && this.getHealth() < this.getMaxHealth()) {
                         if (this.getTrueOwner() instanceof PlayerEntity) {
                             if (RobeArmorFinder.FindNecroSet(this.getTrueOwner())) {
                                 PlayerEntity owner = (PlayerEntity) this.getTrueOwner();
-                                int SoulCost = MainConfig.UndeadMinionHealCost.get();
+                                int SoulCost = SpellConfig.UndeadMinionHealCost.get();
                                 if (RobeArmorFinder.FindLeggings(owner)){
                                     if (this.random.nextBoolean()){
                                         SoulCost = 0;
                                     }
                                 }
-                                if (SEHelper.getSoulsAmount(owner, MainConfig.UndeadMinionHealCost.get())){
+                                if (SEHelper.getSoulsAmount(owner, SpellConfig.UndeadMinionHealCost.get())){
                                     if (this.tickCount % 20 == 0) {
                                         this.heal(1.0F);
                                         Vector3d vector3d = this.getDeltaMovement();
@@ -203,7 +203,7 @@ public class SummonedEntity extends OwnedEntity {
     }
 
     public boolean hurt(DamageSource source, float amount) {
-        if (MainConfig.MinionsMasterImmune.get()) {
+        if (SpellConfig.MinionsMasterImmune.get()) {
             if (source.getEntity() instanceof SummonedEntity) {
                 SummonedEntity summoned = (SummonedEntity) source.getEntity();
                 if (!summoned.isHostile() && !this.isHostile()) {
@@ -407,7 +407,7 @@ public class SummonedEntity extends OwnedEntity {
                 if (--this.timeToRecalcPath <= 0) {
                     this.timeToRecalcPath = 10;
                     if (!this.summonedEntity.isLeashed() && !this.summonedEntity.isPassenger()) {
-                        if (this.summonedEntity.distanceToSqr(this.owner) >= 144.0D && MainConfig.UndeadTeleport.get()) {
+                        if (this.summonedEntity.distanceToSqr(this.owner) >= 144.0D && SpellConfig.UndeadTeleport.get()) {
                             this.tryToTeleportNearEntity();
                         } else {
                             this.navigation.moveTo(this.owner, this.followSpeed);

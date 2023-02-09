@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.WraithMinionEntity;
 import com.Polarice3.Goety.init.ModEffects;
@@ -26,15 +26,15 @@ public class WraithSpell extends SummonSpells{
     public int burning = 0;
 
     public int SoulCost() {
-        return MainConfig.WraithCost.get();
+        return SpellConfig.WraithCost.get();
     }
 
     public int CastDuration() {
-        return MainConfig.WraithDuration.get();
+        return SpellConfig.WraithDuration.get();
     }
 
     public int SummonDownDuration() {
-        return MainConfig.WraithCooldown.get();
+        return SpellConfig.WraithCooldown.get();
     }
 
     public SoundEvent CastingSound() {
@@ -49,7 +49,7 @@ public class WraithSpell extends SummonSpells{
                 this.duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 this.burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
@@ -69,29 +69,29 @@ public class WraithSpell extends SummonSpells{
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         this.commonResult(worldIn, entityLiving);
         if (!isShifting(entityLiving))  {
-                WraithMinionEntity summonedentity = new WraithMinionEntity(ModEntityType.WRAITH_MINION.get(), worldIn);
-                summonedentity.setOwnerId(entityLiving.getUUID());
-                summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
-                summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
-                summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
-                summonedentity.setPersistenceRequired();
-                summonedentity.setUpgraded(this.NecroPower(entityLiving));
-                if (enchantment > 0){
-                    int boost = MathHelper.clamp(enchantment - 1, 0, 10);
-                    summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost));
-                }
-                if (burning > 0){
-                    summonedentity.setBurningLevel(burning);
-                }
-                this.SummonSap(entityLiving, summonedentity);
-                worldIn.addFreshEntity(summonedentity);
-                worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), ModSounds.SUMMON_SPELL.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
-                    worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
-                }
-                this.SummonDown(entityLiving);
-
+            WraithMinionEntity summonedentity = new WraithMinionEntity(ModEntityType.WRAITH_MINION.get(), worldIn);
+            summonedentity.setOwnerId(entityLiving.getUUID());
+            summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
+            summonedentity.setPersistenceRequired();
+            summonedentity.setUpgraded(this.NecroPower(entityLiving));
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
+            if (enchantment > 0){
+                int boost = MathHelper.clamp(enchantment - 1, 0, 10);
+                summonedentity.addEffect(new EffectInstance(ModEffects.BUFF.get(), Integer.MAX_VALUE, boost));
             }
+            if (burning > 0){
+                summonedentity.setBurningLevel(burning);
+            }
+            this.SummonSap(entityLiving, summonedentity);
+            worldIn.addFreshEntity(summonedentity);
+            worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), ModSounds.SUMMON_SPELL.get(), SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
+                worldIn.sendParticles(ParticleTypes.POOF, summonedentity.getX(), summonedentity.getEyeY(), summonedentity.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+            }
+            this.SummonDown(entityLiving);
+
+        }
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {

@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
@@ -37,11 +39,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class BoneLordEntity extends AbstractSkeletonEntity {
+public class BoneLordEntity extends AbstractSkeletonEntity implements ICustomAttributes {
     private static final DataParameter<Optional<UUID>> SKULL_LORD = EntityDataManager.defineId(BoneLordEntity.class, DataSerializers.OPTIONAL_UUID);
 
-    public BoneLordEntity(EntityType<? extends AbstractSkeletonEntity> p_i48555_1_, World p_i48555_2_) {
-        super(p_i48555_1_, p_i48555_2_);
+    public BoneLordEntity(EntityType<? extends AbstractSkeletonEntity> type, World p_i48555_2_) {
+        super(type, p_i48555_2_);
+        ICustomAttributes.applyAttributesForEntity(type, this);
     }
 
     protected void registerGoals() {
@@ -51,11 +54,16 @@ public class BoneLordEntity extends AbstractSkeletonEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, MobConfig.BoneLordHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.BoneLordDamage.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.0D)
                 .add(Attributes.ARMOR, 2.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {

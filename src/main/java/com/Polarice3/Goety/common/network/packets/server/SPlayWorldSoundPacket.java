@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.network.packets.server;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.SoundCategory;

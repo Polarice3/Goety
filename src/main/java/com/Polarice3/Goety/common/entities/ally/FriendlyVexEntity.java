@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.MinionFollowGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
@@ -28,8 +29,8 @@ import javax.annotation.Nullable;
 
 public class FriendlyVexEntity extends MinionEntity {
 
-    public FriendlyVexEntity(EntityType<? extends FriendlyVexEntity> p_i50190_1_, World p_i50190_2_) {
-        super(p_i50190_1_, p_i50190_2_);
+    public FriendlyVexEntity(EntityType<? extends FriendlyVexEntity> type, World p_i50190_2_) {
+        super(type, p_i50190_2_);
         this.xpReward = 0;
     }
 
@@ -58,8 +59,12 @@ public class FriendlyVexEntity extends MinionEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 14.0D)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D);
+                .add(Attributes.MAX_HEALTH, MobConfig.SummonedVexHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.SummonedVexDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected SoundEvent getAmbientSound() {

@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.fluid.ModFluids;
@@ -83,6 +83,7 @@ public class ModItems {
     public static final RegistryObject<Item> FROST_NUGGET = ITEMS.register("frost_nugget", ItemBase::new);
     public static final RegistryObject<Item> DARKFABRIC = ITEMS.register("darkfabric", ItemBase::new);
     public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
+    public static final RegistryObject<Item> OCCULTFABRIC = ITEMS.register("occultfabric", ItemBase::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
     public static final RegistryObject<Item> DRIED_REMNANT = ITEMS.register("dried_remnant", ItemBase::new);
     public static final RegistryObject<Item> DEAD_SAND_HEAP = ITEMS.register("dead_sand_heap", ItemBase::new);
@@ -101,38 +102,38 @@ public class ModItems {
     public static final RegistryObject<Item> GRAVE_GLOVE = ITEMS.register("grave_glove", GraveGloveItem::new);
 
     //Focuses
-    public static final RegistryObject<Item> VEXING_FOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(MainConfig.VexCost.get()));
-    public static final RegistryObject<Item> BITING_FOCUS = ITEMS.register("bitingfocus", () -> new MagicFocusItem(MainConfig.FangCost.get()));
-    public static final RegistryObject<Item> ROARING_FOCUS = ITEMS.register("roaringfocus", () -> new MagicFocusItem(MainConfig.RoarCost.get()));
-    public static final RegistryObject<Item> ROTTING_FOCUS = ITEMS.register("rottingfocus", () -> new MagicFocusItem(MainConfig.ZombieCost.get()));
-    public static final RegistryObject<Item> OSSEOUS_FOCUS = ITEMS.register("osseousfocus", () -> new MagicFocusItem(MainConfig.SkeletonCost.get()));
-    public static final RegistryObject<Item> RIGID_FOCUS = ITEMS.register("rigidfocus", () -> new MagicFocusItem(MainConfig.DredenCost.get()));
-    public static final RegistryObject<Item> SPOOKY_FOCUS = ITEMS.register("spookyfocus", () -> new MagicFocusItem(MainConfig.WraithCost.get()));
-    public static final RegistryObject<Item> WITCHGALE_FOCUS = ITEMS.register("witchgalefocus", () -> new MagicFocusItem(MainConfig.WitchGaleCost.get()));
-    public static final RegistryObject<Item> SPIDERLING_FOCUS = ITEMS.register("spiderlingfocus", () -> new MagicFocusItem(MainConfig.SpiderlingCost.get()));
-    public static final RegistryObject<Item> BRAINEATER_FOCUS = ITEMS.register("braineaterfocus", () -> new MagicFocusItem(MainConfig.BrainEaterCost.get()));
-    public static final RegistryObject<Item> TELEPORT_FOCUS = ITEMS.register("teleportfocus", () -> new MagicFocusItem(MainConfig.TeleportCost.get()));
-    public static final RegistryObject<Item> SOULSKULL_FOCUS = ITEMS.register("soulskullfocus", () -> new MagicFocusItem(MainConfig.SoulSkullCost.get()));
-    public static final RegistryObject<Item> FEAST_FOCUS = ITEMS.register("feastfocus", () -> new MagicFocusItem(MainConfig.FeastCost.get()));
-    public static final RegistryObject<Item> TEMPTING_FOCUS = ITEMS.register("temptingfocus", () -> new MagicFocusItem(MainConfig.TemptingCost.get()));
-    public static final RegistryObject<Item> ENDERACID_FOCUS = ITEMS.register("enderacidfocus", () -> new MagicFocusItem(MainConfig.EnderAcidCost.get()));
-    public static final RegistryObject<Item> DRAGONFIREBALL_FOCUS = ITEMS.register("dragonballfocus", () -> new MagicFocusItem(MainConfig.DragonFireballCost.get()));
-    public static final RegistryObject<Item> CREEPERLING_FOCUS = ITEMS.register("creeperlingfocus", () -> new MagicFocusItem(MainConfig.CreeperlingCost.get()));
-    public static final RegistryObject<Item> BREATH_FOCUS = ITEMS.register("airbreathfocus", () -> new MagicFocusItem(MainConfig.BreathingCost.get()));
-    public static final RegistryObject<Item> FIREBALL_FOCUS = ITEMS.register("fireballfocus", () -> new MagicFocusItem(MainConfig.FireballCost.get()));
-    public static final RegistryObject<Item> LAVABALL_FOCUS = ITEMS.register("lavaballfocus", () -> new MagicFocusItem(MainConfig.LavaballCost.get()));
-    public static final RegistryObject<Item> POISONBALL_FOCUS = ITEMS.register("poisonballfocus", () -> new MagicFocusItem(MainConfig.PoisonballCost.get()));
-    public static final RegistryObject<Item> ILLUSION_FOCUS = ITEMS.register("illusionfocus", () -> new MagicFocusItem(MainConfig.IllusionCost.get()));
-    public static final RegistryObject<Item> FIREBREATH_FOCUS = ITEMS.register("firebreathfocus", () -> new MagicFocusItem(MainConfig.FireBreathCost.get()));
-    public static final RegistryObject<Item> FROSTBREATH_FOCUS = ITEMS.register("frostbreathfocus", () -> new MagicFocusItem(MainConfig.FrostBreathCost.get()));
-    public static final RegistryObject<Item> SOULLIGHT_FOCUS = ITEMS.register("soullightfocus", () -> new MagicFocusItem(MainConfig.SoulLightCost.get()));
-    public static final RegistryObject<Item> GLOWLIGHT_FOCUS = ITEMS.register("glowlightfocus", () -> new MagicFocusItem(MainConfig.GlowLightCost.get()));
-    public static final RegistryObject<Item> ICEOLOGY_FOCUS = ITEMS.register("iceologyfocus", () -> new MagicFocusItem(MainConfig.IceChunkCost.get()));
-    public static final RegistryObject<Item> ICESTORM_FOCUS = ITEMS.register("icestormfocus", () -> new MagicFocusItem(MainConfig.IceStormCost.get()));
-    public static final RegistryObject<Item> HOUNDING_FOCUS = ITEMS.register("houndingfocus", () -> new MagicFocusItem(MainConfig.UndeadWolfCost.get()));
-    public static final RegistryObject<Item> PHANTASM_FOCUS = ITEMS.register("phantasmfocus", () -> new MagicFocusItem(MainConfig.PhantomCost.get()));
-    public static final RegistryObject<Item> LAUNCH_FOCUS = ITEMS.register("launchfocus", () -> new MagicFocusItem(MainConfig.LaunchCost.get()));
-    public static final RegistryObject<Item> SONICBOOM_FOCUS = ITEMS.register("sonicboomfocus", () -> new MagicFocusItem(MainConfig.SonicBoomCost.get()));
+    public static final RegistryObject<Item> VEXING_FOCUS = ITEMS.register("vexingfocus", () -> new MagicFocusItem(SpellConfig.VexCost.get()));
+    public static final RegistryObject<Item> BITING_FOCUS = ITEMS.register("bitingfocus", () -> new MagicFocusItem(SpellConfig.FangCost.get()));
+    public static final RegistryObject<Item> ROARING_FOCUS = ITEMS.register("roaringfocus", () -> new MagicFocusItem(SpellConfig.RoarCost.get()));
+    public static final RegistryObject<Item> ROTTING_FOCUS = ITEMS.register("rottingfocus", () -> new MagicFocusItem(SpellConfig.ZombieCost.get()));
+    public static final RegistryObject<Item> OSSEOUS_FOCUS = ITEMS.register("osseousfocus", () -> new MagicFocusItem(SpellConfig.SkeletonCost.get()));
+    public static final RegistryObject<Item> RIGID_FOCUS = ITEMS.register("rigidfocus", () -> new MagicFocusItem(SpellConfig.DredenCost.get()));
+    public static final RegistryObject<Item> SPOOKY_FOCUS = ITEMS.register("spookyfocus", () -> new MagicFocusItem(SpellConfig.WraithCost.get()));
+    public static final RegistryObject<Item> WITCHGALE_FOCUS = ITEMS.register("witchgalefocus", () -> new MagicFocusItem(SpellConfig.WitchGaleCost.get()));
+    public static final RegistryObject<Item> SPIDERLING_FOCUS = ITEMS.register("spiderlingfocus", () -> new MagicFocusItem(SpellConfig.SpiderlingCost.get()));
+    public static final RegistryObject<Item> BRAINEATER_FOCUS = ITEMS.register("braineaterfocus", () -> new MagicFocusItem(SpellConfig.BrainEaterCost.get()));
+    public static final RegistryObject<Item> TELEPORT_FOCUS = ITEMS.register("teleportfocus", () -> new MagicFocusItem(SpellConfig.TeleportCost.get()));
+    public static final RegistryObject<Item> SOULSKULL_FOCUS = ITEMS.register("soulskullfocus", () -> new MagicFocusItem(SpellConfig.SoulSkullCost.get()));
+    public static final RegistryObject<Item> FEAST_FOCUS = ITEMS.register("feastfocus", () -> new MagicFocusItem(SpellConfig.FeastCost.get()));
+    public static final RegistryObject<Item> TEMPTING_FOCUS = ITEMS.register("temptingfocus", () -> new MagicFocusItem(SpellConfig.TemptingCost.get()));
+    public static final RegistryObject<Item> ENDERACID_FOCUS = ITEMS.register("enderacidfocus", () -> new MagicFocusItem(SpellConfig.EnderAcidCost.get()));
+    public static final RegistryObject<Item> DRAGONFIREBALL_FOCUS = ITEMS.register("dragonballfocus", () -> new MagicFocusItem(SpellConfig.DragonFireballCost.get()));
+    public static final RegistryObject<Item> CREEPERLING_FOCUS = ITEMS.register("creeperlingfocus", () -> new MagicFocusItem(SpellConfig.CreeperlingCost.get()));
+    public static final RegistryObject<Item> BREATH_FOCUS = ITEMS.register("airbreathfocus", () -> new MagicFocusItem(SpellConfig.BreathingCost.get()));
+    public static final RegistryObject<Item> FIREBALL_FOCUS = ITEMS.register("fireballfocus", () -> new MagicFocusItem(SpellConfig.FireballCost.get()));
+    public static final RegistryObject<Item> LAVABALL_FOCUS = ITEMS.register("lavaballfocus", () -> new MagicFocusItem(SpellConfig.LavaballCost.get()));
+    public static final RegistryObject<Item> POISONBALL_FOCUS = ITEMS.register("poisonballfocus", () -> new MagicFocusItem(SpellConfig.PoisonballCost.get()));
+    public static final RegistryObject<Item> ILLUSION_FOCUS = ITEMS.register("illusionfocus", () -> new MagicFocusItem(SpellConfig.IllusionCost.get()));
+    public static final RegistryObject<Item> FIREBREATH_FOCUS = ITEMS.register("firebreathfocus", () -> new MagicFocusItem(SpellConfig.FireBreathCost.get()));
+    public static final RegistryObject<Item> FROSTBREATH_FOCUS = ITEMS.register("frostbreathfocus", () -> new MagicFocusItem(SpellConfig.FrostBreathCost.get()));
+    public static final RegistryObject<Item> SOULLIGHT_FOCUS = ITEMS.register("soullightfocus", () -> new MagicFocusItem(SpellConfig.SoulLightCost.get()));
+    public static final RegistryObject<Item> GLOWLIGHT_FOCUS = ITEMS.register("glowlightfocus", () -> new MagicFocusItem(SpellConfig.GlowLightCost.get()));
+    public static final RegistryObject<Item> ICEOLOGY_FOCUS = ITEMS.register("iceologyfocus", () -> new MagicFocusItem(SpellConfig.IceChunkCost.get()));
+    public static final RegistryObject<Item> ICESTORM_FOCUS = ITEMS.register("icestormfocus", () -> new MagicFocusItem(SpellConfig.IceStormCost.get()));
+    public static final RegistryObject<Item> HOUNDING_FOCUS = ITEMS.register("houndingfocus", () -> new MagicFocusItem(SpellConfig.UndeadWolfCost.get()));
+    public static final RegistryObject<Item> PHANTASM_FOCUS = ITEMS.register("phantasmfocus", () -> new MagicFocusItem(SpellConfig.PhantomCost.get()));
+    public static final RegistryObject<Item> LAUNCH_FOCUS = ITEMS.register("launchfocus", () -> new MagicFocusItem(SpellConfig.LaunchCost.get()));
+    public static final RegistryObject<Item> SONICBOOM_FOCUS = ITEMS.register("sonicboomfocus", () -> new MagicFocusItem(SpellConfig.SonicBoomCost.get()));
 
     //Tools & Weapons
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);
@@ -176,6 +177,15 @@ public class ModItems {
             new DarkRobeArmor(ModArmorMaterial.FELTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> FELBOOTSOFWANDER = ITEMS.register("felbootsofwander", () ->
             new WanderBootsArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<Item> ILLUSION_HELM = ITEMS.register("illusionhelm", () ->
+            new IllusionRobeArmor(ModArmorMaterial.ILLUSION, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> ILLUSION_ROBE = ITEMS.register("illusionrobe", () ->
+            new IllusionRobeArmor(ModArmorMaterial.ILLUSION, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> ILLUSION_LEGGINGS = ITEMS.register("illusionleggings", () ->
+            new IllusionRobeArmor(ModArmorMaterial.ILLUSION, EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> ILLUSION_BOOTS_OF_WANDER = ITEMS.register("illusionbootsofwander", () ->
+            new IllusionBootsArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<Item> FELARMOREDHELM = ITEMS.register("felarmoredhelm", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));

@@ -1,8 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -41,12 +39,6 @@ public class FriendlyScorchEntity extends FriendlyVexEntity {
 
     protected void registerGoals() {
         super.registerGoals();
-    }
-
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 14.0D)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
     public boolean doHurtTarget(Entity entityIn) {

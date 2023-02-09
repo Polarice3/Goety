@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.google.common.collect.Maps;
 import net.minecraft.enchantment.Enchantment;
@@ -41,12 +43,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class InquillagerEntity extends HuntingIllagerEntity {
+public class InquillagerEntity extends HuntingIllagerEntity implements ICustomAttributes{
     public int coolDown;
     public int healTimes;
 
     public InquillagerEntity(EntityType<? extends InquillagerEntity> p_i48556_1_, World p_i48556_2_) {
         super(p_i48556_1_, p_i48556_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48556_1_, this);
         this.xpReward = 20;
         this.coolDown = 0;
         this.healTimes = 0;
@@ -63,9 +66,13 @@ public class InquillagerEntity extends HuntingIllagerEntity {
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MAX_HEALTH, 24.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.InquillagerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, 5.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.InquillagerDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {

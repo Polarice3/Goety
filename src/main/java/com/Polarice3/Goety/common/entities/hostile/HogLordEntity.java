@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.neutral.ISpewing;
 import com.Polarice3.Goety.common.entities.utilities.PoisonGroundEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -53,7 +55,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing {
+public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing, ICustomAttributes {
     private int attackAnimationRemainingTicks;
     private int allyCooldown;
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(HogLordEntity.class, DataSerializers.OPTIONAL_UUID);
@@ -63,6 +65,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing 
 
     public HogLordEntity(EntityType<? extends HogLordEntity> p_i231569_1_, World p_i231569_2_) {
         super(p_i231569_1_, p_i231569_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i231569_1_, this);
         this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
         this.setPathfindingMalus(PathNodeType.LAVA, 0.0F);
         this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
@@ -86,12 +89,16 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing 
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 200.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.HoglordHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.75D)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.ATTACK_DAMAGE, 6.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.HoglordDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {
@@ -322,6 +329,9 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing 
         }
 
         if (minions.size() > 0) {
+            if (this.tickCount % 300 == 0){
+                this.playSound(ModSounds.HOGLORD_RAGE.get(), 1.0F, 1.0F);
+            }
             int amp = MathHelper.clamp(minions.size(), 1, 5) - 1;
             this.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 20, amp));
             this.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 20, amp));
@@ -369,7 +379,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing 
                 }
             }
             if (this.tickCount % 600 == 0){
-                this.playSound(SoundEvents.HOGLIN_ANGRY, 1.0F, 1.0F);
+                this.playSound(ModSounds.HOGLORD_RAGE.get(), 1.0F, 1.0F);
             }
         }
 
@@ -406,6 +416,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing 
                             if (WorldEntitySpawner.isSpawnPositionOk(entityspawnplacementregistry$placementtype, this.level, blockpos, entitytype) && EntitySpawnPlacementRegistry.checkSpawnRules(entitytype, serverworld, SpawnReason.REINFORCEMENT, blockpos, this.level.random)) {
                                 minion.setPos((double) i1, (double) j1, (double) k1);
                                 if (!this.level.hasNearbyAlivePlayer((double) i1, (double) j1, (double) k1, 7.0D) && this.level.isUnobstructed(minion) && this.level.noCollision(minion) && !this.level.containsAnyLiquid(minion.getBoundingBox())) {
+                                    this.playSound(ModSounds.HOGLORD_SUMMON.get(), 1.0F, 1.0F);
                                     minion.setTarget(livingentity);
                                     minion.finalizeSpawn(serverworld, this.level.getCurrentDifficultyAt(minion.blockPosition()), SpawnReason.REINFORCEMENT, (ILivingEntityData) null, (CompoundNBT) null);
                                     serverworld.addFreshEntityWithPassengers(minion);
@@ -461,19 +472,15 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing 
     }
 
     protected SoundEvent getAmbientSound() {
-        if (this.getTarget() != null){
-            return SoundEvents.HOGLIN_ANGRY;
-        } else {
-            return SoundEvents.HOGLIN_AMBIENT;
-        }
+        return ModSounds.HOGLORD_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.HOGLIN_HURT;
+        return ModSounds.HOGLORD_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.HOGLIN_DEATH;
+        return ModSounds.HOGLORD_DEATH.get();
     }
 
     protected SoundEvent getSwimSound() {

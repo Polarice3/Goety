@@ -23,6 +23,10 @@ public class RobeArmorFinder {
         return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.LEGS).getItem() instanceof IRobeArmor;
     }
 
+    public static boolean FindIllusionLeggings(LivingEntity livingEntity){
+        return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ModItems.ILLUSION_LEGGINGS.get();
+    }
+
     public static boolean FindNecroHelm(LivingEntity livingEntity){
         return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROHELM.get() ||
                 livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROARMOREDHELM.get());
@@ -51,6 +55,18 @@ public class RobeArmorFinder {
         return FindFelHelm(livingEntity) && FindFelArmor(livingEntity);
     }
 
+    public static boolean FindIllusionHelm(LivingEntity livingEntity){
+        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.ILLUSION_HELM.get());
+    }
+
+    public static boolean FindIllusionArmor(LivingEntity livingEntity){
+        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.ILLUSION_ROBE.get());
+    }
+
+    public static boolean FindIllusionSet(LivingEntity livingEntity){
+        return FindIllusionHelm(livingEntity) && FindIllusionArmor(livingEntity) && FindIllusionLeggings(livingEntity) && FindIllusionBootsofWander(livingEntity);
+    }
+
     public static boolean FindBootsofWander(LivingEntity livingEntity){
         return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() instanceof WanderBootsArmor;
     }
@@ -61,5 +77,9 @@ public class RobeArmorFinder {
 
     public static boolean FindFelBootsofWander(LivingEntity livingEntity){
         return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.FELBOOTSOFWANDER.get();
+    }
+
+    public static boolean FindIllusionBootsofWander(LivingEntity livingEntity){
+        return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.ILLUSION_BOOTS_OF_WANDER.get();
     }
 }

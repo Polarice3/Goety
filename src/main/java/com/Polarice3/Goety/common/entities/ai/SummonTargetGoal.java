@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.ai;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.utils.LichdomHelper;
@@ -44,7 +45,7 @@ public class SummonTargetGoal<T extends LivingEntity> extends NearestAttackableT
             } else {
                 return (entity) ->
                         entity instanceof IMob
-                                && !(entity instanceof CreeperEntity && entity.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.MinionsAttackCreepers.get())
+                                && !(entity instanceof CreeperEntity && entity.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && SpellConfig.MinionsAttackCreepers.get())
                                 && !(entity instanceof SpiderEntity && ownedEntity.getTrueOwner() != null && RobeArmorFinder.FindFelHelm(ownedEntity.getTrueOwner()))
                                 && !(entity instanceof IAngerable && ((ownedEntity.getTrueOwner() != null && ((IAngerable) entity).getTarget() != ownedEntity.getTrueOwner()) || ((IAngerable) entity).getTarget() != ownedEntity))
                                 && !(entity.getMobType() == CreatureAttribute.UNDEAD && ownedEntity.getTrueOwner() != null && ownedEntity.getTrueOwner() instanceof PlayerEntity && LichdomHelper.isLich((PlayerEntity) ownedEntity.getTrueOwner()) && MainConfig.LichUndeadFriends.get())

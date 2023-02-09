@@ -9,22 +9,25 @@
   "duration": 10,
   "ingredients": [
     {
-      "item": "minecraft:glass_bottle"
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:water_breathing\"}"
     },
     {
-      "item": "minecraft:glass_bottle"
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:water_breathing\"}"
     },
     {
-      "item": "minecraft:glass_bottle"
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:water_breathing\"}"
     },
     {
-      "item": "minecraft:pufferfish"
+      "item": "minecraft:magma_block"
     },
     {
-      "item": "minecraft:nether_wart"
-    },
-    {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:magma_block"
     }
   ],
   "result": {

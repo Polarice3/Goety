@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
@@ -38,7 +39,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class FanaticEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultist{
+public class FanaticEntity extends AbstractCultistEntity implements IRangedAttackMob, ICultist {
     private static final DataParameter<Integer> DATA_TYPE_ID = EntityDataManager.defineId(FanaticEntity.class, DataSerializers.INT);
     public static final Map<Integer, ResourceLocation> TEXTURE_BY_TYPE = Util.make(Maps.newHashMap(), (map) -> {
         map.put(0, Goety.location("textures/entity/cultist/fanatic/fanatic_0.png"));
@@ -68,10 +69,15 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.FanaticHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.FanaticDamage.get())
                 .add(Attributes.FOLLOW_RANGE, 24.0D);
+    }
+
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {

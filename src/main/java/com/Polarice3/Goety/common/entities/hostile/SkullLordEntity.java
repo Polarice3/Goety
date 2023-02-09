@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
@@ -44,7 +46,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SkullLordEntity extends MonsterEntity{
+public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
     protected static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(SkullLordEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Optional<UUID>> BONE_LORD = EntityDataManager.defineId(SkullLordEntity.class, DataSerializers.OPTIONAL_UUID);
     private static final DataParameter<Optional<UUID>> LASER = EntityDataManager.defineId(SkullLordEntity.class, DataSerializers.OPTIONAL_UUID);
@@ -61,6 +63,7 @@ public class SkullLordEntity extends MonsterEntity{
 
     public SkullLordEntity(EntityType<? extends SkullLordEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i50190_1_, this);
         this.navigation = this.createNavigation(p_i50190_2_);
         this.shootTime = 0;
         this.moveControl = new MobUtil.MinionMovementController(this);
@@ -80,9 +83,13 @@ public class SkullLordEntity extends MonsterEntity{
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.ATTACK_DAMAGE, 6.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.SkullLordDamage.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.MAX_HEALTH, 100.0D);
+                .add(Attributes.MAX_HEALTH, MobConfig.SkullLordHealth.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public void move(MoverType typeIn, Vector3d pos) {

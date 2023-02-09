@@ -10,7 +10,6 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
@@ -41,6 +40,9 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
         for (MobEntity mob: this.level.getEntitiesOfClass(MobEntity.class, this.getBoundingBox().inflate(16.0F))) {
             if (this.getTrueOwner() != null){
                 if (mob.getTarget() == this.getTrueOwner()){
+                    if (this.getTarget() != mob) {
+                        this.setTarget(mob);
+                    }
                     mob.setTarget(this);
                 }
             } else {
@@ -49,17 +51,7 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
         }
         if (this.getTrueOwner() != null){
             if (this.getTrueOwner().hurtTime == this.getTrueOwner().hurtDuration - 1){
-                this.remove();
-            }
-        }
-        if (!this.level.isClientSide){
-            if (this.getTrueOwner() != null){
-                if (this.getTrueOwner().hurtTime == this.getTrueOwner().hurtDuration - 1){
-                    playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
-                    for(int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
-                        ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
-                    }
-                }
+                this.die(DamageSource.STARVE);
             }
         }
         super.tick();
@@ -114,13 +106,13 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
     }
 
     public void die(DamageSource cause) {
-        this.remove();
         if (!this.level.isClientSide) {
             for (int i = 0; i < this.level.random.nextInt(35) + 10; ++i) {
                 ServerParticleUtil.smokeParticles(ParticleTypes.POOF, this.getX(), this.getEyeY(), this.getZ(), this.level);
             }
         }
         this.playSound(SoundEvents.ILLUSIONER_MIRROR_MOVE, 1.0F, 1.0F);
+        this.remove();
     }
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
@@ -163,10 +155,11 @@ public class IllusionCloneEntity extends SummonedEntity implements IRangedAttack
 
     protected AbstractArrowEntity getMobArrow(ItemStack arrowStack, float distanceFactor) {
         AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, arrowStack, distanceFactor);
-        if (this.isUpgraded() && abstractarrowentity instanceof ArrowEntity) {
-            ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(Effects.GLOWING, 300));
+        if (!this.isUpgraded()) {
+            abstractarrowentity.setBaseDamage(0.0F);
+        } else {
+            abstractarrowentity.setBaseDamage(0.5F);
         }
-        abstractarrowentity.setBaseDamage(0.0F);
         return abstractarrowentity;
     }
 

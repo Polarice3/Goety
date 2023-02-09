@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#$#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "goety:lapis_string"
+    },
+    "$": {
+      "item": "minecraft:purple_dye"
+    }
+  },
+  "result": {
+    "item": "goety:occultfabric"
+  }
+}

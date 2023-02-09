@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.BackawayCrossbowGoal;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
@@ -66,8 +67,13 @@ public class SkeletonVillagerMinionEntity extends OwnedEntity implements ICrossb
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 20.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.SkeletonVillagerServantHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.SkeletonVillagerServantDamage.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.25D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public void reassessWeaponGoal() {

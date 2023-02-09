@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
@@ -32,7 +33,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class UndeadWolfEntity extends SummonedEntity{
+public class UndeadWolfEntity extends SummonedEntity {
     protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(UndeadWolfEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Boolean> DATA_INTERESTED_ID = EntityDataManager.defineId(UndeadWolfEntity.class, DataSerializers.BOOLEAN);
     private float interestedAngle;
@@ -82,9 +83,13 @@ public class UndeadWolfEntity extends SummonedEntity{
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 8.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.UndeadWolfHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
-                .add(Attributes.ATTACK_DAMAGE, 2.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.UndeadWolfDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
@@ -144,9 +149,9 @@ public class UndeadWolfEntity extends SummonedEntity{
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         if (this.isUpgraded()){
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(20.0D);
-            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-            this.setHealth(20.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.NecroUndeadWolfHealth.get());
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(MobConfig.NecroUndeadWolfDamage.get());
+            this.setHealth(MobConfig.NecroUndeadWolfHealth.get().floatValue());
         }
         return pSpawnData;
     }
@@ -258,42 +263,37 @@ public class UndeadWolfEntity extends SummonedEntity{
     }
 
     public ActionResultType mobInteract(PlayerEntity pPlayer, Hand pHand) {
-        if (!this.level.isClientSide){
-            ItemStack itemstack = pPlayer.getItemInHand(pHand);
-            Item item = itemstack.getItem();
-            if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
-                if (item == Items.ROTTEN_FLESH && this.getHealth() < this.getMaxHealth()) {
-                    if (!pPlayer.abilities.instabuild) {
-                        itemstack.shrink(1);
-                    }
-                    this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
-                    this.heal(2.0F);
+        ItemStack itemstack = pPlayer.getItemInHand(pHand);
+        Item item = itemstack.getItem();
+        if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
+            if ((item == Items.ROTTEN_FLESH || item == Items.BONE) && this.getHealth() < this.getMaxHealth()) {
+                if (!pPlayer.abilities.instabuild) {
+                    itemstack.shrink(1);
+                }
+                this.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+                this.heal(2.0F);
+                if (!this.level.isClientSide) {
+                    ServerWorld serverWorld = (ServerWorld) this.level;
                     for (int i = 0; i < 7; ++i) {
                         double d0 = this.random.nextGaussian() * 0.02D;
                         double d1 = this.random.nextGaussian() * 0.02D;
                         double d2 = this.random.nextGaussian() * 0.02D;
-                        this.level.addParticle(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), d0, d1, d2);
+                        serverWorld.sendParticles(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
                     }
-                    return ActionResultType.CONSUME;
-                } else if (RobeArmorFinder.FindNecroSet(pPlayer)){
-                    ActionResultType actionresulttype = super.mobInteract(pPlayer, pHand);
-                    if ((!actionresulttype.consumesAction() || this.isBaby())) {
-                        this.setOrderedToSit(!this.isOrderedToSit());
-                        this.jumping = false;
-                        this.navigation.stop();
-                        this.setTarget((LivingEntity)null);
-                        return ActionResultType.SUCCESS;
-                    }
-                    return actionresulttype;
-                } else {
-                    return ActionResultType.PASS;
                 }
-            } else {
-                return ActionResultType.PASS;
+                return ActionResultType.sidedSuccess(this.level.isClientSide);
             }
-        } else {
-            return ActionResultType.PASS;
+            if (RobeArmorFinder.FindNecroSet(pPlayer)){
+                if (!this.level.isClientSide) {
+                    this.setOrderedToSit(!this.isOrderedToSit());
+                    this.jumping = false;
+                    this.navigation.stop();
+                    this.setTarget((LivingEntity) null);
+                }
+                return ActionResultType.sidedSuccess(this.level.isClientSide);
+            }
         }
+        return ActionResultType.PASS;
     }
 
     static class BegGoal extends Goal {

@@ -1108,6 +1108,121 @@
     ],
     "subtitle": "subtitle.goety.huskarl_death"
   },
+  "fallen_ambient": {
+    "sounds": [
+      {
+        "name": "goety:fallen/idle1"
+      },
+      {
+        "name": "goety:fallen/idle2"
+      },
+      {
+        "name": "goety:fallen/idle3"
+      }
+    ],
+    "subtitle": "subtitle.goety.fallen_ambient"
+  },
+  "fallen_hurt": {
+    "sounds": [
+      {
+        "name": "goety:fallen/hurt1"
+      },
+      {
+        "name": "goety:fallen/hurt2"
+      },
+      {
+        "name": "goety:fallen/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.fallen_hurt"
+  },
+  "fallen_angry": {
+    "sounds": [
+      {
+        "name": "goety:fallen/angry1"
+      },
+      {
+        "name": "goety:fallen/angry2"
+      },
+      {
+        "name": "goety:fallen/angry3"
+      }
+    ],
+    "subtitle": "subtitle.goety.fallen_angry"
+  },
+  "fallen_death": {
+    "sounds": [
+      {
+        "name": "goety:fallen/death1"
+      },
+      {
+        "name": "goety:fallen/death2"
+      },
+      {
+        "name": "goety:fallen/death3"
+      }
+    ],
+    "subtitle": "subtitle.goety.fallen_death"
+  },
+  "marcire_ambient": {
+    "sounds": [
+      {
+        "name": "goety:marcire/idle1"
+      },
+      {
+        "name": "goety:marcire/idle2"
+      }
+    ],
+    "subtitle": "subtitle.goety.marcire_ambient"
+  },
+  "marcire_hurt": {
+    "sounds": [
+      {
+        "name": "goety:marcire/hurt1"
+      },
+      {
+        "name": "goety:marcire/hurt2"
+      },
+      {
+        "name": "goety:marcire/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.marcire_hurt"
+  },
+  "marcire_angry": {
+    "sounds": [
+      {
+        "name": "goety:marcire/angry1"
+      },
+      {
+        "name": "goety:marcire/angry2"
+      },
+      {
+        "name": "goety:marcire/angry3"
+      },
+      {
+        "name": "goety:marcire/angry4"
+      }
+    ],
+    "subtitle": "subtitle.goety.marcire_angry"
+  },
+  "marcire_death": {
+    "sounds": [
+      {
+        "name": "goety:marcire/death1"
+      },
+      {
+        "name": "goety:marcire/death2"
+      },
+      {
+        "name": "goety:marcire/death3"
+      },
+      {
+        "name": "goety:marcire/death4"
+      }
+    ],
+    "subtitle": "subtitle.goety.marcire_death"
+  },
   "dreden_ambient": {
     "sounds": [
       {
@@ -1269,6 +1384,70 @@
       }
     ],
     "subtitle": "subtitle.goety.wraith_death"
+  },
+  "hoglord_ambient": {
+    "sounds": [
+      {
+        "name": "goety:hoglord/idle1"
+      },
+      {
+        "name": "goety:hoglord/idle2"
+      },
+      {
+        "name": "goety:hoglord/idle3"
+      },
+      {
+        "name": "goety:hoglord/idle4"
+      },
+      {
+        "name": "goety:hoglord/idle5"
+      }
+    ],
+    "subtitle": "subtitle.goety.hoglord_ambient"
+  },
+  "hoglord_hurt": {
+    "sounds": [
+      {
+        "name": "goety:hoglord/hurt1"
+      },
+      {
+        "name": "goety:hoglord/hurt2"
+      },
+      {
+        "name": "goety:hoglord/hurt3"
+      },
+      {
+        "name": "goety:hoglord/hurt4"
+      },
+      {
+        "name": "goety:hoglord/hurt5"
+      }
+    ],
+    "subtitle": "subtitle.goety.hoglord_hurt"
+  },
+  "hoglord_rage": {
+    "sounds": [
+      {
+        "name": "goety:hoglord/rage"
+      }
+    ],
+    "subtitle": "subtitle.goety.hoglord_rage"
+  },
+  "hoglord_summon": {
+    "sounds": [
+      {
+        "name": "goety:hoglord/summon"
+      }
+    ],
+    "subtitle": "subtitle.goety.hoglord_summon"
+  },
+  "hoglord_death": {
+    "sounds": [
+      {
+        "name": "goety:hoglord/death"
+      }
+    ],
+    "subtitle": "subtitle.goety.hoglord_death"
   },
   "vizier_ambient": {
     "sounds": [

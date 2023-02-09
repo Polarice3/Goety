@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.enchantments;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.EquipmentSlotType;
 
@@ -18,7 +18,7 @@ public class PotencyEnchantment extends FocusEnchantments {
     }
 
     public int getMaxLevel() {
-        return MainConfig.MaxPotencyLevel.get();
+        return SpellConfig.MaxPotencyLevel.get();
     }
 
     public boolean checkCompatibility(Enchantment pEnch) {

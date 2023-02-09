@@ -48,7 +48,6 @@ import net.minecraft.block.WoodType;
 import net.minecraft.dispenser.*;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.fish.AbstractFishEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -134,8 +133,13 @@ public class Goety {
         forgeBus.addListener(EventPriority.HIGH, this::biomeModification);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MainConfig.SPEC, "goety.toml");
-
         MainConfig.loadConfig(MainConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety.toml").toString());
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MobConfig.SPEC, "goety-attributes.toml");
+        MobConfig.loadConfig(MobConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-attributes.toml").toString());
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpellConfig.SPEC, "goety-spells.toml");
+        SpellConfig.loadConfig(SpellConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-spells.toml").toString());
 
         ModItems.init();
         ModBlocks.init();
@@ -295,7 +299,7 @@ public class Goety {
         event.put(ModEntityType.SACRED_FISH.get(), SacredFishEntity.setCustomAttributes().build());
         event.put(ModEntityType.PARASITE.get(), ParasiteEntity.setCustomAttributes().build());
         event.put(ModEntityType.FRIENDLY_VEX.get(), FriendlyVexEntity.setCustomAttributes().build());
-        event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyScorchEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyVexEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.HUSK_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.DROWNED_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
@@ -303,9 +307,9 @@ public class Goety {
         event.put(ModEntityType.STRAY_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.DREDEN_MINION.get(), DredenMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.WRAITH_MINION.get(), WraithMinionEntity.setCustomAttributes().build());
-        event.put(ModEntityType.FARMER_MINION.get(), FarmerMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FARMER_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfEntity.setCustomAttributes().build());
-        event.put(ModEntityType.PHANTOM_MINION.get(), MonsterEntity.createMonsterAttributes().build());
+        event.put(ModEntityType.PHANTOM_MINION.get(), PhantomMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneEntity.setCustomAttributes().build());
         event.put(ModEntityType.SPIDERLING_MINION.get(), SpiderlingMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.CREEPERLING_MINION.get(), CreeperlingMinionEntity.setCustomAttributes().build());

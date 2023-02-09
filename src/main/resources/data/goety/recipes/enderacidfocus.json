@@ -14,7 +14,9 @@
     },
     "s":
     {
-      "item": "minecraft:fermented_spider_eye"
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:harming\"}"
     },
     "c":
     {

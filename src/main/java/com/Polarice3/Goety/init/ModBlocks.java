@@ -103,7 +103,7 @@ public class ModBlocks {
             .lightLevel((p_235470_0_) -> {
                 return 10;
             })
-            .sound(SoundType.WOOD), ParticleTypes.FLAME));
+            .sound(SoundType.WOOD), ParticleTypes.SOUL_FIRE_FLAME));
     public static final RegistryObject<Block> GHOST_FIRE_TRAP_BLOCK = BLOCKS.register("ghost_fire_trap", GhostFireTrapBlock::new);
     public static final RegistryObject<Block> CULT_STATUE = BLOCKS.register("cult_statue", CultStatueBlock::new);
 

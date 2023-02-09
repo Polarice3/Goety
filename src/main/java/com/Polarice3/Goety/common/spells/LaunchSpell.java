@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +17,7 @@ public class LaunchSpell extends InstantCastSpells{
 
     @Override
     public int SoulCost() {
-        return MainConfig.LaunchCost.get();
+        return SpellConfig.LaunchCost.get();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class LaunchSpell extends InstantCastSpells{
             player.hasImpulse = true;
             player.fallDistance = 0;
             player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 20 * duration));
-            this.IncreaseInfamy(MainConfig.LaunchInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.LaunchInfamyChance.get(), player);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
     }
@@ -70,7 +70,7 @@ public class LaunchSpell extends InstantCastSpells{
             player.hasImpulse = true;
             player.fallDistance = 0;
             player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 20 * duration));
-            this.IncreaseInfamy(MainConfig.LaunchInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.LaunchInfamyChance.get(), player);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
     }

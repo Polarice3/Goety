@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.FrostBallGoal;
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
 import com.Polarice3.Goety.common.entities.ally.StrayMinionEntity;
@@ -48,10 +49,14 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 30.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.DredenHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, 4.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.DredenDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {

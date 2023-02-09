@@ -1,13 +1,16 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.ally.CreeperlingMinionEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -21,11 +24,11 @@ public class CreeperlingSpell extends ChargingSpells{
 
     @Override
     public int Cooldown() {
-        return MainConfig.CreeperlingDuration.get();
+        return SpellConfig.CreeperlingDuration.get();
     }
 
     public int SoulCost() {
-        return MainConfig.CreeperlingCost.get();
+        return SpellConfig.CreeperlingCost.get();
     }
 
     public SoundEvent CastingSound() {
@@ -53,12 +56,13 @@ public class CreeperlingSpell extends ChargingSpells{
                 int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 if (enchantment != 0){
-                    summonedentity.setExplosionRadius(MainConfig.CreeperlingExplosionRadius.get() + (enchantment/2.5));
+                    summonedentity.setExplosionRadius(SpellConfig.CreeperlingExplosionRadius.get() + (enchantment/2.5));
                 }
                 summonedentity.setLimitedLife(180 * duration);
             }
-            this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
+            this.IncreaseInfamy(SpellConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
         }
+        summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
         worldIn.addFreshEntity(summonedentity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
@@ -86,12 +90,13 @@ public class CreeperlingSpell extends ChargingSpells{
                     int enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                     int duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                     if (enchantment != 0){
-                        summonedentity.setExplosionRadius(MainConfig.CreeperlingExplosionRadius.get() + (enchantment/2.5));
+                        summonedentity.setExplosionRadius(SpellConfig.CreeperlingExplosionRadius.get() + (enchantment/2.5));
                     }
                     summonedentity.setLimitedLife(180 * duration);
                 }
-                this.IncreaseInfamy(MainConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
+                this.IncreaseInfamy(SpellConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
             }
+            summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             worldIn.addFreshEntity(summonedentity);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);

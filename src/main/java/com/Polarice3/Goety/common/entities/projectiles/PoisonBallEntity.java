@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
@@ -72,6 +73,7 @@ public class PoisonBallEntity extends ProjectileItemEntity {
         if (!this.level.isClientSide) {
             Entity target = pResult.getEntity();
             Entity owner = this.getOwner();
+            float damage = SpellConfig.PoisonballDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
             int enchantment = 0;
             int duration = 1;
             if (owner instanceof PlayerEntity){
@@ -87,7 +89,7 @@ public class PoisonBallEntity extends ProjectileItemEntity {
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (livingTarget.isAlive()){
                         if (this.isUpgraded()){
-                            livingTarget.hurt(DamageSource.indirectMagic(this, LivingOwner), 4.0F + enchantment);
+                            livingTarget.hurt(DamageSource.indirectMagic(this, LivingOwner), damage + enchantment);
                         }
                         livingTarget.addEffect(new EffectInstance(Effects.POISON, 432 * duration, enchantment));
                         if (RobeArmorFinder.FindFelSet(LivingOwner)){
@@ -100,7 +102,7 @@ public class PoisonBallEntity extends ProjectileItemEntity {
                     LivingEntity livingTarget = (LivingEntity) target;
                     if (livingTarget.isAlive()){
                         if (this.isUpgraded()){
-                            livingTarget.hurt(DamageSource.MAGIC, 4.0F);
+                            livingTarget.hurt(DamageSource.MAGIC, damage);
                         }
                         livingTarget.addEffect(new EffectInstance(Effects.POISON, 432));
                     }

@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ModDamageSource;
@@ -151,7 +152,7 @@ public class IceChunkEntity extends Entity {
     }
 
     public void damageTargets(LivingEntity livingEntity){
-        float damage = 8.0F;
+        float damage = SpellConfig.IceChunkDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
         damage += this.extraDamage;
         if (livingEntity != null) {
             if (livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getOwner()), damage)) {

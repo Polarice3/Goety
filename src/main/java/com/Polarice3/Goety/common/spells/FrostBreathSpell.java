@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.WandUtil;
@@ -17,10 +17,11 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.server.ServerWorld;
 
 public class FrostBreathSpell extends SpewingSpell{
+    public float damage = SpellConfig.FrostBreathDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
 
     @Override
     public int SoulCost() {
-        return MainConfig.FrostBreathCost.get();
+        return SpellConfig.FrostBreathCost.get();
     }
 
     @Override
@@ -40,14 +41,14 @@ public class FrostBreathSpell extends SpewingSpell{
                 duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.FrostBreathInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.FrostBreathInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 15)) {
                 if (target != null) {
                     if (target instanceof LivingEntity) {
                         LivingEntity livingTarget = (LivingEntity) target;
-                        if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 1.0F + enchantment)) {
+                        if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), damage + enchantment)) {
                             livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
                         }
                     }
@@ -69,14 +70,14 @@ public class FrostBreathSpell extends SpewingSpell{
                 duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(MainConfig.FrostBreathInfamyChance.get(), player);
+            this.IncreaseInfamy(SpellConfig.FrostBreathInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 18)) {
                 if (target != null) {
                     if (target instanceof LivingEntity) {
                         LivingEntity livingTarget = (LivingEntity) target;
-                        if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), 2.0F + enchantment)) {
+                        if (livingTarget.hurt(ModDamageSource.frostBreath(entityLiving), (damage * 2) + enchantment)) {
                             livingTarget.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100 * duration));
                         }
                     }

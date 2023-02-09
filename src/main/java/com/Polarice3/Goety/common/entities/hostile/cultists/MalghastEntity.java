@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.neutral.OwnedFlyingEntity;
 import com.Polarice3.Goety.common.entities.projectiles.ExplosiveProjectileEntity;
 import com.Polarice3.Goety.common.entities.projectiles.GrandLavaballEntity;
@@ -42,8 +43,8 @@ public class MalghastEntity extends OwnedFlyingEntity {
     private int swell;
     private int maxSwell = 15;
 
-    public MalghastEntity(EntityType<? extends OwnedFlyingEntity> p_i48578_1_, World p_i48578_2_) {
-        super(p_i48578_1_, p_i48578_2_);
+    public MalghastEntity(EntityType<? extends OwnedFlyingEntity> type, World p_i48578_2_) {
+        super(type, p_i48578_2_);
         this.moveControl = new MalghastEntity.MoveHelperController(this);
     }
 
@@ -125,8 +126,12 @@ public class MalghastEntity extends OwnedFlyingEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D)
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, MobConfig.MalghastHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 32.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected SoundEvent getAmbientSound() {

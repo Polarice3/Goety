@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "lal",
+    "f f",
+    "y y"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:occultfabric"
+    },
+    "y":
+    {
+      "item": "goety:darkfabric"
+    },
+    "l":
+    {
+      "tag": "forge:leather"
+    },
+    "a":
+    {
+      "item": "goety:lapis_string"
+    }
+  },
+  "result":
+  {
+    "item": "goety:illusionleggings",
+    "count": 1
+  }
+}

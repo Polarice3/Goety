@@ -1,7 +1,10 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -24,10 +27,11 @@ import net.minecraft.world.World;
 
 import java.util.Objects;
 
-public class FallenEntity extends ZombieEntity implements IDeadMob {
+public class FallenEntity extends ZombieEntity implements IDeadMob, ICustomAttributes {
 
     public FallenEntity(EntityType<? extends ZombieEntity> p_i48553_1_, World p_i48553_2_) {
         super(p_i48553_1_, p_i48553_2_);
+        ICustomAttributes.applyAttributesForEntity(p_i48553_1_, this);
     }
 
     @Override
@@ -43,11 +47,16 @@ public class FallenEntity extends ZombieEntity implements IDeadMob {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, MobConfig.FallenHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.FallenDamage.get())
                 .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected boolean isSunSensitive() {
@@ -65,15 +74,19 @@ public class FallenEntity extends ZombieEntity implements IDeadMob {
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.HUSK_AMBIENT;
+        if (this.getTarget() != null){
+            return ModSounds.FALLEN_ANGRY.get();
+        } else {
+            return ModSounds.FALLEN_AMBIENT.get();
+        }
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.HUSK_HURT;
+        return ModSounds.FALLEN_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.HUSK_DEATH;
+        return ModSounds.FALLEN_DEATH.get();
     }
 
     protected SoundEvent getStepSound() {

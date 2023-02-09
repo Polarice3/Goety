@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -37,7 +39,7 @@ import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 
-public abstract class AbstractSMEntity extends SummonedEntity implements IRangedAttackMob{
+public abstract class AbstractSMEntity extends SummonedEntity implements IRangedAttackMob, ICustomAttributes {
     private final CreatureBowAttackGoal<AbstractSMEntity> bowGoal = new CreatureBowAttackGoal<>(this, 1.0D, 20, 15.0F);
     private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
 
@@ -75,10 +77,15 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, MobConfig.SkeletonServantHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.SkeletonServantDamage.get())
                 .add(Attributes.ARMOR, 2.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     public void reassessWeaponGoal() {

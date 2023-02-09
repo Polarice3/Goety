@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.spells;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.PoisonBallEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +13,7 @@ public class PoisonBallSpell extends InstantCastSpells{
 
     @Override
     public int SoulCost() {
-        return MainConfig.PoisonballCost.get();
+        return SpellConfig.PoisonballCost.get();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class PoisonBallSpell extends InstantCastSpells{
         poisonBall.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
         worldIn.addFreshEntity(poisonBall);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -46,6 +46,6 @@ public class PoisonBallSpell extends InstantCastSpells{
             worldIn.addFreshEntity(poisonBall1);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(MainConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
+        this.IncreaseInfamy(SpellConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }
