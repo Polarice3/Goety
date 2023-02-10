@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.ally;
 import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -93,33 +94,29 @@ public class UndeadWolfEntity extends SummonedEntity {
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
+        this.playSound(ModSounds.UNDEAD_WOLF_STEP.get(), 0.15F, 1.0F);
     }
 
     protected SoundEvent getAmbientSound() {
         if (this.isAggressive()) {
-            return SoundEvents.WOLF_GROWL;
+            return ModSounds.UNDEAD_WOLF_GROWL.get();
         } else if (this.random.nextInt(3) == 0) {
-            return SoundEvents.WOLF_PANT;
+            return ModSounds.UNDEAD_WOLF_PANT.get();
         } else {
-            return SoundEvents.WOLF_AMBIENT;
+            return ModSounds.UNDEAD_WOLF_AMBIENT.get();
         }
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.WOLF_HURT;
+        return ModSounds.UNDEAD_WOLF_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.WOLF_DEATH;
+        return ModSounds.UNDEAD_WOLF_DEATH.get();
     }
 
     protected float getSoundVolume() {
         return 0.4F;
-    }
-
-    protected float getVoicePitch() {
-        return 0.5F;
     }
 
     protected float getStandingEyeHeight(Pose pPose, EntitySize pSize) {

@@ -76,6 +76,9 @@ public class MobConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> RottreantHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> RottreantDamage;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> LoyalSpiderHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> LoyalSpiderDamage;
+
     public static final ForgeConfigSpec.ConfigValue<Double> SkullLordHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> SkullLordDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> BoneLordHealth;
@@ -185,6 +188,12 @@ public class MobConfig {
                         .defineInRange("urbhadhachHealth", 32.0, 1.0, Double.MAX_VALUE);
                 UrbhadhachDamage = BUILDER.comment("How much damage Urbhadhach deals, Default: 6.0")
                         .defineInRange("urbhadhachDamage", 6.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Loyal Spider");
+                LoyalSpiderHealth = BUILDER.comment("How much Max Health Loyal Spider initially have, Default: 16.0")
+                        .defineInRange("loyalSpiderHealth", 16.0, 1.0, Double.MAX_VALUE);
+                LoyalSpiderDamage = BUILDER.comment("How much damage Loyal Spider initially deals, Default: 2.0")
+                        .defineInRange("loyalSpiderDamage", 2.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Skull Lord");
                 SkullLordHealth = BUILDER.comment("How much Max Health Skull Lord have, Default: 100.0")

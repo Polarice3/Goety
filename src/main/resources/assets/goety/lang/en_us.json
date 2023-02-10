@@ -641,6 +641,14 @@
   "subtitle.goety.urbhadhach_step": "Urbhadhach prowls",
   "subtitle.goety.urbhadhach_death": "Urbhadhach dies",
 
+  "subtitle.goety.undead_wolf_ambient": "Undead Wolf pants",
+  "subtitle.goety.undead_wolf_hurt": "Undead Wolf hurts",
+  "subtitle.goety.undead_wolf_growl": "Undead Wolf growls",
+  "subtitle.goety.undead_wolf_howl": "Undead Wolf howls",
+  "subtitle.goety.undead_wolf_whine": "Undead Wolf whines",
+  "subtitle.goety.undead_wolf_step": "Undead Wolf steps",
+  "subtitle.goety.undead_wolf_death": "Undead Wolf dies",
+
   "subtitle.goety.fel_fly_loop": "Fel Fly buzzes",
   "subtitle.goety.fel_fly_hurt": "Fel Fly hurts",
   "subtitle.goety.fel_fly_death": "Fel Fly dies",

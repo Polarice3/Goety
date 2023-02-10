@@ -1418,7 +1418,7 @@ public class ModEvents {
         if (event.getEntityLiving() != null) {
             LivingEntity living = event.getEntityLiving();
             if (living instanceof RavagerEntity){
-                event.getDrops().add(ItemHelper.itemEntityDrop(living, new ItemStack(ModItems.SAVAGETOOTH.get(), living.level.random.nextInt(2))));
+                event.getDrops().add(ItemHelper.itemEntityDrop(living, new ItemStack(ModItems.SAVAGE_TOOTH.get(), living.level.random.nextInt(2))));
             }
             if (living instanceof BeldamEntity){
                 if (living.level.getServer() != null) {
@@ -1479,6 +1479,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void ExplosionDetonateEvent(ExplosionEvent.Detonate event){
         if (event.getExplosion() != null) {
+            event.getAffectedEntities().removeIf(entity -> (entity instanceof ItemEntity && ((ItemEntity) entity).getItem().getItem() == ModItems.UNHOLY_BLOOD.get()));
             if (event.getExplosion().getSourceMob() != null) {
                 if (event.getExplosion().getSourceMob() instanceof ApostleEntity) {
                     event.getAffectedEntities().removeIf(entity -> (entity instanceof OwnedEntity && ((OwnedEntity) entity).getTrueOwner() instanceof ApostleEntity) || (entity == event.getExplosion().getSourceMob()));

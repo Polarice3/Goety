@@ -887,6 +887,103 @@
     ],
     "subtitle": "subtitle.goety.urbhadhach_death"
   },
+  "undead_wolf_ambient": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/bark1"
+      },
+      {
+        "name": "goety:undead_wolf/bark2"
+      },
+      {
+        "name": "goety:undead_wolf/bark3"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_ambient"
+  },
+  "undead_wolf_hurt": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/hurt1"
+      },
+      {
+        "name": "goety:undead_wolf/hurt2"
+      },
+      {
+        "name": "goety:undead_wolf/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_hurt"
+  },
+  "undead_wolf_growl": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/growl1"
+      },
+      {
+        "name": "goety:undead_wolf/growl2"
+      },
+      {
+        "name": "goety:undead_wolf/growl3"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_growl"
+  },
+  "undead_wolf_howl": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/howl1"
+      },
+      {
+        "name": "goety:undead_wolf/howl2"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_howl"
+  },
+  "undead_wolf_pant": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/pant"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_ambient"
+  },
+  "undead_wolf_whine": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/whine"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_whine"
+  },
+  "undead_wolf_step": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/step1"
+      },
+      {
+        "name": "goety:undead_wolf/step2"
+      },
+      {
+        "name": "goety:undead_wolf/step3"
+      },
+      {
+        "name": "goety:undead_wolf/step4"
+      },
+      {
+        "name": "goety:undead_wolf/step5"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_step"
+  },
+  "undead_wolf_death": {
+    "sounds": [
+      {
+        "name": "goety:undead_wolf/death"
+      }
+    ],
+    "subtitle": "subtitle.goety.undead_wolf_death"
+  },
   "fel_fly_loop": {
     "sounds": [
       {

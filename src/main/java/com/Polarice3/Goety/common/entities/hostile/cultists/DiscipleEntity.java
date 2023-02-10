@@ -124,8 +124,8 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.NETHER_BOOK.get()));
         this.setDropChance(EquipmentSlotType.MAINHAND, 0.085F);
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTISTHELM.get()));
-        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.CULTISTROBE.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ModItems.CULTIST_HELM.get()));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ModItems.CULTIST_ROBE.get()));
         this.setDropChance(EquipmentSlotType.HEAD, 0.0F);
         this.setDropChance(EquipmentSlotType.CHEST, 0.0F);
         boolean flag = true;

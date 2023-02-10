@@ -1,7 +1,5 @@
 package com.Polarice3.Goety.client.model;
 
-
-import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -205,26 +203,6 @@ public class DuneSpiderModel<T extends Entity> extends SegmentedModel<T> {
 		this.leg5.zRot += -f9;
 		this.leg6.zRot += f10;
 		this.leg7.zRot += -f10;
-		if (pEntity instanceof LoyalSpiderEntity){
-			if (((LoyalSpiderEntity) pEntity).isSitting()){
-				this.leg0.yRot = ((float)Math.PI / 4F);
-				this.leg1.yRot = (-(float)Math.PI / 4F);
-				this.leg2.yRot = ((float)Math.PI / 8F);
-				this.leg3.yRot = (-(float)Math.PI / 8F);
-				this.leg4.yRot = (-(float)Math.PI / 8F);
-				this.leg5.yRot = ((float)Math.PI / 8F);
-				this.leg6.yRot = (-(float)Math.PI / 4F);
-				this.leg7.yRot = ((float)Math.PI / 4F);
-				this.leg0.zRot = 0;
-				this.leg1.zRot = 0;
-				this.leg2.zRot = 0;
-				this.leg3.zRot = 0;
-				this.leg4.zRot = 0;
-				this.leg5.zRot = 0;
-				this.leg6.zRot = 0;
-				this.leg7.zRot = 0;
-			}
-		}
 	}
 
 	public Iterable<ModelRenderer> parts() {

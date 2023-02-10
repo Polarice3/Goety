@@ -529,7 +529,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-        ItemEntity itementity = this.spawnAtLocation(ModItems.SOULRUBY.get());
+        ItemEntity itementity = this.spawnAtLocation(ModItems.SOUL_RUBY.get());
         if (itementity != null) {
             itementity.setExtendedLifetime();
         }

@@ -169,7 +169,7 @@ public class Goety {
                     return stack;
                 }
             });
-            DispenserBlock.registerBehavior(ModItems.WITCHBOMB.get(), new ProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(ModItems.WITCH_BOMB.get(), new ProjectileDispenseBehavior() {
                 protected ProjectileEntity getProjectile(World pLevel, IPosition pPosition, ItemStack pStack) {
                     return Util.make(new WitchBombEntity(pLevel, pPosition.x(), pPosition.y(), pPosition.z()), (witchBomb) -> {
                         witchBomb.setItem(pStack);

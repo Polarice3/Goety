@@ -126,7 +126,7 @@ public class SummonedEntity extends OwnedEntity {
             } else if (this.limitedLifeTicks > 0){
                 this.limitedLifespan = true;
             }
-            if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECROBOOTSOFWANDER.get()){
+            if (this.getTrueOwner().getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECRO_BOOTS_OF_WANDER.get()){
                 if (this.getMobType() == CreatureAttribute.UNDEAD){
                     this.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 100, 0, false, false, false));
                 }

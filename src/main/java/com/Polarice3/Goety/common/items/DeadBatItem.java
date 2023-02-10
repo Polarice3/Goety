@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.ally.LoyalSpiderEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.monster.CaveSpiderEntity;
 import net.minecraft.entity.monster.SpiderEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +17,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -60,6 +62,7 @@ public class DeadBatItem extends Item {
                         }
                         tamedSpider.setOwnerId(player.getUUID());
                         tamedSpider.setPersistenceRequired();
+                        tamedSpider.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(tamedSpider.blockPosition()), SpawnReason.CONVERSION, null, null);
                         world.addFreshEntity(tamedSpider);
                         world.broadcastEntityEvent(tamedSpider, (byte) 7);
                         stack.shrink(1);

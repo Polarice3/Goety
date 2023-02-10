@@ -28,13 +28,13 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindNecroHelm(LivingEntity livingEntity){
-        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECROARMOREDHELM.get());
+        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECRO_HELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.NECRO_ARMORED_HELM.get());
     }
 
     public static boolean FindNecroArmor(LivingEntity livingEntity){
-        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECROARMOREDROBE.get());
+        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECRO_ROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.NECRO_ARMORED_ROBE.get());
     }
 
     public static boolean FindNecroSet(LivingEntity livingEntity){
@@ -42,13 +42,13 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindFelHelm(LivingEntity livingEntity){
-        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.FELHELM.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.FELARMOREDHELM.get());
+        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.FEL_HELM.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ModItems.FEL_ARMORED_HELM.get());
     }
 
     public static boolean FindFelArmor(LivingEntity livingEntity){
-        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.FELROBE.get() ||
-                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.FELARMOREDROBE.get());
+        return livingEntity != null && (livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.FEL_ROBE.get() ||
+                livingEntity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ModItems.FEL_ARMORED_ROBE.get());
     }
 
     public static boolean FindFelSet(LivingEntity livingEntity){
@@ -72,11 +72,11 @@ public class RobeArmorFinder {
     }
 
     public static boolean FindNecroBootsofWander(LivingEntity livingEntity){
-        return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECROBOOTSOFWANDER.get();
+        return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.NECRO_BOOTS_OF_WANDER.get();
     }
 
     public static boolean FindFelBootsofWander(LivingEntity livingEntity){
-        return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.FELBOOTSOFWANDER.get();
+        return livingEntity != null && livingEntity.getItemBySlot(EquipmentSlotType.FEET).getItem() == ModItems.FEL_BOOTS_OF_WANDER.get();
     }
 
     public static boolean FindIllusionBootsofWander(LivingEntity livingEntity){

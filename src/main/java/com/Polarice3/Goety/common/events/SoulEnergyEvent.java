@@ -234,7 +234,7 @@ public class SoulEnergyEvent {
                         GoldTotemItem.setSoulsamount(itemStack, 0);
                         if (victim instanceof MobEntity){
                             itemStack.shrink(1);
-                            victim.spawnAtLocation(new ItemStack(ModItems.SPENTTOTEM.get()));
+                            victim.spawnAtLocation(new ItemStack(ModItems.SPENT_TOTEM.get()));
                         }
                     }
                     return true;

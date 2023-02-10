@@ -1,10 +1,12 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -50,7 +52,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IOwned {
+public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IOwned, ICustomAttributes {
     protected static final DataParameter<Byte> STATUS = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
     protected static final DataParameter<Byte> SITTING = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.BYTE);
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(LoyalSpiderEntity.class, DataSerializers.OPTIONAL_UUID);
@@ -61,6 +63,7 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
 
     public LoyalSpiderEntity(EntityType<? extends AnimalEntity> type, World worldIn) {
         super(type, worldIn);
+        ICustomAttributes.applyAttributesForEntity(type, this);
     }
 
     public void tick() {
@@ -166,12 +169,16 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 16.0D)
+                .add(Attributes.MAX_HEALTH, MobConfig.LoyalSpiderHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
                 .add(Attributes.ARMOR, 0.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.0F)
-                .add(Attributes.ATTACK_DAMAGE, 2.0D);
+                .add(Attributes.ATTACK_DAMAGE, MobConfig.LoyalSpiderDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void updateControlFlags() {
@@ -546,6 +553,9 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        if (this.isPoison()){
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttributeBaseValue(Attributes.MAX_HEALTH) - 4.0D);
+        }
         return spawnDataIn;
     }
 

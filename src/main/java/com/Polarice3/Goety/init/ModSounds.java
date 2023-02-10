@@ -84,6 +84,15 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> URBHADHACH_STEP = create("urbhadhach_step");
     public static final RegistryObject<SoundEvent> URBHADHACH_DEATH = create("urbhadhach_death");
 
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_AMBIENT = create("undead_wolf_ambient");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_HURT = create("undead_wolf_hurt");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_GROWL = create("undead_wolf_growl");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_HOWL = create("undead_wolf_howl");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_PANT = create("undead_wolf_pant");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_WHINE = create("undead_wolf_whine");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_STEP = create("undead_wolf_step");
+    public static final RegistryObject<SoundEvent> UNDEAD_WOLF_DEATH = create("undead_wolf_death");
+
     public static final RegistryObject<SoundEvent> FEL_FLY_LOOP = create("fel_fly_loop");
     public static final RegistryObject<SoundEvent> FEL_FLY_HURT = create("fel_fly_hurt");
     public static final RegistryObject<SoundEvent> FEL_FLY_DEATH = create("fel_fly_death");

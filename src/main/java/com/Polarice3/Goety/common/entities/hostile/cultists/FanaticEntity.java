@@ -128,7 +128,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
     }
 
     public boolean hasBomb(){
-        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModItems.WITCHBOMB.get();
+        return this.getItemInHand(Hand.OFF_HAND).getItem() == ModItems.WITCH_BOMB.get();
     }
 
     public boolean hasPearl(){
@@ -366,7 +366,7 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
             }
         }
         if (witchbomb == 0) {
-            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.WITCHBOMB.get()));
+            this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ModItems.WITCH_BOMB.get()));
         } else if (this.level.random.nextFloat() <= 0.25F){
             if (this.level.random.nextBoolean()) {
                 this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.ENDER_PEARL));

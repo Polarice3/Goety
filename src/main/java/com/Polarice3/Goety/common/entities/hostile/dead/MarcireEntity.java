@@ -134,7 +134,7 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
 
     protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
         super.populateDefaultEquipmentSlots(pDifficulty);
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.CORRUPTSTAFF.get()));
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.CORRUPT_STAFF.get()));
     }
 
     public void desiccateTarget(LivingEntity pEntity) {
@@ -175,7 +175,7 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
 
         public boolean canUse() {
             if (super.canUse()){
-                return this.wizard.getMainHandItem().getItem() == ModItems.CORRUPTSTAFF.get();
+                return this.wizard.getMainHandItem().getItem() == ModItems.CORRUPT_STAFF.get();
             } else {
                 return false;
             }

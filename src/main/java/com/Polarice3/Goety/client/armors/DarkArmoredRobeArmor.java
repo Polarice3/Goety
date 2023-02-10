@@ -50,7 +50,7 @@ public class DarkArmoredRobeArmor extends ArmorItem implements IRobeArmor{
 
     @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
-        return stack.getItem() == ModItems.DARKARMOREDLEGGINGS.get();
+        return stack.getItem() == ModItems.DARK_ARMORED_LEGGINGS.get();
     }
 
     @OnlyIn(Dist.CLIENT)

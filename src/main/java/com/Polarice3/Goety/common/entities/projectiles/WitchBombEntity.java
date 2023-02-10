@@ -36,7 +36,7 @@ public class WitchBombEntity extends ProjectileItemEntity {
     }
 
     protected Item getDefaultItem() {
-        return ModItems.WITCHBOMB.get();
+        return ModItems.WITCH_BOMB.get();
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -15,13 +15,13 @@ import java.util.function.Supplier;
 public enum ModArmorMaterial implements IArmorMaterial {
 
     DARKMAGE(Goety.MOD_ID + ":darkmage", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARK_FABRIC.get());}),
     NECROTURGE(Goety.MOD_ID + ":necroturge", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARK_FABRIC.get());}),
     FELTURGE(Goety.MOD_ID + ":felturge", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARK_FABRIC.get());}),
     ILLUSION(Goety.MOD_ID + ":illusion", 5, new int[] {1, 2, 2, 1}, 25,
-            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.DARKFABRIC.get());}),
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, () -> { return Ingredient.of(ModItems.OCCULT_FABRIC.get());}),
     DARKARMOREDMAGE(Goety.MOD_ID + ":darkarmoredmage", 15, new int[]{2, 5, 6, 2}, 25,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0.0F, () -> {return Ingredient.of(ModItems.CURSED_INGOT.get());
     }),

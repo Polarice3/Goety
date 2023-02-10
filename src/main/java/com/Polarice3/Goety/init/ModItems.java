@@ -30,7 +30,7 @@ public class ModItems {
     public static final RegistryObject<Item> BLAZE_CORE = ITEMS.register("blazecore", BlazeCoreItem::new);
     public static final RegistryObject<Item> DARK_SCROLL = ITEMS.register("dark_scroll", DarkScrollItem::new);
     public static final RegistryObject<PhilosophersStoneItem> PHILOSOPHERSSTONE = ITEMS.register("philosophers_stone", PhilosophersStoneItem::new);
-    public static final RegistryObject<WitchBombItem> WITCHBOMB = ITEMS.register("witchbomb", WitchBombItem::new);
+    public static final RegistryObject<WitchBombItem> WITCH_BOMB = ITEMS.register("witchbomb", WitchBombItem::new);
     public static final RegistryObject<BurningPotionItem> BURNING_POTION = ITEMS.register("burning_potion", BurningPotionItem::new);
     public static final RegistryObject<Item> NETHER_BOOK = ITEMS.register("nether_book", NetherBookRawItem::new);
     public static final RegistryObject<Item> NETHER_BOOK_TRANSLATED = ITEMS.register("nether_book_translated", NetherBookItem::new);
@@ -39,7 +39,7 @@ public class ModItems {
     public static final RegistryObject<Item> SOUL_EMERALD = ITEMS.register("soul_emerald", () -> new SimpleFoiledItem(new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> SCRYING_MIRROR = ITEMS.register("scrying_mirror", ScryingMirrorItem::new);
     public static final RegistryObject<Item> TREASURE_POUCH = ITEMS.register("treasure_pouch", TreasurePouchItem::new);
-    public static final RegistryObject<Item> APOSTLE_BLOOD = ITEMS.register("apostle_blood_bottle", () -> new Item(new Item.Properties().fireResistant().rarity(Rarity.RARE).tab(Goety.TAB)));
+    public static final RegistryObject<Item> UNHOLY_BLOOD = ITEMS.register("apostle_blood_bottle", () -> new Item(new Item.Properties().fireResistant().rarity(Rarity.RARE).tab(Goety.TAB)));
     public static final RegistryObject<Item> UNDEATH_POTION = ITEMS.register("undeath_potion", UndeathPotionItem::new);
     public static final RegistryObject<ModBoatItem> HAUNTED_BOAT = ITEMS.register("haunted_boat", () -> new ModBoatItem(ModBoatEntity.Type.HAUNTED, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_TRANSPORTATION)));
     public static final RegistryObject<ModBoatItem> GLOOM_BOAT = ITEMS.register("gloom_boat", () -> new ModBoatItem(ModBoatEntity.Type.GLOOM, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_TRANSPORTATION)));
@@ -67,12 +67,12 @@ public class ModItems {
     public static final RegistryObject<MutatedFoodItem> MUTATED_RABBIT = ITEMS.register("mutatedrabbit", () -> new MutatedFoodItem(7, 0.8F));
 
     //Basic
-    public static final RegistryObject<Item> SOULRUBY = ITEMS.register("soulruby", ItemBase::new);
+    public static final RegistryObject<Item> SOUL_RUBY = ITEMS.register("soulruby", ItemBase::new);
     public static final RegistryObject<Item> BROKEN_BLAZE_CORE = ITEMS.register("brokenblazecore", ItemBase::new);
-    public static final RegistryObject<Item> SPENTTOTEM = ITEMS.register("spenttotem", ItemBase::new);
+    public static final RegistryObject<Item> SPENT_TOTEM = ITEMS.register("spenttotem", ItemBase::new);
     public static final RegistryObject<Item> CURSED_INGOT = ITEMS.register("cursed_ingot", ItemBase::new);
-    public static final RegistryObject<Item> SAVAGETOOTH = ITEMS.register("savagetooth", ItemBase::new);
-    public static final RegistryObject<Item> EMPTYCORE = ITEMS.register("emptycore", ItemBase::new);
+    public static final RegistryObject<Item> SAVAGE_TOOTH = ITEMS.register("savagetooth", ItemBase::new);
+    public static final RegistryObject<Item> EMPTY_CORE = ITEMS.register("emptycore", ItemBase::new);
     public static final RegistryObject<Item> ANIMALIS_CORE = ITEMS.register("animaliscore", AnimalisCoreItem::new);
     public static final RegistryObject<Item> HUNGER_CORE = ITEMS.register("hunger_core", ItemBase::new);
     public static final RegistryObject<Item> WIND_CORE = ITEMS.register("wind_core", ItemBase::new);
@@ -81,9 +81,9 @@ public class ModItems {
     public static final RegistryObject<Item> FROST_ORE = ITEMS.register("frost_ore", ItemBase::new);
     public static final RegistryObject<Item> FROST_INGOT = ITEMS.register("frost_ingot", ItemBase::new);
     public static final RegistryObject<Item> FROST_NUGGET = ITEMS.register("frost_nugget", ItemBase::new);
-    public static final RegistryObject<Item> DARKFABRIC = ITEMS.register("darkfabric", ItemBase::new);
-    public static final RegistryObject<Item> MAGICFABRIC = ITEMS.register("magicfabric", ItemBase::new);
-    public static final RegistryObject<Item> OCCULTFABRIC = ITEMS.register("occultfabric", ItemBase::new);
+    public static final RegistryObject<Item> DARK_FABRIC = ITEMS.register("darkfabric", ItemBase::new);
+    public static final RegistryObject<Item> MAGIC_FABRIC = ITEMS.register("magicfabric", ItemBase::new);
+    public static final RegistryObject<Item> OCCULT_FABRIC = ITEMS.register("occultfabric", ItemBase::new);
     public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
     public static final RegistryObject<Item> DRIED_REMNANT = ITEMS.register("dried_remnant", ItemBase::new);
     public static final RegistryObject<Item> DEAD_SAND_HEAP = ITEMS.register("dead_sand_heap", ItemBase::new);
@@ -149,33 +149,33 @@ public class ModItems {
     public static final RegistryObject<Item> WITCH_BOW = ITEMS.register("witch_bow", WitchBowItem::new);
     public static final RegistryObject<Item> NETHERITE_BOW = ITEMS.register("netherite_bow", NetheriteBowItem::new);
     public static final RegistryObject<Item> PHILOSOPHERS_MACE = ITEMS.register("philosophers_mace", PhilosophersMaceItem::new);
-    public static final RegistryObject<Item> SOULWAND = ITEMS.register("soulwand", SoulWand::new);
-    public static final RegistryObject<Item> SOULSTAFF = ITEMS.register("soulstaff", SoulStaff::new);
-    public static final RegistryObject<Item> CORRUPTSTAFF = ITEMS.register("corrupt_staff", CorruptStaff::new);
+    public static final RegistryObject<Item> DARK_WAND = ITEMS.register("soulwand", SoulWand::new);
+    public static final RegistryObject<Item> DARK_STAFF = ITEMS.register("soulstaff", SoulStaff::new);
+    public static final RegistryObject<Item> CORRUPT_STAFF = ITEMS.register("corrupt_staff", CorruptStaff::new);
     public static final RegistryObject<Item> FROST_CHARGE = ITEMS.register("frost_charge", FrostChargeItem::new);
 
     //Armors
-    public static final RegistryObject<Item> DARKHELM = ITEMS.register("darkhelm", () ->
+    public static final RegistryObject<Item> DARK_HELM = ITEMS.register("darkhelm", () ->
             new DarkRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> DARKROBE = ITEMS.register("darkrobe", () ->
+    public static final RegistryObject<Item> DARK_ROBE = ITEMS.register("darkrobe", () ->
             new DarkRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> DARKLEGGINGS = ITEMS.register("darkleggings", () ->
+    public static final RegistryObject<Item> DARK_LEGGINGS = ITEMS.register("darkleggings", () ->
             new DarkRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> DARKBOOTSOFWANDER = ITEMS.register("darkbootsofwander", () ->
+    public static final RegistryObject<Item> DARK_BOOTS_OF_WANDER = ITEMS.register("darkbootsofwander", () ->
             new WanderBootsArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> NECROHELM = ITEMS.register("necrohelm", () ->
+    public static final RegistryObject<Item> NECRO_HELM = ITEMS.register("necrohelm", () ->
             new DarkRobeArmor(ModArmorMaterial.NECROTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> NECROROBE = ITEMS.register("necrorobe", () ->
+    public static final RegistryObject<Item> NECRO_ROBE = ITEMS.register("necrorobe", () ->
             new DarkRobeArmor(ModArmorMaterial.NECROTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> NECROBOOTSOFWANDER = ITEMS.register("necrobootsofwander", () ->
+    public static final RegistryObject<Item> NECRO_BOOTS_OF_WANDER = ITEMS.register("necrobootsofwander", () ->
             new WanderBootsArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> FELHELM = ITEMS.register("felhelm", () ->
+    public static final RegistryObject<Item> FEL_HELM = ITEMS.register("felhelm", () ->
             new DarkRobeArmor(ModArmorMaterial.FELTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> FELROBE = ITEMS.register("felrobe", () ->
+    public static final RegistryObject<Item> FEL_ROBE = ITEMS.register("felrobe", () ->
             new DarkRobeArmor(ModArmorMaterial.FELTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> FELBOOTSOFWANDER = ITEMS.register("felbootsofwander", () ->
+    public static final RegistryObject<Item> FEL_BOOTS_OF_WANDER = ITEMS.register("felbootsofwander", () ->
             new WanderBootsArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<Item> ILLUSION_HELM = ITEMS.register("illusionhelm", () ->
@@ -187,31 +187,31 @@ public class ModItems {
     public static final RegistryObject<Item> ILLUSION_BOOTS_OF_WANDER = ITEMS.register("illusionbootsofwander", () ->
             new IllusionBootsArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.FEET, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> FELARMOREDHELM = ITEMS.register("felarmoredhelm", () ->
+    public static final RegistryObject<Item> FEL_ARMORED_HELM = ITEMS.register("felarmoredhelm", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> FELARMOREDROBE = ITEMS.register("felarmoredrobe", () ->
+    public static final RegistryObject<Item> FEL_ARMORED_ROBE = ITEMS.register("felarmoredrobe", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDFELTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> DARKARMOREDHELM = ITEMS.register("darkarmoredhelm", () ->
+    public static final RegistryObject<Item> DARK_ARMORED_HELM = ITEMS.register("darkarmoredhelm", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> DARKARMOREDROBE = ITEMS.register("darkarmoredrobe", () ->
+    public static final RegistryObject<Item> DARK_ARMORED_ROBE = ITEMS.register("darkarmoredrobe", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> DARKARMOREDLEGGINGS = ITEMS.register("darkarmoredleggings", () ->
+    public static final RegistryObject<Item> DARK_ARMORED_LEGGINGS = ITEMS.register("darkarmoredleggings", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> NECROARMOREDHELM = ITEMS.register("necroarmoredhelm", () ->
+    public static final RegistryObject<Item> NECRO_ARMORED_HELM = ITEMS.register("necroarmoredhelm", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
-    public static final RegistryObject<Item> NECROARMOREDROBE = ITEMS.register("necroarmoredrobe", () ->
+    public static final RegistryObject<Item> NECRO_ARMORED_ROBE = ITEMS.register("necroarmoredrobe", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
 
-    public static final RegistryObject<Item> CULTISTHELM = ITEMS.register("cultisthelm", () ->
+    public static final RegistryObject<Item> CULTIST_HELM = ITEMS.register("cultisthelm", () ->
             new CultistRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.HEAD, new Item.Properties()));
-    public static final RegistryObject<Item> CULTISTROBE = ITEMS.register("cultistrobe", () ->
+    public static final RegistryObject<Item> CULTIST_ROBE = ITEMS.register("cultistrobe", () ->
             new CultistRobeArmor(ModArmorMaterial.DARKMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
 
-    public static final RegistryObject<Item> CULTISTARMOREDHELM = ITEMS.register("cultistarmoredhelm", () ->
+    public static final RegistryObject<Item> CULTIST_ARMORED_HELM = ITEMS.register("cultistarmoredhelm", () ->
             new CultistArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.HEAD, new Item.Properties()));
-    public static final RegistryObject<Item> CULTISTARMOREDROBE = ITEMS.register("cultistarmoredrobe", () ->
+    public static final RegistryObject<Item> CULTIST_ARMORED_ROBE = ITEMS.register("cultistarmoredrobe", () ->
             new CultistArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties()));
 
     public static final RegistryObject<Item> FROST_HELMET = ITEMS.register("frost_helmet", () ->

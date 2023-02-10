@@ -73,10 +73,10 @@ public class GoldTotemItem extends Item {
                 GoldTotemItem.decreaseSouls(container, MainConfig.CraftingSouls.get());
                 return container;
             } else {
-                return new ItemStack(ModItems.SPENTTOTEM.get());
+                return new ItemStack(ModItems.SPENT_TOTEM.get());
             }
         } else {
-            return new ItemStack(ModItems.SPENTTOTEM.get());
+            return new ItemStack(ModItems.SPENT_TOTEM.get());
         }
     }
 

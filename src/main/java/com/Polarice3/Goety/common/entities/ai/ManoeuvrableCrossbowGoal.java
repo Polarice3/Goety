@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.EnumSet;
 
-public class ManoeuvrableCrossbowGoal<T extends CreatureEntity & IRangedAttackMob & ICrossbowUser> extends Goal {
+public class ManoeuvrableCrossbowGoal<T extends CreatureEntity & ICrossbowUser> extends Goal {
     private final T mob;
     private ManoeuvrableCrossbowGoal.CrossbowState crossbowState = ManoeuvrableCrossbowGoal.CrossbowState.UNCHARGED;
     private final double speedModifier;
@@ -42,7 +42,7 @@ public class ManoeuvrableCrossbowGoal<T extends CreatureEntity & IRangedAttackMo
     }
 
     private boolean isValidTarget() {
-        return this.mob.getTarget() != null && this.mob.getTarget().isAlive();
+        return this.mob.getTarget() != null && this.mob.getTarget().isAlive() && this.mob.getSensing().canSee(this.mob.getTarget());
     }
 
     public void start() {
