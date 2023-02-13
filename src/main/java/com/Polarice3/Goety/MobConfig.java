@@ -58,6 +58,8 @@ public class MobConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> DesiccatedDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> DuneSpiderHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> DuneSpiderDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> BlightHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> BlightDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> BoomerHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> MarcireHealth;
 
@@ -224,6 +226,12 @@ public class MobConfig {
                         .defineInRange("duneSpiderHealth", 16.0, 1.0, Double.MAX_VALUE);
                 DuneSpiderDamage = BUILDER.comment("How much damage Dune Spider deals, Default: 4.0")
                         .defineInRange("duneSpiderDamage", 4.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Blight");
+                BlightHealth = BUILDER.comment("How much Max Health Blight have, Default: 25.0")
+                        .defineInRange("blightHealth", 25.0, 1.0, Double.MAX_VALUE);
+                BlightDamage = BUILDER.comment("How much damage Blight deals, Default: 4.0")
+                        .defineInRange("blightDamage", 4.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
             BoomerHealth = BUILDER.comment("How much Max Health Boomer have, Default: 20.0")
                     .defineInRange("boomerHealth", 20.0, 1.0, Double.MAX_VALUE);

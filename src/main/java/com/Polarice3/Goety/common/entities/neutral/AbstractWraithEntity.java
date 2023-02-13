@@ -28,6 +28,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -169,6 +170,18 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
 
     protected SoundEvent getStepSound() {
         return ModSounds.WRAITH_FLY.get();
+    }
+
+    protected SoundEvent getAttackSound(){
+        return ModSounds.WRAITH_ATTACK.get();
+    }
+
+    protected SoundEvent getTeleportInSound(){
+        return ModSounds.WRAITH_TELEPORT.get();
+    }
+
+    protected SoundEvent getTeleportOutSound(){
+        return ModSounds.WRAITH_TELEPORT.get();
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
@@ -374,7 +387,8 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
                     double d4 = this.getTarget().getY();
                     double d5 = this.getTarget().getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getFollowRange();
                     BlockPos blockPos1 = new BlockPos(d3, d4, d5);
-                    if (!(this.level.canSeeSky(blockPos1) && this.level.isDay() && !(this.fireImmune() || this.hasEffect(Effects.FIRE_RESISTANCE)))) {
+                    if (!(this.level.canSeeSky(blockPos1) && this.level.isDay()
+                            && !(this.fireImmune() || this.hasEffect(Effects.FIRE_RESISTANCE)))) {
                         AbstractWraithEntity wraith = new WraithEntity(ModEntityType.WRAITH.get(), this.level);
                         wraith.setPos(d3, d4, d5);
                         wraith.getLookControl().setLookAt(this.getTarget(), 100.0F, 100.0F);
@@ -419,8 +433,8 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         this.level.broadcastEntityEvent(this, (byte) 100);
         this.level.broadcastEntityEvent(this, (byte) 101);
         if (!this.isSilent()) {
-            this.level.playSound(null, this.prevX, this.prevY, this.prevZ, ModSounds.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
-            this.playSound(ModSounds.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
+            this.level.playSound(null, this.prevX, this.prevY, this.prevZ, this.getTeleportInSound(), this.getSoundSource(), 1.0F, 1.0F);
+            this.playSound(this.getTeleportOutSound(), 1.0F, 1.0F);
         }
     }
 
@@ -430,8 +444,8 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
             this.level.broadcastEntityEvent(this, (byte) 4);
             this.level.broadcastEntityEvent(this, (byte) 100);
             if (!this.isSilent()) {
-                this.level.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(), ModSounds.WRAITH_ATTACK.get(), this.getSoundSource(), 1.0F, 1.0F);
-                this.playSound(ModSounds.WRAITH_ATTACK.get(), 1.0F, 1.0F);
+                this.level.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(), this.getAttackSound(), this.getSoundSource(), 1.0F, 1.0F);
+                this.playSound(this.getAttackSound(), 1.0F, 1.0F);
             }
         }
     }
@@ -441,6 +455,10 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
             this.setIsFiring(false);
             this.level.broadcastEntityEvent(this, (byte) 5);
         }
+    }
+
+    public IParticleData getFireParticles(){
+        return ModParticleTypes.WRAITH.get();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -457,13 +475,13 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
                 double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
                 double d2 = this.getY() + (this.random.nextDouble() - 0.5D);
                 double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
-                this.level.addParticle(ModParticleTypes.WRAITH.get(), d1, d2, d3, 0.0D, 0.0D, 0.0D);
+                this.level.addParticle(this.getFireParticles(), d1, d2, d3, 0.0D, 0.0D, 0.0D);
             }
         }
         if (pId == 101){
             if (!this.isSilent()) {
-                this.level.playSound(null, this.prevX, this.prevY, this.prevZ, ModSounds.WRAITH_TELEPORT.get(), this.getSoundSource(), 1.0F, 1.0F);
-                this.playSound(ModSounds.WRAITH_TELEPORT.get(), 1.0F, 1.0F);
+                this.level.playSound(null, this.prevX, this.prevY, this.prevZ, this.getTeleportInSound(), this.getSoundSource(), 1.0F, 1.0F);
+                this.playSound(this.getTeleportOutSound(), 1.0F, 1.0F);
             }
         }
 

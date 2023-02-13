@@ -4,6 +4,7 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -292,15 +293,15 @@ public class LocustEntity extends OwnedEntity implements IDeadMob, IFlyingAnimal
     }
 
     protected SoundEvent getAmbientSound() {
-        return null;
+        return ModSounds.LOCUST_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.BEE_HURT;
+        return ModSounds.LOCUST_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.BEE_DEATH;
+        return ModSounds.LOCUST_DEATH.get();
     }
 
     protected float getSoundVolume() {

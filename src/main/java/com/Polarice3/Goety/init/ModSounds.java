@@ -118,10 +118,31 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> FALLEN_ANGRY = create("fallen_angry");
     public static final RegistryObject<SoundEvent> FALLEN_DEATH = create("fallen_death");
 
+    public static final RegistryObject<SoundEvent> DESICCATED_AMBIENT = create("desiccated_ambient");
+    public static final RegistryObject<SoundEvent> DESICCATED_HURT = create("desiccated_hurt");
+    public static final RegistryObject<SoundEvent> DESICCATED_SHOOT = create("desiccated_shoot");
+    public static final RegistryObject<SoundEvent> DESICCATED_STEP = create("desiccated_step");
+    public static final RegistryObject<SoundEvent> DESICCATED_DEATH = create("desiccated_death");
+
+    public static final RegistryObject<SoundEvent> DUNE_SPIDER_AMBIENT = create("dune_spider_ambient");
+    public static final RegistryObject<SoundEvent> DUNE_SPIDER_HURT = create("dune_spider_hurt");
+    public static final RegistryObject<SoundEvent> DUNE_SPIDER_STEP = create("dune_spider_step");
+    public static final RegistryObject<SoundEvent> DUNE_SPIDER_DEATH = create("dune_spider_death");
+
+    public static final RegistryObject<SoundEvent> BLIGHT_AMBIENT = create("blight_ambient");
+    public static final RegistryObject<SoundEvent> BLIGHT_HURT = create("blight_hurt");
+    public static final RegistryObject<SoundEvent> BLIGHT_ATTACK = create("blight_attack");
+    public static final RegistryObject<SoundEvent> BLIGHT_TELEPORT = create("blight_teleport");
+    public static final RegistryObject<SoundEvent> BLIGHT_DEATH = create("blight_death");
+
     public static final RegistryObject<SoundEvent> MARCIRE_AMBIENT = create("marcire_ambient");
     public static final RegistryObject<SoundEvent> MARCIRE_HURT = create("marcire_hurt");
     public static final RegistryObject<SoundEvent> MARCIRE_ANGRY = create("marcire_angry");
     public static final RegistryObject<SoundEvent> MARCIRE_DEATH = create("marcire_death");
+
+    public static final RegistryObject<SoundEvent> LOCUST_AMBIENT = create("locust_ambient");
+    public static final RegistryObject<SoundEvent> LOCUST_HURT = create("locust_hurt");
+    public static final RegistryObject<SoundEvent> LOCUST_DEATH = create("locust_death");
 
     public static final RegistryObject<SoundEvent> DREDEN_AMBIENT = create("dreden_ambient");
     public static final RegistryObject<SoundEvent> DREDEN_HURT = create("dreden_hurt");

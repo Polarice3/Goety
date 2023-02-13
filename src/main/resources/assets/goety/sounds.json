@@ -1261,6 +1261,217 @@
     ],
     "subtitle": "subtitle.goety.fallen_death"
   },
+  "desiccated_ambient": {
+    "sounds": [
+      {
+        "name": "goety:desiccated/idle1"
+      },
+      {
+        "name": "goety:desiccated/idle2"
+      },
+      {
+        "name": "goety:desiccated/idle3"
+      }
+    ],
+    "subtitle": "subtitle.goety.desiccated_ambient"
+  },
+  "desiccated_hurt": {
+    "sounds": [
+      {
+        "name": "goety:desiccated/hurt1"
+      },
+      {
+        "name": "goety:desiccated/hurt2"
+      },
+      {
+        "name": "goety:desiccated/hurt3"
+      },
+      {
+        "name": "goety:desiccated/hurt4"
+      }
+    ],
+    "subtitle": "subtitle.goety.desiccated_hurt"
+  },
+  "desiccated_shoot": {
+    "sounds": [
+      {
+        "name": "goety:desiccated/shoot"
+      }
+    ],
+    "subtitle": "subtitle.goety.desiccated_shoot"
+  },
+  "desiccated_step": {
+    "sounds": [
+      {
+        "name": "mob/wither_skeleton/step1"
+      },
+      {
+        "name": "mob/wither_skeleton/step2"
+      },
+      {
+        "name": "mob/wither_skeleton/step3"
+      },
+      {
+        "name": "mob/wither_skeleton/step4"
+      }
+    ],
+    "subtitle": "subtitle.goety.desiccated_step"
+  },
+  "desiccated_death": {
+    "sounds": [
+      {
+        "name": "goety:desiccated/death1"
+      },
+      {
+        "name": "goety:desiccated/death2"
+      }
+    ],
+    "subtitle": "subtitle.goety.desiccated_death"
+  },
+  "dune_spider_ambient": {
+    "sounds": [
+      {
+        "name": "goety:dune_spider/idle1"
+      },
+      {
+        "name": "goety:dune_spider/idle2"
+      },
+      {
+        "name": "goety:dune_spider/idle3"
+      },
+      {
+        "name": "goety:dune_spider/idle4"
+      }
+    ],
+    "subtitle": "subtitle.goety.dune_spider_ambient"
+  },
+  "dune_spider_hurt": {
+    "sounds": [
+      {
+        "name": "goety:dune_spider/hurt1"
+      },
+      {
+        "name": "goety:dune_spider/hurt2"
+      },
+      {
+        "name": "goety:dune_spider/hurt3"
+      },
+      {
+        "name": "goety:dune_spider/hurt4"
+      }
+    ],
+    "subtitle": "subtitle.goety.dune_spider_hurt"
+  },
+  "dune_spider_step": {
+    "sounds": [
+      {
+        "name": "goety:dune_spider/step1"
+      },
+      {
+        "name": "goety:dune_spider/step2"
+      },
+      {
+        "name": "goety:dune_spider/step3"
+      },
+      {
+        "name": "goety:dune_spider/step4"
+      }
+    ],
+    "subtitle": "subtitle.goety.dune_spider_step"
+  },
+  "dune_spider_death": {
+    "sounds": [
+      {
+        "name": "goety:dune_spider/death1"
+      },
+      {
+        "name": "goety:dune_spider/death2"
+      },
+      {
+        "name": "goety:dune_spider/death3"
+      }
+    ],
+    "subtitle": "subtitle.goety.dune_spider_death"
+  },
+  "blight_ambient": {
+    "sounds": [
+      {
+        "name": "goety:blight/idle1"
+      },
+      {
+        "name": "goety:blight/idle2"
+      },
+      {
+        "name": "goety:blight/idle3"
+      },
+      {
+        "name": "goety:blight/idle4"
+      }
+    ],
+    "subtitle": "subtitle.goety.blight_ambient"
+  },
+  "blight_hurt": {
+    "sounds": [
+      {
+        "name": "goety:blight/hurt1"
+      },
+      {
+        "name": "goety:blight/hurt2"
+      },
+      {
+        "name": "goety:blight/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.blight_hurt"
+  },
+  "blight_attack": {
+    "sounds": [
+      {
+        "name": "goety:blight/attack1"
+      },
+      {
+        "name": "goety:blight/attack2"
+      },
+      {
+        "name": "goety:blight/attack3"
+      },
+      {
+        "name": "goety:blight/attack4"
+      },
+      {
+        "name": "goety:blight/attack5"
+      }
+    ],
+    "subtitle": "subtitle.goety.blight_attack"
+  },
+  "blight_teleport": {
+    "sounds": [
+      {
+        "name": "goety:blight/teleport1"
+      },
+      {
+        "name": "goety:blight/teleport2"
+      }
+    ],
+    "subtitle": "subtitle.goety.blight_teleport"
+  },
+  "blight_death": {
+    "sounds": [
+      {
+        "name": "goety:blight/death1"
+      },
+      {
+        "name": "goety:blight/death2"
+      },
+      {
+        "name": "goety:blight/death3"
+      },
+      {
+        "name": "goety:blight/death4"
+      }
+    ],
+    "subtitle": "subtitle.goety.blight_death"
+  },
   "marcire_ambient": {
     "sounds": [
       {
@@ -1319,6 +1530,51 @@
       }
     ],
     "subtitle": "subtitle.goety.marcire_death"
+  },
+  "locust_ambient": {
+    "sounds": [
+      {
+        "name": "goety:locust/idle1"
+      },
+      {
+        "name": "goety:locust/idle2"
+      },
+      {
+        "name": "goety:locust/idle3"
+      },
+      {
+        "name": "goety:locust/idle4"
+      }
+    ],
+    "subtitle": "subtitle.goety.locust_ambient"
+  },
+  "locust_hurt": {
+    "sounds": [
+      {
+        "name": "goety:locust/hurt1"
+      },
+      {
+        "name": "goety:locust/hurt2"
+      },
+      {
+        "name": "goety:locust/hurt3"
+      }
+    ],
+    "subtitle": "subtitle.goety.locust_hurt"
+  },
+  "locust_death": {
+    "sounds": [
+      {
+        "name": "goety:locust/death1"
+      },
+      {
+        "name": "goety:locust/death2"
+      },
+      {
+        "name": "goety:locust/death3"
+      }
+    ],
+    "subtitle": "subtitle.goety.locust_death"
   },
   "dreden_ambient": {
     "sounds": [
@@ -1764,7 +2020,13 @@
   "corrupt_explosion": {
     "sounds": [
       {
-        "name": "goety:random/explosion"
+        "name": "goety:random/explosion1"
+      },
+      {
+        "name": "goety:random/explosion2"
+      },
+      {
+        "name": "goety:random/explosion3"
       }
     ],
     "subtitle": "subtitle.goety.corrupt_explosion"

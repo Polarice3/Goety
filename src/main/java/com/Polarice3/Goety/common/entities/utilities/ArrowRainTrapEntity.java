@@ -22,7 +22,7 @@ public class ArrowRainTrapEntity extends AbstractTrapEntity {
     }
 
     public ArrowRainTrapEntity(World worldIn, double x, double y, double z) {
-        this(ModEntityType.ARROWRAINTRAP.get(), worldIn);
+        this(ModEntityType.ARROW_RAIN_TRAP.get(), worldIn);
         this.setPos(x, y, z);
     }
 

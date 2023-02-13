@@ -4,10 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.DeadPileBlock;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.entities.hostile.dead.BoomerEntity;
-import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
-import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
-import com.Polarice3.Goety.common.entities.hostile.dead.MarcireEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.*;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTags;
@@ -252,12 +249,12 @@ public class DeadMobEvents {
         }
         if (living instanceof IDeadMob){
             if (living.level.getServer() != null) {
-                if (living instanceof MarcireEntity) {
+                if (living instanceof MarcireEntity || living instanceof BlightEntity) {
                     LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS_2);
                     LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
                     LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);
                     loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(living, loot)));
-                } else {
+                } else if (!(living instanceof BlightlingEntity)) {
                     LootTable loottable = living.level.getServer().getLootTables().get(ModLootTables.DEAD_MOBS);
                     LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), living);
                     LootContext ctx = lootcontext$builder.create(LootParameterSets.ENTITY);

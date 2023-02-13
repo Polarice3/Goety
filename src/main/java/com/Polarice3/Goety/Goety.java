@@ -289,6 +289,8 @@ public class Goety {
         event.put(ModEntityType.DUNE_SPIDER.get(), DuneSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.FALLEN.get(), FallenEntity.setCustomAttributes().build());
         event.put(ModEntityType.DESICCATED.get(), DesiccatedEntity.setCustomAttributes().build());
+        event.put(ModEntityType.BLIGHT.get(), BlightEntity.setCustomAttributes().build());
+        event.put(ModEntityType.BLIGHTLING.get(), BlightlingEntity.setCustomAttributes().build());
         event.put(ModEntityType.MARCIRE.get(), MarcireEntity.setCustomAttributes().build());
         event.put(ModEntityType.LOCUST.get(), LocustEntity.setCustomAttributes().build());
         event.put(ModEntityType.MUTATED_COW.get(), MutatedCowEntity.setCustomAttributes().build());

@@ -1,12 +1,15 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.common.entities.projectiles.BlightFireEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.projectiles.GhostFireEntity;
+import com.Polarice3.Goety.common.entities.utilities.SummonCircleEntity;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -165,6 +168,77 @@ public class WandUtil {
         world.addFreshEntity(ghostFire4);
         GhostFireEntity ghostFire5 = new GhostFireEntity(world, Vector3dUtil.south(pPos), livingEntity);
         world.addFreshEntity(ghostFire5);
+    }
+
+    public static void spawnBlightFires(World world, Vector3d pPos, LivingEntity livingEntity){
+        Vector3d north = Vector3dUtil.north(pPos);
+        Vector3d south = Vector3dUtil.south(pPos);
+        Vector3d west = Vector3dUtil.west(pPos);
+        Vector3d east = Vector3dUtil.east(pPos);
+        BlightFireEntity ghostFire1 = new BlightFireEntity(world, pPos, livingEntity);
+        world.addFreshEntity(ghostFire1);
+        BlightFireEntity ghostFire2 = new BlightFireEntity(world, west, livingEntity);
+        world.addFreshEntity(ghostFire2);
+        BlightFireEntity ghostFire3 = new BlightFireEntity(world, east, livingEntity);
+        world.addFreshEntity(ghostFire3);
+        BlightFireEntity ghostFire4 = new BlightFireEntity(world, Vector3dUtil.north(pPos), livingEntity);
+        world.addFreshEntity(ghostFire4);
+        BlightFireEntity ghostFire5 = new BlightFireEntity(world, Vector3dUtil.south(pPos), livingEntity);
+        world.addFreshEntity(ghostFire5);
+        BlightFireEntity ghostFire6 = new BlightFireEntity(world, Vector3dUtil.north(west), livingEntity);
+        world.addFreshEntity(ghostFire6);
+        BlightFireEntity ghostFire7 = new BlightFireEntity(world, Vector3dUtil.south(west), livingEntity);
+        world.addFreshEntity(ghostFire7);
+        BlightFireEntity ghostFire8 = new BlightFireEntity(world, Vector3dUtil.north(east), livingEntity);
+        world.addFreshEntity(ghostFire8);
+        BlightFireEntity ghostFire9 = new BlightFireEntity(world, Vector3dUtil.south(east), livingEntity);
+        world.addFreshEntity(ghostFire9);
+        BlightFireEntity ghostFire10 = new BlightFireEntity(world, Vector3dUtil.north(north), livingEntity);
+        world.addFreshEntity(ghostFire10);
+        BlightFireEntity ghostFire11 = new BlightFireEntity(world, Vector3dUtil.south(south), livingEntity);
+        world.addFreshEntity(ghostFire11);
+        BlightFireEntity ghostFire12 = new BlightFireEntity(world, Vector3dUtil.west(west), livingEntity);
+        world.addFreshEntity(ghostFire12);
+        BlightFireEntity ghostFire13 = new BlightFireEntity(world, Vector3dUtil.east(east), livingEntity);
+        world.addFreshEntity(ghostFire13);
+    }
+
+    public static void spawnXBlightFires(World world, Vector3d pPos, LivingEntity livingEntity){
+        Vector3d west = Vector3dUtil.west(pPos);
+        Vector3d east = Vector3dUtil.east(pPos);
+        BlightFireEntity ghostFire1 = new BlightFireEntity(world, pPos, livingEntity);
+        world.addFreshEntity(ghostFire1);
+        BlightFireEntity ghostFire6 = new BlightFireEntity(world, Vector3dUtil.north(west), livingEntity);
+        world.addFreshEntity(ghostFire6);
+        BlightFireEntity ghostFire7 = new BlightFireEntity(world, Vector3dUtil.south(west), livingEntity);
+        world.addFreshEntity(ghostFire7);
+        BlightFireEntity ghostFire8 = new BlightFireEntity(world, Vector3dUtil.north(east), livingEntity);
+        world.addFreshEntity(ghostFire8);
+        BlightFireEntity ghostFire9 = new BlightFireEntity(world, Vector3dUtil.south(east), livingEntity);
+        world.addFreshEntity(ghostFire9);
+        BlightFireEntity ghostFire10 = new BlightFireEntity(world, Vector3dUtil.north(Vector3dUtil.west(Vector3dUtil.north(west))), livingEntity);
+        world.addFreshEntity(ghostFire10);
+        BlightFireEntity ghostFire11 = new BlightFireEntity(world, Vector3dUtil.south(Vector3dUtil.west(Vector3dUtil.south(west))), livingEntity);
+        world.addFreshEntity(ghostFire11);
+        BlightFireEntity ghostFire12 = new BlightFireEntity(world, Vector3dUtil.north(Vector3dUtil.east(Vector3dUtil.north(east))), livingEntity);
+        world.addFreshEntity(ghostFire12);
+        BlightFireEntity ghostFire13 = new BlightFireEntity(world, Vector3dUtil.south(Vector3dUtil.east(Vector3dUtil.south(east))), livingEntity);
+        world.addFreshEntity(ghostFire13);
+    }
+
+    public static void summoningCircles(World world, LivingEntity pOwner, Vector3d pPos, Entity summon1, Entity summon2, Entity summon3, Entity summon4){
+        Vector3d north = Vector3dUtil.north(pPos, 2);
+        Vector3d south = Vector3dUtil.south(pPos, 2);
+        Vector3d west = Vector3dUtil.west(pPos, 2);
+        Vector3d east = Vector3dUtil.east(pPos, 2);
+        SummonCircleEntity circle1 = new SummonCircleEntity(world, north, summon1, true, pOwner);
+        world.addFreshEntity(circle1);
+        SummonCircleEntity circle2 = new SummonCircleEntity(world, south, summon2, true, pOwner);
+        world.addFreshEntity(circle2);
+        SummonCircleEntity circle3 = new SummonCircleEntity(world, west, summon3, true, pOwner);
+        world.addFreshEntity(circle3);
+        SummonCircleEntity circle4 = new SummonCircleEntity(world, east, summon4, true, pOwner);
+        world.addFreshEntity(circle4);
     }
 
 }

@@ -156,7 +156,10 @@ public class BlockFinder {
         return world.hasChunksAt(blockpos$mutable.getX() - 10, blockpos$mutable.getY() - 10, blockpos$mutable.getZ() - 10, blockpos$mutable.getX() + 10, blockpos$mutable.getY() + 10, blockpos$mutable.getZ() + 10);
     }
 
-    public static double moveDownToGround(LivingEntity entity) {
+    /**
+     * Code based of @BobMowzies Sunstrike positioning.
+     */
+    public static double moveDownToGround(Entity entity) {
         RayTraceResult rayTrace = rayTrace(entity);
         if (rayTrace.getType() == RayTraceResult.Type.BLOCK) {
             BlockRayTraceResult hitResult = (BlockRayTraceResult) rayTrace;
@@ -172,7 +175,7 @@ public class BlockFinder {
         return entity.getY();
     }
 
-    private static RayTraceResult rayTrace(LivingEntity entity) {
+    private static RayTraceResult rayTrace(Entity entity) {
         Vector3d startPos = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
         Vector3d endPos = new Vector3d(entity.getX(), 0, entity.getZ());
         return entity.level.clip(new RayTraceContext(startPos, endPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
@@ -410,7 +413,7 @@ public class BlockFinder {
     }
 
     /**
-     * Ripped from TelepathicGrunt's RepurposedStructure codes.
+     * Ripped from @TelepathicGrunt's RepurposedStructure codes.
      */
     public static BlockPos getHighestLand(ChunkGenerator chunkGenerator, MutableBoundingBox boundingBox, boolean canBeOnLiquid) {
         BlockPos.Mutable mutable = new BlockPos.Mutable().set(
@@ -436,7 +439,7 @@ public class BlockFinder {
     }
 
     /**
-     * Ripped from izofar's Bygone-Nether codes.
+     * Ripped from @izofar's Bygone-Nether codes.
      */
     private static final Predicate<Block> isAir = (block) -> block == Blocks.AIR || block == Blocks.CAVE_AIR;
 

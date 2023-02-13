@@ -60,12 +60,12 @@ public class ClientEvents {
             if (MainConfig.BossMusic.get()) {
                 if (entity instanceof ApostleEntity && !((ApostleEntity) entity).isNoAi()) {
                     minecraft.getMusicManager().stopPlaying();
-                    minecraft.gui.setNowPlaying(new TranslationTextComponent("goety.apostle_theme"));
+                    minecraft.gui.setNowPlaying(new TranslationTextComponent("item.goety.music_disc_apostle.desc"));
                     soundHandler.play(new BossLoopMusic(ModSounds.APOSTLE_THEME.get(), (ApostleEntity) entity));
                 }
                 if (entity instanceof VizierEntity && !((VizierEntity) entity).isNoAi()) {
                     minecraft.getMusicManager().stopPlaying();
-                    minecraft.gui.setNowPlaying(new TranslationTextComponent("goety.vizier_theme"));
+                    minecraft.gui.setNowPlaying(new TranslationTextComponent("item.goety.music_disc_vizier.desc"));
                     soundHandler.play(new BossLoopMusic(ModSounds.VIZIER_THEME.get(), (VizierEntity) entity));
                 }
             }

@@ -191,6 +191,13 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "ghost_fire").toString()));
 
+    public static final RegistryObject<EntityType<BlightFireEntity>> BLIGHT_FIRE = ENTITY_TYPES.register("blight_fire",
+            () -> EntityType.Builder.<BlightFireEntity>of(BlightFireEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(0.8F, 1.0F)
+                    .clientTrackingRange(10)
+                    .build(new ResourceLocation(Goety.MOD_ID, "blight_fire").toString()));
+
     public static final RegistryObject<EntityType<IceChunkEntity>> ICE_CHUNK = ENTITY_TYPES.register("ice_chunk",
             () -> EntityType.Builder.<IceChunkEntity>of(IceChunkEntity::new, EntityClassification.MISC)
                     .fireImmune()
@@ -199,14 +206,14 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "ice_chunk").toString()));
 
-    public static final RegistryObject<EntityType<WitchGaleEntity>> WITCHGALE = ENTITY_TYPES.register("witchgale",
+    public static final RegistryObject<EntityType<WitchGaleEntity>> WITCH_GALE = ENTITY_TYPES.register("witchgale",
             () -> EntityType.Builder.<WitchGaleEntity>of(WitchGaleEntity::new, EntityClassification.MISC)
                     .sized(1.0F,1.0F)
                     .clientTrackingRange(4)
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchgale").toString()));
 
-    public static final RegistryObject<EntityType<FireTornadoEntity>> FIRETORNADO = ENTITY_TYPES.register("fire_tornado",
+    public static final RegistryObject<EntityType<FireTornadoEntity>> FIRE_TORNADO = ENTITY_TYPES.register("fire_tornado",
             () -> EntityType.Builder.<FireTornadoEntity>of(FireTornadoEntity::new, EntityClassification.MISC)
                     .sized(2.0F, 2.0F)
                     .clientTrackingRange(4)
@@ -414,6 +421,18 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "desiccated").toString()));
 
+    public static final RegistryObject<EntityType<BlightEntity>> BLIGHT = ENTITY_TYPES.register("blight",
+            () -> EntityType.Builder.of(BlightEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "blight").toString()));
+
+    public static final RegistryObject<EntityType<BlightlingEntity>> BLIGHTLING = ENTITY_TYPES.register("blightling",
+            () -> EntityType.Builder.of(BlightlingEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 0.4F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "blightling").toString()));
+
     public static final RegistryObject<EntityType<MarcireEntity>> MARCIRE = ENTITY_TYPES.register("marcire",
             () -> EntityType.Builder.of(MarcireEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.99F)
@@ -609,7 +628,7 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .build(new ResourceLocation(Goety.MOD_ID, "sentinel").toString()));
 
-    public static final RegistryObject<EntityType<LightningTrapEntity>> LIGHTNINGTRAP = ENTITY_TYPES.register("lightningtrap",
+    public static final RegistryObject<EntityType<LightningTrapEntity>> LIGHTNING_TRAP = ENTITY_TYPES.register("lightningtrap",
             () -> EntityType.Builder.<LightningTrapEntity>of(LightningTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(1.0F, 0.5F)
@@ -617,7 +636,7 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "lightningtrap").toString()));
 
-    public static final RegistryObject<EntityType<FireRainTrapEntity>> FIRERAINTRAP = ENTITY_TYPES.register("fireraintrap",
+    public static final RegistryObject<EntityType<FireRainTrapEntity>> FIRE_RAIN_TRAP = ENTITY_TYPES.register("fireraintrap",
             () -> EntityType.Builder.<FireRainTrapEntity>of(FireRainTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(2.0F, 0.5F)
@@ -625,7 +644,7 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
 
-    public static final RegistryObject<EntityType<ArrowRainTrapEntity>> ARROWRAINTRAP = ENTITY_TYPES.register("arrowraintrap",
+    public static final RegistryObject<EntityType<ArrowRainTrapEntity>> ARROW_RAIN_TRAP = ENTITY_TYPES.register("arrowraintrap",
             () -> EntityType.Builder.<ArrowRainTrapEntity>of(ArrowRainTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(2.0F, 0.5F)
@@ -633,7 +652,7 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "arrowraintrap").toString()));
 
-    public static final RegistryObject<EntityType<FireTornadoTrapEntity>> FIRETORNADOTRAP = ENTITY_TYPES.register("firetornadotrap",
+    public static final RegistryObject<EntityType<FireTornadoTrapEntity>> FIRE_TORNADO_TRAP = ENTITY_TYPES.register("firetornadotrap",
             () -> EntityType.Builder.<FireTornadoTrapEntity>of(FireTornadoTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(2.0F, 0.5F)
@@ -641,7 +660,7 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireraintrap").toString()));
 
-    public static final RegistryObject<EntityType<FireBlastTrapEntity>> FIREBLASTTRAP = ENTITY_TYPES.register("fireblasttrap",
+    public static final RegistryObject<EntityType<FireBlastTrapEntity>> FIRE_BLAST_TRAP = ENTITY_TYPES.register("fireblasttrap",
             () -> EntityType.Builder.<FireBlastTrapEntity>of(FireBlastTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(1.0F, 0.5F)
@@ -649,7 +668,7 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "fireblasttrap").toString()));
 
-    public static final RegistryObject<EntityType<MagicBlastTrapEntity>> MAGICBLASTTRAP = ENTITY_TYPES.register("magicblasttrap",
+    public static final RegistryObject<EntityType<MagicBlastTrapEntity>> MAGIC_BLAST_TRAP = ENTITY_TYPES.register("magicblasttrap",
             () -> EntityType.Builder.<MagicBlastTrapEntity>of(MagicBlastTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(1.0F, 0.5F)
@@ -673,13 +692,21 @@ public class ModEntityType {
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "poison_ground").toString()));
 
-    public static final RegistryObject<EntityType<StormEntity>> STORMUTIL = ENTITY_TYPES.register("stormutil",
+    public static final RegistryObject<EntityType<StormEntity>> STORM_UTIL = ENTITY_TYPES.register("stormutil",
             () -> EntityType.Builder.of(StormEntity::new, EntityClassification.MISC)
                     .fireImmune()
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "stormutil").toString()));
+
+    public static final RegistryObject<EntityType<SummonCircleEntity>> SUMMON_CIRCLE = ENTITY_TYPES.register("summon_circle",
+            () -> EntityType.Builder.<SummonCircleEntity>of(SummonCircleEntity::new, EntityClassification.MISC)
+                    .fireImmune()
+                    .sized(2.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "summon_circle").toString()));
 
     public static final RegistryObject<EntityType<SummonApostleTrapEntity>> SUMMON_APOSTLE = ENTITY_TYPES.register("summon_apostle",
             () -> EntityType.Builder.of(SummonApostleTrapEntity::new, EntityClassification.MISC)

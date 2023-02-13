@@ -16,7 +16,7 @@ public class FireRainTrapEntity extends AbstractTrapEntity {
     }
 
     public FireRainTrapEntity(World worldIn, double x, double y, double z) {
-        this(ModEntityType.FIRERAINTRAP.get(), worldIn);
+        this(ModEntityType.FIRE_RAIN_TRAP.get(), worldIn);
         this.setPos(x, y, z);
     }
 

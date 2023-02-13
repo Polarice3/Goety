@@ -17,6 +17,7 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
     private final ModelRenderer RightArm;
     private final ModelRenderer LeftArm;
     private final ModelRenderer body;
+    private final ModelRenderer leg;
 
     public WraithModel() {
         texWidth = 64;
@@ -73,6 +74,11 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
         body.addChild(body_r1);
         setRotationAngle(body_r1, 0.4363F, 0.0F, 0.0F);
         body_r1.texOffs(0, 51).addBox(-5.0F, -2.0F, -2.0F, 10.0F, 7.0F, 6.0F, 0.0F, false);
+
+        leg = new ModelRenderer(this);
+        leg.setPos(0.0F, 10.0F, -1.0F);
+        body.addChild(leg);
+        leg.texOffs(60, 22).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 8.0F, 1.0F, 0.0F, false);
     }
 
     public Iterable<ModelRenderer> parts() {
@@ -86,6 +92,10 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
         this.body.xRot = 0.1745F + MathHelper.cos(pLimbSwing * 0.6662F) * 0.31F * pLimbSwingAmount;
         this.body.xRot += MathHelper.cos(pAgeInTicks * 0.09F) * 0.1F + 0.1F;
         this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+        this.leg.xRot = MathHelper.cos(pLimbSwing * 0.6662F) * 1.4F * pLimbSwingAmount / f;
+        this.leg.yRot = 0.0F;
+        this.leg.zRot = 0.0F;
+        this.leg.xRot += ((float)Math.PI / 5F);
         if (pEntity instanceof AbstractWraithEntity){
             AbstractWraithEntity wraith = (AbstractWraithEntity) pEntity;
             if (wraith.isFiring()){

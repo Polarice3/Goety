@@ -39,7 +39,7 @@ public class FireBlastTrapEntity extends Entity {
     }
 
     public FireBlastTrapEntity(World worldIn, double x, double y, double z) {
-        this(ModEntityType.FIREBLASTTRAP.get(), worldIn);
+        this(ModEntityType.FIRE_BLAST_TRAP.get(), worldIn);
         this.setPos(x, y, z);
     }
 

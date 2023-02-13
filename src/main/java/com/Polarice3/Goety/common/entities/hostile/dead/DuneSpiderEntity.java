@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.hostile.dead;
 import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,7 +24,6 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
@@ -104,19 +104,19 @@ public class DuneSpiderEntity extends MonsterEntity implements IDeadMob, ICustom
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SPIDER_AMBIENT;
+        return ModSounds.DUNE_SPIDER_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.SPIDER_HURT;
+        return ModSounds.DUNE_SPIDER_HURT.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SPIDER_DEATH;
+        return ModSounds.DUNE_SPIDER_DEATH.get();
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
+        this.playSound(ModSounds.DUNE_SPIDER_STEP.get(), 0.15F, 1.0F);
     }
 
     public boolean onClimbable() {

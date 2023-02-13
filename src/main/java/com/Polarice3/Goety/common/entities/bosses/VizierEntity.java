@@ -341,6 +341,17 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     protected void tickDeath() {
         ++this.deathTime;
+        if (this.deathTime > 0){
+            if (!this.level.isClientSide){
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                for (int p = 0; p < 8; ++p) {
+                    double d0 = (double)this.getX() + this.level.random.nextDouble();
+                    double d1 = (double)this.getY() + this.level.random.nextDouble();
+                    double d2 = (double)this.getZ() + this.level.random.nextDouble();
+                    serverWorld.sendParticles(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 0.5F);
+                }
+            }
+        }
         if (this.deathTime == 40) {
             this.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F);
             if (!this.level.isClientSide){

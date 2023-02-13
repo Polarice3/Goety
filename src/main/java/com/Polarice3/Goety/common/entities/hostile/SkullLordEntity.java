@@ -68,7 +68,7 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         this.shootTime = 0;
         this.moveControl = new MobUtil.MinionMovementController(this);
         this.hitTimes = 0;
-        this.xpReward = 10;
+        this.xpReward = 30;
     }
 
     protected void registerGoals() {
@@ -125,6 +125,11 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
                 return super.hurt(pSource, pAmount);
             }
         }
+    }
+
+    public void checkDespawn() {
+        this.setIsDespawn(true);
+        super.checkDespawn();
     }
 
     @Override
@@ -609,8 +614,8 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         return this.geFlags(4);
     }
 
-    public void setIsDespawn(boolean invulnerable) {
-        this.setFlags(4, invulnerable);
+    public void setIsDespawn(boolean despawn) {
+        this.setFlags(4, despawn);
     }
 
     public boolean isLaserTime() {

@@ -32,6 +32,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class DeadSandExplosion {
@@ -179,10 +180,15 @@ public class DeadSandExplosion {
                     entity.setDeltaMovement(entity.getDeltaMovement().add(d5 * d11, d7 * d11, d9 * d11));
                     if (entity instanceof LivingEntity) {
                         LivingEntity livingEntity = (LivingEntity) entity;
-                        if (livingEntity.hasEffect(ModEffects.DESICCATE.get())){
+                        if (livingEntity.hasEffect(ModEffects.DESICCATE.get()) && this.level.random.nextFloat() <= 0.25F){
                             EffectsUtil.amplifyEffect(livingEntity, ModEffects.DESICCATE.get(), 1200);
                         } else {
-                            livingEntity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
+                            if (livingEntity.hasEffect(ModEffects.DESICCATE.get())){
+                                int d2 = Objects.requireNonNull(livingEntity.getEffect(ModEffects.DESICCATE.get())).getDuration();
+                                EffectsUtil.resetDuration(livingEntity, ModEffects.DESICCATE.get(), Math.max(d2, 1200));
+                            } else {
+                                livingEntity.addEffect(new EffectInstance(ModEffects.DESICCATE.get(), 1200));
+                            }
                         }
                     }
                 }

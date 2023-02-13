@@ -2,11 +2,14 @@ package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
+import com.Polarice3.Goety.common.entities.hostile.WraithEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.controller.MovementController;
@@ -24,12 +27,14 @@ import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.play.server.SEntityTeleportPacket;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
@@ -47,30 +52,36 @@ public class MobUtil {
     };
 
     public static void deadSandConvert(Entity entity, boolean natural){
-        if (entity instanceof MonsterEntity && !(entity instanceof IDeadMob)){
-            MonsterEntity monster = (MonsterEntity) entity;
-            MonsterEntity corrupt = null;
-            if (monster instanceof CreeperEntity) {
-                corrupt = monster.convertTo(ModEntityType.BOOMER.get(), false);
-            }
-            if (monster instanceof SpiderEntity) {
-                corrupt = monster.convertTo(ModEntityType.DUNE_SPIDER.get(), false);
-            }
-            if (monster instanceof ZombieEntity && !(monster instanceof HuskarlEntity)) {
-                corrupt = monster.convertTo(ModEntityType.FALLEN.get(), true);
-            }
-            if (monster instanceof AbstractSkeletonEntity && !(monster instanceof WitherSkeletonEntity)) {
-                if (monster.level.random.nextFloat() < 0.1F){
-                    corrupt = monster.convertTo(ModEntityType.MARCIRE.get(), false);
-                } else {
-                    corrupt = monster.convertTo(ModEntityType.DESICCATED.get(), true);
+        if (entity instanceof IMob && !(entity instanceof IDeadMob)){
+            IMob mob = (IMob) entity;
+            MobEntity corrupt = null;
+            if (mob instanceof MobEntity) {
+                MobEntity monster = (MobEntity) mob;
+                if (monster instanceof CreeperEntity) {
+                    corrupt = monster.convertTo(ModEntityType.BOOMER.get(), false);
                 }
-            }
-            if (corrupt != null) {
-                corrupt.finalizeSpawn((IServerWorld) corrupt.level, corrupt.level.getCurrentDifficultyAt(corrupt.blockPosition()), SpawnReason.CONVERSION, null, null);
-                if (!natural){
-                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, corrupt);
-                    new SoundUtil(corrupt, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                if (monster instanceof SpiderEntity) {
+                    corrupt = monster.convertTo(ModEntityType.DUNE_SPIDER.get(), false);
+                }
+                if (monster instanceof ZombieEntity && !(monster instanceof HuskarlEntity)) {
+                    corrupt = monster.convertTo(ModEntityType.FALLEN.get(), true);
+                }
+                if (monster instanceof AbstractSkeletonEntity && !(monster instanceof WitherSkeletonEntity)) {
+                    if (monster.level.random.nextFloat() < 0.1F) {
+                        corrupt = monster.convertTo(ModEntityType.MARCIRE.get(), false);
+                    } else {
+                        corrupt = monster.convertTo(ModEntityType.DESICCATED.get(), true);
+                    }
+                }
+                if (monster instanceof WraithEntity){
+                    corrupt = monster.convertTo(ModEntityType.BLIGHT.get(), false);
+                }
+                if (corrupt != null) {
+                    corrupt.finalizeSpawn((IServerWorld) corrupt.level, corrupt.level.getCurrentDifficultyAt(corrupt.blockPosition()), SpawnReason.CONVERSION, null, null);
+                    if (!natural) {
+                        net.minecraftforge.event.ForgeEventFactory.onLivingConvert((LivingEntity) entity, corrupt);
+                        new SoundUtil(corrupt, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundCategory.HOSTILE, 1.0F, 1.0F);
+                    }
                 }
             }
         }
@@ -372,6 +383,33 @@ public class MobUtil {
             }
         }
         return list;
+    }
+
+    /**
+     * Code based of @BobMowzies Sunstrike positioning.
+     */
+    public static void moveDownToGround(Entity entity) {
+        RayTraceResult rayTrace = rayTrace(entity);
+        if (rayTrace.getType() == RayTraceResult.Type.BLOCK) {
+            BlockRayTraceResult hitResult = (BlockRayTraceResult) rayTrace;
+            if (hitResult.getDirection() == Direction.UP) {
+                BlockState hitBlock = entity.level.getBlockState(hitResult.getBlockPos());
+                if (hitBlock.getBlock() instanceof SlabBlock && hitBlock.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM) {
+                    entity.setPos(entity.getX(), hitResult.getBlockPos().getY() + 1.0625F - 0.5f, entity.getZ());
+                } else {
+                    entity.setPos(entity.getX(), hitResult.getBlockPos().getY() + 1.0625F, entity.getZ());
+                }
+                if (entity.level instanceof ServerWorld) {
+                    ((ServerWorld) entity.level).getChunkSource().broadcastAndSend(entity, new SEntityTeleportPacket(entity));
+                }
+            }
+        }
+    }
+
+    private static RayTraceResult rayTrace(Entity entity) {
+        Vector3d startPos = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
+        Vector3d endPos = new Vector3d(entity.getX(), 0, entity.getZ());
+        return entity.level.clip(new RayTraceContext(startPos, endPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
     }
 
 }

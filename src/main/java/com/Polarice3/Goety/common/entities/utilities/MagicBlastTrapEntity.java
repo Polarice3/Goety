@@ -34,7 +34,7 @@ public class MagicBlastTrapEntity extends Entity {
     }
 
     public MagicBlastTrapEntity(World worldIn, double x, double y, double z) {
-        this(ModEntityType.MAGICBLASTTRAP.get(), worldIn);
+        this(ModEntityType.MAGIC_BLAST_TRAP.get(), worldIn);
         this.setPos(x, y, z);
     }
 

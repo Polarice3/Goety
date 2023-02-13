@@ -16,7 +16,7 @@ public class LightningTrapEntity extends AbstractTrapEntity {
     }
 
     public LightningTrapEntity(World worldIn, double x, double y, double z) {
-        this(ModEntityType.LIGHTNINGTRAP.get(), worldIn);
+        this(ModEntityType.LIGHTNING_TRAP.get(), worldIn);
         this.setPos(x, y, z);
     }
 

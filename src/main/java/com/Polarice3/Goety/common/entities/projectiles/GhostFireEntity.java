@@ -5,11 +5,10 @@ import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -22,18 +21,14 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.server.SEntityTeleportPacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -137,7 +132,7 @@ public class GhostFireEntity extends GroundProjectileEntity {
             }
         } else {
             if (!this.isNoGravity()) {
-                this.moveDownToGround();
+                MobUtil.moveDownToGround(this);
             }
             if (!this.sentTrapEvent) {
                 this.level.broadcastEntityEvent(this, (byte)4);
@@ -164,7 +159,7 @@ public class GhostFireEntity extends GroundProjectileEntity {
             if (this.getOwner() != null){
                 if (this.getOwner() instanceof MobEntity){
                     if (this.getOwner().hurtTime > 0 && this.tickCount < 10 && !this.getOwner().isDeadOrDying()){
-                        this.lifeTicks = 12;
+                        this.lifeTicks = 14;
                     }
                 }
             }
@@ -175,30 +170,6 @@ public class GhostFireEntity extends GroundProjectileEntity {
             }
         }
 
-    }
-
-    public void moveDownToGround() {
-        RayTraceResult rayTrace = rayTrace(this);
-        if (rayTrace.getType() == RayTraceResult.Type.BLOCK) {
-            BlockRayTraceResult hitResult = (BlockRayTraceResult) rayTrace;
-            if (hitResult.getDirection() == Direction.UP) {
-                BlockState hitBlock = this.level.getBlockState(hitResult.getBlockPos());
-                if (hitBlock.getBlock() instanceof SlabBlock && hitBlock.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM) {
-                    this.setPos(getX(), hitResult.getBlockPos().getY() + 1.0625F - 0.5f, getZ());
-                } else {
-                    this.setPos(getX(), hitResult.getBlockPos().getY() + 1.0625F, getZ());
-                }
-                if (this.level instanceof ServerWorld) {
-                    ((ServerWorld) this.level).getChunkSource().broadcastAndSend(this, new SEntityTeleportPacket(this));
-                }
-            }
-        }
-    }
-
-    private RayTraceResult rayTrace(GhostFireEntity entity) {
-        Vector3d startPos = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
-        Vector3d endPos = new Vector3d(entity.getX(), 0, entity.getZ());
-        return entity.level.clip(new RayTraceContext(startPos, endPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
     }
 
     public void dealDamageTo(LivingEntity target) {

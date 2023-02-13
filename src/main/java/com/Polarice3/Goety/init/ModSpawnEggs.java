@@ -61,6 +61,9 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> DESICCATED_SPAWN_EGG = ITEMS.register("desiccated_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DESICCATED, 0x652f76, 0x3e2625, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> BLIGHT_SPAWN_EGG = ITEMS.register("blight_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.BLIGHT, 0x1f1f1f, 0x372637, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> MARCIRE_SPAWN_EGG = ITEMS.register("marcire_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.MARCIRE, 0x652f76, 0x786659, new Item.Properties().tab(Goety.TAB)));
 

@@ -316,6 +316,10 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
     }
 
+    public void setTrueOwner(LivingEntity livingEntity){
+        this.setOwnerId(livingEntity.getUUID());
+    }
+
     public boolean hurt(DamageSource pSource, float pAmount) {
         if (this.isInvulnerableTo(pSource)) {
             return false;

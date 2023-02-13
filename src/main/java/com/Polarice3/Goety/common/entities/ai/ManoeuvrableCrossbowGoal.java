@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.entities.ai;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ICrossbowUser;
-import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.projectile.ProjectileHelper;

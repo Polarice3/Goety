@@ -2,9 +2,9 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
-import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -261,9 +260,8 @@ public class UndeadWolfEntity extends SummonedEntity {
 
     public ActionResultType mobInteract(PlayerEntity pPlayer, Hand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        Item item = itemstack.getItem();
         if (this.getTrueOwner() != null && pPlayer == this.getTrueOwner()) {
-            if ((item == Items.ROTTEN_FLESH || item == Items.BONE) && this.getHealth() < this.getMaxHealth()) {
+            if ((itemstack.getItem() == Items.ROTTEN_FLESH || itemstack.getItem() == Items.BONE) && this.getHealth() < this.getMaxHealth()) {
                 if (!pPlayer.abilities.instabuild) {
                     itemstack.shrink(1);
                 }
@@ -278,19 +276,17 @@ public class UndeadWolfEntity extends SummonedEntity {
                         serverWorld.sendParticles(ModParticleTypes.HEAL_EFFECT.get(), this.getRandomX(1.0D), this.getRandomY() + 0.5D, this.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
                     }
                 }
-                return ActionResultType.sidedSuccess(this.level.isClientSide);
+                return ActionResultType.SUCCESS;
             }
-            if (RobeArmorFinder.FindNecroSet(pPlayer)){
-                if (!this.level.isClientSide) {
-                    this.setOrderedToSit(!this.isOrderedToSit());
-                    this.jumping = false;
-                    this.navigation.stop();
-                    this.setTarget((LivingEntity) null);
-                }
-                return ActionResultType.sidedSuccess(this.level.isClientSide);
+            if (!(itemstack.getItem() instanceof SoulWand && (pPlayer.isShiftKeyDown() || pPlayer.isCrouching()))){
+                this.setOrderedToSit(!this.isOrderedToSit());
+                this.jumping = false;
+                this.navigation.stop();
+                this.setTarget(null);
+                return ActionResultType.SUCCESS;
             }
         }
-        return ActionResultType.PASS;
+        return ActionResultType.SUCCESS;
     }
 
     static class BegGoal extends Goal {

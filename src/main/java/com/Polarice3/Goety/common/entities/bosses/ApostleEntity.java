@@ -866,7 +866,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             summonedentity.setLimitedLife(60 * (90 + this.level.random.nextInt(180)));
                             summonedentity.finalizeSpawn(serverWorld, this.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                             summonedentity.setTarget(this.getTarget());
-                            this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(this.level, blockpos$mutable, summonedentity, false, this);
+                            this.level.addFreshEntity(summonCircleEntity);
                         }
                     } else {
                         for (ZombifiedPiglinEntity zombifiedPiglin : this.level.getEntitiesOfClass(ZombifiedPiglinEntity.class, this.getBoundingBox().inflate(16))){
@@ -887,7 +888,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             summonedentity.setLimitedLife(60 * (90 + this.level.random.nextInt(180)));
                             summonedentity.finalizeSpawn(serverWorld, this.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                             summonedentity.setTarget(this.getTarget());
-                            this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(this.level, blockpos$mutable, summonedentity, false, this);
+                            this.level.addFreshEntity(summonCircleEntity);
                         }
                     }
                 }
@@ -995,7 +997,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             } else {
                 amp = 0;
             }
-            ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(this.getArrowEffect(), 100, amp));
+            ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(this.getArrowEffect(), 200, amp));
         }
         if (this.getFireArrow()){
             abstractarrowentity.setRemainingFireTicks(100);
@@ -1171,7 +1173,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             summonedentity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE, 1, false, false));
                             summonedentity.finalizeSpawn(serverWorld, ApostleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                             summonedentity.setTarget(livingentity);
-                            ApostleEntity.this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos, summonedentity, false, ApostleEntity.this);
+                            ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                         } else {
                             for (int p = 0; p < 3 + r.nextInt(6); ++p) {
                                 int k = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
@@ -1186,7 +1189,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                                 summonedentity.setLimitedLife(60 * (90 + ApostleEntity.this.level.random.nextInt(180)));
                                 summonedentity.finalizeSpawn(serverWorld, ApostleEntity.this.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                                 summonedentity.setTarget(livingentity);
-                                ApostleEntity.this.level.addFreshEntity(summonedentity);
+                                SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos$mutable, summonedentity, false, ApostleEntity.this);
+                                ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                             }
                         }
                     } else {
@@ -1218,7 +1222,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             }
                             summonedentity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE, 1, false, false));
                             summonedentity.setTarget(livingentity);
-                            ApostleEntity.this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos, summonedentity, false, ApostleEntity.this);
+                            ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                         } else {
                             for (int p = 0; p < 2 + r.nextInt(ApostleEntity.this.level.getDifficulty().getId()); ++p) {
                                 int k = (12 + r.nextInt(12)) * (r.nextBoolean() ? -1 : 1);
@@ -1233,7 +1238,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                                 summonedentity.setLimitedLife(60 * (90 + ApostleEntity.this.level.random.nextInt(180)));
                                 summonedentity.finalizeSpawn(serverWorld, ApostleEntity.this.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                                 summonedentity.setTarget(livingentity);
-                                ApostleEntity.this.level.addFreshEntity(summonedentity);
+                                SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos$mutable, summonedentity, false, ApostleEntity.this);
+                                ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                             }
                         }
                     }
@@ -1373,7 +1379,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             summonedentity.setLimitedLife(60 * (90 + ApostleEntity.this.level.random.nextInt(180)));
                             summonedentity.finalizeSpawn(serverWorld, ApostleEntity.this.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                             summonedentity.setTarget(livingentity);
-                            ApostleEntity.this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos$mutable, summonedentity, false, ApostleEntity.this);
+                            ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                         } else {
                             BlockPos blockpos = ApostleEntity.this.blockPosition();
                             SkeletonVillagerMinionEntity summonedentity = new SkeletonVillagerMinionEntity(ModEntityType.SKELETON_VILLAGER_MINION.get(), ApostleEntity.this.level);
@@ -1395,7 +1402,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             summonedentity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, Integer.MAX_VALUE, 1, false, false));
                             summonedentity.finalizeSpawn(serverWorld, ApostleEntity.this.level.getCurrentDifficultyAt(blockpos), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                             summonedentity.setTarget(livingentity);
-                            ApostleEntity.this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos, summonedentity, false, ApostleEntity.this);
+                            ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                         }
                     } else {
                         for (int p = 0; p < 1 + r.nextInt(2); ++p) {
@@ -1411,7 +1419,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             summonedentity.setLimitedLife(60 * (90 + ApostleEntity.this.level.random.nextInt(180)));
                             summonedentity.finalizeSpawn(serverWorld, ApostleEntity.this.level.getCurrentDifficultyAt(blockpos$mutable), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
                             summonedentity.setTarget(livingentity);
-                            ApostleEntity.this.level.addFreshEntity(summonedentity);
+                            SummonCircleEntity summonCircleEntity = new SummonCircleEntity(ApostleEntity.this.level, blockpos$mutable, summonedentity, false, ApostleEntity.this);
+                            ApostleEntity.this.level.addFreshEntity(summonCircleEntity);
                         }
                     }
                     ApostleEntity.this.postSpellCast();
@@ -1466,7 +1475,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                         blockpos$mutable.move(Direction.DOWN);
                     }
 
-                    FireTornadoTrapEntity fireTornadoTrapEntity = new FireTornadoTrapEntity(ModEntityType.FIRETORNADOTRAP.get(), ApostleEntity.this.level);
+                    FireTornadoTrapEntity fireTornadoTrapEntity = new FireTornadoTrapEntity(ModEntityType.FIRE_TORNADO_TRAP.get(), ApostleEntity.this.level);
                     fireTornadoTrapEntity.setPos(blockpos$mutable.getX(), blockpos$mutable.getY() + 1, blockpos$mutable.getZ());
                     fireTornadoTrapEntity.setOwner(ApostleEntity.this);
                     fireTornadoTrapEntity.setDuration(60);
