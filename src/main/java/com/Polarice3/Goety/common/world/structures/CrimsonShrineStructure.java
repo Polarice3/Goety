@@ -28,7 +28,8 @@ public class CrimsonShrineStructure extends ModStructureTemplate{
             new MobSpawnInfo.Spawners(ModEntityType.FANATIC.get(), 20, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.ZEALOT.get(), 20, 1, 1),
             new MobSpawnInfo.Spawners(ModEntityType.DISCIPLE.get(), 1, 1, 1),
-            new MobSpawnInfo.Spawners(ModEntityType.BELDAM.get(), 1, 1, 1));
+            new MobSpawnInfo.Spawners(ModEntityType.BELDAM.get(), 1, 1, 1),
+            new MobSpawnInfo.Spawners(ModEntityType.CHANNELLER.get(), 1, 1, 1));
 
     protected boolean linearSeparation() {
         return false;

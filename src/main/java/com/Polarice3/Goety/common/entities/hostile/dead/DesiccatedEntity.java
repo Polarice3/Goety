@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModSounds;
@@ -49,10 +49,10 @@ public class DesiccatedEntity extends AbstractSkeletonEntity implements IDeadMob
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.DesiccatedHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.DesiccatedHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.DesiccatedDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.DesiccatedDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

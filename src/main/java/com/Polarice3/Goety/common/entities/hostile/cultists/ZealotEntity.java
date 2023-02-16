@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.ai.ManoeuvrableCrossbowGoal;
 import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -53,7 +53,7 @@ public class ZealotEntity extends AbstractCultistEntity implements ICrossbowUser
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.ZealotHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.ZealotHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);

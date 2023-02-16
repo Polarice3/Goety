@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
@@ -77,10 +77,10 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.SkeletonServantHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.SkeletonServantHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.SkeletonServantDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.SkeletonServantDamage.get())
                 .add(Attributes.ARMOR, 2.0D);
     }
 

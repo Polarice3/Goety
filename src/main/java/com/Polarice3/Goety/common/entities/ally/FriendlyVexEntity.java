@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.ai.MinionFollowGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.MinionEntity;
@@ -59,8 +59,8 @@ public class FriendlyVexEntity extends MinionEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.SummonedVexHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.SummonedVexDamage.get());
+                .add(Attributes.MAX_HEALTH, AttributesConfig.SummonedVexHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.SummonedVexDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

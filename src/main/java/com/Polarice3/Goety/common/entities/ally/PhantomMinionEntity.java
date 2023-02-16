@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedFlyingEntity;
 import net.minecraft.entity.*;
@@ -65,8 +65,8 @@ public class PhantomMinionEntity extends OwnedFlyingEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.PhantomServantHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.PhantomServantDamage.get());
+                .add(Attributes.MAX_HEALTH, AttributesConfig.PhantomServantHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.PhantomServantDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

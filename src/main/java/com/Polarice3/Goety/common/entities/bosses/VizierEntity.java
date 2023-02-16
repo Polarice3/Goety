@@ -1,9 +1,11 @@
 package com.Polarice3.Goety.common.entities.bosses;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
+import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SpikeEntity;
 import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -58,7 +60,7 @@ import java.util.function.Predicate;
         value = Dist.CLIENT,
         _interface = IChargeableMob.class
 )
-public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob {
+public class VizierEntity extends SpellcastingIllagerEntity implements IChargeableMob, ICustomAttributes {
     private static final Predicate<Entity> field_213690_b = (p_213685_0_) -> {
         return p_213685_0_.isAlive() && !(p_213685_0_ instanceof VizierEntity);
     };
@@ -79,6 +81,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     public VizierEntity(EntityType<? extends VizierEntity> type, World worldIn) {
         super(type, worldIn);
+        ICustomAttributes.applyAttributesForEntity(type, this);
         this.moveControl = new MobUtil.MinionMovementController(this);
         this.xpReward = 50;
         if (this.level.isClientSide){
@@ -258,8 +261,12 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 200.0D)
+                .add(Attributes.MAX_HEALTH, AttributesConfig.VizierHealth.get())
                 .add(Attributes.ATTACK_DAMAGE, 5.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {
@@ -412,8 +419,8 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             }
         }
 
-        if (pAmount > (float)MainConfig.VizierDamageCap.get()){
-            return super.hurt(pSource, (float)MainConfig.VizierDamageCap.get());
+        if (pAmount > (float) AttributesConfig.VizierDamageCap.get()){
+            return super.hurt(pSource, (float) AttributesConfig.VizierDamageCap.get());
         } else {
             if (this.isSpellcasting()){
                 return super.hurt(pSource, pAmount/2);

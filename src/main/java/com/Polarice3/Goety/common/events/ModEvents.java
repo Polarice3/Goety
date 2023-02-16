@@ -426,13 +426,19 @@ public class ModEvents {
                 event.setResult(Event.Result.ALLOW);
             } else {
                 if (event.getSpawnReason() == SpawnReason.NATURAL){
-                    BlockFinder.moveDownToGround(event.getEntityLiving());
-                    if (event.getWorld().getBlockState(event.getEntityLiving().blockPosition().below()).isAir()){
-                        event.setResult(Event.Result.DENY);
-                    } else if (!event.getWorld().getFluidState(event.getEntityLiving().blockPosition().below()).isEmpty()){
+                    MobUtil.moveDownToGround(event.getEntityLiving());
+                    if (!event.getWorld().getFluidState(event.getEntityLiving().blockPosition().below()).isEmpty()){
                         event.setResult(Event.Result.DENY);
                     } else {
-                        event.setResult(Event.Result.ALLOW);
+                        if (event.getEntityLiving() instanceof ChannellerEntity){
+                            if (event.getWorld().getRandom().nextFloat() <= 0.25F){
+                                event.setResult(Event.Result.ALLOW);
+                            } else {
+                                event.setResult(Event.Result.DENY);
+                            }
+                        } else {
+                            event.setResult(Event.Result.ALLOW);
+                        }
                     }
                 } else {
                     event.setResult(Event.Result.DENY);
@@ -578,7 +584,7 @@ public class ModEvents {
                     ++zombies;
                     if (SpellConfig.ZombieLimit.get() < zombies){
                         if (summonedEntity.tickCount % 20 == 0){
-                            summonedEntity.hurt(DamageSource.STARVE, 5.0F);
+                            summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
                         }
                     }
                 }
@@ -586,7 +592,7 @@ public class ModEvents {
                     ++skeletons;
                     if (SpellConfig.SkeletonLimit.get() < skeletons){
                         if (summonedEntity.tickCount % 20 == 0){
-                            summonedEntity.hurt(DamageSource.STARVE, 5.0F);
+                            summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
                         }
                     }
                 }
@@ -594,7 +600,7 @@ public class ModEvents {
                     ++wolves;
                     if (SpellConfig.UndeadWolfLimit.get() < wolves){
                         if (summonedEntity.tickCount % 20 == 0){
-                            summonedEntity.hurt(DamageSource.STARVE, 5.0F);
+                            summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
                         }
                     }
                 }
@@ -789,60 +795,60 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void TargetSelection(LivingSetAttackTargetEvent event){
-        LivingEntity livingEntity = event.getEntityLiving();
+        LivingEntity attacker = event.getEntityLiving();
         LivingEntity target = event.getTarget();
-        if (livingEntity instanceof MobEntity){
-            MobEntity mob = (MobEntity) livingEntity;
+        if (attacker instanceof MobEntity){
+            MobEntity mobAttacker = (MobEntity) attacker;
             if (target != null){
                 if (target instanceof PlayerEntity){
-                    if (mob.getLastHurtByMob() instanceof IOwned){
-                        mob.setTarget(mob.getLastHurtByMob());
+                    if (mobAttacker.getLastHurtByMob() instanceof IOwned && !(mobAttacker instanceof ApostleEntity)){
+                        mobAttacker.setTarget(mobAttacker.getLastHurtByMob());
                     }
                     if (RobeArmorFinder.FindNecroSet(target) && RobeArmorFinder.FindNecroBootsofWander(target)){
-                        boolean undead = mob.getMobType() == CreatureAttribute.UNDEAD && mob.getMaxHealth() < 50.0F && !(mob instanceof OwnedEntity && !(mob instanceof IMob)) && !(mob instanceof BoneLordEntity);
+                        boolean undead = mobAttacker.getMobType() == CreatureAttribute.UNDEAD && mobAttacker.getMaxHealth() < 50.0F && !(mobAttacker instanceof OwnedEntity && !(mobAttacker instanceof IMob)) && !(mobAttacker instanceof BoneLordEntity);
                         if (undead){
-                            if (mob.getLastHurtByMob() != target){
-                                mob.setTarget(null);
+                            if (mobAttacker.getLastHurtByMob() != target){
+                                mobAttacker.setTarget(null);
                             } else {
-                                mob.setLastHurtByMob(target);
+                                mobAttacker.setLastHurtByMob(target);
                             }
                         }
                     }
                 }
-                if (mob.getTags().contains(ConstantPaths.skullLordMinion())){
+                if (mobAttacker.getTags().contains(ConstantPaths.skullLordMinion())){
                     if (target instanceof SkullLordEntity || target instanceof BoneLordEntity){
-                        mob.setTarget(null);
+                        mobAttacker.setTarget(null);
                     }
                 }
-                if ((mob.getMobType() == CreatureAttribute.UNDEAD && !(mob instanceof SummonedEntity)) || mob instanceof CreeperEntity){
+                if ((mobAttacker.getMobType() == CreatureAttribute.UNDEAD && !(mobAttacker instanceof IOwned)) || mobAttacker instanceof CreeperEntity){
                     if (target instanceof ApostleEntity){
-                        mob.setTarget(null);
+                        mobAttacker.setTarget(null);
                     }
                 }
-                if (mob.getMobType() == CreatureAttribute.ARTHROPOD){
+                if (mobAttacker.getMobType() == CreatureAttribute.ARTHROPOD){
                     if (RobeArmorFinder.FindFelHelm(target)){
-                        if (mob.getLastHurtByMob() != target){
-                            mob.setTarget(null);
+                        if (mobAttacker.getLastHurtByMob() != target){
+                            mobAttacker.setTarget(null);
                         } else {
-                            mob.setLastHurtByMob(target);
+                            mobAttacker.setLastHurtByMob(target);
                         }
                     }
                 }
-                if (mob instanceof CreeperEntity){
+                if (mobAttacker instanceof CreeperEntity){
                     if (RobeArmorFinder.FindFelArmor(target)){
-                        if (mob.getLastHurtByMob() != target){
-                            mob.setTarget(null);
+                        if (mobAttacker.getLastHurtByMob() != target){
+                            mobAttacker.setTarget(null);
                         } else {
-                            mob.setLastHurtByMob(target);
+                            mobAttacker.setLastHurtByMob(target);
                         }
                     }
                 }
-                if (mob instanceof SlimeEntity){
+                if (mobAttacker instanceof SlimeEntity){
                     if (RobeArmorFinder.FindFelBootsofWander(target)){
-                        if (mob.getLastHurtByMob() != target){
-                            mob.setTarget(null);
+                        if (mobAttacker.getLastHurtByMob() != target){
+                            mobAttacker.setTarget(null);
                         } else {
-                            mob.setLastHurtByMob(target);
+                            mobAttacker.setLastHurtByMob(target);
                         }
                     }
                 }
@@ -937,32 +943,34 @@ public class ModEvents {
         }
         if (event.getSource().getDirectEntity() instanceof LivingEntity){
             LivingEntity livingAttacker = (LivingEntity) event.getSource().getDirectEntity();
-            if (livingAttacker.getMainHandItem().getItem() instanceof TieredItem){
-                TieredItem weapon = (TieredItem) livingAttacker.getMainHandItem().getItem();
-                if (weapon.getTier() == ModItemTiers.FROST){
-                    if (MobUtil.immuneToFrost(victim)) {
-                        event.setAmount(event.getAmount() / 2.0F);
-                    } else {
-                        int i = 0;
-                        if (weapon instanceof FrostScytheItem){
-                            i = 1;
+            if (ModDamageSource.physicalAttacks(event.getSource())) {
+                if (livingAttacker.getMainHandItem().getItem() instanceof TieredItem) {
+                    TieredItem weapon = (TieredItem) livingAttacker.getMainHandItem().getItem();
+                    if (weapon.getTier() == ModItemTiers.FROST) {
+                        if (MobUtil.immuneToFrost(victim)) {
+                            event.setAmount(event.getAmount() / 2.0F);
+                        } else {
+                            int i = 0;
+                            if (weapon instanceof FrostScytheItem) {
+                                i = 1;
+                            }
+                            victim.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, i));
                         }
-                        victim.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 60, i));
+                        if (MobUtil.extraFrostDamage(victim)) {
+                            event.setAmount(event.getAmount() * 2.0F);
+                        }
                     }
-                    if (MobUtil.extraFrostDamage(victim)){
-                        event.setAmount(event.getAmount() * 2.0F);
-                    }
-                }
-                if (weapon instanceof DeathScytheItem){
-                    if (!victim.hasEffect(ModEffects.SAPPED.get())) {
-                        victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 20));
-                        victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
-                    } else {
-                        if (victim.level.random.nextBoolean()) {
-                            EffectsUtil.amplifyEffect(victim, ModEffects.SAPPED.get(), 20);
+                    if (weapon instanceof DeathScytheItem) {
+                        if (!victim.hasEffect(ModEffects.SAPPED.get())) {
+                            victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 20));
                             victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
                         } else {
-                            EffectsUtil.resetDuration(victim, ModEffects.SAPPED.get(), 20);
+                            if (victim.level.random.nextBoolean()) {
+                                EffectsUtil.amplifyEffect(victim, ModEffects.SAPPED.get(), 20);
+                                victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
+                            } else {
+                                EffectsUtil.resetDuration(victim, ModEffects.SAPPED.get(), 20);
+                            }
                         }
                     }
                 }

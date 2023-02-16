@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.utils.BlockFinder;
@@ -69,7 +69,7 @@ public class BoomerEntity extends MonsterEntity implements IDeadMob, IChargeable
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.BoomerHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.BoomerHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 16.0F)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.25F)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D);

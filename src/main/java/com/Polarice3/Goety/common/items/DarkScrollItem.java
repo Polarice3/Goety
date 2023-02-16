@@ -71,11 +71,14 @@ public class DarkScrollItem extends Item {
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.startUsingItem(handIn);
+        return ActionResult.consume(itemstack);
+    }
+
+    public void onUseTick(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if (!worldIn.isClientSide){
             ServerWorld serverWorld = (ServerWorld) worldIn;
-            serverWorld.sendParticles(ParticleTypes.ANGRY_VILLAGER, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
+            serverWorld.sendParticles(ParticleTypes.ANGRY_VILLAGER, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        return ActionResult.consume(itemstack);
     }
 
     @Override

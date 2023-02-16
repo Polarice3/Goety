@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModSounds;
@@ -54,10 +54,10 @@ public class DuneSpiderEntity extends MonsterEntity implements IDeadMob, ICustom
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.DuneSpiderHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.DuneSpiderHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.DuneSpiderDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.DuneSpiderDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

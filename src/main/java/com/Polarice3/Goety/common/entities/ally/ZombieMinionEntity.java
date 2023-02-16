@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
@@ -68,10 +68,10 @@ public class ZombieMinionEntity extends SummonedEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.ZombieServantHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.ZombieServantHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.ZombieServantDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.ZombieServantDamage.get())
                 .add(Attributes.ARMOR, 2.0D);
     }
 

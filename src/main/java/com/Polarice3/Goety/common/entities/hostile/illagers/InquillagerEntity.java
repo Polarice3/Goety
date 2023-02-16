@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
@@ -66,9 +66,9 @@ public class InquillagerEntity extends HuntingIllagerEntity implements ICustomAt
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MAX_HEALTH, MobConfig.InquillagerHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.InquillagerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.InquillagerDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.InquillagerDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

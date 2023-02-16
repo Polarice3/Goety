@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
@@ -64,7 +64,7 @@ public class ChannellerEntity extends AbstractCultistEntity implements ICultist 
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.ChannellerHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.ChannellerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D);
     }
 

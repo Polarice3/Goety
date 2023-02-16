@@ -2,9 +2,11 @@ package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
+import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EffectsUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.Goety.utils.WandUtil;
 import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,6 +15,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -102,26 +105,35 @@ public class FrostBallEntity extends DamagingProjectileEntity {
         if (!this.level.isClientSide) {
             Entity entity = pResult.getEntity();
             Entity owner = this.getOwner();
+            float enchantment = 0;
             float damage = 4.0F;
+            int duration = 0;
             boolean flag;
             if (owner != null) {
                 if (owner instanceof MobEntity) {
                     damage = (float) ((MobEntity) owner).getAttributeValue(Attributes.ATTACK_DAMAGE);
                     this.doEnchantDamageEffects((MobEntity) owner, entity);
+                } else if (owner instanceof PlayerEntity){
+                    PlayerEntity player = (PlayerEntity) owner;
+                    if (WandUtil.enchantedFocus(player)){
+                        enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
+                        duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player);
+                    }
+                    this.doEnchantDamageEffects(player, entity);
                 }
-                flag = entity.hurt(ModDamageSource.indirectFrost(this, owner), damage);
+                flag = entity.hurt(ModDamageSource.indirectFrost(this, owner), damage + enchantment);
             } else {
                 flag = entity.hurt(ModDamageSource.FROST, damage);
             }
             if (flag && entity instanceof LivingEntity){
                 LivingEntity livingEntity = (LivingEntity) entity;
                 if (!livingEntity.hasEffect(Effects.MOVEMENT_SLOWDOWN)) {
-                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 300));
+                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 300 + duration));
                 } else {
                     if (this.random.nextFloat() <= 0.01F) {
-                        EffectsUtil.amplifyEffect(livingEntity, Effects.MOVEMENT_SLOWDOWN, 300);
+                        EffectsUtil.amplifyEffect(livingEntity, Effects.MOVEMENT_SLOWDOWN, 300 + duration);
                     } else {
-                        EffectsUtil.resetDuration(livingEntity, Effects.MOVEMENT_SLOWDOWN, 300);
+                        EffectsUtil.resetDuration(livingEntity, Effects.MOVEMENT_SLOWDOWN, 300 + duration);
                     }
                 }
             }

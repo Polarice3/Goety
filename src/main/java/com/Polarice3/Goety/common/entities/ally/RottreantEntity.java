@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.RootTrapEntity;
 import com.Polarice3.Goety.init.ModBlocks;
@@ -70,11 +70,11 @@ public class RottreantEntity extends SummonedEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.RottreantHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.RottreantHealth.get())
                 .add(Attributes.ARMOR, 0.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.RottreantDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.RottreantDamage.get())
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D);
     }
 

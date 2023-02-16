@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.ai.PotionGroupGoal;
 import com.Polarice3.Goety.common.entities.projectiles.PitchforkEntity;
 import com.Polarice3.Goety.common.entities.projectiles.WitchBombEntity;
@@ -69,9 +69,9 @@ public class FanaticEntity extends AbstractCultistEntity implements IRangedAttac
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.FanaticHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.FanaticHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.FanaticDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.FanaticDamage.get())
                 .add(Attributes.FOLLOW_RANGE, 24.0D);
     }
 

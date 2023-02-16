@@ -54,9 +54,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkScytheSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchBowSouls;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> ApostleDamageCap;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ApostleBowDamage;
-    public static final ForgeConfigSpec.ConfigValue<Integer> VizierDamageCap;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
@@ -229,12 +226,6 @@ public class MainConfig {
                 .defineInRange("mutatedRabbitMax", 16, 0, 100);
         VizierMinion = BUILDER.comment("Viziers spawn Vexes instead of Irks, Default: false")
                 .define("vizierMinion", false);
-        VizierDamageCap = BUILDER.comment("How much maximum Damage a Vizier can attain per hit, Default: 20")
-                .defineInRange("vizierDamageCap", 20, 1, Integer.MAX_VALUE);
-        ApostleDamageCap = BUILDER.comment("How much maximum Damage an Apostle can attain per hit, Default: 20")
-                .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
-        ApostleBowDamage = BUILDER.comment("Multiplies Apostle's Bow damage, Default: 4")
-                .defineInRange("apostleBowDamage", 4, 2, Integer.MAX_VALUE);
         FancierApostleDeath = BUILDER.comment("Gives Apostle an even more fancier death animation, Default: false")
                 .define("fancierApostleDeath", false);
         FanaticPitchforkChance = BUILDER.comment("Chance for the Fanatic mob to spawn with a Pitchfork, Default: 16")

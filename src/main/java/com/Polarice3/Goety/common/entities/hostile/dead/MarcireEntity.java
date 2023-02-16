@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.DesiccatedSkullEntity;
 import com.Polarice3.Goety.init.ModEffects;
@@ -50,7 +50,7 @@ public class MarcireEntity extends MonsterEntity implements IDeadMob, IRangedAtt
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.MarcireHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.MarcireHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);

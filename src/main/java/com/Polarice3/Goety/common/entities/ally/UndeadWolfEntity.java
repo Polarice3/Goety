@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -83,9 +83,9 @@ public class UndeadWolfEntity extends SummonedEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.UndeadWolfHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.UndeadWolfHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.UndeadWolfDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.UndeadWolfDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
@@ -145,9 +145,9 @@ public class UndeadWolfEntity extends SummonedEntity {
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         if (this.isUpgraded()){
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.NecroUndeadWolfHealth.get());
-            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(MobConfig.NecroUndeadWolfDamage.get());
-            this.setHealth(MobConfig.NecroUndeadWolfHealth.get().floatValue());
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(AttributesConfig.NecroUndeadWolfHealth.get());
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(AttributesConfig.NecroUndeadWolfDamage.get());
+            this.setHealth(AttributesConfig.NecroUndeadWolfHealth.get().floatValue());
         }
         return pSpawnData;
     }

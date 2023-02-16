@@ -70,6 +70,7 @@ public class UndeadWolfSpell extends SummonSpells{
             UndeadWolfEntity summonedentity = new UndeadWolfEntity(ModEntityType.UNDEAD_WOLF_MINION.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            MobUtil.moveDownToGround(summonedentity);
             summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(this.NecroPower(entityLiving));
@@ -95,6 +96,7 @@ public class UndeadWolfSpell extends SummonSpells{
                     UndeadWolfEntity summonedentity = new UndeadWolfEntity(ModEntityType.UNDEAD_WOLF_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());
                     summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+                    MobUtil.moveDownToGround(summonedentity);
                     summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
                     summonedentity.setPersistenceRequired();
                     summonedentity.setUpgraded(this.NecroPower(entityLiving));

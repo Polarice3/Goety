@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -54,10 +54,10 @@ public class BoneLordEntity extends AbstractSkeletonEntity implements ICustomAtt
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.BoneLordHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.BoneLordHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.BoneLordDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.BoneLordDamage.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.0D)
                 .add(Attributes.ARMOR, 2.0D);
     }

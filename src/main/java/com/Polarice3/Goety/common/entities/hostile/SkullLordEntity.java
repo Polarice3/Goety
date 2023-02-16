@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
@@ -83,9 +83,9 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.SkullLordDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.SkullLordDamage.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.MAX_HEALTH, MobConfig.SkullLordHealth.get());
+                .add(Attributes.MAX_HEALTH, AttributesConfig.SkullLordHealth.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

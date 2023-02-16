@@ -135,8 +135,8 @@ public class Goety {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MainConfig.SPEC, "goety.toml");
         MainConfig.loadConfig(MainConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety.toml").toString());
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MobConfig.SPEC, "goety-attributes.toml");
-        MobConfig.loadConfig(MobConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-attributes.toml").toString());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AttributesConfig.SPEC, "goety-attributes.toml");
+        AttributesConfig.loadConfig(AttributesConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-attributes.toml").toString());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpellConfig.SPEC, "goety-spells.toml");
         SpellConfig.loadConfig(SpellConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-spells.toml").toString());

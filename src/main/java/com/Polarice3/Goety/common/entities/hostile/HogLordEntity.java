@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
@@ -89,12 +89,12 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.HoglordHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.HoglordHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.3F)
                 .add(Attributes.ATTACK_KNOCKBACK, 1.5D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.75D)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.HoglordDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.HoglordDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

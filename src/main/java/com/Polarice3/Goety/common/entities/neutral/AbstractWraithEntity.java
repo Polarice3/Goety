@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.FloatSwimGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
@@ -78,10 +78,10 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.WraithHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.WraithHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.WraithDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.WraithDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

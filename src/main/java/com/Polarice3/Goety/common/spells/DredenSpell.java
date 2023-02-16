@@ -76,6 +76,7 @@ public class DredenSpell extends SummonSpells{
             DredenMinionEntity summonedentity = new DredenMinionEntity(ModEntityType.DREDEN_MINION.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            MobUtil.moveDownToGround(summonedentity);
             summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(this.NecroPower(entityLiving));
@@ -102,6 +103,7 @@ public class DredenSpell extends SummonSpells{
                     DredenMinionEntity summonedentity = new DredenMinionEntity(ModEntityType.DREDEN_MINION.get(), worldIn);
                     summonedentity.setOwnerId(entityLiving.getUUID());
                     summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+                    MobUtil.moveDownToGround(summonedentity);
                     summonedentity.setPersistenceRequired();
                     summonedentity.setUpgraded(this.NecroPower(entityLiving));
                     summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);

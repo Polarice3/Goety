@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModEffects;
@@ -47,10 +47,10 @@ public class FallenEntity extends ZombieEntity implements IDeadMob, ICustomAttri
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.FallenHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.FallenHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.FallenDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.FallenDamage.get())
                 .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
     }

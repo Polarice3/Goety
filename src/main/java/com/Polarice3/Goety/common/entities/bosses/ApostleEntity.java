@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.bosses;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
@@ -122,13 +123,17 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 320.0D)
+                .add(Attributes.MAX_HEALTH, AttributesConfig.ApostleHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.75D)
                 .add(Attributes.FOLLOW_RANGE, 40.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected void defineSynchedData() {
@@ -578,7 +583,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             this.deathBlow = pSource;
         }
 
-        return super.hurt(pSource, Math.min(trueAmount, (float)MainConfig.ApostleDamageCap.get()));
+        return super.hurt(pSource, Math.min(trueAmount, (float) AttributesConfig.ApostleDamageCap.get()));
     }
 
     @Override
@@ -839,7 +844,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             }
         } else {
             if (target instanceof IOwned && ((IOwned) target).getTrueOwner() != null){
-                this.setTarget(((IOwned) target).getTrueOwner());
+                IOwned owned = (IOwned) target;
+                this.setTarget(owned.getTrueOwner());
             }
             int i = this.level.getNearbyEntities(OwnedEntity.class, this.zombieCount, this, this.getBoundingBox().inflate(64.0D)).size();
             if (this.tickCount % 100 == 0 && i < 16 && this.level.random.nextFloat() <= 0.25F){
@@ -975,7 +981,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
-        AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, pDistanceFactor * MainConfig.ApostleBowDamage.get());
+        AbstractArrowEntity abstractarrowentity = this.getArrow(itemstack, pDistanceFactor * AttributesConfig.ApostleBowDamage.get());
         if (this.getMainHandItem().getItem() instanceof BowItem) {
             abstractarrowentity = ((BowItem) this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
         }
@@ -1373,7 +1379,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                             if (serverWorld.noCollision(summonedentity, summonedentity.getBoundingBox().move(blockpos$mutable).inflate(0.5F)) && summonedentity.distanceToSqr(ApostleEntity.this) <= MathHelper.square(32.0F)){
                                 summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
                             } else {
-                                summonedentity.moveTo(ApostleEntity.this.blockPosition().above(), 0.0F, 0.0F);
+                                blockpos$mutable = ApostleEntity.this.blockPosition().mutable();
+                                summonedentity.moveTo(blockpos$mutable, 0.0F, 0.0F);
                             }
                             summonedentity.setTrueOwner(ApostleEntity.this);
                             summonedentity.setLimitedLife(60 * (90 + ApostleEntity.this.level.random.nextInt(180)));

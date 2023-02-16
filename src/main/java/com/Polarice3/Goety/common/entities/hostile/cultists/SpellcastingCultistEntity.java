@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
+import com.Polarice3.Goety.common.items.NetherBookItem;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -194,8 +195,15 @@ public abstract class SpellcastingCultistEntity extends AbstractCultistEntity{
             --this.spellWarmup;
             if (this.spellWarmup == 0) {
                 this.castSpell();
+                if (SpellcastingCultistEntity.this.getMainHandItem().getItem() instanceof NetherBookItem) {
+                    SpellcastingCultistEntity.this.releaseUsingItem();
+                }
                 SpellcastingCultistEntity.this.setSpellType(SpellType.NONE);
                 SpellcastingCultistEntity.this.playSound(SpellcastingCultistEntity.this.getCastingSoundEvent (), 1.0F, 1.0F);
+            } else {
+                if (SpellcastingCultistEntity.this.getMainHandItem().getItem() instanceof NetherBookItem){
+                    SpellcastingCultistEntity.this.startUsingItem(SpellcastingCultistEntity.this.getUsedItemHand());
+                }
             }
 
         }

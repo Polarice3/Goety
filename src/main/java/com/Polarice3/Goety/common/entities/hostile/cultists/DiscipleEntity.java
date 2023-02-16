@@ -1,8 +1,9 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ZPiglinBruteMinionEntity;
 import com.Polarice3.Goety.common.entities.utilities.MagicBlastTrapEntity;
+import com.Polarice3.Goety.common.items.NetherBookItem;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModSounds;
@@ -64,7 +65,7 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.DiscipleHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.DiscipleHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
@@ -182,7 +183,11 @@ public class DiscipleEntity extends SpellcastingCultistEntity implements ICultis
     @OnlyIn(Dist.CLIENT)
     public AbstractCultistEntity.ArmPose getArmPose() {
         if (this.isSpellcasting()) {
-            return ArmPose.BOW_AND_ARROW;
+            if (this.getMainHandItem().getItem() instanceof NetherBookItem){
+                return ArmPose.BOW_AND_ARROW;
+            } else {
+                return ArmPose.SPELLCASTING;
+            }
         } else {
             return AbstractCultistEntity.ArmPose.NEUTRAL;
         }

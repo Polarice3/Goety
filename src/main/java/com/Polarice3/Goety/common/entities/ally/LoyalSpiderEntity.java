@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ally;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
@@ -169,12 +169,12 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.LoyalSpiderHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.LoyalSpiderHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
                 .add(Attributes.ARMOR, 0.0F)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.0F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.LoyalSpiderDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.LoyalSpiderDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

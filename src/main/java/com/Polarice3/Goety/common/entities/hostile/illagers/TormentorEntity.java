@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -65,8 +65,8 @@ public class TormentorEntity extends AbstractIllagerEntity implements ICustomAtt
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.TormentorHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.TormentorDamage.get());
+                .add(Attributes.MAX_HEALTH, AttributesConfig.TormentorHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.TormentorDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

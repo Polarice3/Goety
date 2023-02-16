@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -51,9 +51,9 @@ public class ThugEntity extends AbstractCultistEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.ThugHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.ThugHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.23D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.ThugDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.ThugDamage.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.6D);
     }
 

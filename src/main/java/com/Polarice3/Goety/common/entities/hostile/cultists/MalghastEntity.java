@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.OwnedFlyingEntity;
 import com.Polarice3.Goety.common.entities.projectiles.ExplosiveProjectileEntity;
 import com.Polarice3.Goety.common.entities.projectiles.GrandLavaballEntity;
@@ -126,7 +126,7 @@ public class MalghastEntity extends OwnedFlyingEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, MobConfig.MalghastHealth.get())
+        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, AttributesConfig.MalghastHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 32.0D);
     }
 

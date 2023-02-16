@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.events;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.MobConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.init.ModRitualFactory;
 import com.Polarice3.Goety.init.ModRituals;
@@ -28,7 +28,7 @@ public class ModRegisterEvents {
     @SubscribeEvent
     public static void onModConfigChanged(final ModConfig.Reloading event) {
         final ModConfig config = event.getConfig();
-        if (config.getSpec() == MobConfig.SPEC) {
+        if (config.getSpec() == AttributesConfig.SPEC) {
             ICustomAttributes.ATTRIBUTE_MODIFIER_MAP.clear();
         }
     }

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -45,10 +45,10 @@ public class CrimsonSpiderEntity extends AbstractCultistEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.CrimsonSpiderHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.CrimsonSpiderHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.3F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.CrimsonSpiderDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.CrimsonSpiderDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
@@ -37,10 +37,10 @@ public class BlightEntity extends AbstractWraithEntity implements IDeadMob, IMob
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.BlightHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.BlightHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.BlightDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.BlightDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

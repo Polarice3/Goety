@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.io.File;
 
-public class MobConfig {
+public class AttributesConfig {
 
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
@@ -85,6 +85,13 @@ public class MobConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> SkullLordDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> BoneLordHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> BoneLordDamage;
+
+    public static final ForgeConfigSpec.ConfigValue<Double> ApostleHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> VizierHealth;
+
+    public static final ForgeConfigSpec.ConfigValue<Integer> ApostleDamageCap;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ApostleBowDamage;
+    public static final ForgeConfigSpec.ConfigValue<Integer> VizierDamageCap;
 
     static {
         BUILDER.push("General");
@@ -278,6 +285,22 @@ public class MobConfig {
                         .defineInRange("rottreantHealth", 75.0, 1.0, Double.MAX_VALUE);
                 RottreantDamage = BUILDER.comment("How much damage Rottreant deals, Default: 6.0")
                         .defineInRange("rottreantDamage", 6.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+            BUILDER.pop();
+            BUILDER.push("Bosses");
+                BUILDER.push("Vizier");
+                VizierHealth = BUILDER.comment("How much Max Health Viziers have, Default: 200.0")
+                        .defineInRange("vizierHealth", 200.0, 100.0, Double.MAX_VALUE);
+                VizierDamageCap = BUILDER.comment("The maximum amount of damage a Vizier can attain per hit, Default: 20")
+                        .defineInRange("vizierDamageCap", 20, 1, Integer.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Apostle");
+                ApostleHealth = BUILDER.comment("How much Max Health Apostles have, Default: 320.0")
+                        .defineInRange("apostleHealth", 320.0, 100.0, Double.MAX_VALUE);
+                ApostleDamageCap = BUILDER.comment("The maximum amount of damage an Apostle can attain per hit, Default: 20")
+                        .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
+                ApostleBowDamage = BUILDER.comment("Multiplies Apostle's Bow damage, Default: 4")
+                        .defineInRange("apostleBowDamage", 4, 2, Integer.MAX_VALUE);
                 BUILDER.pop();
             BUILDER.pop();
         BUILDER.pop();

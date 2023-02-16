@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
@@ -23,7 +23,7 @@ public interface ICustomAttributes {
 
     static<T extends ICustomAttributes> AttributeModifierMap getAttributesForEntity(EntityType<? extends LivingEntity> type, T entity) {
         AttributeModifierMap originalAttributes = GlobalEntityTypeAttributes.getSupplier(type);
-        if (!MobConfig.OverrideAttributes.get()){
+        if (!AttributesConfig.OverrideAttributes.get()){
             return originalAttributes;
         }
         if (ATTRIBUTE_MODIFIER_MAP.containsKey(type)) {

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.projectiles.BurningPotionEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -106,7 +106,7 @@ public class BeldamEntity extends AbstractCultistEntity implements IRangedAttack
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.BeldamHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.BeldamHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D);
     }
 

@@ -52,11 +52,10 @@ public class MobUtil {
     };
 
     public static void deadSandConvert(Entity entity, boolean natural){
-        if (entity instanceof IMob && !(entity instanceof IDeadMob)){
-            IMob mob = (IMob) entity;
+        if (!(entity instanceof IDeadMob)){
             MobEntity corrupt = null;
-            if (mob instanceof MobEntity) {
-                MobEntity monster = (MobEntity) mob;
+            if (entity instanceof MobEntity) {
+                MobEntity monster = (MobEntity) entity;
                 if (monster instanceof CreeperEntity) {
                     corrupt = monster.convertTo(ModEntityType.BOOMER.get(), false);
                 }

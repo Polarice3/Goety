@@ -75,6 +75,7 @@ public class SkeletonSpell extends SummonSpells{
             }
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(blockPos, 0.0F, 0.0F);
+            MobUtil.moveDownToGround(summonedentity);
             summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);
             summonedentity.setPersistenceRequired();
             summonedentity.setUpgraded(this.NecroPower(entityLiving));
@@ -102,6 +103,7 @@ public class SkeletonSpell extends SummonSpells{
                 }
                 summonedentity.setOwnerId(entityLiving.getUUID());
                 summonedentity.moveTo(blockPos, 0.0F, 0.0F);
+                MobUtil.moveDownToGround(summonedentity);
                 summonedentity.setPersistenceRequired();
                 summonedentity.setUpgraded(this.NecroPower(entityLiving));
                 summonedentity.setLimitedLife(MobUtil.getSummonLifespan(worldIn) * duration);

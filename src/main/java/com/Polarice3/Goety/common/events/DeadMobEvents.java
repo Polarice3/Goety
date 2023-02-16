@@ -15,7 +15,7 @@ import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.DrownedEntity;
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -50,14 +50,14 @@ public class DeadMobEvents {
     @SubscribeEvent
     public static void SpawnEvents(LivingSpawnEvent.CheckSpawn event){
         if (MainConfig.DeadSandMobs.get()) {
-            if (event.getEntityLiving() instanceof MonsterEntity) {
-                MonsterEntity monster = (MonsterEntity) event.getEntityLiving();
-                if (event.getWorld().getBlockState(monster.blockPosition().below()).is(ModTags.Blocks.DEAD_SANDS)) {
+            if (event.getEntityLiving() instanceof IMob && event.getEntityLiving() instanceof MobEntity) {
+                MobEntity mob = (MobEntity) event.getEntityLiving();
+                if (event.getWorld().getBlockState(mob.blockPosition().below()).is(ModTags.Blocks.DEAD_SANDS)) {
                     if (event.getSpawnReason() == SpawnReason.NATURAL || event.getSpawnReason() == SpawnReason.CHUNK_GENERATION) {
-                        MobUtil.deadSandConvert(monster, true);
+                        MobUtil.deadSandConvert(mob, true);
                     } else {
                         if (event.getWorld().getRandom().nextFloat() < 0.55F) {
-                            MobUtil.deadSandConvert(monster, true);
+                            MobUtil.deadSandConvert(mob, true);
                         }
                     }
                 }
@@ -188,7 +188,7 @@ public class DeadMobEvents {
             }
         }
         if (MainConfig.DeadSandMobs.get()){
-            if (killed instanceof MonsterEntity) {
+            if (killed instanceof MobEntity) {
                 if (ModDamageSource.desiccateAttacks(event.getSource())) {
                     MobUtil.deadSandConvert(killed, false);
                 }

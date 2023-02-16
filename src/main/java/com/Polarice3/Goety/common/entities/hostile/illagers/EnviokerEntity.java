@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SwordProjectileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -60,9 +60,9 @@ public class EnviokerEntity extends HuntingIllagerEntity implements ICustomAttri
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MAX_HEALTH, MobConfig.EnviokerHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.EnviokerHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.EnviokerDamage.get());
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.EnviokerDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

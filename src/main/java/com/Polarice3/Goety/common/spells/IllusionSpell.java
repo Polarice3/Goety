@@ -4,6 +4,7 @@ import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.ally.IllusionCloneEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.BlockFinder;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ILivingEntityData;
@@ -48,6 +49,7 @@ public class IllusionSpell extends Spells{
             IllusionCloneEntity summonedentity = new IllusionCloneEntity(ModEntityType.ILLUSION_CLONE.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+            MobUtil.moveDownToGround(summonedentity);
             summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(1200);
             summonedentity.setPersistenceRequired();
@@ -86,6 +88,7 @@ public class IllusionSpell extends Spells{
             IllusionCloneEntity summonedentity = new IllusionCloneEntity(ModEntityType.ILLUSION_CLONE.get(), worldIn);
             summonedentity.setOwnerId(entityLiving.getUUID());
             summonedentity.moveTo(BlockFinder.SummonRadius(entityLiving, worldIn), 0.0F, 0.0F);
+MobUtil.moveDownToGround(summonedentity);
             summonedentity.finalizeSpawn((IServerWorld) worldIn, entityLiving.level.getCurrentDifficultyAt(BlockFinder.SummonRadius(entityLiving, worldIn)), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             summonedentity.setLimitedLife(1200);
             summonedentity.setPersistenceRequired();

@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
-import com.Polarice3.Goety.MobConfig;
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import net.minecraft.block.BlockState;
@@ -53,10 +53,10 @@ public class ZPiglinMinionEntity extends SummonedEntity {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, MobConfig.ZPiglinServantHealth.get())
+                .add(Attributes.MAX_HEALTH, AttributesConfig.ZPiglinServantHealth.get())
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
-                .add(Attributes.ATTACK_DAMAGE, MobConfig.ZPiglinServantDamage.get())
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.ZPiglinServantDamage.get())
                 .add(Attributes.ARMOR, 2.0D);
     }
 

@@ -242,6 +242,10 @@ public class ClientEventBusSubscriber {
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
         ItemModelsProperties.register(ModItems.WARPED_SPEAR.get(), new ResourceLocation("throwing")
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.NETHER_BOOK.get(), new ResourceLocation("reading")
+                , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.NETHER_BOOK_TRANSLATED.get(), new ResourceLocation("reading")
+                , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
     }
 
     @SubscribeEvent
