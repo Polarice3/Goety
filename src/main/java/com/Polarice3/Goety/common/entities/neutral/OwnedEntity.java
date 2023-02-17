@@ -99,21 +99,18 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
         if (this.getLastHurtByMob() == this.getTrueOwner()){
             this.setLastHurtByMob(null);
         }
+        if (this.getTrueOwner() instanceof MobEntity){
+            MobEntity mobOwner = (MobEntity) this.getTrueOwner();
+            if (mobOwner.getTarget() != null && this.getTarget() == null){
+                this.setTarget(mobOwner.getTarget());
+            }
+        }
         for (OwnedEntity target : this.level.getEntitiesOfClass(OwnedEntity.class, this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE)))) {
             if (target.getTrueOwner() != this.getTrueOwner()
                     && this.getTrueOwner() != target.getTrueOwner()
                     && target.getTarget() == this.getTrueOwner()
                     && this.getTrueOwner() != null){
                 this.setTarget(target);
-            }
-        }
-        if (this.isHostile() && !(this.getEntity() instanceof IMob)){
-            if (this.getTarget() instanceof IMob){
-                if (this.getLastHurtByMob() != this.getTarget()){
-                    this.setTarget(null);
-                } else {
-                    this.setLastHurtByMob(this.getTarget());
-                }
             }
         }
         if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {

@@ -4,6 +4,7 @@ import com.Polarice3.Goety.client.render.BlightFireTextures;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
+import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.EffectsUtil;
@@ -15,6 +16,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
@@ -61,14 +63,26 @@ public class BlightFireEntity extends GhostFireEntity{
                     }
                 }
             } else {
-                if (target.isAlliedTo(owner)){
-                    return;
-                }
-                if (owner.isAlliedTo(target)) {
-                    return;
-                }
-                if (owner instanceof IDeadMob && owner instanceof MobEntity && target instanceof IDeadMob){
-                    if (((MobEntity) owner).getTarget() != target) {
+                if (owner instanceof MobEntity) {
+                    MobEntity mob = (MobEntity) owner;
+                    if (mob instanceof IMob && target instanceof IMob) {
+                        if (mob.getTarget() != target) {
+                            return;
+                        }
+                    }
+                    if (mob instanceof IOwned){
+                        IOwned owned = (IOwned) mob;
+                        if (owned.getTrueOwner() != null){
+                            if (target.isAlliedTo(owned.getTrueOwner()) || owned.getTrueOwner().isAlliedTo(target) || target == owned.getTrueOwner()){
+                                return;
+                            }
+                        }
+                    }
+                } else {
+                    if (target.isAlliedTo(owner)){
+                        return;
+                    }
+                    if (owner.isAlliedTo(target)) {
                         return;
                     }
                 }

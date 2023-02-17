@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.client.render.GhostFireTextures;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
+import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -186,14 +187,28 @@ public class GhostFireEntity extends GroundProjectileEntity {
             if (owner == null) {
                 target.hurt(DamageSource.IN_FIRE, damage);
             } else {
-                if (target.isAlliedTo(owner)){
-                    return;
-                }
-                if (owner.isAlliedTo(target)) {
-                    return;
-                }
-                if (owner instanceof IMob && target instanceof IMob){
-                    return;
+                if (owner instanceof MobEntity) {
+                    MobEntity mob = (MobEntity) owner;
+                    if (mob instanceof IMob && target instanceof IMob) {
+                        if (mob.getTarget() != target) {
+                            return;
+                        }
+                    }
+                    if (mob instanceof IOwned){
+                        IOwned owned = (IOwned) mob;
+                        if (owned.getTrueOwner() != null){
+                            if (target.isAlliedTo(owned.getTrueOwner()) || owned.getTrueOwner().isAlliedTo(target) || target == owned.getTrueOwner()){
+                                return;
+                            }
+                        }
+                    }
+                } else {
+                    if (target.isAlliedTo(owner)){
+                        return;
+                    }
+                    if (owner.isAlliedTo(target)) {
+                        return;
+                    }
                 }
                 if (owner instanceof PlayerEntity){
                     PlayerEntity player = (PlayerEntity) owner;
