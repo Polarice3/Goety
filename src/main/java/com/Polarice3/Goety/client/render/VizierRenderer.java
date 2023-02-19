@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class VizierRenderer extends MobRenderer<VizierEntity, VizierModel> {
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/vizier.png");
+    protected static final ResourceLocation DYING = new ResourceLocation(Goety.MOD_ID, "textures/entity/illagers/vizier_dying.png");
 
     public VizierRenderer(EntityRendererManager renderManagerIn) {
         super(renderManagerIn, new VizierModel(0.0F, 0.0F), 1.0F);
@@ -31,6 +32,10 @@ public class VizierRenderer extends MobRenderer<VizierEntity, VizierModel> {
 
     @Override
     public ResourceLocation getTextureLocation(VizierEntity entity) {
-        return TEXTURE;
+        if (entity.isDeadOrDying() || !entity.isAlive()){
+            return DYING;
+        } else {
+            return TEXTURE;
+        }
     }
 }

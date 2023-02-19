@@ -427,11 +427,21 @@ public class ModEvents {
             } else {
                 if (event.getSpawnReason() == SpawnReason.NATURAL){
                     MobUtil.moveDownToGround(event.getEntityLiving());
+                    boolean spawn = false;
                     if (!event.getWorld().getFluidState(event.getEntityLiving().blockPosition().below()).isEmpty()){
                         event.setResult(Event.Result.DENY);
+                    } else if (event.getWorld().dimensionType().hasCeiling()){
+                        if (event.getWorld().getRandom().nextFloat() <= 0.25F) {
+                            spawn = true;
+                        } else {
+                            event.setResult(Event.Result.DENY);
+                        }
                     } else {
-                        if (event.getEntityLiving() instanceof ChannellerEntity){
-                            if (event.getWorld().getRandom().nextFloat() <= 0.25F){
+                        spawn = true;
+                    }
+                    if (spawn){
+                        if (event.getEntityLiving() instanceof ChannellerEntity) {
+                            if (event.getWorld().getRandom().nextFloat() <= 0.25F) {
                                 event.setResult(Event.Result.ALLOW);
                             } else {
                                 event.setResult(Event.Result.DENY);
@@ -820,7 +830,7 @@ public class ModEvents {
                         mobAttacker.setTarget(null);
                     }
                 }
-                if ((mobAttacker.getMobType() == CreatureAttribute.UNDEAD && !(mobAttacker instanceof IOwned)) || mobAttacker instanceof CreeperEntity){
+                if ((mobAttacker.getMobType() == CreatureAttribute.UNDEAD && !(mobAttacker instanceof IOwned) && mobAttacker.getMaxHealth() < 100.0F) || mobAttacker instanceof CreeperEntity){
                     if (target instanceof ApostleEntity){
                         mobAttacker.setTarget(null);
                     }
