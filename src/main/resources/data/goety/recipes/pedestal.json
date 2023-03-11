@@ -2,12 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "sss",
+    "lll",
     " s ",
-    "sss"
+    "lll"
   ],
   "key":
   {
+    "l":
+    {
+      "item": "goety:cursed_stone_slab"
+    },
     "s":
     {
       "item": "goety:cursed_stone"

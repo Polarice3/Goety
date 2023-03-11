@@ -108,6 +108,7 @@
   "entity.goety.nether_meteor":"Nether Meteor",
   "entity.goety.fireball": "Small Fireball",
   "entity.goety.lavaball": "Fireball",
+  "entity.goety.grand_lavaball": "Grand Fireball",
   "entity.goety.dragon_fireball": "Dragon Fireball",
   "entity.goety.scythe":"Scythe Slash",
   "entity.goety.warped_spear":"Warped Spear",
@@ -839,7 +840,7 @@
 
   "gui.jei.category.cursed_burner": "Cursed Infuser",
   "gui.jei.category.cursed_burner.time": "%ss",
-  "gui.jei.category.dark_altar": "Cursed Infuser",
+  "gui.jei.category.dark_altar": "Dark Altar",
   "gui.jei.category.dark_altar.time": "%ss",
   "gui.jei.category.dark_altar.soulcost": "%s Souls/s",
 

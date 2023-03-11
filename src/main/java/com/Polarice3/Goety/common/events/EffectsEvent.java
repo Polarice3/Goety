@@ -78,7 +78,7 @@ public class EffectsEvent {
                 break;
         }
         int k = 600 >> amplifier;
-        if ((infected.tickCount % k == 0) && level.getDifficulty() != Difficulty.PEACEFUL) {
+        if ((infected.tickCount % k == 0) && level.getDifficulty() != Difficulty.PEACEFUL && k > 0) {
             int r = level.random.nextInt(8);
             int r2 = level.random.nextInt(c - i3);
             int r3 = level.random.nextInt(i2);
@@ -139,7 +139,7 @@ public class EffectsEvent {
     public void Desiccate(ServerWorld level, LivingEntity infected){
         int a = Objects.requireNonNull(infected.getEffect(ModEffects.DESICCATE.get())).getAmplifier();
         int i = 100 >> a;
-        if (infected.tickCount % i == 0 && level.random.nextBoolean()) {
+        if (i > 0 && infected.tickCount % i == 0 && level.random.nextBoolean()) {
             if (infected.hurt(ModDamageSource.DESICCATE, 2.0F)){
                 if (a > 2){
                     DeadSandExplosion.Mode mode = level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING) && MainConfig.DeadSandSpread.get() ? DeadSandExplosion.Mode.SPREAD : DeadSandExplosion.Mode.NONE;
@@ -152,7 +152,7 @@ public class EffectsEvent {
     public void Cosmic(ServerWorld level, LivingEntity pLivingEntity){
         int amplifier = Objects.requireNonNull(pLivingEntity.getEffect(ModEffects.COSMIC.get())).getAmplifier();
         int k = 1200 >> amplifier;
-        if (pLivingEntity.tickCount % k == 0) {
+        if (k > 0 && pLivingEntity.tickCount % k == 0) {
             if (pLivingEntity instanceof PlayerEntity) {
                 int r = level.random.nextInt(20);
                 int a = level.random.nextInt(5);

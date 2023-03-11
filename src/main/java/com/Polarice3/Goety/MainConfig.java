@@ -125,6 +125,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InfamyBadOmen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerRaid;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> CultistRaid;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> VillagerHate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CultistSpread;
@@ -246,6 +247,8 @@ public class MainConfig {
                 .define("witchConversion", true);
         CultistPilgrimage = BUILDER.comment("Whether Cultists will occasionally spawn within the Nether in groups much akin to Patrols, Default: true")
                 .define("cultistPilgrimage", true);
+        CultistRaid = BUILDER.comment("Whether Cultists will appear in raids if players are nearby, Default: false")
+                .define("cultistRaid", false);
         TallSkullDrops = BUILDER.comment("Whether Mobs with Tall Heads(ie. Villagers, Illagers, etc.) will drop Tall Skulls, Default: true")
                 .define("tallSkullDrop", true);
         WraithAggressiveTeleport = BUILDER.comment("Whether Wraiths should teleport towards their targets if they can't see them instead of just teleporting away when they're near them, Default: true")

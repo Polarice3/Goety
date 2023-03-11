@@ -170,15 +170,33 @@ public class ModEvents {
             }
         }
         if (entity instanceof AbstractRaiderEntity){
-            if (MainConfig.IllagerRaid.get()) {
-                AbstractRaiderEntity raider = (AbstractRaiderEntity) entity;
-                if (world instanceof ServerWorld) {
-                    IServerWorld serverWorld = (IServerWorld) world;
-                    if (raider.hasActiveRaid()) {
-                        Raid raid = raider.getCurrentRaid();
-                        if (raid != null && raid.isActive() && !raid.isBetweenWaves() && !raid.isOver() && !raid.isStopped()) {
-                            PlayerEntity player = EntityFinder.getNearbyPlayer(world, raid.getCenter());
-                            if (player != null) {
+            AbstractRaiderEntity raider = (AbstractRaiderEntity) entity;
+            if (world instanceof ServerWorld) {
+                IServerWorld serverWorld = (IServerWorld) world;
+                if (raider.hasActiveRaid()) {
+                    Raid raid = raider.getCurrentRaid();
+                    if (raid != null && raid.isActive() && !raid.isBetweenWaves() && !raid.isOver() && !raid.isStopped()) {
+                        PlayerEntity player = EntityFinder.getNearbyPlayer(world, raid.getCenter());
+                        if (player != null) {
+                            if (MainConfig.CultistRaid.get()) {
+                                if (raider instanceof WitchEntity) {
+                                    int badOmen = MathHelper.clamp(raid.getBadOmenLevel(), 0, 5) + 1;
+                                    for (int k1 = 0; k1 < badOmen; ++k1) {
+                                        AbstractCultistEntity cultist;
+                                        if (world.random.nextFloat() > 0.25F) {
+                                            cultist = ModEntityType.FANATIC.get().create(world);
+                                        } else {
+                                            cultist = ModEntityType.ZEALOT.get().create(world);
+                                        }
+                                        if (cultist != null) {
+                                            cultist.moveTo(raider.getX(), raider.getY(), raider.getZ());
+                                            cultist.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(raider.blockPosition()), SpawnReason.EVENT, null, null);
+                                            serverWorld.addFreshEntity(cultist);
+                                        }
+                                    }
+                                }
+                            }
+                            if (MainConfig.IllagerRaid.get()) {
                                 IInfamy infamy = InfamyHelper.getCapability(player);
                                 if (infamy.getInfamy() >= (MainConfig.InfamyThreshold.get() * 2)) {
                                     int badOmen = MathHelper.clamp(raid.getBadOmenLevel(), 0, 5) + 1;
@@ -431,7 +449,7 @@ public class ModEvents {
                     if (!event.getWorld().getFluidState(event.getEntityLiving().blockPosition().below()).isEmpty()){
                         event.setResult(Event.Result.DENY);
                     } else if (event.getWorld().dimensionType().hasCeiling()){
-                        if (event.getWorld().getRandom().nextFloat() <= 0.25F) {
+                        if (event.getWorld().getRandom().nextFloat() <= 0.15F) {
                             spawn = true;
                         } else {
                             event.setResult(Event.Result.DENY);
