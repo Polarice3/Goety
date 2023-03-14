@@ -121,6 +121,14 @@ public class SwordProjectileEntity extends AbstractArrowEntity implements IRende
         this.playSound(soundevent, f1, 1.0F);
     }
 
+    protected boolean canHitEntity(Entity pEntity) {
+        if (this.getOwner() != null && this.getOwner().isAlliedTo(pEntity)){
+            return false;
+        } else {
+            return super.canHitEntity(pEntity);
+        }
+    }
+
     protected SoundEvent getDefaultHitGroundSoundEvent() {
         return SoundEvents.TRIDENT_HIT_GROUND;
     }

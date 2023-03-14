@@ -16,6 +16,8 @@ public class MainConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxArcaSouls;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulGuiHorizontal;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SoulGuiVertical;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
     public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
@@ -119,6 +121,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ArcaUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterBook;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulGuiShow;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
@@ -177,8 +180,14 @@ public class MainConfig {
                 .define("starterBook", false);
         CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 1")
                 .defineInRange("craftSouls", 1, 0, Integer.MAX_VALUE);
+        SoulGuiShow = BUILDER.comment("Show the Soul Energy Bar if Player has Totem of Souls/Arca, Default: true")
+                .define("soulGuiShow", true);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
                 .define("showNumber", false);
+        SoulGuiHorizontal = BUILDER.comment("Horizontal Position of where the Soul Energy Bar is located, Default: 100")
+                .defineInRange("soulGuiHorizontal", 100, -Integer.MAX_VALUE, Integer.MAX_VALUE);
+        SoulGuiVertical = BUILDER.comment("Vertical Position of where the Soul Energy Bar is located, Default: -5")
+                .defineInRange("soulGuiVertical", -5, -Integer.MAX_VALUE, Integer.MAX_VALUE);
         ApocalypseMode = BUILDER.comment("Nether Meteors deals environmental damage. WARNING: Causes lots of lag. Default: false")
                 .define("apocalypseMode", false);
         SpecialBossBar = BUILDER.comment("Bosses from the Mod has custom looking Boss Bars. Default: true")

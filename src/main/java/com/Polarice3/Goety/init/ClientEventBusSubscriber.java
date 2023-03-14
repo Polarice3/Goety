@@ -11,6 +11,7 @@ import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.layers.PlayerSoulShieldLayer;
 import com.Polarice3.Goety.client.render.tileentities.*;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
+import com.Polarice3.Goety.common.items.FlameCaptureItem;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
@@ -246,6 +247,8 @@ public class ClientEventBusSubscriber {
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
         ItemModelsProperties.register(ModItems.NETHER_BOOK_TRANSLATED.get(), new ResourceLocation("reading")
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.FLAME_CAPTURE.get(), new ResourceLocation("capture"),
+                (stack, world, living) -> FlameCaptureItem.hasEntity(stack) ? 1.0F : 0.0F);
     }
 
     @SubscribeEvent

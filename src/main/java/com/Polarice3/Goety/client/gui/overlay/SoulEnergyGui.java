@@ -29,7 +29,7 @@ public class SoulEnergyGui extends AbstractGui {
     }
 
     public boolean shouldDisplayBar(){
-        return SEHelper.getSoulsContainer(player);
+        return SEHelper.getSoulsContainer(player) && MainConfig.SoulGuiShow.get();
     }
 
     public FontRenderer getFont() {
@@ -55,12 +55,12 @@ public class SoulEnergyGui extends AbstractGui {
             }
         }
 
-        int i = (this.screenWidth/2) + 100;
+        int i = (this.screenWidth/2) + (MainConfig.SoulGuiHorizontal.get());
         int energylength = 117;
         energylength = (int)((energylength) * (SoulEnergy / (double)SoulEnergyTotal));
         int maxenergy = (int)(117 * (MainConfig.MaxSouls.get() / (double)SoulEnergyTotal));
 
-        int height = this.screenHeight - 5;
+        int height = this.screenHeight + (MainConfig.SoulGuiVertical.get());
 
         int offset = (int) ((player.tickCount + partialTicks) % 234);
 

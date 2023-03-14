@@ -45,6 +45,7 @@ public class ModItems {
     public static final RegistryObject<ModBoatItem> GLOOM_BOAT = ITEMS.register("gloom_boat", () -> new ModBoatItem(ModBoatEntity.Type.GLOOM, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_TRANSPORTATION)));
     public static final RegistryObject<ModBoatItem> MURK_BOAT = ITEMS.register("murk_boat", () -> new ModBoatItem(ModBoatEntity.Type.MURK, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_TRANSPORTATION)));
     public static final RegistryObject<SoulTransferItem> SOUL_TRANSFER = ITEMS.register("soul_transfer", SoulTransferItem::new);
+    public static final RegistryObject<Item> FLAME_CAPTURE = ITEMS.register("flame_capture", FlameCaptureItem::new);
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
     public static final RegistryObject<Item> DEAD_SLIME_BALL = ITEMS.register("dead_slime_ball", DeadSlimeBallItem::new);
     public static final RegistryObject<Item> FORBIDDEN_SCROLL = ITEMS.register("forbidden_scroll", ForbiddenScrollItem::new);
