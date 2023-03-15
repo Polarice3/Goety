@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.common.entities.hostile.IrkEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -7,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,11 +19,13 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -91,6 +95,20 @@ public class SwordProjectileEntity extends AbstractArrowEntity implements IRende
         return this.getItem().copy();
     }
 
+    public void tick() {
+        super.tick();
+        if (!this.inGround) {
+            Vector3d vector3d = this.getDeltaMovement();
+            double d3 = vector3d.x;
+            double d4 = vector3d.y;
+            double d0 = vector3d.z;
+            double d5 = this.getX() + d3;
+            double d1 = this.getY() + d4;
+            double d2 = this.getZ() + d0;
+            this.level.addParticle(ParticleTypes.ENCHANT, d5 - d3 * 0.25D, d1 - d4 * 0.25D, d2 - d0 * 0.25D, d3, d4, d0);
+        }
+    }
+
     protected void onHitEntity(EntityRayTraceResult pResult) {
         Entity target = pResult.getEntity();
         float f = 6.0F;
@@ -108,6 +126,9 @@ public class SwordProjectileEntity extends AbstractArrowEntity implements IRende
         if (target.hurt(damagesource, f)) {
             if (target instanceof LivingEntity) {
                 LivingEntity livingentity1 = (LivingEntity)target;
+                if (this.isOnFire()){
+                    livingentity1.setSecondsOnFire(5);
+                }
                 if (entity1 instanceof LivingEntity) {
                     EnchantmentHelper.doPostHurtEffects(livingentity1, entity1);
                     EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, livingentity1);
@@ -123,6 +144,8 @@ public class SwordProjectileEntity extends AbstractArrowEntity implements IRende
 
     protected boolean canHitEntity(Entity pEntity) {
         if (this.getOwner() != null && this.getOwner().isAlliedTo(pEntity)){
+            return false;
+        } else if (pEntity instanceof IrkEntity && this.getOwner() instanceof AbstractIllagerEntity){
             return false;
         } else {
             return super.canHitEntity(pEntity);

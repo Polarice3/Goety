@@ -79,6 +79,8 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
     public double xCloak;
     public double yCloak;
     public double zCloak;
+    public boolean flyWarn;
+    public int airBound;
     public int deathTime = 0;
 
     public VizierEntity(EntityType<? extends VizierEntity> type, World worldIn) {
@@ -186,6 +188,11 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                 }
             }
         } else {
+            if (!this.getTarget().isOnGround()){
+                ++this.airBound;
+            } else {
+                this.airBound = 0;
+            }
             if (!this.getTarget().canSee(this)){
                 BlockPos blockPos = new BlockPos(this.getTarget().getX() - 2, this.getTarget().getY() + 2.0D, this.getTarget().getZ() - 2);
                 if (this.isFree(blockPos.getX(), blockPos.getY(), blockPos.getZ())){
@@ -370,7 +377,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                     double d0 = (double)this.getX() + this.level.random.nextDouble();
                     double d1 = (double)this.getY() + this.level.random.nextDouble();
                     double d2 = (double)this.getZ() + this.level.random.nextDouble();
-                    this.level.addParticle(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0.45, 0.45, 0.45);
                     serverWorld.sendParticles(ModParticleTypes.BULLET_EFFECT.get(), d0, d1, d2, 0, 0.45, 0.45, 0.45, 0.5F);
                 }
             }
@@ -458,6 +464,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         compound.putInt("Confused", this.getInvulnerableTicks());
         compound.putInt("Casting", this.getCasting());
         compound.putInt("CastTimes", this.getCastTimes());
+        compound.putBoolean("FlyWarn", this.flyWarn);
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -469,6 +476,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             this.bossInfo.setName(this.getDisplayName());
         }
         this.bossInfo.setId(this.getUUID());
+        this.flyWarn = compound.getBoolean("FlyWarn");
     }
 
     public void setCustomName(@Nullable ITextComponent name) {
@@ -572,7 +580,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
     class FangsSpellGoal extends Goal {
         int duration;
         int duration2;
-        int airBound;
+
         private FangsSpellGoal() {
         }
 
@@ -594,7 +602,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             VizierEntity.this.setCastTimes(1);
             this.duration2 = 0;
             this.duration = 0;
-            this.airBound = 0;
         }
 
         public void tick() {
@@ -602,19 +609,25 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             if (livingentity != null) {
                 ++this.duration;
                 ++this.duration2;
-                if (!livingentity.isOnGround()){
-                    ++this.airBound;
-                } else {
-                    this.airBound = 0;
-                }
-                if (VizierEntity.this.getHealth() <= VizierEntity.this.getMaxHealth() / 2) {
-                    if (this.duration >= 5) {
-                        this.duration = 0;
-                        this.attack(livingentity);
+                if (VizierEntity.this.airBound > 20){
+                    if (!VizierEntity.this.level.isClientSide) {
+                        ServerWorld serverWorld = (ServerWorld) VizierEntity.this.level;
+                        for (int i = 0; i < 5; ++i) {
+                            double d0 = serverWorld.random.nextGaussian() * 0.02D;
+                            double d1 = serverWorld.random.nextGaussian() * 0.02D;
+                            double d2 = serverWorld.random.nextGaussian() * 0.02D;
+                            serverWorld.sendParticles(ParticleTypes.ENCHANT, VizierEntity.this.getRandomX(1.0D), VizierEntity.this.getRandomY() + 1.0D, VizierEntity.this.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
+                        }
                     }
-                } else {
-                    if (this.duration >= 10) {
-                        this.duration = 0;
+                }
+                int time = VizierEntity.this.getHealth() <= VizierEntity.this.getMaxHealth() / 2 ? 5 : 10;
+                time = VizierEntity.this.airBound > 20 ? time * 2 : time;
+                if (this.duration >= time) {
+                    this.duration = 0;
+                    if (VizierEntity.this.airBound > 20 && !VizierEntity.this.flyWarn){
+                        VizierEntity.this.playSound(ModSounds.VIZIER_CELEBRATE.get(), 1.0F, 1.5F);
+                        VizierEntity.this.flyWarn = true;
+                    } else {
                         this.attack(livingentity);
                     }
                 }
@@ -631,7 +644,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
         }
 
         private void attack(LivingEntity livingEntity){
-            if (this.airBound < 20) {
+            if (VizierEntity.this.airBound < 20) {
                 float f = (float) MathHelper.atan2(livingEntity.getZ() - VizierEntity.this.getZ(), livingEntity.getX() - VizierEntity.this.getX());
                 this.spawnFangs(livingEntity.getX(), livingEntity.getZ(), livingEntity.getY(), livingEntity.getY() + 1.0D, f, 1);
             } else {
@@ -799,7 +812,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
 
     class SpikesGoal extends Goal {
         int duration;
-        int airBound;
 
         @Override
         public boolean canUse() {
@@ -818,7 +830,6 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
             VizierEntity.this.setSpellcasting(false);
             VizierEntity.this.setCastTimes(0);
             VizierEntity.this.setCasting(0);
-            this.airBound = 0;
             this.duration = 0;
         }
 
@@ -831,13 +842,19 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                     double d1 = Math.max(livingentity.getY(), VizierEntity.this.getY()) + 1.0D;
                     float f = (float) MathHelper.atan2(livingentity.getZ() - VizierEntity.this.getZ(), livingentity.getX() - VizierEntity.this.getX());
                     ++this.duration;
-                    if (!livingentity.isOnGround()){
-                        ++this.airBound;
-                    } else {
-                        this.airBound = 0;
+                    if (VizierEntity.this.airBound > 20){
+                        if (!VizierEntity.this.level.isClientSide) {
+                            ServerWorld serverWorld = (ServerWorld) VizierEntity.this.level;
+                            for (int i = 0; i < 5; ++i) {
+                                double d3 = serverWorld.random.nextGaussian() * 0.02D;
+                                double d4 = serverWorld.random.nextGaussian() * 0.02D;
+                                double d2 = serverWorld.random.nextGaussian() * 0.02D;
+                                serverWorld.sendParticles(ParticleTypes.ENCHANT, VizierEntity.this.getRandomX(1.0D), VizierEntity.this.getRandomY() + 1.0D, VizierEntity.this.getRandomZ(1.0D), 0, d3, d4, d2, 0.5F);
+                            }
+                        }
                     }
                     if (this.duration >= 40) {
-                        if (this.airBound < 20) {
+                        if (VizierEntity.this.airBound < 20) {
                             for (int l = 0; l < 16; ++l) {
                                 double d2 = 1.25D * (double) (l + 1);
                                 this.createSpellEntity(VizierEntity.this.getX() + (double) MathHelper.cos(f) * d2, VizierEntity.this.getZ() + (double) MathHelper.sin(f) * d2, d0, d1, f, l * 2);
@@ -850,7 +867,7 @@ public class VizierEntity extends SpellcastingIllagerEntity implements IChargeab
                                 double d2 = livingentity.getZ() - VizierEntity.this.getZ();
                                 double d3 = (double) MathHelper.sqrt(d4 * d4 + d2 * d2);
                                 swordProjectile.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
-                                swordProjectile.shoot(d4, d5 + d3 * (double) 0.2F, d2, 1.6F, 0.6F);
+                                swordProjectile.shoot(d4 + VizierEntity.this.random.nextGaussian(), d5 + d3 * (double) 0.2F, d2 + VizierEntity.this.random.nextGaussian(), 1.6F, 1.0F);
                                 if (!VizierEntity.this.getSensing().canSee(livingentity)) {
                                     swordProjectile.setNoPhysics(true);
                                 }

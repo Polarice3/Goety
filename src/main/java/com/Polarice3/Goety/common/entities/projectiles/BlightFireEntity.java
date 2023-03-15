@@ -2,7 +2,6 @@ package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.client.render.BlightFireTextures;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
-import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.init.ModEffects;
