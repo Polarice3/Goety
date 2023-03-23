@@ -110,7 +110,7 @@ public class DarkScytheItem extends TieredItem implements IVanishable {
                 area = 2.0D;
             }
             for (LivingEntity livingentity : pPlayer.level.getEntitiesOfClass(LivingEntity.class, pTarget.getBoundingBox().inflate(area, 0.25D, area))) {
-                if (livingentity != pPlayer && livingentity != pTarget && !pPlayer.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingentity).isMarker()) && pPlayer.distanceToSqr(livingentity) < 16.0D) {
+                if (livingentity != pPlayer && livingentity != pTarget && !pPlayer.isAlliedTo(livingentity) && (!(livingentity instanceof ArmorStandEntity) || !((ArmorStandEntity) livingentity).isMarker()) && pPlayer.distanceToSqr(livingentity) < 16.0D && livingentity != pPlayer.getVehicle()) {
                     livingentity.knockback(0.4F, (double) MathHelper.sin(pPlayer.yRot * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(pPlayer.yRot * ((float) Math.PI / 180F))));
                     if (livingentity.hurt(DamageSource.playerAttack(pPlayer), f3)) {
                         if (j > 0) {

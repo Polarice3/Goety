@@ -12,6 +12,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -242,6 +243,10 @@ public abstract class Ritual {
                                             PlayerEntity castingPlayer, boolean setTamed) {
         if (setTamed && livingEntity instanceof TameableEntity) {
             ((TameableEntity) livingEntity).tame(castingPlayer);
+        }
+        if (setTamed && livingEntity instanceof AbstractHorseEntity) {
+            ((AbstractHorseEntity) livingEntity).setTamed(true);
+            ((AbstractHorseEntity) livingEntity).setOwnerUUID(castingPlayer.getUUID());
         }
         if (setTamed && livingEntity instanceof OwnedEntity) {
             OwnedEntity summonedEntity = (OwnedEntity) livingEntity;
