@@ -29,6 +29,9 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.StructureStart;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
@@ -485,6 +488,11 @@ public class BlockFinder {
             currentPos.move(Direction.UP);
         }
         return !found;
+    }
+
+    public static boolean findStructure(ServerWorld serverWorld, LivingEntity livingEntity, Structure<?> structure){
+        StructureStart<?> structureStart = serverWorld.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), true, structure);
+        return structureStart.getBoundingBox().isInside(livingEntity.blockPosition());
     }
 
 }

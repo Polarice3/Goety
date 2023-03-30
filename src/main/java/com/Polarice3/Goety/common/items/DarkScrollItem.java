@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.BlockFinder;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -20,7 +21,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
@@ -35,8 +35,7 @@ public class DarkScrollItem extends Item {
         super.finishUsingItem(stack, worldIn, entityLiving);
         if (worldIn instanceof ServerWorld){
             ServerWorld serverWorld = (ServerWorld) worldIn;
-            StructureStart<?> structureStart = serverWorld.structureFeatureManager().getStructureAt(entityLiving.blockPosition(), true, Structure.WOODLAND_MANSION);
-            if (structureStart.getBoundingBox().isInside(entityLiving.blockPosition())){
+            if (BlockFinder.findStructure(serverWorld, entityLiving, Structure.WOODLAND_MANSION)){
                 worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 VizierEntity vizier = ModEntityType.VIZIER.get().create(worldIn);
                 if (vizier != null) {

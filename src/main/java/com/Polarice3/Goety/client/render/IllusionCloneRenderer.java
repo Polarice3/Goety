@@ -19,14 +19,25 @@ import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 
 public class IllusionCloneRenderer extends BipedRenderer<IllusionCloneEntity, PlayerModel<IllusionCloneEntity>> {
+    private final PlayerModel<IllusionCloneEntity> normalModel;
+    private final PlayerModel<IllusionCloneEntity> slimModel;
 
     public IllusionCloneRenderer(EntityRendererManager entityRendererManager) {
         super(entityRendererManager, new PlayerModel<>(0.0F, false),0.5F);
+        this.normalModel = this.getModel();
+        this.slimModel = new PlayerModel<>(0.0F, true);
         this.addLayer(new BipedArmorLayer<>(this, new BipedModel<>(0.5F), new BipedModel<>(1.0F)));
     }
 
     public void render(IllusionCloneEntity pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
         this.setModelProperties(pEntity);
+        if ((pEntity.getTrueOwner() instanceof AbstractClientPlayerEntity
+                && DefaultPlayerSkin.getSkinModelName(pEntity.getTrueOwner().getUUID()).equals("slim") )
+                || DefaultPlayerSkin.getSkinModelName(pEntity.getUUID()).equals("slim")) {
+            this.model = slimModel;
+        } else {
+            this.model = normalModel;
+        }
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 

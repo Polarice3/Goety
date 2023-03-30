@@ -8,6 +8,7 @@ import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.CSoulEnergyPacket;
+import com.Polarice3.Goety.common.network.packets.server.SPlayPlayerSoundPacket;
 import com.Polarice3.Goety.common.network.packets.server.TotemDeathPacket;
 import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
@@ -180,6 +181,7 @@ public class SoulEnergyEvent {
                                 } else {
                                     player.addEffect(new EffectInstance(ModEffects.SOUL_HUNGER.get(), 12000, 4, false, false));
                                 }
+                                ModNetwork.sendTo(player, new SPlayPlayerSoundPacket(SoundEvents.WITHER_DEATH, 1.0F, 1.0F));
                                 player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 1.0F);
                                 SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
                                 SEHelper.sendSEUpdatePacket(player);
@@ -191,6 +193,7 @@ public class SoulEnergyEvent {
                                 player.addEffect(new EffectInstance(Effects.REGENERATION, 900, 1));
                                 player.addEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
                                 player.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
+                                ModNetwork.sendTo(player, new SPlayPlayerSoundPacket(SoundEvents.WITHER_DEATH, 1.0F, 1.0F));
                                 player.playSound(SoundEvents.WITHER_DEATH, 1.0F, 1.0F);
                                 SEHelper.decreaseSESouls(player, MainConfig.MaxSouls.get());
                                 SEHelper.sendSEUpdatePacket(player);

@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "goety:item/flame_capture_empty"
+    "layer0": "goety:items/flame_capture_empty"
   },
   "overrides": [
     {

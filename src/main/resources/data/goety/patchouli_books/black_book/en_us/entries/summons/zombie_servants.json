@@ -20,12 +20,20 @@
       "entity": "goety:husk_minion"
     },
     {
+      "type": "patchouli:text",
+      "text": "Drowned Servants can accept Tridents and will attack the same way as a regular Drowned. Zombie Servants in all variants can accept any Armor but only accept Swords or Axes."
+    },
+    {
       "type": "patchouli:entity",
       "entity": "goety:drowned_minion"
     },
     {
       "type": "patchouli:text",
-      "text": "Drowned Servants can accept Tridents and will attack the same way as a regular Drowned. Zombie Servants in all variants can accept any Armor but only accept Swords or Axes."
+      "text": "Zombified Piglin Servants are immune to fire and lava, and when hit by a non-ally entity will cry out and cause any surrounding non-summoned Zombified Piglin to be hostile towards their attacker."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety:zpiglinminion"
     }
   ]
 }

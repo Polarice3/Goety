@@ -10,6 +10,10 @@
     {
       "type": "goety:ritual",
       "recipe": "goety:rottingfocus"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Trying to summon a Zombie within the Nether allows one to bind and summon a Zombified Piglin (can be disabled through config). However, to bind and summon one that is close to the Nether itself strains the caster causing them to catch fire and be Cursed for 15 seconds."
     }
   ]
 }

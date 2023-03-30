@@ -153,6 +153,7 @@ public class SpellConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> RoyalSpiderMinions;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SummonZPiglins;
 
     static {
         BUILDER.push("General");
@@ -394,6 +395,8 @@ public class SpellConfig {
                 .define("loyalSpiderHeal", true);
         RoyalSpiderMinions = BUILDER.comment("Whether Spiders will follow Royal Spiders around, Default: true")
                 .define("royalSpiderMinions", true);
+        SummonZPiglins = BUILDER.comment("Allows Players to summon Zombified Piglins when casting Rotting Spell in the Nether, Default: true")
+                .define("summonZPiglins", true);
         UndeadMinionHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Undead Minion to heal, Default: 1")
                 .defineInRange("undeadMinionHealCost", 1, 0, Integer.MAX_VALUE);
         TamedSpiderHealCost = BUILDER.comment("How much Soul Energy it cost per second for an Loyal Spider to heal, Default: 1")
