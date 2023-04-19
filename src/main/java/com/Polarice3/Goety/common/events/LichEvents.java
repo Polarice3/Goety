@@ -6,10 +6,12 @@ import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.IAngerable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -109,17 +111,17 @@ public class LichEvents {
             for (EffectInstance effectInstance : player.getActiveEffects()){
                 Effect effect = effectInstance.getEffect();
                 if (!new ZombieEntity(world).canBeAffected(effectInstance)){
-                    player.removeEffectNoUpdate(effect);
+                    player.removeEffect(effect);
                 }
                 if (effect == Effects.BLINDNESS || effect == Effects.CONFUSION
                         || effect == Effects.HUNGER || effect == Effects.SATURATION
                         || effect == ModEffects.DESICCATE.get()){
-                    player.removeEffectNoUpdate(effect);
+                    player.removeEffect(effect);
                 }
             }
             if (player.hasEffect(ModEffects.SOUL_HUNGER.get())){
                 if (SEHelper.getSoulsAmount(player, MainConfig.MaxSouls.get())){
-                    player.removeEffectNoUpdate(ModEffects.SOUL_HUNGER.get());
+                    player.removeEffect(ModEffects.SOUL_HUNGER.get());
                 }
             }
             if (!player.isOnFire()) {
@@ -143,7 +145,7 @@ public class LichEvents {
                 }
             }
             for (IronGolemEntity ironGolem : player.level.getEntitiesOfClass(IronGolemEntity.class, player.getBoundingBox().inflate(16.0D))) {
-                if (!ironGolem.isPlayerCreated() && ironGolem.getTarget() != player) {
+                if (!ironGolem.isPlayerCreated() && ironGolem.getTarget() != player && EntityPredicate.DEFAULT.range(16.0F).test(ironGolem, player)) {
                     ironGolem.setTarget(player);
                 }
             }
@@ -248,8 +250,16 @@ public class LichEvents {
                         if (event.getSource().getEntity() instanceof LivingEntity) {
                             LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
                             for (MonsterEntity undead : player.level.getEntitiesOfClass(MonsterEntity.class, player.getBoundingBox().inflate(16))) {
-                                if (undead.getMobType() == CreatureAttribute.UNDEAD && undead.getMaxHealth() < 100) {
-                                    undead.setTarget(attacker);
+                                if (undead.getMobType() == CreatureAttribute.UNDEAD) {
+                                    if (undead.getTarget() != player) {
+                                        if (MainConfig.LichPowerfulFoes.get()) {
+                                            if (undead.getMaxHealth() < 100.0F) {
+                                                undead.setTarget(attacker);
+                                            }
+                                        } else {
+                                            undead.setTarget(attacker);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -260,11 +270,13 @@ public class LichEvents {
         if (event.getSource().getDirectEntity() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getSource().getDirectEntity();
             if (LichdomHelper.isLich(player)){
-                if (player.getMainHandItem().isEmpty() && event.getEntityLiving() != player){
-                    event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
-                }
-                if (event.getEntityLiving().getMobType() != CreatureAttribute.UNDEAD){
-                    event.getEntityLiving().addEffect(new EffectInstance(Effects.WITHER, ModMathHelper.ticksToSeconds(5)));
+                if (ModDamageSource.physicalAttacks(event.getSource()) && event.getEntityLiving() != player){
+                    if (player.getMainHandItem().isEmpty()) {
+                        event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
+                    }
+                    if (event.getEntityLiving().getMobType() != CreatureAttribute.UNDEAD && player.getMainHandItem().getItem().is(ModTags.Items.LICH_WITHER_ITEMS)){
+                        event.getEntityLiving().addEffect(new EffectInstance(Effects.WITHER, ModMathHelper.ticksToSeconds(5)));
+                    }
                 }
             }
         }

@@ -14,6 +14,7 @@ import net.minecraft.entity.monster.PatrollerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
@@ -45,7 +46,7 @@ public class EffectsEvent {
         int amplifier = Objects.requireNonNull(infected.getEffect(ModEffects.ILLAGUE.get())).getAmplifier();
         if (MainConfig.IllagueSpread.get()) {
             for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, infected.getBoundingBox().inflate(8.0D))) {
-                if (!(livingEntity instanceof PatrollerEntity) && !(livingEntity instanceof IDeadMob) && !livingEntity.hasEffect(ModEffects.ILLAGUE.get())) {
+                if (!(livingEntity instanceof PatrollerEntity) && !livingEntity.getType().is(EntityTypeTags.RAIDERS) && !(livingEntity instanceof IDeadMob) && !livingEntity.hasEffect(ModEffects.ILLAGUE.get())) {
                     if (livingEntity instanceof PlayerEntity) {
                         if (!((PlayerEntity) livingEntity).isCreative()) {
                             livingEntity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), duration / 2, amplifier, false, false));
@@ -115,23 +116,25 @@ public class EffectsEvent {
                             break;
                     }
                 } else {
-                    switch (r) {
-                        case 0:
-                            infected.addEffect(new EffectInstance(Effects.WEAKNESS, 400 * r4, r3, false, false));
-                            break;
-                        case 1:
-                        case 2:
-                        case 3:
-                            infected.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 400 * r4, r3, false, false));
-                            break;
-                        case 4:
-                        case 5:
-                        case 6:
-                            infected.addEffect(new EffectInstance(Effects.POISON, 400 * r4, r3, false, false));
-                            break;
-                        case 7:
-                            infected.addEffect(new EffectInstance(Effects.WITHER, 100, r3, false, false));
-                            break;
+                    if (!infected.getType().is(EntityTypeTags.RAIDERS)) {
+                        switch (r) {
+                            case 0:
+                                infected.addEffect(new EffectInstance(Effects.WEAKNESS, 400 * r4, r3, false, false));
+                                break;
+                            case 1:
+                            case 2:
+                            case 3:
+                                infected.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 400 * r4, r3, false, false));
+                                break;
+                            case 4:
+                            case 5:
+                            case 6:
+                                infected.addEffect(new EffectInstance(Effects.POISON, 400 * r4, r3, false, false));
+                                break;
+                            case 7:
+                                infected.addEffect(new EffectInstance(Effects.WITHER, 100, r3, false, false));
+                                break;
+                        }
                     }
                 }
             }

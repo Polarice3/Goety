@@ -182,10 +182,18 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> PREPARE_SPELL = create("prepare_spell");
     public static final RegistryObject<SoundEvent> CAST_SPELL = create("cast_spell");
     public static final RegistryObject<SoundEvent> SUMMON_SPELL = create("summon_spell");
+    public static final RegistryObject<SoundEvent> WIND = create("wind");
     public static final RegistryObject<SoundEvent> SOUL_EAT = create("soul_eat");
     public static final RegistryObject<SoundEvent> SONIC_CHARGE = create("sonic_charge");
     public static final RegistryObject<SoundEvent> FIRE_TORNADO_AMBIENT = create("fire_tornado_ambient");
     public static final RegistryObject<SoundEvent> CORRUPT_EXPLOSION = create("corrupt_explosion");
+
+    public static final RegistryObject<SoundEvent> SCYTHE_SWING = create("scythe_swing");
+    public static final RegistryObject<SoundEvent> SCYTHE_HIT = create("scythe_hit");
+    public static final RegistryObject<SoundEvent> SCYTHE_HIT_MEATY = create("scythe_hit_meaty");
+
+    public static final RegistryObject<SoundEvent> FLAME_CAPTURE_CATCH = create("flame_capture_catch");
+    public static final RegistryObject<SoundEvent> FLAME_CAPTURE_RELEASE = create("flame_capture_release");
 
     public static final RegistryObject<SoundEvent> APOSTLE_THEME = create("apostle_theme");
     public static final RegistryObject<SoundEvent> APOSTLE_THEME_POST = create("apostle_theme_post");

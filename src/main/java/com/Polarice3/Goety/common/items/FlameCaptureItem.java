@@ -3,10 +3,12 @@ package com.Polarice3.Goety.common.items;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.tileentities.CursedCageTileEntity;
 import com.Polarice3.Goety.init.ModBlocks;
+import com.Polarice3.Goety.init.ModSounds;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -18,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -41,6 +42,7 @@ public class FlameCaptureItem extends Item {
         ItemStack stack = context.getItemInHand();
         BlockPos pos = context.getClickedPos();
         World level = context.getLevel();
+        PlayerEntity player = context.getPlayer();
 
         if (this.getEntity(stack, level) != null) {
             if (level.getBlockState(pos).getBlock() == ModBlocks.CURSED_CAGE_BLOCK.get()){
@@ -58,6 +60,9 @@ public class FlameCaptureItem extends Item {
                             }
                         }
                         this.clearEntity(stack);
+                        if (player != null) {
+                            player.playSound(ModSounds.FLAME_CAPTURE_RELEASE.get(), 1.0F, 1.0F);
+                        }
                         stack.shrink(1);
 
                         return ActionResultType.sidedSuccess(level.isClientSide());
@@ -75,6 +80,9 @@ public class FlameCaptureItem extends Item {
                             level.destroyBlock(pos, false);
                         }
                     }
+                }
+                if (player != null) {
+                    player.playSound(ModSounds.FLAME_CAPTURE_CATCH.get(), 1.0F, 1.0F);
                 }
                 return ActionResultType.sidedSuccess(level.isClientSide());
             }
@@ -94,13 +102,8 @@ public class FlameCaptureItem extends Item {
 
             IFormattableTextComponent textComponent = new TranslationTextComponent("tooltip.goety.entity")
                     .append(": ")
-                    .append(new StringTextComponent(Objects.requireNonNull(ForgeRegistries.ENTITIES.getKey(entity.getType())).toString()));
-
-            if (this.getEntityName(stack) != null)  {
-                textComponent.append(" (").append(Objects.requireNonNull(this.getEntityName(stack))).append(")");
-            }
-
-            textComponent.withStyle(TextFormatting.GRAY);
+                    .append(new StringTextComponent(Objects.requireNonNull(ForgeRegistries.ENTITIES.getKey(entity.getType())).toString())
+                            .withStyle(TextFormatting.GREEN));
 
             tooltip.add(textComponent);
         }
@@ -111,24 +114,14 @@ public class FlameCaptureItem extends Item {
     }
 
     private void setEntity(Entity entity, ItemStack stack) {
-        entity.stopRiding();
-        entity.ejectPassengers();
-
-        CompoundNBT entityTag = new CompoundNBT();
+        CompoundNBT entityTag = stack.getOrCreateTag();
         ResourceLocation name = ForgeRegistries.ENTITIES.getKey(entity.getType());
 
         if (name == null) {
             return;
         }
 
-        entityTag.putString("entity", name.toString());
-        if (entity.hasCustomName()) {
-            entityTag.putString("name", Objects.requireNonNull(entity.getCustomName()).getString());
-        }
-        entity.save(entityTag);
-
-        CompoundNBT itemNBT = stack.getOrCreateTag();
-        itemNBT.put("entity", entityTag);
+        entityTag.putString("mob", name.toString());
     }
 
     private Entity getEntity(ItemStack stack, World level) {
@@ -138,37 +131,13 @@ public class FlameCaptureItem extends Item {
             return null;
         }
 
-        CompoundNBT entityTag = itemTag.getCompound("entity");
-        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(entityTag.getString("entity")));
+        EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(itemTag.getString("mob")));
 
         if (entityType == null) {
             return null;
         }
 
-        Entity entity = entityType.create(level);
-
-        if (level instanceof ServerWorld && entity != null) {
-            entity.load(entityTag);
-        }
-
-        return entity;
-    }
-
-    private ITextComponent getEntityName(ItemStack stack) {
-        CompoundNBT itemTag = stack.getTag();
-
-        if (itemTag == null) {
-            return null;
-        }
-
-        if (itemTag.contains("entity")) {
-            CompoundNBT entityTag = itemTag.getCompound("entity");
-
-            if (entityTag.contains("name")) {
-                return new StringTextComponent(entityTag.getString("name"));
-            }
-        }
-        return null;
+        return entityType.create(level);
     }
 
     private void clearEntity(ItemStack stack) {

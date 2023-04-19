@@ -51,6 +51,7 @@ public class ModTags {
         private static void init(){}
 
         public static final Tags.IOptionalNamedTag<Item> RAW_MUTATED_MEAT = tag("raw_mutated_meats");
+        public static final Tags.IOptionalNamedTag<Item> LICH_WITHER_ITEMS = tag("lich_wither_items");
 
         private static Tags.IOptionalNamedTag<Item> tag(String name)
         {

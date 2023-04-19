@@ -331,7 +331,7 @@
   "item.goety.undeath_potion": "Potion of Transformation",
 
   "item.goety.emerald_amulet": "Emerald Amulet",
-  "item.goety.star_amulet": "Shielding Amulet",
+  "item.goety.star_amulet": "Soul Shield Amulet",
   "item.goety.ring_of_want": "Ring of Want",
   "item.goety.grave_glove": "Grave Gloves",
 
@@ -582,6 +582,7 @@
   "tooltip.goety.arcaPlayer": "Owner: ",
   "tooltip.goety.arca_not_bound": "Has yet to be bound to an Arca.",
   "tooltip.goety.cage": "Prisoner: ",
+  "tooltip.goety.entity": "Entity",
 
   "subtitle.goety.apostle_ambient": "Apostle mutters",
   "subtitle.goety.apostle_hurt": "Apostle hurts",
@@ -750,9 +751,12 @@
   "subtitle.goety.summon_spell": "Summon Spell",
   "subtitle.goety.corrupt_explosion": "Sandy Explosion",
   "subtitle.goety.witch_bomb_explosion": "Witchy Explosion",
-  "subtitles.goety.sonic_charge": "Sonic charges",
-  "subtitles.goety.sonic_boom": "Sonic booms",
+  "subtitle.goety.sonic_charge": "Sonic charges",
+  "subtitle.goety.sonic_boom": "Sonic booms",
+  "subtitle.goety.wind": "Wind Blast",
   "subtitle.goety.fire_tornado_ambient": "Flaming Tornado",
+
+  "subtitle.goety.scythe_swing": "Scythe Swing",
 
   "container.goety.pithos": "Pithos",
 

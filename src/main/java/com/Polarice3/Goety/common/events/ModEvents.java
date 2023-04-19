@@ -25,6 +25,7 @@ import com.Polarice3.Goety.common.entities.hostile.cultists.BeldamEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ChannellerEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.ICultist;
 import com.Polarice3.Goety.common.entities.hostile.dead.FallenEntity;
+import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.hostile.illagers.EnviokerEntity;
 import com.Polarice3.Goety.common.entities.hostile.illagers.HuntingIllagerEntity;
 import com.Polarice3.Goety.common.entities.neutral.*;
@@ -35,10 +36,7 @@ import com.Polarice3.Goety.common.items.ModItemTiers;
 import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
 import com.Polarice3.Goety.common.items.equipment.*;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
-import com.Polarice3.Goety.init.ModBlocks;
-import com.Polarice3.Goety.init.ModEffects;
-import com.Polarice3.Goety.init.ModEntityType;
-import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -74,6 +72,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -988,6 +987,9 @@ public class ModEvents {
                             event.setAmount(event.getAmount() * 2.0F);
                         }
                     }
+                    if (weapon instanceof DarkScytheItem){
+                        victim.playSound(ModSounds.SCYTHE_HIT_MEATY.get(), 1.0F, 1.0F);
+                    }
                     if (weapon instanceof DeathScytheItem) {
                         if (!victim.hasEffect(ModEffects.SAPPED.get())) {
                             victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 20));
@@ -1577,6 +1579,11 @@ public class ModEvents {
         }
         if (event.getPotionEffect().getEffect() == ModEffects.SAPPED.get()){
             if (event.getEntityLiving().hasEffect(ModEffects.CURSED.get())){
+                event.setResult(Event.Result.DENY);
+            }
+        }
+        if (event.getPotionEffect().getEffect() == ModEffects.ILLAGUE.get()){
+            if (event.getEntity() instanceof PatrollerEntity || event.getEntity().getType().is(EntityTypeTags.RAIDERS) || event.getEntity() instanceof IDeadMob){
                 event.setResult(Event.Result.DENY);
             }
         }

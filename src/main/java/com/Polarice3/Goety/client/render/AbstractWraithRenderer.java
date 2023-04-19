@@ -2,10 +2,13 @@ package com.Polarice3.Goety.client.render;
 
 import com.Polarice3.Goety.common.entities.neutral.AbstractWraithEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
 
 public abstract class AbstractWraithRenderer extends MobRenderer<AbstractWraithEntity, SegmentedModel<AbstractWraithEntity>> {
 
@@ -16,6 +19,11 @@ public abstract class AbstractWraithRenderer extends MobRenderer<AbstractWraithE
     @Override
     public ResourceLocation getTextureLocation(AbstractWraithEntity entity) {
         return null;
+    }
+
+    @Nullable
+    protected RenderType getRenderType(AbstractWraithEntity p_230496_1_, boolean p_230496_2_, boolean p_230496_3_, boolean p_230496_4_) {
+        return RenderType.entityTranslucent(getTextureLocation(p_230496_1_));
     }
 
     @Override

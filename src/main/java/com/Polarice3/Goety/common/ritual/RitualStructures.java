@@ -53,13 +53,13 @@ public class RitualStructures {
     public static void getBlocks(String craftType, RitualTileEntity pTileEntity, BlockState pState, BlockPos pPos, World pLevel){
         switch (craftType){
             case "animalis":
-                if (pState.getBlock() == Blocks.LADDER) {
+                if (pState.getBlock() instanceof LadderBlock) {
                     pTileEntity.first.add(pPos);
                 }
-                if (pState.getBlock() == Blocks.RAIL) {
+                if (pState.getBlock() instanceof RailBlock) {
                     pTileEntity.second.add(pPos);
                 }
-                if (pState.getBlock() == Blocks.CARVED_PUMPKIN) {
+                if (pState.getBlock() instanceof CarvedPumpkinBlock) {
                     pTileEntity.third.add(pPos);
                 }
             case "necroturgy":
@@ -80,24 +80,26 @@ public class RitualStructures {
                     pTileEntity.first.add(pPos);
                 }
             case "forge":
-                if (pState.getBlock() == Blocks.SMITHING_TABLE) {
+                if (pState.getBlock() instanceof SmithingTableBlock) {
                     pTileEntity.first.add(pPos);
                 }
-                if (pState.getBlock() == Blocks.FURNACE || pState.getBlock() == Blocks.BLAST_FURNACE) {
+                if (pState.getBlock() instanceof FurnaceBlock || pState.getBlock() instanceof BlastFurnaceBlock) {
                     pTileEntity.second.add(pPos);
                 }
-                if (pState.getBlock() == Blocks.ANVIL || pState.getBlock() == Blocks.CHIPPED_ANVIL || pState.getBlock() == Blocks.DAMAGED_ANVIL) {
+                if (pState.getBlock() instanceof AnvilBlock) {
                     pTileEntity.third.add(pPos);
                 }
             case "magic":
-                if (pState.getBlock() == Blocks.BOOKSHELF) {
+                if (pState.getBlock().getDescriptionId().contains("bookshelf")) {
                     pTileEntity.first.add(pPos);
                 }
                 if (pState.getBlock() instanceof LecternBlock) {
                     if (pState.hasTileEntity() && pLevel.getBlockEntity(pPos) instanceof LecternTileEntity){
                         LecternTileEntity lecternTileEntity = (LecternTileEntity) pLevel.getBlockEntity(pPos);
-                        if (lecternTileEntity.hasBook()){
-                            pTileEntity.second.add(pPos);
+                        if (lecternTileEntity != null) {
+                            if (!lecternTileEntity.getBook().isEmpty()) {
+                                pTileEntity.second.add(pPos);
+                            }
                         }
                     }
                 }
@@ -131,7 +133,7 @@ public class RitualStructures {
                 if (pState.getBlock() == Blocks.GLOWSTONE) {
                     pTileEntity.second.add(pPos);
                 }
-                if (pState.getBlock() == Blocks.CHAIN) {
+                if (pState.getBlock() instanceof ChainBlock) {
                     pTileEntity.third.add(pPos);
                 }
         }

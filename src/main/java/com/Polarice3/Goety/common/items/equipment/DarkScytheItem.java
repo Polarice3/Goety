@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.IOwned;
+import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.google.common.collect.ImmutableMultimap;
@@ -21,7 +22,6 @@ import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -69,6 +69,7 @@ public class DarkScytheItem extends TieredItem implements IVanishable {
                     p_220044_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
         }
         if (this.getMineBlocks(pState)){
+            pLevel.playSound((PlayerEntity) null, pPos.getX(), pPos.getY(), pPos.getZ(), ModSounds.SCYTHE_HIT.get(), pEntityLiving.getSoundSource(), 1.0F, 1.0F);
             for (int i = -2; i <= 2; ++i) {
                 for (int j = -1; j <= 1; ++j) {
                     for (int k = -2; k <= 2; ++k) {
@@ -132,7 +133,7 @@ public class DarkScytheItem extends TieredItem implements IVanishable {
             }
         }
 
-        pPlayer.level.playSound((PlayerEntity)null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, pPlayer.getSoundSource(), 1.0F, 1.0F);
+        pPlayer.level.playSound((PlayerEntity)null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), ModSounds.SCYTHE_SWING.get(), pPlayer.getSoundSource(), 1.0F, 1.0F);
         pPlayer.sweepAttack();
     }
 

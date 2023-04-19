@@ -30,6 +30,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -73,7 +74,7 @@ public class ConquillagerEntity extends HuntingIllagerEntity implements ICrossbo
     public void tick() {
         super.tick();
         for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D), field_213690_b)) {
-            if (!(entity instanceof PatrollerEntity) && !(entity instanceof IDeadMob)) {
+            if (!(entity instanceof PatrollerEntity) && !entity.getType().is(EntityTypeTags.RAIDERS) && !(entity instanceof IDeadMob)) {
                 if (entity instanceof PlayerEntity){
                     if (!((PlayerEntity) entity).isCreative()){
                         entity.addEffect(new EffectInstance(ModEffects.ILLAGUE.get(), 6000, 0, false, false));

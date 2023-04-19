@@ -49,6 +49,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
     public int firingTick2;
     public int teleportCooldown;
     public int teleportTime = 20;
+    public int teleportTime2;
     public double prevX;
     public double prevY;
     public double prevZ;
@@ -61,6 +62,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         this.fireTick = 0;
         this.firingTick = 0;
         this.firingTick2 = 0;
+        this.teleportTime2 = 0;
         this.teleportCooldown = 0;
     }
 
@@ -99,6 +101,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         pCompound.putInt("fireTick", this.fireTick);
         pCompound.putInt("firingTick", this.firingTick);
         pCompound.putInt("firingTick2", this.firingTick2);
+        pCompound.putInt("teleportTime2", this.teleportTime2);
         pCompound.putInt("teleportCooldown", this.teleportCooldown);
         pCompound.putInt("burningLevel", this.getBurningLevel());
     }
@@ -108,6 +111,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         this.fireTick = pCompound.getInt("fireTick");
         this.firingTick = pCompound.getInt("firingTick");
         this.firingTick2 = pCompound.getInt("firingTick2");
+        this.teleportTime2 = pCompound.getInt("teleportTime2");
         this.teleportCooldown = pCompound.getInt("teleportCooldown");
         this.setBurningLevel(pCompound.getInt("burningLevel"));
     }
@@ -286,6 +290,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         } else {
             if (this.isTeleporting()) {
                 --this.teleportTime;
+                ++this.teleportTime2;
                 if (this.teleportTime <= 2){
                     this.prevX = this.getX();
                     this.prevY = this.getY();
@@ -293,6 +298,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
                 }
             } else {
                 this.teleportTime = 20;
+                this.teleportTime2 = 0;
             }
         }
     }

@@ -17,7 +17,6 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
     private final ModelRenderer RightArm;
     private final ModelRenderer LeftArm;
     private final ModelRenderer body;
-    private final ModelRenderer leg;
 
     public WraithModel() {
         texWidth = 64;
@@ -40,45 +39,34 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
         hat_r1.setPos(0.0F, -6.5F, 4.0F);
         hat.addChild(hat_r1);
         setRotationAngle(hat_r1, -0.4363F, 0.0F, 0.0F);
-        hat_r1.texOffs(42, 60).addBox(-4.0F, -1.5F, 0.0F, 8.0F, 1.0F, 3.0F, 0.5F, false);
+        hat_r1.texOffs(0, 56).addBox(-4.0F, -1.5F, 0.0F, 8.0F, 2.0F, 6.0F, 0.5F, false);
 
         RightArm = new ModelRenderer(this);
-        RightArm.setPos(-5.0F, -22.0F, 0.0F);
+        RightArm.setPos(-6.0F, -22.0F, 0.0F);
         Ghost.addChild(RightArm);
-        RightArm.texOffs(0, 16).addBox(-1.0F, -2.0F, -1.0F, 1.0F, 12.0F, 1.0F, 0.0F, true);
+        RightArm.texOffs(0, 16).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 12.0F, 1.0F, 0.0F, true);
 
-        ModelRenderer robe2 = new ModelRenderer(this);
-        robe2.setPos(0.0F, 0.0F, 0.0F);
-        RightArm.addChild(robe2);
-        robe2.texOffs(0, 33).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, false);
+        ModelRenderer Robe2 = new ModelRenderer(this);
+        Robe2.setPos(0.0F, 0.0F, 0.0F);
+        RightArm.addChild(Robe2);
+        Robe2.texOffs(0, 33).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, false);
 
         LeftArm = new ModelRenderer(this);
-        LeftArm.setPos(5.0F, -22.0F, 0.0F);
+        LeftArm.setPos(6.0F, -22.0F, 0.0F);
         Ghost.addChild(LeftArm);
-        LeftArm.texOffs(0, 16).addBox(0.0F, -2.0F, -1.0F, 1.0F, 12.0F, 1.0F, 0.0F, false);
+        LeftArm.texOffs(0, 16).addBox(-0.5F, -2.0F, -0.5F, 1.0F, 12.0F, 1.0F, 0.0F, false);
 
-        ModelRenderer robe = new ModelRenderer(this);
-        robe.setPos(0.0F, 0.0F, 0.0F);
-        LeftArm.addChild(robe);
-        robe.texOffs(0, 33).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, true);
+        ModelRenderer Robe = new ModelRenderer(this);
+        Robe.setPos(0.0F, 0.0F, 0.0F);
+        LeftArm.addChild(Robe);
+        Robe.texOffs(16, 33).addBox(-2.0F, -3.0F, -2.0F, 4.0F, 14.0F, 4.0F, 0.0F, false);
 
         body = new ModelRenderer(this);
         body.setPos(0.0F, -24.0F, 0.0F);
         Ghost.addChild(body);
         body.texOffs(8, 17).addBox(-3.0F, 0.0F, -5.0F, 6.0F, 12.0F, 4.0F, 0.0F, false);
-        body.texOffs(32, 32).addBox(-5.0F, -1.0F, -3.0F, 10.0F, 20.0F, 6.0F, 0.0F, false);
+        body.texOffs(33, 32).addBox(-4.0F, -1.0F, -3.0F, 8.0F, 20.0F, 6.0F, 0.0F, false);
         body.texOffs(0, 16).addBox(-0.5F, -1.0F, -1.5F, 1.0F, 12.0F, 1.0F, 0.0F, false);
-
-        ModelRenderer body_r1 = new ModelRenderer(this);
-        body_r1.setPos(0.0F, 15.0F, 0.0F);
-        body.addChild(body_r1);
-        setRotationAngle(body_r1, 0.4363F, 0.0F, 0.0F);
-        body_r1.texOffs(0, 51).addBox(-5.0F, -2.0F, -2.0F, 10.0F, 7.0F, 6.0F, 0.0F, false);
-
-        leg = new ModelRenderer(this);
-        leg.setPos(0.0F, 10.0F, -1.0F);
-        body.addChild(leg);
-        leg.texOffs(60, 22).addBox(-0.5F, 0.0F, -0.5F, 1.0F, 8.0F, 1.0F, 0.0F, false);
     }
 
     public Iterable<ModelRenderer> parts() {
@@ -89,13 +77,9 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch){
         float f = pAgeInTicks * 0.0025F;
         this.Ghost.y = MathHelper.sin(f * 40.0F) + 24.0F;
-        this.body.xRot = 0.1745F + MathHelper.cos(pLimbSwing * 0.6662F) * 0.31F * pLimbSwingAmount;
+        this.body.xRot = ModMathHelper.modelDegrees(12.5F) + MathHelper.abs(MathHelper.cos(pLimbSwing * 0.3331F) * 0.9F * pLimbSwingAmount / 1.25F);
         this.body.xRot += MathHelper.cos(pAgeInTicks * 0.09F) * 0.1F + 0.1F;
         this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
-        this.leg.xRot = MathHelper.cos(pLimbSwing * 0.6662F) * 1.4F * pLimbSwingAmount / f;
-        this.leg.yRot = 0.0F;
-        this.leg.zRot = 0.0F;
-        this.leg.xRot += ((float)Math.PI / 5F);
         if (pEntity instanceof AbstractWraithEntity){
             AbstractWraithEntity wraith = (AbstractWraithEntity) pEntity;
             if (wraith.isFiring()){
@@ -103,12 +87,16 @@ public class WraithModel<T extends LivingEntity> extends SegmentedModel<T> {
                 this.head.xRot = (((float)Math.PI) * f7) + 0.5F;
                 this.RightArm.zRot = -((float)Math.PI) * f7;
                 this.LeftArm.zRot = ((float)Math.PI) * f7;
+            } else if (wraith.isTeleporting()){
+                float f7 = MathHelper.sin(((float)(wraith.teleportTime - 20) - wraith.teleportTime2) / 20.0F * (float)Math.PI * 0.25F);
+                this.head.xRot = (((float)Math.PI) * f7) + 2.0F;
+                this.RightArm.zRot = -((float)Math.PI) * f7;
+                this.LeftArm.zRot = ((float)Math.PI) * f7;
+                this.Ghost.y += (((float)Math.PI) * f7) * 5.0F;
             } else {
                 float degrees;
                 if (wraith.getLookControl().isHasWanted()){
                     degrees = 0.0F;
-                } else if (pEntity.getDeltaMovement().x != 0 || pEntity.getDeltaMovement().z != 0){
-                    degrees = ModMathHelper.modelDegrees(7.5F);
                 } else {
                     degrees = ModMathHelper.modelDegrees(17.5F);
                 }
