@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.common.spells.Spells;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
@@ -21,16 +22,18 @@ import java.util.List;
 
 public class MagicFocusItem extends Item{
     public static final String SOULCOST = "Soul Cost";
+    public Spells spell;
     public int soulcost;
 
-    public MagicFocusItem(int soulcost){
+    public MagicFocusItem(Spells spell){
         super(new Properties()
                 .tab(Goety.TAB)
                 .rarity(Rarity.UNCOMMON)
                 .setNoRepair()
                 .stacksTo(1)
         );
-        this.soulcost = soulcost;
+        this.spell = spell;
+        this.soulcost = spell.SoulCost();
     }
 
     public boolean isEnchantable(ItemStack pStack) {
@@ -109,6 +112,10 @@ public class MagicFocusItem extends Item{
                     || enchantment == ModEnchantments.BURNING.get();
         }
         return false;
+    }
+
+    public Spells getSpell(){
+        return this.spell;
     }
 
     @Override

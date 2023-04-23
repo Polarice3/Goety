@@ -16,6 +16,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,29 +44,34 @@ public class FocusBagItem extends Item {
         return ActionResult.pass(itemstack);
     }
 
-    @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT result = new CompoundNBT();
-        CompoundNBT tag = super.getShareTag(stack);
-        CompoundNBT cap = FocusBagItemHandler.get(stack).serializeNBT();
-        if (tag != null) {
-            result.put("tag", tag);
-        }
-        if (cap != null) {
-            result.put("cap", cap);
-        }
-        return result;
+    /**
+     * Found Creative Server Bug fix from @mraof's Minestuck Music Player Weapon code.
+     */
+    private static IItemHandler getItemHandler(ItemStack itemStack) {
+        return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
+                new IllegalArgumentException("Expected an item handler for the Magic Focus item, but " + itemStack + " does not expose an item handler."));
     }
 
-    @Override
+    public CompoundNBT getShareTag(ItemStack stack) {
+        IItemHandler iitemHandler = getItemHandler(stack);
+        CompoundNBT nbt = stack.getTag() != null ? stack.getTag() : new CompoundNBT();
+        if(iitemHandler instanceof ItemStackHandler) {
+            ItemStackHandler itemHandler = (ItemStackHandler) iitemHandler;
+            nbt.put("cap", itemHandler.serializeNBT());
+        }
+        return nbt;
+    }
+
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (nbt != null) {
-            if (nbt.contains("tag")) {
-                stack.setTag(nbt.getCompound("tag"));
+        if(nbt == null) {
+            stack.setTag(null);
+        } else {
+            IItemHandler iitemHandler = getItemHandler(stack);
+            if(iitemHandler instanceof ItemStackHandler) {
+                ItemStackHandler itemHandler = (ItemStackHandler) iitemHandler;
+                itemHandler.deserializeNBT(nbt.getCompound("cap"));
             }
-            if (nbt.contains("cap")) {
-                FocusBagItemHandler.get(stack).deserializeNBT(nbt.getCompound("cap"));
-            }
+            stack.setTag(nbt);
         }
     }
 

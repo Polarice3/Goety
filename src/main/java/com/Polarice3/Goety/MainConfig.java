@@ -85,6 +85,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> WraithSpawnWeight;
     public static final ForgeConfigSpec.ConfigValue<Integer> UrbhadhachSpawnWeight;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> DarkStaffDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> ScytheBaseDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> ScytheAttackSpeed;
     public static final ForgeConfigSpec.ConfigValue<Double> DeathScytheDamage;
@@ -276,8 +277,8 @@ public class MainConfig {
                 .define("infamySpell", true);
         InfamySpellGive = BUILDER.comment("How much Infamy is given when casting Spells, Default: 1")
                 .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
-        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 10")
-                .defineInRange("infamyDeathLoss", 10, 0, Integer.MAX_VALUE);
+        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 100")
+                .defineInRange("infamyDeathLoss", 100, 0, Integer.MAX_VALUE);
         InfamyMax = BUILDER.comment("Maximum amount of Infamy the Player can attained, Default: 500")
                 .defineInRange("infamyMax", 500, 1, Integer.MAX_VALUE);
         InfamyThreshold = BUILDER.comment("How much Infamy is required for Special Illagers to spawn, Default: 25")
@@ -388,6 +389,8 @@ public class MainConfig {
                 .defineInRange("darkArmoredRobeRepairSouls", 5, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Tools & Weapons");
+        DarkStaffDamage = BUILDER.comment("How much base damage Dark Staffs deals, Default: 4.0")
+                .defineInRange("darkStaffDamage", 4.0, 1.0, Double.MAX_VALUE);
         ScytheBaseDamage = BUILDER.comment("How much base damage Scythes deals, the damage added depends on material the scythe is made off (ie. Iron = 2.0), Default: 5.5")
                 .defineInRange("scytheBaseDamage", 5.5, 1.0, Double.MAX_VALUE);
         ScytheAttackSpeed = BUILDER.comment("How fast it takes to fully swing a Scythe with item offhand and not wearing Grave Gloves. The lower the number the slower it takes to recharge, Default: 0.6")

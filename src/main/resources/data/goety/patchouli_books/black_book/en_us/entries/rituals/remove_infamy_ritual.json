@@ -1,0 +1,18 @@
+{
+  "name": "Removing Infamy",
+  "icon": "goety:tall_skull",
+  "category": "goety:rituals",
+  "advancement": "goety:goety/kill_hunting_illagers",
+  "secret": true,
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The amount of Infamy you've gathered from the Illagers is starting to concern you. Fortunately, you've found a way to remove it all in one go! With some items and blocks, you've found a ritual that will convince the Illagers that you've died thus reducing your infamy among them!"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:remove_infamy"
+    }
+  ]
+}

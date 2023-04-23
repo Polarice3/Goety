@@ -34,7 +34,9 @@ public class InfamyHelper {
     }
 
     public static void sendInfamyUpdatePacket(PlayerEntity player) {
-        ModNetwork.sendTo(player, new InfamyUpdatePacket(player));
+        if (!player.level.isClientSide) {
+            ModNetwork.sendTo(player, new InfamyUpdatePacket(player));
+        }
     }
 
     public static int getInfamyGiven(LivingEntity killed){
@@ -79,5 +81,10 @@ public class InfamyHelper {
                 }
             }
         }
+    }
+
+    public static void removeInfamy(PlayerEntity player){
+        getCapability(player).decreaseInfamy(MainConfig.DeathLoseInfamy.get());
+        InfamyHelper.sendInfamyUpdatePacket(player);
     }
 }

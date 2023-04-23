@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
 import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
+import com.Polarice3.Goety.common.entities.utilities.InfamyRemoveEntity;
 import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
@@ -55,6 +56,7 @@ public class SummonRitual extends Ritual {
             } else {
                 entity.absMoveTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(),
                         world.random.nextInt(360), 0);
+                this.initSummoned(entity, world, blockPos, tileEntity, castingPlayer);
                 this.spawnEntity(entity, world);
             }
         }
@@ -70,6 +72,14 @@ public class SummonRitual extends Ritual {
         if (living instanceof ShadeEntity){
             ShadeEntity shadeEntity = (ShadeEntity) living;
             shadeEntity.setLimitedLife(12000);
+        }
+    }
+
+    public void initSummoned(Entity entity, World world, BlockPos goldenBowlPosition, DarkAltarTileEntity tileEntity,
+                             PlayerEntity castingPlayer) {
+        if (entity instanceof InfamyRemoveEntity){
+            InfamyRemoveEntity infamyRemove = (InfamyRemoveEntity) entity;
+            infamyRemove.setPlayer(castingPlayer);
         }
     }
 }

@@ -31,6 +31,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+@OnlyIn(
+        value = Dist.CLIENT,
+        _interface = IRendersAsItem.class
+)
 public class SwordProjectileEntity extends AbstractArrowEntity implements IRendersAsItem {
     private static final DataParameter<ItemStack> DATA_ITEM_STACK = EntityDataManager.defineId(SwordProjectileEntity.class, DataSerializers.ITEM_STACK);
 

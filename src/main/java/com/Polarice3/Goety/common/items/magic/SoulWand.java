@@ -34,6 +34,9 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,7 +53,6 @@ public class SoulWand extends Item{
     private static final String SOULCOST = "Soul Cost";
     private static final String DURATION = "Duration";
     private static final String COOLDOWN = "Cooldown";
-    private static final String SPELL = "Spell";
     private static final String COOL = "Cool";
 
     public SoulWand() {
@@ -68,10 +70,9 @@ public class SoulWand extends Item{
                 compound.putInt(CASTTIME, CastTime(livingEntity, stack));
                 compound.putInt(COOL, 0);
             }
-            if (getFocus(stack) != null && !getFocus(stack).isEmpty()) {
-                this.ChangeFocus(stack);
+            if (this.getSpell(stack) != null) {
+                this.setSpellConditions(this.getSpell(stack), stack);
             } else {
-                compound.putInt(SPELL, -1);
                 this.setSpellConditions(null, stack);
             }
             compound.putInt(SOULUSE, SoulUse(livingEntity, stack));
@@ -87,7 +88,6 @@ public class SoulWand extends Item{
         compound.putInt(SOULCOST, 0);
         compound.putInt(CASTTIME, CastTime(pPlayer, pStack));
         compound.putInt(COOL, 0);
-        compound.putInt(SPELL, -1);
         this.setSpellConditions(null, pStack);
     }
 
@@ -229,112 +229,6 @@ public class SoulWand extends Item{
         }
     }
 
-    public void ChangeFocus(ItemStack itemStack){
-        if (!getFocus(itemStack).isEmpty() && getFocus(itemStack) != null) {
-            String spell = getFocus(itemStack).getDescriptionId();
-            if (spell.contains("vexing")) {
-                this.setSpellConditions(new VexSpell(), itemStack);
-                this.setSpell(0, itemStack);
-            } else if (spell.contains("biting")) {
-                this.setSpellConditions(new FangSpell(), itemStack);
-                this.setSpell(1, itemStack);
-            } else if (spell.contains("roaring")) {
-                this.setSpellConditions(new RoarSpell(), itemStack);
-                this.setSpell(2, itemStack);
-            } else if (spell.contains("rotting")) {
-                this.setSpellConditions(new ZombieSpell(), itemStack);
-                this.setSpell(3, itemStack);
-            } else if (spell.contains("osseous")) {
-                this.setSpellConditions(new SkeletonSpell(), itemStack);
-                this.setSpell(4, itemStack);
-            } else if (spell.contains("witchgale")) {
-                this.setSpellConditions(new WitchGaleSpell(), itemStack);
-                this.setSpell(5, itemStack);
-            } else if (spell.contains("spiderling")) {
-                this.setSpellConditions(new SpiderlingSpell(), itemStack);
-                this.setSpell(6, itemStack);
-            } else if (spell.contains("brain")) {
-                this.setSpellConditions(new BrainEaterSpell(), itemStack);
-                this.setSpell(7, itemStack);
-            } else if (spell.contains("teleport")) {
-                this.setSpellConditions(new TeleportSpell(), itemStack);
-                this.setSpell(8, itemStack);
-            } else if (spell.contains("soulskull")) {
-                this.setSpellConditions(new SoulSkullSpell(), itemStack);
-                this.setSpell(9, itemStack);
-            } else if (spell.contains("feast")) {
-                this.setSpellConditions(new FeastSpell(), itemStack);
-                this.setSpell(10, itemStack);
-            } else if (spell.contains("tempting")) {
-                this.setSpellConditions(new TemptingSpell(), itemStack);
-                this.setSpell(11, itemStack);
-            } else if (spell.contains("dragon")) {
-                this.setSpellConditions(new DragonFireballSpell(), itemStack);
-                this.setSpell(12, itemStack);
-            } else if (spell.contains("creeperling")) {
-                this.setSpellConditions(new CreeperlingSpell(), itemStack);
-                this.setSpell(13, itemStack);
-            } else if (spell.contains("airbreath")) {
-                this.setSpellConditions(new BreathSpell(), itemStack);
-                this.setSpell(14, itemStack);
-            } else if (spell.contains("fireball")) {
-                this.setSpellConditions(new FireballSpell(), itemStack);
-                this.setSpell(15, itemStack);
-            } else if (spell.contains("lavaball")) {
-                this.setSpellConditions(new LavaballSpell(), itemStack);
-                this.setSpell(16, itemStack);
-            } else if (spell.contains("poisonball")) {
-                this.setSpellConditions(new PoisonBallSpell(), itemStack);
-                this.setSpell(17, itemStack);
-            } else if (spell.contains("illusion")) {
-                this.setSpellConditions(new IllusionSpell(), itemStack);
-                this.setSpell(18, itemStack);
-            } else if (spell.contains("phantasm")) {
-                this.setSpellConditions(new PhantomSpell(), itemStack);
-                this.setSpell(19, itemStack);
-            } else if (spell.contains("firebreath")) {
-                this.setSpellConditions(new FireBreathSpell(), itemStack);
-                this.setSpell(20, itemStack);
-            } else if (spell.contains("soullight")) {
-                this.setSpellConditions(new SoulLightSpell(), itemStack);
-                this.setSpell(21, itemStack);
-            } else if (spell.contains("glowlight")) {
-                this.setSpellConditions(new GlowLightSpell(), itemStack);
-                this.setSpell(22, itemStack);
-            } else if (spell.contains("icestorm")) {
-                this.setSpellConditions(new IceStormSpell(), itemStack);
-                this.setSpell(23, itemStack);
-            } else if (spell.contains("frostbreath")) {
-                this.setSpellConditions(new FrostBreathSpell(), itemStack);
-                this.setSpell(24, itemStack);
-            } else if (spell.contains("hounding")) {
-                this.setSpellConditions(new UndeadWolfSpell(), itemStack);
-                this.setSpell(25, itemStack);
-            } else if (spell.contains("launch")) {
-                this.setSpellConditions(new LaunchSpell(), itemStack);
-                this.setSpell(26, itemStack);
-            } else if (spell.contains("sonicboom")) {
-                this.setSpellConditions(new SonicBoomSpell(), itemStack);
-                this.setSpell(27, itemStack);
-            } else if (spell.contains("rigid")) {
-                this.setSpellConditions(new DredenSpell(), itemStack);
-                this.setSpell(28, itemStack);
-            } else if (spell.contains("enderacid")) {
-                this.setSpellConditions(new AcidBreathSpell(), itemStack);
-                this.setSpell(29, itemStack);
-            } else if (spell.contains("spooky")) {
-                this.setSpellConditions(new WraithSpell(), itemStack);
-                this.setSpell(30, itemStack);
-            } else if (spell.contains("iceology")) {
-                this.setSpellConditions(new IceChunkSpell(), itemStack);
-                this.setSpell(31, itemStack);
-            }
-        } else {
-            this.setSpellConditions(null, itemStack);
-            this.setSpell(-1, itemStack);
-        }
-    }
-
     public void setSpellConditions(Spells spell, ItemStack stack){
         if (stack.getTag() != null) {
             if (spell != null) {
@@ -353,17 +247,11 @@ public class SoulWand extends Item{
         }
     }
 
-    public void setSpell(int spellint, ItemStack stack) {
-        if (stack.getTag() != null) {
-            stack.getTag().putInt(SPELL, spellint);
-        }
-    }
-
     public Spells getSpell(ItemStack stack){
-        if (stack.getTag() != null) {
-            return new CastSpells(stack.getTag().getInt(SPELL)).getSpell();
+        if (getMagicFocus(stack) != null && getMagicFocus(stack).getSpell() != null){
+            return getMagicFocus(stack).getSpell();
         } else {
-            return new CastSpells(-1).getSpell();
+            return null;
         }
     }
 
@@ -402,6 +290,14 @@ public class SoulWand extends Item{
     public static ItemStack getFocus(ItemStack itemstack) {
         SoulUsingItemHandler handler = SoulUsingItemHandler.get(itemstack);
         return handler.getSlot();
+    }
+
+    public static MagicFocusItem getMagicFocus(ItemStack itemStack){
+        if (getFocus(itemStack) != null && !getFocus(itemStack).isEmpty() && getFocus(itemStack).getItem() instanceof MagicFocusItem){
+            return (MagicFocusItem) getFocus(itemStack).getItem();
+        } else {
+            return null;
+        }
     }
 
     public static Map<Enchantment, Integer> getFocusEnchantments(ItemStack itemStack){
@@ -480,27 +376,34 @@ public class SoulWand extends Item{
         }
     }
 
+    /**
+     * Found Creative Server Bug fix from @mraof's Minestuck Music Player Weapon code.
+     */
+    private static IItemHandler getItemHandler(ItemStack itemStack) {
+        return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
+                new IllegalArgumentException("Expected an item handler for the Magic Focus item, but " + itemStack + " does not expose an item handler."));
+    }
+
     public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT result = new CompoundNBT();
-        CompoundNBT tag = super.getShareTag(stack);
-        CompoundNBT cap = SoulUsingItemHandler.get(stack).serializeNBT();
-        if (tag != null) {
-            result.put("tag", tag);
+        IItemHandler iitemHandler = getItemHandler(stack);
+        CompoundNBT nbt = stack.getTag() != null ? stack.getTag() : new CompoundNBT();
+        if(iitemHandler instanceof ItemStackHandler) {
+            ItemStackHandler itemHandler = (ItemStackHandler) iitemHandler;
+            nbt.put("cap", itemHandler.serializeNBT());
         }
-        if (cap != null) {
-            result.put("cap", cap);
-        }
-        return result;
+        return nbt;
     }
 
     public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if (nbt != null) {
-            if (nbt.contains("tag")) {
-                stack.setTag(nbt.getCompound("tag"));
+        if(nbt == null) {
+            stack.setTag(null);
+        } else {
+            IItemHandler iitemHandler = getItemHandler(stack);
+            if(iitemHandler instanceof ItemStackHandler) {
+                ItemStackHandler itemHandler = (ItemStackHandler) iitemHandler;
+                itemHandler.deserializeNBT(nbt.getCompound("cap"));
             }
-            if (nbt.contains("cap")) {
-                SoulUsingItemHandler.get(stack).deserializeNBT(nbt.getCompound("cap"));
-            }
+            stack.setTag(nbt);
         }
     }
 
