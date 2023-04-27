@@ -5,11 +5,9 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
-import com.Polarice3.Goety.utils.EntityFinder;
-import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ModDamageSource;
-import com.Polarice3.Goety.utils.SEHelper;
+import com.Polarice3.Goety.utils.*;
 import com.google.common.collect.Maps;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -29,9 +27,12 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -191,6 +192,16 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
                 }
             } else {
                 targets.add(entity);
+            }
+        }
+        if (MainConfig.ScytheSlashBreaks.get()) {
+            AxisAlignedBB aabb = this.getBoundingBox().inflate(0.2D);
+
+            for (BlockPos blockpos : BlockPos.betweenClosed(MathHelper.floor(aabb.minX), MathHelper.floor(aabb.minY), MathHelper.floor(aabb.minZ), MathHelper.floor(aabb.maxX), MathHelper.floor(aabb.maxY), MathHelper.floor(aabb.maxZ))) {
+                BlockState blockstate = this.level.getBlockState(blockpos);
+                if (blockstate.getHarvestTool() == ToolType.HOE || BlockFinder.isScytheBreak(blockstate)) {
+                    this.level.destroyBlock(blockpos, true, this);
+                }
             }
         }
         if (!targets.isEmpty()){

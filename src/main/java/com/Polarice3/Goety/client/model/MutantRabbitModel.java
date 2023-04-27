@@ -124,9 +124,6 @@ public class MutantRabbitModel <T extends MutatedRabbitEntity> extends EntityMod
 
     }
 
-    /**
-     * Sets this entity's model rotation angles
-     */
     public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
         float f = pAgeInTicks - (float)pEntity.tickCount;
         this.nose.xRot = pHeadPitch * ((float)Math.PI / 180F);

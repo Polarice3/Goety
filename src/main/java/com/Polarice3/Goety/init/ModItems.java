@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.fluid.ModFluids;

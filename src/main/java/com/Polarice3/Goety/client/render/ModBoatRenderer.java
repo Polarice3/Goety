@@ -57,9 +57,6 @@ public class ModBoatRenderer extends EntityRenderer<ModBoatEntity> {
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     public ResourceLocation getTextureLocation(ModBoatEntity pEntity) {
         return BOAT_TEXTURE_LOCATIONS[pEntity.getModBoatType().ordinal()];
     }

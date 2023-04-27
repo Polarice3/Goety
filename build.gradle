@@ -3,21 +3,27 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
-        maven { url='https://repo.spongepowered.org/maven'}
+        maven { url='https://repo.spongepowered.org/repository/maven-public/'}
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = "${mod_version}"
 group = 'com.Polarice3.Goety'
 archivesBaseName = 'Goety'
+
+mixin {
+    add sourceSets.main, "goety.refmap.json"
+}
 
 repositories {
     maven {
@@ -36,6 +42,16 @@ repositories {
         name = "Patchouli"
         url = "https://maven.blamejared.com"
     }
+    maven {
+        name = "Curse"
+        url = "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    flatDir {
+        dirs 'runtime-mods'
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -51,13 +67,15 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
-            property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-            property "forge.logging.console.level", "debug"
+            property 'forge.logging.console.level', 'debug'
 
-            property "mixin.env.remapRefMap", "true"
+            property 'mixin.env.remapRefMap', 'true'
 
-            property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            arg '-mixin.config=goety.mixins.json'
 
             mods {
                 goety {
@@ -69,11 +87,15 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            property "forge.logging.markers", "SCAN,REGISTRIES,REGISTRYDUMP"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
             property 'forge.logging.console.level', 'debug'
 
-            property "mixin.env.remapRefMap", "true"
+            property 'mixin.env.remapRefMap', 'true'
+
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
+            arg '-mixin.config=goety.mixins.json'
 
             mods {
                 goety {
@@ -93,6 +115,8 @@ minecraft {
 
             args '--mod', 'goety', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
+            arg '-mixin.config=goety.mixins.json'
+
             mods {
                 goety {
                     source sourceSets.main
@@ -106,7 +130,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.20'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
+    annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.3")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.3:api")
@@ -114,6 +139,9 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.2:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.2")
+
+    //Testing Only
+    runtimeOnly fg.deobf("curse.maven:jade-324717:3910873")
 
 }
 
@@ -127,6 +155,7 @@ jar {
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"goety",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "goety.mixins.json"
         ])
     }
 }

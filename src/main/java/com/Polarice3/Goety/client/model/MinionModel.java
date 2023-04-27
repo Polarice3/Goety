@@ -33,9 +33,6 @@ public class MinionModel<T extends MinionEntity> extends BipedModel<T> {
         return Iterables.concat(super.bodyParts(), ImmutableList.of(this.rightWing, this.leftWing));
     }
 
-    /**
-     * Sets this entity's model rotation angles
-     */
     public void setupAnim(T entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         if (entityIn.isCharging()) {

@@ -4,19 +4,16 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
-import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.IAngerable;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
@@ -188,7 +185,7 @@ public class LichEvents {
     @SubscribeEvent
     public static void UndeadFriendly(LivingSetAttackTargetEvent event){
         if (MainConfig.LichUndeadFriends.get()) {
-            if (event.getEntityLiving() instanceof MonsterEntity) {
+            if (event.getEntityLiving() instanceof IMob && event.getEntityLiving() instanceof MobEntity) {
                 if (event.getEntityLiving().getMobType() == CreatureAttribute.UNDEAD) {
                     if (event.getTarget() != null) {
                         if (event.getTarget() instanceof PlayerEntity) {
@@ -196,12 +193,13 @@ public class LichEvents {
                             if (LichdomHelper.isLich(player)) {
                                 if (MainConfig.LichPowerfulFoes.get()) {
                                     if (event.getEntityLiving().getMaxHealth() < 100) {
-                                        if (!(event.getEntityLiving() instanceof OwnedEntity)) {
-                                            ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                        ((MobEntity) event.getEntityLiving()).setTarget(null);
+                                        if (event.getEntityLiving() instanceof IAngerable){
+                                            ((IAngerable) event.getEntityLiving()).stopBeingAngry();
                                         }
                                     }
                                 } else {
-                                    ((MonsterEntity) event.getEntityLiving()).setTarget(null);
+                                    ((MobEntity) event.getEntityLiving()).setTarget(null);
                                     if (event.getEntityLiving() instanceof IAngerable){
                                         ((IAngerable) event.getEntityLiving()).stopBeingAngry();
                                     }
@@ -239,8 +237,10 @@ public class LichEvents {
                 if (event.getSource() == DamageSource.DROWN){
                     event.setCanceled(true);
                 }
-                if (event.getSource().isMagic()){
-                    event.setAmount(event.getAmount() * 0.15F);
+                if (MainConfig.LichMagicResist.get()) {
+                    if (event.getSource().isMagic()) {
+                        event.setAmount(event.getAmount() * 0.15F);
+                    }
                 }
                 if (ModDamageSource.frostAttacks(event.getSource())){
                     event.setAmount(event.getAmount()/2);

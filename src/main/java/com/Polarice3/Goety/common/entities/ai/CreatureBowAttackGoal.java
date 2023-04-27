@@ -32,10 +32,6 @@ public class CreatureBowAttackGoal <T extends CreatureEntity & IRangedAttackMob>
         this.attackIntervalMin = pAttackCooldown;
     }
 
-    /**
-     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-     * method as well.
-     */
     public boolean canUse() {
         return this.mob.getTarget() != null && this.isHoldingBow();
     }
@@ -44,24 +40,15 @@ public class CreatureBowAttackGoal <T extends CreatureEntity & IRangedAttackMob>
         return this.mob.isHolding(item -> item instanceof BowItem);
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
     public boolean canContinueToUse() {
         return (this.canUse() || !this.mob.getNavigation().isDone()) && this.isHoldingBow();
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     public void start() {
         super.start();
         this.mob.setAggressive(true);
     }
 
-    /**
-     * Reset the task's internal state. Called when this task is interrupted by another one
-     */
     public void stop() {
         super.stop();
         this.mob.setAggressive(false);
@@ -70,9 +57,6 @@ public class CreatureBowAttackGoal <T extends CreatureEntity & IRangedAttackMob>
         this.mob.stopUsingItem();
     }
 
-    /**
-     * Keep ticking a continuous task that has already been started
-     */
     public void tick() {
         LivingEntity livingentity = this.mob.getTarget();
         if (livingentity != null) {

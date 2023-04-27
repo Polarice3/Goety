@@ -109,7 +109,7 @@ public class EffectsEvent {
                             infected.addEffect(new EffectInstance(Effects.POISON, 400 * r4, r3, false, false));
                             break;
                         case 6:
-                            infected.addEffect(new EffectInstance(Effects.BLINDNESS, 400 * r4, 0, false, false));
+                            infected.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 400 * r4, 0, false, false));
                             break;
                         case 7:
                             infected.addEffect(new EffectInstance(Effects.WITHER, 100, r3, false, false));

@@ -108,17 +108,11 @@ public class PitchforkEntity extends AbstractArrowEntity {
         return this.entityData.get(ID_FOIL);
     }
 
-    /**
-     * Gets the EntityRayTraceResult representing the entity hit
-     */
     @Nullable
     protected EntityRayTraceResult findHitEntity(Vector3d pStartVec, Vector3d pEndVec) {
         return this.dealtDamage ? null : super.findHitEntity(pStartVec, pEndVec);
     }
 
-    /**
-     * Called when the arrow hits an entity
-     */
     protected void onHitEntity(EntityRayTraceResult pResult) {
         Entity entity = pResult.getEntity();
         float f = 8.0F;

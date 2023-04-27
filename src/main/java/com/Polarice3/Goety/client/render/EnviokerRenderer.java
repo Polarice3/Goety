@@ -26,9 +26,6 @@ public class EnviokerRenderer <T extends EnviokerEntity> extends IllagerRenderer
         });
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     public ResourceLocation getTextureLocation(T pEntity) {
         return TEXTURE;
     }

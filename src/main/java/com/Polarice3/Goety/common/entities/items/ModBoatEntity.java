@@ -74,9 +74,6 @@ public class ModBoatEntity extends BoatEntity {
             return this.name;
         }
 
-        /**
-         * Get a boat type by it's enum ordinal
-         */
         public static ModBoatEntity.Type byId(int pId) {
             ModBoatEntity.Type[] aboatentity$type = values();
             if (pId < 0 || pId >= aboatentity$type.length) {

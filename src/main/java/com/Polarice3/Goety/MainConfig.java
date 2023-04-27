@@ -139,6 +139,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> WraithAggressiveTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ApocalypseMode;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ScytheSlashBreaks;
+
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemGen;
@@ -158,6 +160,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> GoldenKingSpawn;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichMagicResist;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichScrollRequirement;
 
@@ -277,12 +280,12 @@ public class MainConfig {
                 .define("infamySpell", true);
         InfamySpellGive = BUILDER.comment("How much Infamy is given when casting Spells, Default: 1")
                 .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
-        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 100")
-                .defineInRange("infamyDeathLoss", 100, 0, Integer.MAX_VALUE);
-        InfamyMax = BUILDER.comment("Maximum amount of Infamy the Player can attained, Default: 500")
-                .defineInRange("infamyMax", 500, 1, Integer.MAX_VALUE);
-        InfamyThreshold = BUILDER.comment("How much Infamy is required for Special Illagers to spawn, Default: 25")
-                .defineInRange("infamyThreshold", 25, 0, Integer.MAX_VALUE);
+        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 500")
+                .defineInRange("infamyDeathLoss", 500, 0, Integer.MAX_VALUE);
+        InfamyMax = BUILDER.comment("Maximum amount of Infamy the Player can attained, Default: 1000")
+                .defineInRange("infamyMax", 1000, 1, Integer.MAX_VALUE);
+        InfamyThreshold = BUILDER.comment("How much Infamy is required for Special Illagers to spawn, Default: 50")
+                .defineInRange("infamyThreshold", 50, 0, Integer.MAX_VALUE);
         InfamyBadOmen = BUILDER.comment("High Infamy have a chance of giving Player Bad Omen effect, Default: true")
                 .define("infamyBadOmen", true);
         BUILDER.pop();
@@ -383,6 +386,8 @@ public class MainConfig {
                 .defineInRange("necroSoulSandSouls", 1, 1, Integer.MAX_VALUE);
         DarkScytheSouls = BUILDER.comment("Amount of Soul Energy Dark Scythe gives when hitting mob(s), Default: 1")
                 .defineInRange("darkScytheSouls", 1, 1, Integer.MAX_VALUE);
+        ScytheSlashBreaks = BUILDER.comment("Scythe Slashes from Death Scythe breaks blocks that regular Scythes easily breaks, Default: true")
+                .define("scytheSlashBreaks", true);
         WitchBowSouls = BUILDER.comment("Amount of Soul Energy Witch's Bow required to shoot a tipped Arrow, Default: 25")
                 .defineInRange("witchBowSouls", 25, 1, Integer.MAX_VALUE);
         ItemsRepairAmount = BUILDER.comment("Amount of Souls needed to repair certain Equipments per second, Default: 5")
@@ -437,6 +442,8 @@ public class MainConfig {
                 .define("lichNightVision", true);
         LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")
                 .define("lichUndeadFriendly", true);
+        LichMagicResist = BUILDER.comment("Enable to make Liches 85% more resistant to Magic Attacks, Default: false")
+                .define("lichMagicResist", false);
         LichPowerfulFoes = BUILDER.comment("If Lich Undead Friendly is set to true, Only undead that have lower than 50 Hearts are friendly, Default: true")
                 .define("lichPowerfulHostile", true);
         LichScrollRequirement = BUILDER.comment("Whether the player needs to read a Forbidden Scroll to start the Potion of Transformation ritual, Default: true")

@@ -116,6 +116,9 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
                         this.level.addFreshEntity(fireTornadoEntity);
                         this.remove();
                     }
+                } else {
+                    this.setLifespan(this.getTotallife());
+                    this.remove();
                 }
             }
         }

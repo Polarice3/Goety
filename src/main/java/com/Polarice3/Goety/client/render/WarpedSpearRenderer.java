@@ -31,9 +31,6 @@ public class WarpedSpearRenderer extends EntityRenderer<WarpedSpearEntity> {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
-    /**
-     * Returns the location of an entity's texture.
-     */
     public ResourceLocation getTextureLocation(WarpedSpearEntity entity) {
         return SPEAR;
     }

@@ -403,9 +403,6 @@ public class MutatedRabbitEntity extends MutatedEntity {
             super.tick();
         }
 
-        /**
-         * Sets the speed and location to move to
-         */
         public void setWantedPosition(double pX, double pY, double pZ, double pSpeed) {
             if (this.rabbit.isInWater()) {
                 pSpeed = 1.5D;
@@ -439,10 +436,6 @@ public class MutatedRabbitEntity extends MutatedEntity {
             this.rabbit = p_i45860_1_;
         }
 
-        /**
-         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-         * method as well.
-         */
         public boolean canUse() {
             if (this.nextStartTick <= 0) {
                 if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.rabbit.level, this.rabbit)) {
@@ -456,16 +449,10 @@ public class MutatedRabbitEntity extends MutatedEntity {
             return super.canUse();
         }
 
-        /**
-         * Returns whether an in-progress EntityAIBase should continue executing
-         */
         public boolean canContinueToUse() {
             return this.canRaid && super.canContinueToUse();
         }
 
-        /**
-         * Keep ticking a continuous task that has already been started
-         */
         public void tick() {
             super.tick();
             this.rabbit.getLookControl().setLookAt((double)this.blockPos.getX() + 0.5D, (double)(this.blockPos.getY() + 1), (double)this.blockPos.getZ() + 0.5D, 10.0F, (float)this.rabbit.getMaxHeadXRot());

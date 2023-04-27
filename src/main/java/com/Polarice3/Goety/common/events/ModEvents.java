@@ -605,6 +605,39 @@ public class ModEvents {
         int zombies = 0;
         int skeletons = 0;
         int wolves = 0;
+        if (world instanceof ServerWorld){
+            for (Entity entity : ((ServerWorld) world).getAllEntities()){
+                if (entity instanceof OwnedEntity){
+                    OwnedEntity summonedEntity = (OwnedEntity) entity;
+                    if (summonedEntity.getTrueOwner() == player && summonedEntity.isAlive()){
+                        if (summonedEntity instanceof ZombieMinionEntity || summonedEntity instanceof ZPiglinMinionEntity){
+                            ++zombies;
+                            if (zombies > SpellConfig.ZombieLimit.get()){
+                                if (summonedEntity.tickCount % 20 == 0){
+                                    summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
+                                }
+                            }
+                        }
+                        if (summonedEntity instanceof AbstractSMEntity){
+                            ++skeletons;
+                            if (skeletons > SpellConfig.SkeletonLimit.get()){
+                                if (summonedEntity.tickCount % 20 == 0){
+                                    summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
+                                }
+                            }
+                        }
+                        if (summonedEntity instanceof UndeadWolfEntity){
+                            ++wolves;
+                            if (wolves > SpellConfig.UndeadWolfLimit.get()){
+                                if (summonedEntity.tickCount % 20 == 0){
+                                    summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         for (SummonedEntity summonedEntity : world.getEntitiesOfClass(SummonedEntity.class, player.getBoundingBox().inflate(32.0D))){
             if (summonedEntity.getTrueOwner() == player){
                 if (summonedEntity instanceof ZombieMinionEntity){
@@ -887,22 +920,6 @@ public class ModEvents {
     public static void HurtEvent(LivingHurtEvent event){
         LivingEntity victim = event.getEntityLiving();
         Entity attacker = event.getSource().getEntity();
-        if (victim.hasEffect(ModEffects.CURSED.get())){
-            EffectInstance effectInstance = victim.getEffect(ModEffects.CURSED.get());
-            if (effectInstance != null) {
-                int i = effectInstance.getAmplifier() + 1;
-                event.setAmount(event.getAmount() * (1.0F + i));
-            }
-        }
-        if (victim.hasEffect(ModEffects.SAPPED.get())){
-            EffectInstance effectInstance = victim.getEffect(ModEffects.SAPPED.get());
-            if (effectInstance != null) {
-                int i = effectInstance.getAmplifier() / 10;
-                float j = 1.2F + ((float) i * 2);
-                float f = event.getAmount() * j;
-                event.setAmount(f);
-            }
-        }
         if (RobeArmorFinder.FindFelArmor(victim)){
             if (event.getSource().isExplosion()){
                 event.setAmount((float) (event.getAmount() / 1.5F));
@@ -995,7 +1012,7 @@ public class ModEvents {
                             victim.addEffect(new EffectInstance(ModEffects.SAPPED.get(), 20));
                             victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
                         } else {
-                            if (victim.level.random.nextBoolean()) {
+                            if (victim.level.random.nextFloat() <= 0.1F) {
                                 EffectsUtil.amplifyEffect(victim, ModEffects.SAPPED.get(), 20);
                                 victim.playSound(SoundEvents.SHIELD_BREAK, 2.0F, 1.0F);
                             } else {
@@ -1136,6 +1153,23 @@ public class ModEvents {
                 if (event.getSource().getDirectEntity() instanceof AbstractArrowEntity){
                     event.setCanceled(true);
                 }
+            }
+        }
+
+        if (entity.hasEffect(ModEffects.CURSED.get())){
+            EffectInstance effectInstance = entity.getEffect(ModEffects.CURSED.get());
+            if (effectInstance != null) {
+                int i = effectInstance.getAmplifier() + 1;
+                event.setAmount(event.getAmount() * (1.0F + i));
+            }
+        }
+        if (entity.hasEffect(ModEffects.SAPPED.get())){
+            EffectInstance effectInstance = entity.getEffect(ModEffects.SAPPED.get());
+            float original = event.getAmount();
+            if (effectInstance != null) {
+                int i = effectInstance.getAmplifier() + 1;
+                original += event.getAmount() * 0.2F * i;
+                event.setAmount(original);
             }
         }
 

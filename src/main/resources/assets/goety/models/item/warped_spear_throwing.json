@@ -1,6 +1,5 @@
 {
     "parent": "goety:item/warped_spear",
-    "gui_light": "front",
     "textures": {
         "particle": "goety:entity/projectiles/warped_spear_item"
     },

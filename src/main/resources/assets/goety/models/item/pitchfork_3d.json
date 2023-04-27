@@ -1,0 +1,144 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "goety:entity/projectiles/pitchfork",
+		"particle": "goety:entity/projectiles/pitchfork"
+	},
+	"elements": [
+		{
+			"from": [7.5, 0, 7.5],
+			"to": [8.5, 25, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [0.5, 0.5, 1, 13], "texture": "#0"},
+				"east": {"uv": [0, 0.5, 0.5, 13], "texture": "#0"},
+				"south": {"uv": [1.5, 0.5, 2, 13], "texture": "#0"},
+				"west": {"uv": [1, 0.5, 1.5, 13], "texture": "#0"},
+				"up": {"uv": [1, 0.5, 0.5, 0], "texture": "#0"},
+				"down": {"uv": [1.5, 0, 1, 0.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [7.5, 27, 7.5],
+			"to": [8.5, 30, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [2.5, 0.5, 3, 2], "texture": "#0"},
+				"east": {"uv": [2, 0.5, 2.5, 2], "texture": "#0"},
+				"south": {"uv": [3.5, 0.5, 4, 2], "texture": "#0"},
+				"west": {"uv": [3, 0.5, 3.5, 2], "texture": "#0"},
+				"up": {"uv": [3, 0.5, 2.5, 0], "texture": "#0"},
+				"down": {"uv": [3.5, 0, 3, 0.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [9.5, 27, 7.5],
+			"to": [10.5, 30, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [2.5, 0.5, 3, 2], "texture": "#0"},
+				"east": {"uv": [2, 0.5, 2.5, 2], "texture": "#0"},
+				"south": {"uv": [3.5, 0.5, 4, 2], "texture": "#0"},
+				"west": {"uv": [3, 0.5, 3.5, 2], "texture": "#0"},
+				"up": {"uv": [3, 0.5, 2.5, 0], "texture": "#0"},
+				"down": {"uv": [3.5, 0, 3, 0.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.5, 27, 7.5],
+			"to": [6.5, 30, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [2.5, 0.5, 3, 2], "texture": "#0"},
+				"east": {"uv": [2, 0.5, 2.5, 2], "texture": "#0"},
+				"south": {"uv": [3.5, 0.5, 4, 2], "texture": "#0"},
+				"west": {"uv": [3, 0.5, 3.5, 2], "texture": "#0"},
+				"up": {"uv": [3, 0.5, 2.5, 0], "texture": "#0"},
+				"down": {"uv": [3.5, 0, 3, 0.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.5, 26, 7.5],
+			"to": [10.5, 27, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [2.5, 2.5, 5, 3], "texture": "#0"},
+				"east": {"uv": [2, 2.5, 2.5, 3], "texture": "#0"},
+				"south": {"uv": [5.5, 2.5, 8, 3], "texture": "#0"},
+				"west": {"uv": [5, 2.5, 5.5, 3], "texture": "#0"},
+				"up": {"uv": [5, 2.5, 2.5, 2], "texture": "#0"},
+				"down": {"uv": [7.5, 2, 5, 2.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6.5, 25, 7.5],
+			"to": [9.5, 26, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 25, 8]},
+			"faces": {
+				"north": {"uv": [4.5, 0.5, 6, 1], "texture": "#0"},
+				"east": {"uv": [4, 0.5, 4.5, 1], "texture": "#0"},
+				"south": {"uv": [6.5, 0.5, 8, 1], "texture": "#0"},
+				"west": {"uv": [6, 0.5, 6.5, 1], "texture": "#0"},
+				"up": {"uv": [6, 0.5, 4.5, 0], "texture": "#0"},
+				"down": {"uv": [7.5, 0, 6, 0.5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, -90, 0],
+			"translation": [0, -12, 0]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 90, 0],
+			"translation": [0, -12, 0]
+		},
+		"firstperson_righthand": {
+			"rotation": [-5, -90, 0],
+			"translation": [4, -10, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-5, -90, 0],
+			"translation": [4, -10, 0]
+		},
+		"gui": {
+			"rotation": [0, -25, -45],
+			"translation": [-3.25, -3.5, 0],
+			"scale": [0.65, 0.65, 0.65]
+		},
+		"fixed": {
+			"rotation": [0, 0, 45],
+			"translation": [3.75, -4, 0],
+			"scale": [0.75, 0.75, 0.75]
+		}
+	},
+	"groups": [
+		{
+			"name": "bone",
+			"origin": [0, 13, 0],
+			"color": 0,
+			"nbt": "{}",
+			"armAnimationEnabled": false,
+			"children": [
+				0,
+				{
+					"name": "head",
+					"origin": [0, -1, 0],
+					"color": 0,
+					"nbt": "{}",
+					"armAnimationEnabled": false,
+					"children": [1, 2, 3, 4, 5]
+				}
+			]
+		}
+	],
+	"overrides": [
+		{
+			"predicate": {
+				"throwing": 1
+			},
+			"model": "goety:item/pitchfork_throwing"
+		}
+	]
+}

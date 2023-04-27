@@ -53,9 +53,6 @@ public class MutatedCowEntity extends MutatedEntity {
         this.playSound(SoundEvents.COW_STEP, 0.15F, 1.0F);
     }
 
-    /**
-     * Returns the volume for the sounds this mob makes.
-     */
     protected float getSoundVolume() {
         return 0.4F;
     }

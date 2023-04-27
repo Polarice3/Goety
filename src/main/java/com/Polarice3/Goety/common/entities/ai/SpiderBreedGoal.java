@@ -34,10 +34,6 @@ public class SpiderBreedGoal extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
-    /**
-     * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
-     * method as well.
-     */
     public boolean canUse() {
         if (!this.animal.isInLove()) {
             return false;
@@ -47,24 +43,15 @@ public class SpiderBreedGoal extends Goal {
         }
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
     public boolean canContinueToUse() {
         return this.partner.isAlive() && this.partner.isInLove() && this.loveTime < 60;
     }
 
-    /**
-     * Reset the task's internal state. Called when this task is interrupted by another one
-     */
     public void stop() {
         this.partner = null;
         this.loveTime = 0;
     }
 
-    /**
-     * Keep ticking a continuous task that has already been started
-     */
     public void tick() {
         this.animal.getLookControl().setLookAt(this.partner, 10.0F, (float)this.animal.getMaxHeadXRot());
         this.animal.getNavigation().moveTo(this.partner, this.speedModifier);
@@ -82,10 +69,6 @@ public class SpiderBreedGoal extends Goal {
 
     }
 
-    /**
-     * Loops through nearby animals and finds another animal of the same type that can be mated with. Returns the first
-     * valid mate found.
-     */
     @Nullable
     private AnimalEntity getFreePartner() {
         List<AnimalEntity> list = this.level.getNearbyEntities(this.partnerClass, PARTNER_TARGETING, this.animal, this.animal.getBoundingBox().inflate(8.0D));
@@ -102,9 +85,6 @@ public class SpiderBreedGoal extends Goal {
         return animalentity;
     }
 
-    /**
-     * Spawns a baby animal of the same type.
-     */
     protected void breed() {
         this.animal.spawnChildFromBreeding((ServerWorld)this.level, this.partner);
     }

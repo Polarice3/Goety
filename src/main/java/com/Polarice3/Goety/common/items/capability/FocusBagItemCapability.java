@@ -15,6 +15,9 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Learned item capabilities from codes made by @vemerion & @MrCrayfish
+ */
 public class FocusBagItemCapability implements ICapabilitySerializable<INBT> {
     private final ItemStack stack;
     private final LazyOptional<IItemHandler> holder = LazyOptional.of(this::getHandler);
