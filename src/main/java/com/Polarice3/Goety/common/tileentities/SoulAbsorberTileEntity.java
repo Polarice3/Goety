@@ -200,7 +200,9 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
 
     public void load(BlockState blockState, CompoundNBT compoundNBT) {
         super.load(blockState, compoundNBT);
-        this.itemStack = ItemStack.of(compoundNBT);
+        if (compoundNBT.contains("Item")) {
+            this.itemStack = ItemStack.of(compoundNBT.getCompound("Item"));
+        }
         this.cookingProgress = compoundNBT.getInt("CookingTime");
         this.cookingTime = compoundNBT.getInt("CookingTotalTime");
     }
@@ -220,7 +222,9 @@ public class SoulAbsorberTileEntity extends TileEntity implements IClearable, IT
 
     private CompoundNBT saveMetadataAndItems(CompoundNBT pCompound) {
         super.save(pCompound);
-        this.itemStack.save(pCompound);
+        if (!this.itemStack.isEmpty()) {
+            pCompound.put("Item", this.itemStack.save(new CompoundNBT()));
+        }
         return pCompound;
     }
 

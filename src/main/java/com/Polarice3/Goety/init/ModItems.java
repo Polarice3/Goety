@@ -85,7 +85,7 @@ public class ModItems {
     public static final RegistryObject<Item> DARK_FABRIC = ITEMS.register("darkfabric", ItemBase::new);
     public static final RegistryObject<Item> MAGIC_FABRIC = ITEMS.register("magicfabric", ItemBase::new);
     public static final RegistryObject<Item> OCCULT_FABRIC = ITEMS.register("occultfabric", ItemBase::new);
-    public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", ItemBase::new);
+    public static final RegistryObject<Item> PEDESTAL_DUMMY = ITEMS.register("pedestal_dummy", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> DRIED_REMNANT = ITEMS.register("dried_remnant", ItemBase::new);
     public static final RegistryObject<Item> DEAD_SAND_HEAP = ITEMS.register("dead_sand_heap", ItemBase::new);
     public static final RegistryObject<Item> FORBIDDEN_FRAGMENT = ITEMS.register("forbidden_fragment", ItemBase::new);

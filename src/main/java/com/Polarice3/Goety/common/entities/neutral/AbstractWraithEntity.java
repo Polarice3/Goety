@@ -467,6 +467,10 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         return ModParticleTypes.WRAITH.get();
     }
 
+    public IParticleData getBurstParticles(){
+        return ModParticleTypes.WRAITH_BURST.get();
+    }
+
     @OnlyIn(Dist.CLIENT)
     public void handleEntityEvent(byte pId) {
         super.handleEntityEvent(pId);
@@ -477,11 +481,17 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
             this.setIsFiring(false);
         }
         if (pId == 100){
-            for(int j = 0; j < 16; ++j) {
+            for(int j = 0; j < 6; ++j) {
                 double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
-                double d2 = this.getY() + (this.random.nextDouble() - 0.5D);
+                double d2 = this.getY() + (this.random.nextDouble() + 0.5D);
                 double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
                 this.level.addParticle(this.getFireParticles(), d1, d2, d3, 0.0D, 0.0D, 0.0D);
+            }
+            for(int j = 0; j < 4; ++j) {
+                double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
+                double d2 = this.getY() + (this.random.nextDouble() + 0.5D);
+                double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * (double)this.getBbWidth() * 2.0D;
+                this.level.addParticle(this.getBurstParticles(), d1, d2, d3, 0.0D, 0.0D, 0.0D);
             }
         }
         if (pId == 101){

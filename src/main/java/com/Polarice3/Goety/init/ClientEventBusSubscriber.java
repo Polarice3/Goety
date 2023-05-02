@@ -285,6 +285,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.GLOW_EFFECT.get(), SpellParticle.Factory::new);
         particles.register(ModParticleTypes.LEECH.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.WRAITH.get(), WraithParticle.Factory::new);
+        particles.register(ModParticleTypes.WRAITH_BURST.get(), WraithParticle.Factory::new);
         particles.register(ModParticleTypes.HEAL_EFFECT.get(), HeartParticle.Factory::new);
         particles.register(ModParticleTypes.SOUL_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);
         particles.register(ModParticleTypes.GLOW_LIGHT_EFFECT.get(), GlowingParticle.Factory::new);

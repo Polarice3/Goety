@@ -18,6 +18,9 @@ public class ModRecipeSerializer{
     public static final RegistryObject<IRecipeSerializer<SoulAbsorberRecipes>> SOUL_ABSORBER_RECIPES = RECIPE_SERIALIZERS.register("soul_absorber_recipes",
             () -> new SoulAbsorberRecipeSerializer<>(SoulAbsorberRecipes::new, 25, 200));
 
+    public static final RegistryObject<IRecipeSerializer<ModShapelessRecipe>> MODDED_SHAPELESS = RECIPE_SERIALIZERS.register("crafting_shapeless",
+            ModShapelessRecipe.Serializer::new);
+
     public static final NonNullLazy<IRecipeType<RitualRecipe>> RITUAL_TYPE =
             NonNullLazy.of(() -> IRecipeType.register("goety:ritual"));
 
