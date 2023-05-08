@@ -104,7 +104,7 @@ import java.util.Random;
 public class Goety {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "goety";
-    public static final ModProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+    public static final ModProxy PROXY = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static ResourceLocation location(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -323,7 +323,6 @@ public class Goety {
         event.put(ModEntityType.SCORCH.get(), ScorchEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKULL_LORD.get(), SkullLordEntity.setCustomAttributes().build());
         event.put(ModEntityType.BONE_LORD.get(), BoneLordEntity.setCustomAttributes().build());
-        event.put(ModEntityType.SENTINEL.get(), SentinelEntity.setCustomAttributes().build());
         event.put(ModEntityType.LASER.get(), LaserEntity.setCustomAttributes().build());
     }
 

@@ -1,27 +1,27 @@
 {
   "display": {
     "icon": {
-      "item": "goety:dead_sand"
+      "item": "goety:dark_altar"
     },
     "title": {
-      "translate": "advancements.goety.craft_dead_sand.title"
+      "translate": "advancements.goety.craft_dark_altar.title"
     },
     "description": {
-      "translate": "advancements.goety.craft_dead_sand.description"
+      "translate": "advancements.goety.craft_dark_altar.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,
     "hidden": false
   },
-  "parent": "goety:goety/craft_dark_altar",
+  "parent": "goety:goety/craft_totem",
   "criteria": {
     "requirement": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "goety:dead_sand"
+            "item": "goety:dark_altar"
           }
         ]
       }

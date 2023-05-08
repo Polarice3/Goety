@@ -80,12 +80,7 @@ public class SoulFangTotemBlock extends ContainerBlock implements IForgeBlock {
                 SoulFangTotemTileEntity soulFangTotemTile = (SoulFangTotemTileEntity) tileentity;
                 soulFangTotemTile.setOwnerId(pPlacer.getUUID());
                 Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(pStack);
-                for(Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                    Enchantment enchantment = entry.getKey();
-                    if (!this.asItem().canApplyAtEnchantingTable(pStack, enchantment)){
-                        enchantments.remove(enchantment);
-                    }
-                }
+                enchantments.keySet().removeIf(enchantment -> !this.asItem().canApplyAtEnchantingTable(pStack, enchantment));
                 soulFangTotemTile.getEnchantments().putAll(enchantments);
             }
         }

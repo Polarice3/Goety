@@ -12,6 +12,7 @@ public class MasterRobeModel<T extends LivingEntity> extends BipedModel<T> {
 	public final ModelRenderer Helmet_r1;
 	public final ModelRenderer Helmet_r2;
 	public final ModelRenderer Mask;
+	public final ModelRenderer Crown;
 	public final ModelRenderer Body;
 	public final ModelRenderer Body_r1;
 	public final ModelRenderer RightArm;
@@ -61,6 +62,11 @@ public class MasterRobeModel<T extends LivingEntity> extends BipedModel<T> {
 		Mask.setPos(0.0F, 0.0F, 0.0F);
 		Headwear.addChild(Mask);
 		Mask.texOffs(0, 76).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, false);
+
+		Crown = new ModelRenderer(this);
+		Crown.setPos(0.0F, 0.0F, 0.0F);
+		Headwear.addChild(Crown);
+		Crown.texOffs(0, 62).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 6.0F, 8.0F, 1.025F, false);
 
 		Body = new ModelRenderer(this);
 		Body.setPos(0.0F, 0.0F, 0.0F);

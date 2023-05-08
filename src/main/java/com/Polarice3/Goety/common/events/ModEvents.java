@@ -638,34 +638,6 @@ public class ModEvents {
                 }
             }
         }
-        for (SummonedEntity summonedEntity : world.getEntitiesOfClass(SummonedEntity.class, player.getBoundingBox().inflate(32.0D))){
-            if (summonedEntity.getTrueOwner() == player){
-                if (summonedEntity instanceof ZombieMinionEntity){
-                    ++zombies;
-                    if (SpellConfig.ZombieLimit.get() < zombies){
-                        if (summonedEntity.tickCount % 20 == 0){
-                            summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
-                        }
-                    }
-                }
-                if (summonedEntity instanceof AbstractSMEntity || summonedEntity instanceof AbstractWraithEntity){
-                    ++skeletons;
-                    if (SpellConfig.SkeletonLimit.get() < skeletons){
-                        if (summonedEntity.tickCount % 20 == 0){
-                            summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
-                        }
-                    }
-                }
-                if (summonedEntity instanceof UndeadWolfEntity){
-                    ++wolves;
-                    if (SpellConfig.UndeadWolfLimit.get() < wolves){
-                        if (summonedEntity.tickCount % 20 == 0){
-                            summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
-                        }
-                    }
-                }
-            }
-        }
         if (MainConfig.VillagerHate.get()) {
             if (RobeArmorFinder.FindAnySet(player)) {
                 for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {

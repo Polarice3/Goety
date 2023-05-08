@@ -5,6 +5,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemHelper {
@@ -26,5 +27,17 @@ public class ItemHelper {
 
     public static ItemEntity itemEntityDrop(LivingEntity livingEntity, ItemStack itemStack){
         return new ItemEntity(livingEntity.level, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), itemStack);
+    }
+
+    public static ItemStack findItem(PlayerEntity playerEntity, Item item){
+        ItemStack foundStack = ItemStack.EMPTY;
+        for (int i = 0; i <= playerEntity.inventory.getContainerSize(); i++) {
+            ItemStack itemStack = playerEntity.inventory.getItem(i);
+            if (!itemStack.isEmpty() && itemStack.getItem() == item) {
+                foundStack = itemStack;
+                break;
+            }
+        }
+        return foundStack;
     }
 }

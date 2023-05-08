@@ -621,13 +621,6 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "bone_lord").toString()));
 
-    public static final RegistryObject<EntityType<SentinelEntity>> SENTINEL = ENTITY_TYPES.register("sentinel",
-            () -> EntityType.Builder.of(SentinelEntity::new, EntityClassification.MONSTER)
-                    .fireImmune()
-                    .sized(1.4F, 2.7F)
-                    .clientTrackingRange(10)
-                    .build(new ResourceLocation(Goety.MOD_ID, "sentinel").toString()));
-
     public static final RegistryObject<EntityType<LightningTrapEntity>> LIGHTNING_TRAP = ENTITY_TYPES.register("lightningtrap",
             () -> EntityType.Builder.<LightningTrapEntity>of(LightningTrapEntity::new, EntityClassification.MISC)
                     .fireImmune()

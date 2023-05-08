@@ -26,6 +26,8 @@ public class RitualStructures {
                 return pLevel.dimensionType().ultraWarm();
             case "expert_nether":
                 return RitualStructures.checkRequirements(craftType, pTileEntity) && pLevel.dimensionType().ultraWarm();
+            case "end":
+                return pLevel.dimension() == World.END;
             case "air":
                 return pPos.getY() >= 128;
             case "storm":

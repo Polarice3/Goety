@@ -1,0 +1,17 @@
+{
+  "name": "End Ritual",
+  "icon": "minecraft:end_stone",
+  "category": "goety:rituals",
+  "advancement": "minecraft:end/kill_dragon",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Requirements: $(li)Be in the End"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The End is full of mystical and powerful magics that can be used to create wonderful creations. This ritual only demands that the Dark Altar is located within the End and nothing else."
+    }
+  ]
+}

@@ -64,7 +64,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> DEAD_SANDSTONE_SMOOTH = BLOCKS.register("dead_sandstone_smooth", DeadSandStoneBlock::new);
     public static final RegistryObject<Block> DEAD_PILE = BLOCKS.register("dead_pile", DeadPileBlock::new);
     public static final RegistryObject<Block> DEAD_BLOCK = BLOCKS.register("dead_block", DeadBlock::new);
-    public static final RegistryObject<Block> TEMP_WEB = BLOCKS.register("temp_web", TempWebBlock::new);
     public static final RegistryObject<Block> DARK_CLOUD = BLOCKS.register("dark_cloud", DarkCloudBlock::new);
     public static final RegistryObject<Block> ARCA_BLOCK = BLOCKS.register("arca", ArcaBlock::new);
     public static final RegistryObject<Block> SOUL_LIGHT_BLOCK = BLOCKS.register("soul_light", SoulLightBlock::new);

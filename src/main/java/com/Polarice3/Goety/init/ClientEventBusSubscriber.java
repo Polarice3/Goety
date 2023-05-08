@@ -144,7 +144,6 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCORCH.get(), ScorchRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKULL_LORD.get(), SkullLordRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BONE_LORD.get(), BoneLordRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SENTINEL.get(), SentinelRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOD_BOAT.get(), ModBoatRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LIGHTNING_TRAP.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRE_RAIN_TRAP.get(), TrapRenderer::new);
@@ -174,7 +173,6 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.DARK_ALTAR.get(), DarkAltarTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.PEDESTAL.get(), PedestalTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SOUL_ABSORBER.get(), SoulAbsorberTileEntityRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.TEMP_WEB.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ARCA.get(), ArcaTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGN_TILE_ENTITIES.get(), SignTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.TALL_SKULL.get(), TallSkullTileEntityRenderer::new);
@@ -185,7 +183,6 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.SOUL_LIGHT_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.DEAD_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.FALSE_PORTAL.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.TEMP_WEB.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_CACTUS.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_BUSH.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.IRON_FINGER.get(), RenderType.cutout());

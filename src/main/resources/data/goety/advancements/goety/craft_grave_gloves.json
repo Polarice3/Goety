@@ -1,30 +1,33 @@
 {
   "display": {
     "icon": {
-      "item": "goety:dead_sand"
+      "item": "goety:grave_glove"
     },
     "title": {
-      "translate": "advancements.goety.craft_dead_sand.title"
+      "translate": "advancements.goety.craft_grave_gloves.title"
     },
     "description": {
-      "translate": "advancements.goety.craft_dead_sand.description"
+      "translate": "advancements.goety.craft_grave_gloves.description"
     },
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": false,
     "hidden": false
   },
-  "parent": "goety:goety/craft_dark_altar",
+  "parent": "goety:goety/craft_dark_scythe",
   "criteria": {
     "requirement": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "goety:dead_sand"
+            "item": "goety:grave_glove"
           }
         ]
       }
     }
+  },
+  "rewards": {
+    "experience": 5
   }
 }

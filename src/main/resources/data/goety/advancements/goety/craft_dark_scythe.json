@@ -1,13 +1,13 @@
 {
   "display": {
     "icon": {
-      "item": "goety:dead_sand"
+      "item": "goety:dark_scythe"
     },
     "title": {
-      "translate": "advancements.goety.craft_dead_sand.title"
+      "translate": "advancements.goety.craft_dark_scythe.title"
     },
     "description": {
-      "translate": "advancements.goety.craft_dead_sand.description"
+      "translate": "advancements.goety.craft_dark_scythe.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -21,10 +21,13 @@
       "conditions": {
         "items": [
           {
-            "item": "goety:dead_sand"
+            "item": "goety:dark_scythe"
           }
         ]
       }
     }
+  },
+  "rewards": {
+    "experience": 1
   }
 }

@@ -1,29 +1,39 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
-    "csc",
-    "ses",
-    "csc"
-  ],
-  "key":
-  {
-    "e":
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:emptycore"
+  },
+  "craftType": "end",
+  "soulCost": 1,
+  "duration": 10,
+  "ingredients": [
     {
-      "item": "goety:emptycore"
+      "tag": "forge:ender_pearls"
     },
-    "c":
     {
       "item": "minecraft:chorus_fruit"
     },
-    "s":
     {
       "tag": "forge:ender_pearls"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
+    },
+    {
+      "tag": "forge:ender_pearls"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
+    },
+    {
+      "tag": "forge:ender_pearls"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
     }
-  },
-  "result":
-  {
-    "item": "goety:teleportfocus",
-    "count": 1
+  ],
+  "result": {
+    "item": "goety:teleportfocus"
   }
 }

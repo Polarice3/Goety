@@ -4,7 +4,7 @@
   "category": "goety:rituals",
   "advancement": "goety:goety/kill_hunting_illagers",
   "secret": true,
-  "sortnum": 8,
+  "sortnum": 9,
   "pages": [
     {
       "type": "patchouli:text",

@@ -1,0 +1,131 @@
+{
+  "display": {
+    "icon": {
+      "item": "goety:focus_bag"
+    },
+    "title": {
+      "translate": "advancements.goety.craft_all_focus.title"
+    },
+    "description": {
+      "translate": "advancements.goety.craft_all_focus.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "parent": "goety:goety/craft_empty_focus",
+  "criteria": {
+    "all_focus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "goety:vexingfocus"
+          },
+          {
+            "item": "goety:bitingfocus"
+          },
+          {
+            "item": "goety:roaringfocus"
+          },
+          {
+            "item": "goety:rottingfocus"
+          },
+          {
+            "item": "goety:osseousfocus"
+          },
+          {
+            "item": "goety:rigidfocus"
+          },
+          {
+            "item": "goety:spookyfocus"
+          },
+          {
+            "item": "goety:witchgalefocus"
+          },
+          {
+            "item": "goety:spiderlingfocus"
+          },
+          {
+            "item": "goety:braineaterfocus"
+          },
+          {
+            "item": "goety:teleportfocus"
+          },
+          {
+            "item": "goety:soulskullfocus"
+          },
+          {
+            "item": "goety:feastfocus"
+          },
+          {
+            "item": "goety:temptingfocus"
+          },
+          {
+            "item": "goety:enderacidfocus"
+          },
+          {
+            "item": "goety:dragonballfocus"
+          },
+          {
+            "item": "goety:creeperlingfocus"
+          },
+          {
+            "item": "goety:airbreathfocus"
+          },
+          {
+            "item": "goety:fireballfocus"
+          },
+          {
+            "item": "goety:lavaballfocus"
+          },
+          {
+            "item": "goety:poisonballfocus"
+          },
+          {
+            "item": "goety:illusionfocus"
+          },
+          {
+            "item": "goety:firebreathfocus"
+          },
+          {
+            "item": "goety:frostbreathfocus"
+          },
+          {
+            "item": "goety:soullightfocus"
+          },
+          {
+            "item": "goety:glowlightfocus"
+          },
+          {
+            "item": "goety:iceologyfocus"
+          },
+          {
+            "item": "goety:icestormfocus"
+          },
+          {
+            "item": "goety:houndingfocus"
+          },
+          {
+            "item": "goety:phantasmfocus"
+          },
+          {
+            "item": "goety:launchfocus"
+          },
+          {
+            "item": "goety:sonicboomfocus"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "all_focus"
+    ]
+  ],
+  "rewards": {
+    "experience": 100
+  }
+}

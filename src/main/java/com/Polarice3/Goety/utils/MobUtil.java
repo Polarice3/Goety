@@ -405,10 +405,14 @@ public class MobUtil {
         }
     }
 
-    private static RayTraceResult rayTrace(Entity entity) {
+    public static RayTraceResult rayTrace(Entity entity) {
         Vector3d startPos = new Vector3d(entity.getX(), entity.getY(), entity.getZ());
         Vector3d endPos = new Vector3d(entity.getX(), 0, entity.getZ());
         return entity.level.clip(new RayTraceContext(startPos, endPos, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+    }
+
+    public static BlockRayTraceResult rayTrace(Entity entity, double distance, boolean fluids) {
+        return (BlockRayTraceResult) entity.pick(distance, 1.0F, fluids);
     }
 
 }

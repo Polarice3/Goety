@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -493,6 +494,19 @@ public class BlockFinder {
     public static boolean findStructure(ServerWorld serverWorld, LivingEntity livingEntity, Structure<?> structure){
         StructureStart<?> structureStart = serverWorld.structureFeatureManager().getStructureAt(livingEntity.blockPosition(), true, structure);
         return structureStart.getBoundingBox().isInside(livingEntity.blockPosition());
+    }
+
+    public static Iterable<BlockPos> multiBlockBreak(LivingEntity livingEntity, BlockPos blockPos, int x, int y, int z){
+        BlockRayTraceResult blockHitResult = MobUtil.rayTrace(livingEntity, 10, false);
+        Direction direction = blockHitResult.getDirection();
+        boolean hasX = direction.getStepX() == 0;
+        boolean hasY = direction.getStepY() == 0;
+        boolean hasZ = direction.getStepZ() == 0;
+        Vector3i start = new Vector3i(hasX ? -x : 0, hasY ? -y : 0, hasZ ? -z : 0);
+        Vector3i end = new Vector3i(hasX ? x : 0, hasY ? (y * 2) - 1 : 0, hasZ ? z : 0);
+        return BlockPos.betweenClosed(
+                blockPos.offset(start),
+                blockPos.offset(end));
     }
 
 }

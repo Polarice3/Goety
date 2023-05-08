@@ -1,0 +1,24 @@
+{
+  "name": "Master Robes",
+  "icon": "goety:darkmasterrobe",
+  "category": "goety:crafts",
+  "advancement": "minecraft:end/kill_dragon",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With the power of the dragon's breath and some more Cursed Ingots, you've managed to upgrade your Robes to provide Diamond Level protection."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkmasterhelm"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkmasterrobe"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:darkmasterleggings"
+    }
+  ]
+}

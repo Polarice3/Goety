@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.fluid.ModFluids;
 import com.Polarice3.Goety.common.items.*;
 import com.Polarice3.Goety.common.items.curios.AmuletItem;
 import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
+import com.Polarice3.Goety.common.items.curios.PendantOfHungerItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
 import com.Polarice3.Goety.common.items.equipment.*;
 import com.Polarice3.Goety.common.items.magic.*;
@@ -103,6 +104,7 @@ public class ModItems {
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", AmuletItem::new);
     public static final RegistryObject<Item> STAR_AMULET = ITEMS.register("star_amulet", AmuletItem::new);
+    public static final RegistryObject<Item> PENDANT_OF_HUNGER = ITEMS.register("pendant_of_hunger", PendantOfHungerItem::new);
     public static final RegistryObject<Item> RING_OF_WANT = ITEMS.register("ring_of_want", RingItem::new);
     public static final RegistryObject<Item> GRAVE_GLOVE = ITEMS.register("grave_glove", GraveGloveItem::new);
 
@@ -203,6 +205,13 @@ public class ModItems {
             new DarkArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
     public static final RegistryObject<Item> DARK_ARMORED_LEGGINGS = ITEMS.register("darkarmoredleggings", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.DARKARMOREDMAGE, EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<Item> DARK_MASTER_HELM = ITEMS.register("darkmasterhelm", () ->
+            new DarkMasterRobeArmor(ModArmorMaterial.DARKMASTERMAGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> DARK_MASTER_ROBE = ITEMS.register("darkmasterrobe", () ->
+            new DarkMasterRobeArmor(ModArmorMaterial.DARKMASTERMAGE, EquipmentSlotType.CHEST, new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> DARK_MASTER_LEGGINGS = ITEMS.register("darkmasterleggings", () ->
+            new DarkMasterRobeArmor(ModArmorMaterial.DARKMASTERMAGE, EquipmentSlotType.LEGS, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<Item> NECRO_ARMORED_HELM = ITEMS.register("necroarmoredhelm", () ->
             new DarkArmoredRobeArmor(ModArmorMaterial.ARMOREDNECROTURGE, EquipmentSlotType.HEAD, new Item.Properties().tab(Goety.TAB)));

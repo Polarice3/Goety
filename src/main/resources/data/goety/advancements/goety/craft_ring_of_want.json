@@ -1,13 +1,13 @@
 {
   "display": {
     "icon": {
-      "item": "goety:dead_sand"
+      "item": "goety:ring_of_want"
     },
     "title": {
-      "translate": "advancements.goety.craft_dead_sand.title"
+      "translate": "advancements.goety.craft_ring_of_want.title"
     },
     "description": {
-      "translate": "advancements.goety.craft_dead_sand.description"
+      "translate": "advancements.goety.craft_ring_of_want.description"
     },
     "frame": "task",
     "show_toast": true,
@@ -21,10 +21,13 @@
       "conditions": {
         "items": [
           {
-            "item": "goety:dead_sand"
+            "item": "goety:ring_of_want"
           }
         ]
       }
     }
+  },
+  "rewards": {
+    "experience": 5
   }
 }

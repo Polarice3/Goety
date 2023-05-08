@@ -54,6 +54,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> NecroSoulSandSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> ItemsRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkScytheSouls;
+    public static final ForgeConfigSpec.ConfigValue<Integer> PendantOfHungerLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> WitchBowSouls;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
@@ -159,6 +160,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> InterDimensionalMobs;
     public static final ForgeConfigSpec.ConfigValue<Boolean> GoldenKingSpawn;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichDamageHelmet;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichMagicResist;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
@@ -392,6 +394,8 @@ public class MainConfig {
                 .defineInRange("witchBowSouls", 25, 1, Integer.MAX_VALUE);
         ItemsRepairAmount = BUILDER.comment("Amount of Souls needed to repair certain Equipments per second, Default: 5")
                 .defineInRange("darkArmoredRobeRepairSouls", 5, 1, Integer.MAX_VALUE);
+        PendantOfHungerLimit = BUILDER.comment("The total amount of Rotten Flesh a Pendant of Hunger can hold, Default: 256")
+                .defineInRange("pendantOfHungerLimit", 256, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Tools & Weapons");
         DarkStaffDamage = BUILDER.comment("How much base damage Dark Staffs deals, Default: 4.0")
@@ -440,6 +444,8 @@ public class MainConfig {
                 .defineInRange("lichHealCost", 1, 0, Integer.MAX_VALUE);
         LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Fel Helm will no longer give Blindness during day, Default: true")
                 .define("lichNightVision", true);
+        LichDamageHelmet = BUILDER.comment("Wearing Helmet in Sunlight as a Lich periodically damages it, Default: true")
+                .define("lichDamageHelmet", true);
         LichUndeadFriends = BUILDER.comment("Undead Mobs will not attack you if you're a Lich and will even defend you if you're attack by another mob and wearing the Necro Set, Default: true")
                 .define("lichUndeadFriendly", true);
         LichMagicResist = BUILDER.comment("Enable to make Liches 85% more resistant to Magic Attacks, Default: false")
