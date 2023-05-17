@@ -145,22 +145,6 @@ public class LootingExplosion extends Explosion {
 
         boolean flag = this.blockInteraction != Explosion.Mode.NONE;
 
-        if (this.level.isClientSide()) {
-            this.soundAndParticles(pSpawnParticles, flag);
-        }
-
-        if (!this.level.isClientSide){
-            ServerWorld serverWorld = (ServerWorld) this.level;
-            serverWorld.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
-            if (pSpawnParticles) {
-                if (!(this.radius < 2.0F) && flag) {
-                    serverWorld.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 0, 1.0D, 0.0D, 0.0D, 0);
-                } else {
-                    serverWorld.sendParticles(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 0, 1.0D, 0.0D, 0.0D, 0);
-                }
-            }
-        }
-
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
             Collections.shuffle(this.toBlow, this.level.random);
@@ -202,16 +186,19 @@ public class LootingExplosion extends Explosion {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void soundAndParticles(boolean pSpawnParticles, boolean flag){
-        this.level.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
-        if (pSpawnParticles) {
-            if (!(this.radius < 2.0F) && flag) {
-                this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-            } else {
-                this.level.addParticle(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-            }
+    public void playEffects(){
+        boolean flag = this.blockInteraction != Explosion.Mode.NONE;
+
+        if (this.level.isClientSide()) {
+            this.level.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
+
+        if (!(this.radius < 2.0F) && flag) {
+            this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
+        } else {
+            this.level.addParticle(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
+        }
+
     }
 
     private static void addBlockDrops(ObjectArrayList<Pair<ItemStack, BlockPos>> pDropPositionArray, ItemStack pStack, BlockPos pPos) {

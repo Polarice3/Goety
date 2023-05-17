@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -41,7 +42,7 @@ public class MalghastEntity extends OwnedFlyingEntity {
     private float explosionPower = 1.0F;
     private int oldSwell;
     private int swell;
-    private int maxSwell = 15;
+    private int stun;
 
     public MalghastEntity(EntityType<? extends OwnedFlyingEntity> type, World p_i48578_2_) {
         super(type, p_i48578_2_);
@@ -61,8 +62,12 @@ public class MalghastEntity extends OwnedFlyingEntity {
             this.oldSwell = this.swell;
             if (this.isCharging()) {
                 this.setSwellDir(1);
+                this.stun = 40;
             } else {
                 this.setSwellDir(-1);
+                if (this.stun > 0) {
+                    --this.stun;
+                }
             }
 
             int i = this.getSwellDir();
@@ -72,19 +77,18 @@ public class MalghastEntity extends OwnedFlyingEntity {
                 this.swell = 0;
             }
 
-            if (this.swell >= this.maxSwell) {
-                this.swell = this.maxSwell;
+            int maxSwell = 20;
+            if (this.swell >= maxSwell) {
+                this.swell = maxSwell;
             }
         }
         super.tick();
     }
 
-    @OnlyIn(Dist.CLIENT)
     public float getSwelling(float pPartialTicks) {
-        return MathHelper.lerp(pPartialTicks, (float)this.oldSwell, (float)this.swell) / (float)(this.maxSwell - 2);
+        return MathHelper.lerp(pPartialTicks, (float)this.oldSwell, (float)this.swell) / (float)(20 - 2);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean isCharging() {
         return this.entityData.get(DATA_IS_CHARGING);
     }
@@ -157,6 +161,7 @@ public class MalghastEntity extends OwnedFlyingEntity {
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putFloat("ExplosionPower", this.explosionPower);
+        pCompound.putInt("Stun", this.stun);
     }
 
     public void readAdditionalSaveData(CompoundNBT pCompound) {
@@ -164,13 +169,26 @@ public class MalghastEntity extends OwnedFlyingEntity {
         if (pCompound.contains("ExplosionPower", 99)) {
             this.explosionPower = pCompound.getFloat("ExplosionPower");
         }
+        this.stun = pCompound.getInt("Stun");
     }
 
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+        if (this.isNatural()){
+            this.setHostile(true);
+        }
         this.setBoundOrigin(this.blockPosition());
         return pSpawnData;
+    }
+
+    @Override
+    protected ResourceLocation getDefaultLootTable() {
+        if (this.isNatural()){
+            return EntityType.GHAST.getDefaultLootTable();
+        } else {
+            return super.getDefaultLootTable();
+        }
     }
 
     static class FireballAttackGoal extends Goal {
@@ -291,10 +309,14 @@ public class MalghastEntity extends OwnedFlyingEntity {
                     Vector3d vector3d = new Vector3d(this.wantedX - this.ghast.getX(), this.wantedY - this.ghast.getY(), this.wantedZ - this.ghast.getZ());
                     double d0 = vector3d.length();
                     vector3d = vector3d.normalize();
-                    if (this.canReach(vector3d, MathHelper.ceil(d0))) {
-                        this.ghast.setDeltaMovement(this.ghast.getDeltaMovement().add(vector3d.scale(0.1D)));
+                    if (this.ghast.stun <= 0) {
+                        if (this.canReach(vector3d, MathHelper.ceil(d0))) {
+                            this.ghast.setDeltaMovement(this.ghast.getDeltaMovement().add(vector3d.scale(0.1D)));
+                        } else {
+                            this.operation = MovementController.Action.WAIT;
+                        }
                     } else {
-                        this.operation = MovementController.Action.WAIT;
+                        this.ghast.setDeltaMovement(Vector3d.ZERO);
                     }
                 }
 

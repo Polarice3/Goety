@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.common.entities.utilities;
 
+import com.Polarice3.Goety.AttributesConfig;
+import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
@@ -42,6 +44,9 @@ public class LightningTrapEntity extends AbstractTrapEntity {
         if (this.tickCount >= this.getDuration()) {
             LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, level);
             lightning.setPos(this.getX(),this.getY(),this.getZ());
+            if (this.getOwner() instanceof ApostleEntity){
+                lightning.setDamage(AttributesConfig.ApostleMagicDamage.get().floatValue());
+            }
             level.addFreshEntity(lightning);
             this.remove();
         }

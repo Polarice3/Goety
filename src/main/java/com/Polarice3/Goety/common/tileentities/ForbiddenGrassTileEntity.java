@@ -77,7 +77,7 @@ public class ForbiddenGrassTileEntity extends TileEntity implements ITickableTil
                         }
                     }
                     this.getMobs();
-                    AxisAlignedBB alignedBB = new AxisAlignedBB(above.getX(), above.getY(), above.getZ(), above.getX() + 1, above.getY() + 1, above.getZ() + 1);
+                    AxisAlignedBB alignedBB = new AxisAlignedBB(above.getX() - 1, above.getY(), above.getZ() - 1, above.getX() + 1, above.getY() + 1, above.getZ() + 1);
                     int k = this.getLevel().getEntitiesOfClass(LivingEntity.class, alignedBB.inflate(4)).size();
                     if (this.getLevel().random.nextFloat() <= 0.005F) {
                         if (this.getLevel().getEntitiesOfClass(LivingEntity.class, new AxisAlignedBB(above).inflate(1)).isEmpty()) {

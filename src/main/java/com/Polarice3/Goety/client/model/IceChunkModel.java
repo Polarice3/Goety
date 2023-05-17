@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.client.model;
 
+import com.Polarice3.Goety.common.entities.projectiles.IceChunkEntity;
+import com.Polarice3.Goety.utils.ModMathHelper;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -7,7 +9,7 @@ import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class IceChunkModel<T extends Entity> extends SegmentedModel<T> {
+public class IceChunkModel<T extends IceChunkEntity> extends SegmentedModel<T> {
 	private final ModelRenderer chunk;
 
 	public IceChunkModel() {
@@ -24,7 +26,12 @@ public class IceChunkModel<T extends Entity> extends SegmentedModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+		if (entity.isStarting() && this.chunk.yRot != ModMathHelper.modelDegrees(360.0F)){
+			this.chunk.yRot += ageInTicks * 0.5F;
+		} else {
+			this.chunk.yRot = 0.0F;
+		}
 	}
 
 	@Override

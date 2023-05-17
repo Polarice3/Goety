@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.utilities;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
@@ -38,7 +39,7 @@ public class ArrowRainTrapEntity extends AbstractTrapEntity {
                 ApostleEntity apostle = (ApostleEntity) this.getOwner();
                 ItemStack itemstack = apostle.getProjectile(apostle.getItemInHand(ProjectileHelper.getWeaponHoldingHand(apostle, item -> item instanceof net.minecraft.item.BowItem)));
                 for(int i = 0; i < 3; ++i) {
-                    AbstractArrowEntity abstractarrowentity = apostle.getArrow(itemstack, 1.0F);
+                    AbstractArrowEntity abstractarrowentity = apostle.getArrow(itemstack, Math.max(AttributesConfig.ApostleBowDamage.get() / 2.0F, 1.0F));
                     abstractarrowentity.addTag(ConstantPaths.rainArrow());
                     abstractarrowentity.setPos(this.getX() + this.random.nextInt(5), blockpos$mutable.getY(), this.getZ() + this.random.nextInt(5));
                     abstractarrowentity.shoot(0, -900, 0, 2, 10);

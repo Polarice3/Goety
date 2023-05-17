@@ -35,6 +35,7 @@ import java.util.UUID;
 public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttributes{
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
     protected static final DataParameter<Boolean> HOSTILE = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> NATURAL = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
     private final NearestAttackableTargetGoal<PlayerEntity> targetGoal = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true);
     public boolean limitedLifespan;
     public int limitedLifeTicks;
@@ -160,6 +161,7 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
         super.defineSynchedData();
         this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
         this.entityData.define(HOSTILE, false);
+        this.entityData.define(NATURAL, false);
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {
@@ -183,6 +185,10 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
             this.setHostile(compound.getBoolean("isHostile"));
         }
 
+        if (compound.contains("isNatural")){
+            this.setNatural(compound.getBoolean("isNatural"));
+        }
+
         if (compound.contains("LifeTicks")) {
             this.setLimitedLife(compound.getInt("LifeTicks"));
         }
@@ -198,6 +204,9 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
         if (this.isHostile()){
             compound.putBoolean("isHostile", this.isHostile());
         }
+        if (this.isNatural()){
+            compound.putBoolean("isNatural", this.isNatural());
+        }
         if (this.limitedLifespan) {
             compound.putInt("LifeTicks", this.limitedLifeTicks);
         }
@@ -212,6 +221,9 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         this.checkHostility();
+        if (pReason != SpawnReason.MOB_SUMMONED && this.getTrueOwner() == null){
+            this.setNatural(true);
+        }
         return pSpawnData;
     }
 
@@ -244,6 +256,14 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
 
     public boolean isHostile(){
         return this.entityData.get(HOSTILE);
+    }
+
+    public void setNatural(boolean natural){
+        this.entityData.set(NATURAL, natural);
+    }
+
+    public boolean isNatural(){
+        return this.entityData.get(NATURAL);
     }
 
     public boolean canBeAffected(EffectInstance pPotioneffect) {

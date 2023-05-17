@@ -16,6 +16,7 @@ import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -107,6 +108,16 @@ public abstract class Ritual {
     public void update(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
                        PlayerEntity castingPlayer, ItemStack activationItem,
                        List<Ingredient> remainingAdditionalIngredients, int time) {
+        List<PedestalTileEntity> pedestals = this.getPedestals(world, darkAltarPos);
+        for (PedestalTileEntity pedestal : pedestals) {
+            pedestal.itemStackHandler.map(handler -> {
+                ItemStack stack = handler.extractItem(0, 1, true);
+                if (!stack.isEmpty()) {
+                    addItemParticles((ServerWorld) world, pedestal.getBlockPos(), darkAltarPos, stack);
+                }
+                return true;
+            });
+        }
     }
 
     public void update(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
@@ -158,8 +169,6 @@ public abstract class Ritual {
                     ItemStack extracted = handler.extractItem(0, 1, false);
 
                     consumedIngredients.add(extracted);
-                    ((ServerWorld) world).sendParticles(ParticleTypes.LARGE_SMOKE, pedestal.getBlockPos().getX() + 0.5D, pedestal.getBlockPos().getY() + 1.5D, pedestal.getBlockPos().getZ() + 0.5D, 1, 0, 0, 0, 0);
-
                     if (villager){
                         world.playSound(null, darkAltarPos, SoundEvents.VILLAGER_HURT, SoundCategory.BLOCKS, 1.2F, (world.random.nextFloat() - world.random.nextFloat()) * 0.2F + 1.0F);
                     }
@@ -173,6 +182,13 @@ public abstract class Ritual {
 
         }
         return false;
+    }
+
+    private void addItemParticles(ServerWorld world, BlockPos pedestalPos, BlockPos darkAltarPos, ItemStack stack) {
+        double d0 = 0.1D * (darkAltarPos.getX() - pedestalPos.getX());
+        double d1 = 0.3D;
+        double d2 = 0.1D * (darkAltarPos.getZ() - pedestalPos.getZ());
+        world.sendParticles(new ItemParticleData(ParticleTypes.ITEM, stack), pedestalPos.getX() + 0.5D, pedestalPos.getY() + 1.5D, pedestalPos.getZ() + 0.5D, 0, d0, d1, d2, 1.0D);
     }
 
     public boolean areAdditionalIngredientsFulfilled(World world, BlockPos darkAltarPos,

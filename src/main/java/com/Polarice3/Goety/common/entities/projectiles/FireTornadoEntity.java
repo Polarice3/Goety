@@ -1,5 +1,6 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
+import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -9,6 +10,7 @@ import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -144,9 +146,11 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
                     }
                     this.suckInMobs(entity);
                     if (this.getTrueOwner() != null) {
-                        entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 6.0F);
                         if (this.getTrueOwner() instanceof ApostleEntity) {
+                            entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), AttributesConfig.ApostleMagicDamage.get().floatValue());
                             entity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
+                        } else {
+                            entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 6.0F);
                         }
                     } else {
                         if (!entity.fireImmune()) {
@@ -182,8 +186,14 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
     private void suckInMobs(LivingEntity livingEntity) {
         Vector3d vector3d = new Vector3d(this.getX() + 0.5, this.getY() + 0.5, this.getZ() + 0.5);
         Vector3d vector3d1 = vector3d.subtract(livingEntity.position()).normalize();
+        float y = 0.2F;
+        if (livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE) != null){
+            double knockback = 1.0D - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+            vector3d1.scale(knockback);
+            y *= knockback;
+        }
 
-        MobUtil.push(livingEntity, vector3d1.x, 0.2, vector3d1.z);
+        MobUtil.push(livingEntity, vector3d1.x, y, vector3d1.z);
     }
 
     public double AreaofEffect(){

@@ -33,19 +33,21 @@ public class BossBarEvent {
             if (!BOSSES.isEmpty()) {
                 int i = minecraft.getWindow().getGuiScaledWidth();
                 for (MobEntity boss : BOSSES) {
-                    if (event.getBossInfo().getId() == boss.getUUID()) {
-                        event.setCanceled(true);
-                        int k = i / 2 - 100;
-                        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                        drawBar(event.getMatrixStack(), k, event.getY(), event.getPartialTicks(), boss);
-                        ITextComponent itextcomponent = boss.getDisplayName();
-                        int l = minecraft.font.width(itextcomponent);
-                        int i1 = i / 2 - l / 2;
-                        minecraft.font.drawShadow(event.getMatrixStack(), itextcomponent, (float) i1, (float) event.getY() - 9, 16777215);
-                        if (event.getY() >= minecraft.getWindow().getGuiScaledHeight() / 3) {
-                            break;
+                    if (boss != null) {
+                        if (event.getBossInfo().getId() == boss.getUUID()) {
+                            event.setCanceled(true);
+                            int k = i / 2 - 100;
+                            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+                            drawBar(event.getMatrixStack(), k, event.getY(), event.getPartialTicks(), boss);
+                            ITextComponent itextcomponent = boss.getDisplayName();
+                            int l = minecraft.font.width(itextcomponent);
+                            int i1 = i / 2 - l / 2;
+                            minecraft.font.drawShadow(event.getMatrixStack(), itextcomponent, (float) i1, (float) event.getY() - 9, 16777215);
+                            if (event.getY() >= minecraft.getWindow().getGuiScaledHeight() / 3) {
+                                break;
+                            }
+                            event.setIncrement(12 + minecraft.font.lineHeight);
                         }
-                        event.setIncrement(12 + minecraft.font.lineHeight);
                     }
                 }
 
@@ -81,6 +83,13 @@ public class BossBarEvent {
                     shake = pEntity.getRandom().nextInt(pEntity.hurtTime);
                     minecraft.getTextureManager().bind(TEXTURE);
                     blit(pPoseStack, pX2, pY2, shake, damage, i, 8, 256, 256);
+                }
+                if (apostleEntity.isSmited()){
+                    float smite = 1.0F - ((float) apostleEntity.getAntiRegen() / apostleEntity.getAntiRegenTotal());
+                    minecraft.getTextureManager().bind(BOSS_BAR_1);
+                    blit(pPoseStack, pX2, pY2, offset, 16, i, 8, 364, 64);
+                    minecraft.getTextureManager().bind(BOSS_BAR_1);
+                    blit(pPoseStack, pX2, pY2, offset, 0, (int)(smite * i), 8, 364, 64);
                 }
             }
             minecraft.getTextureManager().bind(TEXTURE);

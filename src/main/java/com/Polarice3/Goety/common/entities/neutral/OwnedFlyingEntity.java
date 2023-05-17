@@ -20,19 +20,18 @@ public abstract class OwnedFlyingEntity extends OwnedEntity{
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
         super.addAdditionalSaveData(pCompound);
-        if (pCompound.contains("BoundX")) {
-            this.boundOrigin = new BlockPos(pCompound.getInt("BoundX"), pCompound.getInt("BoundY"), pCompound.getInt("BoundZ"));
-        }
-    }
-
-    public void readAdditionalSaveData(CompoundNBT pCompound) {
-        super.readAdditionalSaveData(pCompound);
         if (this.boundOrigin != null) {
             pCompound.putInt("BoundX", this.boundOrigin.getX());
             pCompound.putInt("BoundY", this.boundOrigin.getY());
             pCompound.putInt("BoundZ", this.boundOrigin.getZ());
         }
+    }
 
+    public void readAdditionalSaveData(CompoundNBT pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        if (pCompound.contains("BoundX")) {
+            this.boundOrigin = new BlockPos(pCompound.getInt("BoundX"), pCompound.getInt("BoundY"), pCompound.getInt("BoundZ"));
+        }
     }
 
     @Nullable

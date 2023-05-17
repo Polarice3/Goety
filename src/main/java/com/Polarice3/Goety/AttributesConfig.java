@@ -87,6 +87,7 @@ public class AttributesConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> BoneLordDamage;
 
     public static final ForgeConfigSpec.ConfigValue<Double> ApostleHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> ApostleMagicDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> VizierHealth;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> ApostleDamageCap;
@@ -301,6 +302,8 @@ public class AttributesConfig {
                         .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
                 ApostleBowDamage = BUILDER.comment("Multiplies Apostle's Bow damage, Default: 4")
                         .defineInRange("apostleBowDamage", 4, 2, Integer.MAX_VALUE);
+                ApostleMagicDamage = BUILDER.comment("Set Apostle's spell damage (ie, Fire Tornadoes, Fire Blasts, Roars), Default: 6.0")
+                        .defineInRange("apostleMagicDamage", 6.0, 6.0, Double.MAX_VALUE);
                 BUILDER.pop();
             BUILDER.pop();
         BUILDER.pop();
