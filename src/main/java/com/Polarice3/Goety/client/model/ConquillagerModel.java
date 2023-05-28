@@ -52,6 +52,7 @@ public class ConquillagerModel<T extends AbstractIllagerEntity> extends BipedMod
         this.body = new ModelRenderer(this);
         this.body.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.body.texOffs(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 12.0F, 6.0F, modelSize);
+        this.body.texOffs(2, 78).addBox(-5.0F, -0.5F, -5.0F, 10.0F, 2.0F, 10.0F, 0.0F, false);
         this.clothes = new ModelRenderer(this);
         this.clothes.setPos(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.clothes.texOffs(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8.0F, 18.0F, 6.0F, modelSize + 0.5F);

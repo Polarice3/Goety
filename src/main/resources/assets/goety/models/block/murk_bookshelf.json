@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "goety:blocks/murk_planks",
+    "side": "goety:blocks/murk_bookshelf"
+  }
+}

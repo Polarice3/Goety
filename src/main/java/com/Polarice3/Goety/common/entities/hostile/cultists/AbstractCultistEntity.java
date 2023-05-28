@@ -339,7 +339,7 @@ public abstract class AbstractCultistEntity extends AbstractRaiderEntity impleme
         } else if (entityIn instanceof IDeadMob) {
             return this.getTeam() == null && entityIn.getTeam() == null;
         } else if (entityIn instanceof AbstractPiglinEntity){
-            return this.isAlliedTo(entityIn);
+            return this.getTeam() == null && entityIn.getTeam() == null;
         } else {
             return entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() instanceof AbstractCultistEntity;
         }

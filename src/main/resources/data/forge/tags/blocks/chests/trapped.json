@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "goety:trapped_haunted_chest",
+    "goety:trapped_gloom_chest",
+    "goety:trapped_murk_chest"
+  ]
+}

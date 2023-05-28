@@ -10,6 +10,7 @@ import com.Polarice3.Goety.client.particles.*;
 import com.Polarice3.Goety.client.render.*;
 import com.Polarice3.Goety.client.render.layers.PlayerSoulShieldLayer;
 import com.Polarice3.Goety.client.render.tileentities.*;
+import com.Polarice3.Goety.common.blocks.ModChestBlock;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
 import com.Polarice3.Goety.common.items.FlameCaptureItem;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
@@ -36,10 +37,12 @@ import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -176,13 +179,15 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.ARCA.get(), ArcaTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.SIGN_TILE_ENTITIES.get(), SignTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.TALL_SKULL.get(), TallSkullTileEntityRenderer::new);
-        RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_CAGE_BLOCK.get(), RenderType.translucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.ARCA_BLOCK.get(), RenderType.translucent());
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MOD_CHEST.get(), ModChestTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.MOD_TRAPPED_CHEST.get(), ModChestTileEntityRenderer::new);
         RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_BARS_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.DARK_CLOUD.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.SOUL_LIGHT_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.DEAD_BLOCK.get(), RenderType.translucent());
         RenderTypeLookup.setRenderLayer(ModBlocks.FALSE_PORTAL.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(ModBlocks.CURSED_CAGE_BLOCK.get(), RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.ARCA_BLOCK.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_CACTUS.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.HAUNTED_BUSH.get(), RenderType.cutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.IRON_FINGER.get(), RenderType.cutout());
@@ -247,6 +252,18 @@ public class ClientEventBusSubscriber {
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
         ItemModelsProperties.register(ModItems.FLAME_CAPTURE.get(), new ResourceLocation("capture"),
                 (stack, world, living) -> FlameCaptureItem.hasEntity(stack) ? 1.0F : 0.0F);
+    }
+
+    @SubscribeEvent
+    public static void onTextureStitchEvent(TextureStitchEvent.Pre event) {
+        if (event.getMap().location() == Atlases.CHEST_SHEET) {
+            ModBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get).forEach(block ->
+            {
+                if (block instanceof ModChestBlock){
+                    ModChestTileEntityRenderer.stitchChests(event, block);
+                }
+            });
+        }
     }
 
     @SubscribeEvent

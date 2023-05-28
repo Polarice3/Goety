@@ -73,6 +73,16 @@ public class ModTileEntityType {
     public static final RegistryObject<TileEntityType<CultStatueTileEntity>> CULT_STATUE = TILEENTITY_TYPES.register("cult_statue",
             () -> TileEntityType.Builder.of(CultStatueTileEntity::new, ModBlocks.CULT_STATUE.get()).build(null));
 
+    public static final RegistryObject<TileEntityType<ModChestTileEntity>> MOD_CHEST = TILEENTITY_TYPES.register("chest",
+            () -> TileEntityType.Builder.of(ModChestTileEntity::new,
+                    ModBlocks.HAUNTED_CHEST.get(), ModBlocks.GLOOM_CHEST.get(), ModBlocks.MURK_CHEST.get())
+                    .build(null));
+
+    public static final RegistryObject<TileEntityType<ModTrappedChestTileEntity>> MOD_TRAPPED_CHEST = TILEENTITY_TYPES.register("trapped_chest",
+            () -> TileEntityType.Builder.of(ModTrappedChestTileEntity::new,
+                            ModBlocks.TRAPPED_HAUNTED_CHEST.get(), ModBlocks.TRAPPED_GLOOM_CHEST.get(), ModBlocks.TRAPPED_MURK_CHEST.get())
+                    .build(null));
+
     public static final RegistryObject<TileEntityType<ModSignTileEntity>> SIGN_TILE_ENTITIES = TILEENTITY_TYPES.register("sign",
             () -> TileEntityType.Builder.of(ModSignTileEntity::new,
                     ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get(),

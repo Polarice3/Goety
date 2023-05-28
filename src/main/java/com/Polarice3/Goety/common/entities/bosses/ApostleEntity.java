@@ -22,6 +22,7 @@ import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModMathHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -401,6 +402,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         this.populateDefaultEquipmentSlots(difficultyIn);
         this.populateDefaultEquipmentEnchantments(difficultyIn);
+        this.setHat(true);
         if (!this.hasCustomName()){
             int random = this.random.nextInt(18);
             int random2 = this.random.nextInt(12);
@@ -591,10 +593,13 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
         if (pSource.getDirectEntity() instanceof LivingEntity){
             LivingEntity living = (LivingEntity) pSource.getDirectEntity();
-            float smite = EnchantmentHelper.getDamageBonus(living.getMainHandItem(), CreatureAttribute.UNDEAD) / 2.5F;
+            int smite = EnchantmentHelper.getEnchantmentLevel(Enchantments.SMITE, living);
             if (smite > 0){
-                int smite2 = (int) MathHelper.clamp(smite, 1, 5);
+                int smite2 = MathHelper.clamp(smite, 1, 5);
                 int duration = ModMathHelper.ticksToSeconds(smite2);
+                if (this.Regen()){
+                    duration /= 2;
+                }
                 this.antiRegenTotal = duration;
                 this.antiRegen = duration;
                 if (this.level instanceof ServerWorld){
@@ -727,6 +732,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     public void aiStep() {
+        super.aiStep();
         if (this.level.getDifficulty() == Difficulty.PEACEFUL){
             this.remove();
         }
@@ -758,7 +764,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             }
         }
         if (this.isSettingupSecond()){
-            this.serverAiStep();
             this.heal(1.0F);
             for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3.0D), ALIVE)) {
                 if (!entity.isAlliedTo(this)) {
@@ -794,8 +799,6 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.setSettingupSecond(false);
                 this.setSecondPhase(true);
             }
-        } else {
-            super.aiStep();
         }
         LivingEntity target = this.getTarget();
         if (this.getMainHandItem().isEmpty() && this.isAlive()){
@@ -914,7 +917,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.setTarget(owned.getTrueOwner());
             }
             int i = this.level.getNearbyEntities(OwnedEntity.class, this.zombieCount, this, this.getBoundingBox().inflate(64.0D)).size();
-            if (this.tickCount % 100 == 0 && i < 16 && this.level.random.nextFloat() <= 0.25F){
+            if (this.tickCount % 100 == 0 && i < 16 && this.level.random.nextFloat() <= 0.25F && !this.isSettingupSecond()){
                 if (!this.level.isClientSide){
                     ServerWorld serverWorld = (ServerWorld) this.level;
                     Random r = this.level.random;
@@ -987,7 +990,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.teleportTowards(target);
             }
         }
-        if (this.isFiring()) {
+        if (this.isFiring() && !this.isSettingupSecond()) {
             ++this.f;
             if (this.f % 2 == 0 && this.f < 10) {
                 for (Entity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0D), ALIVE)) {
@@ -1017,6 +1020,14 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 target.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 100));
             }
         }
+    }
+
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.isSettingupSecond();
+    }
+
+    public boolean canSee(Entity p_149755_) {
+        return !this.isSettingupSecond() && super.canSee(p_149755_);
     }
 
     private void serverRoarParticles(){

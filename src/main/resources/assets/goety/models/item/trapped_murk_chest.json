@@ -1,0 +1,6 @@
+{
+    "parent": "goety:block/template_chest_item",
+    "textures": {
+        "chest": "goety:entity/chest/murk/trapped"
+    }
+}

@@ -155,6 +155,10 @@ public class ModBlocks {
             () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.HAUNTED));
     public static final RegistryObject<Block> HAUNTED_WALL_SIGN = BLOCKS.register("haunted_wall_sign",
             () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, HAUNTED_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(HAUNTED_SIGN.get()), ModWoodType.HAUNTED));
+    public static final RegistryObject<Block> HAUNTED_BOOKSHELF = BLOCKS.register("haunted_bookshelf",
+            () -> new BookshelfBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_GRAY).strength(1.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<ModChestBlock> HAUNTED_CHEST = BLOCKS.register("haunted_chest", () -> new ModChestBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<ModTrappedChestBlock> TRAPPED_HAUNTED_CHEST = BLOCKS.register("trapped_haunted_chest", () -> new ModTrappedChestBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD)));
 
     //Gloom
     public static final RegistryObject<Block> GLOOM_PLANKS = BLOCKS.register("gloom_planks",
@@ -184,8 +188,12 @@ public class ModBlocks {
             () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.GLOOM));
     public static final RegistryObject<Block> GLOOM_WALL_SIGN = BLOCKS.register("gloom_wall_sign",
             () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, GLOOM_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(GLOOM_SIGN.get()), ModWoodType.GLOOM));
+    public static final RegistryObject<Block> GLOOM_BOOKSHELF = BLOCKS.register("gloom_bookshelf",
+            () -> new BookshelfBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_GRAY).strength(1.5F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> GLOOM_LEAVES = BLOCKS.register("gloom_leaves", ModBlocks::leaves);
     public static final RegistryObject<Block> GLOOM_SAPLING = BLOCKS.register("gloom_sapling", () -> sapling(new GloomTree()));
+    public static final RegistryObject<ModChestBlock> GLOOM_CHEST = BLOCKS.register("gloom_chest", () -> new ModChestBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<ModTrappedChestBlock> TRAPPED_GLOOM_CHEST = BLOCKS.register("trapped_gloom_chest", () -> new ModTrappedChestBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD)));
 
     //Murk
     public static final RegistryObject<Block> MURK_PLANKS = BLOCKS.register("murk_planks",
@@ -215,8 +223,12 @@ public class ModBlocks {
             () -> new ModStandSignBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), ModWoodType.MURK));
     public static final RegistryObject<Block> MURK_WALL_SIGN = BLOCKS.register("murk_wall_sign",
             () -> new ModWallSignBlock(AbstractBlock.Properties.of(Material.WOOD, MURK_PLANKS.get().defaultMaterialColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(MURK_SIGN.get()), ModWoodType.MURK));
+    public static final RegistryObject<Block> MURK_BOOKSHELF = BLOCKS.register("murk_bookshelf",
+            () -> new BookshelfBlock(AbstractBlock.Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(1.5F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> MURK_LEAVES = BLOCKS.register("murk_leaves", ModBlocks::leaves);
     public static final RegistryObject<Block> MURK_SAPLING = BLOCKS.register("murk_sapling", () -> sapling(new MurkTree()));
+    public static final RegistryObject<ModChestBlock> MURK_CHEST = BLOCKS.register("murk_chest", () -> new ModChestBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD)));
+    public static final RegistryObject<ModTrappedChestBlock> TRAPPED_MURK_CHEST = BLOCKS.register("trapped_murk_chest", () -> new ModTrappedChestBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.5F).sound(SoundType.WOOD)));
 
     //Slabs
     public static final RegistryObject<Block> CURSED_STONE_SLAB_BLOCK = BLOCKS.register("cursed_stone_slab",
@@ -512,6 +524,12 @@ public class ModBlocks {
             () -> new BlockItemBase(DARK_PRESSURE_PLATE.get()));
     public static final RegistryObject<Item> HAUNTED_SIGN_ITEM = BLOCK_ITEMS.register("haunted_sign",
             () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.HAUNTED_SIGN.get(), ModBlocks.HAUNTED_WALL_SIGN.get()));
+    public static final RegistryObject<Item> HAUNTED_BOOKSHELF_ITEM = BLOCK_ITEMS.register("haunted_bookshelf",
+            () -> new BlockItemBase(HAUNTED_BOOKSHELF.get()));
+    public static final RegistryObject<Item> HAUNTED_CHEST_ITEM = BLOCK_ITEMS.register("haunted_chest",
+            () -> new BlockItem(HAUNTED_CHEST.get(), new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> TRAPPED_HAUNTED_CHEST_ITEM = BLOCK_ITEMS.register("trapped_haunted_chest",
+            () -> new BlockItem(TRAPPED_HAUNTED_CHEST.get(), new Item.Properties().tab(Goety.TAB)));
 
     //GloomItems
     public static final RegistryObject<Item> GLOOM_PLANKS_ITEM = BLOCK_ITEMS.register("gloom_planks",
@@ -544,8 +562,14 @@ public class ModBlocks {
             () -> new BlockItemBase(GLOOM_LEAVES.get()));
     public static final RegistryObject<Item> GLOOM_SIGN_ITEM = BLOCK_ITEMS.register("gloom_sign",
             () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.GLOOM_SIGN.get(), ModBlocks.GLOOM_WALL_SIGN.get()));
+    public static final RegistryObject<Item> GLOOM_BOOKSHELF_ITEM = BLOCK_ITEMS.register("gloom_bookshelf",
+            () -> new BlockItemBase(GLOOM_BOOKSHELF.get()));
     public static final RegistryObject<Item> GLOOM_SAPLING_ITEM = BLOCK_ITEMS.register("gloom_sapling",
             () -> new BlockItemBase(GLOOM_SAPLING.get()));
+    public static final RegistryObject<Item> GLOOM_CHEST_ITEM = BLOCK_ITEMS.register("gloom_chest",
+            () -> new BlockItem(GLOOM_CHEST.get(), new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> TRAPPED_GLOOM_CHEST_ITEM = BLOCK_ITEMS.register("trapped_gloom_chest",
+            () -> new BlockItem(TRAPPED_GLOOM_CHEST.get(), new Item.Properties().tab(Goety.TAB)));
 
     //MurkItems
     public static final RegistryObject<Item> MURK_PLANKS_ITEM = BLOCK_ITEMS.register("murk_planks",
@@ -578,8 +602,14 @@ public class ModBlocks {
             () -> new BlockItemBase(MURK_LEAVES.get()));
     public static final RegistryObject<Item> MURK_SIGN_ITEM = BLOCK_ITEMS.register("murk_sign",
             () -> new SignItem((new Item.Properties()).stacksTo(16).tab(Goety.TAB), ModBlocks.MURK_SIGN.get(), ModBlocks.MURK_WALL_SIGN.get()));
+    public static final RegistryObject<Item> MURK_BOOKSHELF_ITEM = BLOCK_ITEMS.register("murk_bookshelf",
+            () -> new BlockItemBase(MURK_BOOKSHELF.get()));
     public static final RegistryObject<Item> MURK_SAPLING_ITEM = BLOCK_ITEMS.register("murk_sapling",
             () -> new BlockItemBase(MURK_SAPLING.get()));
+    public static final RegistryObject<Item> MURK_CHEST_ITEM = BLOCK_ITEMS.register("murk_chest",
+            () -> new BlockItem(MURK_CHEST.get(), new Item.Properties().tab(Goety.TAB)));
+    public static final RegistryObject<Item> TRAPPED_MURK_CHEST_ITEM = BLOCK_ITEMS.register("trapped_murk_chest",
+            () -> new BlockItem(TRAPPED_MURK_CHEST.get(), new Item.Properties().tab(Goety.TAB)));
 
     private static LeavesBlock leaves() {
         return new LeavesBlock(AbstractBlock.Properties.of(Material.CACTUS).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(ModBlocks::ocelotOrParrot).isSuffocating(ModBlocks::never).isViewBlocking(ModBlocks::never));
