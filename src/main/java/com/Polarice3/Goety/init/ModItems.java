@@ -11,7 +11,7 @@ import com.Polarice3.Goety.common.items.curios.PendantOfHungerItem;
 import com.Polarice3.Goety.common.items.curios.RingItem;
 import com.Polarice3.Goety.common.items.equipment.*;
 import com.Polarice3.Goety.common.items.magic.*;
-import com.Polarice3.Goety.common.spells.*;
+import com.Polarice3.Goety.common.magic.spells.*;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;

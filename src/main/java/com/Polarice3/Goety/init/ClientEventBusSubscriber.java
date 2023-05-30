@@ -170,7 +170,8 @@ public class ClientEventBusSubscriber {
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.FORBIDDEN_GRASS.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.GHOST_FIRE_TRAP.get(), ModTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CULT_STATUE.get(), ModTileEntityRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSEDBURNER.get(), CursedBurnerTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.HOOK_BELL.get(), HookBellTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_BURNER.get(), CursedBurnerTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_KILN.get(), CursedKilnTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.CURSED_CAGE.get(), CursedCageTileEntityRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntityType.DARK_ALTAR.get(), DarkAltarTileEntityRenderer::new);
@@ -312,6 +313,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.BURNING.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.CULT_SPELL.get(), SpellParticle.MobFactory::new);
         particles.register(ModParticleTypes.SONIC_BOOM.get(), SonicBoomParticle.Factory::new);
+        particles.register(ModParticleTypes.SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
         particles.register(ModParticleTypes.CONFUSED.get(), HeartParticle.Factory::new);
     }
 

@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.client.particles;
 
 import com.Polarice3.Goety.Goety;
+import com.mojang.serialization.Codec;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.fml.RegistryObject;
@@ -72,4 +73,12 @@ public class ModParticleTypes {
 
     public static final RegistryObject<BasicParticleType> LEECH = PARTICLE_TYPES.register("leech",
             () -> new BasicParticleType(false));
+
+    public static final RegistryObject<ParticleType<ShockwaveParticleOption>> SHOCKWAVE = PARTICLE_TYPES.register("shockwave",
+            () -> new ParticleType<ShockwaveParticleOption>(false, ShockwaveParticleOption.DESERIALIZER) {
+                @Override
+                public Codec codec() {
+                    return ShockwaveParticleOption.CODEC;
+                }
+            });
 }

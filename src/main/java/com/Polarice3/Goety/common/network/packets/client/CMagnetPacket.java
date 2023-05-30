@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.network.packets.client;
 
-import com.Polarice3.Goety.common.spells.cantrips.MagnetCantrip;
+import com.Polarice3.Goety.common.magic.cantrips.MagnetCantrip;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;

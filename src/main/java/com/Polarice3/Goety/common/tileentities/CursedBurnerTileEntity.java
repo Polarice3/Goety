@@ -35,7 +35,7 @@ public class CursedBurnerTileEntity extends TileEntity implements IClearable, IT
     private final int[] cookingTime = new int[1];
 
     public CursedBurnerTileEntity() {
-        super(ModTileEntityType.CURSEDBURNER.get());
+        super(ModTileEntityType.CURSED_BURNER.get());
     }
 
     public void tick() {

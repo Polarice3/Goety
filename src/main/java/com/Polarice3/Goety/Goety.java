@@ -114,7 +114,7 @@ public class Goety {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModEntityType.ENTITY_TYPES.register(eventBus);
-        ModTileEntityType.TILEENTITY_TYPES.register(eventBus);
+        ModTileEntityType.TILE_ENTITY_TYPES.register(eventBus);
         ModSpawnEggs.ITEMS.register(eventBus);
         ModPotions.POTIONS.register(eventBus);
         ModContainerType.CONTAINER_TYPE.register(eventBus);

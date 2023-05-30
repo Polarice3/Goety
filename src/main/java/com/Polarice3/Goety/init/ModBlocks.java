@@ -74,6 +74,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> FALSE_PORTAL = BLOCKS.register("false_portal", FalsePortalBlock::new);
     public static final RegistryObject<Block> DEAD_TNT = BLOCKS.register("dead_tnt", DeadTNTBlock::new);
     public static final RegistryObject<Block> FROST_BLOCK = BLOCKS.register("frost_block", CursedMetalBlock::new);
+    public static final RegistryObject<Block> HOOK_BELL = BLOCKS.register("hook_bell", HookBellBlock::new);
     public static final RegistryObject<Block> FORBIDDEN_GRASS = BLOCKS.register("forbidden_grass", ForbiddenGrassBlock::new);
     public static final RegistryObject<Block> GRAND_TORCH = BLOCKS.register("grand_torch", () -> new BigTorchBlock(AbstractBlock.Properties.of(Material.DECORATION)
             .noCollission()
@@ -448,6 +449,8 @@ public class ModBlocks {
             () -> new TallSkullItem(ModBlocks.TALL_SKULL_BLOCK.get(), ModBlocks.WALL_TALL_SKULL_BLOCK.get(), (new Item.Properties()).tab(Goety.TAB).rarity(Rarity.UNCOMMON).setISTER(() -> ModItemTERenderer::new)));
     public static final RegistryObject<Item> FROST_BLOCK_ITEM = BLOCK_ITEMS.register("frost_block",
             () -> new BlockItemBase(FROST_BLOCK.get()));
+    public static final RegistryObject<Item> HOOK_BELL_ITEM = BLOCK_ITEMS.register("hook_bell",
+            () -> new BlockItemBase(HOOK_BELL.get()));
     public static final RegistryObject<Item> FORBIDDEN_GRASS_BLOCK_ITEM = BLOCK_ITEMS.register("forbidden_grass",
             () -> new BlockItemBase(FORBIDDEN_GRASS.get()));
     public static final RegistryObject<Item> ROTTEN_PUMPKIN_BLOCK_ITEM = BLOCK_ITEMS.register("rotten_pumpkin",
