@@ -305,7 +305,7 @@ public class RottreantEntity extends SummonedEntity {
             if (!this.isReadyHarvest()) {
                 ++this.mushroomGrow;
                 int minutes = felArmor ? 2 : 5;
-                if (this.mushroomGrow >= ModMathHelper.ticksToMinutes(minutes)) {
+                if (this.mushroomGrow >= ModMathHelper.minutesToTicks(minutes)) {
                     this.setReadyHarvest(true);
                     this.mushroomGrow = 0;
                     this.playSound(SoundEvents.ROOTS_PLACE, 1.0F, 1.0F);
@@ -314,7 +314,7 @@ public class RottreantEntity extends SummonedEntity {
                     }
                 }
             }
-            if (this.level.random.nextInt(25) == 0 && this.tickCount % ModMathHelper.ticksToSeconds(30) == 0) {
+            if (this.level.random.nextInt(25) == 0 && this.tickCount % ModMathHelper.secondsToTicks(30) == 0) {
                 int i = 5;
                 int j = 4;
                 BlockPos pPos = this.blockPosition();
@@ -418,7 +418,7 @@ public class RottreantEntity extends SummonedEntity {
             }
         }
         float healAmount = felArmor ? 5.0F : 2.0F;
-        int time = this.isStaying() ? ModMathHelper.ticksToSeconds(5) : ModMathHelper.ticksToSeconds(15);
+        int time = this.isStaying() ? ModMathHelper.secondsToTicks(5) : ModMathHelper.secondsToTicks(15);
         if ((this.level.isDay() && (this.level.canSeeSky(this.blockPosition()) || this.getBlockStateOn() instanceof IGrowable))) {
             if (this.tickCount % time == 0) {
                 if (this.getHealth() < this.getMaxHealth()) {
@@ -441,7 +441,7 @@ public class RottreantEntity extends SummonedEntity {
                 }
             }
         } else if (this.isInWater() || this.isUnderWater()){
-            if (this.tickCount % ModMathHelper.ticksToSeconds(15) == 0){
+            if (this.tickCount % ModMathHelper.secondsToTicks(15) == 0){
                 if (this.getHealth() < this.getMaxHealth()){
                     this.heal(healAmount);
                     this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
@@ -510,7 +510,7 @@ public class RottreantEntity extends SummonedEntity {
         if (item instanceof BoneMealItem){
             if (this.isMycelium()){
                 if (!this.isReadyHarvest()) {
-                    this.mushroomGrow -= ModMathHelper.ticksToMinutes(1);
+                    this.mushroomGrow -= ModMathHelper.minutesToTicks(1);
                     if (this.level.isClientSide) {
                         this.addParticlesAroundSelf(ParticleTypes.MYCELIUM);
                     }

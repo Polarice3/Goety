@@ -56,7 +56,7 @@ public class PilgrimSpawner {
                             int d0 = (int) MathHelper.clamp((double)m, (double)i + (double)f, (double)i + 32.0D - (double)f);
                             int d1 = (int) MathHelper.clamp((double)n, (double)k + (double)f, (double)k + 32.0D - (double)f);
                             BlockPos blockpos = getTopNonCollidingPos(pLevel, ModEntityType.FANATIC.get(), d0, d1);
-                            if (!pLevel.hasChunksAt(blockpos.getX() - 10, blockpos.getY() - 10, blockpos.getZ() - 10, blockpos.getX() + 10, blockpos.getY() + 10, blockpos.getZ() + 10)) {
+                            if (!pLevel.isAreaLoaded(blockpos, 10)) {
                                 return 0;
                             } else {
                                 int i1 = 0;

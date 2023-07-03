@@ -3,6 +3,7 @@ package com.Polarice3.Goety.utils;
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -124,5 +125,19 @@ public class ServerParticleUtil {
                 }
             });
         }
+    }
+
+    public static void addParticlesAroundSelf(ServerWorld serverLevel, IParticleData particleOptions, LivingEntity living){
+        for(int i = 0; i < 5; ++i) {
+            double d0 = serverLevel.random.nextGaussian() * 0.02D;
+            double d1 = serverLevel.random.nextGaussian() * 0.02D;
+            double d2 = serverLevel.random.nextGaussian() * 0.02D;
+            serverLevel.sendParticles(particleOptions, living.getRandomX(1.0D), living.getRandomY() + 1.0D, living.getRandomZ(1.0D), 0, d0, d1, d2, 0.5F);
+        }
+    }
+
+    public static void addAuraParticles(ServerWorld serverLevel, IParticleData particleOptions, LivingEntity livingEntity, float radius){
+        serverLevel.sendParticles(particleOptions, livingEntity.getX() + Math.cos(livingEntity.tickCount * 0.25) * radius, livingEntity.getY() + 0.5, livingEntity.getZ() + Math.sin(livingEntity.tickCount * 0.25) * radius, 0, 0, 0, 0, 0.5F);
+        serverLevel.sendParticles(particleOptions, livingEntity.getX() + Math.cos(livingEntity.tickCount * 0.25 + Math.PI) * radius, livingEntity.getY() + 0.5, livingEntity.getZ() + Math.sin(livingEntity.tickCount * 0.25 + Math.PI) * radius, 0, 0, 0, 0, 0.5F);
     }
 }

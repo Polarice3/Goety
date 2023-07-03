@@ -31,6 +31,11 @@ public class IceChunkSpell extends Spells {
         return ModSounds.PREPARE_SPELL.get();
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.FROST;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         int range = 16;
         double radius = 2.0D;
@@ -42,7 +47,6 @@ public class IceChunkSpell extends Spells {
                 radius += WandUtil.getLevels(ModEnchantments.RADIUS.get(), playerEntity);
                 damage += WandUtil.getLevels(ModEnchantments.POTENCY.get(), playerEntity);
             }
-            this.IncreaseInfamy(SpellConfig.IceChunkInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         RayTraceResult rayTraceResult = this.rayTrace(worldIn, entityLiving, range, radius);
         if (rayTraceResult instanceof EntityRayTraceResult){

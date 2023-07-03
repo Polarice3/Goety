@@ -37,7 +37,6 @@ public class WitchGaleSpell extends Spells {
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(SpellConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         Random random = worldIn.random;
@@ -62,7 +61,6 @@ public class WitchGaleSpell extends Spells {
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(SpellConfig.WitchGaleInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         Random random = worldIn.random;

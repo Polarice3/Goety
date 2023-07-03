@@ -33,7 +33,7 @@ public class FireTornadoTrapEntity extends AbstractTrapEntity {
                         double d3 = livingentity.getZ() - this.getZ();
                         FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.owner, d1, d2, d3);
                         fireTornadoEntity.setOwnerId(this.owner.getUUID());
-                        fireTornadoEntity.setTotallife(1200);
+                        fireTornadoEntity.setTotalLife(1200);
                         fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
                         this.level.addFreshEntity(fireTornadoEntity);
                         this.remove();
@@ -43,14 +43,14 @@ public class FireTornadoTrapEntity extends AbstractTrapEntity {
                 } else {
                     FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.owner, 0, 0, 0);
                     fireTornadoEntity.setOwnerId(this.owner.getUUID());
-                    fireTornadoEntity.setTotallife(1200);
+                    fireTornadoEntity.setTotalLife(1200);
                     fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
                     this.level.addFreshEntity(fireTornadoEntity);
                     this.remove();
                 }
             } else {
                 FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(ModEntityType.FIRE_TORNADO.get(), this.level);
-                fireTornadoEntity.setTotallife(1200);
+                fireTornadoEntity.setTotalLife(1200);
                 fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
                 this.level.addFreshEntity(fireTornadoEntity);
                 this.remove();

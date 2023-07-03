@@ -28,7 +28,7 @@ public class CultStatueTileEntity extends TileEntity implements ITickableTileEnt
                 int j = this.worldPosition.getY();
                 int k = this.worldPosition.getZ();
                 List<AbstractCultistEntity> cultists = this.level.getEntitiesOfClass(AbstractCultistEntity.class, (new AxisAlignedBB(i, j, k, i, j - 4, k)).inflate(8.0D, 8.0D, 8.0D));
-                if (this.tickCount % ModMathHelper.ticksToSeconds(5) == 0){
+                if (this.tickCount % ModMathHelper.secondsToTicks(5) == 0){
                     for (AbstractCultistEntity cultist : cultists){
                         cultist.addEffect(new EffectInstance(ModEffects.BUFF.get(), 100));
                     }

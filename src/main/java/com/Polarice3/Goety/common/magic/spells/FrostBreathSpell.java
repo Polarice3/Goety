@@ -31,6 +31,11 @@ public class FrostBreathSpell extends SpewingSpell {
     }
 
     @Override
+    public SpellType getSpellType(){
+        return SpellType.FROST;
+    }
+
+    @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         float enchantment = 0;
         int duration = 1;
@@ -42,7 +47,6 @@ public class FrostBreathSpell extends SpewingSpell {
                 duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.FrostBreathInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 15)) {
@@ -71,7 +75,6 @@ public class FrostBreathSpell extends SpewingSpell {
                 duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.FrostBreathInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 18)) {

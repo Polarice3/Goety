@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -36,6 +35,11 @@ public class IllusionSpell extends Spells {
 
     public SoundEvent CastingSound() {
         return SoundEvents.ILLUSIONER_PREPARE_MIRROR;
+    }
+
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.ILL;
     }
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
@@ -74,7 +78,6 @@ public class IllusionSpell extends Spells {
         for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             worldIn.sendParticles(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(SpellConfig.IllusionInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
@@ -113,7 +116,6 @@ MobUtil.moveDownToGround(summonedentity);
         for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             worldIn.sendParticles(ParticleTypes.CLOUD, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 0, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(SpellConfig.IllusionInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 }

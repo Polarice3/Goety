@@ -46,7 +46,6 @@ public class LaunchSpell extends InstantCastSpells {
             player.hasImpulse = true;
             player.fallDistance = 0;
             player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 20 * duration));
-            this.IncreaseInfamy(SpellConfig.LaunchInfamyChance.get(), player);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
     }
@@ -71,7 +70,6 @@ public class LaunchSpell extends InstantCastSpells {
             player.hasImpulse = true;
             player.fallDistance = 0;
             player.addEffect(new EffectInstance(Effects.SLOW_FALLING, 20 * duration));
-            this.IncreaseInfamy(SpellConfig.LaunchInfamyChance.get(), player);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
     }

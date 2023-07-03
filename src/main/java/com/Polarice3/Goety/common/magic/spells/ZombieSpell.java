@@ -51,6 +51,11 @@ public class ZombieSpell extends SummonSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.NECROMANCY;
+    }
+
     public void commonResult(ServerWorld worldIn, LivingEntity entityLiving){
         if (entityLiving instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) entityLiving;
@@ -58,7 +63,6 @@ public class ZombieSpell extends SummonSpells {
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            this.IncreaseInfamy(SpellConfig.ZombieInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {
@@ -99,7 +103,7 @@ public class ZombieSpell extends SummonSpells {
                 }
                 summonedentity = summoned;
                 entityLiving.setSecondsOnFire(15);
-                entityLiving.addEffect(new EffectInstance(ModEffects.CURSED.get(), ModMathHelper.ticksToSeconds(15)));
+                entityLiving.addEffect(new EffectInstance(ModEffects.CURSED.get(), ModMathHelper.secondsToTicks(15)));
             } else {
                 summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
             }
@@ -146,7 +150,7 @@ public class ZombieSpell extends SummonSpells {
                     }
                     summonedentity = summoned;
                     entityLiving.setSecondsOnFire(15);
-                    entityLiving.addEffect(new EffectInstance(ModEffects.CURSED.get(), ModMathHelper.ticksToSeconds(15)));
+                    entityLiving.addEffect(new EffectInstance(ModEffects.CURSED.get(), ModMathHelper.secondsToTicks(15)));
                 } else {
                     summonedentity = new ZombieMinionEntity(ModEntityType.ZOMBIE_MINION.get(), worldIn);
                 }

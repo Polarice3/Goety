@@ -14,15 +14,15 @@
     {
       "type": "patchouli:crafting",
       "recipe": "goety:scrying_mirror",
-      "text": "Through the use of the Eye of Ender, you've found a way to spy on the Illagers back. Using the mirror on a Chicken or Cat will give you an idea on how much they see you as a threat."
+      "text": "Through the use of the Eye of Ender, you've found a way to spy on the Illagers back."
     },
     {
       "type": "patchouli:text",
-      "text": "The fact that Illagers use Cats as a means of spying suddenly gave you an epiphany. It was through the eyes of the Cats that the Illagers are able to decipher where those who gain their scorn are located, and what Village is to be raided. You theorized that Cats have a more stronger connection than Chickens when it comes to scrying, at least ones within Villages, as the Illagers would spy on them more frequently."
+      "text": "The fact that Illagers use these animals as a means of spying suddenly gave you an epiphany. It was through their eyes that the Illagers are able to decipher where those who gain their scorn are located, and what Village is to be raided."
     },
     {
       "type": "patchouli:text",
-      "text": "With such strong connection, perhaps it is possible to find one of their mansions by scrying one of the Village's Cats. By having an Empty Map offhand, you managed to write down the location of a Woodland Mansion, however, either you left some remnant of your spying or an Evoker spotted your scrying, the Illagers are aware of your ability to spy on them. It seems scrying for their mansions gives you a lot of Infamy among them."
+      "text": "With such connection, perhaps it is possible to find one of their mansions by scrying either a Chicken or a Cat. By having an Empty Map offhand, you managed to write down the location of a Woodland Mansion, however, you must be careful as you can either leave some remnant of your spying or an Evoker would spot your scrying!"
     }
   ]
 }

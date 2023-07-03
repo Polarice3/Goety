@@ -4,7 +4,6 @@ import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.PoisonBallEntity;
 import com.Polarice3.Goety.common.magic.InstantCastSpells;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -23,13 +22,17 @@ public class PoisonBallSpell extends InstantCastSpells {
     }
 
     @Override
+    public SpellType getSpellType(){
+        return SpellType.FEL;
+    }
+
+    @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         PoisonBallEntity poisonBall = new PoisonBallEntity(entityLiving, worldIn);
         poisonBall.setOwner(entityLiving);
         poisonBall.shootFromRotation(entityLiving, entityLiving.xRot, entityLiving.yRot, 0.0F, 1.5F, 1.0F);
         worldIn.addFreshEntity(poisonBall);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -47,6 +50,5 @@ public class PoisonBallSpell extends InstantCastSpells {
             worldIn.addFreshEntity(poisonBall1);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.PoisonballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

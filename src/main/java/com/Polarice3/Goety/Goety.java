@@ -6,9 +6,6 @@ import com.Polarice3.Goety.client.inventory.crafting.ModRecipeSerializer;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.CommonProxy;
 import com.Polarice3.Goety.common.blocks.ModWoodType;
-import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
-import com.Polarice3.Goety.common.capabilities.infamy.InfamyImp;
-import com.Polarice3.Goety.common.capabilities.infamy.InfamyStore;
 import com.Polarice3.Goety.common.capabilities.lichdom.ILichdom;
 import com.Polarice3.Goety.common.capabilities.lichdom.LichImp;
 import com.Polarice3.Goety.common.capabilities.lichdom.LichStore;
@@ -151,7 +148,6 @@ public class Goety {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        CapabilityManager.INSTANCE.register(IInfamy.class, new InfamyStore(), InfamyImp::new);
         CapabilityManager.INSTANCE.register(ILichdom.class, new LichStore(), LichImp::new);
         CapabilityManager.INSTANCE.register(ISoulEnergy.class, new SEStore(), SEImp::new);
         CapabilityManager.INSTANCE.register(ISpiderLevels.class, new SpiderLevelsStore(), SpiderLevelsImp::new);
@@ -268,6 +264,7 @@ public class Goety {
         event.put(ModEntityType.CRIMSON_SPIDER.get(), CrimsonSpiderEntity.setCustomAttributes().build());
         event.put(ModEntityType.DISCIPLE.get(), DiscipleEntity.setCustomAttributes().build());
         event.put(ModEntityType.BELDAM.get(), BeldamEntity.setCustomAttributes().build());
+        event.put(ModEntityType.OBSIDIAN_MONOLITH.get(), ObsidianMonolithEntity.setCustomAttributes().build());
         event.put(ModEntityType.APOSTLE.get(), ApostleEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_VILLAGER_MINION.get(), ZombieVillagerMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_VILLAGER_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());

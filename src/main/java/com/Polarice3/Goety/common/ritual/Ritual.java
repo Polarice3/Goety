@@ -7,6 +7,9 @@ import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import com.Polarice3.Goety.common.tileentities.PedestalTileEntity;
 import com.Polarice3.Goety.init.ModItems;
+import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.ItemHelper;
+import com.Polarice3.Goety.utils.ModMathHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
@@ -14,7 +17,9 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -39,8 +44,6 @@ public abstract class Ritual {
     public static final int PEDESTAL_RANGE = 8;
 
     public static final int SACRIFICE_DETECTION_RANGE = 8;
-
-    public static final int ITEM_USE_DETECTION_RANGE = 16;
 
     public RitualRecipe recipe;
 
@@ -85,7 +88,7 @@ public abstract class Ritual {
 
     public void start(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
                       PlayerEntity castingPlayer, ItemStack activationItem) {
-        world.playSound(null, darkAltarPos, SoundEvents.BEACON_ACTIVATE, SoundCategory.BLOCKS, 1, 1);
+        world.playSound(null, darkAltarPos, ModSounds.ALTAR_START.get(), SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
     }
 
     public void finish(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
@@ -96,18 +99,24 @@ public abstract class Ritual {
             world.playSound(null, darkAltarPos, SoundEvents.CHAIN_BREAK, SoundCategory.BLOCKS, 1.5F,
                     1.0f);
         }
-        world.playSound(null, darkAltarPos, SoundEvents.BEACON_POWER_SELECT, SoundCategory.BLOCKS, 0.7f,
-                0.7f);
+        world.playSound(null, darkAltarPos, ModSounds.ALTAR_FINISH.get(), SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
     }
 
     public void interrupt(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
                           PlayerEntity castingPlayer, ItemStack activationItem) {
-        world.playSound(null, darkAltarPos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 0.7f, 0.7f);
+        world.playSound(null, darkAltarPos, ModSounds.SPELL_FAIL.get(), SoundCategory.BLOCKS, 0.7f, 0.7f);
     }
 
     public void update(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
                        PlayerEntity castingPlayer, ItemStack activationItem,
-                       List<Ingredient> remainingAdditionalIngredients, int time) {
+                       List<Ingredient> remainingAdditionalIngredients, int time, int totalTime) {
+
+        int progress = totalTime - time;
+
+        if (world.getGameTime() % ModMathHelper.secondsToTicks(4) == 0 && ModMathHelper.secondsToTicks(4) > progress) {
+            world.playSound(null, darkAltarPos, ModSounds.ALTAR_LOOP.get(), SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
+        }
+
         List<PedestalTileEntity> pedestals = this.getPedestals(world, darkAltarPos);
         for (PedestalTileEntity pedestal : pedestals) {
             pedestal.itemStackHandler.map(handler -> {
@@ -121,9 +130,9 @@ public abstract class Ritual {
     }
 
     public void update(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
-                       PlayerEntity castingPlayer, ItemStack activationItem, int time) {
+                       PlayerEntity castingPlayer, ItemStack activationItem, int time, int totalTime) {
         this.update(world, darkAltarPos, tileEntity, castingPlayer, activationItem, new ArrayList<Ingredient>(),
-                time);
+                time, totalTime);
     }
 
     public boolean identify(World world, BlockPos darkAltarPos, ItemStack activationItem) {
@@ -169,6 +178,16 @@ public abstract class Ritual {
                     ItemStack extracted = handler.extractItem(0, 1, false);
 
                     consumedIngredients.add(extracted);
+
+                    if (extracted.getItem() instanceof BucketItem){
+                        BucketItem bucketItem = (BucketItem) extracted.getItem();
+                        if (!bucketItem.getFluid().defaultFluidState().isEmpty()) {
+                            ItemHelper.addItemEntity(world, pedestal.getBlockPos(), new ItemStack(Items.BUCKET));
+                            world.playSound(null, pedestal.getBlockPos(), SoundEvents.BUCKET_EMPTY, SoundCategory.BLOCKS,
+                                    0.7F, 0.7F);
+                        }
+                    }
+
                     if (villager){
                         world.playSound(null, darkAltarPos, SoundEvents.VILLAGER_HURT, SoundCategory.BLOCKS, 1.2F, (world.random.nextFloat() - world.random.nextFloat()) * 0.2F + 1.0F);
                     }

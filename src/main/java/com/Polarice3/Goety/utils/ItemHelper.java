@@ -7,6 +7,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ItemHelper {
 
@@ -27,6 +29,15 @@ public class ItemHelper {
 
     public static ItemEntity itemEntityDrop(LivingEntity livingEntity, ItemStack itemStack){
         return new ItemEntity(livingEntity.level, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), itemStack);
+    }
+
+    public static void addItemEntity(World level, BlockPos blockPos, ItemStack itemStack){
+        double d0 = (double) (level.random.nextFloat() * 0.5F) + 0.25D;
+        double d1 = (double) (level.random.nextFloat() * 0.5F) + 0.25D;
+        double d2 = (double) (level.random.nextFloat() * 0.5F) + 0.25D;
+        ItemEntity itementity = new ItemEntity(level, (double) blockPos.getX() + d0, (double) blockPos.getY() + d1, (double) blockPos.getZ() + d2, itemStack);
+        itementity.setDefaultPickUpDelay();
+        level.addFreshEntity(itementity);
     }
 
     public static ItemStack findItem(PlayerEntity playerEntity, Item item){

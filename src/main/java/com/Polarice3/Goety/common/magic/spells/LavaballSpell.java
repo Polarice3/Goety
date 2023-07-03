@@ -4,7 +4,6 @@ import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.LavaballEntity;
 import com.Polarice3.Goety.common.magic.Spells;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -28,6 +27,11 @@ public class LavaballSpell extends Spells {
     }
 
     @Override
+    public SpellType getSpellType(){
+        return SpellType.NETHER;
+    }
+
+    @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         LavaballEntity fireballEntity = new LavaballEntity(worldIn,
@@ -43,7 +47,6 @@ public class LavaballSpell extends Spells {
         }
         worldIn.addFreshEntity(fireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -78,6 +81,5 @@ public class LavaballSpell extends Spells {
             worldIn.addFreshEntity(lavaballEntity);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.LavaballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

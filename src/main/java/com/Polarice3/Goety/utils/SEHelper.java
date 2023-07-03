@@ -50,6 +50,14 @@ public class SEHelper {
         getCapability(player).setSoulEnergy(souls);
     }
 
+    public static void setSoulsAmount(PlayerEntity player, int souls){
+        if (SEHelper.getSEActive(player)){
+            SEHelper.setSESouls(player, souls);
+        } else if (!GoldTotemFinder.FindTotem(player).isEmpty()){
+            GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), souls);
+        }
+    }
+
     public static BlockPos getArcaBlock(PlayerEntity player){
         return getCapability(player).getArcaBlock();
     }
@@ -74,6 +82,15 @@ public class SEHelper {
         } else {
             return !GoldTotemFinder.FindTotem(player).isEmpty() && GoldTotemItem.currentSouls(GoldTotemFinder.FindTotem(player)) > souls;
         }
+    }
+
+    public static int getSoulAmountInt(PlayerEntity player){
+        if (SEHelper.getSEActive(player)){
+            return SEHelper.getSESouls(player);
+        } else if (!GoldTotemFinder.FindTotem(player).isEmpty()){
+            return GoldTotemItem.currentSouls(GoldTotemFinder.FindTotem(player));
+        }
+        return 0;
     }
 
     public static int getSoulGiven(LivingEntity victim){

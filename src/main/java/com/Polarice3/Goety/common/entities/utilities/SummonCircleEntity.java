@@ -30,6 +30,7 @@ public class SummonCircleEntity extends Entity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(SummonCircleEntity.class, DataSerializers.OPTIONAL_UUID);
     public Entity entity;
     public boolean preMade;
+    public boolean noPos;
     public int lifeSpan = 20;
 
     public SummonCircleEntity(EntityType<?> pType, World pLevel) {
@@ -49,6 +50,15 @@ public class SummonCircleEntity extends Entity {
         this.setPos(pPos.getX(), pPos.getY(), pPos.getZ());
         this.entity = pEntity;
         this.preMade = preMade;
+        this.setTrueOwner(pOwner);
+    }
+
+    public SummonCircleEntity(World pLevel, BlockPos pPos, Entity pEntity, boolean preMade, boolean noPos, LivingEntity pOwner){
+        this(ModEntityType.SUMMON_CIRCLE.get(), pLevel);
+        this.setPos(pPos.getX(), pPos.getY(), pPos.getZ());
+        this.entity = pEntity;
+        this.preMade = preMade;
+        this.noPos = noPos;
         this.setTrueOwner(pOwner);
     }
 
@@ -78,6 +88,7 @@ public class SummonCircleEntity extends Entity {
             }
         }
         this.preMade = pCompound.getBoolean("preMade");
+        this.noPos = pCompound.getBoolean("noPos");
         this.lifeSpan = pCompound.getInt("lifeSpan");
     }
 
@@ -87,6 +98,7 @@ public class SummonCircleEntity extends Entity {
             pCompound.putUUID("Owner", this.getOwnerId());
         }
         pCompound.putBoolean("preMade", this.preMade);
+        pCompound.putBoolean("noPos", this.noPos);
         pCompound.putInt("lifeSpan", this.lifeSpan);
     }
 
@@ -147,7 +159,9 @@ public class SummonCircleEntity extends Entity {
                     }
                 }
                 if (this.entity != null){
-                    this.entity.setPos(this.getX(), this.getY(), this.getZ());
+                    if (this.noPos) {
+                        this.entity.setPos(this.getX(), this.getY(), this.getZ());
+                    }
                     if (this.preMade) {
                         if (this.entity instanceof TameableEntity && this.getOwnerId() != null) {
                             ((TameableEntity) this.entity).setOwnerUUID(this.getOwnerId());

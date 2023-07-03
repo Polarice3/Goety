@@ -16,6 +16,7 @@ import com.Polarice3.Goety.common.items.FlameCaptureItem;
 import com.Polarice3.Goety.common.items.ModSpawnEggItem;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
+import com.Polarice3.Goety.common.items.magic.RecallFocus;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -84,6 +85,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BLIGHT_FIRE.get(), BlightFireRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ICE_CHUNK.get(), IceChunkRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WITCH_GALE.get(), WitchGaleRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.OBSIDIAN_MONOLITH.get(), ObsidianMonolithRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FIRE_TORNADO.get(), FireTornadoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.CHANNELLER.get(), ChannellerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FANATIC.get(), FanaticRenderer::new);
@@ -157,7 +159,6 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.BURNING_GROUND.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.POISON_GROUND.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STORM_UTIL.get(), TrapRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.INFAMY_REMOVE_UTIL.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SUMMON_CIRCLE.get(), SummonCircleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SUMMON_APOSTLE.get(), TrapRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.LASER.get(), TrapRenderer::new);
@@ -253,6 +254,8 @@ public class ClientEventBusSubscriber {
                 , (stack, world, living) -> living != null && living.isUsingItem() && living.getUseItem() == stack ? 1.0F : 0.0F);
         ItemModelsProperties.register(ModItems.FLAME_CAPTURE.get(), new ResourceLocation("capture"),
                 (stack, world, living) -> FlameCaptureItem.hasEntity(stack) ? 1.0F : 0.0F);
+        ItemModelsProperties.register(ModItems.RECALL_FOCUS.get(), new ResourceLocation("active")
+                , (stack, world, living) -> RecallFocus.hasRecall(stack) ? 1.0F : 0.0F);
     }
 
     @SubscribeEvent
@@ -314,6 +317,7 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.CULT_SPELL.get(), SpellParticle.MobFactory::new);
         particles.register(ModParticleTypes.SONIC_BOOM.get(), SonicBoomParticle.Factory::new);
         particles.register(ModParticleTypes.SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
+        particles.register(ModParticleTypes.PORTAL_SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
         particles.register(ModParticleTypes.CONFUSED.get(), HeartParticle.Factory::new);
     }
 

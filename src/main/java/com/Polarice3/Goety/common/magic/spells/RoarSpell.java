@@ -46,7 +46,6 @@ public class RoarSpell extends Spells {
                 radius = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player);
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
-            this.IncreaseInfamy(SpellConfig.RoarInfamyChance.get(), player);
         }
         for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(4.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {
@@ -88,7 +87,6 @@ public class RoarSpell extends Spells {
                 radius = WandUtil.getLevels(ModEnchantments.RADIUS.get(), player);
                 flaming = WandUtil.getLevels(ModEnchantments.BURNING.get(), player) > 0;
             }
-            this.IncreaseInfamy(SpellConfig.RoarInfamyChance.get(), player);
         }
         for(Entity entity : worldIn.getEntitiesOfClass(LivingEntity.class, entityLiving.getBoundingBox().inflate(8.0D + radius), field_213690_b)) {
             if (!(entity == entityLiving)) {

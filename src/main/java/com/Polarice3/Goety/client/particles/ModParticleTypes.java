@@ -81,4 +81,12 @@ public class ModParticleTypes {
                     return ShockwaveParticleOption.CODEC;
                 }
             });
+
+    public static final RegistryObject<ParticleType<ShockwaveParticleOption>> PORTAL_SHOCKWAVE = PARTICLE_TYPES.register("portal_shockwave",
+            () -> new ParticleType<ShockwaveParticleOption>(false, ShockwaveParticleOption.DESERIALIZER) {
+                @Override
+                public Codec codec() {
+                    return ShockwaveParticleOption.CODEC;
+                }
+            });
 }

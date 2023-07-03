@@ -44,6 +44,7 @@ public class SpellConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IceChunkCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> LaunchCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RecallCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomCost;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> VexDuration;
@@ -67,38 +68,8 @@ public class SpellConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> IllusionDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceChunkDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> IceStormDuration;
+    public static final ForgeConfigSpec.ConfigValue<Integer> RecallDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomDuration;
-
-    public static final ForgeConfigSpec.ConfigValue<Integer> VexInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FangInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> RoarInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ZombieInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SkeletonInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DredenInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> UndeadWolfInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> PhantomInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WraithInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WitchGaleInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SpiderlingInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> BrainEaterInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> TeleportInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SoulSkullInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FeastInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> TemptingInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> EnderAcidInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DragonFireballInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> CreeperlingInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> BreathingInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FireballInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> LavaballInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> PoisonballInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> IllusionInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FireBreathInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FrostBreathInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> IceChunkInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> IceStormInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> LaunchInfamyChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SonicBoomInfamyChance;
 
     public static final ForgeConfigSpec.ConfigValue<Double> FangDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> RoarDamage;
@@ -225,6 +196,8 @@ public class SpellConfig {
                 .defineInRange("iceStormCost", 16, 0, Integer.MAX_VALUE);
         LaunchCost = BUILDER.comment("Launch Spell Cost, Default: 4")
                 .defineInRange("launchCost", 4, 0, Integer.MAX_VALUE);
+        RecallCost = BUILDER.comment("Recall Spell Cost, Default: 1000")
+                .defineInRange("recallCost", 1000, 0, Integer.MAX_VALUE);
         SonicBoomCost = BUILDER.comment("Sonic Boom Spell Cost, Default: 16")
                 .defineInRange("sonicBoomCost", 16, 0, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -271,6 +244,8 @@ public class SpellConfig {
                 .defineInRange("iceChunkTime", 40, 0, 72000);
         IceStormDuration = BUILDER.comment("Time to cast Ice Storm Spell, Default: 60")
                 .defineInRange("iceStormTime", 60, 0, 72000);
+        RecallDuration = BUILDER.comment("Time to cast Recall Spell, Default: 160")
+                .defineInRange("recallTime", 160, 0, 72000);
         SonicBoomDuration = BUILDER.comment("Time to cast Sonic Boom Spell, Default: 60")
                 .defineInRange("sonicBoomTime", 60, 0, 72000);
         BUILDER.pop();
@@ -315,68 +290,6 @@ public class SpellConfig {
                 .defineInRange("iceStormDamage", 1.0, 1.0, Double.MAX_VALUE);
         SonicBoomDamage = BUILDER.comment("How much base damage Sonic Boom Spell deals, Default: 10.0")
                 .defineInRange("sonicBoomDamage", 10.0, 1.0, Double.MAX_VALUE);
-        BUILDER.pop();
-        BUILDER.push("Infamy Chance");
-        VexInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Vex Spell, Default: 1")
-                .defineInRange("vexInfamyChance", 1, 0, Integer.MAX_VALUE);
-        FangInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fang Spell, Default: 4")
-                .defineInRange("fangInfamyChance", 4, 0, Integer.MAX_VALUE);
-        RoarInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Roaring Spell, Default: 4")
-                .defineInRange("roarInfamyChance", 4, 0, Integer.MAX_VALUE);
-        ZombieInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Rotting Spell, Default: 16")
-                .defineInRange("zombieInfamyChance", 16, 0, Integer.MAX_VALUE);
-        SkeletonInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Osseous Spell, Default: 16")
-                .defineInRange("skeletonInfamyChance", 16, 0, Integer.MAX_VALUE);
-        DredenInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Rigid Spell, Default: 8")
-                .defineInRange("dredenInfamyChance", 8, 0, Integer.MAX_VALUE);
-        UndeadWolfInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Hounding Spell, Default: 32")
-                .defineInRange("undeadWolfInfamyChance", 32, 0, Integer.MAX_VALUE);
-        PhantomInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Phantasm Spell, Default: 32")
-                .defineInRange("phantomInfamyChance", 32, 0, Integer.MAX_VALUE);
-        WraithInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spooky Spell, Default: 32")
-                .defineInRange("wraithChance", 32, 0, Integer.MAX_VALUE);
-        WitchGaleInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Witch's Gale Spell, Default: 16")
-                .defineInRange("crippleInfamyChance", 16, 0, Integer.MAX_VALUE);
-        SpiderlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Spiderling Spell per second, Default: 128")
-                .defineInRange("spiderlingInfamyChance", 128, 0, Integer.MAX_VALUE);
-        BrainEaterInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Brain Eater Spell per second, Default: 128")
-                .defineInRange("brainEaterInfamyChance", 128, 0, Integer.MAX_VALUE);
-        SoulSkullInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Soul Skull Spell per second, Default: 16")
-                .defineInRange("soulSkullInfamyChance", 16, 0, Integer.MAX_VALUE);
-        TeleportInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Teleport Spell per second, Default: 0")
-                .defineInRange("teleportInfamyChance", 0, 0, Integer.MAX_VALUE);
-        FeastInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Feasting Spell per second, Default: 8")
-                .defineInRange("feastInfamyChance", 8, 0, Integer.MAX_VALUE);
-        TemptingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Tempting Spell per second, Default: 128")
-                .defineInRange("temptingInfamyChance", 128, 0, Integer.MAX_VALUE);
-        EnderAcidInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ender Acid Breath Spell, Default: 128")
-                .defineInRange("enderAcidBreathInfamyChance", 128, 0, Integer.MAX_VALUE);
-        DragonFireballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Dragon Fireball Spell, Default: 16")
-                .defineInRange("dragonFireballInfamyChance", 16, 0, Integer.MAX_VALUE);
-        CreeperlingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Creeperling Spell per second, Default: 128")
-                .defineInRange("creeperlingInfamyChance", 128, 0, Integer.MAX_VALUE);
-        BreathingInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Breathing Spell per second, Default: 0")
-                .defineInRange("breathingInfamyChance", 0, 0, Integer.MAX_VALUE);
-        FireballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fireball Spell, Default: 32")
-                .defineInRange("fireballInfamyChance", 32, 0, Integer.MAX_VALUE);
-        LavaballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Lava Bomb Spell, Default: 16")
-                .defineInRange("lavaBombInfamyChance", 16, 0, Integer.MAX_VALUE);
-        PoisonballInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Poison Ball Spell, Default: 0")
-                .defineInRange("poisonBallInfamyChance", 0, 0, Integer.MAX_VALUE);
-        IllusionInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Illusion Spell, Default: 1")
-                .defineInRange("illusionInfamyChance", 1, 0, Integer.MAX_VALUE);
-        FireBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Fire Breath Spell, Default: 128")
-                .defineInRange("fireBreathInfamyChance", 128, 0, Integer.MAX_VALUE);
-        FrostBreathInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Frost Breath Spell, Default: 128")
-                .defineInRange("frostBreathInfamyChance", 128, 0, Integer.MAX_VALUE);
-        IceChunkInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Chunk Spell, Default: 1")
-                .defineInRange("iceChunkInfamyChance", 1, 0, Integer.MAX_VALUE);
-        IceStormInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Ice Storm Spell, Default: 8")
-                .defineInRange("iceStormInfamyChance", 8, 0, Integer.MAX_VALUE);
-        LaunchInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Launch Spell, Default: 128")
-                .defineInRange("launchInfamyChance", 128, 0, Integer.MAX_VALUE);
-        SonicBoomInfamyChance = BUILDER.comment("Chance of Gaining Infamy when casting the Sonic Boom Spell, Default: 2")
-                .defineInRange("sonicBoomInfamyChance", 2, 0, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Minions");
         UndeadTeleport = BUILDER.comment("Whether Undead Servants can teleport to Players, Default: false")

@@ -4,7 +4,6 @@ import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.ModFireballEntity;
 import com.Polarice3.Goety.common.magic.InstantCastSpells;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -27,6 +26,11 @@ public class FireballSpell extends InstantCastSpells {
     }
 
     @Override
+    public SpellType getSpellType(){
+        return SpellType.NETHER;
+    }
+
+    @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         ModFireballEntity smallFireballEntity = new ModFireballEntity(worldIn,
@@ -39,7 +43,6 @@ public class FireballSpell extends InstantCastSpells {
         smallFireballEntity.setOwner(entityLiving);
         worldIn.addFreshEntity(smallFireballEntity);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -66,6 +69,5 @@ public class FireballSpell extends InstantCastSpells {
             worldIn.addFreshEntity(smallFireballEntity2);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.FireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

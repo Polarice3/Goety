@@ -1,11 +1,14 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.AttributesConfig;
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.neutral.ISpewing;
 import com.Polarice3.Goety.common.entities.utilities.PoisonGroundEntity;
+import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;
@@ -24,6 +27,7 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.monster.piglin.PiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -44,9 +48,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.api.distmarker.Dist;
@@ -58,6 +61,7 @@ import java.util.*;
 public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing, ICustomAttributes {
     private int attackAnimationRemainingTicks;
     private int allyCooldown;
+    private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.PINK, BossInfo.Overlay.PROGRESS).setDarkenScreen(false).setCreateWorldFog(false);
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(HogLordEntity.class, DataSerializers.OPTIONAL_UUID);
     protected static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(HogLordEntity.class, DataSerializers.BYTE);
     protected static final DataParameter<Boolean> SPEWING = EntityDataManager.defineId(HogLordEntity.class, DataSerializers.BOOLEAN);
@@ -72,6 +76,9 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
         this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, 0.0F);
         this.maxUpStep = 1.0F;
         this.xpReward = 25;
+        if (this.level.isClientSide){
+            Goety.PROXY.addBoss(this);
+        }
     }
 
     protected void registerGoals() {
@@ -127,6 +134,14 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
         }
 
         this.entityData.set(DATA_FLAGS_ID, (byte)(i & 255));
+    }
+
+    @Override
+    public void remove() {
+        if (this.level.isClientSide) {
+            Goety.PROXY.removeBoss(this);
+        }
+        super.remove();
     }
 
     @Override
@@ -493,6 +508,55 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
         this.playSound(SoundEvents.HOGLIN_STEP, 0.15F, 1.0F);
+    }
+
+    public void readAdditionalSaveData(CompoundNBT pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        if (pCompound.contains("allyCooldown")) {
+            this.allyCooldown = pCompound.getInt("allyCooldown");
+        }
+        if (this.hasCustomName()) {
+            this.bossInfo.setName(this.getDisplayName());
+        }
+        this.bossInfo.setId(this.getUUID());
+    }
+
+    public void addAdditionalSaveData(CompoundNBT pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putInt("allyCooldown", this.allyCooldown);
+    }
+
+    @Nullable
+    public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
+        if (this.getTarget() == null){
+            this.bossInfo.setVisible(false);
+        }
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+    }
+
+    public void setCustomName(@Nullable ITextComponent name) {
+        super.setCustomName(name);
+        this.bossInfo.setName(this.getDisplayName());
+    }
+
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if (MainConfig.SpecialBossBar.get()) {
+            this.bossInfo.setVisible(this.getTarget() != null);
+        } else {
+            this.bossInfo.setVisible(false);
+        }
+        this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+    }
+
+    public void startSeenByPlayer(ServerPlayerEntity pPlayer) {
+        super.startSeenByPlayer(pPlayer);
+        this.bossInfo.addPlayer(pPlayer);
+    }
+
+    public void stopSeenByPlayer(ServerPlayerEntity pPlayer) {
+        super.stopSeenByPlayer(pPlayer);
+        this.bossInfo.removePlayer(pPlayer);
     }
 
     static class MurkyGroundGoal extends Goal {

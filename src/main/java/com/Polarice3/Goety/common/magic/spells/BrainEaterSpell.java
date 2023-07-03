@@ -35,7 +35,6 @@ public class BrainEaterSpell extends ChargingSpells {
                 for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                     worldIn.sendParticles(ParticleTypes.HAPPY_VILLAGER, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                 }
-                this.IncreaseInfamy(SpellConfig.BrainEaterInfamyChance.get(), (PlayerEntity) entityLiving);
             } else {
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
@@ -56,7 +55,6 @@ public class BrainEaterSpell extends ChargingSpells {
                 for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
                     worldIn.sendParticles(ParticleTypes.HAPPY_VILLAGER, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
                 }
-                this.IncreaseInfamy(SpellConfig.BrainEaterInfamyChance.get(), (PlayerEntity) entityLiving);
             } else {
                 worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 for(int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {

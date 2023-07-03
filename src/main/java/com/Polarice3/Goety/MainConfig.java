@@ -19,18 +19,10 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulGuiHorizontal;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulGuiVertical;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> PillagerInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> VindicatorInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> EvokerInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> IllusionerInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> EnviokerInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> InquillagerInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ConquillagerInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> VizierInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ScryingInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> PowerfulInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> OtherInfamy;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DeathLoseInfamy;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllagerAssaultSpawnFreq;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllagerAssaultSpawnChance;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllagerAssaultSEThreshold;
+    public static final ForgeConfigSpec.ConfigValue<Integer> IllagerAssaultSELimit;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> UndeadSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> AnthropodSouls;
@@ -42,12 +34,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> DefaultSouls;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
-    public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnFreq;
-    public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpawnChance;
-    public static final ForgeConfigSpec.ConfigValue<Integer> InfamyMax;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
-    public static final ForgeConfigSpec.ConfigValue<Integer> InfamySpellGive;
-    public static final ForgeConfigSpec.ConfigValue<Integer> InfamyThreshold;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
     public static final ForgeConfigSpec.ConfigValue<Integer> EmeraldAmuletSouls;
@@ -106,7 +93,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> PhilosophersMaceDamage;
     public static final ForgeConfigSpec.ConfigValue<Integer> PhilosophersMaceDurability;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpawn;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SpecialBossBar;
     public static final ForgeConfigSpec.ConfigValue<Boolean> BossMusic;
 
@@ -127,8 +113,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> InfamySpell;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> InfamyBadOmen;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerAssault;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulEnergyBadOmen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerRaid;
     public static final ForgeConfigSpec.ConfigValue<Boolean> CultistRaid;
 
@@ -271,50 +257,6 @@ public class MainConfig {
         GoldenKingSpawn = BUILDER.comment("Whether Golden King Fish Mob can spawn, Default: true")
                 .define("goldenKingSpawn", true);
         BUILDER.pop();
-        BUILDER.push("Infamy");
-        InfamySpawn = BUILDER.comment("Special Illagers Spawning due to Infamy, Default: true")
-                .define("infamySpawn", true);
-        InfamySpawnFreq = BUILDER.comment("Spawn Frequency for Illagers Hunting the Player, Default: 12000")
-                .defineInRange("infamySpawnFreq", 12000, 0, Integer.MAX_VALUE);
-        InfamySpawnChance = BUILDER.comment("Spawn Chance for Illagers Hunting the Player every Infamy Spawn Frequency, the lower the more likelier, Default: 5")
-                .defineInRange("infamySpawnChance", 5, 0, Integer.MAX_VALUE);
-        InfamySpell = BUILDER.comment("Casting Spells have a chance of giving Player Infamy, Default: true")
-                .define("infamySpell", true);
-        InfamySpellGive = BUILDER.comment("How much Infamy is given when casting Spells, Default: 1")
-                .defineInRange("infamySpellGive", 1, 0, Integer.MAX_VALUE);
-        DeathLoseInfamy = BUILDER.comment("How much Infamy removed when Player is killed, Default: 500")
-                .defineInRange("infamyDeathLoss", 500, 0, Integer.MAX_VALUE);
-        InfamyMax = BUILDER.comment("Maximum amount of Infamy the Player can attained, Default: 1000")
-                .defineInRange("infamyMax", 1000, 1, Integer.MAX_VALUE);
-        InfamyThreshold = BUILDER.comment("How much Infamy is required for Special Illagers to spawn, Default: 50")
-                .defineInRange("infamyThreshold", 50, 0, Integer.MAX_VALUE);
-        InfamyBadOmen = BUILDER.comment("High Infamy have a chance of giving Player Bad Omen effect, Default: true")
-                .define("infamyBadOmen", true);
-        BUILDER.pop();
-        BUILDER.push("Infamy Illager");
-        PillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Pillagers, Default: 1")
-                .defineInRange("pillagerInfamyGain", 1, 0, Integer.MAX_VALUE);
-        VindicatorInfamy = BUILDER.comment("How much Infamy the Player gains killing Vindicators, Default: 2")
-                .defineInRange("vindicatorInfamyGain", 2, 0, Integer.MAX_VALUE);
-        EvokerInfamy = BUILDER.comment("How much Infamy the Player gains killing Evokers, Default: 5")
-                .defineInRange("evokerInfamyGain", 5, 0, Integer.MAX_VALUE);
-        IllusionerInfamy = BUILDER.comment("How much Infamy the Player gains killing Illusioners, Default: 5")
-                .defineInRange("illusionerInfamyGain", 5, 0, Integer.MAX_VALUE);
-        EnviokerInfamy = BUILDER.comment("How much Infamy the Player gains killing Enviokers, Default: 5")
-                .defineInRange("enviokerInfamyGain", 5, 0, Integer.MAX_VALUE);
-        InquillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Inquillagers, Default: 5")
-                .defineInRange("inquillagerInfamyGain", 5, 0, Integer.MAX_VALUE);
-        ConquillagerInfamy = BUILDER.comment("How much Infamy the Player gains killing Conquillagers, Default: 5")
-                .defineInRange("conquillagerInfamyGain", 5, 0, Integer.MAX_VALUE);
-        VizierInfamy = BUILDER.comment("How much Infamy the Player gains killing Viziers, Default: 25")
-                .defineInRange("vizierInfamyGain", 25, 0, Integer.MAX_VALUE);
-        ScryingInfamy = BUILDER.comment("How much Infamy the Player gains scrying on a Cat with an Empty Map offhand in a Village, Default: 10")
-                .defineInRange("scryingInfamyGain", 10, 0, Integer.MAX_VALUE);
-        PowerfulInfamy = BUILDER.comment("How much Infamy the Player gains killing a Powerful Modded Illagers, Default: 5")
-                .defineInRange("powerfulInfamyGain", 5, 0, Integer.MAX_VALUE);
-        OtherInfamy = BUILDER.comment("How much Infamy the Player gains killing other types of Illagers, Default: 1")
-                .defineInRange("otherInfamyGain", 1, 0, Integer.MAX_VALUE);
-        BUILDER.pop();
         BUILDER.push("Structure Generation");
         DarkManorGen = BUILDER.comment("Dark Manor Generates in the World, Default: true")
                 .define("darkManorGen", true);
@@ -455,7 +397,19 @@ public class MainConfig {
         LichScrollRequirement = BUILDER.comment("Whether the player needs to read a Forbidden Scroll to start the Potion of Transformation ritual, Default: true")
                 .define("lichScrollRequirement", true);
         BUILDER.pop();
-        BUILDER.push("Misc");
+        BUILDER.push("Illagers");
+        IllagerAssault = BUILDER.comment("Special Illagers Spawning based of Player's Soul Energy amount, Default: true")
+                .define("illagerAssault", true);
+        IllagerAssaultSpawnFreq = BUILDER.comment("Spawn Frequency for Illagers Hunting the Player, Default: 12000")
+                .defineInRange("illagerAssaultSpawnFreq", 12000, 0, Integer.MAX_VALUE);
+        IllagerAssaultSpawnChance = BUILDER.comment("Spawn Chance for Illagers Hunting the Player every Infamy Spawn Frequency, the lower the more likelier, Default: 5")
+                .defineInRange("illagerAssaultSpawnChance", 5, 0, Integer.MAX_VALUE);
+        IllagerAssaultSEThreshold = BUILDER.comment("How much Soul Energy the Player has is required for Special Illagers to spawn, Default: 2500")
+                .defineInRange("illagerAssaultThreshold", 2500, 0, Integer.MAX_VALUE);
+        IllagerAssaultSELimit = BUILDER.comment("The maximum amount of Soul Energy the Player has that is taken consideration for the Assaults, Default: 30000")
+                .defineInRange("illagerAssaultLimit", 30000, 0, Integer.MAX_VALUE);
+        SoulEnergyBadOmen = BUILDER.comment("Hitting the Illager Assault Limit of Soul Energy have a chance of giving Player Bad Omen effect, Default: true")
+                .define("soulEnergyBadOmen", true);
         IllagueSpread = BUILDER.comment("Whether Illague Effect can spread from non Conquillagers that has the effect, Default: true")
                 .define("illagueSpread", true);
         IllagerSteal = BUILDER.comment("Whether Enviokers, Inquillagers and Conquillagers can steal Totems of Souls or Totems of Undying, Default: true")

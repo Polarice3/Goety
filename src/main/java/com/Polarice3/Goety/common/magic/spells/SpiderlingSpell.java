@@ -34,6 +34,11 @@ public class SpiderlingSpell extends ChargingSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.FEL;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         BlockPos blockpos = entityLiving.blockPosition();
         SpiderlingMinionEntity summonedentity = new SpiderlingMinionEntity(ModEntityType.SPIDERLING_MINION.get(), worldIn);
@@ -50,7 +55,6 @@ public class SpiderlingSpell extends ChargingSpells {
                 }
                 summonedentity.setLimitedLife(180 * duration);
             }
-            this.IncreaseInfamy(SpellConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
         worldIn.addFreshEntity(summonedentity);
@@ -74,7 +78,6 @@ public class SpiderlingSpell extends ChargingSpells {
                     }
                     summonedentity.setLimitedLife(180 * duration);
                 }
-                this.IncreaseInfamy(SpellConfig.SpiderlingInfamyChance.get(), (PlayerEntity) entityLiving);
             }
             summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             worldIn.addFreshEntity(summonedentity);

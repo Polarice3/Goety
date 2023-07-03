@@ -1,14 +1,12 @@
 package com.Polarice3.Goety.common.magic;
 
-import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
-import com.Polarice3.Goety.utils.InfamyHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -27,20 +25,12 @@ public abstract class Spells {
 
     public abstract void StaffResult(ServerWorld worldIn, LivingEntity entityLiving);
 
-    public boolean isShifting(LivingEntity entityLiving){
-        return entityLiving.isCrouching() || entityLiving.isShiftKeyDown();
+    public SpellType getSpellType(){
+        return SpellType.NONE;
     }
 
-    public void IncreaseInfamy(int random, PlayerEntity player){
-        if (MainConfig.InfamySpell.get()){
-            if (random != 0) {
-                int random2 = player.level.random.nextInt(random);
-                if (random2 == 0) {
-                    IInfamy infamy1 = InfamyHelper.getCapability(player);
-                    infamy1.increaseInfamy(MainConfig.InfamySpellGive.get());
-                }
-            }
-        }
+    public boolean isShifting(LivingEntity entityLiving){
+        return entityLiving.isCrouching() || entityLiving.isShiftKeyDown();
     }
 
     protected RayTraceResult rayTrace(World worldIn, LivingEntity livingEntity, int range, double radius) {
@@ -72,5 +62,24 @@ public abstract class Spells {
         AxisAlignedBB axisalignedbb = livingEntity.getBoundingBox().expandTowards(lookVec.scale(range)).inflate(radius, radius, radius);
         return ProjectileHelper.getEntityHitResult(worldIn, livingEntity, srcVec, destVec, axisalignedbb, entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.isPickable());
     }
+
+    public enum SpellType{
+        NONE("none"),
+        NECROMANCY("necromancy"),
+        FEL("fel"),
+        NETHER("nether"),
+        ILL("ill"),
+        ENDER("ender"),
+        FROST("frost");
+
+        private final ITextComponent name;
+
+        SpellType(String name){
+            this.name = new TranslationTextComponent("spell.goety." + name);
+        }
+
+        public ITextComponent getName(){
+            return name;
+        }}
 
 }

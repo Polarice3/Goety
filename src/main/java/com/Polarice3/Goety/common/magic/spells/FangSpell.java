@@ -30,6 +30,11 @@ public class FangSpell extends Spells {
         return SoundEvents.EVOKER_PREPARE_ATTACK;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.ILL;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         PlayerEntity playerEntity = (PlayerEntity) entityLiving;
         int range = 16;
@@ -65,7 +70,6 @@ public class FangSpell extends Spells {
                 WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 2.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
             }
         }
-        this.IncreaseInfamy(SpellConfig.FangInfamyChance.get(), (PlayerEntity) entityLiving);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 
@@ -118,7 +122,6 @@ public class FangSpell extends Spells {
                 WandUtil.spawnFangs(entityLiving,entityLiving.getX() + (double)MathHelper.cos(f2) * 4.5D, entityLiving.getZ() + (double)MathHelper.sin(f2) * 4.5D, d0, d1, f2, 9);
             }
         }
-        this.IncreaseInfamy(SpellConfig.FangInfamyChance.get(), (PlayerEntity) entityLiving);
         worldIn.playSound((PlayerEntity) null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
     }
 

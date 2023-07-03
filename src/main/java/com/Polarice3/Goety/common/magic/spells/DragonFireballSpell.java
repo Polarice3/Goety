@@ -4,7 +4,6 @@ import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.entities.projectiles.ModDragonFireballEntity;
 import com.Polarice3.Goety.common.magic.Spells;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -25,6 +24,11 @@ public class DragonFireballSpell extends Spells {
         return SoundEvents.ENDER_DRAGON_GROWL;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.ENDER;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
         ModDragonFireballEntity dragonFireball = new ModDragonFireballEntity(worldIn,
@@ -37,7 +41,6 @@ public class DragonFireballSpell extends Spells {
         dragonFireball.setOwner(entityLiving);
         worldIn.addFreshEntity(dragonFireball);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ENDER_DRAGON_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.DragonFireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
@@ -63,6 +66,5 @@ public class DragonFireballSpell extends Spells {
             worldIn.addFreshEntity(dragonFireball1);
         }
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ENDER_DRAGON_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.DragonFireballInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 }

@@ -143,6 +143,7 @@ public class MagicFocusItem extends Item{
         } else {
             tooltip.add(new TranslationTextComponent("info.goety.soulitems.focuscost", 0));
         }
+        tooltip.add(new TranslationTextComponent("info.goety.focus.spellType", spell.getSpellType().getName()));
     }
 
 }

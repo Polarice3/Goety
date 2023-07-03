@@ -40,7 +40,6 @@ public class FireBreathSpell extends SpewingSpell {
                 burning += WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 15)) {
@@ -67,7 +66,6 @@ public class FireBreathSpell extends SpewingSpell {
                 burning += WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.FireBreathInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 18)) {

@@ -36,6 +36,11 @@ public class CreeperlingSpell extends ChargingSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.FEL;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         BlockPos blockpos = entityLiving.blockPosition();
         CreeperlingMinionEntity summonedentity = new CreeperlingMinionEntity(ModEntityType.CREEPERLING_MINION.get(), worldIn);
@@ -61,7 +66,6 @@ public class CreeperlingSpell extends ChargingSpells {
                 }
                 summonedentity.setLimitedLife(180 * duration);
             }
-            this.IncreaseInfamy(SpellConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
         worldIn.addFreshEntity(summonedentity);
@@ -95,7 +99,6 @@ public class CreeperlingSpell extends ChargingSpells {
                     }
                     summonedentity.setLimitedLife(180 * duration);
                 }
-                this.IncreaseInfamy(SpellConfig.CreeperlingInfamyChance.get(), (PlayerEntity) entityLiving);
             }
             summonedentity.finalizeSpawn(worldIn, entityLiving.level.getCurrentDifficultyAt(entityLiving.blockPosition()), SpawnReason.MOB_SUMMONED, (ILivingEntityData) null, (CompoundNBT) null);
             worldIn.addFreshEntity(summonedentity);

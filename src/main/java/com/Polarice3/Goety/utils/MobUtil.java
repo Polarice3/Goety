@@ -198,6 +198,11 @@ public class MobUtil {
         }
     }
 
+    public static void twister(Entity pEntity, double pX, double pY, double pZ){
+        pEntity.setDeltaMovement(pX, pY, pZ);
+        pEntity.hasImpulse = true;
+    }
+
     public static int getSummonLifespan(World world){
         return 20 * (30 + world.random.nextInt(90));
     }

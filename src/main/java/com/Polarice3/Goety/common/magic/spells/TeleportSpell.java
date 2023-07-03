@@ -35,6 +35,11 @@ public class TeleportSpell extends InstantCastSpells {
     }
 
     @Override
+    public SpellType getSpellType(){
+        return SpellType.ENDER;
+    }
+
+    @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         PlayerEntity player = (PlayerEntity) entityLiving;
         int enchantment = 0;
@@ -48,7 +53,6 @@ public class TeleportSpell extends InstantCastSpells {
         enderTeleportEvent(entityLiving, worldIn, newPos);
         worldIn.sendParticles(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), 0, worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian(), 0.5F);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.TeleportInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     @Override
@@ -65,7 +69,6 @@ public class TeleportSpell extends InstantCastSpells {
         enderTeleportEvent(entityLiving, worldIn, newPos);
         worldIn.sendParticles(ParticleTypes.PORTAL, entityLiving.getX(), entityLiving.getY() + worldIn.random.nextDouble() * 2.0D, entityLiving.getZ(), 0, worldIn.random.nextGaussian(), 0.0D, worldIn.random.nextGaussian(), 0.5F);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CastingSound(), SoundCategory.PLAYERS, 1.0F, 1.0F);
-        this.IncreaseInfamy(SpellConfig.TeleportInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public static void enderTeleportEvent(LivingEntity player, World world, BlockPos target) {

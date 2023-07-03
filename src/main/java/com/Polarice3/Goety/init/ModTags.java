@@ -28,6 +28,7 @@ public class ModTags {
         public static final Tags.IOptionalNamedTag<Block> DEAD_SANDS = tag("dead_sands_blocks");
         public static final Tags.IOptionalNamedTag<Block> HAUNTED_WOOD = tag("haunted_wood_blocks");
         public static final Tags.IOptionalNamedTag<Block> TERRACOTTAS = tag("terracottas");
+        public static final Tags.IOptionalNamedTag<Block> RECALL_BLOCKS = tag("recall_blocks");
 
         private static Tags.IOptionalNamedTag<Block> tag(String name)
         {
@@ -66,6 +67,7 @@ public class ModTags {
         public static final ITag.INamedTag<EntityType<?>> VILLAGERS = tag(new ResourceLocation("forge", "villagers"));
         public static final Tags.IOptionalNamedTag<EntityType<?>> FROST_EXTRA_DAMAGE = tag("frost_extra_damage");
         public static final Tags.IOptionalNamedTag<EntityType<?>> FROST_IMMUNE = tag("frost_immune");
+        public static final Tags.IOptionalNamedTag<EntityType<?>> BOSSES = tag("bosses");
 
         public static ITag.INamedTag<EntityType<?>> tag(ResourceLocation id) {
             return EntityTypeTags.bind(id.toString());

@@ -213,6 +213,14 @@ public class ModEntityType {
                     .updateInterval(1)
                     .build(new ResourceLocation(Goety.MOD_ID, "witchgale").toString()));
 
+    public static final RegistryObject<EntityType<ObsidianMonolithEntity>> OBSIDIAN_MONOLITH = ENTITY_TYPES.register("obsidian_monolith",
+            () -> EntityType.Builder.of(ObsidianMonolithEntity::new, EntityClassification.MONSTER)
+                    .fireImmune()
+                    .sized(1.0F, 3.1F)
+                    .clientTrackingRange(8)
+                    .updateInterval(1)
+                    .build(new ResourceLocation(Goety.MOD_ID, "obsidian_monolith").toString()));
+
     public static final RegistryObject<EntityType<FireTornadoEntity>> FIRE_TORNADO = ENTITY_TYPES.register("fire_tornado",
             () -> EntityType.Builder.<FireTornadoEntity>of(FireTornadoEntity::new, EntityClassification.MISC)
                     .sized(2.0F, 2.0F)
@@ -692,14 +700,6 @@ public class ModEntityType {
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE)
                     .build(new ResourceLocation(Goety.MOD_ID, "stormutil").toString()));
-
-    public static final RegistryObject<EntityType<InfamyRemoveEntity>> INFAMY_REMOVE_UTIL = ENTITY_TYPES.register("remove_infamy_util",
-            () -> EntityType.Builder.of(InfamyRemoveEntity::new, EntityClassification.MISC)
-                    .fireImmune()
-                    .sized(0.5F, 0.5F)
-                    .clientTrackingRange(10)
-                    .updateInterval(Integer.MAX_VALUE)
-                    .build(new ResourceLocation(Goety.MOD_ID, "remove_infamy_util").toString()));
 
     public static final RegistryObject<EntityType<SummonCircleEntity>> SUMMON_CIRCLE = ENTITY_TYPES.register("summon_circle",
             () -> EntityType.Builder.<SummonCircleEntity>of(SummonCircleEntity::new, EntityClassification.MISC)

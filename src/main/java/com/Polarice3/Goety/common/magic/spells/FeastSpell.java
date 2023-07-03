@@ -4,7 +4,6 @@ import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.magic.ChargingSpells;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -27,6 +26,11 @@ public class FeastSpell extends ChargingSpells {
         return SoundEvents.EVOKER_PREPARE_ATTACK;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.ILL;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving){
         int i = (int) entityLiving.getX();
         int j = (int) entityLiving.getY();
@@ -40,7 +44,6 @@ public class FeastSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(SpellConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving){
@@ -64,7 +67,6 @@ public class FeastSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             worldIn.sendParticles(ParticleTypes.POOF, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(SpellConfig.FeastInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 }

@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
+import com.Polarice3.Goety.init.ModTags;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ public class BossBarEvent {
 
     protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/gui/boss_bar.png");
     protected static final ResourceLocation BOSS_BAR_1 = new ResourceLocation(Goety.MOD_ID, "textures/gui/boss_bar_1.png");
+    protected static final ResourceLocation MINI_BOSS_BAR = new ResourceLocation(Goety.MOD_ID, "textures/gui/miniboss_bar.png");
     private static Minecraft minecraft;
     public static final Set<MobEntity> BOSSES = Collections.newSetFromMap(new WeakHashMap<>());
 
@@ -38,7 +40,11 @@ public class BossBarEvent {
                             event.setCanceled(true);
                             int k = i / 2 - 100;
                             RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-                            drawBar(event.getMatrixStack(), k, event.getY(), event.getPartialTicks(), boss);
+                            if (boss.getType().is(ModTags.EntityTypes.BOSSES)) {
+                                drawBar(event.getMatrixStack(), k, event.getY(), event.getPartialTicks(), boss);
+                            } else {
+                                drawMiniBossBar(event.getMatrixStack(), k, event.getY(), boss);
+                            }
                             ITextComponent itextcomponent = boss.getDisplayName();
                             int l = minecraft.font.width(itextcomponent);
                             int i1 = i / 2 - l / 2;
@@ -110,6 +116,21 @@ public class BossBarEvent {
             minecraft.getTextureManager().bind(TEXTURE);
             blit(pPoseStack, pX, pY, 0, 48, 200, 16, 256, 256);
         }
+    }
+
+    private static void drawMiniBossBar(MatrixStack pPoseStack, int pX, int pY, MobEntity pEntity) {
+        float percent = pEntity.getHealth() / pEntity.getMaxHealth();
+        int i = (int) (percent * 128.0F);
+        int j = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        int j1 = j / 2 - 62;
+        if (i > 0) {
+            minecraft.getTextureManager().bind(MINI_BOSS_BAR);
+            blit(pPoseStack, j1, pY, 0, 8, i, 8, 128, 128);
+        }
+        minecraft.getTextureManager().bind(MINI_BOSS_BAR);
+        blit(pPoseStack, j1 - 11, pY, 0, 16, 9, 8, 128, 128);
+        minecraft.getTextureManager().bind(MINI_BOSS_BAR);
+        blit(pPoseStack, j1, pY, 0, 0, 128, 8, 128, 128);
     }
 
     public static void addBoss(MobEntity mob){

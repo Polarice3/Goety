@@ -41,7 +41,6 @@ public class GhostFireSpell extends Spells {
                 range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
                 radius += WandUtil.getLevels(ModEnchantments.RADIUS.get(), playerEntity);
             }
-            this.IncreaseInfamy(SpellConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         RayTraceResult rayTraceResult = this.rayTrace(worldIn, entityLiving, range, radius);
         if (rayTraceResult instanceof EntityRayTraceResult){
@@ -64,7 +63,6 @@ public class GhostFireSpell extends Spells {
                 range += WandUtil.getLevels(ModEnchantments.RANGE.get(), playerEntity);
                 radius += WandUtil.getLevels(ModEnchantments.RADIUS.get(), playerEntity);
             }
-            this.IncreaseInfamy(SpellConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         RayTraceResult rayTraceResult = this.rayTrace(worldIn, entityLiving, range, radius);
         if (rayTraceResult instanceof EntityRayTraceResult){

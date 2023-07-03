@@ -1,9 +1,6 @@
 package com.Polarice3.Goety.common.items.equipment;
 
-import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
 import com.Polarice3.Goety.common.items.ItemBase;
-import com.Polarice3.Goety.utils.InfamyHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ChickenEntity;
@@ -30,13 +27,7 @@ public class ScryingMirrorItem extends ItemBase {
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand){
         World world = player.getEntity().level;
-        if (target instanceof ChickenEntity){
-            IInfamy infamy = InfamyHelper.getCapability(player);
-            int i = infamy.getInfamy();
-            player.displayClientMessage(new TranslationTextComponent("info.goety.infamy.amount", i), true);
-            return ActionResultType.SUCCESS;
-        }
-        if (target instanceof CatEntity){
+        if (target instanceof CatEntity || target instanceof ChickenEntity){
             if (!world.isClientSide){
                 ServerWorld serverWorld = (ServerWorld) player.getEntity().level;
                 if (serverWorld.isVillage(target.blockPosition())){
@@ -49,18 +40,7 @@ public class ScryingMirrorItem extends ItemBase {
                         MapData.addTargetDecoration(itemstack, blockpos, "+", MapDecoration.Type.MANSION);
                         itemstack.setHoverName(new TranslationTextComponent("filled_map." + Structure.WOODLAND_MANSION.getFeatureName().toLowerCase(Locale.ROOT)));
                         player.addItem(itemstack);
-                        IInfamy infamy = InfamyHelper.getCapability(player);
-                        infamy.increaseInfamy(MainConfig.ScryingInfamy.get());
-                        InfamyHelper.sendInfamyUpdatePacket(player);
-                    } else {
-                        IInfamy infamy = InfamyHelper.getCapability(player);
-                        int i = infamy.getInfamy();
-                        player.displayClientMessage(new TranslationTextComponent("info.goety.infamy.amount", i), true);
                     }
-                } else {
-                    IInfamy infamy = InfamyHelper.getCapability(player);
-                    int i = infamy.getInfamy();
-                    player.displayClientMessage(new TranslationTextComponent("info.goety.infamy.amount", i), true);
                 }
                 return ActionResultType.SUCCESS;
             }

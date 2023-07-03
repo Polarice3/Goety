@@ -1,10 +1,13 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.AttributesConfig;
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.common.entities.utilities.LaserEntity;
+import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
@@ -19,6 +22,7 @@ import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -37,6 +41,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 
@@ -50,6 +55,7 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
     protected static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(SkullLordEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Optional<UUID>> BONE_LORD = EntityDataManager.defineId(SkullLordEntity.class, DataSerializers.OPTIONAL_UUID);
     private static final DataParameter<Optional<UUID>> LASER = EntityDataManager.defineId(SkullLordEntity.class, DataSerializers.OPTIONAL_UUID);
+    private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS).setDarkenScreen(false).setCreateWorldFog(false);
     @Nullable
     private BlockPos boundOrigin;
     private int shootTime;
@@ -69,6 +75,9 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         this.moveControl = new MobUtil.MinionMovementController(this);
         this.hitTimes = 0;
         this.xpReward = 30;
+        if (this.level.isClientSide){
+            Goety.PROXY.addBoss(this);
+        }
     }
 
     protected void registerGoals() {
@@ -439,6 +448,14 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
     }
 
     @Override
+    public void remove() {
+        if (this.level.isClientSide) {
+            Goety.PROXY.removeBoss(this);
+        }
+        super.remove();
+    }
+
+    @Override
     public void onRemovedFromWorld() {
         super.onRemovedFromWorld();
         if (this.getBoneLord() != null){
@@ -663,6 +680,10 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         this.boneLordRegen = pCompound.getInt("boneLordRegen");
         this.spawnDelay = pCompound.getInt("spawnDelay");
         this.spawnNumber = pCompound.getInt("spawnNumber");
+        if (this.hasCustomName()) {
+            this.bossInfo.setName(this.getDisplayName());
+        }
+        this.bossInfo.setId(this.getUUID());
     }
 
     public void addAdditionalSaveData(CompoundNBT pCompound) {
@@ -685,6 +706,31 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         pCompound.putInt("spawnNumber", this.spawnNumber);
     }
 
+    public void setCustomName(@Nullable ITextComponent name) {
+        super.setCustomName(name);
+        this.bossInfo.setName(this.getDisplayName());
+    }
+
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if (MainConfig.SpecialBossBar.get()) {
+            this.bossInfo.setVisible(this.getTarget() != null);
+        } else {
+            this.bossInfo.setVisible(false);
+        }
+        this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+    }
+
+    public void startSeenByPlayer(ServerPlayerEntity pPlayer) {
+        super.startSeenByPlayer(pPlayer);
+        this.bossInfo.addPlayer(pPlayer);
+    }
+
+    public void stopSeenByPlayer(ServerPlayerEntity pPlayer) {
+        super.stopSeenByPlayer(pPlayer);
+        this.bossInfo.removePlayer(pPlayer);
+    }
+
     public float getBrightness() {
         return 1.0F;
     }
@@ -704,6 +750,9 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
             boneLord.setSkullLord(this);
             this.setBoneLord(boneLord);
             pLevel.addFreshEntity(boneLord);
+        }
+        if (this.getTarget() == null){
+            this.bossInfo.setVisible(false);
         }
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }

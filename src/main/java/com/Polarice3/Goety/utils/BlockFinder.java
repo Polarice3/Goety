@@ -157,7 +157,7 @@ public class BlockFinder {
     public static boolean hasChunksAt(LivingEntity livingEntity){
         World world = livingEntity.level;
         BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
-        return world.hasChunksAt(blockpos$mutable.getX() - 10, blockpos$mutable.getY() - 10, blockpos$mutable.getZ() - 10, blockpos$mutable.getX() + 10, blockpos$mutable.getY() + 10, blockpos$mutable.getZ() + 10);
+        return world.isAreaLoaded(blockpos$mutable, 10);
     }
 
     /**

@@ -2048,6 +2048,28 @@
     ],
     "subtitle": "subtitle.goety.wind"
   },
+  "rumble": {
+    "sounds": [
+      {
+        "name": "goety:spell/rumble_1"
+      },
+      {
+        "name": "goety:spell/rumble_2"
+      },
+      {
+        "name": "goety:spell/rumble_3"
+      }
+    ],
+    "subtitle": "subtitle.goety.rumble"
+  },
+  "spell_fail": {
+    "sounds": [
+      {
+        "name": "goety:spell/spell_fail"
+      }
+    ],
+    "subtitle": "subtitle.goety.spell_fail"
+  },
   "scythe_swing": {
   "sounds": [
       {
@@ -2104,6 +2126,30 @@
         "name": "goety:item/flame_capture_release2"
       }
     ]
+  },
+  "altar_start": {
+    "sounds": [
+      {
+        "name": "goety:block/altar_start"
+      }
+    ],
+    "subtitle": "subtitle.goety.altar_start"
+  },
+  "altar_loop": {
+    "sounds": [
+      {
+        "name": "goety:block/altar_loop"
+      }
+    ],
+    "subtitle": "subtitle.goety.altar_loop"
+  },
+  "altar_finish": {
+    "sounds": [
+      {
+        "name": "goety:block/altar_finish"
+      }
+    ],
+    "subtitle": "subtitle.goety.altar_finish"
   },
   "apostle_theme": {
     "sounds": [

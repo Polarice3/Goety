@@ -1,7 +1,6 @@
 package com.Polarice3.Goety.common.network;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.capabilities.infamy.InfamyUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.lichdom.LichUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.soulenergy.SEUpdatePacket;
 import com.Polarice3.Goety.common.capabilities.spider.SpiderLevelsUpdatePacket;
@@ -29,7 +28,6 @@ public class ModNetwork {
     public static void init() {
         INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Goety.MOD_ID, "channel"), () -> "1.0", s -> true, s -> true);
 
-        INSTANCE.registerMessage(nextID(), InfamyUpdatePacket.class, InfamyUpdatePacket::encode, InfamyUpdatePacket::decode, InfamyUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), LichUpdatePacket.class, LichUpdatePacket::encode, LichUpdatePacket::decode, LichUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), SEUpdatePacket.class, SEUpdatePacket::encode, SEUpdatePacket::decode, SEUpdatePacket::consume);
         INSTANCE.registerMessage(nextID(), SpiderLevelsUpdatePacket.class, SpiderLevelsUpdatePacket::encode, SpiderLevelsUpdatePacket::decode, SpiderLevelsUpdatePacket::consume);

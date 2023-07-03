@@ -5,7 +5,6 @@ import com.Polarice3.Goety.common.magic.ChargingSpells;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -40,7 +39,6 @@ public class TemptingSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             worldIn.sendParticles(ParticleTypes.NOTE, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(SpellConfig.TemptingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
     public void StaffResult(ServerWorld worldIn, LivingEntity entityLiving) {
@@ -56,7 +54,6 @@ public class TemptingSpell extends ChargingSpells {
         for(int i1 = 0; i1 < entityLiving.level.random.nextInt(35) + 10; ++i1) {
             worldIn.sendParticles(ParticleTypes.NOTE, entityLiving.getX(), entityLiving.getEyeY(), entityLiving.getZ(), 1, 0.0F, 0.0F, 0.0F, 0);
         }
-        this.IncreaseInfamy(SpellConfig.TemptingInfamyChance.get(), (PlayerEntity) entityLiving);
     }
 
 

@@ -273,7 +273,7 @@ public class LichEvents {
                         event.getEntityLiving().addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1200));
                     }
                     if (event.getEntityLiving().getMobType() != CreatureAttribute.UNDEAD && player.getMainHandItem().getItem().is(ModTags.Items.LICH_WITHER_ITEMS)){
-                        event.getEntityLiving().addEffect(new EffectInstance(Effects.WITHER, ModMathHelper.ticksToSeconds(5)));
+                        event.getEntityLiving().addEffect(new EffectInstance(Effects.WITHER, ModMathHelper.secondsToTicks(5)));
                     }
                 }
             }

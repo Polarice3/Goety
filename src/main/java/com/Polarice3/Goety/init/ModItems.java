@@ -141,6 +141,7 @@ public class ModItems {
     public static final RegistryObject<Item> PHANTASM_FOCUS = ITEMS.register("phantasmfocus", () -> new MagicFocusItem(new PhantomSpell()));
     public static final RegistryObject<Item> LAUNCH_FOCUS = ITEMS.register("launchfocus", () -> new MagicFocusItem(new LaunchSpell()));
     public static final RegistryObject<Item> SONICBOOM_FOCUS = ITEMS.register("sonicboomfocus", () -> new MagicFocusItem(new SonicBoomSpell()));
+    public static final RegistryObject<Item> RECALL_FOCUS = ITEMS.register("recallfocus", RecallFocus::new);
 
     //Tools & Weapons
     public static final RegistryObject<Item> WARPED_SPEAR = ITEMS.register("warped_spear", WarpedSpearItem::new);

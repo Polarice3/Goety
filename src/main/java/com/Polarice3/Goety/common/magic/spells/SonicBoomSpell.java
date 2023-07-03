@@ -8,7 +8,6 @@ import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
@@ -53,7 +52,6 @@ public class SonicBoomSpell extends Spells {
                 }
             }
         }
-        this.IncreaseInfamy(SpellConfig.SonicBoomInfamyChance.get(), (PlayerEntity) entityLiving);
         worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), ModSounds.ROAR_SPELL.get(), SoundCategory.NEUTRAL, 3.0F, 0.25F);
     }
 

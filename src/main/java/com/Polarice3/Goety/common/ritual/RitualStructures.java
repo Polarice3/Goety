@@ -14,9 +14,10 @@ public class RitualStructures {
     public static boolean getProperStructure(String craftType, RitualTileEntity pTileEntity, BlockPos pPos, World pLevel){
         findStructures(craftType, pTileEntity, pPos, pLevel);
         switch (craftType){
-            case "animalis":
             case "necroturgy":
             case "lich":
+                return RitualStructures.checkRequirements(craftType, pTileEntity) && !pLevel.isDay();
+            case "animalis":
             case "minor_nether":
             case "forge":
             case "magic":

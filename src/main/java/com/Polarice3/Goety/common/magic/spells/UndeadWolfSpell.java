@@ -41,6 +41,11 @@ public class UndeadWolfSpell extends SummonSpells {
         return SoundEvents.EVOKER_PREPARE_SUMMON;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.NECROMANCY;
+    }
+
     public void commonResult(ServerWorld worldIn, LivingEntity entityLiving){
         if (entityLiving instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) entityLiving;
@@ -48,7 +53,6 @@ public class UndeadWolfSpell extends SummonSpells {
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
             }
-            this.IncreaseInfamy(SpellConfig.UndeadWolfInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {

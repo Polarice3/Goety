@@ -7,6 +7,7 @@ import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.ModMathHelper;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -25,7 +26,6 @@ import net.minecraft.potion.Effects;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -40,6 +40,7 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(FireTornadoEntity.class, DataSerializers.OPTIONAL_UUID);
     private int lifespan;
     private int totallife;
+    private int spun = 0;
 
     public FireTornadoEntity(EntityType<? extends DamagingProjectileEntity> p_i50173_1_, World p_i50173_2_) {
         super(p_i50173_1_, p_i50173_2_);
@@ -60,12 +61,12 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
         return 0.68F;
     }
 
-    public int getTotallife() {
+    public int getTotalLife() {
         return totallife;
     }
 
-    public void setTotallife(int totallife) {
-        this.totallife = totallife;
+    public void setTotalLife(int totalLife) {
+        this.totallife = totalLife;
     }
 
     public int getLifespan() {
@@ -74,6 +75,14 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
 
     public void setLifespan(int lifespan) {
         this.lifespan = lifespan;
+    }
+
+    public int getSpun(){
+        return spun;
+    }
+
+    public void setSpun(int spun){
+        this.spun = spun;
     }
 
     public LivingEntity getTrueOwner() {
@@ -96,10 +105,10 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
 
     public void tick() {
         super.tick();
-        if (this.lifespan < getTotallife()){
+        if (this.getLifespan() < getTotalLife()){
             ++this.lifespan;
         } else {
-            this.remove();
+            this.trueRemove();
         }
         if (this.getTrueOwner() != null){
             if (this.getTrueOwner() instanceof MobEntity){
@@ -110,19 +119,16 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
                     double d2 = livingentity.getY(0.5D) - this.getY(0.5D);
                     double d3 = livingentity.getZ() - this.getZ();
                     if (this.tickCount % 50 == 0) {
-                        FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.getTrueOwner(), d1, d2, d3);
-                        fireTornadoEntity.setOwnerId(this.getTrueOwner().getUUID());
-                        fireTornadoEntity.setLifespan(this.getLifespan());
-                        fireTornadoEntity.setTotallife(this.getTotallife());
-                        fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
-                        this.level.addFreshEntity(fireTornadoEntity);
-                        this.remove();
+                        this.fakeRemove(d1, d2, d3);
                     }
                 } else {
-                    this.setLifespan(this.getTotallife());
-                    this.remove();
+                    this.trueRemove();
                 }
             }
+        }
+        int maxSpun = 80;
+        if (this.getSpun() >= maxSpun){
+            this.trueRemove();
         }
         if (this.tickCount % 20 == 0){
             this.playSound(ModSounds.FIRE_TORNADO_AMBIENT.get(), 1.0F, 0.5F);
@@ -145,55 +151,88 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
                         entity.removeEffectNoUpdate(Effects.FIRE_RESISTANCE);
                     }
                     this.suckInMobs(entity);
-                    if (this.getTrueOwner() != null) {
-                        if (this.getTrueOwner() instanceof ApostleEntity) {
-                            entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), AttributesConfig.ApostleMagicDamage.get().floatValue());
-                            entity.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
-                        } else {
-                            entity.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 6.0F);
-                        }
-                    } else {
-                        if (!entity.fireImmune()) {
-                            entity.hurt(DamageSource.IN_FIRE, 6.0F);
-                        }
-                    }
-                    if (entity instanceof PlayerEntity){
-                        PlayerEntity player = (PlayerEntity) entity;
-                        if (player.isBlocking()) {
-                            player.disableShield(true);
-                        }
-                    }
                 }
             }
         }
     }
 
-    public void remove() {
-        if (!this.level.isClientSide && this.getLifespan() >= this.getTotallife()){
-            ServerWorld serverWorld = (ServerWorld) this.level;
-            for(int k = 0; k < 200; ++k) {
-                float f2 = random.nextFloat() * 4.0F;
-                float f1 = random.nextFloat() * ((float)Math.PI * 2F);
-                double d1 = MathHelper.cos(f1) * f2;
-                double d2 = 0.01D + random.nextDouble() * 0.5D;
-                double d3 = MathHelper.sin(f1) * f2;
-                serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
-            }
-        }
-        this.remove(false);
+    public void trueRemove(){
+        this.setLifespan(this.getTotalLife());
+        this.discard();
     }
 
-    private void suckInMobs(LivingEntity livingEntity) {
-        Vector3d vector3d = new Vector3d(this.getX() + 0.5, this.getY() + 0.5, this.getZ() + 0.5);
-        Vector3d vector3d1 = vector3d.subtract(livingEntity.position()).normalize();
-        float y = 0.2F;
-        if (livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE) != null){
-            double knockback = 1.0D - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
-            vector3d1.scale(knockback);
-            y *= knockback;
-        }
+    public void fakeRemove(double x, double y, double z){
+        FireTornadoEntity fireTornadoEntity = new FireTornadoEntity(this.level, this.getTrueOwner(), x, y, z);
+        fireTornadoEntity.setOwnerId(this.getTrueOwner().getUUID());
+        fireTornadoEntity.setLifespan(this.getLifespan());
+        fireTornadoEntity.setTotalLife(this.getTotalLife());
+        fireTornadoEntity.setSpun(this.getSpun());
+        fireTornadoEntity.setPos(this.getX(), this.getY(), this.getZ());
+        this.level.addFreshEntity(fireTornadoEntity);
+        this.discard();
+    }
 
-        MobUtil.push(livingEntity, vector3d1.x, y, vector3d1.z);
+    public void discard() {
+        if (!this.level.isClientSide){
+            if (this.getLifespan() >= this.getTotalLife()) {
+                ServerWorld serverWorld = (ServerWorld) this.level;
+                for (int k = 0; k < 200; ++k) {
+                    float f2 = random.nextFloat() * 4.0F;
+                    float f1 = random.nextFloat() * ((float) Math.PI * 2F);
+                    double d1 = MathHelper.cos(f1) * f2;
+                    double d2 = 0.01D + random.nextDouble() * 0.5D;
+                    double d3 = MathHelper.sin(f1) * f2;
+                    serverWorld.sendParticles(ParticleTypes.FLAME, this.getX() + d1 * 0.1D, this.getY() + 0.3D, this.getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
+                }
+                if (this.getTrueOwner() instanceof ApostleEntity){
+                    ApostleEntity apostle = (ApostleEntity) this.getTrueOwner();
+                    apostle.setTornadoCoolDown(apostle.getTornadoCoolDown() + ModMathHelper.secondsToTicks(45));
+                }
+            }
+        }
+        this.remove();
+    }
+
+    /**
+     * Based on EntityDuster lift codes from @AlexModGuy's Alex's Mobs.
+     */
+    private void suckInMobs(LivingEntity livingEntity) {
+        ++this.spun;
+        float radius = 1.0F + (this.spun * 0.05F);
+        float knockBack = (float) MathHelper.clamp((1.0D - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)), 0, 1);
+        float angle = this.spun * -0.25F;
+        double f0 = this.getX() + radius * MathHelper.sin((float) (Math.PI + angle));
+        double f1 = this.getZ() + radius * MathHelper.cos(angle);
+        double d0 = (f0 - livingEntity.getX()) * knockBack;
+        double d1 = (f1 - livingEntity.getZ()) * knockBack;
+        if (this.xPower != 0 || this.yPower != 0 || this.zPower != 0){
+            this.fakeRemove(0, 0, 0);
+        }
+        this.hurtMobs(livingEntity);
+
+        MobUtil.twister(livingEntity, d0, 0.1 * knockBack, d1);
+    }
+
+    public void hurtMobs(LivingEntity living){
+        if (this.getTrueOwner() != null) {
+            if (this.getTrueOwner() instanceof ApostleEntity) {
+                if (living.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), AttributesConfig.ApostleMagicDamage.get().floatValue() / 1.5F)){
+                    living.addEffect(new EffectInstance(ModEffects.BURN_HEX.get(), 1200));
+                }
+            } else {
+                living.hurt(DamageSource.indirectMagic(this, this.getTrueOwner()), 4.0F);
+            }
+        } else {
+            if (!living.fireImmune()) {
+                living.hurt(DamageSource.IN_FIRE, 4.0F);
+            }
+        }
+        if (living instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) living;
+            if (player.isBlocking()) {
+                player.disableShield(true);
+            }
+        }
     }
 
     public double AreaofEffect(){
@@ -236,7 +275,10 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
             this.setLifespan(compound.getInt("Lifespan"));
         }
         if (compound.contains("TotalLife")) {
-            this.setTotallife(compound.getInt("TotalLife"));
+            this.setTotalLife(compound.getInt("TotalLife"));
+        }
+        if (compound.contains("Spun")){
+            this.setSpun(compound.getInt("Spun"));
         }
 
     }
@@ -247,7 +289,8 @@ public class FireTornadoEntity extends DamagingProjectileEntity {
             compound.putUUID("Owner", this.getOwnerId());
         }
         compound.putInt("Lifespan", this.getLifespan());
-        compound.putInt("TotalLife", this.getTotallife());
+        compound.putInt("TotalLife", this.getTotalLife());
+        compound.putInt("Spun", this.getSpun());
     }
 
     protected IParticleData getTrailParticle() {

@@ -30,6 +30,11 @@ public class AcidBreathSpell extends SpewingSpell {
     }
 
     @Override
+    public SpellType getSpellType(){
+        return SpellType.ENDER;
+    }
+
+    @Override
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         int enchantment = 0;
         int range = 0;
@@ -39,7 +44,6 @@ public class AcidBreathSpell extends SpewingSpell {
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.EnderAcidInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 15)) {
@@ -70,7 +74,6 @@ public class AcidBreathSpell extends SpewingSpell {
                 enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                 range = WandUtil.getLevels(ModEnchantments.RANGE.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.EnderAcidInfamyChance.get(), player);
         }
         if (!worldIn.isClientSide) {
             for (Entity target : getTarget(entityLiving, range + 18)) {

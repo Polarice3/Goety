@@ -159,7 +159,7 @@ public class IceChunkEntity extends Entity {
         damage += this.extraDamage;
         if (livingEntity != null) {
             if (livingEntity.hurt(ModDamageSource.indirectFrost(this, this.getOwner()), damage)) {
-                livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, ModMathHelper.ticksToSeconds(5), 4));
+                livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, ModMathHelper.secondsToTicks(5), 4));
             }
         }
     }
@@ -230,7 +230,7 @@ public class IceChunkEntity extends Entity {
         if (this.hovering == 1 && !(this.isInWall() || this.isOnGround())){
             this.playSound(ModSounds.ICE_CHUNK_IDLE.get(), 1.0F, 1.0F);
         }
-        int hoverTime = ModMathHelper.ticksToSeconds(5);
+        int hoverTime = ModMathHelper.secondsToTicks(5);
         boolean isHovering = !this.isStarting() && this.hovering < hoverTime;
         this.isDropping = this.hovering > hoverTime;
         if (isHovering){

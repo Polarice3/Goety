@@ -27,6 +27,11 @@ public class IceStormSpell extends Spells {
         return SoundEvents.EVOKER_PREPARE_ATTACK;
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.FROST;
+    }
+
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {
         int enchantment = 1;
         Vector3d vector3d = entityLiving.getViewVector( 1.0F);
@@ -42,7 +47,6 @@ public class IceStormSpell extends Spells {
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(SpellConfig.IceStormInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         iceStormEntity.setTotallife(60 * enchantment);
         iceStormEntity.setOwner(entityLiving);
@@ -66,7 +70,6 @@ public class IceStormSpell extends Spells {
             if (WandUtil.enchantedFocus(player)){
                 enchantment = WandUtil.getLevels(ModEnchantments.RANGE.get(), player) + 1;
             }
-            this.IncreaseInfamy(SpellConfig.IceStormInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         iceStormEntity.setTotallife(120 * enchantment);
         iceStormEntity.setOwner(entityLiving);

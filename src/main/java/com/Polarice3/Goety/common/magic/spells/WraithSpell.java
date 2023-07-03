@@ -42,6 +42,11 @@ public class WraithSpell extends SummonSpells {
         return ModSounds.PREPARE_SPELL.get();
     }
 
+    @Override
+    public SpellType getSpellType(){
+        return SpellType.NECROMANCY;
+    }
+
     public void commonResult(ServerWorld worldIn, LivingEntity entityLiving){
         if (entityLiving instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) entityLiving;
@@ -50,7 +55,6 @@ public class WraithSpell extends SummonSpells {
                 this.duration = WandUtil.getLevels(ModEnchantments.DURATION.get(), player) + 1;
                 this.burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
             }
-            this.IncreaseInfamy(SpellConfig.WraithInfamyChance.get(), (PlayerEntity) entityLiving);
         }
         if (isShifting(entityLiving)) {
             for (Entity entity : worldIn.getAllEntities()) {

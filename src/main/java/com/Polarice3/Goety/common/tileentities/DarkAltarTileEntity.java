@@ -184,7 +184,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         }
 
                         recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
-                                this.currentTime);
+                                this.currentTime, recipe.getDuration());
 
                         boolean villager = recipe.getActivationItem().test(new ItemStack(ModItems.FILLED_ILL_CAGE.get()));
 

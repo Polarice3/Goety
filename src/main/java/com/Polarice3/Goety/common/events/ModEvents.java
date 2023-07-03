@@ -5,8 +5,6 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.client.armors.ModArmorMaterial;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.capabilities.infamy.IInfamy;
-import com.Polarice3.Goety.common.capabilities.infamy.InfamyProvider;
 import com.Polarice3.Goety.common.capabilities.lichdom.ILichdom;
 import com.Polarice3.Goety.common.capabilities.lichdom.LichProvider;
 import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
@@ -118,7 +116,6 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerCapabilityAttachEvent(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(Goety.MOD_ID, "infamy"), new InfamyProvider());
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "lichdom"), new LichProvider());
             event.addCapability(new ResourceLocation(Goety.MOD_ID, "soulenergy"), new SEProvider());
         }
@@ -135,7 +132,6 @@ public class ModEvents {
             if (entity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entity;
 
-                InfamyHelper.sendInfamyUpdatePacket(player);
                 LichdomHelper.sendLichUpdatePacket(player);
                 SEHelper.sendSEUpdatePacket(player);
                 CompoundNBT playerData = player.getPersistentData();
@@ -196,8 +192,7 @@ public class ModEvents {
                                 }
                             }
                             if (MainConfig.IllagerRaid.get()) {
-                                IInfamy infamy = InfamyHelper.getCapability(player);
-                                if (infamy.getInfamy() >= (MainConfig.InfamyThreshold.get() * 2)) {
+                                if (SEHelper.getSoulAmountInt(player) >= (MainConfig.IllagerAssaultSEThreshold.get() * 2)) {
                                     int badOmen = MathHelper.clamp(raid.getBadOmenLevel(), 0, 5) + 1;
                                     int pillager = world.random.nextInt((int) 12 / badOmen);
                                     if (pillager == 0) {
@@ -270,12 +265,6 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         PlayerEntity player = event.getPlayer();
-
-        IInfamy capability = event.getOriginal().getCapability(InfamyProvider.CAPABILITY).resolve().get();
-
-        player.getCapability(InfamyProvider.CAPABILITY)
-                .ifPresent(infamy ->
-                        infamy.setInfamy(capability.getInfamy() > 0 ? capability.getInfamy() - MainConfig.DeathLoseInfamy.get() : 0));
 
         ILichdom capability2 = event.getOriginal().getCapability(LichProvider.CAPABILITY).resolve().get();
 
@@ -560,10 +549,10 @@ public class ModEvents {
             }
         }
         if (player.getMainHandItem().getItem() instanceof PhilosophersMaceItem){
-            if (event.getState() == Blocks.NETHER_GOLD_ORE.defaultBlockState()){
+            if (event.getState().getBlock().getDescriptionId().contains("nether_gold")){
                 if (!player.level.isClientSide) {
                     if (player.level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS) && !player.level.restoringBlockSnapshots) {
-                        ItemStack itemStack = new ItemStack(Items.NETHER_GOLD_ORE);
+                        ItemStack itemStack = new ItemStack(event.getState().getBlock().asItem());
                         double d0 = (double) (player.level.random.nextFloat() * 0.5F) + 0.25D;
                         double d1 = (double) (player.level.random.nextFloat() * 0.5F) + 0.25D;
                         double d2 = (double) (player.level.random.nextFloat() * 0.5F) + 0.25D;
@@ -721,12 +710,7 @@ public class ModEvents {
         if (RobeArmorFinder.FindFelArmor(player)){
             BlockFinder.BushMovement(player);
         }
-        IInfamy infamy = InfamyHelper.getCapability(player);
-        int i = infamy.getInfamy();
-        if (i < 0){
-            infamy.setInfamy(0);
-        }
-        if (i > MainConfig.InfamyThreshold.get() * 2){
+        if (SEHelper.getSoulAmountInt(player) > MainConfig.IllagerAssaultSEThreshold.get() * 2){
             for (AbstractRaiderEntity pillagerEntity : player.level.getEntitiesOfClass(AbstractRaiderEntity.class, player.getBoundingBox().inflate(32))){
                 if (pillagerEntity.getTarget() == player) {
                     if (!pillagerEntity.isAggressive()) {
@@ -816,7 +800,7 @@ public class ModEvents {
             if (RobeArmorFinder.FindBootsofWander(player)){
                 float f = 0.625F;
                 if (player.hasEffect(Effects.JUMP)){
-                    f += 0.1F * (float)(player.getEffect(Effects.JUMP).getAmplifier() + 1);
+                    f += 0.1F * (float)(Objects.requireNonNull(player.getEffect(Effects.JUMP)).getAmplifier() + 1);
                 }
                 Vector3d vector3d = player.getDeltaMovement();
                 player.setDeltaMovement(vector3d.x, f, vector3d.z);
@@ -891,7 +875,6 @@ public class ModEvents {
     @SubscribeEvent
     public static void HurtEvent(LivingHurtEvent event){
         LivingEntity victim = event.getEntityLiving();
-        Entity attacker = event.getSource().getEntity();
         if (RobeArmorFinder.FindFelArmor(victim)){
             if (event.getSource().isExplosion()){
                 event.setAmount((float) (event.getAmount() / 1.5F));
@@ -1280,18 +1263,6 @@ public class ModEvents {
                 }
             }
         }
-        if (killed instanceof AbstractIllagerEntity){
-            AbstractIllagerEntity illager = (AbstractIllagerEntity) killed;
-            if (killer instanceof PlayerEntity || killer instanceof IOwned) {
-                if (illager instanceof PillagerEntity) {
-                    if (illager.level.random.nextFloat() <= 0.25F || illager.isPatrolLeader()) {
-                        InfamyHelper.addInfamy(killer, InfamyHelper.getInfamyGiven(illager));
-                    }
-                } else {
-                    InfamyHelper.addInfamy(killer, InfamyHelper.getInfamyGiven(illager));
-                }
-            }
-        }
         if (killer instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) killer;
             int r1 = world.random.nextInt(4);
@@ -1615,15 +1586,6 @@ public class ModEvents {
     @SubscribeEvent
     public static void PotionAddedEvents(PotionEvent.PotionAddedEvent event){
         Effect effect = event.getPotionEffect().getEffect();
-        if (effect == Effects.HERO_OF_THE_VILLAGE){
-            if (event.getEntityLiving() instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-                if (!GoldTotemFinder.FindTotem(player).isEmpty() || RobeArmorFinder.FindAnySet(player)){
-                    InfamyHelper.increaseInfamy(player, 100);
-                    InfamyHelper.sendInfamyUpdatePacket(player);
-                }
-            }
-        }
         if (effect == ModEffects.BURN_HEX.get()){
             if (event.getEntityLiving().hasEffect(Effects.FIRE_RESISTANCE)){
                 event.getEntityLiving().removeEffect(Effects.FIRE_RESISTANCE);
