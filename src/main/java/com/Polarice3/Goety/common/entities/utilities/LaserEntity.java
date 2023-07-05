@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.utilities;
 import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -18,6 +19,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -112,6 +114,10 @@ public class LaserEntity extends MobEntity {
 
     public void setDuration(int durationIn) {
         this.duration = durationIn;
+    }
+
+    public void makeStuckInBlock(BlockState pState, Vector3d pMotionMultiplier) {
+        super.makeStuckInBlock(pState, Vector3d.ZERO);
     }
 
     @Override

@@ -66,6 +66,7 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
     public float explosionRadius = 1.5F;
     public int boneLordRegen;
     private int hitTimes;
+    private int stuckTime = 0;
 
     public SkullLordEntity(EntityType<? extends SkullLordEntity> p_i50190_1_, World p_i50190_2_) {
         super(p_i50190_1_, p_i50190_2_);
@@ -260,13 +261,18 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
 
             boolean flag = false;
 
-            if (this.tickCount % 20 == 0){
-                if ((this.xOld == this.getX() && this.yOld == this.getY() && this.zOld == this.getZ()) || this.isInWall()){
+            if ((this.xOld == this.getX() && this.yOld == this.getY() && this.zOld == this.getZ()) || this.isInWall()){
+                ++this.stuckTime;
+                if (this.stuckTime >= 100) {
                     flag = true;
-                    if (!this.isInvulnerable() && !this.isLasering() && net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this)) {
-                        this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, Explosion.Mode.DESTROY);
+                    Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
+                    if (!this.isInvulnerable() && !this.isLasering() && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                        this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2.0F, explosion$mode);
                     }
+                    this.stuckTime = 0;
                 }
+            } else {
+                this.stuckTime = 0;
             }
 
             if (!this.level.getBlockState(this.blockPosition().relative(Direction.WEST)).isAir()
@@ -680,6 +686,8 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         this.boneLordRegen = pCompound.getInt("boneLordRegen");
         this.spawnDelay = pCompound.getInt("spawnDelay");
         this.spawnNumber = pCompound.getInt("spawnNumber");
+        this.laserTime = pCompound.getInt("laserTime");
+        this.stuckTime = pCompound.getInt("stuckTime");
         if (this.hasCustomName()) {
             this.bossInfo.setName(this.getDisplayName());
         }
@@ -704,6 +712,8 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         pCompound.putInt("boneLordRegen", this.boneLordRegen);
         pCompound.putInt("spawnDelay", this.spawnDelay);
         pCompound.putInt("spawnNumber", this.spawnNumber);
+        pCompound.putInt("laserTime", this.laserTime);
+        pCompound.putInt("stuckTime", this.stuckTime);
     }
 
     public void setCustomName(@Nullable ITextComponent name) {

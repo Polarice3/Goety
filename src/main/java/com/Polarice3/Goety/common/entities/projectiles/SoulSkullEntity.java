@@ -192,9 +192,7 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
             if (this.getOwner() instanceof PlayerEntity){
                 explodeMode = Explosion.Mode.DESTROY;
             } else {
-                if (net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner())){
-                    explodeMode = Explosion.Mode.DESTROY;
-                }
+                explodeMode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
             }
         }
         LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
