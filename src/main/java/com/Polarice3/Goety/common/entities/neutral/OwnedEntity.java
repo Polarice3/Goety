@@ -1,7 +1,9 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
+import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -91,6 +93,12 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
                     this.setLastHurtByMob(null);
                 }
             }
+            if (MobUtil.ownerStack(this, ownedEntity)){
+                this.setTarget(null);
+                if (this.getLastHurtByMob() == ownedEntity){
+                    this.setLastHurtByMob(null);
+                }
+            }
         }
         if (this.getTrueOwner() instanceof OwnedEntity){
             if (this.getTrueOwner().isDeadOrDying() || !this.getTrueOwner().isAlive()){
@@ -112,6 +120,16 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
                     && target.getTarget() == this.getTrueOwner()
                     && this.getTrueOwner() != null){
                 this.setTarget(target);
+            }
+        }
+        if (SpellConfig.MobSense.get()) {
+            if (this.getTarget() != null) {
+                if (this.getTarget() instanceof MobEntity) {
+                    MobEntity mob = (MobEntity) this.getTarget();
+                    if (mob.getTarget() == null) {
+                        mob.setTarget(this);
+                    }
+                }
             }
         }
         if (this.limitedLifespan && --this.limitedLifeTicks <= 0) {
@@ -145,14 +163,12 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
 
     public boolean isAlliedTo(Entity entityIn) {
         if (this.getTrueOwner() != null) {
-            LivingEntity livingentity = this.getTrueOwner();
-            if (entityIn == livingentity) {
-                return true;
-            }
-            return livingentity.isAlliedTo(entityIn);
+            LivingEntity trueOwner = this.getTrueOwner();
+            return trueOwner.isAlliedTo(entityIn) || entityIn.isAlliedTo(trueOwner) || entityIn == trueOwner;
         }
-        if (entityIn instanceof OwnedEntity && ((OwnedEntity) entityIn).getTrueOwner() != null && ((OwnedEntity) entityIn).getTrueOwner() == this.getTrueOwner() && this.getTrueOwner() != null){
-            return true;
+        if (entityIn instanceof OwnedEntity){
+            OwnedEntity owned = (OwnedEntity) entityIn;
+            return MobUtil.ownerStack(this, owned);
         }
         return super.isAlliedTo(entityIn);
     }
@@ -217,6 +233,10 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
         this.limitedLifeTicks = limitedLifeTicksIn;
     }
 
+    public void convertNewEquipment(Entity entity){
+        this.populateDefaultEquipmentSlots(this.level.getCurrentDifficultyAt(this.blockPosition()));
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
@@ -232,6 +252,14 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
             UUID uuid = this.getOwnerId();
             return uuid == null ? null : EntityFinder.getLivingEntityByUuiD(uuid);
         } catch (IllegalArgumentException illegalargumentexception) {
+            return null;
+        }
+    }
+
+    public LivingEntity getMasterOwner(){
+        if (this.getTrueOwner() instanceof OwnedEntity){
+            return ((OwnedEntity) this.getTrueOwner()).getTrueOwner();
+        } else {
             return null;
         }
     }
@@ -283,7 +311,36 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
     }
 
     @Override
+    public void push(Entity p_21294_) {
+        if (!this.level.isClientSide) {
+            if (p_21294_ != this.getTrueOwner()) {
+                super.push(p_21294_);
+            }
+        }
+    }
+
+    protected void doPush(Entity p_20971_) {
+        if (!this.level.isClientSide) {
+            if (p_20971_ != this.getTrueOwner()) {
+                super.doPush(p_20971_);
+            }
+        }
+    }
+
+    public boolean canCollideWith(Entity p_20303_) {
+        if (p_20303_ != this.getTrueOwner()){
+            return super.canCollideWith(p_20303_);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     protected boolean shouldDespawnInPeaceful() {
+        return this.isHostile();
+    }
+
+    public boolean removeWhenFarAway(double p_27519_) {
         return this.isHostile();
     }
 

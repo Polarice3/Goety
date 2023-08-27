@@ -207,6 +207,9 @@ public class ModSounds {
 
     public static final RegistryObject<SoundEvent> BOSS_POST = create("boss_post");
 
+    public static final RegistryObject<SoundEvent> MUSIC_DISC_APOSTLE = create("apostle_theme_disc");
+    public static final RegistryObject<SoundEvent> MUSIC_DISC_VIZIER = create("vizier_theme_disc");
+
     static RegistryObject<SoundEvent> create(String name) {
         SoundEvent event = new SoundEvent(Goety.location(name));
         return SOUNDS.register(name, () -> event);

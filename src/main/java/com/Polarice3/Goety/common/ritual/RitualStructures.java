@@ -3,13 +3,30 @@ package com.Polarice3.Goety.common.ritual;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.tileentities.RitualTileEntity;
 import net.minecraft.block.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.tags.ITag;
 import net.minecraft.tileentity.LecternTileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RitualStructures {
 
     public static final int RANGE = 8;
+
+    public static boolean noConvertEntity(ITag<EntityType<?>> entityType, BlockPos pPos, World pLevel){
+        return getConvertEntity(entityType, pPos, pLevel) == null;
+    }
+
+    public static MobEntity getConvertEntity(ITag<EntityType<?>> entityType, BlockPos pPos, World pLevel){
+        for (MobEntity mob : pLevel.getEntitiesOfClass(MobEntity.class, new AxisAlignedBB(pPos).inflate(RANGE))){
+            if (mob.getType().is(entityType)){
+                return mob;
+            }
+        }
+        return null;
+    }
 
     public static boolean getProperStructure(String craftType, RitualTileEntity pTileEntity, BlockPos pPos, World pLevel){
         findStructures(craftType, pTileEntity, pPos, pLevel);

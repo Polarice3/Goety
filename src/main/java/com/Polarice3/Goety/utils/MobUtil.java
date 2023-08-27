@@ -1,10 +1,12 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.hostile.HuskarlEntity;
 import com.Polarice3.Goety.common.entities.hostile.WraithEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
+import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
@@ -19,6 +21,8 @@ import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.StriderEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.villager.VillagerType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -27,20 +31,20 @@ import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.play.server.SEntityTeleportPacket;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.SlabType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -418,6 +422,156 @@ public class MobUtil {
 
     public static BlockRayTraceResult rayTrace(Entity entity, double distance, boolean fluids) {
         return (BlockRayTraceResult) entity.pick(distance, 1.0F, fluids);
+    }
+
+    public static List<EntityType<?>> getEntityTypesConfig(List<? extends String> config){
+        List<EntityType<?>> list = new ArrayList<>();
+        if (!config.isEmpty()){
+            for (String id : config){
+                EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(id));
+                if (entityType != null){
+                    list.add(entityType);
+                }
+            }
+        }
+        return list;
+    }
+
+    public static boolean hasEntityTypesConfig(List<? extends String> config, EntityType<?> entityType){
+        return !getEntityTypesConfig(config).isEmpty() && getEntityTypesConfig(config).contains(entityType);
+    }
+
+    public static void summonTame(Entity entity, PlayerEntity player){
+        if (entity instanceof TameableEntity){
+            TameableEntity tamableAnimal = (TameableEntity) entity;
+            tamableAnimal.tame(player);
+        } else if (entity instanceof AbstractHorseEntity){
+            AbstractHorseEntity horse = (AbstractHorseEntity) entity;
+            horse.setTamed(true);
+            horse.setOwnerUUID(player.getUUID());
+        } else if (entity instanceof OwnedEntity) {
+            OwnedEntity summonedEntity = (OwnedEntity) entity;
+            summonedEntity.setPersistenceRequired();
+            summonedEntity.setOwnerId(player.getUUID());
+            if (summonedEntity instanceof SummonedEntity){
+                ((SummonedEntity) summonedEntity).setWandering(false);
+            }
+        }
+    }
+
+    /**
+     * Mind Bending, lol.
+     */
+    public static boolean ownerStack(OwnedEntity owned0, OwnedEntity owned1){
+        LivingEntity masterOwner0 = owned0.getMasterOwner();
+        LivingEntity masterOwner1 = owned1.getMasterOwner();
+        LivingEntity trueOwner0 = owned0.getTrueOwner();
+        LivingEntity trueOwner1 = owned1.getTrueOwner();
+        if (trueOwner0 != null && trueOwner1 != null){
+            if (masterOwner0 != null && masterOwner1 != null){
+                return masterOwner0 == masterOwner1;
+            } else if (masterOwner0 != null){
+                return masterOwner0 == trueOwner1;
+            } else if (masterOwner1 != null){
+                return masterOwner1 == trueOwner0;
+            } else {
+                return trueOwner0 == trueOwner1;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Copy of Vanilla's getEquipmentDropChance. Had to accesstransformer handDropChances and armorDropChances
+     */
+    public static float getEquipmentDropChance(MobEntity mob, EquipmentSlotType p_21520_) {
+        float f;
+        switch (p_21520_.getType()) {
+            case HAND:
+                f = mob.handDropChances[p_21520_.getIndex()];
+                break;
+            case ARMOR:
+                f = mob.armorDropChances[p_21520_.getIndex()];
+                break;
+            default:
+                f = 0.0F;
+        }
+
+        return f;
+    }
+
+    @Nullable
+    public static Entity convertTo(Entity originalEntity, EntityType<?> convertedType, boolean loot, boolean newEquip, PlayerEntity player) {
+        if (originalEntity.removed) {
+            return null;
+        } else {
+            Entity newEntity = convertedType.create(originalEntity.level);
+            if (newEntity != null) {
+                newEntity.copyPosition(originalEntity);
+                if (originalEntity instanceof MobEntity && newEntity instanceof MobEntity) {
+                    MobEntity originalMob = (MobEntity) originalEntity;
+                    MobEntity newMob = (MobEntity) newEntity;
+                    newMob.setBaby(originalMob.isBaby());
+                    newMob.setNoAi(originalMob.isNoAi());
+                    if (originalMob.hasCustomName()) {
+                        newEntity.setCustomName(originalMob.getCustomName());
+                        newEntity.setCustomNameVisible(originalMob.isCustomNameVisible());
+                    }
+
+                    if (originalMob.isPersistenceRequired()) {
+                        newMob.setPersistenceRequired();
+                    }
+
+                    newMob.setInvulnerable(originalMob.isInvulnerable());
+                    if (loot) {
+                        newMob.setCanPickUpLoot(originalMob.canPickUpLoot());
+
+                        for (EquipmentSlotType equipmentslot : EquipmentSlotType.values()) {
+                            ItemStack itemstack = originalMob.getItemBySlot(equipmentslot);
+                            if (!itemstack.isEmpty()) {
+                                newMob.setItemSlot(equipmentslot, itemstack.copy());
+                                newMob.setDropChance(equipmentslot, getEquipmentDropChance(originalMob, equipmentslot));
+                                itemstack.setCount(0);
+                            }
+                        }
+                    }
+                    if (player != null){
+                        summonTame(newMob, player);
+                    }
+
+                    if (originalMob.level instanceof ServerWorld) {
+                        ServerWorld serverLevel = (ServerWorld) originalMob.level;
+                        if (originalMob instanceof VillagerEntity && newMob instanceof ZombieVillagerEntity) {
+                            VillagerEntity villager = (VillagerEntity) originalMob;
+                            ZombieVillagerEntity zombievillager = (ZombieVillagerEntity) newMob;
+                            zombievillager.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(zombievillager.blockPosition()), SpawnReason.CONVERSION, new ZombieEntity.GroupData(false, true), null);
+                            zombievillager.setVillagerData(villager.getVillagerData());
+                            zombievillager.setGossips(villager.getGossips().store(NBTDynamicOps.INSTANCE).getValue());
+                            zombievillager.setTradeOffers(villager.getOffers().createTag());
+                            zombievillager.setVillagerXp(villager.getVillagerXp());
+                            if (!originalMob.isSilent()) {
+                                serverLevel.levelEvent(null, 1026, originalMob.blockPosition(), 0);
+                            }
+                        } else if (newEquip && newMob instanceof OwnedEntity){
+                            OwnedEntity owned = (OwnedEntity) newMob;
+                            owned.convertNewEquipment(originalEntity);
+                        }
+                    }
+
+                    originalMob.level.addFreshEntity(newEntity);
+                    if (originalMob.isPassenger()) {
+                        Entity entity = originalMob.getVehicle();
+                        if (entity != null) {
+                            originalMob.stopRiding();
+                            newEntity.startRiding(entity, true);
+                        }
+                    }
+                }
+
+                originalEntity.remove();
+            }
+            return newEntity;
+        }
     }
 
 }

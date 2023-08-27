@@ -792,9 +792,9 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
         public void tick() {
             LivingEntity livingentity = SkullLordEntity.this.getTarget();
             if (livingentity != null) {
-                int shoot = 20;
+                int shoot = 45;
                 if (SkullLordEntity.this.isHalfHealth()){
-                    shoot = 15;
+                    shoot = 30;
                 }
                 if (SkullLordEntity.this.shootTime == 0) {
                     double d1 = livingentity.getX() - SkullLordEntity.this.getX();
@@ -832,9 +832,9 @@ public class SkullLordEntity extends MonsterEntity implements ICustomAttributes{
                     && !SkullLordEntity.this.isLaserTime()
                     && !SkullLordEntity.this.isLasering()) {
                 if (!SkullLordEntity.this.isHalfHealth()){
-                    return SkullLordEntity.this.random.nextInt(7) == 0;
+                    return SkullLordEntity.this.random.nextInt(15) == 0;
                 } else {
-                    return SkullLordEntity.this.random.nextInt(3) == 0;
+                    return SkullLordEntity.this.random.nextInt(7) == 0;
                 }
             } else {
                 return false;

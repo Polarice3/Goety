@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.common.ritual.ConvertRitual;
 import com.Polarice3.Goety.common.ritual.CraftItemRitual;
 import com.Polarice3.Goety.common.ritual.SummonRitual;
 import net.minecraftforge.fml.RegistryObject;
@@ -24,6 +25,18 @@ public class ModRituals {
     public static final RegistryObject<ModRitualFactory> SUMMON_TAMED_RITUAL =
             RITUALS.register("summon_tamed",
                     () -> new ModRitualFactory((ritual) -> new SummonRitual(ritual, true)));
+
+    public static final RegistryObject<ModRitualFactory> CONVERT_RITUAL =
+            RITUALS.register("convert",
+                    () -> new ModRitualFactory((ritual) -> new ConvertRitual(ritual, false, false)));
+
+    public static final RegistryObject<ModRitualFactory> CONVERT_TAMED_RITUAL =
+            RITUALS.register("convert_tamed",
+                    () -> new ModRitualFactory((ritual) -> new ConvertRitual(ritual, true, false)));
+
+    public static final RegistryObject<ModRitualFactory> CONVERT_COMPLETE_TAMED_RITUAL =
+            RITUALS.register("convert_complete_tamed",
+                    () -> new ModRitualFactory((ritual) -> new ConvertRitual(ritual, true, true)));
 
 }
 /*

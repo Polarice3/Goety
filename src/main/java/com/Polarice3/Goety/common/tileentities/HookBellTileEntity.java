@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.tileentities;
 
+import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.init.ModTileEntityType;
+import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -117,7 +119,7 @@ public class HookBellTileEntity extends TileEntity implements ITickableTileEntit
 
     private boolean areRaidersNearby() {
         for(LivingEntity livingentity : this.nearbyEntities) {
-            if (livingentity.isAlive() && !livingentity.removed && areRaidersClose(livingentity) && livingentity.getType().is(EntityTypeTags.RAIDERS)) {
+            if (isRaiderWithinRange(livingentity)) {
                 return true;
             }
         }
@@ -134,7 +136,7 @@ public class HookBellTileEntity extends TileEntity implements ITickableTileEntit
     }
 
     private boolean isRaiderWithinRange(LivingEntity p_155198_) {
-        return p_155198_.isAlive() && !p_155198_.removed && areRaidersClose(p_155198_) && p_155198_.getType().is(EntityTypeTags.RAIDERS);
+        return p_155198_.isAlive() && !p_155198_.removed && areRaidersClose(p_155198_) && p_155198_.getType().is(EntityTypeTags.RAIDERS) && !MobUtil.hasEntityTypesConfig(MainConfig.HookBellBlackList.get(), p_155198_.getType());
     }
 
     private void teleport(LivingEntity p_58841_) {

@@ -2158,6 +2158,14 @@
       }
     ]
   },
+  "apostle_theme_disc": {
+    "sounds": [
+      {
+        "name": "goety:music/apostle_theme_mono",
+        "stream": true
+      }
+    ]
+  },
   "apostle_theme_post": {
     "sounds": [
       {
@@ -2169,6 +2177,14 @@
     "sounds": [
       {
         "name": "goety:music/vizier_theme"
+      }
+    ]
+  },
+  "vizier_theme_disc": {
+    "sounds": [
+      {
+        "name": "goety:music/vizier_theme_mono",
+        "stream": true
       }
     ]
   },

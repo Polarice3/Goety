@@ -28,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -93,11 +94,8 @@ public abstract class Ritual {
 
     public void finish(World world, BlockPos darkAltarPos, DarkAltarTileEntity tileEntity,
                        PlayerEntity castingPlayer, ItemStack activationItem) {
-        if (activationItem.getItem() == ModItems.FILLED_ILL_CAGE.get()){
-            world.playSound(null, darkAltarPos, SoundEvents.VILLAGER_DEATH, SoundCategory.BLOCKS, 1.2F,
-                    0.5f);
-            world.playSound(null, darkAltarPos, SoundEvents.CHAIN_BREAK, SoundCategory.BLOCKS, 1.5F,
-                    1.0f);
+        if (tileEntity.getCurrentRitualRecipe().getCraftType().contains("forge")){
+            world.playSound(null, darkAltarPos, SoundEvents.ANVIL_USE, SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
         }
         world.playSound(null, darkAltarPos, ModSounds.ALTAR_FINISH.get(), SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
     }
@@ -140,9 +138,9 @@ public abstract class Ritual {
                 this.areAdditionalIngredientsFulfilled(world, darkAltarPos, this.recipe.getIngredients());
     }
 
-    public boolean consumeAdditionalIngredients(World world, BlockPos darkAltarPos,
+    public boolean consumeAdditionalIngredients(World world, BlockPos darkAltarPos, PlayerEntity player,
                                                 List<Ingredient> remainingAdditionalIngredients, int time,
-                                                List<ItemStack> consumedIngredients, boolean villager) {
+                                                List<ItemStack> consumedIngredients) {
         if (remainingAdditionalIngredients.isEmpty())
             return true;
 
@@ -159,9 +157,10 @@ public abstract class Ritual {
              it.hasNext() && consumed < ingredientsToConsume; consumed++) {
             Ingredient ingredient = it.next();
             if (this.consumeAdditionalIngredient(world, darkAltarPos, pedestals, ingredient,
-                    consumedIngredients, villager)) {
+                    consumedIngredients)) {
                 it.remove();
             } else {
+                player.displayClientMessage(new TranslationTextComponent("info.goety.ritual.cannotConsume.fail"), true);
                 return false;
             }
         }
@@ -170,7 +169,7 @@ public abstract class Ritual {
 
     public boolean consumeAdditionalIngredient(World world, BlockPos darkAltarPos,
                                                List<PedestalTileEntity> pedestals,
-                                               Ingredient ingredient, List<ItemStack> consumedIngredients, boolean villager) {
+                                               Ingredient ingredient, List<ItemStack> consumedIngredients) {
         for (PedestalTileEntity pedestal : pedestals) {
             if (pedestal.itemStackHandler.map(handler -> {
                 ItemStack stack = handler.extractItem(0, 1, true);
@@ -186,10 +185,8 @@ public abstract class Ritual {
                             world.playSound(null, pedestal.getBlockPos(), SoundEvents.BUCKET_EMPTY, SoundCategory.BLOCKS,
                                     0.7F, 0.7F);
                         }
-                    }
-
-                    if (villager){
-                        world.playSound(null, darkAltarPos, SoundEvents.VILLAGER_HURT, SoundCategory.BLOCKS, 1.2F, (world.random.nextFloat() - world.random.nextFloat()) * 0.2F + 1.0F);
+                    } else if (extracted.hasContainerItem()){
+                        ItemHelper.addItemEntity(world, pedestal.getBlockPos(), extracted.getContainerItem());
                     }
                     world.playSound(null, pedestal.getBlockPos(), SoundEvents.ITEM_PICKUP, SoundCategory.BLOCKS,
                             0.7f, 0.7f);

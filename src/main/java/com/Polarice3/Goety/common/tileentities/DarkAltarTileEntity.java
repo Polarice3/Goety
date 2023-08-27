@@ -9,12 +9,12 @@ import com.Polarice3.Goety.common.blocks.DarkAltarBlock;
 import com.Polarice3.Goety.common.ritual.Ritual;
 import com.Polarice3.Goety.common.ritual.RitualStructures;
 import com.Polarice3.Goety.init.ModBlocks;
-import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import com.Polarice3.Goety.utils.ConstantPaths;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -49,8 +49,10 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
     public List<Ingredient> remainingAdditionalIngredients = new ArrayList<>();
     public List<ItemStack> consumedIngredients = new ArrayList<>();
     public boolean sacrificeProvided;
+    public MobEntity getConvertEntity;
     public int currentTime;
     public int structureTime;
+    public int convertTime;
 
     public DarkAltarTileEntity() {
         super(ModTileEntityType.DARK_ALTAR.get());
@@ -115,6 +117,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
 
         this.currentTime = compound.getInt("currentTime");
         this.structureTime = compound.getInt("structureTime");
+        this.convertTime = compound.getInt("convertTime");
     }
 
     @Override
@@ -128,6 +131,7 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
         }
         compound.putInt("currentTime", this.currentTime);
         compound.putInt("structureTime", this.structureTime);
+        compound.putInt("convertTime", this.convertTime);
         return super.writeNetwork(compound);
     }
 
@@ -186,17 +190,24 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                         recipe.getRitual().update(this.level, this.worldPosition, this, this.castingPlayer, handler.getStackInSlot(0),
                                 this.currentTime, recipe.getDuration());
 
-                        boolean villager = recipe.getActivationItem().test(new ItemStack(ModItems.FILLED_ILL_CAGE.get()));
-
                         if (!recipe.getRitual()
-                                .consumeAdditionalIngredients(this.level, this.worldPosition, this.remainingAdditionalIngredients,
-                                        this.currentTime, this.consumedIngredients, villager)) {
+                                .consumeAdditionalIngredients(this.level, this.worldPosition, this.castingPlayer, this.remainingAdditionalIngredients,
+                                        this.currentTime, this.consumedIngredients)) {
                             this.stopRitual(false);
                             return;
                         }
 
                         if (recipe.getDuration() >= 0 && this.currentTime >= recipe.getDuration()) {
-                            this.stopRitual(true);
+                            if (!recipe.isConversion()) {
+                                this.stopRitual(true);
+                            } else {
+                                if (this.getConvertEntity != null){
+                                    this.stopRitual(true);
+                                } else {
+                                    this.castingPlayer.displayClientMessage(new TranslationTextComponent("info.goety.ritual.convert.fail"), true);
+                                    this.stopRitual(false);
+                                }
+                            }
                         }
 
                         int totalSTime = 60;
@@ -209,6 +220,21 @@ public class DarkAltarTileEntity extends PedestalTileEntity implements ITickable
                             }
                         } else {
                             this.structureTime = 0;
+                        }
+                        if (recipe.isConversion()){
+                            if (RitualStructures.noConvertEntity(recipe.getEntityToConvert(), this.worldPosition, this.level)){
+                                ++this.convertTime;
+                                if (this.getConvertEntity != null){
+                                    this.getConvertEntity = null;
+                                }
+                                if (this.convertTime >= totalSTime) {
+                                    this.castingPlayer.displayClientMessage(new TranslationTextComponent("info.goety.ritual.convert.fail"), true);
+                                    this.stopRitual(false);
+                                }
+                            } else {
+                                this.getConvertEntity = RitualStructures.getConvertEntity(recipe.getEntityToConvert(), this.worldPosition, this.level);
+                                this.convertTime = 0;
+                            }
                         }
                     } else {
                         if (this.level.getGameTime() % 20 == 0) {

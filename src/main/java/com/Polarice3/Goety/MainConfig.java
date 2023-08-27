@@ -2,9 +2,11 @@ package com.Polarice3.Goety;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Learned how to add Config from codes by @AlexModGuy
@@ -103,6 +105,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandQuickSand;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandDesiccate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandMobs;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> HookBellBlackList;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
@@ -188,6 +191,9 @@ public class MainConfig {
                 .define("bossMusic", true);
         BUILDER.pop();
         BUILDER.push("Blocks");
+        HookBellBlackList = BUILDER.comment(" Add mobs that Hook Bells don't work on. To do so, enter the namespace ID of the mob, like 'minecraft:zombie, minecraft:skeleton'")
+                .defineList("hookBellBlackList", Lists.newArrayList(),
+                        (itemRaw) -> itemRaw instanceof String);
         DeadSandSpread = BUILDER.comment("Dead Sand can Spread to other Blocks, Default: true")
                 .define("deadSandSpread", true);
         DeadSandStoneSpread = BUILDER.comment("Dead Sandstone have a 5% chance of spreading itself instead of just Dead Sands, disable so that they only spread Dead Sands, Default: false")

@@ -121,6 +121,7 @@ public class SpellConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsAttackCreepers;
     public static final ForgeConfigSpec.ConfigValue<Boolean> MinionsMasterImmune;
     public static final ForgeConfigSpec.ConfigValue<Boolean> OwnerAttackCancel;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> MobSense;
     public static final ForgeConfigSpec.ConfigValue<Boolean> UndeadMinionHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TamedSpiderHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> RoyalSpiderMinions;
@@ -302,6 +303,8 @@ public class SpellConfig {
                 .define("minionMasterImmune", true);
         OwnerAttackCancel = BUILDER.comment("Owners can't attack their servants, Default: true")
                 .define("ownerAttackCancel", true);
+        MobSense = BUILDER.comment("Mobs will automatically be hostile to servants, if servant is hostile towards the mob, Default: true")
+                .define("mobSense", true);
         UndeadMinionHeal = BUILDER.comment("Whether Undead Minions can heal if summoned while wearing Necro Robes, Default: true")
                 .define("undeadMinionHeal", true);
         TamedSpiderHeal = BUILDER.comment("Whether Loyal Spiders can heal if wearing Fel Helm, Default: true")
