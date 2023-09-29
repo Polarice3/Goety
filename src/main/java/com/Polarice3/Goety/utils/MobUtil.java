@@ -7,6 +7,7 @@ import com.Polarice3.Goety.common.entities.hostile.WraithEntity;
 import com.Polarice3.Goety.common.entities.hostile.cultists.FanaticEntity;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
+import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.init.ModTags;
@@ -572,6 +573,10 @@ public class MobUtil {
             }
             return newEntity;
         }
+    }
+
+    public static boolean isSpellCasting(LivingEntity livingEntity){
+        return livingEntity.isUsingItem() && livingEntity.getUseItem().getItem() instanceof SoulWand && !WandUtil.findFocus(livingEntity).isEmpty();
     }
 
 }

@@ -4,6 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -11,13 +12,12 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameType;
 
 /**
  * Gui and implementation based of codes from @baileyholl
  */
 public class SoulEnergyGui extends AbstractGui {
-    protected static final ResourceLocation TEXTURE = new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy.png");
     private final Minecraft minecraft;
     private final PlayerEntity player;
     protected int screenWidth;
@@ -29,7 +29,7 @@ public class SoulEnergyGui extends AbstractGui {
     }
 
     public boolean shouldDisplayBar(){
-        return SEHelper.getSoulsContainer(player) && MainConfig.SoulGuiShow.get();
+        return SEHelper.getSoulsContainer(player) && MainConfig.SoulGuiShow.get() && (minecraft.gameMode != null && minecraft.gameMode.getPlayerMode() != GameType.SPECTATOR);
     }
 
     public FontRenderer getFont() {
@@ -56,25 +56,34 @@ public class SoulEnergyGui extends AbstractGui {
         }
 
         int i = (this.screenWidth/2) + (MainConfig.SoulGuiHorizontal.get());
-        int energylength = 117;
-        energylength = (int)((energylength) * (SoulEnergy / (double)SoulEnergyTotal));
-        int maxenergy = (int)(117 * (MainConfig.MaxSouls.get() / (double)SoulEnergyTotal));
+        int energylength = (int)(117 * (SoulEnergy / (double)SoulEnergyTotal));
+        int maxenergy = (int) (117 * (MainConfig.MaxSouls.get() / (double)SoulEnergyTotal));
 
         int height = this.screenHeight + (MainConfig.SoulGuiVertical.get());
 
         int offset = (int) ((player.tickCount + partialTicks) % 234);
 
         if (SEHelper.getSEActive(player)){
-            Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder2.png"));
-            blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
-            Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy_revive.png"));
-            blit(ms,i + 9, height - 7, 0, 0, maxenergy,5, 117, 5);
+            Minecraft.getInstance().textureManager.bind(Goety.location("textures/gui/soul_energy.png"));
+            blit(ms, i, height - 9, 0, 9, 128, 9, 128, 90);
+            Minecraft.getInstance().textureManager.bind(Goety.location("textures/gui/soul_energy.png"));
+            blit(ms, i + 9, height - 9, 9, 18, maxenergy, 9, 128, 90);
         } else {
-            Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergyborder.png"));
-            blit(ms,i, height - 9, 0, 0, 128,9, 128, 9);
+            Minecraft.getInstance().textureManager.bind(Goety.location("textures/gui/soul_energy.png"));
+            blit(ms, i, height - 9, 0, 0, 128, 9, 128, 90);
         }
-        Minecraft.getInstance().textureManager.bind(new ResourceLocation(Goety.MOD_ID, "textures/gui/soulenergy.png"));
-        blit(ms,i + 9, height - 7, offset, 0, energylength,5, 234, 5);
+        Minecraft.getInstance().textureManager.bind(Goety.location("textures/gui/soul_energy_bar.png"));
+        blit(ms, i + 9, height - 7, offset, 0, energylength, 5, 234, 5);
+
+        if (MobUtil.isSpellCasting(player)){
+            int useDuration = player.getUseItem().getUseDuration();
+            int remain = player.getUseItemRemainingTicks();
+            float useTime0 = (float) (useDuration - remain) / useDuration;
+            int useTime = (int) (117 * useTime0);
+            Minecraft.getInstance().textureManager.bind(Goety.location("textures/gui/soul_energy.png"));
+            blit(ms, i + 9, height - 9, 9, 27, useTime, 9, 128, 90);
+        }
+
         if (MainConfig.ShowNum.get()) {
             this.minecraft.getProfiler().push("soulenergy");
             String s = "" + SoulEnergy + "/" + "" + SoulEnergyTotal;

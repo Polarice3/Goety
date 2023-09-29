@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.projectiles.BlightFireEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
 import com.Polarice3.Goety.common.entities.projectiles.GhostFireEntity;
 import com.Polarice3.Goety.common.entities.utilities.SummonCircleEntity;
+import com.Polarice3.Goety.common.items.magic.MagicFocusItem;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -20,6 +21,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class WandUtil {
@@ -27,26 +29,43 @@ public class WandUtil {
         return itemStack.getItem() instanceof SoulWand;
     }
 
-    public static ItemStack findWand(PlayerEntity playerEntity) {
+    public static ItemStack findWand(LivingEntity livingEntity) {
         ItemStack foundStack = ItemStack.EMPTY;
-        if (isMatchingItem(playerEntity.getMainHandItem())){
-            foundStack = playerEntity.getMainHandItem();
-        } else if (isMatchingItem(playerEntity.getOffhandItem())){
-            foundStack = playerEntity.getOffhandItem();
+        if (isMatchingItem(livingEntity.getMainHandItem())){
+            foundStack = livingEntity.getMainHandItem();
+        } else if (isMatchingItem(livingEntity.getOffhandItem())){
+            foundStack = livingEntity.getOffhandItem();
         }
 
         return foundStack;
     }
 
-    public static ItemStack findFocus(PlayerEntity playerEntity){
+    public static ItemStack findFocus(LivingEntity livingEntity){
         ItemStack foundStack = ItemStack.EMPTY;
-        if (!findWand(playerEntity).isEmpty()){
-            if (!SoulWand.getFocus(findWand(playerEntity)).isEmpty()) {
-                foundStack = SoulWand.getFocus(findWand(playerEntity));
+        if (!findWand(livingEntity).isEmpty()){
+            if (!SoulWand.getFocus(findWand(livingEntity)).isEmpty()) {
+                foundStack = SoulWand.getFocus(findWand(livingEntity));
             }
         }
 
         return foundStack;
+    }
+
+    public static ItemStack findFocusInInv(@Nullable PlayerEntity player){
+        ItemStack foundStack = ItemStack.EMPTY;
+        if (player != null) {
+            for (int i = 0; i < player.inventory.items.size(); ++i) {
+                ItemStack inSlot = player.inventory.getItem(i);
+                if (inSlot.getItem() instanceof MagicFocusItem) {
+                    foundStack = inSlot;
+                }
+            }
+        }
+        return foundStack;
+    }
+
+    public static boolean hasFocusInInv(@Nullable PlayerEntity player){
+        return !findFocusInInv(player).isEmpty();
     }
 
     public static boolean enchantedFocus(PlayerEntity playerEntity){

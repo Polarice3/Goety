@@ -31,7 +31,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.WitchEntity;
@@ -39,7 +38,6 @@ import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -68,6 +66,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -91,14 +90,17 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     private static final DataParameter<Float> SPIN = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.FLOAT);
     private static final DataParameter<Boolean> HAT = EntityDataManager.defineId(ApostleEntity.class, DataSerializers.BOOLEAN);
     private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS).setDarkenScreen(true).setCreateWorldFog(true);
-    public final Predicate<LivingEntity> ZOMBIE_MINIONS = (livingEntity) -> {
-        return livingEntity instanceof ZombieVillagerMinionEntity || livingEntity instanceof ZPiglinMinionEntity;
+    public Predicate<OwnedEntity> ZOMBIE_MINIONS = (owned) -> {
+        return (owned instanceof ZombieVillagerMinionEntity || owned instanceof ZPiglinMinionEntity) && owned.getTrueOwner() == this;
     };
     private final Predicate<LivingEntity> MONOLITHS = (livingEntity) -> {
-        return livingEntity instanceof ObsidianMonolithEntity;
+        return livingEntity instanceof ObsidianMonolithEntity && ((ObsidianMonolithEntity) livingEntity).getTrueOwner() == this;
     };
-    public final Predicate<LivingEntity> SKELETON_MINIONS = (livingEntity) -> {
-        return livingEntity instanceof SkeletonVillagerMinionEntity || livingEntity instanceof MalghastEntity;
+    private final Predicate<OwnedEntity> SKELETON_MINIONS = (owned) -> {
+        return (owned instanceof SkeletonVillagerMinionEntity || owned instanceof MalghastEntity) && owned.getTrueOwner() == this;
+    };
+    private final Predicate<Entity> OWNED_TRAPS = (entity) -> {
+        return entity instanceof AbstractTrapEntity && ((AbstractTrapEntity) entity).getOwner() == this;
     };
     public int antiRegen;
     public int antiRegenTotal;
@@ -124,9 +126,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new SecondPhaseIndicator());
-        this.goalSelector.addGoal(2, new BowAttackGoal<>(this));
-        this.goalSelector.addGoal(2, new FasterBowAttackGoal<>(this));
-        this.goalSelector.addGoal(2, new FastestBowAttackGoal<>(this));
+        this.goalSelector.addGoal(2, new ApostleBowGoal<>(this, 30.0F));
         this.goalSelector.addGoal(3, new CastingSpellGoal());
         this.goalSelector.addGoal(3, new FireballSpellGoal());
         this.goalSelector.addGoal(3, new ZombieSpellGoal());
@@ -684,7 +684,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             return false;
         }
 
-        float trueAmount = this.level.dimension() == World.NETHER ? pAmount/4 : pAmount;
+        float trueAmount = this.level.dimension() == World.NETHER ? pAmount / 2 : pAmount;
 
         if (pSource == DamageSource.OUT_OF_WORLD){
             this.remove();
@@ -1143,7 +1143,9 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     public AbstractArrowEntity getArrow(ItemStack pArrowStack, float pDistanceFactor) {
-        AbstractArrowEntity abstractarrowentity = ProjectileHelper.getMobArrow(this, pArrowStack, pDistanceFactor);
+        DeathArrowEntity deathArrow = new DeathArrowEntity(this.level, this);
+        deathArrow.setEffectsFromItem(pArrowStack);
+        deathArrow.setEnchantmentEffectsFromEntity(this, pDistanceFactor);
         if (this.getArrowEffect() != null){
             Effect mobEffect = this.getArrowEffect();
             int amp;
@@ -1155,12 +1157,30 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
             if (this.getTarget() != null && this.getArrowEffect() == Effects.HARM && this.getTarget().isInvertedHealAndHarm()){
                 mobEffect = Effects.HEAL;
             }
-            ((ArrowEntity)abstractarrowentity).addEffect(new EffectInstance(mobEffect, mobEffect.isInstantenous() ? 1 : 200, amp));
+            deathArrow.addEffect(new EffectInstance(mobEffect, mobEffect.isInstantenous() ? 1 : 200, amp));
         }
         if (this.getFireArrow()){
-            abstractarrowentity.setRemainingFireTicks(100);
+            deathArrow.setRemainingFireTicks(100);
         }
-        return abstractarrowentity;
+        if (this.level.dimension() == World.NETHER){
+            deathArrow.setPierceLevel((byte) 5);
+            deathArrow.setCritArrow(true);
+        } else {
+            float critChance = 0.05F;
+            if (this.level.getDifficulty() == Difficulty.HARD){
+                critChance += 0.25F;
+            }
+            if (this.isSecondPhase()){
+                critChance += 0.1F;
+            }
+            if (this.isSecondPhase() && this.getHealth() <= this.getMaxHealth() / 4){
+                critChance += 0.25F;
+            }
+            if (this.level.random.nextFloat() <= critChance){
+                deathArrow.setCritArrow(true);
+            }
+        }
+        return deathArrow;
     }
 
     public boolean canFireProjectileWeapon(ShootableItem p_230280_1_) {
@@ -1478,7 +1498,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         @Override
         public boolean canUse() {
             int i = ApostleEntity.this.level.getEntitiesOfClass(OwnedEntity.class, ApostleEntity.this.getBoundingBox().inflate(64.0D), ZOMBIE_MINIONS).size();
-            int i2 = ApostleEntity.this.level.getEntitiesOfClass(AbstractTrapEntity.class, ApostleEntity.this.getBoundingBox().inflate(64.0D)).size();
+            int i2 = ApostleEntity.this.level.getEntitiesOfClass(AbstractTrapEntity.class, ApostleEntity.this.getBoundingBox().inflate(64.0D), OWNED_TRAPS).size();
             if (!super.canUse()) {
                 return false;
             } else {
@@ -1811,57 +1831,117 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
     }
 
-    static class BowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T> {
+    static class ApostleBowGoal<T extends ApostleEntity> extends Goal{
         private final T mob;
+        private final float attackRadiusSqr;
+        private int attackTime = -1;
+        private int seeTime;
+        private boolean strafingClockwise;
+        private boolean strafingBackwards;
+        private int strafingTime = -1;
 
-        public BowAttackGoal(T p_i47515_1_) {
-            super(p_i47515_1_, 1.0D, 40, 30.0F);
-            this.mob = p_i47515_1_;
+        public ApostleBowGoal(T p_25792_, float p_25795_) {
+            this.mob = p_25792_;
+            this.attackRadiusSqr = p_25795_ * p_25795_;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
 
         @Override
         public boolean canUse() {
-            return !this.mob.isSecondPhase() && this.mob.getTarget() != null && this.HaveBow() && !this.mob.isSettingUpSecond();
+            return this.mob.getTarget() != null && this.HaveBow() && !this.mob.isSettingUpSecond();
+        }
+
+        public boolean canContinueToUse() {
+            return (this.canUse() || !this.mob.getNavigation().isDone()) && this.HaveBow() && !this.mob.isCasting();
+        }
+
+        public void start() {
+            super.start();
+            this.mob.setAggressive(true);
+        }
+
+        public void stop() {
+            super.stop();
+            this.mob.setAggressive(false);
+            this.seeTime = 0;
+            this.attackTime = -1;
+            this.mob.stopUsingItem();
+        }
+
+        public void tick() {
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null) {
+                double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
+                boolean flag = this.mob.getSensing().canSee(livingentity);
+                boolean flag1 = this.seeTime > 0;
+                if (flag != flag1) {
+                    this.seeTime = 0;
+                }
+
+                if (flag) {
+                    ++this.seeTime;
+                } else {
+                    --this.seeTime;
+                }
+
+                if (!(d0 > (double)this.attackRadiusSqr) && this.seeTime >= 20) {
+                    this.mob.getNavigation().stop();
+                    ++this.strafingTime;
+                } else {
+                    this.mob.getNavigation().moveTo(livingentity, 1.0F);
+                    this.strafingTime = -1;
+                }
+
+                if (this.strafingTime >= 20) {
+                    if ((double)this.mob.getRandom().nextFloat() < 0.3D) {
+                        this.strafingClockwise = !this.strafingClockwise;
+                    }
+
+                    if ((double)this.mob.getRandom().nextFloat() < 0.3D) {
+                        this.strafingBackwards = !this.strafingBackwards;
+                    }
+
+                    this.strafingTime = 0;
+                }
+
+                if (this.strafingTime > -1) {
+                    if (d0 > (double)(this.attackRadiusSqr * 0.75F)) {
+                        this.strafingBackwards = false;
+                    } else if (d0 < (double)(this.attackRadiusSqr * 0.25F)) {
+                        this.strafingBackwards = true;
+                    }
+
+                    this.mob.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                    this.mob.lookAt(livingentity, 30.0F, 30.0F);
+                } else {
+                    this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
+                }
+
+                if (this.mob.isUsingItem()) {
+                    if (!flag && this.seeTime < -60) {
+                        this.mob.stopUsingItem();
+                    } else if (flag) {
+                        int i = this.mob.getTicksUsingItem();
+                        if (i >= 20) {
+                            this.mob.stopUsingItem();
+                            this.mob.performRangedAttack(livingentity, BowItem.getPowerForTime(i));
+                            Difficulty difficulty = this.mob.level.getDifficulty();
+                            int attackIntervalMin = difficulty != Difficulty.HARD ? 10 : 5;
+                            if (this.mob.isSecondPhase() || this.mob.level.dimension() == World.NETHER) {
+                                attackIntervalMin = 0;
+                            }
+                            this.attackTime = attackIntervalMin;
+                        }
+                    }
+                } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+                    this.mob.startUsingItem(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
+                }
+
+            }
         }
 
         protected boolean HaveBow() {
-            return this.mob.isHolding(item -> item instanceof BowItem);
-        }
-    }
-
-    static class FasterBowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T> {
-        private final T mob;
-
-        public FasterBowAttackGoal(T p_i47515_1_) {
-            super(p_i47515_1_, 1.0D, 20, 30.0F);
-            this.mob = p_i47515_1_;
-        }
-
-        @Override
-        public boolean canUse() {
-            return this.mob.isSecondPhase() && this.mob.getHealth() > this.mob.getMaxHealth()/4 && this.mob.getTarget() != null && this.HaveBow() && !this.mob.isSettingUpSecond();
-        }
-
-        protected boolean HaveBow() {
-            return this.mob.isHolding(item -> item instanceof BowItem);
-        }
-    }
-
-    static class FastestBowAttackGoal<T extends ApostleEntity & IRangedAttackMob> extends RangedBowAttackGoal<T> {
-        private final T mob;
-
-        public FastestBowAttackGoal(T p_i47515_1_) {
-            super(p_i47515_1_, 1.0D, 5, 30.0F);
-            this.mob = p_i47515_1_;
-        }
-
-        @Override
-        public boolean canUse() {
-            return this.mob.isSecondPhase() && this.mob.getHealth() <= this.mob.getMaxHealth()/4 && this.mob.getTarget() != null && this.HaveBow() && !this.mob.isSettingUpSecond();
-        }
-
-        protected boolean HaveBow() {
-            return this.mob.isHolding(item -> item instanceof BowItem);
+            return this.mob.isHolding(item -> item.getItem() instanceof BowItem);
         }
     }
 

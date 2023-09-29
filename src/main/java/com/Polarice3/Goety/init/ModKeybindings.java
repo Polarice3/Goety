@@ -10,7 +10,7 @@ public class ModKeybindings {
         keyBindings = new KeyBinding[6];
 
         keyBindings[0] = new KeyBinding("key.goety.wand", 90, "key.goety.category");
-        keyBindings[1] = new KeyBinding("key.goety.wandandbag", 88, "key.goety.category");
+        keyBindings[1] = new KeyBinding("key.goety.focusCircle", 88, "key.goety.category");
         keyBindings[2] = new KeyBinding("key.goety.bag", 67, "key.goety.category");
         keyBindings[3] = new KeyBinding("key.goety.ceaseFire", 86, "key.goety.category");
         keyBindings[4] = new KeyBinding("key.goety.lichKiss", 82, "key.goety.category");
@@ -20,5 +20,9 @@ public class ModKeybindings {
         {
             ClientRegistry.registerKeyBinding(keyBindings[i]);
         }
+    }
+
+    public static KeyBinding wandCircle(){
+        return keyBindings[1];
     }
 }

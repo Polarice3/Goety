@@ -14,7 +14,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The Soul Kiln is a Cursed Infuser that burns and smelts items instead of infusing them with magic. The Soul Kiln needs to be on top of a Cursed Cage that has a Totem in it to work."
+      "text": "The Soul Kiln is a Cursed Infuser that burns and smelts items instead of infusing them with magic. The Soul Kiln needs to be on top of a $(l:intro/cursed_cage)Cursed Cage$() that has a $(l:intro/magical_emeralds)Totem$() in it to work."
     },
     {
       "type": "patchouli:text",

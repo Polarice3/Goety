@@ -197,6 +197,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> FLAME_CAPTURE_CATCH = create("flame_capture_catch");
     public static final RegistryObject<SoundEvent> FLAME_CAPTURE_RELEASE = create("flame_capture_release");
 
+    public static final RegistryObject<SoundEvent> FOCUS_PICK = create("focus_pick");
+
     public static final RegistryObject<SoundEvent> ALTAR_START = create("altar_start");
     public static final RegistryObject<SoundEvent> ALTAR_LOOP = create("altar_loop");
     public static final RegistryObject<SoundEvent> ALTAR_FINISH = create("altar_finish");

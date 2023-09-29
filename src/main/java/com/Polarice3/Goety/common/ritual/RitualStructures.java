@@ -181,12 +181,12 @@ public class RitualStructures {
             case "forge":
                 first = 1;
                 second = 3;
-                third = 4;
+                third = 2;
                 break;
             case "magic":
                 first = 16;
                 second = 1;
-                third = 2;
+                third = 1;
                 break;
             case "sabbath":
                 first = 8;

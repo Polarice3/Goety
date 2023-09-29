@@ -4,7 +4,6 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.gui.screen.inventory.FocusBagScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.SoulItemScreen;
-import com.Polarice3.Goety.client.gui.screen.inventory.WandandBagScreen;
 import com.Polarice3.Goety.client.inventory.container.ModContainerType;
 import com.Polarice3.Goety.client.particles.*;
 import com.Polarice3.Goety.client.render.*;
@@ -67,6 +66,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FROST_BALL.get(), FrostBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEAD_SLIME_BALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SWORD.get(),(rendererManager) -> new SwordProjectileRenderer<>(rendererManager, itemRenderer, 1.25F, true));
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEATH_ARROW.get(), DeathArrowRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCYTHE.get(), ScytheProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
@@ -206,7 +206,6 @@ public class ClientEventBusSubscriber {
         RenderTypeLookup.setRenderLayer(ModBlocks.MURK_LEAVES.get(), RenderType.cutoutMipped());
         ScreenManager.register(ModContainerType.WAND.get(), SoulItemScreen::new);
         ScreenManager.register(ModContainerType.FOCUSBAG.get(), FocusBagScreen::new);
-        ScreenManager.register(ModContainerType.WANDANDBAG.get(), WandandBagScreen::new);
         ModKeybindings.init();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(BossBarEvent::renderBossBar);

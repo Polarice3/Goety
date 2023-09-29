@@ -86,6 +86,13 @@ public class ModEntityType {
                     .clientTrackingRange(4)
                     .build(new ResourceLocation(Goety.MOD_ID, "sword").toString()));
 
+    public static final RegistryObject<EntityType<DeathArrowEntity>> DEATH_ARROW = ENTITY_TYPES.register("death_arrow",
+            () -> EntityType.Builder.<DeathArrowEntity>of(DeathArrowEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build(new ResourceLocation(Goety.MOD_ID, "death_arrow").toString()));
+
     public static final RegistryObject<EntityType<ScytheProjectileEntity>> SCYTHE = ENTITY_TYPES.register("scythe",
             () -> EntityType.Builder.<ScytheProjectileEntity>of(ScytheProjectileEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.5F)

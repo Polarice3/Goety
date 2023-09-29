@@ -15,7 +15,4 @@ public class ModContainerType {
 
     public static final RegistryObject<ContainerType<FocusBagContainer>> FOCUSBAG = CONTAINER_TYPE.register("focusbag",
             () -> IForgeContainerType.create(FocusBagContainer::createContainerClientSide));
-
-    public static final RegistryObject<ContainerType<WandandBagContainer>> WANDANDBAG = CONTAINER_TYPE.register("wandandbag",
-            () -> IForgeContainerType.create(WandandBagContainer::createContainerClientSide));
 }

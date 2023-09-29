@@ -119,6 +119,7 @@
   "entity.goety.dead_slime_ball":"Dead Slime Ball",
   "entity.goety.ice_storm":"Ice Storm",
   "entity.goety.sword":"Flying Sword",
+  "entity.goety.death_arrow":"Death Arrow",
   "entity.goety.soul_bullet":"Soul Bullet",
   "entity.goety.soul_light":"Soul Light",
   "entity.goety.glow_light":"Glow Light",
@@ -560,16 +561,11 @@
 
   "key.goety.category": "Goety",
   "key.goety.wand": "Open Wand Focus Slot",
-  "key.goety.wandandbag": "Open Bag with Wand",
+  "key.goety.focusCircle": "Open Focus Circle",
   "key.goety.bag": "Open Focus Bag",
   "key.goety.ceaseFire": "Cease Fire",
   "key.goety.magnet": "Lich Magnet",
   "key.goety.lichKiss": "Lich Kiss",
-
-  "text.goety.swap": "Swap",
-  "text.goety.insert": "Insert",
-  "text.goety.extract": "Remove",
-  "text.goety.empty": "Empty",
 
   "info.goety.goldtotem.souls": "\u00A7aSoul Energy: %d/%d\u00A7a",
   "info.goety.soulitems.cost": "\u00A73Soul Cost: %d\u00A73",
@@ -614,6 +610,11 @@
   "tooltip.goety.arca_not_bound": "Has yet to be bound to an Arca.",
   "tooltip.goety.cage": "Prisoner: ",
   "tooltip.goety.entity": "Entity",
+  "tooltip.goety.focusBag.bag": "Bag",
+  "tooltip.goety.focusBag.insert": "Insert",
+  "tooltip.goety.focusBag.swap": "Swap",
+  "tooltip.goety.focusBag.extract": "Extract",
+  "tooltip.goety.focusBag.empty": "Empty",
 
   "spell.goety.none": "§eMagic§e",
   "spell.goety.necromancy": "§7Necromancy§7",

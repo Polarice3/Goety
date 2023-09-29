@@ -5,8 +5,10 @@ import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.client.audio.BossLoopMusic;
 import com.Polarice3.Goety.client.audio.FelFlySound;
 import com.Polarice3.Goety.client.audio.LocustSound;
+import com.Polarice3.Goety.client.gui.overlay.CurrentFocusGui;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
+import com.Polarice3.Goety.client.gui.screen.inventory.FocusRadialMenuScreen;
 import com.Polarice3.Goety.common.entities.ally.FelFlyEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
@@ -18,15 +20,20 @@ import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModKeybindings;
 import com.Polarice3.Goety.init.ModSounds;
+import com.Polarice3.Goety.utils.FocusBagFinder;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.SEHelper;
+import com.Polarice3.Goety.utils.WandUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -37,10 +44,12 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = Goety.MOD_ID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -107,6 +116,9 @@ public class ClientEvents {
         if (player != null) {
             if (SEHelper.getSoulsContainer(player)){
                 new SoulEnergyGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack(), event.getPartialTicks());
+            }
+            if (!WandUtil.findFocus(player).isEmpty()){
+                new CurrentFocusGui(Minecraft.getInstance(), player).drawHUD(event.getMatrixStack());
             }
             RayTraceResult hitResult = minecraft.hitResult;
             FontRenderer fontRenderer = minecraft.font;
@@ -216,15 +228,69 @@ public class ClientEvents {
         }
     }
 
+    /**
+     * From here, code is modified and based of @gigaherz ClientEvents codes: <a href="https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ClientEvents.java">...</a>
+     * */
+    public static void wipeOpen()
+    {
+        while (ModKeybindings.wandCircle().consumeClick()) {
+        }
+    }
+
+    private static boolean toolMenuKeyWasDown = false;
+
+    @SubscribeEvent
+    public static void handleKeys(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) {
+            return;
+        }
+
+        Minecraft minecraft = Minecraft.getInstance();
+
+        if (minecraft.screen == null) {
+            boolean toolMenuKeyIsDown = ModKeybindings.wandCircle().isDown();
+            if (toolMenuKeyIsDown && !toolMenuKeyWasDown) {
+                while (ModKeybindings.wandCircle().consumeClick()) {
+                    if (minecraft.screen == null && minecraft.player != null) {
+                        ItemStack inHand = WandUtil.findWand(minecraft.player);
+                        if (!inHand.isEmpty() && ((FocusBagFinder.canOpenWandCircle(minecraft.player)))) {
+                            minecraft.setScreen(new FocusRadialMenuScreen());
+                        }
+                    }
+                }
+            }
+            toolMenuKeyWasDown = toolMenuKeyIsDown;
+        } else {
+            toolMenuKeyWasDown = true;
+        }
+    }
+
+    public static boolean isKeyDown(KeyBinding keybind) {
+        if (keybind.isUnbound()) {
+            return false;
+        }
+
+        boolean isDown = false;
+        switch (keybind.getKey().getType()) {
+            case KEYSYM:
+                isDown = InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), keybind.getKey().getValue());
+                break;
+            case MOUSE:
+                isDown = GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), keybind.getKey().getValue()) == GLFW.GLFW_PRESS;
+                break;
+        }
+        return isDown && keybind.getKeyConflictContext().isActive() && keybind.getKeyModifier().isActive(keybind.getKeyConflictContext());
+    }
+    /**
+     * To Here
+     * */
+
     @SubscribeEvent
     public static void KeyInputs(InputEvent.KeyInputEvent event){
         Minecraft MINECRAFT = Minecraft.getInstance();
 
         if (ModKeybindings.keyBindings[0].isDown() && MINECRAFT.isWindowActive()){
             ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CWandKeyPacket());
-        }
-        if (ModKeybindings.keyBindings[1].isDown() && MINECRAFT.isWindowActive()){
-            ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CWandAndBagKeyPacket());
         }
         if (ModKeybindings.keyBindings[2].isDown() && MINECRAFT.isWindowActive()){
             ModNetwork.INSTANCE.send(PacketDistributor.SERVER.noArg(), new CBagKeyPacket());

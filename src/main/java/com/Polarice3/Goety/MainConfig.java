@@ -20,6 +20,8 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> MaxArcaSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulGuiHorizontal;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulGuiVertical;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FocusGuiHorizontal;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FocusGuiVertical;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> IllagerAssaultSpawnFreq;
     public static final ForgeConfigSpec.ConfigValue<Integer> IllagerAssaultSpawnChance;
@@ -113,6 +115,7 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterBook;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulGuiShow;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> FocusGuiShow;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
@@ -175,6 +178,8 @@ public class MainConfig {
                 .define("starterBook", false);
         CraftingSouls = BUILDER.comment("How much Souls is consumed when crafting with Totem, Default: 1")
                 .defineInRange("craftSouls", 1, 0, Integer.MAX_VALUE);
+        FocusGuiShow = BUILDER.comment("Show currently equipped focus on Wand/Staff in Gui, Default: true")
+                .define("focusGuiShow", true);
         SoulGuiShow = BUILDER.comment("Show the Soul Energy Bar if Player has Totem of Souls/Arca, Default: true")
                 .define("soulGuiShow", true);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
@@ -183,6 +188,10 @@ public class MainConfig {
                 .defineInRange("soulGuiHorizontal", 100, -Integer.MAX_VALUE, Integer.MAX_VALUE);
         SoulGuiVertical = BUILDER.comment("Vertical Position of where the Soul Energy Bar is located, Default: -5")
                 .defineInRange("soulGuiVertical", -5, -Integer.MAX_VALUE, Integer.MAX_VALUE);
+        FocusGuiHorizontal = BUILDER.comment("Move where the equipped Focus is located horizontally from its original position (- = Left, + = Right), Default: 0")
+                .defineInRange("focusGuiHorizontal", 0, -Integer.MAX_VALUE, Integer.MAX_VALUE);
+        FocusGuiVertical = BUILDER.comment("Move where the equipped Focus is located vertically from its original position (- = Up, + = Down), Default: 0")
+                .defineInRange("focusGuiVertical", 0, -Integer.MAX_VALUE, Integer.MAX_VALUE);
         ApocalypseMode = BUILDER.comment("Nether Meteors deals environmental damage. WARNING: Causes lots of lag. Default: false")
                 .define("apocalypseMode", false);
         SpecialBossBar = BUILDER.comment("Bosses from the Mod has custom looking Boss Bars. Default: true")
