@@ -52,7 +52,9 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
     public static final ForgeConfigSpec.ConfigValue<Integer> LichHealCost;
+    public static final ForgeConfigSpec.ConfigValue<Integer> LichHealSeconds;
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulKilnCost;
+    public static final ForgeConfigSpec.ConfigValue<Double> LichHealAmount;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkManorSpacing;
     public static final ForgeConfigSpec.ConfigValue<Integer> DarkManorSeperation;
@@ -151,11 +153,13 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> UrbhadhachThrall;
     public static final ForgeConfigSpec.ConfigValue<Boolean> InterDimensionalMobs;
     public static final ForgeConfigSpec.ConfigValue<Boolean> GoldenKingSpawn;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichSoulHeal;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichNightVision;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichDamageHelmet;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichUndeadFriends;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichMagicResist;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichPowerfulFoes;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> LichVillagerHate;
     public static final ForgeConfigSpec.ConfigValue<Boolean> LichScrollRequirement;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> FancierApostleDeath;
@@ -397,8 +401,14 @@ public class MainConfig {
                 .define("cultistSpread", true);
         BUILDER.pop();
         BUILDER.push("Lich");
-        LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per second if they've become a Lich, Default: 1")
-                .defineInRange("lichHealCost", 1, 0, Integer.MAX_VALUE);
+        LichSoulHeal = BUILDER.comment("Enable Liches healing using Soul Energy, Default: true")
+                .define("lichSoulHeal", true);
+        LichHealCost = BUILDER.comment("How much Soul Energy is cost to heal the Player per configured second if they've become a Lich, Default: 5")
+                .defineInRange("lichHealCost", 5, 0, Integer.MAX_VALUE);
+        LichHealSeconds = BUILDER.comment("How many seconds until Lich Players heals using Soul Energy, Default: 1")
+                .defineInRange("lichHealSeconds", 1, 0, Integer.MAX_VALUE);
+        LichHealAmount = BUILDER.comment("How much health Lich Players heals using Soul Energy, Default: 1.0")
+                .defineInRange("lichHealCost", 1.0, 0.0, Double.MAX_VALUE);
         LichNightVision = BUILDER.comment("Enable to get infinite Night Vision when being a Lich. If set true, wearing Fel Helm will no longer give Blindness during day, Default: true")
                 .define("lichNightVision", true);
         LichDamageHelmet = BUILDER.comment("Wearing Helmet in Sunlight as a Lich periodically damages it, Default: true")
@@ -409,6 +419,8 @@ public class MainConfig {
                 .define("lichMagicResist", false);
         LichPowerfulFoes = BUILDER.comment("If Lich Undead Friendly is set to true, Only undead that have lower than 50 Hearts are friendly, Default: true")
                 .define("lichPowerfulHostile", true);
+        LichVillagerHate = BUILDER.comment("If Villagers provide negative Reputation to Liches and non-Player Iron Golems are automatically aggressive against them, Default: true")
+                .define("lichVillagerHate", true);
         LichScrollRequirement = BUILDER.comment("Whether the player needs to read a Forbidden Scroll to start the Potion of Transformation ritual, Default: true")
                 .define("lichScrollRequirement", true);
         BUILDER.pop();

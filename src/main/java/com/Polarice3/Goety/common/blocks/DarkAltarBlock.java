@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -59,12 +60,16 @@ public class DarkAltarBlock extends ContainerBlock implements IForgeBlock {
         TileEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof DarkAltarTileEntity) {
             DarkAltarTileEntity darkAltarTile = (DarkAltarTileEntity) tileEntity;
-            if (player.isShiftKeyDown() || player.isCrouching()){
-                darkAltarTile.RemoveItem();
-                return ActionResultType.SUCCESS;
-            } else {
-                return darkAltarTile.activate(world, pos, player, hand,
-                        hit.getDirection()) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+            if (darkAltarTile.itemStackHandler.isPresent()){
+                IItemHandler handler = darkAltarTile.itemStackHandler.orElseThrow(RuntimeException::new);
+                ItemStack itemStack = handler.getStackInSlot(0);
+                if (!itemStack.isEmpty()){
+                    darkAltarTile.RemoveItem();
+                    return ActionResultType.SUCCESS;
+                } else if (!player.getItemInHand(hand).isEmpty()){
+                    return darkAltarTile.activate(world, pos, player, hand,
+                            hit.getDirection()) ? ActionResultType.SUCCESS : ActionResultType.PASS;
+                }
             }
         }
         return super.use(state, world, pos, player, hand, hit);

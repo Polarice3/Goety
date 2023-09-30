@@ -51,7 +51,7 @@ public class IllagerSpawner {
                 return 0;
             } else {
                 this.ticksUntilSpawn += MainConfig.IllagerAssaultSpawnFreq.get();
-                if (randomsource.nextInt(MainConfig.IllagerAssaultSpawnFreq.get()) != 0) {
+                if (randomsource.nextInt(MainConfig.IllagerAssaultSpawnChance.get()) != 0) {
                     return 0;
                 } else {
                     int j = p_64570_.players().size();

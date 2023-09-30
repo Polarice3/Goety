@@ -119,29 +119,33 @@ public class LichEvents {
                     player.removeEffect(ModEffects.SOUL_HUNGER.get());
                 }
             }
-            if (!player.isOnFire()) {
-                if (player.getHealth() < player.getMaxHealth()) {
-                    if (player.tickCount % 20 == 0 && SEHelper.getSoulsAmount(player, MainConfig.LichHealCost.get())) {
-                        player.heal(1.0F);
-                        Vector3d vector3d = player.getDeltaMovement();
-                        if (!player.level.isClientSide){
-                            ServerWorld serverWorld = (ServerWorld) player.level;
-                            serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
+            if (MainConfig.LichSoulHeal.get()) {
+                if (!player.isOnFire()) {
+                    if (player.getHealth() < player.getMaxHealth()) {
+                        if (player.tickCount % ModMathHelper.secondsToTicks(MainConfig.LichHealSeconds.get()) == 0 && SEHelper.getSoulsAmount(player, MainConfig.LichHealCost.get())) {
+                            player.heal(MainConfig.LichHealAmount.get().floatValue());
+                            Vector3d vector3d = player.getDeltaMovement();
+                            if (!player.level.isClientSide) {
+                                ServerWorld serverWorld = (ServerWorld) player.level;
+                                serverWorld.sendParticles(ParticleTypes.SOUL, player.getRandomX(0.5D), player.getRandomY(), player.getRandomZ(0.5D), 0, vector3d.x * -0.2D, 0.1D, vector3d.z * -0.2D, 0.5F);
+                            }
+                            SEHelper.decreaseSouls(player, MainConfig.LichHealCost.get());
                         }
-                        SEHelper.decreaseSouls(player, MainConfig.LichHealCost.get());
                     }
                 }
             }
-            for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
-                if (villager.getPlayerReputation(player) > -100 && villager.getPlayerReputation(player) < 100) {
-                    if (player.tickCount % 20 == 0) {
-                        villager.getGossips().add(player.getUUID(), GossipType.MAJOR_NEGATIVE, 25);
+            if (MainConfig.LichVillagerHate.get()) {
+                for (VillagerEntity villager : player.level.getEntitiesOfClass(VillagerEntity.class, player.getBoundingBox().inflate(16.0D))) {
+                    if (villager.getPlayerReputation(player) > -100 && villager.getPlayerReputation(player) < 100) {
+                        if (player.tickCount % 20 == 0) {
+                            villager.getGossips().add(player.getUUID(), GossipType.MAJOR_NEGATIVE, 25);
+                        }
                     }
                 }
-            }
-            for (IronGolemEntity ironGolem : player.level.getEntitiesOfClass(IronGolemEntity.class, player.getBoundingBox().inflate(16.0D))) {
-                if (!ironGolem.isPlayerCreated() && ironGolem.getTarget() != player && EntityPredicate.DEFAULT.range(16.0F).test(ironGolem, player)) {
-                    ironGolem.setTarget(player);
+                for (IronGolemEntity ironGolem : player.level.getEntitiesOfClass(IronGolemEntity.class, player.getBoundingBox().inflate(16.0D))) {
+                    if (!ironGolem.isPlayerCreated() && ironGolem.getTarget() != player && EntityPredicate.DEFAULT.range(16.0F).test(ironGolem, player)) {
+                        ironGolem.setTarget(player);
+                    }
                 }
             }
             if (player.isAlive()){
@@ -285,9 +289,6 @@ public class LichEvents {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (LichdomHelper.isLich(player)) {
-                if (!new ZombieEntity(player.level).hurt(event.getSource(), event.getAmount())) {
-                    event.setCanceled(true);
-                }
                 if (event.getSource() == DamageSource.DROWN){
                     event.setCanceled(true);
                 }
