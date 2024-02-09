@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.items.equipment;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
 import com.Polarice3.Goety.common.entities.projectiles.ScytheProjectileEntity;
 import com.Polarice3.Goety.common.items.ModItemTiers;
 import com.Polarice3.Goety.common.network.ModNetwork;
@@ -27,16 +27,16 @@ public class DeathScytheItem extends DarkScytheItem{
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (MainConfig.SoulRepair.get()) {
+        if (ItemConfig.SoulRepair.get()) {
             if (entityIn instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entityIn;
                 if (!(player.swinging && isSelected)) {
                     if (stack.isDamaged()) {
                         if (SEHelper.getSoulsContainer(player)){
-                            if (SEHelper.getSoulsAmount(player, MainConfig.ItemsRepairAmount.get())){
+                            if (SEHelper.getSoulsAmount(player, ItemConfig.ItemsRepairAmount.get())){
                                 if (player.tickCount % 20 == 0) {
                                     stack.setDamageValue(stack.getDamageValue() - 1);
-                                    SEHelper.decreaseSouls(player, MainConfig.ItemsRepairAmount.get());
+                                    SEHelper.decreaseSouls(player, ItemConfig.ItemsRepairAmount.get());
                                 }
                             }
                         }

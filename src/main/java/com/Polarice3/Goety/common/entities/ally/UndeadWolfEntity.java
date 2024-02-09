@@ -141,6 +141,11 @@ public class UndeadWolfEntity extends SummonedEntity {
         this.setInSittingPose(this.orderedToSit);
     }
 
+    @Override
+    public boolean canUpdateMove() {
+        return false;
+    }
+
     @Nullable
     public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
         pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);

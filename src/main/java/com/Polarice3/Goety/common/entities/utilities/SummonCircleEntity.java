@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.utilities;
 
-import com.Polarice3.Goety.common.entities.neutral.IOwned;
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;

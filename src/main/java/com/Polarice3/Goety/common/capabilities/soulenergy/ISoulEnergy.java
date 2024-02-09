@@ -15,4 +15,6 @@ public interface ISoulEnergy {
     void setSoulEnergy(int soulEnergy);
     boolean increaseSE(int increase);
     boolean decreaseSE(int decrease);
+    FocusCooldown cooldowns();
+    void setCooldowns(FocusCooldown cooldowns);
 }

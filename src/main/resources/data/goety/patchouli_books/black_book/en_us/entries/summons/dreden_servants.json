@@ -11,6 +11,14 @@
     {
       "type": "patchouli:entity",
       "entity": "goety:dreden_minion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "One can call these creatures through the use of a $(l:focuses/rigid_focus)Rigid Focus$(), or through a ritual which summons one without a limited lifespan."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:thrall/summon_dreden_thrall"
     }
   ]
 }

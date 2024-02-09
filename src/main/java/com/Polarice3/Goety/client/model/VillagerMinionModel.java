@@ -12,7 +12,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.util.math.MathHelper;
 
 public class VillagerMinionModel<T extends OwnedEntity> extends BipedModel<T> {
-    public final ModelRenderer clothes;
+    public ModelRenderer clothes;
     public final ModelRenderer all;
 
     public VillagerMinionModel(float modelSize, float p_i47227_2_) {

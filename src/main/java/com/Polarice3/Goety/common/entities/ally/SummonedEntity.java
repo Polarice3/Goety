@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.SpellConfig;
+import com.Polarice3.Goety.api.entities.ally.IServant;
+import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModItems;
@@ -39,16 +41,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class SummonedEntity extends OwnedEntity {
+public class SummonedEntity extends OwnedEntity implements IServant {
     protected static final DataParameter<Byte> SUMMONED_FLAGS = EntityDataManager.defineId(SummonedEntity.class, DataSerializers.BYTE);
     private static final UUID SPEED_MODIFIER_UUID = UUID.fromString("9c47949c-b896-4802-8e8a-f08c50791a8a");
     private static final AttributeModifier SPEED_MODIFIER = new AttributeModifier(SPEED_MODIFIER_UUID, "Staying speed penalty", -1.0D, AttributeModifier.Operation.ADDITION);
@@ -195,6 +196,20 @@ public class SummonedEntity extends OwnedEntity {
         return false;
     }
 
+    @Nullable
+    public ILivingEntityData finalizeSpawn(IServerWorld pLevel, DifficultyInstance pDifficulty, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
+        pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+        if (pReason == SpawnReason.MOB_SUMMONED && this.getTrueOwner() != null && this.getMobType() == CreatureAttribute.UNDEAD){
+            for (int i = 0; i < pLevel.getLevel().random.nextInt(10) + 10; ++i) {
+                pLevel.getLevel().sendParticles(ModParticleTypes.SUMMON.get(), this.getRandomX(1.5D), this.getRandomY(), this.getRandomZ(1.5D), 0, 0.0F, 1.0F, 0.0F, 1.0F);
+            }
+            pLevel.getLevel().sendParticles(ModParticleTypes.SOUL_EXPLODE.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 2.0D, 0, 1.0F);
+        }
+        this.setWandering(false);
+        this.setStaying(false);
+        return pSpawnData;
+    }
+
     public void die(DamageSource pCause) {
         if (!this.level.isClientSide && this.hasCustomName() && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getTrueOwner() instanceof ServerPlayerEntity) {
             this.getTrueOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
@@ -289,6 +304,11 @@ public class SummonedEntity extends OwnedEntity {
 
     public void setStaying(boolean staying){
         this.setFlags(2, staying);
+    }
+
+    @Override
+    public boolean canUpdateMove() {
+        return this.getMobType() == CreatureAttribute.UNDEAD;
     }
 
     public void readAdditionalSaveData(CompoundNBT compound) {

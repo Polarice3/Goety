@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.client.events.BossBarEvent;
 import com.Polarice3.Goety.client.gui.screen.inventory.FocusBagScreen;
 import com.Polarice3.Goety.client.gui.screen.inventory.SoulItemScreen;
@@ -67,6 +68,7 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEAD_SLIME_BALL.get(),(rendererManager) -> new SpriteRenderer<>(rendererManager, itemRenderer, 0.75F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SWORD.get(),(rendererManager) -> new SwordProjectileRenderer<>(rendererManager, itemRenderer, 1.25F, true));
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DEATH_ARROW.get(), DeathArrowRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HARPOON.get(), HarpoonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SCYTHE.get(), ScytheProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WARPED_SPEAR.get(), WarpedSpearRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PITCHFORK.get(), PitchforkRenderer::new);
@@ -131,11 +133,17 @@ public class ClientEventBusSubscriber {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.HUSK_MINION.get(), HuskMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DROWNED_MINION.get(), DrownedMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FROZEN_ZOMBIE_MINION.get(), FrozenZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.JUNGLE_ZOMBIE_MINION.get(), JungleZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_MINION.get(), SkeletonMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.STRAY_MINION.get(), SkeletonMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.MOSSY_SKELETON_MINION.get(), SkeletonMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SUNKEN_SKELETON_MINION.get(), SunkenSkeletonMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.DREDEN_MINION.get(), DredenMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.WRAITH_MINION.get(), WraithMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.FARMER_MINION.get(), FarmerMinionRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.SKELETON_PILLAGER.get(), SkeletonPillagerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ZOMBIE_VINDICATOR.get(), ZombieVindicatorRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.PHANTOM_MINION.get(), PhantomMinionRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneRenderer::new);
@@ -220,7 +228,7 @@ public class ClientEventBusSubscriber {
         }
 
         ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("souls"),
-                (stack, world, living) -> ((float) GoldTotemItem.currentSouls(stack)) / GoldTotemItem.MAXSOULS);
+                (stack, world, living) -> ((float) ITotem.currentSouls(stack)) / ITotem.MAX_SOULS);
         ItemModelsProperties.register(ModItems.GOLDTOTEM.get(), new ResourceLocation("activated"),
                 (stack, world, living) -> GoldTotemItem.isActivated(stack) ? 1.0F : 0.0F);
         ItemModelsProperties.register(ModItems.NETHERITE_BOW.get(), new ResourceLocation("pull"),
@@ -314,7 +322,10 @@ public class ClientEventBusSubscriber {
         particles.register(ModParticleTypes.POISON.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.BURNING.get(), FlameParticle.Factory::new);
         particles.register(ModParticleTypes.CULT_SPELL.get(), SpellParticle.MobFactory::new);
+        particles.register(ModParticleTypes.BIG_CULT_SPELL.get(), BigSpellParticle.MobFactory::new);
         particles.register(ModParticleTypes.SONIC_BOOM.get(), SonicBoomParticle.Factory::new);
+        particles.register(ModParticleTypes.SOUL_EXPLODE.get(), SoulExplodeParticle.Provider::new);
+        particles.register(ModParticleTypes.SUMMON.get(), SoulExplodeParticle.SummonProvider::new);
         particles.register(ModParticleTypes.SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
         particles.register(ModParticleTypes.PORTAL_SHOCKWAVE.get(), ShockwaveParticle.Factory::new);
         particles.register(ModParticleTypes.CONFUSED.get(), HeartParticle.Factory::new);

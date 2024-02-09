@@ -138,7 +138,7 @@ dependencies {
 
     //Testing Only
     runtimeOnly fg.deobf("curse.maven:jade-324717:3910873")
-
+    runtimeOnly fg.deobf("curse.maven:kiwi-303657:3536245")
 }
 
 jar {

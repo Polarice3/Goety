@@ -64,9 +64,33 @@ public class AttributesConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> MarcireHealth;
 
     public static final ForgeConfigSpec.ConfigValue<Double> ZombieServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieServantArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> ZombieServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> HuskServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> HuskServantArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> HuskServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> DrownedServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> DrownedServantArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> DrownedServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> FrozenZombieServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> FrozenZombieServantArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> FrozenZombieServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> JungleZombieServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> JungleZombieServantArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> JungleZombieServantDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> SkeletonServantHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> SkeletonServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> StrayServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> StrayServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> MossySkeletonServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> MossySkeletonServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> SunkenSkeletonServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> SunkenSkeletonServantDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> SkeletonPillagerHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> SkeletonPillagerDamage;
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieVindicatorHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieVindicatorArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieVindicatorDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> UndeadWolfHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> UndeadWolfDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> NecroUndeadWolfHealth;
@@ -87,6 +111,8 @@ public class AttributesConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> BoneLordDamage;
 
     public static final ForgeConfigSpec.ConfigValue<Double> ApostleHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> ApostleArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> ApostleToughness;
     public static final ForgeConfigSpec.ConfigValue<Double> ApostleMagicDamage;
     public static final ForgeConfigSpec.ConfigValue<Double> VizierHealth;
 
@@ -248,16 +274,82 @@ public class AttributesConfig {
             BUILDER.pop();
             BUILDER.push("Summoned Mobs");
                 BUILDER.push("Zombie Servant");
-                ZombieServantHealth = BUILDER.comment("How much Max Health Zombie Servants and variants have, Default: 20.0")
+                ZombieServantHealth = BUILDER.comment("How much Max Health Zombie Servants have, Default: 20.0")
                         .defineInRange("zombieServantHealth", 20.0, 1.0, Double.MAX_VALUE);
-                ZombieServantDamage = BUILDER.comment("How much damage Zombie Servants and variants deals, Default: 3.0")
+                ZombieServantArmor = BUILDER.comment("How much natural armor points Zombie Servants have, Default: 2.0")
+                        .defineInRange("zombieServantArmor", 2.0, 1.0, Double.MAX_VALUE);
+                ZombieServantDamage = BUILDER.comment("How much damage Zombie Servants deals, Default: 3.0")
                         .defineInRange("zombieServantDamage", 3.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Husk Servant");
+                HuskServantHealth = BUILDER.comment("How much Max Health Husk Servants have, Default: 20.0")
+                        .defineInRange("huskServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                HuskServantArmor = BUILDER.comment("How much natural armor points Husk Servants have, Default: 2.0")
+                        .defineInRange("huskServantArmor", 2.0, 1.0, Double.MAX_VALUE);
+                HuskServantDamage = BUILDER.comment("How much damage Husk Servants deals, Default: 3.0")
+                        .defineInRange("huskServantDamage", 3.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Drowned Servant");
+                DrownedServantHealth = BUILDER.comment("How much Max Health Drowned Servants have, Default: 20.0")
+                        .defineInRange("drownedServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                DrownedServantArmor = BUILDER.comment("How much natural armor points Drowned Servants have, Default: 2.0")
+                        .defineInRange("drownedServantArmor", 2.0, 1.0, Double.MAX_VALUE);
+                DrownedServantDamage = BUILDER.comment("How much damage Drowned Servants deals, Default: 3.0")
+                        .defineInRange("drownedServantDamage", 3.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Frozen Zombie Servant");
+                FrozenZombieServantHealth = BUILDER.comment("How much Max Health Frozen Zombie Servants have, Default: 20.0")
+                        .defineInRange("frozenZombieServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                FrozenZombieServantArmor = BUILDER.comment("How much natural armor points Frozen Zombie Servants have, Default: 2.0")
+                        .defineInRange("frozenZombieServantArmor", 2.0, 1.0, Double.MAX_VALUE);
+                FrozenZombieServantDamage = BUILDER.comment("How much damage Frozen Zombie Servants deals, Default: 3.0")
+                        .defineInRange("frozenZombieServantDamage", 3.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Jungle Zombie Servant");
+                JungleZombieServantHealth = BUILDER.comment("How much Max Health Jungle Zombie Servants have, Default: 20.0")
+                        .defineInRange("jungleZombieServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                JungleZombieServantArmor = BUILDER.comment("How much natural armor points Jungle Zombie Servants have, Default: 2.0")
+                        .defineInRange("jungleZombieServantArmor", 2.0, 1.0, Double.MAX_VALUE);
+                JungleZombieServantDamage = BUILDER.comment("How much damage Jungle Zombie Servants deals, Default: 3.0")
+                        .defineInRange("jungleZombieServantDamage", 3.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Skeleton Servant");
                 SkeletonServantHealth = BUILDER.comment("How much Max Health Skeleton Servants and variants have, Default: 20.0")
                         .defineInRange("skeletonServantHealth", 20.0, 1.0, Double.MAX_VALUE);
                 SkeletonServantDamage = BUILDER.comment("How much damage Skeleton Servants and variants deals, Default: 3.0")
                         .defineInRange("skeletonServantDamage", 3.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Stray Servant");
+                StrayServantHealth = BUILDER.comment("How much Max Health Stray Servants have, Default: 20.0")
+                        .defineInRange("strayServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                StrayServantDamage = BUILDER.comment("How much damage Stray Servants deals, Default: 2.0")
+                        .defineInRange("strayServantDamage", 2.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Mossy Skeleton Servant");
+                MossySkeletonServantHealth = BUILDER.comment("How much Max Health Mossy Skeleton Servants have, Default: 20.0")
+                        .defineInRange("mossySkeletonServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                MossySkeletonServantDamage = BUILDER.comment("How much damage Mossy Skeleton Servants deals, Default: 2.0")
+                        .defineInRange("mossySkeletonServantDamage", 2.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Sunken Skeleton Servant");
+                SunkenSkeletonServantHealth = BUILDER.comment("How much Max Health Sunken Skeleton Servants have, Default: 20.0")
+                        .defineInRange("sunkenSkeletonServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                SunkenSkeletonServantDamage = BUILDER.comment("How much damage Sunken Skeleton Servants deals, Default: 2.0")
+                        .defineInRange("sunkenSkeletonServantDamage", 2.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Skeleton Pillager");
+                SkeletonPillagerHealth = BUILDER.comment("How much Max Health Skeleton Pillagers have, Default: 24.0")
+                        .defineInRange("skeletonPillagerHealth", 24.0, 1.0, Double.MAX_VALUE);
+                SkeletonPillagerDamage = BUILDER.comment("How much damage Skeleton Pillagers deals, Default: 5.0")
+                        .defineInRange("skeletonPillagerDamage", 5.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Zombie Vindicator");
+                ZombieVindicatorHealth = BUILDER.comment("How much Max Health Zombie Vindicators have, Default: 24.0")
+                        .defineInRange("zombieVindicatorHealth", 24.0, 1.0, Double.MAX_VALUE);
+                ZombieVindicatorArmor = BUILDER.comment("How much natural armor points Zombie Vindicators have, Default: 2.0")
+                        .defineInRange("zombieVindicatorArmor", 2.0, 1.0, Double.MAX_VALUE);
+                ZombieVindicatorDamage = BUILDER.comment("How much damage Zombie Vindicators deals, Default: 5.0")
+                        .defineInRange("zombieVindicatorDamage", 5.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Undead Wolf Servant");
                 UndeadWolfHealth = BUILDER.comment("How much Max Health Undead Wolf have, Default: 8.0")
@@ -298,6 +390,10 @@ public class AttributesConfig {
                 BUILDER.push("Apostle");
                 ApostleHealth = BUILDER.comment("How much Max Health Apostles have, Default: 320.0")
                         .defineInRange("apostleHealth", 320.0, 100.0, Double.MAX_VALUE);
+                ApostleArmor = BUILDER.comment("How much natural Armor Points Apostles have, Default: 12.0")
+                        .defineInRange("apostleArmor", 12.0, 0.0, Double.MAX_VALUE);
+                ApostleToughness = BUILDER.comment("How much natural Toughness Points Apostles have, Default: 6.0")
+                        .defineInRange("apostleToughness", 6.0, 0.0, Double.MAX_VALUE);
                 ApostleDamageCap = BUILDER.comment("The maximum amount of damage an Apostle can attain per hit, Default: 20")
                         .defineInRange("apostleDamageCap", 20, 1, Integer.MAX_VALUE);
                 ApostleBowDamage = BUILDER.comment("Multiplies Apostle's Bow damage, Default: 4")

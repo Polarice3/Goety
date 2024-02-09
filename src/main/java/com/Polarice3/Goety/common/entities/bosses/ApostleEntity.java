@@ -3,8 +3,8 @@ package com.Polarice3.Goety.common.entities.bosses;
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.entities.hostile.cultists.*;
-import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.entities.neutral.ZPiglinBruteMinionEntity;
 import com.Polarice3.Goety.common.entities.neutral.ZPiglinMinionEntity;
@@ -22,6 +22,8 @@ import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModLootTables;
 import com.Polarice3.Goety.utils.ModMathHelper;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -40,6 +42,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -47,13 +50,15 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.*;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
@@ -109,6 +114,8 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public ApostleEntity(EntityType<? extends SpellcastingCultistEntity> type, World worldIn) {
         super(type, worldIn);
+        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(PathNodeType.LAVA, 0.0F);
         this.setPathfindingMalus(PathNodeType.DANGER_FIRE, 0.0F);
         this.setPathfindingMalus(PathNodeType.DAMAGE_FIRE, 0.0F);
         this.maxUpStep = 1.0F;
@@ -137,12 +144,16 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
+    @Override
+    public void extraGoal() {
+    }
+
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, AttributesConfig.ApostleHealth.get())
                 .add(Attributes.MOVEMENT_SPEED, 0.35D)
-                .add(Attributes.ARMOR, 12.0D)
-                .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
+                .add(Attributes.ARMOR, AttributesConfig.ApostleArmor.get())
+                .add(Attributes.ARMOR_TOUGHNESS, AttributesConfig.ApostleToughness.get())
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.75D)
                 .add(Attributes.FOLLOW_RANGE, 40.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D);
@@ -150,6 +161,10 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
         return setCustomAttributes();
+    }
+
+    protected PathNavigator createNavigation(World p_33913_) {
+        return new ApostlePathNavigation(this, p_33913_);
     }
 
     protected void defineSynchedData() {
@@ -173,6 +188,30 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         }
 
         this.entityData.set(BOSS_FLAGS, (byte)(i & 255));
+    }
+
+    public boolean canStandOnFluid(Fluid p_230285_1_) {
+        return p_230285_1_.is(FluidTags.LAVA);
+    }
+
+    private void floatApostle() {
+        if (this.isInLava()) {
+            ISelectionContext iselectioncontext = ISelectionContext.of(this);
+            if (iselectioncontext.isAbove(FlowingFluidBlock.STABLE_SHAPE, this.blockPosition(), true) && !this.level.getFluidState(this.blockPosition().above()).is(FluidTags.LAVA)) {
+                this.onGround = true;
+            } else {
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.5D).add(0.0D, 0.05D, 0.0D));
+            }
+        }
+
+    }
+
+    public float getWalkTargetValue(BlockPos pPos, IWorldReader pLevel) {
+        if (pLevel.getBlockState(pPos).getFluidState().is(FluidTags.LAVA)) {
+            return 10.0F;
+        } else {
+            return this.isInLava() ? Float.NEGATIVE_INFINITY : 0.0F;
+        }
     }
 
     public int getAmbientSoundInterval() {
@@ -270,7 +309,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
     }
 
     protected boolean isAffectedByFluids() {
-        return false;
+        return !this.isInWater();
     }
 
     public boolean isAlliedTo(Entity entityIn) {
@@ -796,6 +835,12 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
         return this.spellCycle;
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        this.floatApostle();
+    }
+
     public void aiStep() {
         super.aiStep();
         if (this.level.getDifficulty() == Difficulty.PEACEFUL){
@@ -1083,7 +1128,7 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
                 this.f = 0;
             }
         }
-        if (this.isInWater() || this.isInLava() || this.isInWall()){
+        if (this.isInWater() || this.isInWall()){
             this.teleport();
         }
         if (this.level.dimension() == World.NETHER){
@@ -1942,6 +1987,26 @@ public class ApostleEntity extends SpellcastingCultistEntity implements IRangedA
 
         protected boolean HaveBow() {
             return this.mob.isHolding(item -> item.getItem() instanceof BowItem);
+        }
+    }
+
+    static class ApostlePathNavigation extends GroundPathNavigator {
+        ApostlePathNavigation(ApostleEntity p_33969_, World p_33970_) {
+            super(p_33969_, p_33970_);
+        }
+
+        protected PathFinder createPathFinder(int p_33972_) {
+            this.nodeEvaluator = new WalkNodeProcessor();
+            this.nodeEvaluator.setCanPassDoors(true);
+            return new PathFinder(this.nodeEvaluator, p_33972_);
+        }
+
+        protected boolean hasValidPathType(PathNodeType p_33974_) {
+            return p_33974_ == PathNodeType.LAVA || p_33974_ == PathNodeType.DAMAGE_FIRE || p_33974_ == PathNodeType.DANGER_FIRE || super.hasValidPathType(p_33974_);
+        }
+
+        public boolean isStableDestination(BlockPos p_33976_) {
+            return this.level.getBlockState(p_33976_).is(Blocks.LAVA) || super.isStableDestination(p_33976_);
         }
     }
 

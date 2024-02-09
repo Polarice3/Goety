@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.WitchGaleEntity;
 import com.Polarice3.Goety.common.magic.Spells;
 import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -14,20 +15,45 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class WitchGaleSpell extends Spells {
 
-    public int SoulCost() {
+    public int defaultSoulCost() {
         return SpellConfig.WitchGaleCost.get();
     }
 
-    public int CastDuration() {
+    public int defaultCastDuration() {
         return SpellConfig.WitchGaleDuration.get();
     }
 
     public SoundEvent CastingSound() {
         return SoundEvents.ILLUSIONER_PREPARE_BLINDNESS;
+    }
+
+    @Override
+    public int defaultSpellCooldown() {
+        return SpellConfig.WitchGaleCoolDown.get();
+    }
+
+    @Override
+    public List<Enchantment> acceptedEnchantments() {
+        List<Enchantment> list = new ArrayList<>();
+        list.add(ModEnchantments.POTENCY.get());
+        list.add(ModEnchantments.RANGE.get());
+        list.add(ModEnchantments.DURATION.get());
+        return list;
+    }
+
+    @Override
+    public void SpellResult(ServerWorld worldIn, LivingEntity entityLiving, boolean staff) {
+        if (staff){
+            StaffResult(worldIn, entityLiving);
+        } else {
+            WandResult(worldIn, entityLiving);
+        }
     }
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {

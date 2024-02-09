@@ -2,41 +2,38 @@ package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.ally.RottreantEntity;
-import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
-import com.Polarice3.Goety.common.entities.ally.UndeadWolfEntity;
+import com.Polarice3.Goety.SpellConfig;
+import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.api.entities.ally.IServant;
+import com.Polarice3.Goety.api.items.magic.IFocus;
+import com.Polarice3.Goety.api.magic.*;
+import com.Polarice3.Goety.common.blocks.tiles.ArcaTileEntity;
 import com.Polarice3.Goety.common.items.capability.SoulUsingItemCapability;
 import com.Polarice3.Goety.common.items.handler.SoulUsingItemHandler;
-import com.Polarice3.Goety.common.magic.ChargingSpells;
-import com.Polarice3.Goety.common.magic.InstantCastSpells;
-import com.Polarice3.Goety.common.magic.Spells;
-import com.Polarice3.Goety.common.magic.SpewingSpell;
-import com.Polarice3.Goety.common.magic.spells.BreathSpell;
+import com.Polarice3.Goety.common.magic.spells.ender.RecallSpell;
+import com.Polarice3.Goety.common.network.ModNetwork;
+import com.Polarice3.Goety.common.network.packets.server.SPlayEntitySoundPacket;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.SEHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.item.UseAction;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.GossipType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -45,7 +42,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -58,6 +54,7 @@ public class SoulWand extends Item{
     private static final String DURATION = "Duration";
     private static final String COOLDOWN = "Cooldown";
     private static final String COOL = "Cool";
+    private static final String SECONDS = "Seconds";
 
     public SoulWand() {
         super(new Properties().tab(Goety.TAB).stacksTo(1).setNoRepair().rarity(Rarity.RARE));
@@ -71,16 +68,20 @@ public class SoulWand extends Item{
             if (stack.getTag() == null) {
                 compound.putInt(SOULUSE, SoulUse(livingEntity, stack));
                 compound.putInt(SOULCOST, 0);
-                compound.putInt(CASTTIME, CastTime(livingEntity, stack));
+                compound.putInt(CASTTIME, CastDuration(stack));
                 compound.putInt(COOL, 0);
+                compound.putInt(SECONDS, 0);
             }
             if (this.getSpell(stack) != null) {
-                this.setSpellConditions(this.getSpell(stack), stack);
+                this.setSpellConditions(this.getSpell(stack), stack, livingEntity);
             } else {
-                this.setSpellConditions(null, stack);
+                this.setSpellConditions(null, stack, livingEntity);
             }
             compound.putInt(SOULUSE, SoulUse(livingEntity, stack));
-            compound.putInt(CASTTIME, CastTime(livingEntity, stack));
+            compound.putInt(CASTTIME, CastDuration(stack));
+            if (getFocus(stack) != null){
+                getFocus(stack).inventoryTick(worldIn, entityIn, itemSlot, isSelected);
+            }
         }
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
@@ -90,9 +91,10 @@ public class SoulWand extends Item{
         CompoundNBT compound = pStack.getOrCreateTag();
         compound.putInt(SOULUSE, SoulUse(pPlayer, pStack));
         compound.putInt(SOULCOST, 0);
-        compound.putInt(CASTTIME, CastTime(pPlayer, pStack));
+        compound.putInt(CASTTIME, CastDuration(pStack));
         compound.putInt(COOL, 0);
-        this.setSpellConditions(null, pStack);
+        compound.putInt(SECONDS, 0);
+        this.setSpellConditions(null, pStack, pPlayer);
     }
 
     public boolean SoulDiscount(LivingEntity entityLiving){
@@ -134,46 +136,148 @@ public class SoulWand extends Item{
         }
     }
 
+    public boolean cannotCast(LivingEntity livingEntity, ItemStack stack){
+        boolean flag = false;
+        if (livingEntity.level instanceof ServerWorld){
+            ServerWorld serverLevel = (ServerWorld) livingEntity.level;
+            if (this.getSpell(stack) != null){
+                if (!this.getSpell(stack).conditionsMet(serverLevel, livingEntity)){
+                    flag = true;
+                }
+            }
+        }
+        return this.isOnCooldown(livingEntity, stack) || flag;
+    }
+
+    public boolean isOnCooldown(LivingEntity livingEntity, ItemStack stack){
+        if (livingEntity instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) livingEntity;
+            if (getFocus(stack) != null){
+                Item item = getFocus(stack).getItem();
+                return SEHelper.getFocusCoolDown(player).isOnCooldown(item);
+            }
+        }
+        return false;
+    }
+
+    public boolean isNotInstant(ISpell spells){
+        return spells != null && spells.defaultCastDuration() > 0;
+    }
+
+    public boolean notTouch(ISpell spells){
+        return !(spells instanceof ITouchSpell) && !(spells instanceof IBlockSpell);
+    }
+
     @Nonnull
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand){
-        if (target instanceof SummonedEntity){
-            SummonedEntity summonedEntity = (SummonedEntity) target;
-            if (summonedEntity.getTrueOwner() == player){
-                if (player.isShiftKeyDown() || player.isCrouching()){
-                    summonedEntity.kill();
-                } else {
-                    if (summonedEntity.getMobType() == CreatureAttribute.UNDEAD && !(summonedEntity instanceof UndeadWolfEntity)) {
-                        summonedEntity.updateMoveMode(player);
+        if (!SpellConfig.OwnerHitCommand.get()) {
+            if (target instanceof IServant) {
+                IServant summonedEntity = (IServant) target;
+                if (summonedEntity.getTrueOwner() == player || (summonedEntity.getTrueOwner() instanceof IOwned && ((IOwned) summonedEntity.getTrueOwner()).getTrueOwner() == player)) {
+                    if (player.isShiftKeyDown() || player.isCrouching()) {
+                        target.kill();
+                    } else {
+                        if (summonedEntity.canUpdateMove()) {
+                            summonedEntity.updateMoveMode(player);
+                        }
                     }
-                    if (summonedEntity instanceof RottreantEntity){
-                        summonedEntity.updateMoveMode(player);
-                    }
+                    return ActionResultType.SUCCESS;
                 }
-                return ActionResultType.SUCCESS;
+            }
+        }
+        if (this.getSpell(stack) instanceof ITouchSpell){
+            ITouchSpell touchSpells = (ITouchSpell) this.getSpell(stack);
+            if (this.canCastTouch(stack, player.level, player)) {
+                if (player.level instanceof ServerWorld) {
+                    ServerWorld serverLevel = (ServerWorld) player.level;
+                    touchSpells.touchResult(serverLevel, player, target);
+                }
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);
+    }
 
+    public ActionResultType useOn(ItemUseContext pContext) {
+        World level = pContext.getLevel();
+        BlockPos blockpos = pContext.getClickedPos();
+        PlayerEntity player = pContext.getPlayer();
+        ItemStack stack = pContext.getItemInHand();
+        if (player != null) {
+            if (getFocus(stack).getItem() instanceof RecallFocus){
+                RecallFocus recallFocus = (RecallFocus) getFocus(stack).getItem();
+                CompoundNBT compoundTag = getFocus(stack).getOrCreateTag();
+                if (!RecallFocus.hasRecall(getFocus(stack))){
+                    TileEntity tileEntity = level.getBlockEntity(blockpos);
+                    if (tileEntity instanceof ArcaTileEntity) {
+                        ArcaTileEntity arcaTile = (ArcaTileEntity) tileEntity;
+                        if (pContext.getPlayer() == arcaTile.getPlayer() && arcaTile.getLevel() != null) {
+                            recallFocus.addRecallTags(arcaTile.getLevel().dimension(), arcaTile.getBlockPos(), compoundTag);
+                            getFocus(stack).setTag(compoundTag);
+                            player.playSound(SoundEvents.ARROW_HIT_PLAYER, 1.0F, 0.45F);
+                            if (!level.isClientSide) {
+                                ModNetwork.sendTo(player, new SPlayEntitySoundPacket(player.getUUID(), SoundEvents.ARROW_HIT_PLAYER, 1.0F, 0.45F));
+                            }
+                            return ActionResultType.sidedSuccess(level.isClientSide);
+                        }
+                    }
+                    BlockState blockstate = level.getBlockState(blockpos);
+                    if (blockstate.is(ModTags.Blocks.RECALL_BLOCKS)) {
+                        recallFocus.addRecallTags(level.dimension(), blockpos, compoundTag);
+                        getFocus(stack).setTag(compoundTag);
+                        player.playSound(SoundEvents.ARROW_HIT_PLAYER, 1.0F, 0.45F);
+                        if (!level.isClientSide) {
+                            ModNetwork.sendTo(player, new SPlayEntitySoundPacket(player.getUUID(), SoundEvents.ARROW_HIT_PLAYER, 1.0F, 0.45F));
+                        }
+                        return ActionResultType.sidedSuccess(level.isClientSide);
+                    }
+                }
+            } else if (this.getSpell(stack) instanceof IBlockSpell){
+                IBlockSpell blockSpells = (IBlockSpell) this.getSpell(stack);
+                if (player.level instanceof ServerWorld) {
+                    ServerWorld serverLevel = (ServerWorld) player.level;
+                    if (blockSpells.rightBlock(serverLevel, player, blockpos)) {
+                        if (this.canCastTouch(stack, level, player)) {
+                            blockSpells.blockResult(serverLevel, player, blockpos);
+                        }
+                        return ActionResultType.SUCCESS;
+                    }
+                }
+            }
+        }
+        return super.useOn(pContext);
     }
 
     public void onUseTick(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
-        if (!(this.getSpell(stack) instanceof InstantCastSpells)) {
+        if (this.cannotCast(livingEntityIn, stack)){
+            return;
+        }
+        if (this.getSpell(stack) != null && this.isNotInstant(this.getSpell(stack))) {
             SoundEvent soundevent = this.CastingSound(stack);
             int CastTime = stack.getUseDuration() - count;
-            if (CastTime == 1) {
-                if (soundevent != null) {
-                    worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
-                } else {
-                    worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), SoundEvents.EVOKER_PREPARE_ATTACK, SoundCategory.PLAYERS, 0.5F, 1.0F);
-                }
+            if (CastTime == 1 && soundevent != null) {
+                worldIn.playSound(null, livingEntityIn.getX(), livingEntityIn.getY(), livingEntityIn.getZ(), soundevent, SoundCategory.PLAYERS, 0.5F, 1.0F);
             }
-            if (this.getSpell(stack) instanceof ChargingSpells) {
+            if (this.getSpell(stack) instanceof RecallSpell){
+                for(int i = 0; i < 2; ++i) {
+                    worldIn.addParticle(ParticleTypes.PORTAL, livingEntityIn.getRandomX(0.5D), livingEntityIn.getRandomY() - 0.25D, livingEntityIn.getRandomZ(0.5D), (worldIn.random.nextDouble() - 0.5D) * 2.0D, -worldIn.random.nextDouble(), (worldIn.random.nextDouble() - 0.5D) * 2.0D);
+                }
+            } else if (!(this.getSpell(stack) instanceof IChargingSpell)) {
+                this.useParticles(worldIn, livingEntityIn, this.getSpell(stack));
+            }
+            if (this.getSpell(stack) instanceof IChargingSpell) {
                 if (stack.getTag() != null) {
                     stack.getTag().putInt(COOL, stack.getTag().getInt(COOL) + 1);
                     if (stack.getTag().getInt(COOL) > Cooldown(stack)) {
                         stack.getTag().putInt(COOL, 0);
                         this.MagicResults(stack, worldIn, livingEntityIn);
+                    }
+                }
+
+                if (livingEntityIn instanceof PlayerEntity){
+                    PlayerEntity player = (PlayerEntity) livingEntityIn;
+                    if (!SEHelper.getSoulsAmount(player, this.getSpell(stack).soulCost(player)) && !player.isCreative()){
+                        player.stopUsingItem();
                     }
                 }
             }
@@ -196,8 +300,10 @@ public class SoulWand extends Item{
     @Nonnull
     public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         super.finishUsingItem(stack, worldIn, entityLiving);
-        if (!(this.getSpell(stack) instanceof ChargingSpells) || !(this.getSpell(stack) instanceof InstantCastSpells)){
-            this.MagicResults(stack, worldIn, entityLiving);
+        if (this.getSpell(stack) != null) {
+            if (!(this.getSpell(stack) instanceof IChargingSpell) || this.isNotInstant(this.getSpell(stack)) || this.notTouch(this.getSpell(stack))) {
+                this.MagicResults(stack, worldIn, entityLiving);
+            }
         }
         if (stack.getTag() != null) {
             if (stack.getTag().getInt(COOL) > 0) {
@@ -211,12 +317,16 @@ public class SoulWand extends Item{
     public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         if (this.getSpell(itemstack) != null) {
-            if (!(this.getSpell(itemstack) instanceof InstantCastSpells)){
-                playerIn.startUsingItem(handIn);
-                if (worldIn.isClientSide){
-                    this.useParticles(worldIn, playerIn);
+            if (this.cannotCast(playerIn, itemstack)){
+                return ActionResult.pass(itemstack);
+            } else if (this.isNotInstant(this.getSpell(itemstack))){
+                if (SEHelper.getSoulsAmount(playerIn, this.getSpell(itemstack).soulCost(playerIn)) || playerIn.abilities.instabuild) {
+                    if (!worldIn.isClientSide) {
+                        playerIn.startUsingItem(handIn);
+                    }
                 }
-            } else {
+            } else if (this.notTouch(this.getSpell(itemstack))){
+                playerIn.swing(handIn);
                 this.MagicResults(itemstack, worldIn, playerIn);
             }
         }
@@ -225,21 +335,25 @@ public class SoulWand extends Item{
 
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void useParticles(World worldIn, PlayerEntity playerIn){
-        for (int i = 0; i < playerIn.level.random.nextInt(35) + 10; ++i) {
-            double d = worldIn.random.nextGaussian() * 0.2D;
-            worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, playerIn.getX(), playerIn.getBoundingBox().maxY + 0.5D, playerIn.getZ(), d, d, d);
+    public void useParticles(World worldIn, LivingEntity livingEntity, ISpell iSpell){
+        double d0 = worldIn.random.nextGaussian() * 0.2D;
+        double d1 = worldIn.random.nextGaussian() * 0.2D;
+        double d2 = worldIn.random.nextGaussian() * 0.2D;
+        if (iSpell != null){
+            d0 = iSpell.particleColors(livingEntity).red();
+            d1 = iSpell.particleColors(livingEntity).green();
+            d2 = iSpell.particleColors(livingEntity).blue();
         }
+        worldIn.addParticle(ParticleTypes.ENTITY_EFFECT, livingEntity.getX(), livingEntity.getBoundingBox().maxY + 0.5D, livingEntity.getZ(), d0, d1, d2);
     }
 
-    public void setSpellConditions(Spells spell, ItemStack stack){
+    public void setSpellConditions(@Nullable ISpell spell, ItemStack stack, LivingEntity livingEntity){
         if (stack.getTag() != null) {
             if (spell != null) {
-                stack.getTag().putInt(SOULCOST, spell.SoulCost());
-                stack.getTag().putInt(DURATION, spell.CastDuration());
-                if (spell instanceof ChargingSpells) {
-                    stack.getTag().putInt(COOLDOWN, ((ChargingSpells) spell).Cooldown());
+                stack.getTag().putInt(SOULCOST, spell.soulCost(livingEntity));
+                stack.getTag().putInt(DURATION, spell.castDuration(livingEntity));
+                if (spell instanceof IChargingSpell) {
+                    stack.getTag().putInt(COOLDOWN, ((IChargingSpell) spell).Cooldown());
                 } else {
                     stack.getTag().putInt(COOLDOWN, 0);
                 }
@@ -251,7 +365,7 @@ public class SoulWand extends Item{
         }
     }
 
-    public Spells getSpell(ItemStack stack){
+    public ISpell getSpell(ItemStack stack){
         if (getMagicFocus(stack) != null && getMagicFocus(stack).getSpell() != null){
             return getMagicFocus(stack).getSpell();
         } else {
@@ -283,6 +397,7 @@ public class SoulWand extends Item{
         }
     }
 
+    @Nullable
     public SoundEvent CastingSound(ItemStack stack) {
         if (this.getSpell(stack) != null) {
             return this.getSpell(stack).CastingSound();
@@ -296,83 +411,96 @@ public class SoulWand extends Item{
         return handler.getSlot();
     }
 
-    public static MagicFocusItem getMagicFocus(ItemStack itemStack){
-        if (getFocus(itemStack) != null && !getFocus(itemStack).isEmpty() && getFocus(itemStack).getItem() instanceof MagicFocusItem){
-            return (MagicFocusItem) getFocus(itemStack).getItem();
+    public static IFocus getMagicFocus(ItemStack itemStack){
+        if (getFocus(itemStack) != null && !getFocus(itemStack).isEmpty() && getFocus(itemStack).getItem() instanceof IFocus){
+            return (IFocus) getFocus(itemStack).getItem();
         } else {
             return null;
         }
     }
 
-    public static Map<Enchantment, Integer> getFocusEnchantments(ItemStack itemStack){
-        SoulUsingItemHandler handler = SoulUsingItemHandler.get(itemStack);
-        return EnchantmentHelper.getEnchantments(handler.getSlot());
+    public boolean canCastTouch(ItemStack stack, World worldIn, LivingEntity caster){
+        PlayerEntity playerEntity = (PlayerEntity) caster;
+        if (!worldIn.isClientSide) {
+            if (this.getSpell(stack) != null && !this.cannotCast(caster, stack)) {
+                if (playerEntity.isCreative()){
+                    SEHelper.addCooldown(playerEntity, getFocus(stack).getItem(), this.getSpell(stack).spellCooldown());
+                    return stack.getTag() != null;
+                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(caster, stack))) {
+                    if (stack.getTag() != null) {
+                        SEHelper.decreaseSouls(playerEntity, SoulUse(caster, stack));
+                        SEHelper.addCooldown(playerEntity, getFocus(stack).getItem(), this.getSpell(stack).spellCooldown());
+                        SEHelper.sendSEUpdatePacket(playerEntity);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-    public void MagicResults(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        PlayerEntity playerEntity = (PlayerEntity) entityLiving;
-        if (!worldIn.isClientSide) {
-            ServerWorld serverWorld = (ServerWorld) worldIn;
-            if (this.getSpell(stack) != null) {
-                if (playerEntity.isCreative()){
-                    assert stack.getTag() != null;
-                    if (stack.getItem() instanceof SoulStaff){
-                        this.getSpell(stack).StaffResult(serverWorld, entityLiving);
-                    } else {
-                        this.getSpell(stack).WandResult(serverWorld, entityLiving);
+    public void MagicResults(ItemStack stack, World worldIn, LivingEntity caster) {
+        PlayerEntity playerEntity = (PlayerEntity) caster;
+        if (this.getSpell(stack) != null) {
+            if (!worldIn.isClientSide) {
+                ServerWorld serverWorld = (ServerWorld) worldIn;
+                if (playerEntity.isCreative()) {
+                    if (stack.getTag() != null) {
+                        this.getSpell(stack).SpellResult(serverWorld, caster, stack.getItem() instanceof SoulStaff);
+                        SEHelper.addCooldown(playerEntity, getFocus(stack).getItem(), this.getSpell(stack).spellCooldown());
                     }
-                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(entityLiving, stack))) {
+                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(caster, stack))) {
                     boolean spent = true;
-                    int random = worldIn.random.nextInt(4);
-                    if (this.getSpell(stack) instanceof SpewingSpell || this.getSpell(stack) instanceof BreathSpell) {
-                        if (random != 0) {
-                            spent = false;
-                        }
-                    }
-                    if (spent){
-                        SEHelper.decreaseSouls(playerEntity, SoulUse(entityLiving, stack));
-                        SEHelper.sendSEUpdatePacket(playerEntity);
-                        if (MainConfig.VillagerHateSpells.get() > 0) {
-                            for (VillagerEntity villager : entityLiving.level.getEntitiesOfClass(VillagerEntity.class, entityLiving.getBoundingBox().inflate(16.0D))) {
-                                villager.getGossips().add(entityLiving.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                    if (this.getSpell(stack) instanceof IEverChargeSpell) {
+                        if (stack.getTag() != null) {
+                            stack.getTag().putInt(SECONDS, stack.getTag().getInt(SECONDS) + 1);
+                            if (stack.getTag().getInt(SECONDS) != 20) {
+                                spent = false;
+                            } else {
+                                stack.getTag().putInt(SECONDS, 0);
                             }
                         }
                     }
-                    assert stack.getTag() != null;
-                    if (stack.getItem() instanceof SoulStaff){
-                        this.getSpell(stack).StaffResult(serverWorld, entityLiving);
-                    } else {
-                        this.getSpell(stack).WandResult(serverWorld, entityLiving);
+                    if (spent) {
+                        SEHelper.decreaseSouls(playerEntity, SoulUse(caster, stack));
+                        SEHelper.sendSEUpdatePacket(playerEntity);
+                        if (MainConfig.VillagerHateSpells.get() > 0) {
+                            for (VillagerEntity villager : caster.level.getEntitiesOfClass(VillagerEntity.class, caster.getBoundingBox().inflate(16.0D))) {
+                                if (villager.canSee(caster)) {
+                                    villager.getGossips().add(caster.getUUID(), GossipType.MINOR_NEGATIVE, MainConfig.VillagerHateSpells.get());
+                                }
+                            }
+                        }
+                    }
+                    if (stack.getTag() != null) {
+                        this.getSpell(stack).SpellResult(serverWorld, caster, stack.getItem() instanceof SoulStaff);
+                        SEHelper.addCooldown(playerEntity, getFocus(stack).getItem(), this.getSpell(stack).spellCooldown());
                     }
                 } else {
-                    worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                    worldIn.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                 }
-            } else {
-                worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             }
-        }
-        if (worldIn.isClientSide){
-            if (this.getSpell(stack) != null) {
-                if (playerEntity.isCreative()){
-                    if (this.getSpell(stack) instanceof SpewingSpell){
-                        SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
-                        spewingSpell.showWandBreath(entityLiving);
+            if (worldIn.isClientSide) {
+                if (playerEntity.isCreative()) {
+                    if (this.getSpell(stack) instanceof IBreathingSpell) {
+                        IBreathingSpell breathingSpell = (IBreathingSpell) this.getSpell(stack);
+                        breathingSpell.showWandBreath(caster);
                     }
-                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(entityLiving, stack))) {
-                    if (this.getSpell(stack) instanceof SpewingSpell){
-                        SpewingSpell spewingSpell = (SpewingSpell) this.getSpell(stack);
-                        spewingSpell.showWandBreath(entityLiving);
+                } else if (SEHelper.getSoulsAmount(playerEntity, SoulUse(caster, stack))) {
+                    if (this.getSpell(stack) instanceof IBreathingSpell) {
+                        IBreathingSpell breathingSpell = (IBreathingSpell) this.getSpell(stack);
+                        breathingSpell.showWandBreath(caster);
                     }
                 } else {
-                    this.failParticles(worldIn, entityLiving);
+                    this.failParticles(worldIn, caster);
                 }
-            } else {
-                this.failParticles(worldIn, entityLiving);
             }
+        } else {
+            this.failParticles(worldIn, caster);
+            worldIn.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void failParticles(World worldIn, LivingEntity entityLiving){
         for (int i = 0; i < entityLiving.level.random.nextInt(35) + 10; ++i) {
             double d = worldIn.random.nextGaussian() * 0.2D;
@@ -427,14 +555,27 @@ public class SoulWand extends Item{
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.getTag() != null) {
             int SoulUse = stack.getTag().getInt(SOULUSE);
-            tooltip.add(new TranslationTextComponent("info.goety.soulitems.cost", SoulUse));
+            tooltip.add(new TranslationTextComponent("info.goety.wand.cost", SoulUse));
+            if (getSpell(stack) != null) {
+                if (this.isNotInstant(this.getSpell(stack)) && !(getSpell(stack) instanceof IChargingSpell)) {
+                    int CastTime = stack.getTag().getInt(CASTTIME);
+                    tooltip.add(new TranslationTextComponent("info.goety.wand.castTime", CastTime / 20.0F));
+                }
+                if (getSpell(stack).spellCooldown() > 0){
+                    tooltip.add(new TranslationTextComponent("info.goety.wand.coolDown", getSpell(stack).spellCooldown() / 20.0F));
+                }
+            }
         } else {
-            tooltip.add(new TranslationTextComponent("info.goety.soulitems.cost", SoulCost(stack)));
+            tooltip.add(new TranslationTextComponent("info.goety.wand.cost", SoulCost(stack)));
         }
         if (!getFocus(stack).isEmpty()){
-            tooltip.add(new TranslationTextComponent("info.goety.soulitems.focus", getFocus(stack).getItem().getDescription()));
+            tooltip.add(new TranslationTextComponent("info.goety.wand.focus", getFocus(stack).getItem().getDescription()));
+            if (getFocus(stack).getItem() instanceof RecallFocus){
+                ItemStack recallFocus = getFocus(stack);
+                RecallFocus.addRecallText(recallFocus, tooltip);
+            }
         } else {
-            tooltip.add(new TranslationTextComponent("info.goety.soulitems.focus", "Empty"));
+            tooltip.add(new TranslationTextComponent("info.goety.wand.focus", "Empty"));
         }
     }
 }

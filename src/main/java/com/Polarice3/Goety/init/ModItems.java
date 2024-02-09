@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.init;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.client.armors.*;
 import com.Polarice3.Goety.common.entities.items.ModBoatEntity;
 import com.Polarice3.Goety.common.fluid.ModFluids;
@@ -12,6 +13,22 @@ import com.Polarice3.Goety.common.items.curios.RingItem;
 import com.Polarice3.Goety.common.items.equipment.*;
 import com.Polarice3.Goety.common.items.magic.*;
 import com.Polarice3.Goety.common.magic.spells.*;
+import com.Polarice3.Goety.common.magic.spells.ender.AcidBreathSpell;
+import com.Polarice3.Goety.common.magic.spells.ender.DragonFireballSpell;
+import com.Polarice3.Goety.common.magic.spells.ender.TeleportSpell;
+import com.Polarice3.Goety.common.magic.spells.fel.CreeperlingSpell;
+import com.Polarice3.Goety.common.magic.spells.fel.PoisonBallSpell;
+import com.Polarice3.Goety.common.magic.spells.fel.SpiderlingSpell;
+import com.Polarice3.Goety.common.magic.spells.frost.FrostBreathSpell;
+import com.Polarice3.Goety.common.magic.spells.frost.IceChunkSpell;
+import com.Polarice3.Goety.common.magic.spells.frost.IceStormSpell;
+import com.Polarice3.Goety.common.magic.spells.ill.FangSpell;
+import com.Polarice3.Goety.common.magic.spells.ill.FeastSpell;
+import com.Polarice3.Goety.common.magic.spells.ill.IllusionSpell;
+import com.Polarice3.Goety.common.magic.spells.ill.VexSpell;
+import com.Polarice3.Goety.common.magic.spells.necromancy.*;
+import com.Polarice3.Goety.common.magic.spells.nether.FireballSpell;
+import com.Polarice3.Goety.common.magic.spells.nether.LavaballSpell;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -50,8 +67,6 @@ public class ModItems {
     public static final RegistryObject<Item> BRAIN = ITEMS.register("brain", BrainItem::new);
     public static final RegistryObject<Item> DEAD_SLIME_BALL = ITEMS.register("dead_slime_ball", DeadSlimeBallItem::new);
     public static final RegistryObject<Item> FORBIDDEN_SCROLL = ITEMS.register("forbidden_scroll", ForbiddenScrollItem::new);
-    public static final RegistryObject<Item> EMPTY_ILL_CAGE = ITEMS.register("empty_ill_cage", EmptyIllCageItem::new);
-    public static final RegistryObject<Item> FILLED_ILL_CAGE = ITEMS.register("filled_ill_cage", FilledIllCageItem::new);
     public static final RegistryObject<Item> SACRED_FISH_BUCKET = ITEMS.register("sacred_fish_bucket", () -> new FishBucketItem(ModEntityType.SACRED_FISH,() -> Fluids.WATER, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_MISC)));
     public static final RegistryObject<Item> QUICKSAND_BUCKET = ITEMS.register("quicksand_bucket", () -> new BucketItem(() -> ModFluids.QUICKSAND_SOURCE.get(), (new Item.Properties()).stacksTo(1).tab(Goety.TAB)));
 
@@ -100,7 +115,7 @@ public class ModItems {
     public static final RegistryObject<Item> MUSIC_DISC_APOSTLE = ITEMS.register("music_disc_apostle", () -> new MusicDiscItem(15, ModSounds.MUSIC_DISC_APOSTLE, (new Item.Properties()).stacksTo(1).tab(ItemGroup.TAB_MISC).rarity(Rarity.RARE)));
 
     //Curios
-    public static final RegistryObject<GoldTotemItem> GOLDTOTEM = ITEMS.register("goldtotem", GoldTotemItem::new);
+    public static final RegistryObject<GoldTotemItem> GOLDTOTEM = ITEMS.register("goldtotem", () -> new GoldTotemItem(ITotem.MAX_SOULS));
     public static final RegistryObject<Item> FOCUSBAG = ITEMS.register("focusbag", FocusBagItem::new);
     public static final RegistryObject<Item> EMERALD_AMULET = ITEMS.register("emerald_amulet", AmuletItem::new);
     public static final RegistryObject<Item> STAR_AMULET = ITEMS.register("star_amulet", AmuletItem::new);

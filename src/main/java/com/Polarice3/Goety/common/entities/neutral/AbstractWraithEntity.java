@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.FloatSwimGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
@@ -22,8 +23,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -41,10 +40,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class AbstractWraithEntity extends SummonedEntity implements ICustomAttributes{
+public abstract class AbstractWraithEntity extends SummonedEntity implements ICustomAttributes {
     private static final DataParameter<Integer> BURNING_LEVEL = EntityDataManager.defineId(AbstractWraithEntity.class, DataSerializers.INT);
     private static final DataParameter<Byte> FLAGS = EntityDataManager.defineId(AbstractWraithEntity.class, DataSerializers.BYTE);
     public int fireTick;
+    public int fireCooldown;
     public int firingTick;
     public int firingTick2;
     public int teleportCooldown;
@@ -62,6 +62,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         this.fireTick = 0;
         this.firingTick = 0;
         this.firingTick2 = 0;
+        this.fireCooldown = 0;
         this.teleportTime2 = 0;
         this.teleportCooldown = 0;
     }
@@ -101,6 +102,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         pCompound.putInt("fireTick", this.fireTick);
         pCompound.putInt("firingTick", this.firingTick);
         pCompound.putInt("firingTick2", this.firingTick2);
+        pCompound.putInt("fireCooldown", this.fireCooldown);
         pCompound.putInt("teleportTime2", this.teleportTime2);
         pCompound.putInt("teleportCooldown", this.teleportCooldown);
         pCompound.putInt("burningLevel", this.getBurningLevel());
@@ -111,6 +113,7 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         this.fireTick = pCompound.getInt("fireTick");
         this.firingTick = pCompound.getInt("firingTick");
         this.firingTick2 = pCompound.getInt("firingTick2");
+        this.fireCooldown = pCompound.getInt("fireCooldown");
         this.teleportTime2 = pCompound.getInt("teleportTime2");
         this.teleportCooldown = pCompound.getInt("teleportCooldown");
         this.setBurningLevel(pCompound.getInt("burningLevel"));
@@ -223,6 +226,10 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
         return 10;
     }
 
+    protected boolean isSunSensitive() {
+        return true;
+    }
+
     @Override
     public void tick() {
         this.setGravity();
@@ -235,26 +242,6 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
 
     public void aiStep() {
         super.aiStep();
-
-        boolean flag = this.isSunBurnTick();
-        if (flag) {
-            ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
-            if (!itemstack.isEmpty()) {
-                if (itemstack.isDamageableItem()) {
-                    itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                    if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                        this.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                        this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
-                    }
-                }
-
-                flag = false;
-            }
-
-            if (flag) {
-                this.setSecondsOnFire(8);
-            }
-        }
 
         Vector3d vector3d = this.getDeltaMovement();
         if (!this.onGround && vector3d.y < 0.0D && !this.isNoGravity()) {
@@ -305,33 +292,45 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
 
     public void attackAI(){
         if (!this.level.isClientSide) {
+            if (this.fireCooldown > 0){
+                --this.fireCooldown;
+            }
             if (this.getTarget() != null) {
+                if (!this.isFiring()){
+                    this.getLookControl().setLookAt(this.getTarget(), 100.0F, this.getMaxHeadXRot());
+                }
                 if (this.getSensing().canSee(this.getTarget())) {
-                    if ((this.getTarget().distanceToSqr(this) >= MathHelper.square(4.0F) || this.isStaying())
-                            && this.getTarget().distanceToSqr(this) < MathHelper.square(this.halfFollowRange())) {
+                    if ((this.fireCooldown <= 0 && !this.isTeleporting()
+                            && this.getTarget().distanceToSqr(this) < MathHelper.square(this.halfFollowRange())) || this.isFiring()) {
                         ++this.fireTick;
-                        this.getNavigation().stop();
-                        this.getLookControl().setLookAt(this.getTarget(), 100.0F, this.getMaxHeadXRot());
-                        double d2 = this.getTarget().getX() - this.getX();
-                        double d1 = this.getTarget().getZ() - this.getZ();
-                        this.yRot = -((float) MathHelper.atan2(d2, d1)) * (180F / (float) Math.PI);
-                        this.yBodyRot = this.yRot;
+                        if (this.isFiring()){
+                            this.getNavigation().stop();
+                            double d2 = this.getTarget().getX() - this.getX();
+                            double d1 = this.getTarget().getZ() - this.getZ();
+                            this.yRot = -((float) MathHelper.atan2(d2, d1)) * (180F / (float) Math.PI);
+                            this.yBodyRot = this.yRot;
+                        }
                         if (this.fireTick > 10) {
                             this.startFiring();
+                            this.getNavigation().stop();
                         } else {
                             this.movement();
                             this.stopFiring();
                         }
-                        if (this.fireTick > 20) {
-                            this.fireTick = -30;
+                        if (this.fireTick == 20) {
                             this.magicFire(this.getTarget());
+                        }
+                        if (this.fireTick > 30){
+                            this.fireCooldown = 100;
+                            this.fireTick = 0;
                         }
                     } else {
                         if (this.fireTick > 0) {
                             this.fireTick = 0;
                         }
                         this.stopFiring();
-                        if (!this.isStaying() && this.getTarget().distanceToSqr(this) <= MathHelper.square(4.0F)) {
+                        if (!this.isStaying() && this.getTarget().distanceToSqr(this) <= MathHelper.square(4.0F) && this.teleportCooldown <= 0) {
+                            this.getNavigation().stop();
                             this.setIsTeleporting(true);
                         } else {
                             this.setIsTeleporting(false);
@@ -340,7 +339,8 @@ public abstract class AbstractWraithEntity extends SummonedEntity implements ICu
                     }
                 } else {
                     if (MainConfig.WraithAggressiveTeleport.get()) {
-                        if (!this.isStaying()) {
+                        if (!this.isStaying() && this.teleportCooldown <= 0) {
+                            this.getNavigation().stop();
                             this.setIsTeleporting(true);
                         }
                     }

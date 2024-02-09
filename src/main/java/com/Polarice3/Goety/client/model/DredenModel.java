@@ -86,7 +86,7 @@ public class DredenModel<T extends LivingEntity> extends SegmentedModel<T> {
         this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
         if (pEntity instanceof AbstractDredenEntity){
-            animateArms(this.LeftArm, this.RightArm, ((AbstractDredenEntity) pEntity).isSpewing(), this.attackTime, pAgeInTicks);
+            animateArms(this.LeftArm, this.RightArm, ((AbstractDredenEntity) pEntity).isBreathing(), this.attackTime, pAgeInTicks);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.AttributesConfig;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SwordProjectileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.SoundUtil;
@@ -283,7 +283,10 @@ public class EnviokerEntity extends HuntingIllagerEntity implements ICustomAttri
             if (!super.canUse()) {
                 return false;
             } else {
-                return EnviokerEntity.this.isMagic() && EnviokerEntity.this.getMainHandItem().getItem() instanceof SwordItem;
+                return EnviokerEntity.this.getTarget() != null
+                        && EnviokerEntity.this.isMagic()
+                        && EnviokerEntity.this.getMainHandItem().getItem() instanceof SwordItem
+                        && EnviokerEntity.this.canSee(EnviokerEntity.this.getTarget());
             }
         }
 
@@ -335,7 +338,9 @@ public class EnviokerEntity extends HuntingIllagerEntity implements ICustomAttri
                 return false;
             } else {
                 int i = EnviokerEntity.this.level.getNearbyEntities(TormentorEntity.class, this.vexCountTargeting, EnviokerEntity.this, EnviokerEntity.this.getBoundingBox().inflate(16.0D)).size();
-                return i < 3 && EnviokerEntity.this.isMagic();
+                return EnviokerEntity.this.getTarget() != null
+                        && i < 1 && EnviokerEntity.this.isMagic()
+                        && EnviokerEntity.this.canSee(EnviokerEntity.this.getTarget());
             }
         }
 

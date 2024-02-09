@@ -18,12 +18,21 @@ public class TemptingSpell extends ChargingSpells {
         return SpellConfig.TemptingDuration.get();
     }
 
-    public int SoulCost() {
+    public int defaultSoulCost() {
         return SpellConfig.TemptingCost.get();
     }
 
     public SoundEvent CastingSound() {
         return SoundEvents.ILLUSIONER_CAST_SPELL;
+    }
+
+    @Override
+    public void SpellResult(ServerWorld worldIn, LivingEntity entityLiving, boolean staff) {
+        if (staff){
+            StaffResult(worldIn, entityLiving);
+        } else {
+            WandResult(worldIn, entityLiving);
+        }
     }
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {

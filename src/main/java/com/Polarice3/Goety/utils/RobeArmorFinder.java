@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.utils;
 
-import com.Polarice3.Goety.client.armors.IRobeArmor;
+import com.Polarice3.Goety.api.items.IRobeArmor;
 import com.Polarice3.Goety.client.armors.WanderBootsArmor;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.LivingEntity;

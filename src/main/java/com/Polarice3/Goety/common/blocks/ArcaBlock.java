@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.common.blocks.tiles.ArcaTileEntity;
 import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
-import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;

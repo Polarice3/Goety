@@ -5,7 +5,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Phantom Servants act pretty much the same as regular wild Phantoms, baring their allegiance towards their summoner. They would follow their master from the skies and will flee from any nearby cats."
+      "text": "Phantom Servants act pretty much the same as regular wild Phantoms, baring their allegiance towards their summoner. They would follow their master from the skies and will flee from any nearby cats. The Phantoms can also come in different sizes. The spell's Potency dictates how large and strong the summoned Phantom would be."
     },
     {
       "type": "patchouli:entity",
@@ -13,7 +13,11 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The Phantoms can also come in different sizes. The spell's Potency dictates how large and strong the summoned Phantom would be."
+      "text": "One can call these creatures through the use of a $(l:focuses/phantasm_focus)Phantasm Focus$(), or through a ritual which summons one without a limited lifespan."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:thrall/summon_phantom_thrall"
     }
   ]
 }

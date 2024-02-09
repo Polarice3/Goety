@@ -4,7 +4,7 @@ import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.client.model.TallSkullModel;
 import com.Polarice3.Goety.common.blocks.TallSkullBlock;
 import com.Polarice3.Goety.common.blocks.WallTallSkullBlock;
-import com.Polarice3.Goety.common.tileentities.TallSkullTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.TallSkullTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.BlockState;

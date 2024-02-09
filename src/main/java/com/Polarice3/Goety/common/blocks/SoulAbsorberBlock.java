@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.client.inventory.crafting.SoulAbsorberRecipes;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
-import com.Polarice3.Goety.common.tileentities.SoulAbsorberTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.SoulAbsorberTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
@@ -67,8 +67,8 @@ public class SoulAbsorberBlock extends ContainerBlock implements IWaterLoggable 
 
                 return ActionResultType.CONSUME;
             }
-            if (itemstack.getItem() instanceof GoldTotemItem){
-                if (GoldTotemItem.currentSouls(itemstack) > 0){
+            if (itemstack.getItem() instanceof ITotem){
+                if (ITotem.currentSouls(itemstack) > 0){
                     if (!pLevel.isClientSide && burnerTileEntity.placeItem(pPlayer.abilities.instabuild ? itemstack.copy() : itemstack, 9999)) {
                         return ActionResultType.SUCCESS;
                     }

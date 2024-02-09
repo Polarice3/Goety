@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.blocks;
 
+import com.Polarice3.Goety.common.blocks.tiles.PithosTileEntity;
 import com.Polarice3.Goety.common.entities.hostile.SkullLordEntity;
-import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;

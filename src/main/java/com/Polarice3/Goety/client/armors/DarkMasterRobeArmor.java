@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.client.armors;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
+import com.Polarice3.Goety.api.items.IRobeArmor;
 import com.Polarice3.Goety.client.model.MasterRobeModel;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.SEHelper;
@@ -21,7 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class DarkMasterRobeArmor extends ArmorItem implements IRobeArmor{
+public class DarkMasterRobeArmor extends ArmorItem implements IRobeArmor {
 
     public DarkMasterRobeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
         super(materialIn, slot, builderIn);
@@ -30,13 +31,13 @@ public class DarkMasterRobeArmor extends ArmorItem implements IRobeArmor{
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
-        if (MainConfig.SoulRepair.get()) {
+        if (ItemConfig.SoulRepair.get()) {
             if (stack.isDamaged()){
                 if (SEHelper.getSoulsContainer(player)){
-                    if (SEHelper.getSoulsAmount(player, MainConfig.DarkArmoredRobeRepairAmount.get())){
+                    if (SEHelper.getSoulsAmount(player, ItemConfig.DarkArmoredRobeRepairAmount.get())){
                         if (player.tickCount % 20 == 0) {
                             stack.setDamageValue(stack.getDamageValue() - 1);
-                            SEHelper.decreaseSouls(player, MainConfig.DarkArmoredRobeRepairAmount.get());
+                            SEHelper.decreaseSouls(player, ItemConfig.DarkArmoredRobeRepairAmount.get());
                         }
                     }
                 }

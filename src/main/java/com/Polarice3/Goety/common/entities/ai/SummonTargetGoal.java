@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.ai;
 
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.SpellConfig;
-import com.Polarice3.Goety.common.entities.neutral.IOwned;
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.RobeArmorFinder;

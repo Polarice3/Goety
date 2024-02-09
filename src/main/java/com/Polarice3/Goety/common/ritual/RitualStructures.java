@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.tileentities.RitualTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.RitualTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;

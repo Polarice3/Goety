@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.ForbiddenGrassTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.ForbiddenGrassTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;

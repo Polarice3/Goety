@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
-import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.DarkAltarTileEntity;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

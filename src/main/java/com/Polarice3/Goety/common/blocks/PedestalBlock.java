@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.PedestalTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.PedestalTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;

@@ -201,6 +201,10 @@ public class SoulSkullEntity extends ExplosiveProjectileEntity {
 
     }
 
+    public boolean ignoreExplosion(){
+        return true;
+    }
+
     public boolean isPickable() {
         return false;
     }

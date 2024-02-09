@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.SoulFangTotemTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.SoulFangTotemTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;

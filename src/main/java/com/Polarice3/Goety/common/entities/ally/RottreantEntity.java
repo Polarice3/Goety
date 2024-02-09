@@ -275,6 +275,11 @@ public class RottreantEntity extends SummonedEntity {
         return flag;
     }
 
+    @Override
+    public boolean canUpdateMove() {
+        return true;
+    }
+
     public void push(Entity pEntity) {
         if (!this.isStaying()){
             super.push(pEntity);

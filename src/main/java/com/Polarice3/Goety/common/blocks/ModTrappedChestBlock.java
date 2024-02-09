@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.ModTrappedChestTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.ModTrappedChestTileEntity;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.BlockState;
 import net.minecraft.stats.Stat;

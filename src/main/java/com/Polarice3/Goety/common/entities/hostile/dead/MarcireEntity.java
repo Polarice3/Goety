@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.dead;
 
 import com.Polarice3.Goety.AttributesConfig;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.DesiccatedSkullEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModEntityType;

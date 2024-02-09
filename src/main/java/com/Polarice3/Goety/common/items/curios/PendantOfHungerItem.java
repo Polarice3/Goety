@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.items.curios;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
 import com.Polarice3.Goety.compat.curios.CuriosLoaded;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
@@ -38,7 +38,7 @@ public class PendantOfHungerItem extends AmuletItem {
                     stack.setTag(new CompoundNBT());
                     stack.getOrCreateTag().putInt(ROTTEN_FLESH, 0);
                 } else {
-                    if (getRottenFleshAmount(stack) < MainConfig.PendantOfHungerLimit.get()) {
+                    if (getRottenFleshAmount(stack) < ItemConfig.PendantOfHungerLimit.get()) {
                         if (!ItemHelper.findItem(player, Items.ROTTEN_FLESH).isEmpty()) {
                             increaseRottenFlesh(stack);
                             ItemHelper.findItem(player, Items.ROTTEN_FLESH).shrink(1);

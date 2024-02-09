@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.common.entities.ai.StealTotemGoal;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -120,7 +120,7 @@ public abstract class HuntingIllagerEntity extends SpellcastingIllagerEntity {
 
     public void pickUpItem(ItemEntity pItemEntity) {
         ItemStack itemstack = pItemEntity.getItem();
-        if (itemstack.getItem() instanceof GoldTotemItem) {
+        if (itemstack.getItem() instanceof ITotem) {
             if (this.inventory.canAddItem(itemstack)) {
                 this.onItemPickup(pItemEntity);
                 this.inventory.addItem(itemstack);
@@ -170,8 +170,8 @@ public abstract class HuntingIllagerEntity extends SpellcastingIllagerEntity {
             for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
                 ItemStack itemstack = this.inventory.getItem(i);
                 if (itemstack != ItemStack.EMPTY){
-                    if (itemstack.getItem() instanceof GoldTotemItem){
-                        GoldTotemItem.increaseSouls(itemstack, MainConfig.IllagerSouls.get());
+                    if (itemstack.getItem() instanceof ITotem){
+                        ITotem.increaseSouls(itemstack, MainConfig.IllagerSouls.get());
                     }
                     ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), itemstack);
                     itemEntity.setDefaultPickUpDelay();

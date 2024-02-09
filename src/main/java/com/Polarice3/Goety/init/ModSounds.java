@@ -158,6 +158,27 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> WRAITH_TELEPORT = create("wraith_teleport");
     public static final RegistryObject<SoundEvent> WRAITH_DEATH = create("wraith_death");
 
+    public static final RegistryObject<SoundEvent> FROZEN_ZOMBIE_AMBIENT = create("frozen_zombie_ambient");
+    public static final RegistryObject<SoundEvent> FROZEN_ZOMBIE_HURT = create("frozen_zombie_hurt");
+    public static final RegistryObject<SoundEvent> FROZEN_ZOMBIE_DEATH = create("frozen_zombie_death");
+
+    public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_AMBIENT = create("jungle_zombie_ambient");
+    public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_HURT = create("jungle_zombie_hurt");
+    public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_STEP = create("jungle_zombie_step");
+    public static final RegistryObject<SoundEvent> JUNGLE_ZOMBIE_DEATH = create("jungle_zombie_death");
+
+    public static final RegistryObject<SoundEvent> MOSSY_SKELETON_AMBIENT = create("mossy_skeleton_ambient");
+    public static final RegistryObject<SoundEvent> MOSSY_SKELETON_HURT = create("mossy_skeleton_hurt");
+    public static final RegistryObject<SoundEvent> MOSSY_SKELETON_SHOOT = create("mossy_skeleton_shoot");
+    public static final RegistryObject<SoundEvent> MOSSY_SKELETON_STEP = create("mossy_skeleton_step");
+    public static final RegistryObject<SoundEvent> MOSSY_SKELETON_DEATH = create("mossy_skeleton_death");
+
+    public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_AMBIENT = create("sunken_skeleton_ambient");
+    public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_HURT = create("sunken_skeleton_hurt");
+    public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_SHOOT = create("sunken_skeleton_shoot");
+    public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_STEP = create("sunken_skeleton_step");
+    public static final RegistryObject<SoundEvent> SUNKEN_SKELETON_DEATH = create("sunken_skeleton_death");
+
     public static final RegistryObject<SoundEvent> HOGLORD_AMBIENT = create("hoglord_ambient");
     public static final RegistryObject<SoundEvent> HOGLORD_HURT = create("hoglord_hurt");
     public static final RegistryObject<SoundEvent> HOGLORD_RAGE = create("hoglord_rage");
@@ -178,6 +199,7 @@ public class ModSounds {
 
     public static final RegistryObject<SoundEvent> EVIL_LAUGH = create("evil_laugh");
     public static final RegistryObject<SoundEvent> ROAR_SPELL = create("roar_spell");
+    public static final RegistryObject<SoundEvent> FIRE_BREATH_START = create("fire_breath_start");
     public static final RegistryObject<SoundEvent> FIRE_BREATH = create("fire_breath");
     public static final RegistryObject<SoundEvent> PREPARE_SPELL = create("prepare_spell");
     public static final RegistryObject<SoundEvent> CAST_SPELL = create("cast_spell");
@@ -193,6 +215,9 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> SCYTHE_SWING = create("scythe_swing");
     public static final RegistryObject<SoundEvent> SCYTHE_HIT = create("scythe_hit");
     public static final RegistryObject<SoundEvent> SCYTHE_HIT_MEATY = create("scythe_hit_meaty");
+
+    public static final RegistryObject<SoundEvent> HARPOON_HIT = create("harpoon_impact");
+    public static final RegistryObject<SoundEvent> HARPOON_HIT_WATER = create("harpoon_impact_water");
 
     public static final RegistryObject<SoundEvent> FLAME_CAPTURE_CATCH = create("flame_capture_catch");
     public static final RegistryObject<SoundEvent> FLAME_CAPTURE_RELEASE = create("flame_capture_release");

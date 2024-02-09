@@ -138,6 +138,9 @@ public class Goety {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SpellConfig.SPEC, "goety-spells.toml");
         SpellConfig.loadConfig(SpellConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-spells.toml").toString());
 
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ItemConfig.SPEC, "goety-items.toml");
+        ItemConfig.loadConfig(ItemConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety-items.toml").toString());
+
         ModItems.init();
         ModBlocks.init();
         ModFluids.init();
@@ -300,13 +303,19 @@ public class Goety {
         event.put(ModEntityType.FRIENDLY_VEX.get(), FriendlyVexEntity.setCustomAttributes().build());
         event.put(ModEntityType.FRIENDLY_SCORCH.get(), FriendlyVexEntity.setCustomAttributes().build());
         event.put(ModEntityType.ZOMBIE_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
-        event.put(ModEntityType.HUSK_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
-        event.put(ModEntityType.DROWNED_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.HUSK_MINION.get(), HuskMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.DROWNED_MINION.get(), DrownedMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.FROZEN_ZOMBIE_MINION.get(), FrozenZombieMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.JUNGLE_ZOMBIE_MINION.get(), JungleZombieMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.SKELETON_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
-        event.put(ModEntityType.STRAY_MINION.get(), SkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.STRAY_MINION.get(), StrayMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.MOSSY_SKELETON_MINION.get(), MossySkeletonMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SUNKEN_SKELETON_MINION.get(), SunkenSkeletonMinion.setCustomAttributes().build());
         event.put(ModEntityType.DREDEN_MINION.get(), DredenMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.WRAITH_MINION.get(), WraithMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.FARMER_MINION.get(), ZombieMinionEntity.setCustomAttributes().build());
+        event.put(ModEntityType.SKELETON_PILLAGER.get(), SkeletonPillagerEntity.setCustomAttributes().build());
+        event.put(ModEntityType.ZOMBIE_VINDICATOR.get(), ZombieVindicatorEntity.setCustomAttributes().build());
         event.put(ModEntityType.UNDEAD_WOLF_MINION.get(), UndeadWolfEntity.setCustomAttributes().build());
         event.put(ModEntityType.PHANTOM_MINION.get(), PhantomMinionEntity.setCustomAttributes().build());
         event.put(ModEntityType.ILLUSION_CLONE.get(), IllusionCloneEntity.setCustomAttributes().build());

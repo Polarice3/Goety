@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.client.armors;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
+import com.Polarice3.Goety.api.items.IRobeArmor;
 import com.Polarice3.Goety.client.model.RobeModel;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -17,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-public class DarkRobeArmor extends ArmorItem implements IRobeArmor{
+public class DarkRobeArmor extends ArmorItem implements IRobeArmor {
 
     public DarkRobeArmor(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
         super(materialIn, slot, builderIn);
@@ -26,7 +27,7 @@ public class DarkRobeArmor extends ArmorItem implements IRobeArmor{
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
-        if (MainConfig.SoulRepair.get()) {
+        if (ItemConfig.SoulRepair.get()) {
             if (stack.isDamaged()){
                 if (SEHelper.getSoulsContainer(player)){
                     if (SEHelper.getSoulsAmount(player, 0)){

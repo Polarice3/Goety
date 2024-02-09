@@ -6,11 +6,19 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "These spectres are called and bound by your will to the point where their own Flames do not touch either you or your allies."
+      "text": "These spectres are called and bound by your will to the point where their own Ice Bouquets do not touch either you or your allies."
     },
     {
       "type": "patchouli:entity",
       "entity": "goety:wraith_minion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "One can call these creatures through the use of a $(l:focuses/spooky_focus)Spooky Focus$(), or through a ritual which summons one without a limited lifespan."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety:thrall/summon_wraith_thrall"
     }
   ]
 }

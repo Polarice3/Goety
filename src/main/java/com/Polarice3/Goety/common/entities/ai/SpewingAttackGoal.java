@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.entities.ai;
 
-import com.Polarice3.Goety.common.entities.neutral.ISpewing;
+import com.Polarice3.Goety.api.entities.IBreathing;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -14,7 +14,7 @@ import java.util.EnumSet;
 /**
  * Spewing Attack Goal Codes based of codes from @TeamTwilight
  */
-public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
+public class SpewingAttackGoal<T extends MobEntity & IBreathing> extends Goal {
     private final T attacker;
     private LivingEntity attackTarget;
     private double spewX;
@@ -52,7 +52,7 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
             this.spewZ = this.attackTarget.getZ();
         }
         this.durationLeft = this.maxDuration;
-        this.attacker.setSpewing(true);
+        this.attacker.setBreathing(true);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
         if (duration > 5) {
             for (Entity entity : MobUtil.getTargets(this.attacker, this.spewingRange)) {
                 if (entity != null) {
-                    this.attacker.doSpewing(entity);
+                    this.attacker.doBreathing(entity);
                 }
             }
         }
@@ -97,7 +97,7 @@ public class SpewingAttackGoal<T extends MobEntity & ISpewing> extends Goal {
     public void stop() {
         this.durationLeft = 0;
         this.attackTarget = null;
-        this.attacker.setSpewing(false);
+        this.attacker.setBreathing(false);
     }
 
     public void rotateAttacker(double x, double y, double z, float pDeltaYaw, float pDeltaPitch) {

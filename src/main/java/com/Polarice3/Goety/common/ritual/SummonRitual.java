@@ -1,8 +1,9 @@
 package com.Polarice3.Goety.common.ritual;
 
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
+import com.Polarice3.Goety.common.blocks.tiles.DarkAltarTileEntity;
 import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
-import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -44,6 +45,13 @@ public class SummonRitual extends Ritual {
         EntityType<?> entityType = this.recipe.getEntityToSummon();
         if (entityType != null) {
             Entity entity = this.createSummonedEntity(entityType, world, blockPos, tileEntity, castingPlayer);
+            if (entity instanceof IOwned){
+                IOwned owned = (IOwned) entity;
+                EntityType<?> entityType1 = owned.getVariant(world, blockPos);
+                if (entityType1 != null) {
+                    entity = this.createSummonedEntity(entityType1, world, blockPos, tileEntity, castingPlayer);
+                }
+            }
             if (entity instanceof LivingEntity) {
                 LivingEntity living = (LivingEntity) entity;
                 this.prepareLivingEntityForSpawn(living, world, blockPos, tileEntity, castingPlayer, this.tame);

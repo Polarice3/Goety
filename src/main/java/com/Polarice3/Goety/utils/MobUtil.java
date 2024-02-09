@@ -131,6 +131,22 @@ public class MobUtil {
         }
     }
 
+    public static boolean areAllies(@Nullable Entity entity, @Nullable Entity entity1){
+        if (entity != null && entity1 != null) {
+            return entity.isAlliedTo(entity1) || entity1.isAlliedTo(entity);
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean areFullAllies(@Nullable Entity entity, @Nullable Entity entity1){
+        if (entity != null && entity1 != null) {
+            return entity.isAlliedTo(entity1) && entity1.isAlliedTo(entity);
+        } else {
+            return false;
+        }
+    }
+
     public static LootContext.Builder createLootContext(DamageSource pDamageSource, LivingEntity livingEntity) {
         LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerWorld)livingEntity.level)).withRandom(livingEntity.getRandom()).withParameter(LootParameters.THIS_ENTITY, livingEntity).withParameter(LootParameters.ORIGIN, livingEntity.position()).withParameter(LootParameters.DAMAGE_SOURCE, pDamageSource).withOptionalParameter(LootParameters.KILLER_ENTITY, pDamageSource.getEntity()).withOptionalParameter(LootParameters.DIRECT_KILLER_ENTITY, pDamageSource.getDirectEntity());
         if (livingEntity.getLastHurtByMob() != null && livingEntity.getLastHurtByMob() instanceof PlayerEntity) {
@@ -357,41 +373,82 @@ public class MobUtil {
      * Target Codes based of codes from @TeamTwilight
      */
     public static List<Entity> getTargets(LivingEntity pSource, double pRange) {
+        return getTargets(pSource.level, pSource, pRange, 3.0D);
+    }
+
+    public static List<Entity> getTargets(World level, LivingEntity pSource, double pRange, double pRadius) {
         List<Entity> list = new ArrayList<>();
-        double vectorY = pSource.getY();
-        if (pSource instanceof PlayerEntity){
-            vectorY = pSource.getEyeY();
-        }
-        Vector3d source = new Vector3d(pSource.getX(), vectorY, pSource.getZ());
+        Vector3d srcVec = pSource.getEyePosition(1.0F);
         Vector3d lookVec = pSource.getViewVector(1.0F);
-        Vector3d rangeVec = new Vector3d(lookVec.x * pRange, lookVec.y * pRange, lookVec.z * pRange);
-        Vector3d end = source.add(rangeVec);
-        float size = 3.0F;
-        List<Entity> entities = pSource.level.getEntities(pSource, pSource.getBoundingBox().expandTowards(rangeVec).inflate(size));
+        double[] lookRange = new double[] {lookVec.x() * pRange, lookVec.y() * pRange, lookVec.z() * pRange};
+        Vector3d destVec = srcVec.add(lookRange[0], lookRange[1], lookRange[2]);
+        List<Entity> possibleList = level.getEntities(pSource, pSource.getBoundingBox().expandTowards(lookRange[0], lookRange[1], lookRange[2]).inflate(pRadius, pRadius, pRadius),
+                EntityPredicates.NO_CREATIVE_OR_SPECTATOR.and(EntityPredicates.ENTITY_STILL_ALIVE).and(entity -> !MobUtil.areAllies(entity, pSource)));
         double hitDist = 0.0D;
 
-        for (Entity entity : entities) {
-            if (entity.isPickable() && entity != pSource) {
-                float borderSize = entity.getPickRadius();
-                AxisAlignedBB collisionBB = entity.getBoundingBox().inflate(borderSize);
-                Optional<Vector3d> interceptPos = collisionBB.clip(source, end);
-
-                if (collisionBB.contains(source)) {
+        for (Entity hit : possibleList) {
+            if (hit.isPickable() && pSource.canSee(hit) && hit != pSource) {
+                float maxSize = pSource instanceof MobEntity ? 2.0F : 0.8F;
+                float borderSize = Math.max(maxSize, hit.getPickRadius());
+                AxisAlignedBB collisionBB = hit.getBoundingBox().inflate(borderSize);
+                Optional<Vector3d> interceptPos = collisionBB.clip(srcVec, destVec);
+                if (collisionBB.contains(srcVec)) {
                     if (0.0D <= hitDist) {
-                        list.add(entity);
+                        list.add(hit);
                         hitDist = 0.0D;
                     }
                 } else if (interceptPos.isPresent()) {
-                    double possibleDist = source.distanceTo(interceptPos.get());
+                    double possibleDist = srcVec.distanceTo(interceptPos.get());
 
                     if (possibleDist < hitDist || hitDist == 0.0D) {
-                        list.add(entity);
+                        list.add(hit);
                         hitDist = possibleDist;
                     }
                 }
             }
         }
         return list;
+    }
+
+    @Nullable
+    public static Entity getSingleTarget(World pLevel, LivingEntity pSource, double pRange, double pRadius) {
+        return getSingleTarget(pLevel, pSource, pRange, pRadius, EntityPredicates.NO_CREATIVE_OR_SPECTATOR.and(EntityPredicates.ENTITY_STILL_ALIVE).and(entity -> !MobUtil.areAllies(entity, pSource) && entity.isPickable()));
+    }
+
+    @Nullable
+    public static Entity getSingleTarget(World pLevel, LivingEntity pSource, double pRange, double pRadius, Predicate<? super Entity> predicate) {
+        Entity target = null;
+        Vector3d srcVec = pSource.getEyePosition(1.0F);
+        Vector3d lookVec = pSource.getViewVector(1.0F);
+        double[] lookRange = new double[] {lookVec.x() * pRange, lookVec.y() * pRange, lookVec.z() * pRange};
+        Vector3d destVec = srcVec.add(lookRange[0], lookRange[1], lookRange[2]);
+        List<Entity> possibleList = pLevel.getEntities(pSource, pSource.getBoundingBox().expandTowards(lookRange[0], lookRange[1], lookRange[2]).inflate(pRadius, pRadius, pRadius),
+                predicate);
+        double hitDist = 0.0D;
+
+        for (Entity hit : possibleList) {
+            if (pSource.canSee(pSource) && hit != pSource) {
+                float maxSize = pSource instanceof MobEntity ? 2.0F : 0.8F;
+                float borderSize = Math.max(maxSize, hit.getPickRadius());
+                AxisAlignedBB collisionBB = hit.getBoundingBox().inflate(borderSize, borderSize, borderSize);
+                Optional<Vector3d> interceptPos = collisionBB.clip(srcVec, destVec);
+
+                if (collisionBB.contains(srcVec)) {
+                    if (0.0D <= hitDist) {
+                        target = hit;
+                        hitDist = 0.0D;
+                    }
+                } else if (interceptPos.isPresent()) {
+                    double possibleDist = srcVec.distanceTo(interceptPos.get());
+
+                    if (possibleDist < hitDist || hitDist == 0.0D) {
+                        target = hit;
+                        hitDist = possibleDist;
+                    }
+                }
+            }
+        }
+        return target;
     }
 
     /**

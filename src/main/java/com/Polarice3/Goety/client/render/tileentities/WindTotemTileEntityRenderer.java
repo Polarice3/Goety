@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.client.render.tileentities;
 
-import com.Polarice3.Goety.common.tileentities.WindTotemTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.WindTotemTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;

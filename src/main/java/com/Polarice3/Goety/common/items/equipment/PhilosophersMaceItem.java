@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.items.equipment;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModItems;
 import com.Polarice3.Goety.utils.SEHelper;
@@ -28,25 +28,25 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
     private final Multimap<Attribute, AttributeModifier> maceAttributes;
 
     public PhilosophersMaceItem() {
-        super(new Properties().durability(MainConfig.PhilosophersMaceDurability.get()).tab(Goety.TAB).fireResistant());
+        super(new Properties().durability(ItemConfig.PhilosophersMaceDurability.get()).tab(Goety.TAB).fireResistant());
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", MainConfig.PhilosophersMaceDamage.get() - 1.0D, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", ItemConfig.PhilosophersMaceDamage.get() - 1.0D, AttributeModifier.Operation.ADDITION));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", (double)-2.4F, AttributeModifier.Operation.ADDITION));
         this.maceAttributes = builder.build();
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (MainConfig.SoulRepair.get()) {
+        if (ItemConfig.SoulRepair.get()) {
             if (entityIn instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entityIn;
                 if (!(player.swinging && isSelected)) {
                     if (stack.isDamaged()) {
                         if (SEHelper.getSoulsContainer(player)){
-                            if (SEHelper.getSoulsAmount(player, MainConfig.ItemsRepairAmount.get())){
+                            if (SEHelper.getSoulsAmount(player, ItemConfig.ItemsRepairAmount.get())){
                                 if (player.tickCount % 20 == 0) {
                                     stack.setDamageValue(stack.getDamageValue() - 1);
-                                    SEHelper.decreaseSouls(player, MainConfig.ItemsRepairAmount.get());
+                                    SEHelper.decreaseSouls(player, ItemConfig.ItemsRepairAmount.get());
                                 }
                             }
                         }
@@ -97,7 +97,7 @@ public class PhilosophersMaceItem extends Item implements IVanishable {
     }
 
     public int getEnchantmentValue() {
-        return 15;
+        return ItemConfig.PhilosophersMaceEnchantability.get();
     }
 
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)

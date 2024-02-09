@@ -5,6 +5,7 @@ import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureZombieAttackGoal;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -33,6 +34,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
@@ -72,7 +75,7 @@ public class ZombieMinionEntity extends SummonedEntity {
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
                 .add(Attributes.ATTACK_DAMAGE, AttributesConfig.ZombieServantDamage.get())
-                .add(Attributes.ARMOR, 2.0D);
+                .add(Attributes.ARMOR, AttributesConfig.ZombieServantArmor.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
@@ -199,6 +202,31 @@ public class ZombieMinionEntity extends SummonedEntity {
             }
         }
 
+    }
+
+    public EntityType<?> getVariant(World level, BlockPos blockPos){
+        EntityType<?> entityType = ModEntityType.ZOMBIE_MINION.get();
+        if (level instanceof ServerWorld) {
+            ServerWorld serverLevel = (ServerWorld) level;
+            if (level.isWaterAt(blockPos)) {
+                entityType = ModEntityType.DROWNED_MINION.get();
+            } else if (level.getBiome(blockPos).getBiomeCategory() == Biome.Category.DESERT && level.canSeeSky(blockPos)) {
+                entityType = ModEntityType.HUSK_MINION.get();
+            } else if (level.dimension() == World.NETHER) {
+                EntityType<?> entityType1 = ModEntityType.ZPIGLIN_MINION.get();
+                if (level.random.nextFloat() <= 0.25F && BlockFinder.findStructure(serverLevel, blockPos, Structure.BASTION_REMNANT)) {
+                    entityType1 = ModEntityType.ZPIGLIN_BRUTE_MINION.get();
+                }
+                entityType = entityType1;
+            } else if (BlockFinder.findStructure(serverLevel, blockPos, Structure.WOODLAND_MANSION)) {
+                entityType = ModEntityType.ZOMBIE_VINDICATOR.get();
+            } else if (level.getBiome(blockPos).getTemperature(blockPos) < 0.15F) {
+                entityType = ModEntityType.FROZEN_ZOMBIE_MINION.get();
+            } else if (level.getBiome(blockPos).getBiomeCategory() == Biome.Category.JUNGLE && level.random.nextBoolean()) {
+                entityType = ModEntityType.JUNGLE_ZOMBIE_MINION.get();
+            }
+        }
+        return entityType;
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {

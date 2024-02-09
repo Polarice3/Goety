@@ -6,6 +6,7 @@ import com.Polarice3.Goety.common.magic.Spells;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,22 +18,47 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class RoarSpell extends Spells {
     private static final Predicate<Entity> field_213690_b = Entity::isAlive;
     public float damage = SpellConfig.RoarDamage.get().floatValue() * SpellConfig.SpellDamageMultiplier.get();
 
-    public int SoulCost() {
+    public int defaultSoulCost() {
         return SpellConfig.RoarCost.get();
     }
 
-    public int CastDuration() {
+    public int defaultCastDuration() {
         return SpellConfig.RoarDuration.get();
     }
 
     public SoundEvent CastingSound() {
         return SoundEvents.ILLUSIONER_PREPARE_BLINDNESS;
+    }
+
+    @Override
+    public int defaultSpellCooldown() {
+        return SpellConfig.RoarCoolDown.get();
+    }
+
+    @Override
+    public List<Enchantment> acceptedEnchantments() {
+        List<Enchantment> list = new ArrayList<>();
+        list.add(ModEnchantments.POTENCY.get());
+        list.add(ModEnchantments.BURNING.get());
+        list.add(ModEnchantments.RADIUS.get());
+        return list;
+    }
+
+    @Override
+    public void SpellResult(ServerWorld worldIn, LivingEntity entityLiving, boolean staff) {
+        if (staff){
+            StaffResult(worldIn, entityLiving);
+        } else {
+            WandResult(worldIn, entityLiving);
+        }
     }
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {

@@ -1,6 +1,8 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.SpellConfig;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -34,7 +36,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttributes{
+public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttributes {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.OPTIONAL_UUID);
     protected static final DataParameter<Boolean> HOSTILE = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> NATURAL = EntityDataManager.defineId(OwnedEntity.class, DataSerializers.BOOLEAN);
@@ -100,9 +102,14 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
                 }
             }
         }
-        if (this.getTrueOwner() instanceof OwnedEntity){
+        if (this.getTrueOwner() instanceof IOwned){
+            IOwned owned = (IOwned) this.getTrueOwner();
             if (this.getTrueOwner().isDeadOrDying() || !this.getTrueOwner().isAlive()){
-                this.kill();
+                if (owned.getTrueOwner() != null){
+                    this.setTrueOwner(owned.getTrueOwner());
+                } else if (!this.isHostile() && !this.isNatural() && !(owned instanceof IMob) && !owned.isHostile()){
+                    this.kill();
+                }
             }
         }
         if (this.getLastHurtByMob() == this.getTrueOwner()){
@@ -112,6 +119,11 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
             MobEntity mobOwner = (MobEntity) this.getTrueOwner();
             if (mobOwner.getTarget() != null && this.getTarget() == null){
                 this.setTarget(mobOwner.getTarget());
+            }
+        }
+        if (this.getTarget() != null){
+            if (!this.getTarget().isAlive() || this.getTarget().isDeadOrDying()){
+                this.setTarget(null);
             }
         }
         for (OwnedEntity target : this.level.getEntitiesOfClass(OwnedEntity.class, this.getBoundingBox().inflate(this.getAttributeValue(Attributes.FOLLOW_RANGE)))) {
@@ -235,6 +247,11 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
 
     public void convertNewEquipment(Entity entity){
         this.populateDefaultEquipmentSlots(this.level.getCurrentDifficultyAt(this.blockPosition()));
+    }
+
+    @Nullable
+    public EntityType<?> getVariant(World level, BlockPos blockPos){
+        return this.getType();
     }
 
     @Nullable
@@ -364,6 +381,10 @@ public class OwnedEntity extends CreatureEntity implements IOwned, ICustomAttrib
     public static boolean checkSpawner(EntityType<? extends MobEntity> pType, IWorld pLevel, SpawnReason pReason, BlockPos pPos, Random pRandom) {
         BlockPos blockpos = pPos.below();
         return pReason == SpawnReason.SPAWNER || pLevel.getBlockState(blockpos).isValidSpawn(pLevel, blockpos, pType) || pLevel.getBlockState(blockpos).getBlock() == Blocks.SNOW;
+    }
+
+    public boolean isChargingCrossbow() {
+        return false;
     }
 
     public class OwnerHurtTargetGoal extends TargetGoal {

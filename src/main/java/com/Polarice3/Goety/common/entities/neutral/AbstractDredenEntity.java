@@ -1,6 +1,7 @@
 package com.Polarice3.Goety.common.entities.neutral;
 
 import com.Polarice3.Goety.AttributesConfig;
+import com.Polarice3.Goety.api.entities.IBreathing;
 import com.Polarice3.Goety.common.entities.ai.FrostBallGoal;
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
 import com.Polarice3.Goety.common.entities.ally.StrayMinionEntity;
@@ -33,7 +34,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class AbstractDredenEntity extends AbstractWraithEntity implements ISpewing, IRangedAttackMob {
+public abstract class AbstractDredenEntity extends AbstractWraithEntity implements IBreathing, IRangedAttackMob {
     protected static final DataParameter<Boolean> SPEWING = EntityDataManager.defineId(AbstractDredenEntity.class, DataSerializers.BOOLEAN);
 
     public AbstractDredenEntity(EntityType<? extends SummonedEntity> p_i48553_1_, World p_i48553_2_) {
@@ -107,7 +108,7 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
     public void aiStep() {
         super.aiStep();
 
-        if (isSpewing() && this.isAlive()) {
+        if (this.isBreathing() && this.isAlive()) {
             if (this.level.isClientSide) {
                 Vector3d lookAngle = this.getLookAngle();
 
@@ -191,17 +192,17 @@ public abstract class AbstractDredenEntity extends AbstractWraithEntity implemen
     }
 
     @Override
-    public boolean isSpewing() {
+    public boolean isBreathing() {
         return this.entityData.get(SPEWING);
     }
 
     @Override
-    public void setSpewing(boolean flag) {
+    public void setBreathing(boolean flag) {
         this.entityData.set(SPEWING, flag);
     }
 
     @Override
-    public void doSpewing(Entity target) {
+    public void doBreathing(Entity target) {
         if (target instanceof LivingEntity) {
             LivingEntity livingEntity = (LivingEntity) target;
             if (livingEntity.hurt(ModDamageSource.frostBreath(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE))){

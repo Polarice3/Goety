@@ -10,6 +10,7 @@ public class SEImp implements ISoulEnergy{
     private int soulEnergy = 0;
     private RegistryKey<World> dimension = World.OVERWORLD;
     private BlockPos ArcaBlock = new BlockPos(0, 0, 0);
+    private FocusCooldown cooldowns = new FocusCooldown();
 
     @Override
     public BlockPos getArcaBlock() {
@@ -67,5 +68,15 @@ public class SEImp implements ISoulEnergy{
         }
         this.soulEnergy = Math.max(this.soulEnergy - decrease, 0);
         return true;
+    }
+
+    @Override
+    public FocusCooldown cooldowns() {
+        return this.cooldowns;
+    }
+
+    @Override
+    public void setCooldowns(FocusCooldown cooldowns){
+        this.cooldowns = cooldowns;
     }
 }

@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.AttributesConfig;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.projectiles.SoulSkullEntity;
 import com.Polarice3.Goety.utils.EntityFinder;
 import net.minecraft.block.BlockState;

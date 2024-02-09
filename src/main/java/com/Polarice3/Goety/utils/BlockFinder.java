@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.tileentities.PithosTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.PithosTileEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModTags;
@@ -315,16 +315,51 @@ public class BlockFinder {
         }
     }
 
+    public static BlockPos SummonPosition(LivingEntity livingEntity, BlockPos blockPos){
+        return SummonPosition(livingEntity, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public static BlockPos SummonPosition(LivingEntity livingEntity, double x, double y, double z){
+        double d3 = y;
+        boolean flag = false;
+        BlockPos blockpos = new BlockPos(x, y, z);
+        World level = livingEntity.level;
+        if (level.hasChunkAt(blockpos)) {
+            boolean flag1 = false;
+
+            while(!flag1 && blockpos.getY() > 0) {
+                BlockPos blockpos1 = blockpos.below();
+                BlockState blockstate = level.getBlockState(blockpos1);
+                if (blockstate.getMaterial().blocksMotion()) {
+                    flag1 = true;
+                } else {
+                    --d3;
+                    blockpos = blockpos1;
+                }
+            }
+
+            if (flag1) {
+                if (level.noCollision(livingEntity) && !level.containsAnyLiquid(livingEntity.getBoundingBox())) {
+                    flag = true;
+                }
+            }
+        }
+        if (!flag) {
+            return blockpos;
+        } else {
+            return new BlockPos(x, d3, z);
+        }
+    }
+
     public static BlockPos SummonRadius(LivingEntity livingEntity, World world){
         BlockPos.Mutable blockpos$mutable = livingEntity.blockPosition().mutable().move(0, 0, 0);
         blockpos$mutable.setX(blockpos$mutable.getX() + world.random.nextInt(5) - world.random.nextInt(5));
-        blockpos$mutable.setY((int) BlockFinder.moveDownToGround(livingEntity));
+        blockpos$mutable.setY(livingEntity.blockPosition().getY());
         blockpos$mutable.setZ(blockpos$mutable.getZ() + world.random.nextInt(5) - world.random.nextInt(5));
-        if (hasChunksAt(livingEntity)
-                && isEmptyBlock(world, blockpos$mutable, world.getBlockState(blockpos$mutable), world.getFluidState(blockpos$mutable), ModEntityType.ZOMBIE_MINION.get(), false)){
-            return blockpos$mutable;
+        if (world.noCollision(livingEntity) && !world.containsAnyLiquid(livingEntity.getBoundingBox())) {
+            return SummonPosition(livingEntity, blockpos$mutable);
         } else {
-            return livingEntity.blockPosition().mutable().move(0, (int) BlockFinder.moveDownToGround(livingEntity), 0);
+            return livingEntity.blockPosition();
         }
     }
 
@@ -489,6 +524,11 @@ public class BlockFinder {
             currentPos.move(Direction.UP);
         }
         return !found;
+    }
+
+    public static boolean findStructure(ServerWorld serverWorld, BlockPos blockPos, Structure<?> structure){
+        StructureStart<?> structureStart = serverWorld.structureFeatureManager().getStructureAt(blockPos, true, structure);
+        return structureStart.getBoundingBox().isInside(blockPos);
     }
 
     public static boolean findStructure(ServerWorld serverWorld, LivingEntity livingEntity, Structure<?> structure){

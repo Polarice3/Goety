@@ -2,8 +2,8 @@ package com.Polarice3.Goety.common.entities.hostile.dead;
 
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.DeadSandExplosion;
 import com.Polarice3.Goety.utils.ExplosionUtil;

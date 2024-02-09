@@ -40,14 +40,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> CraftingSouls;
     public static final ForgeConfigSpec.ConfigValue<Integer> MRabbitMax;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> DarkArmoredRobeRepairAmount;
-    public static final ForgeConfigSpec.ConfigValue<Integer> EmeraldAmuletSouls;
-    public static final ForgeConfigSpec.ConfigValue<Integer> NecroSoulSandSouls;
-    public static final ForgeConfigSpec.ConfigValue<Integer> ItemsRepairAmount;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DarkScytheSouls;
-    public static final ForgeConfigSpec.ConfigValue<Integer> PendantOfHungerLimit;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WitchBowSouls;
-
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticPitchforkChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> FanaticWitchBombChance;
     public static final ForgeConfigSpec.ConfigValue<Integer> VillagerHateSpells;
@@ -79,26 +71,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> WraithSpawnWeight;
     public static final ForgeConfigSpec.ConfigValue<Integer> UrbhadhachSpawnWeight;
 
-    public static final ForgeConfigSpec.ConfigValue<Double> DarkStaffDamage;
-    public static final ForgeConfigSpec.ConfigValue<Double> ScytheBaseDamage;
-    public static final ForgeConfigSpec.ConfigValue<Double> ScytheAttackSpeed;
-    public static final ForgeConfigSpec.ConfigValue<Double> DeathScytheDamage;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DeathScytheDurability;
-    public static final ForgeConfigSpec.ConfigValue<Integer> DeathScytheEnchantability;
-
-    public static final ForgeConfigSpec.ConfigValue<Double> WarpedSpearDamage;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WarpedSpearDurability;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WarpedSpearEnchantability;
-
-    public static final ForgeConfigSpec.ConfigValue<Double> FrostTierDamage;
-    public static final ForgeConfigSpec.ConfigValue<Double> FrostTierMiningSpeed;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FrostTierDurability;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FrostTierLevel;
-    public static final ForgeConfigSpec.ConfigValue<Integer> FrostTierEnchantability;
-
-    public static final ForgeConfigSpec.ConfigValue<Double> PhilosophersMaceDamage;
-    public static final ForgeConfigSpec.ConfigValue<Integer> PhilosophersMaceDurability;
-
     public static final ForgeConfigSpec.ConfigValue<Boolean> SpecialBossBar;
     public static final ForgeConfigSpec.ConfigValue<Boolean> BossMusic;
 
@@ -111,13 +83,14 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> DeadSandMobs;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> HookBellBlackList;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> SoulRepair;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TotemUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ArcaUndying;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterTotem;
     public static final ForgeConfigSpec.ConfigValue<Boolean> StarterBook;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SoulGuiShow;
     public static final ForgeConfigSpec.ConfigValue<Boolean> FocusGuiShow;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ShowWandCooldown;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> WheelGuiMovement;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ShowNum;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagueSpread;
     public static final ForgeConfigSpec.ConfigValue<Boolean> IllagerSteal;
@@ -133,8 +106,6 @@ public class MainConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> TallSkullDrops;
     public static final ForgeConfigSpec.ConfigValue<Boolean> WraithAggressiveTeleport;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ApocalypseMode;
-
-    public static final ForgeConfigSpec.ConfigValue<Boolean> ScytheSlashBreaks;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DarkManorGen;
     public static final ForgeConfigSpec.ConfigValue<Boolean> PortalOutpostGen;
@@ -170,8 +141,6 @@ public class MainConfig {
                 .defineInRange("maxSouls", 10000, 10, Integer.MAX_VALUE);
         MaxArcaSouls = BUILDER.comment("Arca Maximum Soul Count, Default: 100000")
                 .defineInRange("maxArcaSouls", 100000, 10, Integer.MAX_VALUE);
-        SoulRepair = BUILDER.comment("Certain Items repair themselves using Soul Energy, Default: true")
-                .define("soulRepair", true);
         TotemUndying = BUILDER.comment("Totem of Souls will save the Player if full of Soul Energy and its in Curio Slot or inventory, Default: true")
                 .define("totemUndying", true);
         ArcaUndying = BUILDER.comment("Arca will save the Player if past Totem Maximum Soul Count, Default: true")
@@ -186,6 +155,10 @@ public class MainConfig {
                 .define("focusGuiShow", true);
         SoulGuiShow = BUILDER.comment("Show the Soul Energy Bar if Player has Totem of Souls/Arca, Default: true")
                 .define("soulGuiShow", true);
+        ShowWandCooldown = BUILDER.comment("Whether Wands and Staffs show cooldown if the focus it's equipped with is, Default: true")
+                .define("showWandCooldown", true);
+        WheelGuiMovement = BUILDER.comment("Allows player movement if Focus/Brew Wheel are open, Default: true")
+                .define("wheelGuiMovement", true);
         ShowNum = BUILDER.comment("Show numerical amount of Souls on the Soul Energy Bar, Default: false")
                 .define("showNumber", false);
         SoulGuiHorizontal = BUILDER.comment("Horizontal Position of where the Soul Energy Bar is located, Default: 100")
@@ -339,58 +312,6 @@ public class MainConfig {
                 .define("gloomTreeGen", true);
         MurkTreeGen = BUILDER.comment("Murk Trees Generates in the World, Default: true")
                 .define("murkTreeGen", true);
-        BUILDER.pop();
-        BUILDER.push("Items");
-        DarkArmoredRobeRepairAmount = BUILDER.comment("Amount of Souls needed to repair Dark Armored Robes per second, Default: 10")
-                .defineInRange("darkArmoredRobeRepairSouls", 10, 1, Integer.MAX_VALUE);
-        EmeraldAmuletSouls = BUILDER.comment("Amount of Soul Energy Emerald Amulet gives every 5 seconds, Default: 1")
-                .defineInRange("emeraldAmuletSouls", 1, 1, Integer.MAX_VALUE);
-        NecroSoulSandSouls = BUILDER.comment("Amount of Soul Energy Necro Boots of Wander gives when running on Soul Sand Blocks, Default: 1")
-                .defineInRange("necroSoulSandSouls", 1, 1, Integer.MAX_VALUE);
-        DarkScytheSouls = BUILDER.comment("Amount of Soul Energy Dark Scythe gives when hitting mob(s), Default: 1")
-                .defineInRange("darkScytheSouls", 1, 1, Integer.MAX_VALUE);
-        ScytheSlashBreaks = BUILDER.comment("Scythe Slashes from Death Scythe breaks blocks that regular Scythes easily breaks, Default: true")
-                .define("scytheSlashBreaks", true);
-        WitchBowSouls = BUILDER.comment("Amount of Soul Energy Witch's Bow required to shoot a tipped Arrow, Default: 25")
-                .defineInRange("witchBowSouls", 25, 1, Integer.MAX_VALUE);
-        ItemsRepairAmount = BUILDER.comment("Amount of Souls needed to repair certain Equipments per second, Default: 5")
-                .defineInRange("darkArmoredRobeRepairSouls", 5, 1, Integer.MAX_VALUE);
-        PendantOfHungerLimit = BUILDER.comment("The total amount of Rotten Flesh a Pendant of Hunger can hold, Default: 256")
-                .defineInRange("pendantOfHungerLimit", 256, 1, Integer.MAX_VALUE);
-        BUILDER.pop();
-        BUILDER.push("Tools & Weapons");
-        DarkStaffDamage = BUILDER.comment("How much base damage Dark Staffs deals, Default: 4.0")
-                .defineInRange("darkStaffDamage", 4.0, 1.0, Double.MAX_VALUE);
-        ScytheBaseDamage = BUILDER.comment("How much base damage Scythes deals, the damage added depends on material the scythe is made off (ie. Iron = 2.0), Default: 5.5")
-                .defineInRange("scytheBaseDamage", 5.5, 1.0, Double.MAX_VALUE);
-        ScytheAttackSpeed = BUILDER.comment("How fast it takes to fully swing a Scythe with item offhand and not wearing Grave Gloves. The lower the number the slower it takes to recharge, Default: 0.6")
-                .defineInRange("scytheAttackSpeed", 0.6, 0.0, Double.MAX_VALUE);
-        DeathScytheDamage = BUILDER.comment("How much damage Death Scythe deals, the configured number is added to Scythe Base Damage, Default: 4.0")
-                .defineInRange("deathScytheDamage", 4.0, 1.0, Double.MAX_VALUE);
-        DeathScytheDurability = BUILDER.comment("How many uses before Death Scythe breaks, Default: 444")
-                .defineInRange("deathScytheDurability", 444, 1, Integer.MAX_VALUE);
-        DeathScytheEnchantability = BUILDER.comment("Define the Enchantability for Death Scythe, higher number the better, Default: 22")
-                .defineInRange("deathScytheEnchantability", 22, 1, Integer.MAX_VALUE);
-        WarpedSpearDamage = BUILDER.comment("How much damage Warped Spear deals, Default: 10.0")
-                .defineInRange("warpedSpearDamage", 10.0, 1.0, Double.MAX_VALUE);
-        WarpedSpearDurability = BUILDER.comment("How many uses before Warped Spear breaks, Default: 250")
-                .defineInRange("warpedSpearDurability", 250, 1, Integer.MAX_VALUE);
-        WarpedSpearEnchantability = BUILDER.comment("Define the Enchantability for Warped Spear, higher number the better, Default: 1")
-                .defineInRange("warpedSpearEnchantability", 1, 1, Integer.MAX_VALUE);
-        PhilosophersMaceDamage = BUILDER.comment("How much damage Philosopher's Mace deals, Default: 9.0")
-                .defineInRange("philosophersMaceDamage", 9.0, 1.0, Double.MAX_VALUE);
-        PhilosophersMaceDurability = BUILDER.comment("How many uses before the Philosopher's Mace breaks, Default: 128")
-                .defineInRange("philosophersMaceDurability", 128, 1, Integer.MAX_VALUE);
-        FrostTierDamage = BUILDER.comment("How much damage Frost items deals, for swords the damage defined is added by 4.0 so by default, a Frost Sword would deal 6.5 Damage, Default: 2.5")
-                .defineInRange("frostTierDamage", 2.5, 1.0, Double.MAX_VALUE);
-        FrostTierMiningSpeed = BUILDER.comment("How fast Frost Items destroy blocks, higher number the faster (Hint: Iron has 6.0 Mining Speed), Default: 7.0")
-                .defineInRange("frostTierMiningSpeed", 7.0, 1.0, Double.MAX_VALUE);
-        FrostTierDurability = BUILDER.comment("How many uses before a Frost Item breaks, Default: 1000")
-                .defineInRange("frostTierDurability", 1000, 1, Integer.MAX_VALUE);
-        FrostTierLevel = BUILDER.comment("Define the Mining Level for Frost Tools (0 = Wood/Gold, 1 = Stone, 2 = Iron, 3 = Diamond, 4 = Netherite, 5+ = Above Netherite), Default: 3")
-                .defineInRange("frostTierLevel", 3, 0, Integer.MAX_VALUE);
-        FrostTierEnchantability = BUILDER.comment("Define the Enchantability for Frost Items, higher number the better, Default: 20")
-                .defineInRange("frostTierEnchantability", 20, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         BUILDER.push("Villagers");
         VillagerHate = BUILDER.comment("Wearing a Dark Helm and Robe, along with variants, causes Villagers around the Player to have a negative Reputation unless said Player has 100 or more reputation among them, Default: false")

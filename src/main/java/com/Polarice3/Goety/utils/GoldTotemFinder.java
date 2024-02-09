@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.common.blocks.tiles.ArcaTileEntity;
 import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
-import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.compat.curios.CuriosLoaded;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.entity.player.PlayerEntity;

@@ -2,19 +2,19 @@ package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.blocks.ArcaBlock;
+import com.Polarice3.Goety.common.blocks.tiles.ArcaTileEntity;
 import com.Polarice3.Goety.common.events.ArcaTeleporter;
-import com.Polarice3.Goety.common.magic.spells.RecallSpell;
+import com.Polarice3.Goety.common.magic.spells.ender.RecallSpell;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.server.SPlayWorldSoundPacket;
-import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RespawnAnchorBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
@@ -88,7 +88,7 @@ public class RecallFocus extends MagicFocusItem{
         return ActionResult.pass(itemstack);
     }
 
-    public static boolean recall(ServerPlayerEntity player, ItemStack stack){
+    public static boolean recall(LivingEntity player, ItemStack stack){
         if (hasRecall(stack) && stack.getTag() != null) {
             if (getDimension(stack.getTag()).isPresent() && getRecallBlockPos(stack.getTag()) != null) {
                 BlockPos blockPos = getRecallBlockPos(stack.getTag());
@@ -141,7 +141,7 @@ public class RecallFocus extends MagicFocusItem{
         return World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, p_40728_.get(TAG_DIMENSION)).result();
     }
 
-    private void addRecallTags(RegistryKey<World> p_40733_, BlockPos p_40734_, CompoundNBT p_40735_) {
+    public void addRecallTags(RegistryKey<World> p_40733_, BlockPos p_40734_, CompoundNBT p_40735_) {
         p_40735_.put(TAG_POS, NBTUtil.writeBlockPos(p_40734_));
         World.RESOURCE_KEY_CODEC.encodeStart(NBTDynamicOps.INSTANCE, p_40733_).resultOrPartial(Goety.LOGGER::error).ifPresent((p_40731_) -> {
             p_40735_.put(TAG_DIMENSION, p_40731_);

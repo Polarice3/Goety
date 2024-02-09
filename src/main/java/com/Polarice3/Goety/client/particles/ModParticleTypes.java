@@ -56,6 +56,9 @@ public class ModParticleTypes {
     public static final RegistryObject<BasicParticleType> CULT_SPELL = PARTICLE_TYPES.register("cult_spell",
             () -> new BasicParticleType(true));
 
+    public static final RegistryObject<BasicParticleType> BIG_CULT_SPELL = PARTICLE_TYPES.register("big_cult_spell",
+            () -> new BasicParticleType(true));
+
     public static final RegistryObject<BasicParticleType> SONIC_BOOM = PARTICLE_TYPES.register("sonic_boom",
             () -> new BasicParticleType(true));
 
@@ -73,6 +76,12 @@ public class ModParticleTypes {
 
     public static final RegistryObject<BasicParticleType> LEECH = PARTICLE_TYPES.register("leech",
             () -> new BasicParticleType(false));
+
+    public static final RegistryObject<BasicParticleType> SOUL_EXPLODE = PARTICLE_TYPES.register("soul_explode",
+            () -> new BasicParticleType(true));
+
+    public static final RegistryObject<BasicParticleType> SUMMON = PARTICLE_TYPES.register("summon",
+            () -> new BasicParticleType(true));
 
     public static final RegistryObject<ParticleType<ShockwaveParticleOption>> SHOCKWAVE = PARTICLE_TYPES.register("shockwave",
             () -> new ParticleType<ShockwaveParticleOption>(false, ShockwaveParticleOption.DESERIALIZER) {

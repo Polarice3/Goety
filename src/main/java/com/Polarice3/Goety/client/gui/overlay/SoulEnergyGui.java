@@ -2,7 +2,7 @@ package com.Polarice3.Goety.client.gui.overlay;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.SEHelper;
@@ -51,7 +51,7 @@ public class SoulEnergyGui extends AbstractGui {
             SoulEnergyTotal = MainConfig.MaxArcaSouls.get();
         } else if (!stack.isEmpty()) {
             if (stack.getTag() != null) {
-                SoulEnergy = GoldTotemItem.currentSouls(stack);
+                SoulEnergy = ITotem.currentSouls(stack);
             }
         }
 

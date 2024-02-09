@@ -3,10 +3,13 @@ package com.Polarice3.Goety.common.network.packets.server;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
@@ -25,13 +28,18 @@ public class SPlayWorldSoundPacket {
 
     public static void encode(SPlayWorldSoundPacket packet, PacketBuffer buffer) {
         buffer.writeBlockPos(packet.blockPos);
-        buffer.writeResourceLocation(packet.soundEvent.getLocation());
+        ResourceLocation resourceLocation = ForgeRegistries.SOUND_EVENTS.getKey(packet.soundEvent);
+        if (resourceLocation != null){
+            buffer.writeResourceLocation(resourceLocation);
+        } else {
+            buffer.writeResourceLocation(ForgeRegistries.SOUND_EVENTS.getKey(SoundEvents.ITEM_PICKUP));
+        }
         buffer.writeFloat(packet.volume);
         buffer.writeFloat(packet.pitch);
     }
 
     public static SPlayWorldSoundPacket decode(PacketBuffer buffer) {
-        return new SPlayWorldSoundPacket(buffer.readBlockPos(), new SoundEvent(buffer.readResourceLocation()), buffer.readFloat(), buffer.readFloat());
+        return new SPlayWorldSoundPacket(buffer.readBlockPos(), ForgeRegistries.SOUND_EVENTS.getValue(buffer.readResourceLocation()), buffer.readFloat(), buffer.readFloat());
     }
 
     public static void consume(SPlayWorldSoundPacket packet, Supplier<NetworkEvent.Context> ctx) {

@@ -3,10 +3,10 @@ package com.Polarice3.Goety.common.entities.hostile;
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.entities.IBreathing;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.ai.SpewingAttackGoal;
 import com.Polarice3.Goety.common.entities.hostile.cultists.AbstractCultistEntity;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
-import com.Polarice3.Goety.common.entities.neutral.ISpewing;
 import com.Polarice3.Goety.common.entities.utilities.PoisonGroundEntity;
 import com.Polarice3.Goety.common.network.ModServerBossInfo;
 import com.Polarice3.Goety.init.ModEntityType;
@@ -58,7 +58,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing, ICustomAttributes {
+public class HogLordEntity extends MonsterEntity implements IFlinging, IBreathing, ICustomAttributes {
     private int attackAnimationRemainingTicks;
     private int allyCooldown;
     private final ModServerBossInfo bossInfo = new ModServerBossInfo(this.getUUID(), this.getDisplayName(), BossInfo.Color.PINK, BossInfo.Overlay.PROGRESS).setDarkenScreen(false).setCreateWorldFog(false);
@@ -145,12 +145,12 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
     }
 
     @Override
-    public boolean isSpewing() {
+    public boolean isBreathing() {
         return this.entityData.get(SPEWING);
     }
 
     @Override
-    public void setSpewing(boolean flag) {
+    public void setBreathing(boolean flag) {
         this.entityData.set(SPEWING, flag);
     }
 
@@ -163,7 +163,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
     }
 
     @Override
-    public void doSpewing(Entity target) {
+    public void doBreathing(Entity target) {
         if (!target.fireImmune()) {
             target.setSecondsOnFire(10);
             target.hurt(ModDamageSource.fireBreath(this), 2.0F);
@@ -249,7 +249,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
     }
 
     public void aiStep() {
-        if (this.attackAnimationRemainingTicks > 0 && !this.isSpewing()) {
+        if (this.attackAnimationRemainingTicks > 0 && !this.isBreathing()) {
             --this.attackAnimationRemainingTicks;
         }
 
@@ -277,7 +277,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
             this.animationSpeed += 0.6F;
         }
 
-        if (isSpewing()) {
+        if (isBreathing()) {
             if (this.level.isClientSide) {
                 Vector3d lookAngle = this.getLookAngle();
 
@@ -306,7 +306,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
             }
 
             this.attackAnimationRemainingTicks = 2;
-            this.playSound(ModSounds.FIRE_BREATH.get(), random.nextFloat() * 0.5F, random.nextFloat() * 0.5F);
+            this.playSound(SoundEvents.BLAZE_SHOOT, random.nextFloat() * 0.5F, random.nextFloat() * 0.5F);
         }
 
         List<MobEntity> minions = new ArrayList<>();
@@ -575,7 +575,7 @@ public class HogLordEntity extends MonsterEntity implements IFlinging, ISpewing,
                     && !this.hogLord.isInWater()
                     && !this.hogLord.isInLava()
                     && this.hogLord.getTarget() != null
-                    && !this.hogLord.isSpewing()
+                    && !this.hogLord.isBreathing()
                     && !this.hogLord.isRaging();
         }
 

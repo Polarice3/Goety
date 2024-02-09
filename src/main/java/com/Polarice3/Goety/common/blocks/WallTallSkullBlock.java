@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.TallSkullTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.TallSkullTileEntity;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;

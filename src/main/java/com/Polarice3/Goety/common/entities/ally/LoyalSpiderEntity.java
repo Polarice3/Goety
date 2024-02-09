@@ -2,12 +2,12 @@ package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.SpellConfig;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.capabilities.spider.ISpiderLevels;
 import com.Polarice3.Goety.common.entities.ai.SpiderBreedGoal;
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
-import com.Polarice3.Goety.common.entities.neutral.IOwned;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
@@ -269,13 +269,27 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
         if (compound.contains("CollarColor", 99)) {
             this.setCollarColor(DyeColor.byId(compound.getInt("CollarColor")));
         }
-        this.setSitting(compound.getBoolean("Sitting"));
-        this.setRideable(compound.getBoolean("Rideable"));
-        this.setPoison(compound.getBoolean("Poison"));
-        this.setFallImmune(compound.getBoolean("FallImmune"));
-        this.setSaddled(compound.getBoolean("Saddled"));
-        this.setFrost(compound.getBoolean("Frost"));
-        this.setRoyal(compound.getBoolean("Royal"));
+        if (compound.contains("Sitting")) {
+            this.setSitting(compound.getBoolean("Sitting"));
+        }
+        if (compound.contains("Rideable")){
+            this.setRideable(compound.getBoolean("Rideable"));
+        }
+        if (compound.contains("Poison")) {
+            this.setPoison(compound.getBoolean("Poison"));
+        }
+        if (compound.contains("FallImmune")) {
+            this.setFallImmune(compound.getBoolean("FallImmune"));
+        }
+        if (compound.contains("Saddled")) {
+            this.setSaddled(compound.getBoolean("Saddled"));
+        }
+        if (compound.contains("Frost")) {
+            this.setFrost(compound.getBoolean("Frost"));
+        }
+        if (compound.contains("Royal")) {
+            this.setRoyal(compound.getBoolean("Royal"));
+        }
     }
 
     private boolean getStatusFlag(int mask) {
@@ -318,6 +332,16 @@ public class LoyalSpiderEntity extends AnimalEntity implements IJumpingMount, IO
 
     public void setTrueOwner(LivingEntity livingEntity){
         this.setOwnerId(livingEntity.getUUID());
+    }
+
+    @Override
+    public void setHostile(boolean hostile) {
+
+    }
+
+    @Override
+    public boolean isHostile() {
+        return false;
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {

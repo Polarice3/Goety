@@ -17,12 +17,21 @@ public class BrainEaterSpell extends ChargingSpells {
         return SpellConfig.BrainEaterDuration.get();
     }
 
-    public int SoulCost() {
+    public int defaultSoulCost() {
         return SpellConfig.BrainEaterCost.get();
     }
 
     public SoundEvent CastingSound() {
         return SoundEvents.ILLUSIONER_PREPARE_BLINDNESS;
+    }
+
+    @Override
+    public void SpellResult(ServerWorld worldIn, LivingEntity entityLiving, boolean staff) {
+        if (staff){
+            StaffResult(worldIn, entityLiving);
+        } else {
+            WandResult(worldIn, entityLiving);
+        }
     }
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {

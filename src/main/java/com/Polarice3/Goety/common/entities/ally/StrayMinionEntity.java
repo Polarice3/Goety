@@ -1,6 +1,10 @@
 package com.Polarice3.Goety.common.entities.ally;
 
+import com.Polarice3.Goety.AttributesConfig;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
@@ -15,6 +19,17 @@ public class StrayMinionEntity extends AbstractSMEntity {
 
     public StrayMinionEntity(EntityType<? extends AbstractSMEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
+        return MobEntity.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, AttributesConfig.StrayServantHealth.get())
+                .add(Attributes.MOVEMENT_SPEED, 0.25F)
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.StrayServantDamage.get());
+    }
+
+    public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
+        return setCustomAttributes();
     }
 
     protected SoundEvent getAmbientSound() {

@@ -1,11 +1,11 @@
 package com.Polarice3.Goety.common.ritual;
 
 import com.Polarice3.Goety.client.inventory.crafting.RitualRecipe;
+import com.Polarice3.Goety.common.blocks.tiles.DarkAltarTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.PedestalTileEntity;
 import com.Polarice3.Goety.common.entities.ally.SummonedEntity;
 import com.Polarice3.Goety.common.entities.hostile.ShadeEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
-import com.Polarice3.Goety.common.tileentities.DarkAltarTileEntity;
-import com.Polarice3.Goety.common.tileentities.PedestalTileEntity;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.ModMathHelper;

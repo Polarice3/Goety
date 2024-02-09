@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.entities.hostile;
 
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -231,7 +231,7 @@ public class UrbhadhachEntity extends MonsterEntity implements ICustomAttributes
                             if (this.getThrall().getAttributeValue(Attributes.MOVEMENT_SPEED) < 0.5F) {
                                 speed = 1.0F;
                             }
-                            if (this.pathToUrbhadhach(this.getThrall()) != null) {
+                            if (this.pathToUrbhadhach(this.getThrall()) != null && this.getThrall().getNavigation().isDone()) {
                                 this.getThrall().getNavigation().moveTo(this.pathToUrbhadhach(this.getThrall()), speed);
                             }
                         } else {

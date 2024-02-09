@@ -2,7 +2,7 @@ package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.AttributesConfig;
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.init.ModRitualFactory;
 import com.Polarice3.Goety.init.ModRituals;
 import net.minecraftforge.event.RegistryEvent;

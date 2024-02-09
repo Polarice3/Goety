@@ -1,5 +1,7 @@
 package com.Polarice3.Goety.utils;
 
+import com.Polarice3.Goety.api.items.magic.IFocus;
+import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.projectiles.BlightFireEntity;
 import com.Polarice3.Goety.common.entities.projectiles.FangEntity;
@@ -22,7 +24,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.Map;
 
 public class WandUtil {
     private static boolean isMatchingItem(ItemStack itemStack) {
@@ -51,6 +52,16 @@ public class WandUtil {
         return foundStack;
     }
 
+    public static ISpell getSpell(LivingEntity livingEntity){
+        if (WandUtil.findFocus(livingEntity).getItem() instanceof IFocus){
+            IFocus magicFocus = (IFocus) WandUtil.findFocus(livingEntity).getItem();
+            if (magicFocus.getSpell() != null){
+                return magicFocus.getSpell();
+            }
+        }
+        return null;
+    }
+
     public static ItemStack findFocusInInv(@Nullable PlayerEntity player){
         ItemStack foundStack = ItemStack.EMPTY;
         if (player != null) {
@@ -68,27 +79,16 @@ public class WandUtil {
         return !findFocusInInv(player).isEmpty();
     }
 
-    public static boolean enchantedFocus(PlayerEntity playerEntity){
+    public static boolean enchantedFocus(LivingEntity playerEntity){
         return !findFocus(playerEntity).isEmpty() && findFocus(playerEntity).isEnchanted();
     }
 
-    public static int getLevels(Enchantment enchantment, PlayerEntity playerEntity){
+    public static int getLevels(Enchantment enchantment, LivingEntity playerEntity){
         if (enchantedFocus(playerEntity)) {
             return EnchantmentHelper.getItemEnchantmentLevel(enchantment, findFocus(playerEntity));
         } else {
             return 0;
         }
-    }
-
-    public static Map<Enchantment, Integer> getFocusEnchantments(PlayerEntity playerEntity){
-        if (!findFocus(playerEntity).isEmpty()){
-            ItemStack focus = findFocus(playerEntity);
-            if (focus.isEnchanted()){
-                return SoulWand.getFocusEnchantments(focus);
-            }
-        }
-
-        return null;
     }
 
     public static void spawnFangs(LivingEntity livingEntity, double pPosX, double pPosZ, double PPPosY, double pOPosY, float pYRot, int pWarmUp) {

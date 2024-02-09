@@ -1,9 +1,8 @@
 package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.enchantments.ModEnchantments;
+import com.Polarice3.Goety.api.items.magic.IFocus;
 import com.Polarice3.Goety.common.magic.Spells;
-import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +19,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MagicFocusItem extends Item{
+public class MagicFocusItem extends Item implements IFocus {
     public static final String SOULCOST = "Soul Cost";
     public Spells spell;
     public int soulcost;
@@ -33,7 +32,7 @@ public class MagicFocusItem extends Item{
                 .stacksTo(1)
         );
         this.spell = spell;
-        this.soulcost = spell.SoulCost();
+        this.soulcost = spell.defaultSoulCost();
     }
 
     public boolean isEnchantable(ItemStack pStack) {
@@ -44,72 +43,14 @@ public class MagicFocusItem extends Item{
         return 1;
     }
 
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-    {
-        if (stack.getItem() == ModItems.TELEPORT_FOCUS.get()){
-            return enchantment == ModEnchantments.RANGE.get();
-        }
-        if (stack.getItem() == ModItems.DRAGONFIREBALL_FOCUS.get()){
-            return enchantment == ModEnchantments.RADIUS.get()
-                    || enchantment == ModEnchantments.DURATION.get();
-        }
-        if (stack.getItem() == ModItems.SPIDERLING_FOCUS.get()
-                || stack.getItem() == ModItems.CREEPERLING_FOCUS.get()
-                || stack.getItem() == ModItems.VEXING_FOCUS.get()
-                || stack.getItem() == ModItems.ROTTING_FOCUS.get()
-                || stack.getItem() == ModItems.OSSEOUS_FOCUS.get()
-                || stack.getItem() == ModItems.RIGID_FOCUS.get()
-                || stack.getItem() == ModItems.HOUNDING_FOCUS.get()
-                || stack.getItem() == ModItems.PHANTASM_FOCUS.get()
-                || stack.getItem() == ModItems.LAUNCH_FOCUS.get()
-                || stack.getItem() == ModItems.POISONBALL_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.DURATION.get();
-        }
-        if (stack.getItem() == ModItems.SPOOKY_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.BURNING.get()
-                    || enchantment == ModEnchantments.DURATION.get();
-        }
-        if (stack.getItem() == ModItems.ICESTORM_FOCUS.get()
-                || stack.getItem() == ModItems.FROSTBREATH_FOCUS.get()
-                || stack.getItem() == ModItems.WITCHGALE_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.DURATION.get()
-                    || enchantment == ModEnchantments.RANGE.get();
-        }
-        if (stack.getItem() == ModItems.ICEOLOGY_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.RANGE.get()
-                    || enchantment == ModEnchantments.RADIUS.get();
-        }
-        if (stack.getItem() == ModItems.BITING_FOCUS.get()) {
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.RANGE.get()
-                    || enchantment == ModEnchantments.RADIUS.get()
-                    || enchantment == ModEnchantments.BURNING.get()
-                    || enchantment == ModEnchantments.ABSORB.get();
-        }
-        if (stack.getItem() == ModItems.FEAST_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.BURNING.get()
-                    || enchantment == ModEnchantments.ABSORB.get();
-        }
-        if (stack.getItem() == ModItems.FIREBALL_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.BURNING.get();
-        }
-        if (stack.getItem() == ModItems.FIREBREATH_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.BURNING.get()
-                    || enchantment == ModEnchantments.RANGE.get();
-        }
-        if (stack.getItem() == ModItems.LAVABALL_FOCUS.get()
-            || stack.getItem() == ModItems.ROARING_FOCUS.get()
-            || stack.getItem() == ModItems.SOULSKULL_FOCUS.get()){
-            return enchantment == ModEnchantments.POTENCY.get()
-                    || enchantment == ModEnchantments.RADIUS.get()
-                    || enchantment == ModEnchantments.BURNING.get();
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        if (stack.getItem() instanceof IFocus){
+            IFocus magicFocus = (IFocus) stack.getItem();
+            if (magicFocus.getSpell() != null){
+                if (!magicFocus.getSpell().acceptedEnchantments().isEmpty()){
+                    return magicFocus.getSpell().acceptedEnchantments().contains(enchantment);
+                }
+            }
         }
         return false;
     }
@@ -138,10 +79,10 @@ public class MagicFocusItem extends Item{
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        if (soulcost != 0) {
-            tooltip.add(new TranslationTextComponent("info.goety.soulitems.focuscost", soulcost));
+        if (this.soulcost != 0) {
+            tooltip.add(new TranslationTextComponent("info.goety.focus.cost", this.soulcost));
         } else {
-            tooltip.add(new TranslationTextComponent("info.goety.soulitems.focuscost", 0));
+            tooltip.add(new TranslationTextComponent("info.goety.focus.cost", 0));
         }
         tooltip.add(new TranslationTextComponent("info.goety.focus.spellType", spell.getSpellType().getName()));
     }

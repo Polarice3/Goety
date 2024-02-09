@@ -1,8 +1,11 @@
 package com.Polarice3.Goety.common.events;
 
 import com.Polarice3.Goety.Goety;
+import com.Polarice3.Goety.ItemConfig;
 import com.Polarice3.Goety.MainConfig;
 import com.Polarice3.Goety.SpellConfig;
+import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.client.armors.ModArmorMaterial;
 import com.Polarice3.Goety.common.blocks.IDeadBlock;
 import com.Polarice3.Goety.common.capabilities.lichdom.ILichdom;
@@ -33,6 +36,7 @@ import com.Polarice3.Goety.common.items.GrandTorchItem;
 import com.Polarice3.Goety.common.items.ModItemTiers;
 import com.Polarice3.Goety.common.items.curios.GraveGloveItem;
 import com.Polarice3.Goety.common.items.equipment.*;
+import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.compat.patchouli.PatchouliLoaded;
 import com.Polarice3.Goety.init.*;
 import com.Polarice3.Goety.utils.*;
@@ -286,6 +290,9 @@ public class ModEvents {
         player.getCapability(SEProvider.CAPABILITY)
                 .ifPresent(soulEnergy ->
                         soulEnergy.setArcaBlockDimension(capability3.getArcaBlockDimension()));
+        player.getCapability(SEProvider.CAPABILITY)
+                .ifPresent(soulEnergy ->
+                        soulEnergy.setCooldowns(capability3.cooldowns()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
@@ -593,6 +600,7 @@ public class ModEvents {
         World world = player.level;
         int zombies = 0;
         int skeletons = 0;
+        int wraith = 0;
         int wolves = 0;
         if (world instanceof ServerWorld){
             for (Entity entity : ((ServerWorld) world).getAllEntities()){
@@ -610,6 +618,14 @@ public class ModEvents {
                         if (summonedEntity instanceof AbstractSMEntity){
                             ++skeletons;
                             if (skeletons > SpellConfig.SkeletonLimit.get()){
+                                if (summonedEntity.tickCount % 20 == 0){
+                                    summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
+                                }
+                            }
+                        }
+                        if (summonedEntity instanceof AbstractWraithEntity){
+                            ++wraith;
+                            if (wraith > SpellConfig.WraithLimit.get()){
                                 if (summonedEntity.tickCount % 20 == 0){
                                     summonedEntity.hurt(DamageSource.STARVE, summonedEntity.getMaxHealth()/4);
                                 }
@@ -820,7 +836,7 @@ public class ModEvents {
                     if (mobAttacker.getLastHurtByMob() instanceof IOwned && !(mobAttacker instanceof ApostleEntity)){
                         mobAttacker.setTarget(mobAttacker.getLastHurtByMob());
                     }
-                    if (RobeArmorFinder.FindNecroSet(target) && RobeArmorFinder.FindNecroBootsofWander(target)){
+                    if (RobeArmorFinder.FindNecroSet(target) && RobeArmorFinder.FindNecroBootsofWander(target) && ItemConfig.NecroSetUndeadNeutral.get()){
                         boolean undead = mobAttacker.getMobType() == CreatureAttribute.UNDEAD && mobAttacker.getMaxHealth() < 50.0F && !(mobAttacker instanceof OwnedEntity && !(mobAttacker instanceof IMob)) && !(mobAttacker instanceof BoneLordEntity);
                         if (undead){
                             if (mobAttacker.getLastHurtByMob() != target){
@@ -842,7 +858,7 @@ public class ModEvents {
                     }
                 }
                 if (mobAttacker.getMobType() == CreatureAttribute.ARTHROPOD){
-                    if (RobeArmorFinder.FindFelHelm(target)){
+                    if (RobeArmorFinder.FindFelHelm(target) && ItemConfig.FelHelmArthropodNeutral.get()){
                         if (mobAttacker.getLastHurtByMob() != target){
                             mobAttacker.setTarget(null);
                         } else {
@@ -851,7 +867,7 @@ public class ModEvents {
                     }
                 }
                 if (mobAttacker instanceof CreeperEntity){
-                    if (RobeArmorFinder.FindFelArmor(target)){
+                    if (RobeArmorFinder.FindFelArmor(target) && ItemConfig.FelRobesCreeperNeutral.get()){
                         if (mobAttacker.getLastHurtByMob() != target){
                             mobAttacker.setTarget(null);
                         } else {
@@ -860,7 +876,7 @@ public class ModEvents {
                     }
                 }
                 if (mobAttacker instanceof SlimeEntity){
-                    if (RobeArmorFinder.FindFelBootsofWander(target)){
+                    if (RobeArmorFinder.FindFelBootsofWander(target) && ItemConfig.FelBootsSlimeNeutral.get()){
                         if (mobAttacker.getLastHurtByMob() != target){
                             mobAttacker.setTarget(null);
                         } else {
@@ -1090,9 +1106,24 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void PlayerAttackEvent(AttackEntityEvent event){
-        if (SpellConfig.OwnerAttackCancel.get()) {
-            if (event.getTarget() instanceof IOwned){
-                if (((IOwned) event.getTarget()).getTrueOwner() == event.getPlayer()) {
+        if (event.getTarget() instanceof IOwned){
+            IOwned iOwned = (IOwned) event.getTarget();
+            if (iOwned.getTrueOwner() == event.getEntity() || (iOwned.getTrueOwner() instanceof IOwned && ((IOwned)iOwned.getTrueOwner()).getTrueOwner() == event.getEntity())) {
+                if (SpellConfig.OwnerHitCommand.get()) {
+                    if (event.getPlayer().getMainHandItem().getItem() instanceof SoulWand) {
+                        if (iOwned instanceof IServant) {
+                            IServant summonedEntity = (IServant) iOwned;
+                            if (event.getEntity().isShiftKeyDown() || event.getEntity().isCrouching()) {
+                                event.getTarget().kill();
+                            } else {
+                                if (summonedEntity.canUpdateMove()) {
+                                    summonedEntity.updateMoveMode(event.getPlayer());
+                                }
+                            }
+                        }
+                    }
+                }
+                if (SpellConfig.OwnerAttackCancel.get()) {
                     event.setCanceled(true);
                 }
             }
@@ -1158,19 +1189,21 @@ public class ModEvents {
         if (event.getLookingEntity() instanceof LivingEntity){
             LivingEntity looker = (LivingEntity) event.getLookingEntity();
             boolean undead = looker.getMobType() == CreatureAttribute.UNDEAD && looker.getMaxHealth() < 50.0F && !(looker instanceof OwnedEntity && !(looker instanceof IMob)) && !(looker instanceof BoneLordEntity);
-            if (RobeArmorFinder.FindNecroHelm(entity)){
-                if (undead){
-                    event.modifyVisibility(0.5);
+            if (ItemConfig.NecroSetUndeadNeutral.get()) {
+                if (RobeArmorFinder.FindNecroHelm(entity)) {
+                    if (undead) {
+                        event.modifyVisibility(0.5);
+                    }
                 }
-            }
-            if (RobeArmorFinder.FindNecroArmor(entity)){
-                if (undead){
-                    event.modifyVisibility(0.3);
+                if (RobeArmorFinder.FindNecroArmor(entity)) {
+                    if (undead) {
+                        event.modifyVisibility(0.3);
+                    }
                 }
-            }
-            if (RobeArmorFinder.FindNecroBootsofWander(entity)){
-                if (undead){
-                    event.modifyVisibility(0.2);
+                if (RobeArmorFinder.FindNecroBootsofWander(entity)) {
+                    if (undead) {
+                        event.modifyVisibility(0.2);
+                    }
                 }
             }
             if (entity.isInvisible()){
@@ -1614,67 +1647,34 @@ public class ModEvents {
                     serverWorld.sendParticles(ParticleTypes.DRAGON_BREATH, (double) livingEntity.blockPosition().getX() + d1 * 0.1D, (double) livingEntity.blockPosition().getY() + 0.3D, (double) livingEntity.blockPosition().getZ() + d3 * 0.1D, 0, d1, d2, d3, 0.5F);
                 }
             }
+            MutatedEntity mutated = null;
             if (livingEntity instanceof CowEntity){
-                MutatedCowEntity mutatedCowEntity = new MutatedCowEntity(ModEntityType.MUTATED_COW.get(), world);
-                mutatedCowEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
-                mutatedCowEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedCowEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (livingEntity.hasCustomName()) {
-                    mutatedCowEntity.setCustomName(livingEntity.getCustomName());
-                    mutatedCowEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
-                }
-                mutatedCowEntity.setPersistenceRequired();
-                world.addFreshEntity(mutatedCowEntity);
-                livingEntity.remove();
+                mutated = new MutatedCowEntity(ModEntityType.MUTATED_COW.get(), world);
             } else if (livingEntity instanceof ChickenEntity){
-                MutatedChickenEntity mutatedChickenEntity = new MutatedChickenEntity(ModEntityType.MUTATED_CHICKEN.get(), world);
-                mutatedChickenEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
-                mutatedChickenEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedChickenEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (livingEntity.hasCustomName()) {
-                    mutatedChickenEntity.setCustomName(livingEntity.getCustomName());
-                    mutatedChickenEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
-                }
-                mutatedChickenEntity.setPersistenceRequired();
-                world.addFreshEntity(mutatedChickenEntity);
-                livingEntity.remove();
+                mutated = new MutatedChickenEntity(ModEntityType.MUTATED_CHICKEN.get(), world);
             } else if (livingEntity instanceof SheepEntity){
-                MutatedSheepEntity mutatedSheepEntity = new MutatedSheepEntity(ModEntityType.MUTATED_SHEEP.get(), world);
-                mutatedSheepEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
-                mutatedSheepEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedSheepEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (livingEntity.hasCustomName()) {
-                    mutatedSheepEntity.setCustomName(livingEntity.getCustomName());
-                    mutatedSheepEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
-                }
-                mutatedSheepEntity.setColor(((SheepEntity) livingEntity).getColor());
-                mutatedSheepEntity.setPersistenceRequired();
-                world.addFreshEntity(mutatedSheepEntity);
-                livingEntity.remove();
+                mutated = new MutatedSheepEntity(ModEntityType.MUTATED_SHEEP.get(), world);
+                ((MutatedSheepEntity) mutated).setColor(((SheepEntity) livingEntity).getColor());
             } else if (livingEntity instanceof PigEntity){
-                MutatedPigEntity mutatedPigEntity = new MutatedPigEntity(ModEntityType.MUTATED_PIG.get(), world);
-                mutatedPigEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
-                mutatedPigEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedPigEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (livingEntity.hasCustomName()) {
-                    mutatedPigEntity.setCustomName(livingEntity.getCustomName());
-                    mutatedPigEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
-                }
-                mutatedPigEntity.setPersistenceRequired();
-                world.addFreshEntity(mutatedPigEntity);
-                livingEntity.remove();
+                mutated = new MutatedPigEntity(ModEntityType.MUTATED_PIG.get(), world);
             } else if (livingEntity instanceof RabbitEntity){
                 RabbitEntity rabbit = (RabbitEntity) livingEntity;
-                MutatedRabbitEntity mutatedRabbitEntity = new MutatedRabbitEntity(ModEntityType.MUTATED_RABBIT.get(), world);
-                mutatedRabbitEntity.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
-                mutatedRabbitEntity.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutatedRabbitEntity.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData)null, (CompoundNBT)null);
-                if (livingEntity.hasCustomName()) {
-                    mutatedRabbitEntity.setCustomName(livingEntity.getCustomName());
-                    mutatedRabbitEntity.setCustomNameVisible(livingEntity.isCustomNameVisible());
-                }
+                mutated = new MutatedRabbitEntity(ModEntityType.MUTATED_RABBIT.get(), world);
                 if (rabbit.getRabbitType() != 99) {
-                    mutatedRabbitEntity.setRabbitType(rabbit.getRabbitType());
+                    ((MutatedRabbitEntity)mutated).setRabbitType(rabbit.getRabbitType());
                 } else {
-                    mutatedRabbitEntity.setRabbitType(1);
+                    ((MutatedRabbitEntity)mutated).setRabbitType(1);
                 }
-                mutatedRabbitEntity.setPersistenceRequired();
-                world.addFreshEntity(mutatedRabbitEntity);
+            }
+            if (mutated != null) {
+                mutated.moveTo(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), livingEntity.yRot, livingEntity.xRot);
+                mutated.finalizeSpawn((IServerWorld) world, world.getCurrentDifficultyAt(mutated.blockPosition()), SpawnReason.CONVERSION, (ILivingEntityData) null, (CompoundNBT) null);
+                if (livingEntity.hasCustomName()) {
+                    mutated.setCustomName(livingEntity.getCustomName());
+                    mutated.setCustomNameVisible(livingEntity.isCustomNameVisible());
+                }
+                mutated.setPersistenceRequired();
+                world.addFreshEntity(mutated);
                 livingEntity.remove();
             }
         }

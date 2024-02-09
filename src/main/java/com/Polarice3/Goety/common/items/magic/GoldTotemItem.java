@@ -2,6 +2,7 @@ package com.Polarice3.Goety.common.items.magic;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.common.blocks.CursedCageBlock;
 import com.Polarice3.Goety.init.ModBlocks;
 import com.Polarice3.Goety.init.ModItems;
@@ -11,7 +12,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -27,23 +27,27 @@ import java.util.List;
 /**
  * Learned how to make Gold Totem gain Soul Energy from codes by @Ipsis
  */
-public class GoldTotemItem extends Item {
-    public static final String SOULSAMOUNT = "Souls";
-    public static final int MAXSOULS = MainConfig.MaxSouls.get();
+public class GoldTotemItem extends Item implements ITotem {
+    public int maxSouls;
 
-    public GoldTotemItem() {
+    public GoldTotemItem(int maxSouls) {
         super(new Properties().tab(Goety.TAB).stacksTo(1).rarity(Rarity.RARE));
+        this.maxSouls = maxSouls;
+    }
+
+    public int getMaxSouls(){
+        return this.maxSouls;
     }
 
     @Override
     public void fillItemCategory(ItemGroup pGroup, NonNullList<ItemStack> pItems) {
         if (this.allowdedIn(pGroup)){
             ItemStack emptySouls = new ItemStack(this);
-            setSoulsamount(emptySouls, 0);
+            ITotem.setSoulsamount(emptySouls, 0);
             pItems.add(emptySouls);
 
             ItemStack maxSouls = new ItemStack(this);
-            setSoulsamount(maxSouls, MAXSOULS);
+            ITotem.setMaxSoulAmount(maxSouls, this.getMaxSouls());
             pItems.add(maxSouls);
         }
     }
@@ -60,7 +64,8 @@ public class GoldTotemItem extends Item {
 
     @Override
     public void onCraftedBy(ItemStack pStack, World pLevel, PlayerEntity pPlayer) {
-        setSoulsamount(pStack, 0);
+        ITotem.setSoulsamount(pStack, 0);
+        ITotem.setMaxSoulAmount(pStack, this.getMaxSouls());
         super.onCraftedBy(pStack, pLevel, pPlayer);
     }
 
@@ -69,8 +74,8 @@ public class GoldTotemItem extends Item {
     public ItemStack getContainerItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
         if (container.getTag() != null) {
-            if (container.getTag().getInt(SOULSAMOUNT) > MainConfig.CraftingSouls.get()) {
-                GoldTotemItem.decreaseSouls(container, MainConfig.CraftingSouls.get());
+            if (container.getTag().getInt(SOULS_AMOUNT) > MainConfig.CraftingSouls.get()) {
+                ITotem.decreaseSouls(container, MainConfig.CraftingSouls.get());
                 return container;
             } else {
                 return new ItemStack(ModItems.SPENT_TOTEM.get());
@@ -82,16 +87,7 @@ public class GoldTotemItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (stack.getTag() == null){
-            CompoundNBT compound = stack.getOrCreateTag();
-            compound.putInt(SOULSAMOUNT, 0);
-        }
-        if (stack.getTag().getInt(SOULSAMOUNT) > MAXSOULS){
-            stack.getTag().putInt(SOULSAMOUNT, MAXSOULS);
-        }
-        if (stack.getTag().getInt(SOULSAMOUNT) < 0){
-            stack.getTag().putInt(SOULSAMOUNT, 0);
-        }
+        this.setTagTick(stack);
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
@@ -101,13 +97,13 @@ public class GoldTotemItem extends Item {
 
     private static boolean isFull(ItemStack itemStack) {
         assert itemStack.getTag() != null;
-        int Soulcount = itemStack.getTag().getInt(SOULSAMOUNT);
-        return Soulcount == MAXSOULS;
+        int Soulcount = itemStack.getTag().getInt(SOULS_AMOUNT);
+        return Soulcount == MAX_SOULS;
     }
 
     private static boolean isEmpty(ItemStack itemStack) {
         assert itemStack.getTag() != null;
-        int Soulcount = itemStack.getTag().getInt(SOULSAMOUNT);
+        int Soulcount = itemStack.getTag().getInt(SOULS_AMOUNT);
         return Soulcount == 0;
     }
 
@@ -116,7 +112,7 @@ public class GoldTotemItem extends Item {
         if (!itemStack.isEmpty()) {
             if (itemStack.getTag() != null) {
                 if (MainConfig.TotemUndying.get()) {
-                    return itemStack.getTag().getInt(SOULSAMOUNT) == MAXSOULS;
+                    return itemStack.getTag().getInt(SOULS_AMOUNT) == MAX_SOULS;
                 }
             }
         }
@@ -125,40 +121,9 @@ public class GoldTotemItem extends Item {
 
     public static int currentSouls(ItemStack itemStack){
         if (itemStack.getTag() != null){
-            return itemStack.getTag().getInt(SOULSAMOUNT);
+            return itemStack.getTag().getInt(SOULS_AMOUNT);
         } else {
             return 0;
-        }
-    }
-
-    public static void setSoulsamount(ItemStack itemStack, int souls){
-        if (itemStack.getItem() != ModItems.GOLDTOTEM.get()) {
-            return;
-        }
-        itemStack.getOrCreateTag().putInt(SOULSAMOUNT, souls);
-    }
-
-    public static void increaseSouls(ItemStack itemStack, int souls) {
-        if (itemStack.getItem() != ModItems.GOLDTOTEM.get()) {
-            return;
-        }
-        assert itemStack.getTag() != null;
-        int Soulcount = itemStack.getTag().getInt(SOULSAMOUNT);
-        if (!isFull(itemStack)) {
-            Soulcount += souls;
-            itemStack.getOrCreateTag().putInt(SOULSAMOUNT, Soulcount);
-        }
-    }
-
-    public static void decreaseSouls(ItemStack itemStack, int souls) {
-        if (itemStack.getItem() != ModItems.GOLDTOTEM.get()) {
-            return;
-        }
-        assert itemStack.getTag() != null;
-        int Soulcount = itemStack.getTag().getInt(SOULSAMOUNT);
-        if (!isEmpty(itemStack)) {
-            Soulcount -= souls;
-            itemStack.getOrCreateTag().putInt(SOULSAMOUNT, Soulcount);
         }
     }
 
@@ -170,8 +135,8 @@ public class GoldTotemItem extends Item {
     @Override
     public double getDurabilityForDisplay(ItemStack stack){
         if (stack.getTag() != null) {
-            int Soulcount = stack.getTag().getInt(SOULSAMOUNT);
-            return 1.0D - (Soulcount / (double) MAXSOULS);
+            int Soulcount = stack.getTag().getInt(SOULS_AMOUNT);
+            return 1.0D - (Soulcount / (double) MAX_SOULS);
         } else {
             return 1.0D;
         }
@@ -199,8 +164,9 @@ public class GoldTotemItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (stack.getTag() != null) {
-            int Soulcounts = stack.getTag().getInt(SOULSAMOUNT);
-            tooltip.add(new TranslationTextComponent("info.goety.goldtotem.souls", Soulcounts, MAXSOULS));
+            int Soulcounts = stack.getTag().getInt(SOULS_AMOUNT);
+            int MaxSouls = stack.getTag().getInt(MAX_SOUL_AMOUNT);
+            tooltip.add(new TranslationTextComponent("info.goety.goldtotem.souls", Soulcounts, MaxSouls));
         }
     }
 

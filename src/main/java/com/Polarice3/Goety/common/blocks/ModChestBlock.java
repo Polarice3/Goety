@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.ModChestTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.ModChestTileEntity;
 import com.Polarice3.Goety.init.ModTileEntityType;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.tileentity.ChestTileEntity;

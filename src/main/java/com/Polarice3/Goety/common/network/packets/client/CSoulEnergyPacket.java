@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.network.packets.client;
 
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
+import com.Polarice3.Goety.api.items.magic.ITotem;
 import com.Polarice3.Goety.utils.GoldTotemFinder;
 import com.Polarice3.Goety.utils.SEHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -40,7 +40,7 @@ public class CSoulEnergyPacket {
                     } else {
                         ItemStack foundStack = GoldTotemFinder.FindTotem(player);
                         if (foundStack != null) {
-                            GoldTotemItem.increaseSouls(foundStack, packet.souls);
+                            ITotem.increaseSouls(foundStack, packet.souls);
                         }
                     }
                 } else {
@@ -50,7 +50,7 @@ public class CSoulEnergyPacket {
                     } else {
                         ItemStack foundStack = GoldTotemFinder.FindTotem(player);
                         if (foundStack != null){
-                            GoldTotemItem.decreaseSouls(foundStack, packet.souls);
+                            ITotem.decreaseSouls(foundStack, packet.souls);
                         }
                     }
                 }

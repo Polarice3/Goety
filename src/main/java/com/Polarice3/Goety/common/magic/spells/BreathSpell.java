@@ -15,12 +15,21 @@ public class BreathSpell extends ChargingSpells {
         return SpellConfig.BreathingDuration.get();
     }
 
-    public int SoulCost() {
+    public int defaultSoulCost() {
         return SpellConfig.BreathingCost.get();
     }
 
     public SoundEvent CastingSound() {
         return SoundEvents.CONDUIT_ACTIVATE;
+    }
+
+    @Override
+    public void SpellResult(ServerWorld worldIn, LivingEntity entityLiving, boolean staff) {
+        if (staff){
+            StaffResult(worldIn, entityLiving);
+        } else {
+            WandResult(worldIn, entityLiving);
+        }
     }
 
     public void WandResult(ServerWorld worldIn, LivingEntity entityLiving) {

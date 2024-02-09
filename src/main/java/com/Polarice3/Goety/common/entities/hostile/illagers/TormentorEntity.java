@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.hostile.illagers;
 
 import com.Polarice3.Goety.AttributesConfig;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.init.ModSounds;
 import com.Polarice3.Goety.utils.MobUtil;
 import net.minecraft.entity.*;
@@ -82,11 +82,9 @@ public class TormentorEntity extends AbstractIllagerEntity implements ICustomAtt
             this.limitedLifeTicks = 20;
             this.hurt(DamageSource.STARVE, 1.0F);
         }
-        if (this.hasActiveRaid()){
-            if (this.getOwner() == null || this.getOwner().isDeadOrDying()){
-                if (this.tickCount % 20 == 0) {
-                    this.hurt(DamageSource.STARVE, 5.0F);
-                }
+        if (this.getOwner() == null || this.getOwner().isDeadOrDying()){
+            if (this.tickCount % 20 == 0) {
+                this.hurt(DamageSource.STARVE, 5.0F);
             }
         }
         if (!this.isCharging()){

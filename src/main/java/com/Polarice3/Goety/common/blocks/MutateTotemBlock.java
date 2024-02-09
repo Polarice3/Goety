@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.blocks;
 
-import com.Polarice3.Goety.common.tileentities.MutateTotemTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.MutateTotemTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 

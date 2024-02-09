@@ -1,11 +1,13 @@
 package com.Polarice3.Goety.common.entities.ally;
 
 import com.Polarice3.Goety.AttributesConfig;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ai.CreatureBowAttackGoal;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.items.magic.SoulWand;
 import com.Polarice3.Goety.init.ModEffects;
+import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.EntityFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
 import net.minecraft.block.BlockState;
@@ -34,14 +36,17 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 
 public abstract class AbstractSMEntity extends SummonedEntity implements IRangedAttackMob, ICustomAttributes {
-    private final CreatureBowAttackGoal<AbstractSMEntity> bowGoal = new CreatureBowAttackGoal<>(this, 1.0D, 20, 15.0F);
-    private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
+    public final CreatureBowAttackGoal<AbstractSMEntity> bowGoal = new CreatureBowAttackGoal<>(this, 1.0D, 20, 15.0F);
+    public final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false) {
 
         public void stop() {
             super.stop();
@@ -78,10 +83,8 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
         return MobEntity.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, AttributesConfig.SkeletonServantHealth.get())
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.25F)
-                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.SkeletonServantDamage.get())
-                .add(Attributes.ARMOR, 2.0D);
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.ATTACK_DAMAGE, AttributesConfig.SkeletonServantDamage.get());
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){
@@ -146,7 +149,7 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
     }
 
     public boolean canBeAffected(EffectInstance potioneffectIn) {
-        return potioneffectIn.getEffect() != ModEffects.HOSTED.get();
+        return potioneffectIn.getEffect() != ModEffects.HOSTED.get() && super.canBeAffected(potioneffectIn);
     }
 
     public int getArrowPower() {
@@ -155,6 +158,23 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
 
     public void setArrowPower(int arrowPower) {
         this.arrowPower = arrowPower;
+    }
+
+    public EntityType<?> getVariant(World level, BlockPos blockPos){
+        EntityType<?> entityType = ModEntityType.SKELETON_MINION.get();
+        if (level instanceof ServerWorld) {
+            ServerWorld serverLevel = (ServerWorld) level;
+            if (level.getBiome(blockPos).getBiomeCategory() == Biome.Category.ICY && level.canSeeSky(blockPos)) {
+                entityType = ModEntityType.STRAY_MINION.get();
+            } else if (BlockFinder.findStructure(serverLevel, blockPos, Structure.PILLAGER_OUTPOST)) {
+                entityType = ModEntityType.SKELETON_PILLAGER.get();
+            } else if (level.getBiome(blockPos).getBiomeCategory() == Biome.Category.JUNGLE && level.random.nextBoolean()) {
+                entityType = ModEntityType.MOSSY_SKELETON_MINION.get();
+            } else if (level.isWaterAt(blockPos)) {
+                entityType = ModEntityType.SUNKEN_SKELETON_MINION.get();
+            }
+        }
+        return entityType;
     }
 
     public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
@@ -174,6 +194,10 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
         return spawnDataIn;
     }
 
+    public SoundEvent getShootSound(){
+        return SoundEvents.SKELETON_SHOOT;
+    }
+
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof BowItem)));
         AbstractArrowEntity abstractarrowentity = this.getMobArrow(itemstack, distanceFactor);
@@ -187,7 +211,9 @@ public abstract class AbstractSMEntity extends SummonedEntity implements IRanged
         double d2 = target.getZ() - this.getZ();
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        if (this.getShootSound() != null) {
+            this.playSound(this.getShootSound(), 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        }
         this.level.addFreshEntity(abstractarrowentity);
     }
 

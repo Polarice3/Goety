@@ -1,6 +1,6 @@
 package com.Polarice3.Goety.common.items;
 
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
 import com.Polarice3.Goety.init.ModItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Items;
@@ -10,18 +10,18 @@ import net.minecraft.util.LazyValue;
 import java.util.function.Supplier;
 
 public enum ModItemTiers implements IItemTier {
-    FROST(MainConfig.FrostTierLevel.get(),
-            MainConfig.FrostTierDurability.get(),
-            MainConfig.FrostTierMiningSpeed.get().floatValue(),
-            MainConfig.FrostTierDamage.get().floatValue(),
-            MainConfig.FrostTierEnchantability.get(), () -> {
+    FROST(ItemConfig.FrostTierLevel.get(),
+            ItemConfig.FrostTierDurability.get(),
+            ItemConfig.FrostTierMiningSpeed.get().floatValue(),
+            ItemConfig.FrostTierDamage.get().floatValue(),
+            ItemConfig.FrostTierEnchantability.get(), () -> {
         return Ingredient.of(ModItems.FROST_INGOT.get());
     }),
     DEATH(4,
-            MainConfig.DeathScytheDurability.get(),
+            ItemConfig.DeathScytheDurability.get(),
             12.0F,
-            MainConfig.DeathScytheDamage.get().floatValue(),
-            MainConfig.DeathScytheEnchantability.get(), () -> {
+            ItemConfig.DeathScytheDamage.get().floatValue(),
+            ItemConfig.DeathScytheEnchantability.get(), () -> {
         return Ingredient.of(Items.BONE);
     });
 

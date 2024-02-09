@@ -3,6 +3,7 @@ package com.Polarice3.Goety.common.entities.projectiles;
 import com.Polarice3.Goety.SpellConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
+import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -16,6 +17,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -201,9 +203,12 @@ public class FangEntity extends Entity {
                             enchantment = WandUtil.getLevels(ModEnchantments.POTENCY.get(), player);
                             burning = WandUtil.getLevels(ModEnchantments.BURNING.get(), player);
                         }
-                        target.hurt(DamageSource.indirectMagic(this, livingentity), baseDamage + enchantment);
-                        if (burning > 0){
-                            target.setSecondsOnFire(5 * burning);
+                        if (target.hurt(DamageSource.indirectMagic(this, livingentity), baseDamage + enchantment)){
+                            int soulEater = MathHelper.clamp(this.getSoulEater(), 0, 10);
+                            SEHelper.increaseSouls(player, SpellConfig.FangGainSouls.get() * soulEater);
+                            if (burning > 0){
+                                target.setSecondsOnFire(5 * burning);
+                            }
                         }
                     }
                 } else {

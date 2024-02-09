@@ -97,6 +97,12 @@ public class ModSpawnEggs {
     public static final RegistryObject<ModSpawnEggItem> DROWNED_MINION_SPAWN_EGG = ITEMS.register("drowned_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DROWNED_MINION, 0x182d37, 0x2f8209, new Item.Properties().tab(Goety.TAB)));
 
+    public static final RegistryObject<ModSpawnEggItem> FROZEN_ZOMBIE_MINION_SPAWN_EGG = ITEMS.register("frozen_zombie_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.FROZEN_ZOMBIE_MINION, 0x2b4550, 0x6aa8c5, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> JUNGLE_ZOMBIE_MINION_SPAWN_EGG = ITEMS.register("jungle_zombie_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.JUNGLE_ZOMBIE_MINION, 0x383028, 0x2d3c21, new Item.Properties().tab(Goety.TAB)));
+
     public static final RegistryObject<ModSpawnEggItem> FARMER_MINION_SPAWN_EGG = ITEMS.register("farmer_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.FARMER_MINION, 0x5e4236, 0xdbc549, new Item.Properties().tab(Goety.TAB)));
 
@@ -105,6 +111,12 @@ public class ModSpawnEggs {
 
     public static final RegistryObject<ModSpawnEggItem> STRAY_MINION_SPAWN_EGG = ITEMS.register("stray_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.STRAY_MINION, 0x495959, 0xb3d4e3, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> MOSSY_SKELETON_MINION_SPAWN_EGG = ITEMS.register("mossy_skeleton_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.MOSSY_SKELETON_MINION, 0xbdbea5, 0x4a5d21, new Item.Properties().tab(Goety.TAB)));
+
+    public static final RegistryObject<ModSpawnEggItem> SUNKEN_SKELETON_MINION_SPAWN_EGG = ITEMS.register("sunken_skeleton_minion_spawn_egg",
+            () -> new ModSpawnEggItem(ModEntityType.SUNKEN_SKELETON_MINION, 0xd6d0c9, 0xa154bc, new Item.Properties().tab(Goety.TAB)));
 
     public static final RegistryObject<ModSpawnEggItem> DREDEN_MINION_SPAWN_EGG = ITEMS.register("dreden_minion_spawn_egg",
             () -> new ModSpawnEggItem(ModEntityType.DREDEN_MINION, 0x4288ae, 0x182022, new Item.Properties().tab(Goety.TAB)));

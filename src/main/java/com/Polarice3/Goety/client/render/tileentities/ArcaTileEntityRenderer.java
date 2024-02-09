@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.client.render.tileentities;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
+import com.Polarice3.Goety.common.blocks.tiles.ArcaTileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

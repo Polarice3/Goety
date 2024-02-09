@@ -1,8 +1,8 @@
 package com.Polarice3.Goety.common.entities.hostile.cultists;
 
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.entities.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.hostile.dead.IDeadMob;
-import com.Polarice3.Goety.common.entities.neutral.ICustomAttributes;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -65,7 +65,7 @@ public abstract class AbstractCultistEntity extends AbstractRaiderEntity impleme
 
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.extraGoal();
         this.goalSelector.addGoal(2, new FindTargetGoal(this, 10.0F));
         this.goalSelector.addGoal(4, new PilgrimGoal<>(this, 0.7D, 0.595D));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
@@ -75,6 +75,10 @@ public abstract class AbstractCultistEntity extends AbstractRaiderEntity impleme
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, AbstractCultistEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this, WitchEntity.class)).setAlertOthers());
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+    }
+
+    public void extraGoal(){
+        this.goalSelector.addGoal(0, new SwimGoal(this));
     }
 
     public AttributeModifierMap.MutableAttribute getConfiguredAttributes(){

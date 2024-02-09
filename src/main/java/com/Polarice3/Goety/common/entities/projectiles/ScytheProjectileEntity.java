@@ -1,7 +1,7 @@
 package com.Polarice3.Goety.common.entities.projectiles;
 
 import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.ItemConfig;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.init.ModEntityType;
 import com.Polarice3.Goety.init.ModItems;
@@ -194,7 +194,7 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
                 targets.add(entity);
             }
         }
-        if (MainConfig.ScytheSlashBreaks.get()) {
+        if (ItemConfig.ScytheSlashBreaks.get()) {
             AxisAlignedBB aabb = this.getBoundingBox().inflate(0.2D);
 
             for (BlockPos blockpos : BlockPos.betweenClosed(MathHelper.floor(aabb.minX), MathHelper.floor(aabb.minY), MathHelper.floor(aabb.minZ), MathHelper.floor(aabb.maxX), MathHelper.floor(aabb.maxY), MathHelper.floor(aabb.maxZ))) {
@@ -222,7 +222,7 @@ public class ScytheProjectileEntity extends DamagingProjectileEntity {
                             if (attack && entity instanceof LivingEntity) {
                                 int enchantment = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SOUL_EATER.get(), this.weapon);
                                 int soulEater = MathHelper.clamp(enchantment + 1, 1, 10);
-                                SEHelper.increaseSouls(player, MainConfig.DarkScytheSouls.get() * soulEater);
+                                SEHelper.increaseSouls(player, ItemConfig.DarkScytheSouls.get() * soulEater);
                             }
                         } else {
                             entity.hurt(DamageSource.mobAttack(this.getTrueOwner()), f);

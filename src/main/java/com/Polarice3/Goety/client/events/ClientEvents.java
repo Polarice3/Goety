@@ -2,13 +2,16 @@ package com.Polarice3.Goety.client.events;
 
 import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.MainConfig;
+import com.Polarice3.Goety.api.magic.ISpell;
 import com.Polarice3.Goety.client.audio.BossLoopMusic;
 import com.Polarice3.Goety.client.audio.FelFlySound;
+import com.Polarice3.Goety.client.audio.ItemLoopSound;
 import com.Polarice3.Goety.client.audio.LocustSound;
 import com.Polarice3.Goety.client.gui.overlay.CurrentFocusGui;
 import com.Polarice3.Goety.client.gui.overlay.DeadHeartsGui;
 import com.Polarice3.Goety.client.gui.overlay.SoulEnergyGui;
 import com.Polarice3.Goety.client.gui.screen.inventory.FocusRadialMenuScreen;
+import com.Polarice3.Goety.common.blocks.tiles.ArcaTileEntity;
 import com.Polarice3.Goety.common.entities.ally.FelFlyEntity;
 import com.Polarice3.Goety.common.entities.bosses.ApostleEntity;
 import com.Polarice3.Goety.common.entities.bosses.VizierEntity;
@@ -16,7 +19,6 @@ import com.Polarice3.Goety.common.entities.hostile.dead.LocustEntity;
 import com.Polarice3.Goety.common.items.equipment.NetheriteBowItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.packets.client.*;
-import com.Polarice3.Goety.common.tileentities.ArcaTileEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.init.ModKeybindings;
 import com.Polarice3.Goety.init.ModSounds;
@@ -25,6 +27,7 @@ import com.Polarice3.Goety.utils.LichdomHelper;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
@@ -36,16 +39,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -228,6 +230,22 @@ public class ClientEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onItemUse(LivingEntityUseItemEvent.Start event){
+        if (event.getEntity().level instanceof ClientWorld){
+            Minecraft minecraft = Minecraft.getInstance();
+            SoundHandler soundHandler = minecraft.getSoundManager();
+            if (WandUtil.getSpell(event.getEntityLiving()) != null){
+                ISpell spells = WandUtil.getSpell(event.getEntityLiving());
+                if (spells != null) {
+                    if (spells.loopSound(event.getEntityLiving()) != null) {
+                        soundHandler.play(new ItemLoopSound(spells.loopSound(event.getEntityLiving()), event.getEntityLiving()));
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * From here, code is modified and based of @gigaherz ClientEvents codes: <a href="https://github.com/gigaherz/ToolBelt/blob/master/src/main/java/dev/gigaherz/toolbelt/client/ClientEvents.java">...</a>
      * */
@@ -265,6 +283,23 @@ public class ClientEvents {
         }
     }
 
+    public static boolean isKeyDown0(KeyBinding keybind) {
+        if (keybind.isUnbound()) {
+            return false;
+        }
+
+        boolean isDown = false;
+        switch (keybind.getKey().getType()) {
+            case KEYSYM:
+                isDown = InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), keybind.getKey().getValue());
+                break;
+            case MOUSE:
+                isDown = GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), keybind.getKey().getValue()) == GLFW.GLFW_PRESS;
+                break;
+        };
+        return isDown;
+    }
+
     public static boolean isKeyDown(KeyBinding keybind) {
         if (keybind.isUnbound()) {
             return false;
@@ -280,6 +315,29 @@ public class ClientEvents {
                 break;
         }
         return isDown && keybind.getKeyConflictContext().isActive() && keybind.getKeyModifier().isActive(keybind.getKeyConflictContext());
+    }
+
+    @SubscribeEvent
+    public static void updateInputEvent(InputUpdateEvent event) {
+        if (MainConfig.WheelGuiMovement.get()) {
+            if (Minecraft.getInstance().screen instanceof FocusRadialMenuScreen) {
+                GameSettings settings = Minecraft.getInstance().options;
+                MovementInput input = event.getMovementInput();
+                input.up = isKeyDown0(settings.keyUp);
+                input.down = isKeyDown0(settings.keyDown);
+                input.left = isKeyDown0(settings.keyLeft);
+                input.right = isKeyDown0(settings.keyRight);
+
+                input.forwardImpulse = input.up == input.down ? 0.0F : (input.up ? 1.0F : -1.0F);
+                input.leftImpulse = input.left == input.right ? 0.0F : (input.left ? 1.0F : -1.0F);
+                input.jumping = isKeyDown0(settings.keyJump);
+                input.shiftKeyDown = isKeyDown0(settings.keyShift);
+                if (Minecraft.getInstance().player.isMovingSlowly()) {
+                    input.leftImpulse = (float) ((double) input.leftImpulse * 0.3D);
+                    input.forwardImpulse = (float) ((double) input.forwardImpulse * 0.3D);
+                }
+            }
+        }
     }
     /**
      * To Here

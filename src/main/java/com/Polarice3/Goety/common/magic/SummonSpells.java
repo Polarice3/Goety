@@ -1,18 +1,20 @@
 package com.Polarice3.Goety.common.magic;
 
+import com.Polarice3.Goety.api.magic.ISummonSpell;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.init.ModEffects;
 import com.Polarice3.Goety.utils.RobeArmorFinder;
 import com.Polarice3.Goety.utils.WandUtil;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 
-public abstract class SummonSpells extends Spells{
+public abstract class SummonSpells extends Spells implements ISummonSpell {
     private final EntityPredicate summonCountTargeting = (new EntityPredicate()).range(64.0D).allowUnseeable().ignoreInvisibilityTesting().allowInvulnerable().allowSameTeam();
     public int enchantment = 0;
     public int duration = 1;
@@ -32,18 +34,6 @@ public abstract class SummonSpells extends Spells{
     }
 
     public abstract void commonResult(ServerWorld worldIn, LivingEntity entityLiving);
-
-    public void SummonSap(LivingEntity owner, LivingEntity summonedEntity){
-        if (owner != null && summonedEntity != null) {
-            if (owner.hasEffect(ModEffects.SUMMONDOWN.get())) {
-                EffectInstance effectinstance = owner.getEffect(ModEffects.SUMMONDOWN.get());
-                if (effectinstance != null) {
-                    summonedEntity.addEffect(new EffectInstance(Effects.WEAKNESS, Integer.MAX_VALUE, effectinstance.getAmplifier()));
-                    summonedEntity.addEffect(new EffectInstance(ModEffects.SAPPED.get(), Integer.MAX_VALUE, effectinstance.getAmplifier()));
-                }
-            }
-        }
-    }
 
     public void SummonDown(LivingEntity entityLiving){
         EffectInstance effectinstance1 = entityLiving.getEffect(ModEffects.SUMMONDOWN.get());
@@ -74,5 +64,12 @@ public abstract class SummonSpells extends Spells{
 
     public int SummonLimit(LivingEntity entityLiving){
         return entityLiving.level.getNearbyEntities(OwnedEntity.class, this.summonCountTargeting, entityLiving, entityLiving.getBoundingBox().inflate(64.0D)).size();
+    }
+
+    public void summonAdvancement(LivingEntity summoner, LivingEntity summoned){
+        if(summoner instanceof ServerPlayerEntity){
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) summoner;
+            CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, summoned);
+        }
     }
 }

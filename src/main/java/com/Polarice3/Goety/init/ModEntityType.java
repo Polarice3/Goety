@@ -93,6 +93,12 @@ public class ModEntityType {
                     .updateInterval(20)
                     .build(new ResourceLocation(Goety.MOD_ID, "death_arrow").toString()));
 
+    public static final RegistryObject<EntityType<HarpoonEntity>> HARPOON = ENTITY_TYPES.register("harpoon",
+            () -> EntityType.Builder.<HarpoonEntity>of(HarpoonEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(4)
+                    .build(new ResourceLocation(Goety.MOD_ID, "harpoon").toString()));
+
     public static final RegistryObject<EntityType<ScytheProjectileEntity>> SCYTHE = ENTITY_TYPES.register("scythe",
             () -> EntityType.Builder.<ScytheProjectileEntity>of(ScytheProjectileEntity::new, EntityClassification.MISC)
                     .sized(0.5F, 0.5F)
@@ -531,6 +537,18 @@ public class ModEntityType {
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "drowned_minion").toString()));
 
+    public static final RegistryObject<EntityType<FrozenZombieMinionEntity>> FROZEN_ZOMBIE_MINION = ENTITY_TYPES.register("frozen_zombie_minion",
+            () -> EntityType.Builder.of(FrozenZombieMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "frozen_zombie_minion").toString()));
+
+    public static final RegistryObject<EntityType<JungleZombieMinionEntity>> JUNGLE_ZOMBIE_MINION = ENTITY_TYPES.register("jungle_zombie_minion",
+            () -> EntityType.Builder.of(JungleZombieMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "jungle_zombie_minion").toString()));
+
     public static final RegistryObject<EntityType<SkeletonMinionEntity>> SKELETON_MINION = ENTITY_TYPES.register("skeleton_minion",
             () -> EntityType.Builder.of(SkeletonMinionEntity::new, EntityClassification.MONSTER)
                     .sized(0.6F, 1.99F)
@@ -542,6 +560,18 @@ public class ModEntityType {
                     .sized(0.6F, 1.99F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "stray_minion").toString()));
+
+    public static final RegistryObject<EntityType<MossySkeletonMinionEntity>> MOSSY_SKELETON_MINION = ENTITY_TYPES.register("mossy_skeleton_minion",
+            () -> EntityType.Builder.of(MossySkeletonMinionEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "mossy_skeleton_minion").toString()));
+
+    public static final RegistryObject<EntityType<SunkenSkeletonMinion>> SUNKEN_SKELETON_MINION = ENTITY_TYPES.register("sunken_skeleton_minion",
+            () -> EntityType.Builder.of(SunkenSkeletonMinion::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "sunken_skeleton_minion").toString()));
 
     public static final RegistryObject<EntityType<DredenMinionEntity>> DREDEN_MINION = ENTITY_TYPES.register("dreden_minion",
             () -> EntityType.Builder.of(DredenMinionEntity::new, EntityClassification.MONSTER)
@@ -560,6 +590,18 @@ public class ModEntityType {
                     .sized(0.6F, 1.95F)
                     .clientTrackingRange(8)
                     .build(new ResourceLocation(Goety.MOD_ID, "farmer_minion").toString()));
+
+    public static final RegistryObject<EntityType<SkeletonPillagerEntity>> SKELETON_PILLAGER = ENTITY_TYPES.register("skeleton_pillager",
+            () -> EntityType.Builder.of(SkeletonPillagerEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.99F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "skeleton_pillager").toString()));
+
+    public static final RegistryObject<EntityType<ZombieVindicatorEntity>> ZOMBIE_VINDICATOR = ENTITY_TYPES.register("zombie_vindicator",
+            () -> EntityType.Builder.of(ZombieVindicatorEntity::new, EntityClassification.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .clientTrackingRange(8)
+                    .build(new ResourceLocation(Goety.MOD_ID, "zombie_vindicator").toString()));
 
     public static final RegistryObject<EntityType<UndeadWolfEntity>> UNDEAD_WOLF_MINION = ENTITY_TYPES.register("undead_wolf",
             () -> EntityType.Builder.of(UndeadWolfEntity::new, EntityClassification.MONSTER)

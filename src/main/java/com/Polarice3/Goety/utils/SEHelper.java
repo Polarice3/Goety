@@ -1,15 +1,12 @@
 package com.Polarice3.Goety.utils;
 
 import com.Polarice3.Goety.MainConfig;
-import com.Polarice3.Goety.common.capabilities.soulenergy.ISoulEnergy;
-import com.Polarice3.Goety.common.capabilities.soulenergy.SEImp;
-import com.Polarice3.Goety.common.capabilities.soulenergy.SEProvider;
-import com.Polarice3.Goety.common.capabilities.soulenergy.SEUpdatePacket;
+import com.Polarice3.Goety.api.items.magic.ITotem;
+import com.Polarice3.Goety.common.capabilities.soulenergy.*;
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.entities.neutral.MutatedEntity;
 import com.Polarice3.Goety.common.entities.neutral.OwnedEntity;
 import com.Polarice3.Goety.common.events.ArcaTeleporter;
-import com.Polarice3.Goety.common.items.magic.GoldTotemItem;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.compat.minecolonies.MinecoloniesLoaded;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -23,6 +20,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.piglin.AbstractPiglinEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -54,7 +52,7 @@ public class SEHelper {
         if (SEHelper.getSEActive(player)){
             SEHelper.setSESouls(player, souls);
         } else if (!GoldTotemFinder.FindTotem(player).isEmpty()){
-            GoldTotemItem.setSoulsamount(GoldTotemFinder.FindTotem(player), souls);
+            ITotem.setSoulsamount(GoldTotemFinder.FindTotem(player), souls);
         }
     }
 
@@ -80,7 +78,7 @@ public class SEHelper {
         if (SEHelper.getSEActive(player) && SEHelper.getSESouls(player) > souls){
             return true;
         } else {
-            return !GoldTotemFinder.FindTotem(player).isEmpty() && GoldTotemItem.currentSouls(GoldTotemFinder.FindTotem(player)) > souls;
+            return !GoldTotemFinder.FindTotem(player).isEmpty() && ITotem.currentSouls(GoldTotemFinder.FindTotem(player)) > souls;
         }
     }
 
@@ -88,7 +86,7 @@ public class SEHelper {
         if (SEHelper.getSEActive(player)){
             return SEHelper.getSESouls(player);
         } else if (!GoldTotemFinder.FindTotem(player).isEmpty()){
-            return GoldTotemItem.currentSouls(GoldTotemFinder.FindTotem(player));
+            return ITotem.currentSouls(GoldTotemFinder.FindTotem(player));
         }
         return 0;
     }
@@ -149,7 +147,7 @@ public class SEHelper {
         } else {
             ItemStack foundStack = GoldTotemFinder.FindTotem(player);
             if (foundStack != null){
-                GoldTotemItem.increaseSouls(foundStack, souls);
+                ITotem.increaseSouls(foundStack, souls);
             }
         }
     }
@@ -161,7 +159,7 @@ public class SEHelper {
         } else {
             ItemStack foundStack = GoldTotemFinder.FindTotem(player);
             if (foundStack != null){
-                GoldTotemItem.decreaseSouls(foundStack, souls);
+                ITotem.decreaseSouls(foundStack, souls);
             }
         }
     }
@@ -202,6 +200,18 @@ public class SEHelper {
                 }
             }
         }
+    }
+
+    public static FocusCooldown getFocusCoolDown(PlayerEntity player){
+        return getCapability(player).cooldowns();
+    }
+
+    public static void addCooldown(PlayerEntity player, Item item, int duration){
+        getFocusCoolDown(player).addCooldown(player.level, item, duration);
+    }
+
+    public static FocusCooldown.CooldownInstance getCooldownInstance(PlayerEntity player, Item item){
+        return getFocusCoolDown(player).getInstance(item);
     }
 
     public static void sendSEUpdatePacket(PlayerEntity player) {
